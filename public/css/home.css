@@ -1,0 +1,27 @@
+/* +----------------------------------------------------------------------
+   | Core : ThinkPHP Copyright (c) 2006-2014 All rights reserved.
+   +----------------------------------------------------------------------
+   | APP  : Copyright (c) 2014-ALL http://wumingmxk.xicp.net rights reserved. 
+   +----------------------------------------------------------------------
+   | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+   +----------------------------------------------------------------------
+   | Author: merry M  <test20121212@qq.com>
+   +----------------------------------------------------------------------
+   Home Module Cascading Style Sheets
+*/
+
+/*Index Css Start*/
+section .list_title{color:#ababab;font-size:24px;padding-left: 20px;font-weight: bold;}
+section .list_title span{color:#ae0000;font-size:16px;padding-left:10px;font-weight: bold;}
+section .content{}
+section .list_images{}
+section .list_article{}
+section .list_article .title{overflow: hidden;white-space: nowrap;text-overflow:ellipsis;}
+section .list_link{margin-left: 5px;}
+footer div{background-color:#333333;}
+/*Index Css End*/
+
+/*Member Css Start*/
+.Member .login-panel{margin-top:13%}
+.Member .login-logo{margin-top:13%}
+/*Member Css End*/

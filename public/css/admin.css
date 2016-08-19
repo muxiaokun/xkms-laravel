@@ -1,0 +1,43 @@
+/* +----------------------------------------------------------------------
+   | Core : ThinkPHP Copyright (c) 2006-2014 All rights reserved.
+   +----------------------------------------------------------------------
+   | APP  : Copyright (c) 2014-ALL http://wumingmxk.xicp.net rights reserved. 
+   +----------------------------------------------------------------------
+   | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+   +----------------------------------------------------------------------
+   | Author: merry M  <test20121212@qq.com>
+   +----------------------------------------------------------------------
+   Admin Module Cascading Style Sheets 
+*/
+body{background-color:#f1f5f8;}
+.nowrap{flex-wrap: nowrap;white-space: nowrap;}
+.login{margin-top:15%;}
+
+.top_nav{background-color:#26384e;width:100%;position:relative;z-index: 1;}
+.top_nav .title{float:left;font-size:36px;line-height:50px;height:50px;color:#FFF;width:230px;overflow:hidden;background-image:url('bimages/app_logo.png');}
+.top_nav .companytitle{float:left;color:#FFF;}
+.top_nav .right_menu{float:right;margin-right:20px;line-height:50px;color:#FFF;}
+.top_nav .right_menu a{color:#FFF;}
+.top_nav .right_menu a:hover{color:#FFF;}
+
+.left_nav{width:200px;}
+.left_nav div ul{padding:0px !important;}
+.left_nav li a{padding:8px 0px !important;}
+.left_nav .ui-accordion-header{border:0px !important;border-bottom:1px solid #ccc !important;border-radius: 0px !important;background:none 0 0 #2d527f !important;padding-top:10px;padding-bottom: 10px;}
+.left_nav .ui-accordion-header:hover{background:none 0 0 #396CA4 !important;}
+.left_nav .ui-state-default{color:#FFFFFF !important;}
+.left_nav .ui-state-active{background:none 0 0 #244161 !important;}
+
+.quick_ico span{background:url('bimages/backend_ico.png') 0 0 no-repeat;width:65px;height:65px;display: inline-block;}
+.quick_ico .ico1{background-position: 0px 0px;}
+.quick_ico .ico2{background-position: -65px 0px;}
+.quick_ico .ico3{background-position: -130px 0px;}
+.quick_ico .ico4{background-position: -195px 0px;}
+.quick_ico .ico5{background-position: -260px 0px;}
+.quick_ico .ico6{background-position: -325px 0px;}
+.quick_ico .ico7{background-position: -390px 0px;}
+.quick_ico .ico8{background-position: -455px 0px;}
+.quick_ico .ico9{background-position: -520px 0px;}
+.quick_ico .ico10{background-position: -585px 0px;}
+.quick_ico .ico11{background-position: -650px 0px;}
+.quick_ico .ico12{background-position: -715px 0px;}

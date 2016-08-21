@@ -32,14 +32,14 @@ class ManageUpload extends Backend
         $AdminModel         = D('Admin');
         $MemberModel        = D('Member');
         $ManageUploadModel  = D('ManageUpload');
-        $manage_upload_list = $ManageUploadModel->m_select($where, true);
+        $manage_upload_list = $ManageUploadModel->mSelect($where, true);
         foreach ($manage_upload_list as &$manage_upload) {
             switch ($manage_upload['user_type']) {
                 case 1:
-                    $manage_upload['user_name'] = $AdminModel->m_find_column($manage_upload['user_id'], 'admin_name');
+                    $manage_upload['user_name'] = $AdminModel->mFindColumn($manage_upload['user_id'], 'admin_name');
                     break;
                 case 2:
-                    $manage_upload['user_name'] = $MemberModel->m_find_column($manage_upload['user_id'], 'member_name');
+                    $manage_upload['user_name'] = $MemberModel->mFindColumn($manage_upload['user_id'], 'member_name');
                     break;
             }
             $bind_info     = array(L('controller') => L('relevance') . L('id'));
@@ -53,7 +53,7 @@ class ManageUpload extends Backend
             $manage_upload['bind_info'] = json_encode($bind_info);
         }
         $this->assign('manage_upload_list', $manage_upload_list);
-        $this->assign('manage_upload_list_count', $ManageUploadModel->get_page_count($where));
+        $this->assign('manage_upload_list_count', $ManageUploadModel->getPageCount($where));
 
         //初始化where_info
         $where_info              = array();
@@ -81,7 +81,7 @@ class ManageUpload extends Backend
         }
 
         $ManageUploadModel = D('ManageUpload');
-        $result_del        = $ManageUploadModel->m_del($id);
+        $result_del        = $ManageUploadModel->mDel($id);
         if ($result_del) {
             $this->success(L('file') . L('del') . L('success'), U('index'));
             return;
@@ -100,9 +100,9 @@ class ManageUpload extends Backend
 
         $ManageUploadModel  = D('ManageUpload');
         $where['_string']   = '(bind_info is NULL OR bind_info = "")';
-        $manage_upload_list = $ManageUploadModel->m_select($where, $ManageUploadModel->where($where)->count());
+        $manage_upload_list = $ManageUploadModel->mSelect($where, $ManageUploadModel->where($where)->count());
         foreach ($manage_upload_list as $manage_upload) {
-            $result_del = $ManageUploadModel->m_del($manage_upload['id']);
+            $result_del = $ManageUploadModel->mDel($manage_upload['id']);
             if (!$result_del) {
                 $this->error(L('clear') . L('file') . $manage_upload['path'] . L('error'), U('index'));
             }

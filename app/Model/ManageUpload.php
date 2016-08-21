@@ -6,16 +6,16 @@ namespace App\Model;
 class ManageUpload extends Common
 {
     //获得全部或者部分管理组列表
-    public function m_select($where = null, $page = false)
+    public function mSelect($where = null, $page = false)
     {
-        $this->_get_page($page);
+        $this->getPage($page);
         !isset($this->options['order']) && $this->order('id desc');
         $data = $this->where($where)->select();
-        foreach ($data as &$data_row) {$this->_decode_data($data_row);}
+        foreach ($data as &$data_row) {$this->decodeData($data_row);}
         return $data;
     }
 
-    public function m_add($data)
+    public function mAdd($data)
     {
         if (!$data) {
             return false;
@@ -29,7 +29,7 @@ class ManageUpload extends Common
         return $this->add($data);
     }
 
-    public function m_del($id)
+    public function mDel($id)
     {
         if (!$id) {
             return false;
@@ -37,7 +37,7 @@ class ManageUpload extends Common
 
         !is_array($id) && $id = array($id);
         foreach ($id as $i) {
-            $del_file_result = $this->_m_del_file($i);
+            $del_file_result = $this->_mDel_file($i);
             if (false === $del_file_result) {
                 return false;
             }
@@ -52,7 +52,7 @@ class ManageUpload extends Common
     }
 
     //修改文件属主关系 $paths 不进行传参 就只进行 属主文件归零
-    public function m_edit($item, $paths = false)
+    public function mEdit($item, $paths = false)
     {
         if (!$item) {
             return false;
@@ -60,7 +60,7 @@ class ManageUpload extends Common
 
         if (is_array($item)) {
             foreach ($item as $i) {
-                $edit_result = $this->m_edit($i);
+                $edit_result = $this->mEdit($i);
                 if (!$edit_result) {
                     return false;
                 }
@@ -100,7 +100,7 @@ class ManageUpload extends Common
         return true;
     }
 
-    public function m_find($id, $is_path = false)
+    public function mFind($id, $is_path = false)
     {
         if (!$id) {
             return false;
@@ -115,14 +115,14 @@ class ManageUpload extends Common
         return $manage_upload;
     }
 
-    protected function _decode_data(&$data)
+    protected function decodeData(&$data)
     {
         $data['size'] = $this->format_size($data['size']);
     }
 
-    private function _m_del_file($id)
+    private function _mDel_file($id)
     {
-        $file_path = $this->m_find_column($id, 'path');
+        $file_path = $this->mFindColumn($id, 'path');
         return (is_file($file_path)) ? @unlink($file_path) : true;
     }
 

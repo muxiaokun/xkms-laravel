@@ -32,9 +32,9 @@ class Itlink extends Backend
         $v_value && $where['is_statistics'] = (1 == $v_value) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $itlink_list = $ItlinkModel->m_select($where, true);
+        $itlink_list = $ItlinkModel->mSelect($where, true);
         $this->assign('itlink_list', $itlink_list);
-        $this->assign('itlink_list_count', $ItlinkModel->get_page_count($where));
+        $this->assign('itlink_list_count', $ItlinkModel->getPageCount($where));
 
         //初始化where_info
         $where_info['name']          = array('type' => 'input', 'name' => L('itlink') . L('name'));
@@ -60,7 +60,7 @@ class Itlink extends Backend
         if (IS_POST) {
             $ItlinkModel = D('Itlink');
             $data        = $this->_make_data();
-            $result_add  = $ItlinkModel->m_add($data);
+            $result_add  = $ItlinkModel->mAdd($data);
             if ($result_add) {
                 $this->_add_edit_after_common($data, $id);
                 $this->success(L('itlink') . L('add') . L('success'), U('index'));
@@ -84,7 +84,7 @@ class Itlink extends Backend
         $ItlinkModel = D('Itlink');
         if (IS_POST) {
             $data        = $this->_make_data();
-            $result_edit = $ItlinkModel->m_edit($id, $data);
+            $result_edit = $ItlinkModel->mEdit($id, $data);
             if ($result_edit) {
                 $this->_add_edit_after_common($data, $id);
                 $this->success(L('itlink') . L('edit') . L('success'), U('index'));
@@ -95,7 +95,7 @@ class Itlink extends Backend
             }
         }
 
-        $edit_info = $ItlinkModel->m_find($id);
+        $edit_info = $ItlinkModel->mFind($id);
         $this->assign('edit_info', $edit_info);
         $this->assign('title', L('itlink') . L('edit'));
         $this->display('addedit');
@@ -110,10 +110,10 @@ class Itlink extends Backend
         }
 
         $ItlinkModel = D('Itlink');
-        $result_del  = $ItlinkModel->m_del($id);
+        $result_del  = $ItlinkModel->mDel($id);
         if ($result_del) {
             $ManageUploadModel = D('ManageUpload');
-            $ManageUploadModel->m_edit($id);
+            $ManageUploadModel->mEdit($id);
             $this->success(L('itlink') . L('del') . L('success'), U('index'));
             return;
         } else {
@@ -129,7 +129,7 @@ class Itlink extends Backend
             case 'short_name':
                 //检查用户名是否存在
                 $ItlinkModel = D('Itlink');
-                $itlink_info = $ItlinkModel->m_select(array('short_name' => $data['short_name'], 'id' => array('neq', $data['id'])));
+                $itlink_info = $ItlinkModel->mSelect(array('short_name' => $data['short_name'], 'id' => array('neq', $data['id'])));
                 if (0 < count($itlink_info)) {
                     $result['info'] = L('short') . L('name') . L('exists');
                     break;
@@ -210,6 +210,6 @@ class Itlink extends Backend
         foreach ($data as $item) {
             $bind_file[] = $item['link_image'];
         }
-        $ManageUploadModel->m_edit($id, $bind_file);
+        $ManageUploadModel->mEdit($id, $bind_file);
     }
 }

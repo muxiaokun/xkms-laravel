@@ -26,9 +26,9 @@ class Quests extends FrontendMember
             'end_time'   => array('gt', $current_time),
             '(current_portion < max_portion OR max_portion = 0)',
         );
-        $quests_list = $QuestsModel->m_select($where, true);
+        $quests_list = $QuestsModel->mSelect($where, true);
         $this->assign('quests_list', $quests_list);
-        $this->assign('quests_list_count', $QuestsModel->get_page_count($where));
+        $this->assign('quests_list_count', $QuestsModel->getPageCount($where));
 
         $this->assign('title', L('quests'));
         $this->display();
@@ -44,7 +44,7 @@ class Quests extends FrontendMember
         }
 
         $QuestsModel = D('Quests');
-        $quests_info = $QuestsModel->m_find($id);
+        $quests_info = $QuestsModel->mFind($id);
         //检测是否能够提交
         $current_time = time();
         if ($quests_info['start_time'] < $current_time && $quests_info['end_time'] < $current_time) {
@@ -79,7 +79,7 @@ class Quests extends FrontendMember
                 }
             }
             $QuestsAnswerModel = D('QuestsAnswer');
-            $result_add        = $QuestsAnswerModel->m_add($data);
+            $result_add        = $QuestsAnswerModel->mAdd($data);
             if ($result_add) {
                 $QuestsModel->where(array('id' => $quests_info['id']))->setInc('current_portion');
                 $this->success(L('answer') . L('add') . L('success'), U('Quests/index'));

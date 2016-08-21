@@ -30,7 +30,7 @@ class Assess extends FrontendMember
         );
 
         //初始化翻页 和 列表数据
-        $assess_list = $AssessModel->m_select($where, true);
+        $assess_list = $AssessModel->mSelect($where, true);
         foreach ($assess_list as &$assess) {
             switch ($assess['target']) {
                 case 'member':
@@ -42,7 +42,7 @@ class Assess extends FrontendMember
             }
         }
         $this->assign('assess_list', $assess_list);
-        $this->assign('assess_list_conut', $AssessModel->get_page_count($where));
+        $this->assign('assess_list_conut', $AssessModel->getPageCount($where));
 
         $this->assign('title', L('assess'));
         $this->display();
@@ -58,7 +58,7 @@ class Assess extends FrontendMember
         }
 
         $AssessModel  = D('Assess');
-        $assess_info  = $AssessModel->m_find($id);
+        $assess_info  = $AssessModel->mFind($id);
         $current_time = time();
         if (
             1 != $assess_info['is_enable'] ||
@@ -73,7 +73,7 @@ class Assess extends FrontendMember
             $data = $this->_make_data();
             //提交时检测类型下可以被评分的组和组员
             $AssessLogMode = D('AssessLog');
-            $result_add    = $AssessLogMode->m_add($data);
+            $result_add    = $AssessLogMode->mAdd($data);
             if ($result_add) {
                 $this->success(L('grade') . L('success'), U('index'));
                 return;
@@ -126,7 +126,7 @@ class Assess extends FrontendMember
             case 'member':
                 $MemberModel                                = D('Member');
                 isset($data['keyword']) && $data['keyword'] = $where['member_name'] = array('like', '%' . $data['keyword'] . '%');
-                $member_user_list                           = $MemberModel->m_select($where);
+                $member_user_list                           = $MemberModel->mSelect($where);
                 foreach ($member_user_list as $member_user) {
                     $result['info'][] = array('value' => $member_user['id'], 'html' => $member_user['member_name']);
                 }
@@ -134,7 +134,7 @@ class Assess extends FrontendMember
             case 'member_group':
                 $MemberGroupModel                           = D('MemberGroup');
                 isset($data['keyword']) && $data['keyword'] = $where['name'] = array('like', '%' . $data['keyword'] . '%');
-                $member_group_list                          = $MemberGroupModel->m_select($where);
+                $member_group_list                          = $MemberGroupModel->mSelect($where);
                 foreach ($member_group_list as $member_group) {
                     $result['info'][] = array('value' => $member_group['id'], 'html' => $member_group['name']);
                 }

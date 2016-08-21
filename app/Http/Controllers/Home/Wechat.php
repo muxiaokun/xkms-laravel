@@ -125,9 +125,9 @@ class Wechat extends Frontend
             //已经绑定 直接登陆
             //未绑定 登录绑定
             $WechatModel = D('Wechat');
-            $wechat_id   = $WechatModel->m_find_id($user_info['openid']);
+            $wechat_id   = $WechatModel->mFindId($user_info['openid']);
             if ($wechat_id) {
-                $member_id = $WechatModel->m_find_column($wechat_id, 'member_id');
+                $member_id = $WechatModel->mFindColumn($wechat_id, 'member_id');
                 $msg       = $this->_login(null, null, false, $member_id);
                 $this->_member_bind_msg($msg);
             } else {

@@ -155,7 +155,7 @@ class Common extends Controller
 
         //如果记录不存在 追加新生成文件的记录
         $ManageUploadModel = D('ManageUpload');
-        $file_info         = $ManageUploadModel->m_find($new_file, true);
+        $file_info         = $ManageUploadModel->mFind($new_file, true);
         if (!$file_info) {
             $data = array(
                 'name'   => $new_name,
@@ -164,7 +164,7 @@ class Common extends Controller
                 'mime'   => '',
                 'suffix' => $pathinfo['extension'],
             );
-            $ManageUploadModel->m_add($data);
+            $ManageUploadModel->mAdd($data);
         }
 
         return $new_file;

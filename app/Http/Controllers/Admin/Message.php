@@ -35,13 +35,13 @@ class Message extends Backend
         $v_value                        = M_mktime_range('send_time');
         $v_value && $where['send_time'] = $v_value;
 
-        $message_list = $MessageModel->order('receive_time asc,send_time desc')->m_select($where, true);
+        $message_list = $MessageModel->order('receive_time asc,send_time desc')->mSelect($where, true);
         foreach ($message_list as &$message) {
-            $message['send_name']    = ($message['send_id']) ? $MemberModel->m_find_column($message['send_id'], 'member_name') : L('system');
-            $message['receive_name'] = ($message['receive_id']) ? $MemberModel->m_find_column($message['receive_id'], 'member_name') : L('system');
+            $message['send_name']    = ($message['send_id']) ? $MemberModel->mFindColumn($message['send_id'], 'member_name') : L('system');
+            $message['receive_name'] = ($message['receive_id']) ? $MemberModel->mFindColumn($message['receive_id'], 'member_name') : L('system');
         }
         $this->assign('message_list', $message_list);
-        $this->assign('message_list_count', $MessageModel->get_page_count($where));
+        $this->assign('message_list_count', $MessageModel->getPageCount($where));
 
         //初始化where_info
         $where_info               = array();
@@ -79,7 +79,7 @@ class Message extends Backend
                 'receive_id' => $receive_id,
                 'content'    => $content,
             );
-            $result_add = $MessageModel->m_add($data);
+            $result_add = $MessageModel->mAdd($data);
             if ($result_add) {
                 $this->success(L('send') . L('success'), U('index'));
                 return;
@@ -90,7 +90,7 @@ class Message extends Backend
 
         if ($receive_id) {
             $MemberModel = D('Member');
-            $this->assign('receive_info', $MemberModel->m_find($receive_id));
+            $this->assign('receive_info', $MemberModel->mFind($receive_id));
         }
 
         $this->assign('title', L('send') . L('message'));
@@ -106,7 +106,7 @@ class Message extends Backend
         }
 
         $MessageModel = D('Message');
-        $result_del   = $MessageModel->m_del($id);
+        $result_del   = $MessageModel->mDel($id);
         if ($result_del) {
             $this->success(L('message') . L('del') . L('success'), U('index'));
             return;
@@ -125,7 +125,7 @@ class Message extends Backend
                 isset($data['inserted']) && $where['id']         = array('not in', $data['inserted']);
                 isset($data['keyword']) && $where['member_name'] = array('like', '%' . $data['keyword'] . '%');
                 $MemberModel                                     = D('Member');
-                $member_user_list                                = $MemberModel->m_select($where);
+                $member_user_list                                = $MemberModel->mSelect($where);
                 foreach ($member_user_list as $member_user) {
                     $result['info'][] = array('value' => $member_user['id'], 'html' => $member_user['member_name']);
                 }
@@ -134,7 +134,7 @@ class Message extends Backend
                 $MessageModel = D('Message');
                 $current_time = time();
                 $where        = array('receive_id' => 0);
-                $result_edit  = $MessageModel->where($where)->m_edit($data['id'], array('receive_time' => $current_time));
+                $result_edit  = $MessageModel->where($where)->mEdit($data['id'], array('receive_time' => $current_time));
                 if ($result_edit) {
                     $result['info'] = date(C('SYS_DATE_DETAIL'), $current_time);
                 } else {

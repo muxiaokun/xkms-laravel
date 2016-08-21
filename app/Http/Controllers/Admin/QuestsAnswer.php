@@ -39,13 +39,13 @@ class QuestsAnswer extends Backend
         );
 
         $QuestsAnswerModel  = D('QuestsAnswer');
-        $quests_answer_list = $QuestsAnswerModel->m_select($where, true);
+        $quests_answer_list = $QuestsAnswerModel->mSelect($where, true);
         foreach ($quests_answer_list as &$quests_answer) {
-            $member_name                  = $MemberModel->m_find_column($group_id, 'name');
+            $member_name                  = $MemberModel->mFindColumn($group_id, 'name');
             $quests_answer['member_name'] = ($member_name) ? $member_name : L('anonymous');
         }
         $this->assign('quests_answer_list', $quests_answer_list);
-        $this->assign('quests_answer_list_count', $QuestsAnswerModel->get_page_count($where));
+        $this->assign('quests_answer_list_count', $QuestsAnswerModel->getPageCount($where));
         //初始化where_info
         $where_info                 = array();
         $where_info['quests_title'] = array('type' => 'input', 'name' => L('quests') . L('name'));
@@ -72,8 +72,8 @@ class QuestsAnswer extends Backend
 
         $QuestsModel        = D('Quests');
         $QuestsAnswerModel  = D('QuestsAnswer');
-        $quests_answer_info = $QuestsAnswerModel->m_find($id);
-        $quests_info        = $QuestsModel->m_find($quests_answer_info['quests_id']);
+        $quests_answer_info = $QuestsAnswerModel->mFind($id);
+        $quests_info        = $QuestsModel->mFind($quests_answer_info['quests_id']);
 
         //初始化问题
         $quests_quest_list = json_decode($quests_info['ext_info'], true);
@@ -104,7 +104,7 @@ class QuestsAnswer extends Backend
 
         //读取问题
         $QuestsModel = D('Quests');
-        $quests_info = $QuestsModel->m_find($quests_id);
+        $quests_info = $QuestsModel->mFind($quests_id);
         //初始化问题
         $quests_quest_list = json_decode($quests_info['ext_info'], true);
         $QuestsAnswerModel = D('QuestsAnswer');
@@ -149,8 +149,8 @@ class QuestsAnswer extends Backend
         }
 
         $QuestsAnswerModel  = D('QuestsAnswer');
-        $quests_answer_info = $QuestsAnswerModel->m_find($id);
-        $result_del         = $QuestsAnswerModel->m_del($quests_answer_info['id']);
+        $quests_answer_info = $QuestsAnswerModel->mFind($id);
+        $result_del         = $QuestsAnswerModel->mDel($quests_answer_info['id']);
         if ($result_del) {
             $QuestsModel = D('Quests');
             $QuestsModel->where(array('id' => $quests_answer_info['quests_id']))->setDec('current_portion');

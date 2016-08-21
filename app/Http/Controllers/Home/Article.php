@@ -26,7 +26,7 @@ class Article extends Frontend
         }
 
         $ArticleModel = D('Article');
-        $article_info = $ArticleModel->where($this->_get_article_where())->m_find($id);
+        $article_info = $ArticleModel->where($this->_get_article_where())->mFind($id);
         if (!$article_info) {
             $this->error(L('article') . L('by') . L('hidden'), U('Index/index'));
         }
@@ -34,18 +34,18 @@ class Article extends Frontend
         $ArticleModel->where(array('id' => $id))->setInc('hits');
 
         $ArticleCategoryModel = D('ArticleCategory');
-        $category_info        = $ArticleCategoryModel->m_find($article_info['cate_id']);
+        $category_info        = $ArticleCategoryModel->mFind($article_info['cate_id']);
 
         $ArticleChannelModel = D('ArticleChannel');
-        $channel_info        = $ArticleChannelModel->m_find($article_info['channel_id']);
+        $channel_info        = $ArticleChannelModel->mFind($article_info['channel_id']);
 
         //检测权限
         $member_group_id                                              = session('frontend_info.group_id');
-        $m_find_allows                                                = array();
-        is_array($article_info['access_group_id']) && $m_find_allows  = array_merge($m_find_allows, $article_info['access_group_id']);
-        is_array($category_info['access_group_id']) && $m_find_allows = array_merge($m_find_allows, $category_info['access_group_id']);
-        is_array($channel_info['access_group_id']) && $m_find_allows  = array_merge($m_find_allows, $channel_info['access_group_id']);
-        if ($m_find_allows && !M_in_array($member_group_id, $m_find_allows)) {
+        $mFind_allows                                                = array();
+        is_array($article_info['access_group_id']) && $mFind_allows  = array_merge($mFind_allows, $article_info['access_group_id']);
+        is_array($category_info['access_group_id']) && $mFind_allows = array_merge($mFind_allows, $category_info['access_group_id']);
+        is_array($channel_info['access_group_id']) && $mFind_allows  = array_merge($mFind_allows, $channel_info['access_group_id']);
+        if ($mFind_allows && !M_in_array($member_group_id, $mFind_allows)) {
             $this->error(L('none') . L('privilege') . L('access') . L('comma') . L('please') . L('login'), U('Member/index'));
         }
 
@@ -83,20 +83,20 @@ class Article extends Frontend
         }
 
         $ArticleCategoryModel = D('ArticleCategory');
-        $category_info        = $ArticleCategoryModel->m_find($cate_id);
+        $category_info        = $ArticleCategoryModel->mFind($cate_id);
         if (!$category_info) {
             $this->error(L('category') . L('id') . L('error'), U('Index/index'));
         }
 
         $ArticleChannelModel = D('ArticleChannel');
-        $channel_info        = $ArticleChannelModel->m_find($article_info['channel_id']);
+        $channel_info        = $ArticleChannelModel->mFind($article_info['channel_id']);
 
         //检测权限
         $member_group_id                                              = session('frontend_info.group_id');
-        $m_find_allows                                                = array();
-        is_array($category_info['access_group_id']) && $m_find_allows = array_merge($m_find_allows, $category_info['access_group_id']);
-        is_array($channel_info['access_group_id']) && $m_find_allows  = array_merge($m_find_allows, $channel_info['access_group_id']);
-        if ($m_find_allows && !M_in_array($member_group_id, $m_find_allows)) {
+        $mFind_allows                                                = array();
+        is_array($category_info['access_group_id']) && $mFind_allows = array_merge($mFind_allows, $category_info['access_group_id']);
+        is_array($channel_info['access_group_id']) && $mFind_allows  = array_merge($mFind_allows, $channel_info['access_group_id']);
+        if ($mFind_allows && !M_in_array($member_group_id, $mFind_allows)) {
             $this->error(L('none') . L('privilege') . L('access') . L('comma') . L('please') . L('login'), U('Member/index'));
         }
 
@@ -118,13 +118,13 @@ class Article extends Frontend
         } else {
             //如果分类是列表页
             $template  = $template['list_template'];
-            $child_arr = $ArticleCategoryModel->m_find_child_id($cate_id);
+            $child_arr = $ArticleCategoryModel->mFind_child_id($cate_id);
             $where     = array_merge($this->_get_article_where(), array(
                 'channel_id' => 0,
                 'cate_id'    => array('in', $child_arr),
             ));
             $channel_id && $where['channel_id']     = array('in', array(0, $channel_id));
-            $category_top_info                      = $ArticleCategoryModel->m_find_top($category_info['id']);
+            $category_top_info                      = $ArticleCategoryModel->mFind_top($category_info['id']);
             $attribute_where                        = M_attribute_where($category_top_info['attribute']);
             $attribute_where && $where['attribute'] = $attribute_where;
 
@@ -134,10 +134,10 @@ class Article extends Frontend
                 $page = $category_info['s_limit'];
                 $this->assign('article_list_max', $page);
             }
-            $article_lsit = $ArticleModel->m_select($where, $page);
+            $article_lsit = $ArticleModel->mSelect($where, $page);
 
             $this->assign('article_list', $article_lsit);
-            $this->assign('article_list_count', $ArticleModel->get_page_count($where));
+            $this->assign('article_list_count', $ArticleModel->getPageCount($where));
         }
 
         $this->assign('category_info', $category_info);
@@ -157,13 +157,13 @@ class Article extends Frontend
         }
 
         $ArticleChannelModel = D('ArticleChannel');
-        $channel_info        = $ArticleChannelModel->m_find($channel_id);
+        $channel_info        = $ArticleChannelModel->mFind($channel_id);
 
         //检测权限
         $member_group_id                                             = session('frontend_info.group_id');
-        $m_find_allows                                               = array();
-        is_array($channel_info['access_group_id']) && $m_find_allows = array_merge($m_find_allows, $channel_info['access_group_id']);
-        if ($m_find_allows && !M_in_array($member_group_id, $m_find_allows)) {
+        $mFind_allows                                               = array();
+        is_array($channel_info['access_group_id']) && $mFind_allows = array_merge($mFind_allows, $channel_info['access_group_id']);
+        if ($mFind_allows && !M_in_array($member_group_id, $mFind_allows)) {
             $this->error(L('none') . L('privilege') . L('access') . L('comma') . L('please') . L('login'), U('Member/index'));
         }
 
@@ -186,7 +186,7 @@ class Article extends Frontend
         $cate_id = I('cate_id');
         if ($cate_id) {
             $ArticleCategoryModel                   = D('ArticleCategory');
-            $where['cate_id']                       = array('in', $ArticleCategoryModel->m_find_child_id($cate_id));
+            $where['cate_id']                       = array('in', $ArticleCategoryModel->mFind_child_id($cate_id));
             $category_position                      = $this->_get_category_position($cate_id);
             $attribute_where                        = M_attribute_where($category_position['attribute']);
             $attribute_where && $where['attribute'] = $attribute_where;
@@ -224,9 +224,9 @@ class Article extends Frontend
         $where['_complex'] = $complex;
 
         $ArticleModel = D('Article');
-        $article_lsit = $ArticleModel->m_select($where, true);
+        $article_lsit = $ArticleModel->mSelect($where, true);
         $this->assign('article_list', $article_lsit);
-        $this->assign('article_list_count', $ArticleModel->get_page_count($where));
+        $this->assign('article_list_count', $ArticleModel->getPageCount($where));
 
         $request = I();
         $this->assign('request', $request);
@@ -249,7 +249,7 @@ class Article extends Frontend
         // 如果频道编号存在 则查询频道是否有模板的配置 覆盖一般分类配置
         if ($channel_id) {
             $ArticleChannelModel  = D('ArticleChannel');
-            $channel_info         = $ArticleChannelModel->m_find($channel_id);
+            $channel_info         = $ArticleChannelModel->mFind($channel_id);
             $def_channel_template = CONTROLLER_NAME . C('TMPL_FILE_DEPR') . 'channel';
             $data                 = $channel_info['ext_info'];
             $template             = array(
@@ -286,7 +286,7 @@ class Article extends Frontend
         }
 
         $ArticleCategoryModel = D('ArticleCategory');
-        $category_info        = $ArticleCategoryModel->m_find($cate_id);
+        $category_info        = $ArticleCategoryModel->mFind($cate_id);
         if ($category_info[$col]) {
             return $category_info[$col];
         }
@@ -305,7 +305,7 @@ class Article extends Frontend
         }
 
         $ArticleCategoryModel = D('ArticleCategory');
-        $parent_id            = $ArticleCategoryModel->m_find_column($cate_id, 'parent_id');
+        $parent_id            = $ArticleCategoryModel->mFindColumn($cate_id, 'parent_id');
         return ($cate_id == $parent_id) ? '' : $this->_get_channel_template($parent_id, $col, $data);
     }
 
@@ -319,15 +319,15 @@ class Article extends Frontend
         }
 
         $ArticleCategoryModel = D('ArticleCategory');
-        $top_cate_id          = $ArticleCategoryModel->m_find_top_id($cate_id);
-        $category_top_info    = $ArticleCategoryModel->m_find($top_cate_id);
+        $top_cate_id          = $ArticleCategoryModel->mFind_top_id($cate_id);
+        $category_top_info    = $ArticleCategoryModel->mFind($top_cate_id);
 
         $where = array(
             'parent_id' => $top_cate_id,
             'if_show'   => 1,
         );
         $category_count = $ArticleCategoryModel->where($where)->count();
-        $category_list  = $ArticleCategoryModel->m_select($where, $category_count);
+        $category_list  = $ArticleCategoryModel->mSelect($where, $category_count);
 
         $category_position                  = $category_top_info;
         $category_position['category_list'] = $category_list;
@@ -347,7 +347,7 @@ class Article extends Frontend
         }
 
         $ArticleCategoryModel  = D('ArticleCategory');
-        $article_category_info = $ArticleCategoryModel->m_find($cate_id);
+        $article_category_info = $ArticleCategoryModel->mFind($cate_id);
         $path[]                = array(
             'name' => $article_category_info['name'],
             'link' => M_U('article_category', array('cate_id' => $article_category_info['id'])),
@@ -396,7 +396,7 @@ class Article extends Frontend
         $p_order      = ('desc' == $mian_order) ? $origin_sort . ' asc' : $origin_sort . ' desc';
         $n_order      = ('desc' == $mian_order) ? $origin_sort . ' desc' : $origin_sort . ' asc';
         $ArticleModel = D('Article');
-        $article_info = $ArticleModel->m_find($id);
+        $article_info = $ArticleModel->mFind($id);
         //上一篇
         $where[$mian_sort] = array($p_condition, $article_info[$mian_sort]);
         $article_pn['p']   = $ArticleModel->where($where)->order($p_order)->limit($limit)->select();

@@ -5,23 +5,23 @@ namespace App\Model;
 
 class ArticleCategory extends Common
 {
-    public function m_select($where = null, $page = false)
+    public function mSelect($where = null, $page = false)
     {
-        $this->_parse_where($where);
-        $this->_get_page($page);
+        $this->parseWhere($where);
+        $this->getPage($page);
         !isset($this->options['order']) && $this->order('sort');
         $data = $this->where($where)->select();
-        foreach ($data as &$data_row) {$this->_decode_data($data_row);}
+        foreach ($data as &$data_row) {$this->decodeData($data_row);}
         return $data;
     }
 
     //获得缩进的分类树
-    public function m_select_tree($where = null, $parent_id = 0, $level = 0)
+    public function mSelect_tree($where = null, $parent_id = 0, $level = 0)
     {
         $config = array(
-            'list_fn'     => 'm_select',
+            'list_fn'     => 'mSelect',
             'list_where'  => $where,
-            'tree_fn'     => 'm_select_tree',
+            'tree_fn'     => 'mSelect_tree',
             'id'          => 'id',
             'parent_id'   => 'parent_id',
             'retract_col' => 'name',
@@ -29,7 +29,7 @@ class ArticleCategory extends Common
         return $this->field('id,name')->_make_tree($config, $parent_id, $level);
     }
 
-    public function m_del($id)
+    public function mDel($id)
     {
         if (!$id) {
             return false;
@@ -43,15 +43,15 @@ class ArticleCategory extends Common
 
     //返回子级所有分类id 数组集合
     //$push_me 是否包含传入id
-    public function m_find_child_id($id, $push_me = true)
+    public function mFind_child_id($id, $push_me = true)
     {
         $where             = array('parent_id' => $id);
-        $article_category  = $this->field('id')->m_select($where);
+        $article_category  = $this->field('id')->mSelect($where);
         $category_child_id = array();
         foreach ($article_category as $category) {
             $category_child_id[] = $category['id'];
             if (0 < $this->where(array('parent_id' => $category['id']))->count()) {
-                $article_category_child = $this->m_find_child_id($category['id'], false);
+                $article_category_child = $this->mFind_child_id($category['id'], false);
                 foreach ($article_category_child as $child) {
                     $category_child_id[] = $child;
                 }
@@ -66,44 +66,44 @@ class ArticleCategory extends Common
     }
 
     // 寻找分类的顶级分类
-    public function m_find_top($id)
+    public function mFind_top($id)
     {
         if (!$id) {
             return false;
         }
 
-        $article_category_top_id = $this->m_find_top_id($id);
-        return $this->m_find($article_category_top_id);
+        $article_category_top_id = $this->mFind_top_id($id);
+        return $this->mFind($article_category_top_id);
     }
 
     // 寻找分类的顶级分类ID
-    public function m_find_top_id($id)
+    public function mFind_top_id($id)
     {
         if (!$id) {
             return false;
         }
 
-        $category_info = $this->field('id,parent_id')->m_find($id);
+        $category_info = $this->field('id,parent_id')->mFind($id);
         if (0 != $category_info['parent_id']) {
-            return $this->m_find_top_id($category_info['parent_id']);
+            return $this->mFind_top_id($category_info['parent_id']);
         }
 
         return $category_info['id'];
     }
 
     // 寻找分类的顶级分类列
-    public function m_find_top_column($id, $column_name)
+    public function mFind_top_column($id, $column_name)
     {
         if (!$id) {
             return false;
         }
 
-        $article_category_top_id = $this->m_find_top_id($id);
-        return $this->m_find_column($article_category_top_id, $column_name);
+        $article_category_top_id = $this->mFind_top_id($id);
+        return $this->mFindColumn($article_category_top_id, $column_name);
     }
 
     //返回有权管理的频道
-    public function m_find_allow($type = true)
+    public function mFind_allow($type = true)
     {
         $where = array();
         //ma = manage admin 编辑属主 属组
@@ -116,19 +116,19 @@ class ArticleCategory extends Common
             $where['manage_group_id'] = session('backend_info.group_id');
         }
 
-        $m_find_allow = array(0);
+        $mFind_allow = array(0);
         if (empty($where['manage_id']) && empty($where['manage_group_id'])) {
-            return $m_find_allow;
+            return $mFind_allow;
         }
 
-        $article_category = $this->field('id')->m_select($where);
+        $article_category = $this->field('id')->mSelect($where);
         foreach ($article_category as $category) {
-            $m_find_allow[] = $category['id'];
+            $mFind_allow[] = $category['id'];
         }
-        return $m_find_allow;
+        return $mFind_allow;
     }
 
-    protected function _parse_where(&$where)
+    protected function parseWhere(&$where)
     {
         if (is_null($where)) {
             return;
@@ -148,7 +148,7 @@ class ArticleCategory extends Common
         }
     }
 
-    protected function _encode_data(&$data)
+    protected function encodeData(&$data)
     {
         //只有顶级可以设置扩展模板和属性
         if (isset($data['parent_id']) && 0 < $data['parent_id']) {
@@ -163,7 +163,7 @@ class ArticleCategory extends Common
         isset($data['attribute']) && $data['attribute']             = serialize($data['attribute']);
     }
 
-    protected function _decode_data(&$data)
+    protected function decodeData(&$data)
     {
         isset($data['manage_id']) && $data['manage_id']             = explode('|', substr($data['manage_id'], 1, strlen($data['manage_id']) - 2));
         isset($data['manage_group_id']) && $data['manage_group_id'] = explode('|', substr($data['manage_group_id'], 1, strlen($data['manage_group_id']) - 2));

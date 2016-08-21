@@ -32,13 +32,13 @@ class Region extends Backend
         $v_value && $where['postcode']    = array('like', '%' . $v_value . '%');
 
         //初始化翻页 和 列表数据
-        $region_list = $RegionModel->m_select($where, true);
+        $region_list = $RegionModel->mSelect($where, true);
         foreach ($region_list as &$region) {
-            $region['parent_name'] = $RegionModel->m_find_column($region['parent_id'], 'region_name');
+            $region['parent_name'] = $RegionModel->mFindColumn($region['parent_id'], 'region_name');
         }
 
         $this->assign('region_list', $region_list);
-        $this->assign('region_list_count', $RegionModel->get_page_count($where));
+        $this->assign('region_list_count', $RegionModel->getPageCount($where));
 
         //初始化where_info
         $where_info['region_name'] = array('type' => 'input', 'name' => L('region_name'));
@@ -64,7 +64,7 @@ class Region extends Backend
         if (IS_POST) {
             $RegionModel = D('Region');
             $data        = $this->_make_data();
-            $result_add  = $RegionModel->m_add($data);
+            $result_add  = $RegionModel->mAdd($data);
             if ($result_add) {
                 $this->success(L('region') . L('add') . L('success'), U('index'));
                 return;
@@ -88,7 +88,7 @@ class Region extends Backend
         $RegionModel = D('Region');
         if (IS_POST) {
             $data        = $this->_make_data();
-            $result_edit = $RegionModel->m_edit($id, $data);
+            $result_edit = $RegionModel->mEdit($id, $data);
             if ($result_edit) {
                 $this->success(L('region') . L('edit') . L('success'), U('index'));
                 return;
@@ -98,8 +98,8 @@ class Region extends Backend
             }
         }
 
-        $edit_info                = $RegionModel->m_find($id);
-        $edit_info['parent_name'] = $RegionModel->m_find_column($edit_info['parent_id'], 'region_name');
+        $edit_info                = $RegionModel->mFind($id);
+        $edit_info['parent_name'] = $RegionModel->mFindColumn($edit_info['parent_id'], 'region_name');
         $this->assign('edit_info', $edit_info);
         $this->assign('title', L('region') . L('edit'));
         $this->display('addedit');
@@ -114,7 +114,7 @@ class Region extends Backend
         }
 
         $RegionModel = D('Region');
-        $result_del  = $RegionModel->m_del($id);
+        $result_del  = $RegionModel->mDel($id);
         if ($result_del) {
             $this->success(L('region') . L('del') . L('success'), U('index'));
             return;

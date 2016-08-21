@@ -35,9 +35,9 @@ class FrontendMember extends Frontend
 
             //检查管理员或者管理员组权限变动 先检查数量 提高效率
             $MemberModel            = D('Member');
-            $member_info            = $MemberModel->m_find($frontend_info['id']);
+            $member_info            = $MemberModel->mFind($frontend_info['id']);
             $MemberGroupModel       = D('MemberGroup');
-            $member_group_privilege = $MemberGroupModel->m_find_privilege($member_info['group_id']);
+            $member_group_privilege = $MemberGroupModel->mFind_privilege($member_info['group_id']);
             if ($frontend_info['group_privilege'] !== $member_group_privilege) {
                 $this->_logout();
                 $this->error(L('privilege') . L('change') . L('please') . L('login'), U('Member/index'));

@@ -37,12 +37,12 @@ class AdminLog extends Backend
         $v_value && $where['controller_name'] = $v_value;
 
         //初始化翻页 和 列表数据
-        $admin_log_list = $AdminLogModel->m_select($where, true);
+        $admin_log_list = $AdminLogModel->mSelect($where, true);
         foreach ($admin_log_list as &$admin_log) {
-            $admin_log['admin_name'] = $AdminModel->m_find_column($admin_log['admin_id'], 'admin_name');
+            $admin_log['admin_name'] = $AdminModel->mFindColumn($admin_log['admin_id'], 'admin_name');
         }
         $this->assign('admin_log_list', $admin_log_list);
-        $this->assign('admin_log_list_count', $AdminLogModel->get_page_count($where));
+        $this->assign('admin_log_list_count', $AdminLogModel->getPageCount($where));
 
         //初始化where_info
         $where_info                    = array();
@@ -69,7 +69,7 @@ class AdminLog extends Backend
         }
 
         $AdminLogModel = D('AdminLog');
-        $result_del    = $AdminLogModel->m_del($id);
+        $result_del    = $AdminLogModel->mDel($id);
         if ($result_del) {
             $this->success(L('log') . L('del') . L('success'), U('index'));
         } else {
@@ -85,7 +85,7 @@ class AdminLog extends Backend
         }
 
         $AdminLogModel = D('AdminLog');
-        $result_del    = $AdminLogModel->m_del_all();
+        $result_del    = $AdminLogModel->mDel_all();
         if ($result_del) {
             $this->success(L('log') . L('del') . L('success'), U('index'));
         } else {

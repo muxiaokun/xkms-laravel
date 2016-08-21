@@ -200,7 +200,7 @@ class Index extends Backend
                 $this->error($result['info'], U(ACTION_NAME));
             }
 
-            $result_edit = $AdminModel->m_edit($admin_info['id'], array('admin_pwd' => $password));
+            $result_edit = $AdminModel->mEdit($admin_info['id'], array('admin_pwd' => $password));
             if ($result_edit) {
                 $this->success(L('edit') . L('pass') . L('success'), U('edit_my_pass'));
                 return;
@@ -233,7 +233,7 @@ class Index extends Backend
         if ($clean_cache_result && $clean_temp_result) {
             //写入日志
             $AdminLogModel = D('AdminLog');
-            $AdminLogModel->m_add(session('backend_info.id'));
+            $AdminLogModel->mAdd(session('backend_info.id'));
             $this->success($message_str . L('clean') . L('success'), U('main'));
         } else {
             $this->error($message_str . L('clean') . L('error'), U('main'));
@@ -252,7 +252,7 @@ class Index extends Backend
         if ($clean_result) {
             //写入日志
             $AdminLogModel = D('AdminLog');
-            $AdminLogModel->m_add(session('backend_info.id'));
+            $AdminLogModel->mAdd(session('backend_info.id'));
             $this->success(L('clean') . L('log') . L('success'), U('main'));
         } else {
             $this->error(L('clean') . L('log') . L('error'), U('main'));

@@ -5,14 +5,14 @@ namespace App\Model;
 
 class QuestsAnswer extends Common
 {
-    public function m_add($data)
+    public function mAdd($data)
     {
         if (!$data) {
             return false;
         }
 
         !isset($data['add_time']) && $data['add_time'] = time();
-        return parent::m_add($data);
+        return parent::mAdd($data);
     }
 
     //统计答案

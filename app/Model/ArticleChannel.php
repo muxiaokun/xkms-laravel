@@ -5,18 +5,18 @@ namespace App\Model;
 
 class ArticleChannel extends Common
 {
-    public function m_select($where = null, $page = false)
+    public function mSelect($where = null, $page = false)
     {
-        $this->_parse_where($where);
-        $this->_get_page($page);
+        $this->parseWhere($where);
+        $this->getPage($page);
         !isset($this->options['order']) && $this->order('id desc');
         $data = $this->where($where)->select();
-        foreach ($data as &$data_row) {$this->_decode_data($data_row);}
+        foreach ($data as &$data_row) {$this->decodeData($data_row);}
         return $data;
     }
 
     //返回有权管理的频道
-    public function m_find_allow($type = true)
+    public function mFind_allow($type = true)
     {
         $where = array();
         //ma = manage admin 编辑属主 属组
@@ -29,19 +29,19 @@ class ArticleChannel extends Common
             $where['manage_group_id'] = session('backend_info.group_id');
         }
 
-        $m_find_allow = array(0);
+        $mFind_allow = array(0);
         if (empty($where['manage_id']) && empty($where['manage_group_id'])) {
-            return $m_find_allow;
+            return $mFind_allow;
         }
 
-        $article_channel = $this->field('id')->m_select($where);
+        $article_channel = $this->field('id')->mSelect($where);
         foreach ($article_channel as $channel) {
-            $m_find_allow[] = $channel['id'];
+            $mFind_allow[] = $channel['id'];
         }
-        return $m_find_allow;
+        return $mFind_allow;
     }
 
-    protected function _parse_where(&$where)
+    protected function parseWhere(&$where)
     {
         if (is_null($where)) {
             return;
@@ -61,14 +61,14 @@ class ArticleChannel extends Common
         }
     }
 
-    protected function _encode_data(&$data)
+    protected function encodeData(&$data)
     {
         isset($data['manage_id']) && $data['manage_id']             = '|' . implode('|', $data['manage_id']) . '|';
         isset($data['manage_group_id']) && $data['manage_group_id'] = '|' . implode('|', $data['manage_group_id']) . '|';
         isset($data['access_group_id']) && $data['access_group_id'] = serialize($data['access_group_id']);
         isset($data['ext_info']) && $data['ext_info']               = serialize($data['ext_info']);
     }
-    protected function _decode_data(&$data)
+    protected function decodeData(&$data)
     {
         isset($data['manage_id']) && $data['manage_id']             = explode('|', substr($data['manage_id'], 1, strlen($data['manage_id']) - 2));
         isset($data['manage_group_id']) && $data['manage_group_id'] = explode('|', substr($data['manage_group_id'], 1, strlen($data['manage_group_id']) - 2));

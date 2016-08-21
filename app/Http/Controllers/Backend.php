@@ -18,11 +18,11 @@ class Backend extends Common
     {
         /*parent::_initialize();
         if ($this->_is_login()) {
-            $backend_info = session('backend_info');
+            $backendInfo = session('backend_info');
             //自动登出时间
-            if (time() - C('SYS_BACKEND_TIMEOUT') < $backend_info['login_time']) {
-                $backend_info['login_time'] = time();
-                session('backend_info', $backend_info);
+            if (time() - C('SYS_BACKEND_TIMEOUT') < $backendInfo['login_time']) {
+                $backendInfo['login_time'] = time();
+                session('backend_info', $backendInfo);
             } else {
                 $this->_logout();
                 $this->error(L('login') . L('timeout'), U('Admin/Index/index'));
@@ -30,12 +30,12 @@ class Backend extends Common
 
             //检查管理员或者管理员组权限变动 先检查数量 提高效率
             $AdminModel            = D('Admin');
-            $admin_info            = $AdminModel->m_find($backend_info['id']);
+            $admin_info            = $AdminModel->mFind($backendInfo['id']);
             $AdminGroupModel       = D('AdminGroup');
-            $admin_group_privilege = $AdminGroupModel->m_find_privilege($admin_info['group_id']);
+            $admin_group_privilege = $AdminGroupModel->mFind_privilege($admin_info['group_id']);
             if (
-                $backend_info['privilege'] !== $admin_info['privilege'] ||
-                $backend_info['group_privilege'] !== $admin_group_privilege
+                $backendInfo['privilege'] !== $admin_info['privilege'] ||
+                $backendInfo['group_privilege'] !== $admin_group_privilege
             ) {
                 $this->_logout();
                 $this->error(L('privilege') . L('change') . L('please') . L('login'), U('Admin/Index/index'));
@@ -51,7 +51,7 @@ class Backend extends Common
                 $deny_log['Index'] = array('index', 'top_nav', 'left_nav', 'main', 'logout');
                 if (!in_array(ACTION_NAME, $deny_log[CONTROLLER_NAME])) {
                     $AdminLogModel = D('AdminLog');
-                    $AdminLogModel->m_add($backend_info['id']);
+                    $AdminLogModel->mAdd($backendInfo['id']);
                 }
             }
         } else {
@@ -108,7 +108,7 @@ class Backend extends Common
         $login_num = C('SYS_BACKEND_LOGIN_NUM');
         $lock_time = C('SYS_BACKEND_LOCK_TIME');
         if (0 != $login_num) {
-            $login_info = $AdminModel->m_find($AdminModel->m_find_id($user_name));
+            $login_info = $AdminModel->mFind($AdminModel->mFindId($user_name));
             if (0 != $login_info['lock_time'] && $login_info['lock_time'] > (time() - $lock_time)) {
                 $AdminModel->data(array('lock_time' => time()))->where(array('id' => $login_info['id']))->save();
                 return 'lock_user_error';
@@ -120,7 +120,7 @@ class Backend extends Common
             //管理员有组的 加载分组权限
             if (0 < count($admin_info['group_id'])) {
                 $AdminGroupModel               = D('AdminGroup');
-                $admin_info['group_privilege'] = $AdminGroupModel->m_find_privilege($admin_info['group_id']);
+                $admin_info['group_privilege'] = $AdminGroupModel->mFind_privilege($admin_info['group_id']);
             }
             //重置登录次数
             if (0 != $admin_info['login_num']) {
@@ -169,9 +169,9 @@ class Backend extends Common
         //登录后 检查是否有权限可以操作 1.不是默认框架控制器 2.拥有管理员管理组全部权限 3.拥有权限 4.ajax_api接口 4.不需要权限就能访问的
         $allow_action['Index']        = array('index', 'top_nav', 'left_nav', 'main', 'logout');
         $allow_action['ManageUpload'] = array('UploadFile', 'ManageFile');
-        $backend_info                 = session('backend_info');
-        $admin_priv                   = $backend_info['privilege'];
-        $admin_group_priv             = ($backend_info['group_privilege']) ? $backend_info['group_privilege'] : array();
+        $backendInfo                 = session('backend_info');
+        $admin_priv                   = $backendInfo['privilege'];
+        $admin_group_priv             = ($backendInfo['group_privilege']) ? $backendInfo['group_privilege'] : array();
         if (
             'ajax_api' != $action_name &&
             !in_array($action_name, $allow_action[$controller_name]) &&

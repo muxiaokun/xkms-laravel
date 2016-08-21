@@ -23,8 +23,8 @@ class AdminGroup extends Backend
         $where           = array();
         if (1 != session('backend_info.id')) {
             //非root需要权限
-            $m_find_allow = $AdminGroupModel->m_find_allow();
-            $where['id']  = array('in', $m_find_allow);
+            $mFind_allow = $AdminGroupModel->mFind_allow();
+            $where['id']  = array('in', $mFind_allow);
         }
         //建立where
         $v_value                        = '';
@@ -34,9 +34,9 @@ class AdminGroup extends Backend
         $v_value && $where['is_enable'] = (1 == $v_value) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $admin_group_list = $AdminGroupModel->m_select($where, true);
+        $admin_group_list = $AdminGroupModel->mSelect($where, true);
         $this->assign('admin_group_list', $admin_group_list);
-        $this->assign('admin_group_list_count', $AdminGroupModel->get_page_count($where));
+        $this->assign('admin_group_list_count', $AdminGroupModel->getPageCount($where));
 
         //初始化where_info
         $where_info              = array();
@@ -62,7 +62,7 @@ class AdminGroup extends Backend
         $AdminGroupModel = D('AdminGroup');
         if (IS_POST) {
             $data       = $this->_make_data();
-            $result_add = $AdminGroupModel->m_add($data);
+            $result_add = $AdminGroupModel->mAdd($data);
             if ($result_add) {
                 $this->success(L('management') . L('group') . L('add') . L('success'), U('index'));
                 return;
@@ -88,7 +88,7 @@ class AdminGroup extends Backend
         $AdminGroupModel = D('AdminGroup');
         if (IS_POST) {
             $data        = $this->_make_data();
-            $result_edit = $AdminGroupModel->m_edit($id, $data);
+            $result_edit = $AdminGroupModel->mEdit($id, $data);
             if ($result_edit) {
                 $this->success(L('management') . L('group') . L('edit') . L('success'), U('index'));
                 return;
@@ -98,9 +98,9 @@ class AdminGroup extends Backend
             }
         }
         //获取分组默认信息
-        $edit_info = $AdminGroupModel->m_find($id);
+        $edit_info = $AdminGroupModel->mFind($id);
         foreach ($edit_info['manage_id'] as $manage_key => $manage_id) {
-            $admin_name                          = $AdminModel->m_find_column($manage_id, 'admin_name');
+            $admin_name                          = $AdminModel->mFindColumn($manage_id, 'admin_name');
             $edit_info['manage_id'][$manage_key] = array('value' => $manage_id, 'html' => $admin_name);
         }
         $edit_info['manage_id'] = json_encode($edit_info['manage_id']);
@@ -122,17 +122,17 @@ class AdminGroup extends Backend
         $AdminGroupModel = D('AdminGroup');
         if (1 != session('backend_info.id')) {
             //非root需要权限
-            $m_find_allow = $AdminGroupModel->m_find_allow();
+            $mFind_allow = $AdminGroupModel->mFind_allow();
         }
-        if ($id == 1 || (!in_array($id, $m_find_allow) && count(0 < $m_find_allow))) {
+        if ($id == 1 || (!in_array($id, $mFind_allow) && count(0 < $mFind_allow))) {
             $this->error(L('id') . L('not') . L('del'), U('index'));
         }
 
-        $result_del = $AdminGroupModel->m_del($id);
+        $result_del = $AdminGroupModel->mDel($id);
         if ($result_del) {
             //删除成功后 删除管理员与组的关系
             $AdminModel = D('Admin');
-            $AdminModel->m_clean($id, 'group_id', 0);
+            $AdminModel->mClean($id, 'group_id');
             $this->success(L('management') . L('group') . L('del') . L('success'), U('index'));
             return;
         } else {
@@ -163,7 +163,7 @@ class AdminGroup extends Backend
                 }
                 //检查管理组名是否存在
                 $AdminGroupModel = D('AdminGroup');
-                $admin_info      = $AdminGroupModel->m_select(array('name' => $data['name'], 'id' => array('neq', $data['id'])));
+                $admin_info      = $AdminGroupModel->mSelect(array('name' => $data['name'], 'id' => array('neq', $data['id'])));
                 if (0 < count($admin_info)) {
                     $result['info'] = L('admin') . L('group') . L('name') . L('exists');
                     break;
@@ -207,7 +207,7 @@ class AdminGroup extends Backend
                 isset($data['inserted']) && $where['id']        = array('not in', $data['inserted']);
                 $AdminModel                                     = D('Admin');
                 isset($data['keyword']) && $where['admin_name'] = array('like', '%' . $data['keyword'] . '%');
-                $admin_user_list                                = $AdminModel->m_select($where);
+                $admin_user_list                                = $AdminModel->mSelect($where);
                 foreach ($admin_user_list as $admin_user) {
                     $result['info'][] = array('value' => $admin_user['id'], 'html' => $admin_user['admin_name']);
                 }

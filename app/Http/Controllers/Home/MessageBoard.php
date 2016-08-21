@@ -24,7 +24,7 @@ class MessageBoard extends Frontend
         }
 
         $MessageBoardModel  = D('MessageBoard');
-        $message_board_info = $MessageBoardModel->m_find($id);
+        $message_board_info = $MessageBoardModel->mFind($id);
         if (!$message_board_info) {
             $this->error(L('messageboard') . L('dont') . L('exists'));
         }
@@ -34,13 +34,13 @@ class MessageBoard extends Frontend
         $MessageBoardLogModel   = D('MessageBoardLog');
         $where                  = array();
         $where['audit_id']      = array('gt', 0);
-        $message_board_log_list = $MessageBoardLogModel->order('add_time desc')->m_select($where, true);
+        $message_board_log_list = $MessageBoardLogModel->order('add_time desc')->mSelect($where, true);
         foreach ($message_board_log_list as &$message_board_log) {
             $message_board_log['reply_info'] = ($message_board_log['reply_info']) ? $message_board_log['reply_info'] : L('admin') . L('reply') . L('empty');
             $message_board_log['send_info']  = json_decode($message_board_log['send_info'], true);
         }
         $this->assign('message_board_log_list', $message_board_log_list);
-        $this->assign('message_board_log_list_count', $MessageBoardLogModel->get_page_count($where));
+        $this->assign('message_board_log_list_count', $MessageBoardLogModel->getPageCount($where));
 
         $def_template = CONTROLLER_NAME . C('TMPL_FILE_DEPR') . ACTION_NAME;
         $template     = ($message_board_info['template']) ? $def_template . '_' . $message_board_info['template'] : $def_template;
@@ -59,7 +59,7 @@ class MessageBoard extends Frontend
             }
 
             $MessageBoardModel  = D('MessageBoard');
-            $message_board_info = $MessageBoardModel->m_find($id);
+            $message_board_info = $MessageBoardModel->mFind($id);
             if (!$message_board_info) {
                 $this->error(L('id') . L('error'));
             }
@@ -73,7 +73,7 @@ class MessageBoard extends Frontend
                 $this->error($submit_time . L('second') . L('later') . L('again') . L('send'), U('index', array('id' => $id)));
             }
             $data       = $this->_make_data();
-            $result_add = $MessageBoard->m_add($data);
+            $result_add = $MessageBoard->mAdd($data);
             if ($result_add) {
                 $this->success(L('send') . L('success'), U('index', array('id' => $id)));
                 return;
@@ -97,7 +97,7 @@ class MessageBoard extends Frontend
         }
         //检测数据
         $MessageBoardModel  = D('MessageBoard');
-        $message_board_info = $MessageBoardModel->m_find($id);
+        $message_board_info = $MessageBoardModel->mFind($id);
         $config             = $message_board_info['config'];
         foreach ($send_info as $name => $value) {
             //合法

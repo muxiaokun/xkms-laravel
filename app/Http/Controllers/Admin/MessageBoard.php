@@ -27,7 +27,7 @@ class MessageBoard extends Backend
         $v_value                   = I('name');
         $v_value && $where['name'] = array('like', '%' . $v_value . '%');
 
-        $message_board_list = $MessageBoardModel->m_select($where, true);
+        $message_board_list = $MessageBoardModel->mSelect($where, true);
         foreach ($message_board_list as &$message_board) {
             $option = array();
             foreach ($message_board['config'] as $name => $value) {
@@ -36,7 +36,7 @@ class MessageBoard extends Backend
             $message_board['option'] = M_substr(implode(',', $option), 40);
         }
         $this->assign('message_board_list', $message_board_list);
-        $this->assign('message_board_list_count', $MessageBoardModel->get_page_count($where));
+        $this->assign('message_board_list_count', $MessageBoardModel->getPageCount($where));
 
         //初始化batch_handle
         $batch_handle              = array();
@@ -56,7 +56,7 @@ class MessageBoard extends Backend
         if (IS_POST) {
             $data              = $this->_make_data();
             $MessageBoardModel = D('MessageBoard');
-            $result_add        = $MessageBoardModel->m_add($data);
+            $result_add        = $MessageBoardModel->mAdd($data);
             if ($result_add) {
                 $this->success(L('messageboard') . L('add') . L('success'), $reback_link);
                 return;
@@ -81,7 +81,7 @@ class MessageBoard extends Backend
         $MessageBoardModel = D('MessageBoard');
         if (IS_POST) {
             $data        = $this->_make_data();
-            $result_edit = $MessageBoardModel->m_edit($id, $data);
+            $result_edit = $MessageBoardModel->mEdit($id, $data);
             if ($result_edit) {
                 $this->success(L('messageboard') . L('edit') . L('success'), U('index'));
                 return;
@@ -91,7 +91,7 @@ class MessageBoard extends Backend
             }
         }
 
-        $edit_info           = $MessageBoardModel->m_find($id);
+        $edit_info           = $MessageBoardModel->mFind($id);
         $edit_info['config'] = json_encode($edit_info['config']);
         $this->assign('edit_info', $edit_info);
 
@@ -109,7 +109,7 @@ class MessageBoard extends Backend
         }
 
         $MessageBoardModel = D('MessageBoard');
-        $result_del        = $MessageBoardModel->m_del($id);
+        $result_del        = $MessageBoardModel->mDel($id);
         if ($result_del) {
             $this->success(L('messageboard') . L('del') . L('success'), U('index'));
             return;

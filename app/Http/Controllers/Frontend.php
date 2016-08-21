@@ -95,7 +95,7 @@ class Frontend extends Common
 
     //登录功能
     /* $if_vc 是在快捷方式登陆时 不检测验证码
-     * $member_info 是在快捷方式登陆时 提供用户信息（必须是m_find用户）
+     * $member_info 是在快捷方式登陆时 提供用户信息（必须是mFind用户）
      *
      */
     protected function _login($user_name = null, $password = null, $if_vc = true, $member_id = false)
@@ -109,7 +109,7 @@ class Frontend extends Common
         $login_num = C('SYS_FRONTEND_LOGIN_NUM');
         $lock_time = C('SYS_FRONTEND_LOCK_TIME');
         if (0 != $login_num) {
-            $login_info = $MemberModel->m_find($MemberModel->m_find_id($user_name));
+            $login_info = $MemberModel->mFind($MemberModel->mFindId($user_name));
             if (0 != $login_info['lock_time'] && $login_info['lock_time'] > (time() - $lock_time)) {
                 $MemberModel->data(array('lock_time' => time()))->where(array('id' => $login_info['id']))->save();
                 return 'lock_user_error';
@@ -121,7 +121,7 @@ class Frontend extends Common
             //会员有组的 验证组是否启用
             if (0 < count($member_info['group_id'])) {
                 $MemberGroupModel               = D('MemberGroup');
-                $member_info['group_privilege'] = $MemberGroupModel->m_find_privilege($member_info['group_id']);
+                $member_info['group_privilege'] = $MemberGroupModel->mFind_privilege($member_info['group_id']);
             }
             //重置登录次数
             if (0 != $member_info['login_num']) {

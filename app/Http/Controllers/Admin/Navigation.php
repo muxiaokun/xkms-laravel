@@ -32,9 +32,9 @@ class Navigation extends Backend
         $v_value                         = I('is_enable');
         $v_value && $where['is_enable']  = (1 == $v_value) ? 1 : 0;
         //初始化翻页 和 列表数据
-        $navigation_list = $NavigationModel->m_select($where, true);
+        $navigation_list = $NavigationModel->mSelect($where, true);
         $this->assign('navigation_list', $navigation_list);
-        $this->assign('navigation_list_count', $NavigationModel->get_page_count($where));
+        $this->assign('navigation_list_count', $NavigationModel->getPageCount($where));
 
         //初始化where_info
         $where_info               = array();
@@ -60,7 +60,7 @@ class Navigation extends Backend
         if (IS_POST) {
             $NavigationModel = D('Navigation');
             $data            = $this->_make_data();
-            $result_add      = $NavigationModel->m_add($data);
+            $result_add      = $NavigationModel->mAdd($data);
             if ($result_add) {
                 $this->success(L('navigation') . L('add') . L('success'), U('index'));
                 return;
@@ -85,7 +85,7 @@ class Navigation extends Backend
         $NavigationModel = D('Navigation');
         if (IS_POST) {
             $data        = $this->_make_data();
-            $result_edit = $NavigationModel->m_edit($id, $data);
+            $result_edit = $NavigationModel->mEdit($id, $data);
             if ($result_edit) {
                 $this->success(L('navigation') . L('edit') . L('success'), U('index'));
                 return;
@@ -95,7 +95,7 @@ class Navigation extends Backend
             }
         }
 
-        $edit_info = $NavigationModel->m_find($id);
+        $edit_info = $NavigationModel->mFind($id);
         //$edit_info['ext_info'] = json_encode($edit_info['ext_info']);
         $this->assign('edit_info', $edit_info);
 
@@ -113,7 +113,7 @@ class Navigation extends Backend
         }
 
         $NavigationModel = D('Navigation');
-        $result_del      = $NavigationModel->m_del($id);
+        $result_del      = $NavigationModel->mDel($id);
         if ($result_del) {
             $this->success(L('navigation') . L('del') . L('success'), U('index'));
             return;
@@ -130,7 +130,7 @@ class Navigation extends Backend
             case 'short_name':
                 //检查用户名是否存在
                 $NavigationModel = D('Navigation');
-                $itlink_info     = $NavigationModel->m_select(array('short_name' => $data['short_name'], 'id' => array('neq', $data['id'])));
+                $itlink_info     = $NavigationModel->mSelect(array('short_name' => $data['short_name'], 'id' => array('neq', $data['id'])));
                 if (0 < count($itlink_info)) {
                     $result['info'] = L('short') . L('name') . L('exists');
                     break;

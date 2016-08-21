@@ -31,9 +31,9 @@ class Quests extends Backend
         $v_value && $where['end_time']   = $v_value;
 
         $QuestsModel = D('Quests');
-        $quests_list = $QuestsModel->m_select($where, true);
+        $quests_list = $QuestsModel->mSelect($where, true);
         $this->assign('quests_list', $quests_list);
-        $this->assign('quests_list_count', $QuestsModel->get_page_count($where));
+        $this->assign('quests_list_count', $QuestsModel->getPageCount($where));
 
         //初始化where_info
         $where_info               = array();
@@ -61,7 +61,7 @@ class Quests extends Backend
         if (IS_POST) {
             $QuestsModel = D('Quests');
             $data        = $this->_make_data();
-            $result_add  = $QuestsModel->m_add($data);
+            $result_add  = $QuestsModel->mAdd($data);
             if ($result_add) {
                 $this->success(L('quests') . L('add') . L('success'), U('Quests/index'));
                 return;
@@ -84,7 +84,7 @@ class Quests extends Backend
         $QuestsModel = D('Quests');
         if (IS_POST) {
             $data        = $this->_make_data();
-            $result_edit = $QuestsModel->m_edit($id, $data);
+            $result_edit = $QuestsModel->mEdit($id, $data);
             if ($result_edit) {
                 $this->success(L('quests') . L('edit') . L('success'), U('Quests/index'));
                 return;
@@ -93,7 +93,7 @@ class Quests extends Backend
                 $this->error(L('quests') . L('edit') . L('error'), $error_go_link);
             }
         }
-        $edit_info = $QuestsModel->m_find($id);
+        $edit_info = $QuestsModel->mFind($id);
         $this->assign('edit_info', $edit_info);
 
         $this->assign('title', L('edit') . L('quests'));
@@ -111,13 +111,14 @@ class Quests extends Backend
         $clear       = I('clear');
         $QuestsModel = D('Quests');
         if (!$clear) {
-            $result_del = $QuestsModel->m_del($id);
+            $result_del = $QuestsModel->mDel($id);
         }
 
         if ($result_del || $clear) {
             //删除问卷会删除该问卷下的所有答案
             $QuestsAnswerModel = D('QuestsAnswer');
-            $result_clear      = $QuestsAnswerModel->m_clean($id);
+            //TODO 需要定义数据列
+            $result_clear      = $QuestsAnswerModel->mClean($id);
             if ($clear) {
                 if ($result_clear) {
                     $QuestsModel->where(array('id' => $id))->data(array('current_portion' => 0))->save();

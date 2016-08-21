@@ -91,7 +91,7 @@ class Member extends FrontendMember
                 'is_enable'   => $is_enable,
             );
             $MemberModel = D('Member');
-            $add_result  = $MemberModel->m_add($data);
+            $add_result  = $MemberModel->mAdd($data);
             if ($add_result) {
                 $this->_login($member_name, $member_pwd, false);
                 $this->success(L('member') . L('register') . L('success'), U('index'));
@@ -122,7 +122,7 @@ class Member extends FrontendMember
                 }
                 //检查用户名是否存在
                 $MemberModel = D('Member');
-                $member_info = $MemberModel->m_select(array('member_name' => $data['user']));
+                $member_info = $MemberModel->mSelect(array('member_name' => $data['user']));
                 if (0 >= count($member_info)) {
                     $result['info'] = L('member') . L('name') . L('dont') . L('exists');
                     break;
@@ -170,7 +170,7 @@ class Member extends FrontendMember
                 }
                 //检查用户名是否存在
                 $MemberModel = D('Member');
-                $member_info = $MemberModel->m_select(array('member_name' => $data['re_member_name']));
+                $member_info = $MemberModel->mSelect(array('member_name' => $data['re_member_name']));
                 if (0 < count($member_info)) {
                     $result['info'] = L('member') . L('name') . L('exists');
                     break;

@@ -27,7 +27,7 @@ class Article extends Backend
         $v_value                         = I('title');
         $v_value && $where['title']      = array('like', '%' . $v_value . '%');
         $v_value                         = I('cate_id');
-        $v_value && $where['cate_id']    = array('in', $ArticleCategoryModel->m_find_child_id($v_value));
+        $v_value && $where['cate_id']    = array('in', $ArticleCategoryModel->mFind_child_id($v_value));
         $v_value                         = I('channel_id');
         $v_value && $where['channel_id'] = $v_value;
         $v_value                         = M_mktime_range('add_time');
@@ -38,7 +38,7 @@ class Article extends Backend
         $v_value && $where['if_show']    = (1 == $v_value) ? 1 : 0;
         $channel_where                   = $category_where                   = array();
         if (1 != session('backend_info.id')) {
-            $allow_channel                             = $ArticleChannelModel->m_find_allow();
+            $allow_channel                             = $ArticleChannelModel->mFind_allow();
             is_array($allow_channel) && $channel_where = array('id' => array('in', $allow_channel));
             if (isset($where['channel_id']) && in_array($where['channel_id'], $allow_channel)) {
                 $where['channel_id'] = $where['channel_id'];
@@ -46,7 +46,7 @@ class Article extends Backend
                 $where['channel_id'] = array('in', $allow_channel);
             }
 
-            $allow_category                              = $ArticleCategoryModel->m_find_allow();
+            $allow_category                              = $ArticleCategoryModel->mFind_allow();
             is_array($allow_category) && $category_where = array('id' => array('in', $allow_category));
             if (isset($where['cate_id']) && !M_in_array($where['cate_id'], $allow_category)) {
                 $where['cate_id'] = array('in', $allow_category);
@@ -63,17 +63,17 @@ class Article extends Backend
             }
         }
         //初始化翻页 和 列表数据
-        $article_list = $ArticleModel->m_select($where, true);
+        $article_list = $ArticleModel->mSelect($where, true);
         foreach ($article_list as &$article) {
-            $article['channel_name'] = ($article['channel_id']) ? $ArticleCategoryModel->m_find_column($article['channel_id'], 'name') : L('empty');
-            $article['cate_name']    = ($article['cate_id']) ? $ArticleCategoryModel->m_find_column($article['cate_id'], 'name') : L('empty');
+            $article['channel_name'] = ($article['channel_id']) ? $ArticleCategoryModel->mFindColumn($article['channel_id'], 'name') : L('empty');
+            $article['cate_name']    = ($article['cate_id']) ? $ArticleCategoryModel->mFindColumn($article['cate_id'], 'name') : L('empty');
         }
         $this->assign('article_list', $article_list);
-        $this->assign('article_list_count', $ArticleModel->get_page_count($where));
+        $this->assign('article_list_count', $ArticleModel->getPageCount($where));
 
         //初始化where_info
-        $channel_list         = $ArticleChannelModel->m_select($channel_where, $ArticleChannelModel->where($channel_where)->count());
-        $category_list        = $ArticleCategoryModel->m_select_tree($category_where);
+        $channel_list         = $ArticleChannelModel->mSelect($channel_where, $ArticleChannelModel->where($channel_where)->count());
+        $category_list        = $ArticleCategoryModel->mSelect_tree($category_where);
         $search_channel_list  = array();
         $search_category_list = array();
         foreach ($channel_list as $channel) {
@@ -111,7 +111,7 @@ class Article extends Backend
             $ArticleModel                        = D('Article');
             $data                                = $this->_make_data();
             isset($data['thumb']) && $thumb_file = $this->_image_thumb($data['thumb'], C('SYS_ARTICLE_THUMB_WIDTH'), C('SYS_ARTICLE_THUMB_HEIGHT'));
-            $result_add                          = $ArticleModel->m_add($data);
+            $result_add                          = $ArticleModel->mAdd($data);
             //增加了一个分类快捷添加文章的回跳链接
             $reback_link = I('get.cate_id') ? U('ArticleCategory/index') : U('index');
             if ($result_add) {
@@ -141,7 +141,7 @@ class Article extends Backend
         if (IS_POST) {
             $data                                = $this->_make_data();
             isset($data['thumb']) && $thumb_file = $this->_image_thumb($data['thumb'], C('SYS_ARTICLE_THUMB_WIDTH'), C('SYS_ARTICLE_THUMB_HEIGHT'));
-            $result_edit                         = $ArticleModel->m_edit($id, $data);
+            $result_edit                         = $ArticleModel->mEdit($id, $data);
             if ($result_edit) {
                 $data['new_thumb'] = $thumb_file;
                 $this->_add_edit_after_common($data, $id);
@@ -154,24 +154,24 @@ class Article extends Backend
         }
         $current_config = C('SYS_ARTICLE_SYNC_IMAGE');
         C('SYS_ARTICLE_SYNC_IMAGE', false);
-        $edit_info = $ArticleModel->m_find($id);
+        $edit_info = $ArticleModel->mFind($id);
         C('SYS_ARTICLE_SYNC_IMAGE', $current_config);
 
         $MemberGroupModel = D('MemberGroup');
         foreach ($edit_info['access_group_id'] as &$access_group_id) {
-            $admin_group_name = $MemberGroupModel->m_find_column($access_group_id, 'name');
+            $admin_group_name = $MemberGroupModel->mFindColumn($access_group_id, 'name');
             $access_group_id  = array('value' => $access_group_id, 'html' => $admin_group_name);
         }
 
         $ArticleCategoryModel = D('ArticleCategory');
-        $extend_tpl           = $ArticleCategoryModel->m_find_top_column($edit_info['cate_id'], 'extend');
+        $extend_tpl           = $ArticleCategoryModel->mFind_top_column($edit_info['cate_id'], 'extend');
         $val_extend           = array();
         foreach ($extend_tpl as $template) {
             $val_extend[$template] = ($edit_info['extend'][$template]) ? $edit_info['extend'][$template] : '';
         }
         $edit_info['extend']        = $val_extend;
         $edit_info['album']         = array_map("json_encode", $edit_info['album']);
-        $edit_info['attribute_tpl'] = $ArticleCategoryModel->m_find_top_column($edit_info['cate_id'], 'attribute');
+        $edit_info['attribute_tpl'] = $ArticleCategoryModel->mFind_top_column($edit_info['cate_id'], 'attribute');
 
         $this->assign('edit_info', $edit_info);
 
@@ -190,10 +190,10 @@ class Article extends Backend
         }
 
         $ArticleModel = D('Article');
-        $result_del   = $ArticleModel->m_del($id);
+        $result_del   = $ArticleModel->mDel($id);
         if ($result_del) {
             $ManageUploadModel = D('ManageUpload');
-            $ManageUploadModel->m_edit($id);
+            $ManageUploadModel->mEdit($id);
             $this->success(L('article') . L('del') . L('success'), U('index'));
             return;
         } else {
@@ -229,9 +229,9 @@ class Article extends Backend
         }
 
         $ArticleModel = D('Article');
-        $result_edit  = $ArticleModel->m_edit($data['id'], array($field => $data['value']));
+        $result_edit  = $ArticleModel->mEdit($data['id'], array($field => $data['value']));
         if ($result_edit) {
-            $data['value'] = $ArticleModel->m_find_column($data['id'], $field);
+            $data['value'] = $ArticleModel->mFindColumn($data['id'], $field);
             return array('status' => true, 'info' => $data['value']);
         } else {
             return array('status' => false, 'info' => L('edit') . L('error'));
@@ -247,7 +247,7 @@ class Article extends Backend
             case 'access_group_id':
                 $MemberGroupModel                         = D('MemberGroup');
                 isset($data['keyword']) && $where['name'] = array('like', '%' . $data['keyword'] . '%');
-                $member_group_list                        = $MemberGroupModel->m_select($where);
+                $member_group_list                        = $MemberGroupModel->mSelect($where);
                 foreach ($member_group_list as $member_group) {
                     $result['info'][] = array('value' => $member_group['id'], 'html' => $member_group['name']);
                 }
@@ -255,7 +255,7 @@ class Article extends Backend
             case 'exttpl_id':
                 isset($data['id']) && $cate_id = $data['id'];
                 $ArticleCategoryModel          = D('ArticleCategory');
-                $extend_tpl                    = $ArticleCategoryModel->m_find_top_column($cate_id, 'extend');
+                $extend_tpl                    = $ArticleCategoryModel->mFind_top_column($cate_id, 'extend');
                 foreach ($extend_tpl as $template) {
                     $result['info'][$template] = '';
                 }
@@ -264,7 +264,7 @@ class Article extends Backend
                 if ($data['id']) {
                     $cate_id              = $data['id'];
                     $ArticleCategoryModel = D('ArticleCategory');
-                    $result['info']       = $ArticleCategoryModel->m_find_top_column($cate_id, 'attribute');
+                    $result['info']       = $ArticleCategoryModel->mFind_top_column($cate_id, 'attribute');
                 } else {
                     $result = array('status' => false, 'info' => 'id error');
                 }
@@ -341,7 +341,7 @@ class Article extends Backend
         $bind_file[]    = $data['thumb'];
         $content_upload = M_get_content_upload($data['content']);
         $bind_file      = array_merge($bind_file, $content_upload);
-        $ManageUploadModel->m_edit($id, $bind_file);
+        $ManageUploadModel->mEdit($id, $bind_file);
     }
 
     //添加 编辑 公共方法
@@ -351,11 +351,11 @@ class Article extends Backend
         $ArticleCategoryModel = D('ArticleCategory');
         $channel_where        = $category_where        = array();
         if (1 != session('backend_info.id')) {
-            $channel_where['id']  = array('in', $ArticleChannelModel->m_find_allow());
-            $category_where['id'] = array('in', $ArticleCategoryModel->m_find_allow());
+            $channel_where['id']  = array('in', $ArticleChannelModel->mFind_allow());
+            $category_where['id'] = array('in', $ArticleCategoryModel->mFind_allow());
         }
-        $channel_list  = $ArticleChannelModel->m_select($channel_where, $ArticleChannelModel->where($channel_where)->count());
-        $category_list = $ArticleCategoryModel->m_select_tree($category_where);
+        $channel_list  = $ArticleChannelModel->mSelect($channel_where, $ArticleChannelModel->where($channel_where)->count());
+        $category_list = $ArticleCategoryModel->mSelect_tree($category_where);
         $this->assign('channel_list', $channel_list);
         $this->assign('category_list', $category_list);
     }
@@ -370,12 +370,12 @@ class Article extends Backend
         if (!$data) {
             $id           = I('id');
             $ArticleModel = D('Article');
-            $data         = $ArticleModel->m_find($id);
+            $data         = $ArticleModel->mFind($id);
         }
         $ArticleCategoryModel = D('ArticleCategory');
         $ArticleChannelModel  = D('ArticleChannel');
-        if (!in_array($data['channel_id'], $ArticleChannelModel->m_find_allow())
-            && !in_array($data['cate_id'], $ArticleCategoryModel->m_find_allow())
+        if (!in_array($data['channel_id'], $ArticleChannelModel->mFind_allow())
+            && !in_array($data['cate_id'], $ArticleCategoryModel->mFind_allow())
         ) {
             $this->error(L('none') . L('privilege') . L('handle') . L('article'), U('index'));
         }

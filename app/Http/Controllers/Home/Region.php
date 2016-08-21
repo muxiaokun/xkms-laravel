@@ -26,7 +26,7 @@ class Region extends Frontend
                 $where['parent_id'] = ($data['id']) ? $data['id'] : 0;
                 $RegionModel        = D('Region');
                 $count              = $RegionModel->where($where)->count();
-                $region_user_list   = $RegionModel->field('id,region_name')->limit($count)->m_select($where);
+                $region_user_list   = $RegionModel->field('id,region_name')->limit($count)->mSelect($where);
                 $result['info']     = $region_user_list;
                 break;
         }

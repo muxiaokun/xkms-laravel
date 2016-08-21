@@ -25,7 +25,7 @@ class AssessLog extends Backend
         }
 
         $AssessModel                  = D('Assess');
-        $assess_info                  = $AssessModel->m_find($id);
+        $assess_info                  = $AssessModel->mFind($id);
         $assess_info['all_grade']     = 0;
         $assess_info['re_grade_name'] = '';
         $re_grade_id                  = I('re_grade_id');
@@ -33,19 +33,19 @@ class AssessLog extends Backend
         switch ($assess_info['target']) {
             case 'member':
                 $MemberModel   = D('Member');
-                $re_grade_name = $MemberModel->m_find_column($re_grade_id, 'member_name');
+                $re_grade_name = $MemberModel->mFindColumn($re_grade_id, 'member_name');
                 break;
             case 'member_group':
                 $MemberGroupModel = D('MemberGroup');
-                $re_grade_name    = $MemberGroupModel->m_find_column($re_grade_id, 'name');
+                $re_grade_name    = $MemberGroupModel->mFindColumn($re_grade_id, 'name');
                 break;
         }
         if ($re_grade_name) {
             $AssessLogModel       = D('AssessLog');
             $where                = array('assess_id' => $id);
             $where['re_grade_id'] = $re_grade_id;
-            $count_row            = $AssessLogModel->get_page_count($where);
-            $assess_log_infos     = $AssessLogModel->limit($count_row)->m_select($where);
+            $count_row            = $AssessLogModel->getPageCount($where);
+            $assess_log_infos     = $AssessLogModel->limit($count_row)->mSelect($where);
             //算出各项评分
             $result_info             = array();
             $assess_info['ext_info'] = json_decode($assess_info['ext_info'], true);
@@ -84,7 +84,7 @@ class AssessLog extends Backend
         }
 
         $AssessLogModel = D('AssessLog');
-        $result_del     = $AssessLogModel->m_del($id);
+        $result_del     = $AssessLogModel->mDel($id);
         if ($result_del) {
             $this->success(L('assess') . L('del') . L('success'), U('Assess/index'));
             return;
@@ -102,7 +102,7 @@ class AssessLog extends Backend
             case 'member':
                 $MemberModel                                = D('Member');
                 isset($data['keyword']) && $data['keyword'] = $where['member_name'] = array('like', '%' . $data['keyword'] . '%');
-                $member_user_list                           = $MemberModel->m_select($where);
+                $member_user_list                           = $MemberModel->mSelect($where);
                 //取出已经评价的
                 $AssessLogMode = D('AssessLog');
                 foreach ($member_user_list as $member_user) {
@@ -112,7 +112,7 @@ class AssessLog extends Backend
             case 'member_group':
                 $MemberGroupModel                           = D('MemberGroup');
                 isset($data['keyword']) && $data['keyword'] = $where['name'] = array('like', '%' . $data['keyword'] . '%');
-                $member_group_list                          = $MemberGroupModel->m_select($where);
+                $member_group_list                          = $MemberGroupModel->mSelect($where);
                 foreach ($member_group_list as $member_group) {
                     $result['info'][] = array('value' => $member_group['id'], 'html' => $member_group['name']);
                 }

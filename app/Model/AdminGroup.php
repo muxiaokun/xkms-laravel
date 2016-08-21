@@ -6,26 +6,26 @@ namespace App\Model;
 class AdminGroup extends Common
 {
     //获得全部或者部分管理组列表
-    public function m_select($where = null, $page = false)
+    public function mSelect($where = null, $page = false)
     {
-        $this->_parse_where($where);
-        $this->_get_page($page);
+        $this->parseWhere($where);
+        $this->getPage($page);
         !isset($this->options['order']) && $this->order('id desc');
         $data = $this->where($where)->select();
-        foreach ($data as &$data_row) {$this->_decode_data($data_row);}
+        foreach ($data as &$data_row) {$this->decodeData($data_row);}
         return $data;
     }
 
-    public function m_del($id)
+    public function mDel($id)
     {
         if (!$id || 1 == $id || (is_array($id) && in_array(1, $id))) {
             return false;
         }
-        return parent::m_del($id);
+        return parent::mDel($id);
     }
 
     //查找出组权限
-    public function m_find_privilege($id)
+    public function mFind_privilege($id)
     {
         if (!$id) {
             return false;
@@ -33,7 +33,7 @@ class AdminGroup extends Common
 
         is_array($id) && $id = array('in', $id);
         $data                = $this->field('privilege')->where(array('id' => $id, 'is_enable' => 1))->select();
-        foreach ($data as &$data_row) {$this->_decode_data($data_row);}
+        foreach ($data as &$data_row) {$this->decodeData($data_row);}
         $privilege = array();
         foreach ($data as $group) {
             $privilege = array_merge($privilege, $group['privilege']);
@@ -42,22 +42,22 @@ class AdminGroup extends Common
     }
 
     //返回有权管理的组
-    public function m_find_allow()
+    public function mFind_allow()
     {
         $where = array(
             'manage_id' => session('backend_info.id'),
         );
-        $manage_group = $this->field('id')->m_select($where);
-        $m_find_allow = array();
+        $manage_group = $this->field('id')->mSelect($where);
+        $mFind_allow = array();
         foreach ($manage_group as $group) {
-            $m_find_allow[] = $group['id'];
+            $mFind_allow[] = $group['id'];
         }
         //不归组的任何人都可以管理
-        $m_find_allow[] = 0;
-        return $m_find_allow;
+        $mFind_allow[] = 0;
+        return $mFind_allow;
     }
 
-    protected function _parse_where(&$where)
+    protected function parseWhere(&$where)
     {
         if (is_null($where)) {
             return;
@@ -67,7 +67,7 @@ class AdminGroup extends Common
     }
 
     //检查和格式化数据
-    protected function _encode_data(&$data)
+    protected function encodeData(&$data)
     {
         if (isset($data['id']) && (1 == $data['id'] || (is_array($data['id']) && in_array(1, $data['id'])))) {
             unset($data['privilege']);
@@ -78,7 +78,7 @@ class AdminGroup extends Common
     }
 
     //检查和去除格式化数据
-    protected function _decode_data(&$data)
+    protected function decodeData(&$data)
     {
         isset($data['manage_id']) && $data['manage_id']       = explode('|', substr($data['manage_id'], 1, strlen($data['manage_id']) - 2));
         isset($data['privilege']) && $data['privilege']       = explode('|', $data['privilege']);

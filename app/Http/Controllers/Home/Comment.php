@@ -54,7 +54,7 @@ class Comment extends Frontend
                     break;
                 }
 
-                $add_result     = $CommentModel->m_add($data);
+                $add_result     = $CommentModel->mAdd($data);
                 $result['info'] = ($add_result) ? L('send') . L('success') : L('send') . L('error');
                 break;
             case 'get_data':
@@ -69,13 +69,13 @@ class Comment extends Frontend
                 );
                 $MemberModel  = D('Member');
                 $CommentModel = D('Comment');
-                $comment_list = $CommentModel->m_select($where, true);
+                $comment_list = $CommentModel->mSelect($where, true);
                 foreach ($comment_list as &$comment) {
-                    $member_name            = $MemberModel->m_find_column($comment['member_id'], 'member_name');
+                    $member_name            = $MemberModel->mFindColumn($comment['member_id'], 'member_name');
                     $comment['member_name'] = ($member_name) ? $member_name : L('anonymous');
                 }
                 $this->assign('comment_list', $comment_list);
-                $this->assign('comment_list_count', $CommentModel->get_page_count($where));
+                $this->assign('comment_list_count', $CommentModel->getPageCount($where));
                 $this->display('index');
                 exit();
                 break;

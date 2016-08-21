@@ -34,12 +34,12 @@ class Assess extends Backend
         $v_value && $where['is_enable']   = (1 == $v_value) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $assess_list = $AssessModel->m_select($where, true);
+        $assess_list = $AssessModel->mSelect($where, true);
         foreach ($assess_list as &$assess) {
-            $assess['group_name'] = ($assess['group_level']) ? $MemberGroupModel->m_find_column($assess['group_level'], 'name') : L('empty');
+            $assess['group_name'] = ($assess['group_level']) ? $MemberGroupModel->mFindColumn($assess['group_level'], 'name') : L('empty');
         }
         $this->assign('assess_list', $assess_list);
-        $this->assign('assess_list_count', $AssessModel->get_page_count($where));
+        $this->assign('assess_list_count', $AssessModel->getPageCount($where));
 
         //初始化where_info
         $where_info                = array();
@@ -67,7 +67,7 @@ class Assess extends Backend
         if (IS_POST) {
             $AssessModel = D('Assess');
             $data        = $this->_make_data();
-            $result_add  = $AssessModel->m_add($data);
+            $result_add  = $AssessModel->mAdd($data);
             if ($result_add) {
                 $this->success(L('assess') . L('add') . L('success'), U('index'));
                 return;
@@ -91,7 +91,7 @@ class Assess extends Backend
         $AssessModel = D('Assess');
         if (IS_POST) {
             $data        = $this->_make_data();
-            $result_edit = $AssessModel->m_edit($id, $data);
+            $result_edit = $AssessModel->mEdit($id, $data);
             if ($result_edit) {
                 $this->success(L('assess') . L('edit') . L('success'), U('index'));
                 return;
@@ -101,9 +101,9 @@ class Assess extends Backend
             }
         }
 
-        $edit_info               = $AssessModel->m_find($id);
+        $edit_info               = $AssessModel->mFind($id);
         $MemberGroupModel        = D('MemberGroup');
-        $edit_info['group_name'] = $MemberGroupModel->m_find_column($edit_info['group_level'], 'name');
+        $edit_info['group_name'] = $MemberGroupModel->mFindColumn($edit_info['group_level'], 'name');
         $this->assign('edit_info', $edit_info);
 
         $this->assign('title', L('assess') . L('edit'));
@@ -119,7 +119,7 @@ class Assess extends Backend
         }
 
         $AssessModel = D('Assess');
-        $result_del  = $AssessModel->m_del($id);
+        $result_del  = $AssessModel->mDel($id);
         if ($result_del) {
             $this->success(L('assess') . L('del') . L('success'), U('index'));
             return;
@@ -138,7 +138,7 @@ class Assess extends Backend
                 isset($data['inserted']) && $where['id']  = array('not in', $data['inserted']);
                 isset($data['keyword']) && $where['name'] = array('like', '%' . $data['keyword'] . '%');
                 $MemberGroupModel                         = D('MemberGroup');
-                $member_group_list                        = $MemberGroupModel->m_select($where);
+                $member_group_list                        = $MemberGroupModel->mSelect($where);
                 foreach ($member_group_list as $member_group) {
                     $result['info'][] = array('value' => $member_group['id'], 'html' => $member_group['name']);
                 }

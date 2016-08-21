@@ -36,9 +36,9 @@ class Recruit extends Frontend
             $where['_complex']   = $complex;
         }
 
-        $recruit_list = $RecruitModel->m_select($where);
+        $recruit_list = $RecruitModel->mSelect($where);
         $this->assign('recruit_list', $recruit_list);
-        $this->assign('recruit_list_count', $RecruitModel->get_page_count($where));
+        $this->assign('recruit_list_count', $RecruitModel->getPageCount($where));
 
         $this->assign('title', L('recruit'));
         $this->display();
@@ -54,7 +54,7 @@ class Recruit extends Frontend
         }
 
         $RecruitModel = D('Recruit');
-        $recruit_info = $RecruitModel->m_find($id);
+        $recruit_info = $RecruitModel->mFind($id);
         //检测是否能够提交
         $current_time = time();
         if ($recruit_info['start_time'] < $current_time && $recruit_info['end_time'] < $current_time) {
@@ -74,7 +74,7 @@ class Recruit extends Frontend
             $data['ext_info']    = I('ext_info');
             $data['file_path']   = I('file_path');
             $RecruitLogModel     = D('RecruitLog');
-            $result_add          = $RecruitLogModel->m_add($data);
+            $result_add          = $RecruitLogModel->mAdd($data);
             if ($result_add) {
                 $RecruitModel = D('Recruit');
                 $RecruitModel->where(array('id' => $recruit_info['id']))->setInc('current_portion');
@@ -114,7 +114,7 @@ class Recruit extends Frontend
         }
 
         $RecruitModel = D('Recruit');
-        $recruit_info = $RecruitModel->m_find($id);
+        $recruit_info = $RecruitModel->mFind($id);
         $this->assign('recruit_info', $recruit_info);
         $this->assign('title', L('look') . L('recruit'));
         $this->display();

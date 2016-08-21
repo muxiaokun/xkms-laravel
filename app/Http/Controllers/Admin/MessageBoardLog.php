@@ -37,14 +37,14 @@ class MessageBoardLog extends Backend
         $v_value                       = M_mktime_range('add_time');
         $v_value && $where['add_time'] = $v_value;
 
-        $message_board_log_list = $MessageBoardLogModel->order('add_time desc')->m_select($where, true);
+        $message_board_log_list = $MessageBoardLogModel->order('add_time desc')->mSelect($where, true);
         foreach ($message_board_log_list as &$message_board_log) {
-            $message_board_log['admin_name']  = ($message_board_log['audit_id']) ? $AdminModel->m_find_column($message_board_log['audit_id'], 'admin_name') : L('none') . L('audit');
-            $member_name                      = $MemberModel->m_find_column($message_board_log['send_id'], 'member_name');
+            $message_board_log['admin_name']  = ($message_board_log['audit_id']) ? $AdminModel->mFindColumn($message_board_log['audit_id'], 'admin_name') : L('none') . L('audit');
+            $member_name                      = $MemberModel->mFindColumn($message_board_log['send_id'], 'member_name');
             $message_board_log['member_name'] = ($member_name) ? $member_name : L('empty');
         }
         $this->assign('message_board_log_list', $message_board_log_list);
-        $this->assign('message_board_log_list_count', $MessageBoardLogModel->get_page_count($where));
+        $this->assign('message_board_log_list_count', $MessageBoardLogModel->getPageCount($where));
 
         //初始化where_info
         $where_info             = array();
@@ -76,7 +76,7 @@ class MessageBoardLog extends Backend
                 'audit_id'   => session('backend_info.id'),
                 'reply_info' => I('reply_info'),
             );
-            $result_edit = $MessageBoardLogModel->m_edit($id, $data);
+            $result_edit = $MessageBoardLogModel->mEdit($id, $data);
             if ($result_edit) {
                 $this->success(L('audit') . L('success'), U('index'));
                 return;
@@ -89,9 +89,9 @@ class MessageBoardLog extends Backend
         $AdminModel  = D('Admin');
         $MemberModel = D('Member');
 
-        $edit_info                = $MessageBoardLogModel->m_find($id);
-        $edit_info['admin_name']  = ($edit_info['audit_id']) ? $AdminModel->m_find_column($edit_info['audit_id'], 'admin_name') : L('none') . L('audit');
-        $member_name              = $MemberModel->m_find_column($edit_info['send_id'], 'member_name');
+        $edit_info                = $MessageBoardLogModel->mFind($id);
+        $edit_info['admin_name']  = ($edit_info['audit_id']) ? $AdminModel->mFindColumn($edit_info['audit_id'], 'admin_name') : L('none') . L('audit');
+        $member_name              = $MemberModel->mFindColumn($edit_info['send_id'], 'member_name');
         $edit_info['member_name'] = ($member_name) ? $member_name : L('empty');
         $edit_info['send_info']   = json_decode($edit_info['send_info'], true);
         $this->assign('edit_info', $edit_info);
@@ -109,7 +109,7 @@ class MessageBoardLog extends Backend
         }
 
         $MessageBoardLogModel = D('MessageBoardLog');
-        $result_del           = $MessageBoardLogModel->m_del($id);
+        $result_del           = $MessageBoardLogModel->mDel($id);
         if ($result_del) {
             $this->success(L('messageboard') . L('log') . L('del') . L('success'), U('index'));
             return;

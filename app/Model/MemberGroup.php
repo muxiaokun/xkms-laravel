@@ -6,26 +6,26 @@ namespace App\Model;
 class MemberGroup extends Common
 {
     //获得全部或者部分管理组列表
-    public function m_select($where = null, $page = false)
+    public function mSelect($where = null, $page = false)
     {
-        $this->_parse_where($where);
-        $this->_get_page($page);
+        $this->parseWhere($where);
+        $this->getPage($page);
         !isset($this->options['order']) && $this->order('id desc');
         $data = $this->where($where)->select();
-        foreach ($data as &$data_row) {$this->_decode_data($data_row);}
+        foreach ($data as &$data_row) {$this->decodeData($data_row);}
         return $data;
     }
 
-    public function m_del($id)
+    public function mDel($id)
     {
         if (!$id || 1 == $id || (is_array($id) && in_array(1, $id))) {
             return false;
         }
-        return parent::m_del($id);
+        return parent::mDel($id);
     }
 
     //查找出组权限
-    public function m_find_privilege($id)
+    public function mFind_privilege($id)
     {
         if (!$id) {
             return false;
@@ -33,7 +33,7 @@ class MemberGroup extends Common
 
         is_array($id) && $id = array('in', $id);
         $data                = $this->field('is_enable,privilege')->where(array('id' => $id))->select();
-        foreach ($data as &$data_row) {$this->_decode_data($data_row);}
+        foreach ($data as &$data_row) {$this->decodeData($data_row);}
         $privilege = array();
         foreach ($data as $group) {
             isset($group['is_enable']) && $privilege = array_merge($privilege, $group['privilege']);
@@ -41,7 +41,7 @@ class MemberGroup extends Common
         return $privilege;
     }
 
-    protected function _parse_where(&$where)
+    protected function parseWhere(&$where)
     {
         if (is_null($where)) {
             return;
@@ -52,7 +52,7 @@ class MemberGroup extends Common
     }
 
     //检查和格式化数据
-    protected function _encode_data(&$data)
+    protected function encodeData(&$data)
     {
         if (isset($data['id']) && (1 == $data['id'] || (is_array($data['id']) && in_array(1, $data['id'])))) {
             unset($data['privilege']);
@@ -63,7 +63,7 @@ class MemberGroup extends Common
     }
 
     //检查和去除格式化数据
-    protected function _decode_data(&$data)
+    protected function decodeData(&$data)
     {
         isset($data['manage_id']) && $data['manage_id']       = explode('|', substr($data['manage_id'], 1, strlen($data['manage_id']) - 2));
         isset($data['privilege']) && $data['privilege']       = explode('|', $data['privilege']);

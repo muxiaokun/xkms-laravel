@@ -23,11 +23,11 @@ class Common extends Model
      * @param int $page 翻页数量
      * @return array 返回数据数组
      */
-    public function m_select($where = null, $page = false)
+    public function mSelect($where = null, $page = false)
     {
-        $this->_get_page($page);
+        $this->getPage($page);
         $data = $this->where($where)->select();
-        foreach ($data as &$data_row) {$this->_decode_data($data_row);}
+        foreach ($data as &$data_row) {$this->decodeData($data_row);}
         return $data;
     }
 
@@ -36,13 +36,13 @@ class Common extends Model
      * @param array $data
      * @return boolean
      */
-    public function m_add($data)
+    public function mAdd($data)
     {
         if (!$data) {
             return false;
         }
 
-        $this->_encode_data($data);
+        $this->encodeData($data);
         return $this->add($data);
     }
 
@@ -51,7 +51,7 @@ class Common extends Model
      * @param mixed $id
      * @return boolean
      */
-    public function m_del($id)
+    public function mDel($id)
     {
         if (!$id) {
             return false;
@@ -67,14 +67,14 @@ class Common extends Model
      * @param array $data
      * @return boolean
      */
-    public function m_edit($id, $data)
+    public function mEdit($id, $data)
     {
         if (!$id || !$data) {
             return false;
         }
 
         is_array($id) && $id = array('in', $id);
-        $this->_encode_data($data);
+        $this->encodeData($data);
         return $this->where(array('id' => $id))->data($data)->save();
     }
 
@@ -83,14 +83,14 @@ class Common extends Model
      * @param mixed $id
      * @return array
      */
-    public function m_find($id)
+    public function mFind($id)
     {
         if (!$id) {
             return false;
         }
 
         $data = $this->where(array('id' => $id))->find();
-        $this->_decode_data($data);
+        $this->decodeData($data);
         return $data;
     }
 
@@ -100,7 +100,7 @@ class Common extends Model
      * @param string $column_name
      * @return string
      */
-    public function m_find_id($value, $column_name = '')
+    public function mFindId($value, $column_name = '')
     {
         if (!$value) {
             return false;
@@ -120,14 +120,14 @@ class Common extends Model
      * @param string $column_name
      * @return string
      */
-    public function m_find_column($id, $column_name)
+    public function mFindColumn($id, $column_name)
     {
         if (!$id || !$column_name) {
             return false;
         }
 
         $column = $this->field($column_name)->where(array('id' => $id))->find();
-        $this->_decode_data($column);
+        $this->decodeData($column);
         return $column[$column_name];
     }
 
@@ -138,7 +138,7 @@ class Common extends Model
      * @param string $data
      * @return boolean
      */
-    public function m_clean($id, $column_name = '', $data = false)
+    public function mClean($id, $column_name = '', $data = false)
     {
         if (!$id) {
             return false;
@@ -164,9 +164,9 @@ class Common extends Model
      * @param array $where 查询条件
      * @return int 最大页数
      */
-    public function get_page_count($where)
+    public function getPageCount($where)
     {
-        $this->_parse_where($where);
+        $this->parseWhere($where);
         $page_count   = $this->where($where)->count();
         $sys_max_page = C('SYS_MAX_PAGE') * C('SYS_MAX_ROW');
         return ($page_count < $sys_max_page) ? $page_count : $sys_max_page;
@@ -194,7 +194,7 @@ class Common extends Model
      * 设置翻页中数据数量
      * @param int $max_num
      */
-    protected function _get_page($max_num)
+    protected function getPage($max_num)
     {
         if (!$max_num) {
             return;
@@ -313,15 +313,15 @@ class Common extends Model
      * 格式化查询条件接口
      * @param type &$data
      */
-    protected function _parse_where(&$where)
+    protected function parseWhere(&$where)
     {}
 
     /**
      * 格式化数据接口
      * @param type &$data
      */
-    protected function _encode_data(&$data)
+    protected function encodeData(&$data)
     {}
-    protected function _decode_data(&$data)
+    protected function decodeData(&$data)
     {}
 }

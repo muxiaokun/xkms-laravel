@@ -30,9 +30,9 @@ class MemberGroup extends Backend
         $v_value && $where['is_enable'] = (1 == $v_value) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $member_group_list = $MemberGroupModel->m_select($where, true);
+        $member_group_list = $MemberGroupModel->mSelect($where, true);
         $this->assign('member_group_list', $member_group_list);
-        $this->assign('member_group_list_count', $MemberGroupModel->get_page_count($where));
+        $this->assign('member_group_list_count', $MemberGroupModel->getPageCount($where));
 
         //初始化where_info
         $where_info              = array();
@@ -58,7 +58,7 @@ class MemberGroup extends Backend
         $MemberGroupModel = D('MemberGroup');
         if (IS_POST) {
             $data       = $this->_make_data();
-            $result_add = $MemberGroupModel->m_add($data);
+            $result_add = $MemberGroupModel->mAdd($data);
             if ($result_add) {
                 $this->success(L('member') . L('group') . L('add') . L('success'), U('index'));
                 return;
@@ -84,7 +84,7 @@ class MemberGroup extends Backend
         $MemberGroupModel = D('MemberGroup');
         if (IS_POST) {
             $data        = $this->_make_data();
-            $result_edit = $MemberGroupModel->m_edit($id, $data);
+            $result_edit = $MemberGroupModel->mEdit($id, $data);
             if ($result_edit) {
                 $this->success(L('member') . L('group') . L('edit') . L('success'), U('index'));
                 return;
@@ -94,9 +94,9 @@ class MemberGroup extends Backend
             }
         }
         //获取分组默认信息
-        $edit_info = $MemberGroupModel->m_find($id);
+        $edit_info = $MemberGroupModel->mFind($id);
         foreach ($edit_info['manage_id'] as $manage_key => $manage_id) {
-            $member_name                         = $MemberModel->m_find_column($manage_id, 'member_name');
+            $member_name                         = $MemberModel->mFindColumn($manage_id, 'member_name');
             $edit_info['manage_id'][$manage_key] = array('value' => $manage_id, 'html' => $member_name);
         }
         $edit_info['manage_id'] = json_encode($edit_info['manage_id']);
@@ -117,11 +117,11 @@ class MemberGroup extends Backend
         }
 
         $MemberGroupModel = D('MemberGroup');
-        $result_del       = $MemberGroupModel->m_del($id);
+        $result_del       = $MemberGroupModel->mDel($id);
         if ($result_del) {
             //删除成功后 删除管理员与组的关系
             $MemberModel = D('Member');
-            $MemberModel->m_clean($id, 'group_id', 0);
+            $MemberModel->mClean($id, 'group_id');
             $this->success(L('member') . L('group') . L('del') . L('success'), U('index'));
             return;
         } else {
@@ -152,7 +152,7 @@ class MemberGroup extends Backend
                 }
                 //检查管理组名是否存在
                 $MemberGroupModel = D('MemberGroup');
-                $member_info      = $MemberGroupModel->m_select(array('name' => $data['name'], 'id' => array('neq', $data['id'])));
+                $member_info      = $MemberGroupModel->mSelect(array('name' => $data['name'], 'id' => array('neq', $data['id'])));
                 if (0 < count($member_info)) {
                     $result['info'] = L('member') . L('group') . L('name') . L('exists');
                     break;
@@ -196,7 +196,7 @@ class MemberGroup extends Backend
                 isset($data['keyword']) && $where['member_name'] = array('like', '%' . $data['keyword'] . '%');
                 isset($data['inserted']) && $where['id']         = array('not in', $data['inserted']);
                 $MemberModel                                     = D('Member');
-                $member_user_list                                = $MemberModel->m_select($where);
+                $member_user_list                                = $MemberModel->mSelect($where);
                 foreach ($member_user_list as $member_user) {
                     $result['info'][] = array('value' => $member_user['id'], 'html' => $member_user['member_name']);
                 }

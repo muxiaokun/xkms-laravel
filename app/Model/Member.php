@@ -5,30 +5,30 @@ namespace App\Model;
 
 class Member extends Common
 {
-    public function m_select($where = null, $page = false)
+    public function mSelect($where = null, $page = false)
     {
-        $this->_parse_where($where);
-        $this->_get_page($page);
+        $this->parseWhere($where);
+        $this->getPage($page);
         !isset($this->options['order']) && $this->order('id desc');
         $data = $this->field('*,inet_ntoa(login_ip) as aip')->where($where)->select();
-        foreach ($data as &$data_row) {$this->_decode_data($data_row);}
+        foreach ($data as &$data_row) {$this->decodeData($data_row);}
         return $data;
     }
 
-    public function m_add($data)
+    public function mAdd($data)
     {
         if (!$data) {
             return false;
         }
 
         $data['register_time'] = time();
-        return parent::m_add($data);
+        return parent::mAdd($data);
     }
 
-    public function m_find($id)
+    public function mFind($id)
     {
         $this->field('*,inet_ntoa(login_ip) as aip');
-        return parent::m_find($id);
+        return parent::mFind($id);
     }
 
     public function authorized($user, $pwd, $member_id)
@@ -54,14 +54,14 @@ class Member extends Common
                 'login_ip'  => array('exp', 'inet_aton("' . $_SERVER['REMOTE_ADDR'] . '")'),
             );
             $this->where(array('id' => $member_info['id']))->data($data)->save();
-            $member_info = $this->m_find($member_info['id']);
+            $member_info = $this->mFind($member_info['id']);
             return $member_info;
         } else {
             return false;
         }
     }
 
-    protected function _parse_where(&$where)
+    protected function parseWhere(&$where)
     {
         if (is_null($where)) {
             return;
@@ -70,7 +70,7 @@ class Member extends Common
         isset($where['group_id']) && $where['group_id'] = $this->_make_like_arr($where['group_id']);
     }
 
-    protected function _encode_data(&$data)
+    protected function encodeData(&$data)
     {
         if ($data['member_pwd']) {
             $rand_str            = $this->_make_rand();
@@ -87,7 +87,7 @@ class Member extends Common
         isset($data['ext_info']) && $data['ext_info']   = serialize($data['ext_info']);
     }
 
-    protected function _decode_data(&$data)
+    protected function decodeData(&$data)
     {
         unset($data['member_pwd']);
         unset($data['member_rand']);

@@ -30,16 +30,16 @@ class RecruitLog extends Backend
         $v_value                       = M_mktime_range('birthday');
         $v_value && $where['birthday'] = $v_value;
         //初始化翻页 和 列表数据
-        $recruit_log_list         = $RecruitLogModel->m_select($where, true);
+        $recruit_log_list         = $RecruitLogModel->mSelect($where, true);
         $recruit_sex_data         = L('recruit_sex_data');
         $recruit_certificate_data = L('recruit_certificate_data');
         foreach ($recruit_log_list as &$recruit_log) {
-            $recruit_log['recruit_title'] = $RecruitModel->m_find_column($recruit_log['r_id'], 'title');
+            $recruit_log['recruit_title'] = $RecruitModel->mFindColumn($recruit_log['r_id'], 'title');
             $recruit_log['sex']           = $recruit_sex_data[$recruit_log['sex']];
             $recruit_log['certificate']   = $recruit_certificate_data[$recruit_log['certificate']];
         }
         $this->assign('recruit_log_list', $recruit_log_list);
-        $this->assign('recruit_log_list_count', $RecruitLogModel->get_page_count($where));
+        $this->assign('recruit_log_list_count', $RecruitLogModel->getPageCount($where));
 
         //初始化where_info
         $where_info             = array();
@@ -65,7 +65,7 @@ class RecruitLog extends Backend
         }
 
         $RecruitLogModel = D('RecruitLog');
-        $result_del      = $RecruitLogModel->m_del($id);
+        $result_del      = $RecruitLogModel->mDel($id);
         if ($result_del) {
             $this->success(L('recruit_log') . L('del') . L('success'), U('index'));
             return;

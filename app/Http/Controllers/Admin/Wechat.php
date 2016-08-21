@@ -28,12 +28,12 @@ class Wechat extends Backend
         $v_value && $where['bind_time']   = $v_value;
 
         //初始化翻页 和 列表数据
-        $wechat_list = $WechatModel->m_select($where, true);
+        $wechat_list = $WechatModel->mSelect($where, true);
         foreach ($wechat_list as &$wechat) {
-            $wechat['member_name'] = $MemberModel->m_find_column($wechat['member_id'], 'member_name');
+            $wechat['member_name'] = $MemberModel->mFindColumn($wechat['member_id'], 'member_name');
         }
         $this->assign('wechat_list', $wechat_list);
-        $this->assign('wechat_list_count', $WechatModel->get_page_count($where));
+        $this->assign('wechat_list_count', $WechatModel->getPageCount($where));
 
         //初始化where_info
         $where_info                = array();
@@ -96,9 +96,9 @@ class Wechat extends Backend
 
         }
         $WechatModel              = D('Wechat');
-        $edit_info                = $WechatModel->m_find($id);
+        $edit_info                = $WechatModel->mFind($id);
         $MemberModel              = D('Member');
-        $edit_info['member_name'] = $MemberModel->m_find_column($edit_info['member_id'], 'member_name');
+        $edit_info['member_name'] = $MemberModel->mFindColumn($edit_info['member_id'], 'member_name');
         $this->assign('edit_info', $edit_info);
         if (IS_POST) {
             $error_go_link = U('edit', array('id' => $id));
@@ -143,7 +143,7 @@ class Wechat extends Backend
         }
 
         $WechatModel = D('Wechat');
-        $result_del  = $WechatModel->m_del($id);
+        $result_del  = $WechatModel->mDel($id);
         if ($result_del) {
             $this->success(L('wechat') . L('bind') . L('del') . L('success'), U('Wechat/index'));
             return;

@@ -41,14 +41,14 @@ class Comment extends Backend
         $v_value                         = I('item');
         $v_value && $where['item']       = $v_value;
 
-        $comment_list = $CommentModel->order('add_time desc')->m_select($where, true);
+        $comment_list = $CommentModel->order('add_time desc')->mSelect($where, true);
         foreach ($comment_list as &$comment) {
-            $comment['audit_name']  = ($comment['audit_id']) ? $AdminModel->m_find_column($comment['audit_id'], 'admin_name') : L('none') . L('audit');
-            $member_name            = $MemberModel->m_find_column($comment['member_id'], 'member_name');
+            $comment['audit_name']  = ($comment['audit_id']) ? $AdminModel->mFindColumn($comment['audit_id'], 'admin_name') : L('none') . L('audit');
+            $member_name            = $MemberModel->mFindColumn($comment['member_id'], 'member_name');
             $comment['member_name'] = ($member_name) ? $member_name : L('anonymous');
         }
         $this->assign('comment_list', $comment_list);
-        $this->assign('comment_list_count', $CommentModel->get_page_count($where));
+        $this->assign('comment_list_count', $CommentModel->getPageCount($where));
 
         //初始化where_info
         $where_info               = array();
@@ -99,7 +99,7 @@ class Comment extends Backend
 
         $CommentModel = D('Comment');
         $data         = array('audit_id' => session('backend_info.id'));
-        $result_edit  = $CommentModel->m_edit($id, $data);
+        $result_edit  = $CommentModel->mEdit($id, $data);
         if ($result_edit) {
             $this->success(L('comment') . L('audit') . L('success'), U('index'));
             return;
@@ -117,7 +117,7 @@ class Comment extends Backend
         }
 
         $CommentModel = D('Comment');
-        $result_del   = $CommentModel->m_del($id);
+        $result_del   = $CommentModel->mDel($id);
         if ($result_del) {
             $this->success(L('comment') . L('del') . L('success'), U('index'));
             return;

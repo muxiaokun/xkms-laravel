@@ -29,9 +29,9 @@ class Recruit extends Backend
         $v_value                         = M_mktime_range('end_time');
         $v_value && $where['end_time']   = $v_value;
         //初始化翻页 和 列表数据
-        $recruit_list = $RecruitModel->m_select($where, true);
+        $recruit_list = $RecruitModel->mSelect($where, true);
         $this->assign('recruit_list', $recruit_list);
-        $this->assign('recruit_list_count', $RecruitModel->get_page_count($where));
+        $this->assign('recruit_list_count', $RecruitModel->getPageCount($where));
 
         //初始化where_info
         $where_info               = array();
@@ -58,7 +58,7 @@ class Recruit extends Backend
         if (IS_POST) {
             $RecruitModel = D('Recruit');
             $data         = $this->_make_data();
-            $result_add   = $RecruitModel->m_add($data);
+            $result_add   = $RecruitModel->mAdd($data);
             if ($result_add) {
                 $this->success(L('recruit') . L('add') . L('success'), U('index'));
                 return;
@@ -81,7 +81,7 @@ class Recruit extends Backend
         $RecruitModel = D('Recruit');
         if (IS_POST) {
             $data        = $this->_make_data();
-            $result_edit = $RecruitModel->m_edit($id, $data);
+            $result_edit = $RecruitModel->mEdit($id, $data);
             if ($result_edit) {
                 $this->success(L('recruit') . L('edit') . L('success'), U('index'));
                 return;
@@ -91,7 +91,7 @@ class Recruit extends Backend
             }
         }
 
-        $edit_info = $RecruitModel->m_find($id);
+        $edit_info = $RecruitModel->mFind($id);
         $this->assign('edit_info', $edit_info);
 
         $this->assign('title', L('edit') . L('recruit'));
@@ -107,10 +107,11 @@ class Recruit extends Backend
         }
 
         $RecruitModel = D('Recruit');
-        $result_del   = $RecruitModel->m_del($id);
+        $result_del   = $RecruitModel->mDel($id);
         if ($result_del) {
             $RecruitLogModel = D('RecruitLog');
-            $result_del      = $RecruitLogModel->m_clean($id);
+            //TODO 需要定义数据列
+            $result_del      = $RecruitLogModel->mClean($id);
             $this->success(L('recruit') . L('del') . L('success'), U('index'));
             return;
         } else {

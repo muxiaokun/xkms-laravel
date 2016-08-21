@@ -5,39 +5,39 @@ namespace App\Model;
 
 class Admin extends Common
 {
-    public function m_select($where = null, $page = false)
+    public function mSelect($where = null, $page = false)
     {
-        $this->_parse_where($where);
-        $this->_get_page($page);
+        $this->parseWhere($where);
+        $this->getPage($page);
         !isset($this->options['order']) && $this->order('id desc');
         $data = $this->field('*,inet_ntoa(login_ip) as aip')->where($where)->select();
-        foreach ($data as &$data_row) {$this->_decode_data($data_row);}
+        foreach ($data as &$data_row) {$this->decodeData($data_row);}
         return $data;
     }
 
-    public function m_add($data)
+    public function mAdd($data)
     {
         if (!$data) {
             return false;
         }
 
         $data['add_time'] = time();
-        return parent::m_add($data);
+        return parent::mAdd($data);
     }
 
-    public function m_del($id)
+    public function mDel($id)
     {
         //不能删除root用户
         if (!$id || 1 == $id || (is_array($id) && in_array(1, $id))) {
             return false;
         }
-        return parent::m_del($id);
+        return parent::mDel($id);
     }
 
-    public function m_find($id)
+    public function mFind($id)
     {
         $this->field('*,inet_ntoa(login_ip) as aip');
-        return parent::m_find($id);
+        return parent::mFind($id);
     }
 
     public function authorized($user, $pwd)
@@ -57,14 +57,14 @@ class Admin extends Common
                 'login_ip'  => array('exp', 'inet_aton("' . $_SERVER['REMOTE_ADDR'] . '")'),
             );
             $this->where(array('id' => $admin_info['id']))->data($data)->save();
-            $admin_info = $this->m_find($admin_info['id']);
+            $admin_info = $this->mFind($admin_info['id']);
             return $admin_info;
         } else {
             return false;
         }
     }
 
-    protected function _parse_where(&$where)
+    protected function parseWhere(&$where)
     {
         if (is_null($where)) {
             return;
@@ -73,7 +73,7 @@ class Admin extends Common
         isset($where['group_id']) && $where['group_id'] = $this->_make_like_arr($where['group_id']);
     }
 
-    protected function _encode_data(&$data)
+    protected function encodeData(&$data)
     {
         if (isset($data['id']) && (1 == $data['id'] || (is_array($data['id']) && in_array(1, $data['id'])))) {
             unset($data['privilege']);
@@ -92,7 +92,7 @@ class Admin extends Common
         isset($data['ext_info']) && $data['ext_info']   = serialize($data['ext_info']);
     }
 
-    protected function _decode_data(&$data)
+    protected function decodeData(&$data)
     {
         unset($data['admin_pwd']);
         unset($data['admin_rand']);

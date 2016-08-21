@@ -28,16 +28,16 @@ class Member extends Backend
         $v_value                            = I('member_name');
         $v_value && $where['member_name']   = array('like', '%' . $v_value . '%');
         $v_value                            = I('group_id');
-        $v_value && $where['group_id']      = $MemberGroupModel->m_find_id(array('like', '%' . $v_value . '%'));
+        $v_value && $where['group_id']      = $MemberGroupModel->mFindId(array('like', '%' . $v_value . '%'));
         $v_value                            = M_mktime_range('register_time');
         $v_value && $where['register_time'] = $v_value;
         $v_value                            = M_mktime_range('last_time');
         $v_value && $where['last_time']     = $v_value;
 
-        $member_list = $MemberModel->m_select($where, true);
+        $member_list = $MemberModel->mSelect($where, true);
         foreach ($member_list as &$member) {
             foreach ($member['group_id'] as $group_id) {
-                $group_name = $MemberGroupModel->m_find_column($group_id, 'name');
+                $group_name = $MemberGroupModel->mFindColumn($group_id, 'name');
                 isset($member['group_name']) && $member['group_name'] .= " | ";
                 $member['group_name'] .= $group_name;
             }
@@ -45,7 +45,7 @@ class Member extends Backend
             !isset($member['add_time']) && $member['add_time']     = L('system') . L('add');
         }
         $this->assign('member_list', $member_list);
-        $this->assign('member_list_count', $MemberModel->get_page_count($where));
+        $this->assign('member_list_count', $MemberModel->getPageCount($where));
 
         //初始化where_info
         $where_info                  = array();
@@ -72,7 +72,7 @@ class Member extends Backend
         if (IS_POST) {
             $MemberModel = D('Member');
             $data        = $this->_make_data();
-            $result_add  = $MemberModel->m_add($data);
+            $result_add  = $MemberModel->mAdd($data);
             if ($result_add) {
                 $this->success(L('member') . L('add') . L('success'), U('index'));
                 return;
@@ -96,7 +96,7 @@ class Member extends Backend
         $MemberModel = D('Member');
         if (IS_POST) {
             $data        = $this->_make_data(false);
-            $result_edit = $MemberModel->m_edit($id, $data);
+            $result_edit = $MemberModel->mEdit($id, $data);
             if ($result_edit) {
                 $this->success(L('member') . L('edit') . L('success'), U('index'));
                 return;
@@ -106,10 +106,10 @@ class Member extends Backend
             }
         }
 
-        $edit_info        = $MemberModel->m_find($id);
+        $edit_info        = $MemberModel->mFind($id);
         $MemberGroupModel = D('MemberGroup');
         foreach ($edit_info['group_id'] as &$group_id) {
-            $member_group_name = $MemberGroupModel->m_find_column($group_id, 'name');
+            $member_group_name = $MemberGroupModel->mFindColumn($group_id, 'name');
             $group_id          = array('value' => $group_id, 'html' => $member_group_name);
         }
         $edit_info['group_id'] = json_encode($edit_info['group_id']);
@@ -134,7 +134,7 @@ class Member extends Backend
         }
 
         $MemberModel = D('Member');
-        $result_del  = $MemberModel->m_del($id);
+        $result_del  = $MemberModel->mDel($id);
         if ($result_del) {
             $this->success(L('member') . L('del') . L('success'), U('index'));
             return;
@@ -187,7 +187,7 @@ class Member extends Backend
                 }
                 //检查用户名是否存在
                 $MemberModel = D('Member');
-                $member_info = $MemberModel->m_select(array('member_name' => $data['member_name'], 'id' => array('neq', $data['id'])));
+                $member_info = $MemberModel->mSelect(array('member_name' => $data['member_name'], 'id' => array('neq', $data['id'])));
                 if (0 < count($member_info)) {
                     $result['info'] = L('member') . L('name') . L('exists');
                     break;
@@ -256,7 +256,7 @@ class Member extends Backend
                 isset($data['inserted']) && $where['id']  = array('not in', $data['inserted']);
                 $MemberGroupModel                         = D('MemberGroup');
                 isset($data['keyword']) && $where['name'] = array('like', '%' . $data['keyword'] . '%');
-                $member_group_list                        = $MemberGroupModel->m_select($where);
+                $member_group_list                        = $MemberGroupModel->mSelect($where);
                 foreach ($member_group_list as $member_group) {
                     $result['info'][] = array('value' => $member_group['id'], 'html' => $member_group['name']);
                 }
@@ -328,7 +328,7 @@ class Member extends Backend
     private function _add_edit_common()
     {
         $MemberGroupModel  = D('MemberGroup');
-        $member_group_list = $MemberGroupModel->m_select();
+        $member_group_list = $MemberGroupModel->mSelect();
         $this->assign('member_group_list', $member_group_list);
     }
 }

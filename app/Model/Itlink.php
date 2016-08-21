@@ -5,16 +5,16 @@ namespace App\Model;
 
 class Itlink extends Common
 {
-    public function m_select($where = null, $page = false)
+    public function mSelect($where = null, $page = false)
     {
-        $this->_get_page($page);
+        $this->getPage($page);
         !isset($this->options['order']) && $this->order('id desc');
         $data = $this->where($where)->select();
-        foreach ($data as &$data_row) {$this->_decode_data($data_row);}
+        foreach ($data as &$data_row) {$this->decodeData($data_row);}
         return $data;
     }
 
-    public function m_find_data($short_name)
+    public function mFind_data($short_name)
     {
         if (!$short_name) {
             return array();
@@ -33,7 +33,7 @@ class Itlink extends Common
             '_string'    => $_string,
         );
         $itlink_info = $this->where($where)->find();
-        $this->_decode_data($itlink_info);
+        $this->decodeData($itlink_info);
         $links = $itlink_info['ext_info'];
         foreach ($links as &$link) {
             if (0 < $itlink_info['max_hit_num']) {
@@ -47,12 +47,12 @@ class Itlink extends Common
         return is_array($links) ? $links : array();
     }
 
-    protected function _encode_data(&$data)
+    protected function encodeData(&$data)
     {
         isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
     }
 
-    protected function _decode_data(&$data)
+    protected function decodeData(&$data)
     {
         isset($data['ext_info']) && $data['ext_info'] = unserialize($data['ext_info']);
     }

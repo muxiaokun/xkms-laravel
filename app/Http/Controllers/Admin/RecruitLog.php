@@ -27,7 +27,7 @@ class RecruitLog extends Backend
         $whereValue && $where['r_id']     = $whereValue;
         $whereValue                       = I('name');
         $whereValue && $where['name']     = array('like', '%' . $whereValue . '%');
-        $whereValue                       = M_mktime_range('birthday');
+        $whereValue                       = mMktimeRange('birthday');
         $whereValue && $where['birthday'] = $whereValue;
         //初始化翻页 和 列表数据
         $recruitLogList         = $RecruitLogModel->mSelect($where, true);

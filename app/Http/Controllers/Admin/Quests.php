@@ -25,9 +25,9 @@ class Quests extends Backend
         $whereValue                         = '';
         $whereValue                         = I('title');
         $whereValue && $where['title']      = array('like', '%' . $whereValue . '%');
-        $whereValue                         = M_mktime_range('start_time');
+        $whereValue                         = mMktimeRange('start_time');
         $whereValue && $where['start_time'] = $whereValue;
-        $whereValue                         = M_mktime_range('end_time');
+        $whereValue                         = mMktimeRange('end_time');
         $whereValue && $where['end_time']   = $whereValue;
 
         $QuestsModel = D('Quests');
@@ -143,8 +143,8 @@ class Quests extends Backend
         $maxPortion   = I('max_portion');
         $startTime    = I('start_time');
         $endTime      = I('end_time');
-        $startTime    = M_mktime($startTime, true);
-        $endTime      = M_mktime($endTime, true);
+        $startTime    = mMktime($startTime, true);
+        $endTime      = mMktime($endTime, true);
         $startContent = I('start_content');
         $endContent   = I('end_content');
         $accessInfo   = I('access_info');

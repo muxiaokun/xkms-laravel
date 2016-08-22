@@ -94,7 +94,7 @@ class ArticleChannel extends Backend
         }
 
         if (1 != session('backend_info.id')
-            && !M_in_array($id, $ArticleChannelModel->mFind_allow())) {
+            && !mInArray($id, $ArticleChannelModel->mFind_allow())) {
             $this->error(L('none') . L('privilege') . L('edit') . L('channel'), U('index'));
         }
 
@@ -102,7 +102,7 @@ class ArticleChannel extends Backend
         if (IS_POST) {
             $data = $this->makeData();
             if (1 != session('backend_info.id')
-                && !M_in_array($id, $maAllowArr)) {
+                && !mInArray($id, $maAllowArr)) {
                 unset($data['manage_id']);
                 unset($data['manage_group_id']);
                 unset($data['access_group_id']);
@@ -119,7 +119,7 @@ class ArticleChannel extends Backend
 
         $editInfo = $ArticleChannelModel->mFind($id);
         //如果有管理权限进行进一步数据处理
-        if (M_in_array($id, $maAllowArr)) {
+        if (mInArray($id, $maAllowArr)) {
             $AdminModel = D('Admin');
             foreach ($editInfo['manage_id'] as &$manageId) {
                 $adminName = $AdminModel->mFindColumn($manageId, 'admin_name');
@@ -157,7 +157,7 @@ class ArticleChannel extends Backend
         $ArticleChannelModel = D('ArticleChannel');
         //删除必须是 属主
         if (1 != session('backend_info.id')
-            && !M_in_array($id, $ArticleChannelModel->mFind_allow('ma'))
+            && !mInArray($id, $ArticleChannelModel->mFind_allow('ma'))
         ) {
             $this->error(L('none') . L('privilege') . L('del') . L('channel'), U('index'));
         }
@@ -275,10 +275,10 @@ class ArticleChannel extends Backend
         $this->assign('manage_privilege', $managePrivilgeg);
 
         $ArticleCategoryModel = D('ArticleCategory');
-        $this->assign('channel_template_list', M_scan_template('channel', C('DEFAULT_MODULE'), 'Article'));
-        $this->assign('template_list', M_scan_template('category', C('DEFAULT_MODULE'), 'Article'));
-        $this->assign('list_template_list', M_scan_template('list_category', C('DEFAULT_MODULE'), 'Article'));
-        $this->assign('article_template_list', M_scan_template('article', C('DEFAULT_MODULE'), 'Article'));
+        $this->assign('channel_template_list', mScanTemplate('channel', C('DEFAULT_MODULE'), 'Article'));
+        $this->assign('template_list', mScanTemplate('category', C('DEFAULT_MODULE'), 'Article'));
+        $this->assign('list_template_list', mScanTemplate('list_category', C('DEFAULT_MODULE'), 'Article'));
+        $this->assign('article_template_list', mScanTemplate('article', C('DEFAULT_MODULE'), 'Article'));
     }
 
     //构造频道公共ajax

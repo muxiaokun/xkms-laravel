@@ -34,7 +34,7 @@ class Message extends FrontendMember
             'in',
             $MemberModel->where(array('member_name' => array('like', '%' . $whereValue . '%')))->mColumn2Array('id'),
         );
-        $whereValue                        = M_mktime_range('send_time');
+        $whereValue                        = mMktimeRange('send_time');
         $whereValue && $where['send_time'] = $whereValue;
 
         $messageList = $MessageModel->order('receive_time asc,send_time desc')->mSelect($where, true);

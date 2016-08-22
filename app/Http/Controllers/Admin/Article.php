@@ -30,7 +30,7 @@ class Article extends Backend
         $whereValue && $where['cate_id']    = array('in', $ArticleCategoryModel->mFind_child_id($whereValue));
         $whereValue                         = I('channel_id');
         $whereValue && $where['channel_id'] = $whereValue;
-        $whereValue                         = M_mktime_range('add_time');
+        $whereValue                         = mMktimeRange('add_time');
         $whereValue && $where['add_time']   = $whereValue;
         $whereValue                         = I('is_audit');
         $whereValue && $where['is_audit']   = (1 == $whereValue) ? array('gt', 0) : 0;
@@ -48,7 +48,7 @@ class Article extends Backend
 
             $allowCategory                              = $ArticleCategoryModel->mFind_allow();
             is_array($allowCategory) && $categoryWhere = array('id' => array('in', $allowCategory));
-            if (isset($where['cate_id']) && !M_in_array($where['cate_id'], $allowCategory)) {
+            if (isset($where['cate_id']) && !mInArray($where['cate_id'], $allowCategory)) {
                 $where['cate_id'] = array('in', $allowCategory);
             }
 
@@ -286,8 +286,8 @@ class Article extends Backend
         $cateId               = I('cate_id');
         $channelId            = I('channel_id');
         $thumb                 = I('thumb');
-        $addTime              = M_mktime(I('add_time'), true);
-        $updateTime           = M_mktime(I('update_time'), true);
+        $addTime              = mMktime(I('add_time'), true);
+        $updateTime           = mMktime(I('update_time'), true);
         $sort                  = I('sort');
         $isStick              = I('is_stick');
         $isAudit              = I('is_audit');
@@ -300,7 +300,7 @@ class Article extends Backend
         }
         $attribute = I('attribute');
 
-        !$description && $description = trim(M_substr(strip_tags(htmlspecialchars_decode($content)), 100));
+        !$description && $description = trim(mSubstr(strip_tags(htmlspecialchars_decode($content)), 100));
 
         $data                                                                           = array();
         ('add' == ACTION_NAME || null !== $accessGroupId) && $data['access_group_id'] = $accessGroupId;
@@ -339,7 +339,7 @@ class Article extends Backend
 
         $bindFile[]    = $data['new_thumb'];
         $bindFile[]    = $data['thumb'];
-        $contentUpload = M_get_content_upload($data['content']);
+        $contentUpload = mGetContentUpload($data['content']);
         $bindFile      = array_merge($bindFile, $contentUpload);
         $ManageUploadModel->mEdit($id, $bindFile);
     }

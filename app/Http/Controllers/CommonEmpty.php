@@ -49,7 +49,7 @@ class CommonEmpty extends Controller
 <script type="text/javascript">
     (function(){
         var wait = document.getElementById('wait');
-        if(10 < wait)M_jump_link();
+        if(10 < wait)mJumpLink();
         var interval = setInterval(function(){
             var time = --wait.innerHTML;
             if(time <= 0) {

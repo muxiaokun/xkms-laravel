@@ -24,9 +24,9 @@ class Recruit extends Backend
         $whereValue                         = '';
         $whereValue                         = I('name');
         $whereValue && $where['name']       = array('like', '%' . $whereValue . '%');
-        $whereValue                         = M_mktime_range('start_time');
+        $whereValue                         = mMktimeRange('start_time');
         $whereValue && $where['start_time'] = $whereValue;
-        $whereValue                         = M_mktime_range('end_time');
+        $whereValue                         = mMktimeRange('end_time');
         $whereValue && $where['end_time']   = $whereValue;
         //初始化翻页 和 列表数据
         $recruitList = $RecruitModel->mSelect($where, true);
@@ -128,8 +128,8 @@ class Recruit extends Backend
         $isEnable       = I('is_enable');
         $currentPortion = I('current_portion');
         $maxPortion     = I('max_portion');
-        $startTime      = M_mktime(I('start_time'), true);
-        $endTime        = M_mktime(I('end_time'), true);
+        $startTime      = mMktime(I('start_time'), true);
+        $endTime        = mMktime(I('end_time'), true);
         $extInfo        = I('ext_info');
 
         $data                                                                           = array();

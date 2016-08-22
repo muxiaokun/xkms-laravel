@@ -127,7 +127,7 @@ class Common extends Controller
     //生成中文拼音首字母缩写
     protected function _zh2py($str)
     {
-        $MZh2py = new \Common\Lib\M_zh2py();
+        $MZh2py = new \Common\Lib\mZh2py();
         return $MZh2py->encode($str, false);
     }
 
@@ -269,7 +269,7 @@ class Common extends Controller
 <script type='text/javascript'>
     //{$currentTime}
    (function(){
-       M_confirm('{$lang}?','{:U('',array('confirm'=>'yes'))}',true);
+       mConfirm('{$lang}?','{:U('',array('confirm'=>'yes'))}',true);
    })();
 </script>
 EOF;

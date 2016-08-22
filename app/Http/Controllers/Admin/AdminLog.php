@@ -26,7 +26,7 @@ class AdminLog extends Backend
 
         //建立where
         $whereValue                       = '';
-        $whereValue                       = M_mktime_range('add_time');
+        $whereValue                       = mMktimeRange('add_time');
         $whereValue && $where['add_time'] = $whereValue;
         $whereValue                       = I('admin_id');
         $whereValue && $where['admin_id'] = array(

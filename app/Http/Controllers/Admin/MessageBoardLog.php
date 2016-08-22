@@ -34,7 +34,7 @@ class MessageBoardLog extends Backend
             'in',
             $AdminModel->where(array('admin_name' => array('like', '%' . $whereValue . '%')))->mColumn2Array('id'),
         );
-        $whereValue                       = M_mktime_range('add_time');
+        $whereValue                       = mMktimeRange('add_time');
         $whereValue && $where['add_time'] = $whereValue;
 
         $messageBoardLogList = $MessageBoardLogModel->order('add_time desc')->mSelect($where, true);

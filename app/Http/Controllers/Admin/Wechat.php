@@ -24,7 +24,7 @@ class Wechat extends Backend
         $where                            = array();
         $whereValue                          = I('member_name');
         $whereValue && $where['member_name'] = $whereValue;
-        $whereValue                          = M_mktime_range('bind_time');
+        $whereValue                          = mMktimeRange('bind_time');
         $whereValue && $where['bind_time']   = $whereValue;
 
         //初始化翻页 和 列表数据

@@ -114,7 +114,7 @@ class ArticleCategory extends Backend
         $ArticleCategoryModel = D('ArticleCategory');
 
         if (1 != session('backend_info.id')
-            && !M_in_array($id, $ArticleCategoryModel->mFind_allow())
+            && !mInArray($id, $ArticleCategoryModel->mFind_allow())
         ) {
             $this->error(L('none') . L('privilege') . L('edit') . L('article') . L('category'), U('index'));
         }
@@ -123,7 +123,7 @@ class ArticleCategory extends Backend
         if (IS_POST) {
             $data = $this->makeData();
             if (1 != session('backend_info.id')
-                && !M_in_array($id, $maAllowArr)
+                && !mInArray($id, $maAllowArr)
             ) {
                 unset($data['manage_id']);
                 unset($data['manage_group_id']);
@@ -145,7 +145,7 @@ class ArticleCategory extends Backend
         $editInfo = $ArticleCategoryModel->mFind($id);
         C('SYS_ARTICLE_SYNC_IMAGE', $currentConfig);
         //如果有管理权限进行进一步数据处理
-        if (M_in_array($id, $maAllowArr)) {
+        if (mInArray($id, $maAllowArr)) {
             $AdminModel = D('Admin');
             foreach ($editInfo['manage_id'] as &$manageId) {
                 $adminName = $AdminModel->mFindColumn($manageId, 'admin_name');
@@ -183,7 +183,7 @@ class ArticleCategory extends Backend
 
         $ArticleCategoryModel = D('ArticleCategory');
         //删除必须是 属主
-        if (!M_in_array($id, $ArticleCategoryModel->mFind_allow('ma'))
+        if (!mInArray($id, $ArticleCategoryModel->mFind_allow('ma'))
             && 1 != session('backend_info.id')
         ) {
             $this->error(L('none') . L('privilege') . L('del') . L('article') . L('category'), U('index'));
@@ -326,7 +326,7 @@ class ArticleCategory extends Backend
     private function addEditAfterCommon(&$data, $id)
     {
         $ManageUploadModel = D('ManageUpload');
-        $bindFile         = M_get_content_upload($data['content']);
+        $bindFile         = mGetContentUpload($data['content']);
         $bindFile[]       = $data['thumb'];
         $ManageUploadModel->mEdit($id, $bindFile);
     }
@@ -344,8 +344,8 @@ class ArticleCategory extends Backend
         $this->assign('category_list', $ArticleCategoryModel->mSelect_tree($where));
         $managePrivilege = (1 == session('backend_info.id')) || in_array($id, $ArticleCategoryModel->mFind_allow('ma'));
         $this->assign('manage_privilege', $managePrivilege);
-        $this->assign('template_list', M_scan_template('category', C('DEFAULT_MODULE'), 'Article'));
-        $this->assign('list_template_list', M_scan_template('list_category', C('DEFAULT_MODULE'), 'Article'));
-        $this->assign('article_template_list', M_scan_template('article', C('DEFAULT_MODULE'), 'Article'));
+        $this->assign('template_list', mScanTemplate('category', C('DEFAULT_MODULE'), 'Article'));
+        $this->assign('list_template_list', mScanTemplate('list_category', C('DEFAULT_MODULE'), 'Article'));
+        $this->assign('article_template_list', mScanTemplate('article', C('DEFAULT_MODULE'), 'Article'));
     }
 }

@@ -305,7 +305,7 @@ class Common extends Model
             return $content;
         }
 
-        $urlpreg = M_get_urlpreg();
+        $urlpreg = MGetUrlpreg();
         return preg_replace($urlpreg['pattern'], $urlpreg['replacement'], $content);
     }
 

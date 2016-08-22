@@ -29,7 +29,7 @@ class Assess extends Backend
         $whereValue = I('group_level');
         $whereValue && $where['group_level'] = $MemberGroupModel->where(['name' => ['like',
             '%' . $whereValue . '%']])->mColumn2Array('id');
-        $whereValue = M_mktime_range('start_time');
+        $whereValue = mMktimeRange('start_time');
         $whereValue && $where['start_time'] = $whereValue;
         $whereValue = I('is_enable');
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
@@ -164,8 +164,8 @@ class Assess extends Backend
         $groupLevel    = I('group_level');
         $startTime     = I('start_time');
         $endTime       = I('end_time');
-        $startTime     = M_mktime($startTime, true);
-        $endTime       = M_mktime($endTime, true);
+        $startTime     = mMktime($startTime, true);
+        $endTime       = mMktime($endTime, true);
         $isEnable      = I('is_enable');
         $target        = I('target');
         $extInfo       = [];

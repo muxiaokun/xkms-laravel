@@ -25,7 +25,7 @@ class ManageUpload extends Backend
         $whereValue && $where['suffix']    = $whereValue;
         $whereValue                        = I('bind_info');
         $whereValue && $where['bind_info'] = array('like', '%|' . $whereValue . ':%');
-        $whereValue                        = M_mktime_range('add_time');
+        $whereValue                        = mMktimeRange('add_time');
         $whereValue && $where['add_time']  = $whereValue;
 
         //初始化翻页 和 列表数据

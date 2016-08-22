@@ -45,7 +45,7 @@ class Article extends Frontend
         is_array($articleInfo['access_group_id']) && $mFindAllows  = array_merge($mFindAllows, $articleInfo['access_group_id']);
         is_array($categoryInfo['access_group_id']) && $mFindAllows = array_merge($mFindAllows, $categoryInfo['access_group_id']);
         is_array($channelInfo['access_group_id']) && $mFindAllows  = array_merge($mFindAllows, $channelInfo['access_group_id']);
-        if ($mFindAllows && !M_in_array($memberGroupId, $mFindAllows)) {
+        if ($mFindAllows && !mInArray($memberGroupId, $mFindAllows)) {
             $this->error(L('none') . L('privilege') . L('access') . L('comma') . L('please') . L('login'), U('Member/index'));
         }
 
@@ -55,8 +55,8 @@ class Article extends Frontend
         if ($cacheValue && true !== APP_DEBUG) {
             $articleInfo['content'] = $cacheValue;
         } else {
-            $articleInfo['content']                                = M_content2ckplayer($articleInfo['content'], $articleInfo['thumb']);
-            C('SYS_ARTICLE_SYNC_IMAGE') && $articleInfo['content'] = M_sync_img($articleInfo['content']);
+            $articleInfo['content']                                = mContent2ckplayer($articleInfo['content'], $articleInfo['thumb']);
+            C('SYS_ARTICLE_SYNC_IMAGE') && $articleInfo['content'] = mSyncImg($articleInfo['content']);
             $cacheValue                                            = $articleInfo['content'];
             S($cacheName, $cacheValue, C('SYS_TD_CACHE'));
         }
@@ -96,7 +96,7 @@ class Article extends Frontend
         $mFindAllows                                                = array();
         is_array($categoryInfo['access_group_id']) && $mFindAllows = array_merge($mFindAllows, $categoryInfo['access_group_id']);
         is_array($channelInfo['access_group_id']) && $mFindAllows  = array_merge($mFindAllows, $channelInfo['access_group_id']);
-        if ($mFindAllows && !M_in_array($memberGroupId, $mFindAllows)) {
+        if ($mFindAllows && !mInArray($memberGroupId, $mFindAllows)) {
             $this->error(L('none') . L('privilege') . L('access') . L('comma') . L('please') . L('login'), U('Member/index'));
         }
 
@@ -110,8 +110,8 @@ class Article extends Frontend
             if ($cacheValue && true !== APP_DEBUG) {
                 $categoryInfo['content'] = $cacheValue;
             } else {
-                $categoryInfo['content']                                = M_content2ckplayer($categoryInfo['content'], $categoryInfo['thumb']);
-                C('SYS_ARTICLE_SYNC_IMAGE') && $categoryInfo['content'] = M_sync_img($categoryInfo['content']);
+                $categoryInfo['content']                                = mContent2ckplayer($categoryInfo['content'], $categoryInfo['thumb']);
+                C('SYS_ARTICLE_SYNC_IMAGE') && $categoryInfo['content'] = mSyncImg($categoryInfo['content']);
                 $cacheValue                                             = $categoryInfo['content'];
                 S($cacheName, $cacheValue, C('SYS_TD_CACHE'));
             }
@@ -125,7 +125,7 @@ class Article extends Frontend
             ));
             $channelId && $where['channel_id']     = array('in', array(0, $channelId));
             $categoryTopInfo                      = $ArticleCategoryModel->mFind_top($categoryInfo['id']);
-            $attributeWhere                        = M_attribute_where($categoryTopInfo['attribute']);
+            $attributeWhere                        = mAttributeWhere($categoryTopInfo['attribute']);
             $attributeWhere && $where['attribute'] = $attributeWhere;
 
             $ArticleModel = D('Article');
@@ -163,7 +163,7 @@ class Article extends Frontend
         $memberGroupId                                             = session('frontend_info.group_id');
         $mFindAllows                                               = array();
         is_array($channelInfo['access_group_id']) && $mFindAllows = array_merge($mFindAllows, $channelInfo['access_group_id']);
-        if ($mFindAllows && !M_in_array($memberGroupId, $mFindAllows)) {
+        if ($mFindAllows && !mInArray($memberGroupId, $mFindAllows)) {
             $this->error(L('none') . L('privilege') . L('access') . L('comma') . L('please') . L('login'), U('Member/index'));
         }
 
@@ -188,7 +188,7 @@ class Article extends Frontend
             $ArticleCategoryModel                   = D('ArticleCategory');
             $where['cate_id']                       = array('in', $ArticleCategoryModel->mFind_child_id($cateId));
             $categoryPosition                      = $this->_get_category_position($cateId);
-            $attributeWhere                        = M_attribute_where($categoryPosition['attribute']);
+            $attributeWhere                        = mAttributeWhere($categoryPosition['attribute']);
             $attributeWhere && $where['attribute'] = $attributeWhere;
             $this->assign('category_position', $this->_get_category_position($cateId));
         }
@@ -350,12 +350,12 @@ class Article extends Frontend
         $articleCategoryInfo = $ArticleCategoryModel->mFind($cateId);
         $path[]                = array(
             'name' => $articleCategoryInfo['name'],
-            'link' => M_U('article_category', array('cate_id' => $articleCategoryInfo['id'])),
+            'link' => mU('article_category', array('cate_id' => $articleCategoryInfo['id'])),
         );
         if (0 == $articleCategoryInfo['parent_id']) {
             $path[] = array(
                 'name' => L('homepage'),
-                'link' => M_U(),
+                'link' => mU(),
             );
             $path = array_reverse($path);
 

@@ -68,7 +68,7 @@ class Recruit extends Frontend
             $data                = array();
             $data['r_id']        = $id;
             $data['name']        = I('name');
-            $data['birthday']    = M_mktime(I('birthday'));
+            $data['birthday']    = mMktime(I('birthday'));
             $data['sex']         = I('sex');
             $data['certificate'] = I('certificate');
             $data['ext_info']    = I('ext_info');
@@ -91,8 +91,8 @@ class Recruit extends Frontend
         if ($cacheValue && true !== APP_DEBUG) {
             $recruitInfo['explains'] = $cacheValue;
         } else {
-            $recruitInfo['explains']                                = M_content2ckplayer($recruitInfo['explains'], $recruitInfo['thumb']);
-            C('SYS_ARTICLE_SYNC_IMAGE') && $recruitInfo['explains'] = M_sync_img($recruitInfo['explains']);
+            $recruitInfo['explains']                                = mContent2ckplayer($recruitInfo['explains'], $recruitInfo['thumb']);
+            C('SYS_ARTICLE_SYNC_IMAGE') && $recruitInfo['explains'] = mSyncImg($recruitInfo['explains']);
             $cacheValue                                             = $recruitInfo['explains'];
             S($cacheName, $cacheValue, C('SYS_TD_CACHE'));
         }

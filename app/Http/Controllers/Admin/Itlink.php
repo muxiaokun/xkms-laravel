@@ -153,8 +153,8 @@ class Itlink extends Backend
         $shortName     = I('short_name');
         $startTime     = I('start_time');
         $endTime       = I('end_time');
-        $startTime     = M_mktime($startTime, true);
-        $endTime       = M_mktime($endTime, true);
+        $startTime     = mMktime($startTime, true);
+        $endTime       = mMktime($endTime, true);
         $isEnable      = I('is_enable');
         $isStatistics  = I('is_statistics');
         $maxShowNum   = I('max_show_num');

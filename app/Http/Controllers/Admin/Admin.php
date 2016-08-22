@@ -39,7 +39,7 @@ class Admin extends Backend
         $whereValue = I('group_id');
         $whereValue && $where['group_id'] = $AdminGroupModel->where(['name' => ['like',
             '%' . $whereValue . '%']])->mColumn2Array('id');
-        $whereValue = M_mktime_range('last_time');
+        $whereValue = mMktimeRange('last_time');
         $whereValue && $where['last_time'] = $whereValue;
         $whereValue = I('is_enable');
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
@@ -332,7 +332,7 @@ class Admin extends Backend
         if (1 != session('backend_info.id')) {
             $AdminGroupModel = D('AdminGroup');
             $mFindAllow      = $AdminGroupModel->mFind_allow();
-            if (!M_in_array($groupId, $mFindAllow)) {
+            if (!mInArray($groupId, $mFindAllow)) {
                 $this->error(L('you') . L('none') . L('privilege'));
             }
 

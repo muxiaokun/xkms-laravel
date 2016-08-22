@@ -33,7 +33,7 @@ class MessageBoard extends Backend
             foreach ($messageBoard['config'] as $name => $value) {
                 $option[] = $name;
             }
-            $messageBoard['option'] = M_substr(implode(',', $option), 40);
+            $messageBoard['option'] = mSubstr(implode(',', $option), 40);
         }
         $this->assign('message_board_list', $messageBoardList);
         $this->assign('message_board_list_count', $MessageBoardModel->mGetPageCount($where));
@@ -65,7 +65,7 @@ class MessageBoard extends Backend
             }
         }
 
-        $this->assign('template_list', M_scan_template('index', C('DEFAULT_MODULE'), 'MessageBoard'));
+        $this->assign('template_list', mScanTemplate('index', C('DEFAULT_MODULE'), 'MessageBoard'));
         $this->assign('title', L('messageboard') . L('add'));
         $this->display('addedit');
     }
@@ -95,7 +95,7 @@ class MessageBoard extends Backend
         $editInfo['config'] = json_encode($editInfo['config']);
         $this->assign('edit_info', $editInfo);
 
-        $this->assign('template_list', M_scan_template('index', C('DEFAULT_MODULE'), 'MessageBoard'));
+        $this->assign('template_list', mScanTemplate('index', C('DEFAULT_MODULE'), 'MessageBoard'));
         $this->assign('title', L('messageboard') . L('edit'));
         $this->display('addedit');
     }

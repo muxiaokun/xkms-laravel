@@ -13,7 +13,7 @@
 //构造本系统的URL连接 $type如果为空返回根目录
 //切割字符串
 //提取 Org\Util\String::msubstr
-function M_substr($str, $len, $suffix = true, $start = 0)
+function mSubstr($str, $len, $suffix = true, $start = 0)
 {
     $charset      = 'utf-8';
     $re['utf-8']  = "/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}/";
@@ -32,7 +32,7 @@ function M_substr($str, $len, $suffix = true, $start = 0)
 
 //转换本系统的格式时间到时间戳
 //暂时只支持基本的格式YmdHis
-function M_mktime($date, $isDetail = false)
+function mMktime($date, $isDetail = false)
 {
     if ('' === $date) {
         return $date;
@@ -70,11 +70,11 @@ function M_mktime($date, $isDetail = false)
 }
 
 //创建where_info中时间范围的数组
-function M_mktime_range($inputName)
+function mMktimeRange($inputName)
 {
     $timeRange = array();
-    $gtTime    = M_mktime(I($inputName . '_start'));
-    $ltTime    = M_mktime(I($inputName . '_end')) + 86400;
+    $gtTime    = mMktime(I($inputName . '_start'));
+    $ltTime    = mMktime(I($inputName . '_end')) + 86400;
     if (I($inputName . '_start') && 0 < $gtTime) {
         $timeRange[] = array('gt', $gtTime);
     }
@@ -86,7 +86,7 @@ function M_mktime_range($inputName)
     return $timeRange;
 }
 
-function M_exists($url, $isThumb = false)
+function mExists($url, $isThumb = false)
 {
     if (!$url || !is_file($url)) {
         $systemDefault = "Public/css/bimages/default.png";
@@ -110,19 +110,19 @@ function M_exists($url, $isThumb = false)
 }
 
 // 获得字符串中的本站资源链接
-function M_get_content_upload($str)
+function mGetContentUpload($str)
 {
     preg_match_all('/(&quot;|\')\s*(?!(http:\/\/|https:\/\/|ftp:\/\/))[^\1]*?(Uploads[^\1]*?)\1/i', $str, $uploadLinks);
     return $uploadLinks[3];
 }
 
 //将内容中的IMG标签替换成异步IMG标签
-function M_sync_img($content)
+function mSyncImg($content)
 {
     $pattern = '/(<img.*?)\ssrc=([\'|\"])(.*?)\2(.*?\/?>)/i';
     $content = preg_replace_callback($pattern, function ($match) {
         $newElement = base64_encode($match[1] . $match[4]);
-        $replacement = '<img src="' . M_exists(C('SYS_SYNC_IMAGE')) . '" ';
+        $replacement = '<img src="' . mExists(C('SYS_SYNC_IMAGE')) . '" ';
         $replacement .= 'M_Img="' . $newElement . '" ';
         $replacement .= 'M_img_src=' . $match[2] . $match[3] . $match[2] . ' />';
         return $replacement;
@@ -131,7 +131,7 @@ function M_sync_img($content)
 }
 
 //创建CKplayer
-function M_ckplayer($config)
+function mCkplayer($config)
 {
     $id           = $config['id'];
     $src          = $config['src'];
@@ -159,7 +159,7 @@ EOF;
 //将内容中的视频替换成CKplayer
 //custom_id 自定义输出div id
 //jop=>just one player 只返回一个视频
-function M_content2ckplayer($content, $image, $customId = false, $jop = false)
+function mContent2ckplayer($content, $image, $customId = false, $jop = false)
 {
     if (!preg_match_all('/<embed.*?\/>/i', $content, $elements)) {
         return $content;
@@ -185,7 +185,7 @@ function M_content2ckplayer($content, $image, $customId = false, $jop = false)
             $height    = $matches[11][2] . 'px';
             $autostart = ('true' == $matches[14][3]) ? 1 : 2;
             $loop      = ('true' == $matches[17][4]) ? 1 : 2;
-            $image     = M_exists($image);
+            $image     = mExists($image);
             $divId    = ($customId) ? $customId : 'content2ckplayer_' . $id;
             if ($jop) {
                 $width  = '100%';
@@ -200,7 +200,7 @@ function M_content2ckplayer($content, $image, $customId = false, $jop = false)
                 'loop'        => $loop,
                 'right_close' => 'true',
             );
-            $MTag = M_ckplayer($config);
+            $MTag = mCkplayer($config);
             if ('' != $MTag) {
                 $reContent = 'span id="' . $divId . '" style="display:block;margin:0 auto;';
                 $reContent .= 'width:' . $width . ';height:' . $height . ';" >' . $MTag . '</span';
@@ -219,7 +219,7 @@ function M_content2ckplayer($content, $image, $customId = false, $jop = false)
 // 自定义将字符串转换成系统连接
 // 1 M/C/A?ars1=val1&ars2=val2
 // 2 \w*://
-function M_str2url($url)
+function mStr2url($url)
 {
     if ($url && preg_match('/^(\w*?:\/\/|javascript|#).*/', $url)) {
         return $url;
@@ -231,17 +231,17 @@ function M_str2url($url)
             list($key, $value)   = explode('=', trim($varUrlValue));
             $varUrlArray[$key] = $value;
         }
-        return M_U(trim($varUrl[0]), $varUrlArray);
+        return mU(trim($varUrl[0]), $varUrlArray);
     } else {
-        return ($url) ? '#' . $url : M_U();
+        return ($url) ? '#' . $url : mU();
     }
 }
 
-function M_in_array($target, $source)
+function mInArray($target, $source)
 {
     if (is_array($target)) {
         foreach ($target as $t) {
-            if (!M_in_array($t, $source)) {
+            if (!mInArray($t, $source)) {
                 return false;
             }
 
@@ -252,7 +252,7 @@ function M_in_array($target, $source)
     }
 }
 
-function M_attribute_arr($attribute, $cateId = 0)
+function mAttributeArr($attribute, $cateId = 0)
 {
     $attrStrs = I('attr');
     //清空非合法属性格式
@@ -311,7 +311,7 @@ function M_attribute_arr($attribute, $cateId = 0)
         $attributeList[$key][]       = array(
             'name'    => $name,
             'checked' => $checked,
-            'link'    => $checked ? 'javascript:void(0);' : M_U('article_category', $request),
+            'link'    => $checked ? 'javascript:void(0);' : mU('article_category', $request),
         );
         foreach ($values as $valueKey => $value) {
             unset($request['attr']);
@@ -342,7 +342,7 @@ function M_attribute_arr($attribute, $cateId = 0)
             $attributeList[$key][]       = array(
                 'name'    => $value,
                 'checked' => $checked,
-                'link'    => M_U('article_category', $request),
+                'link'    => mU('article_category', $request),
             );
         }
         ++$key;
@@ -354,7 +354,7 @@ function M_attribute_arr($attribute, $cateId = 0)
     return $attributeList;
 }
 
-function M_attribute_where($attribute, $attr)
+function mAttributeWhere($attribute, $attr)
 {
     $attrStrs = I('attr', $attr);
     //清空非合法属性格式
@@ -400,7 +400,7 @@ function M_attribute_where($attribute, $attr)
     return $where;
 }
 
-function M_date($timestamp, $format, $toZh = false)
+function mDate($timestamp, $format, $toZh = false)
 {
     if (!$timestamp) {
         return '';
@@ -426,7 +426,7 @@ function M_date($timestamp, $format, $toZh = false)
     return $date;
 }
 
-function M_iptoadd($ip, $type = 0)
+function mIptoadd($ip, $type = 0)
 {
     if ('' == $ip) {
         return '';
@@ -456,10 +456,10 @@ function M_iptoadd($ip, $type = 0)
  * $margin 0 - N
  * 并生成缓存 无失效期
  */
-function M_qrcode($data, $level = 'H', $size = 10, $margin = 0)
+function mQrcode($data, $level = 'H', $size = 10, $margin = 0)
 {
     if (!$data) {
-        return M_exists();
+        return mExists();
     }
 
     $dataMd5 = 'QRcode_' . md5($data . $level . $size . $margin);
@@ -476,7 +476,7 @@ function M_qrcode($data, $level = 'H', $size = 10, $margin = 0)
 }
 
 // 构造Page html 必须放在公共函数中 配合ViewFilterBehavior
-function M_page($config)
+function mPage($config)
 {
     $maxRow   = ($config['max_row']) ? $config['max_row'] : C('SYS_MAX_ROW');
     $countRow = ($config['count_row']) ? $config['count_row'] : 0;
@@ -503,7 +503,7 @@ function M_page($config)
     !isset($config['preg_njump']) && $inputJump = <<<EOF
     <div class="fr">
         <form class="form-inline" action="{$inputJumpLink}">
-            <input class="form-control w80" type="text" name="p" onKeyup="M_in_int_range(this,1,{$countRow});" />
+            <input class="form-control w80" type="text" name="p" onKeyup="mInIntRange(this,1,{$countRow});" />
             <button class="btn btn-default" type="submit" >GO</button>
         </form>
     </div>
@@ -529,7 +529,7 @@ EOF;
 }
 
 //扫描模板
-function M_scan_template($name, $module, $controller)
+function mScanTemplate($name, $module, $controller)
 {
     $dir = APP_PATH . $module . '/' . C('DEFAULT_V_LAYER') . '/';
     C('DEFAULT_THEME') && $dir .= C('DEFAULT_THEME') . '/';
@@ -558,7 +558,7 @@ function M_scan_template($name, $module, $controller)
 }
 
 //生成处理url的preg
-function M_get_urlpreg($prefix = '')
+function mGetUrlpreg($prefix = '')
 {
     $pregRoot = '((\.\.\/){0,})(?!';
     $pregRoot .= (__ROOT__) ? str_replace('/', '\/', __ROOT__) : '\/';
@@ -581,7 +581,7 @@ function M_get_urlpreg($prefix = '')
 }
 
 //使用PHPMailer发送邮件
-function M_sendmail($to, $title = '', $content = '', $chart = 'utf-8', $attachment = '')
+function mSendmail($to, $title = '', $content = '', $chart = 'utf-8', $attachment = '')
 {
     $from               = 'test20121212@qq.com';
     $PHPMailer          = new \Common\Lib\PHPMailer();

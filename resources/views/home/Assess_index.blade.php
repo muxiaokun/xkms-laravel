@@ -2,11 +2,11 @@
 <block name="content">
     <table class="table table-condensed table-hover">
         <tr>
-            <th>{$Think.lang.id}</th>
-            <th>{$Think.lang.title}</th>
-            <th>{$Think.lang.target}</th>
-            <th>{$Think.lang.start}{$Think.lang.time}</th>
-            <th>{$Think.lang.end}{$Think.lang.time}</th>
+            <th>{{ trans('common.id') }}</th>
+            <th>{{ trans('common.title') }}</th>
+            <th>{{ trans('common.target') }}</th>
+            <th>{{ trans('common.start') }}{{ trans('common.time') }}</th>
+            <th>{{ trans('common.end') }}{{ trans('common.time') }}</th>
             <th></th>
         </tr>
         <foreach name="assess_list" item="assess">
@@ -28,7 +28,7 @@
                 </td>
                 <td>
                     <a href="{:M_U('Assess/add',array('id'=>$assess[id]))}">
-                        {$Think.lang.grade}
+                        {{ trans('common.grade') }}
                     </a>
                 </td>
             </tr>

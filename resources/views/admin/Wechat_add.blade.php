@@ -1,7 +1,7 @@
 
     <section class="container mt10">
         <div class="panel panel-default">
-            <div class="panel-heading">{$title}</div>
+            <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
             <form method="post" class="form-horizontal"  role="form">
                 <div class="row">
@@ -10,10 +10,10 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Api_link</label>
                             <div class="col-sm-7">
-                                <a href="javascript:void(0);" id="Api_link" data-clipboard-text="{$Api_link}" >
-                                    {$Api_link}
+                                <a href="javascript:void(0);" id="Api_link" data-clipboard-text="{{ $Api_link }}" >
+                                    {{ $Api_link }}
                                 </a>
-                                <br/>{$Think.lang.click}{$Think.lang.path}{$Think.lang.copy}
+                                <br/>{{ trans('common.click') }}{{ trans('common.path') }}{{ trans('common.copy') }}
                                 <a href="{:M_qrcode($Api_link)}" target="_blank" >
                                     <M:Img class="w100 h100" src="{:M_qrcode($Api_link)}" />
                                 </a>
@@ -26,10 +26,10 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Oauth2_link</label>
                             <div class="col-sm-7">
-                                <a href="javascript:void(0);" id="Oauth2_link" data-clipboard-text="{$Oauth2_link}" >
-                                    {$Oauth2_link}
+                                <a href="javascript:void(0);" id="Oauth2_link" data-clipboard-text="{{ $Oauth2_link }}" >
+                                    {{ $Oauth2_link }}
                                 </a>
-                                <br/>{$Think.lang.click}{$Think.lang.path}{$Think.lang.copy}
+                                <br/>{{ trans('common.click') }}{{ trans('common.path') }}{{ trans('common.copy') }}
                                 <a href="{:M_qrcode($Oauth2_link)}" target="_blank" >
                                     <M:Img class="w100 h100" src="{:M_qrcode($Oauth2_link)}" />
                                 </a>
@@ -71,13 +71,13 @@
                     {/*<!--是否自动记录Wechat日志-->*/}
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{$Think.lang.enable}{$Think.lang.record}{$Think.lang.log}</label>
+                            <label class="col-sm-4 control-label">{{ trans('common.enable') }}{{ trans('common.record') }}{{ trans('common.log') }}</label>
                             <div class="col-sm-7">
                                 <label class="radio-inline">
-                                    <input type="radio" name="WECHAT_RECORD_LOG" value="1" <if condition="'1' heq $wechat['WECHAT_RECORD_LOG'] or !isset($wechat['WECHAT_RECORD_LOG'])">checked="checked"</if> >{$Think.lang.open}
+                                    <input type="radio" name="WECHAT_RECORD_LOG" value="1" <if condition="'1' heq $wechat['WECHAT_RECORD_LOG'] or !isset($wechat['WECHAT_RECORD_LOG'])">checked="checked"</if> >{{ trans('common.open') }}
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="WECHAT_RECORD_LOG" value="0" <if condition="'0' heq $wechat['WECHAT_RECORD_LOG']">checked="checked"</if> >{$Think.lang.close}
+                                    <input type="radio" name="WECHAT_RECORD_LOG" value="0" <if condition="'0' heq $wechat['WECHAT_RECORD_LOG']">checked="checked"</if> >{{ trans('common.close') }}
                                 </label>
                             </div>
                         </div>
@@ -105,10 +105,10 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 text-center">
-                        <button type="submit" class="btn btn-info">{$Think.lang.save}</button>
-                        <input class="btn btn-default" type="reset" value="{$Think.lang.reset}">
+                        <button type="submit" class="btn btn-info">{{ trans('common.save') }}</button>
+                        <input class="btn btn-default" type="reset" value="{{ trans('common.reset') }}">
                         <a href="{:U('index')}" class="btn btn-default">
-                            {$Think.lang.goback}
+                            {{ trans('common.goback') }}
                         </a>
                     </div>
                 </div>

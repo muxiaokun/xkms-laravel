@@ -7,7 +7,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>{$Think.lang.system}{$Think.lang.info} {$Think.lang.dash} {:C('SITE_TITLE')}</title>
+    <title>{{ trans('common.system') }}{{ trans('common.info') }} {{ trans('common.dash') }} {:C('SITE_TITLE')}</title>
     <import type="css" file="css/bootstrap#min" />
     <import type="css" file="css/bootstrap-theme#min" />
     <import type="css" file="css/common" />
@@ -21,7 +21,7 @@
         <div class="col-sm-8 col-sm-offset-2">
             <div class="panel <if condition="$message">panel-info<else/>panel-danger</if> ">
                 <div class="panel-heading text-center">
-                    {$Think.lang.system}<if condition="$message">{$Think.lang.info}<else/>{$Think.lang.error}</if>
+                    {{ trans('common.system') }}<if condition="$message">{{ trans('common.info') }}<else/>{{ trans('common.error') }}</if>
                 </div>
                 <div class="panel-body">
                     <div class="col-sm-4 text-center">

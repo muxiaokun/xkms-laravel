@@ -7,18 +7,18 @@
             <if condition="$quest['required']">
                 <switch name="quest['answer_type']">
                     <case value="radio">
-                        obj_str="[name='quests[{$quest_id}]']:checked";
+                        obj_str="[name='quests[{{ $quest_id }}]']:checked";
                     </case>
                     <case value="checkbox">
-                        obj_str="[name='quests[{$quest_id}][]']:checked";
+                        obj_str="[name='quests[{{ $quest_id }}][]']:checked";
                     </case>
                     <case value="textarea">
-                        obj_str="[name='quests[{$quest_id}]']";
+                        obj_str="[name='quests[{{ $quest_id }}]']";
                     </case>
                 </switch>
                 if(!$(obj_str).val())
                 {
-                    window.location.hash = "quests{$quest_id}";
+                    window.location.hash = "quests{{ $quest_id }}";
                     return false;
                 }
             </if>
@@ -35,11 +35,11 @@
             <input type="hidden" name="access_info" value="{$quests_info.access_info}"/>
             <foreach name="quests_quest_list" key="quest_id" item="quest">
                 <div class="col-sm-12 form-group mt20 cb">
-                    <a name="quests{$quest_id}"></a>
+                    <a name="quests{{ $quest_id }}"></a>
                     <label >
                         <h4>{$quest.question}
                         <if condition="$quest['required']">
-                            <span class="ml20" style="color:#ff0000">({$Think.lang.required})</span>
+                            <span class="ml20" style="color:#ff0000">({{ trans('common.required') }})</span>
                         </if>
                         </h4>
                     </label>
@@ -50,7 +50,7 @@
                                 <foreach name="quest['answer']" item="info">
                                     <div class="col-sm-2">
                                         <label class="checkbox-inline">
-                                            <input type="radio" name="quests[{$quest_id}]" value="{$key}" />{$info}
+                                            <input type="radio" name="quests[{{ $quest_id }}]" value="{{ $key }}" />{{ $info }}
                                         </label>
                                     </div>
                                 </foreach>
@@ -59,16 +59,16 @@
                                 <foreach name="quest['answer']" item="info">
                                     <div class="col-sm-2">
                                         <label class="checkbox-inline">
-                                            <input type="checkbox" name="quests[{$quest_id}][]" value="{$key}" />{$info}
+                                            <input type="checkbox" name="quests[{{ $quest_id }}][]" value="{{ $key }}" />{{ $info }}
                                         </label>
                                     </div>
                                 </foreach>
                             </case>
                             <case value="text">
-                                <input class="form-control" type="text" name="quests[{$quest_id}]" />
+                                <input class="form-control" type="text" name="quests[{{ $quest_id }}]" />
                             </case>
                             <case value="textarea">
-                                <textarea name="quests[{$quest_id}]" style="width:100%" row="3"></textarea>
+                                <textarea name="quests[{{ $quest_id }}]" style="width:100%" row="3"></textarea>
                             </case>
                         </switch>
                     </div>
@@ -77,7 +77,7 @@
             <!-- 隐藏传参 -->
             <div class="row">
                 <div class="col-sm-12 text-center">
-                    <button class="col-sm-offset-5 col-sm-1 btn btn-info" type="submit">{$Think.lang.submit}</button>
+                    <button class="col-sm-offset-5 col-sm-1 btn btn-info" type="submit">{{ trans('common.submit') }}</button>
                 </div>
             </div>
         </form>

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{$Think.const.APP_NAME}{$Think.lang.management}{$Think.lang.backend}</title>
+        <title>{$Think.const.APP_NAME}{{ trans('common.management') }}{{ trans('common.backend') }}</title>
         <link href="__ROOT__/Public/css/bimages/favicon.ico" type="image/ico" rel="shortcut icon" />
         <meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">

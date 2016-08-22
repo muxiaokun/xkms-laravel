@@ -2,21 +2,21 @@
     <import file="js/M_alert_log" />
     <section class="container mt10">
         <div class="panel panel-default">
-            <div class="panel-heading">{$title}</div>
+            <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <include file="Public:where_info" />
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{$Think.lang.id}</th>
-                        <th>{$Think.lang.upload}{$Think.lang.person}</th>
-                        <th>{$Think.lang.file}{$Think.lang.name}</th>
-                        <th>{$Think.lang.add}{$Think.lang.time}</th>
-                        <th>{$Think.lang.size}</th>
-                        <th>{$Think.lang.suffix}</th>
-                        <th>{$Think.lang.bind}{$Think.lang.info}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
+                        <th>{{ trans('common.upload') }}{{ trans('common.person') }}</th>
+                        <th>{{ trans('common.file') }}{{ trans('common.name') }}</th>
+                        <th>{{ trans('common.add') }}{{ trans('common.time') }}</th>
+                        <th>{{ trans('common.size') }}</th>
+                        <th>{{ trans('common.suffix') }}</th>
+                        <th>{{ trans('common.bind') }}{{ trans('common.info') }}</th>
                         <td class="nowrap">
                             <if condition="$batch_handle['edit']">
-                                <a class="btn btn-xs btn-success"  href="{:U('edit')}">{$Think.lang.clear}{$Think.lang.none}{$Think.lang.bind}</a>
+                                <a class="btn btn-xs btn-success"  href="{:U('edit')}">{{ trans('common.clear') }}{{ trans('common.none') }}{{ trans('common.bind') }}</a>
                             </if>
                         </td>
                     </tr>
@@ -29,8 +29,8 @@
                             <td>
                                 {$manage_upload.user_name}
                                 [
-                                    <if condition="1 eq $manage_upload['user_type']">{$Think.lang.backend}
-                                    <elseif condition="2 eq $manage_upload['user_type']"/>{$Think.lang.frontend}
+                                    <if condition="1 eq $manage_upload['user_type']">{{ trans('common.backend') }}
+                                    <elseif condition="2 eq $manage_upload['user_type']"/>{{ trans('common.frontend') }}
                                     </if>
                                 ]
                             </td>
@@ -48,29 +48,29 @@
                             </td>
                             <td class="nowrap">
                                 <if condition="$manage_upload['bind_info']">
-<a id="M_alert_log_{$manage_upload.id}" class="btn btn-xs btn-primary" href="javascript:void(0);" >{$Think.lang.look}</a>
+<a id="M_alert_log_{$manage_upload.id}" class="btn btn-xs btn-primary" href="javascript:void(0);" >{{ trans('common.look') }}</a>
                                     <script>
                                         $(function(){
                                             var config = {
                                                 'bind_obj':$('#M_alert_log_{$manage_upload.id}'),
-                                                'title':'{$Think.lang.file}{$Think.lang.bind}{$Think.lang.info}',
+                                                'title':'{{ trans('common.file') }}{{ trans('common.bind') }}{{ trans('common.info') }}',
                                                 'message':{$manage_upload.bind_info}
                                             }
                                             new M_alert_log(config);
                                         });
                                     </script>
                                 <else/>
-                                    {$Think.lang.empty}
+                                    {{ trans('common.empty') }}
                                 </if>
                             </td>
                             <td>
                                 <a class="btn btn-xs btn-primary" href="javascript:void(0);" id="copy_obj{$manage_upload.id}" data-clipboard-text="{$manage_upload.path}" >
                                     <script type="text/javascript" charset="utf-8">M_ZeroClipboard('copy_obj{$manage_upload.id}');</script>
-                                    {$Think.lang.copy}{$Think.lang.path}
+                                    {{ trans('common.copy') }}{{ trans('common.path') }}
                                 </a>
                                 <if condition="$batch_handle['del']">
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{$Think.lang.confirm}{$Think.lang.del}{$manage_upload.name}?','{:U('del',array('id'=>$manage_upload['id']))}')" >
-                                        {$Think.lang.del}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$manage_upload.name}?','{:U('del',array('id'=>$manage_upload['id']))}')" >
+                                        {{ trans('common.del') }}
                                     </a>
                                 </if>
                             </td>

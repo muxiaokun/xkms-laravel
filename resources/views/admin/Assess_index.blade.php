@@ -1,20 +1,20 @@
 
     <section class="container mt10">
         <div class="panel panel-default">
-            <div class="panel-heading">{$title}</div>
+            <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <include file="Public:where_info" />
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{$Think.lang.id}</th>
-                        <th>{$Think.lang.title}</th>
-                        <th>{$Think.lang.assess}{$Think.lang.group}</th>
-                        <th>{$Think.lang.start}{$Think.lang.time}</th>
-                        <th>{$Think.lang.end}{$Think.lang.time}</th>
-                        <th>{$Think.lang.yes}{$Think.lang.no}{$Think.lang.enable}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
+                        <th>{{ trans('common.title') }}</th>
+                        <th>{{ trans('common.assess') }}{{ trans('common.group') }}</th>
+                        <th>{{ trans('common.start') }}{{ trans('common.time') }}</th>
+                        <th>{{ trans('common.end') }}{{ trans('common.time') }}</th>
+                        <th>{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.enable') }}</th>
                         <td class="nowrap">
                             <if condition="$batch_handle['add']">
-                                <a class="btn btn-xs btn-success" href="{:U('add')}">{$Think.lang.add}{$Think.lang.assess}</a>
+                                <a class="btn btn-xs btn-success" href="{:U('add')}">{{ trans('common.add') }}{{ trans('common.assess') }}</a>
                             </if>
                         </td>
                     </tr>
@@ -37,24 +37,24 @@
                                 {$assess.end_time|M_date=C('SYS_DATE_DETAIL')}
                             </td>
                             <td>
-                                <if condition="$assess['is_enable']">{$Think.lang.enable}<else />{$Think.lang.disable}</if>
+                                <if condition="$assess['is_enable']">{{ trans('common.enable') }}<else />{{ trans('common.disable') }}</if>
                             </td>
                             <td class="nowrap">
                                 <if condition="$batch_handle['log_edit']">
                                     <a class="btn btn-xs btn-primary" href="{:U('AssessLog/edit',array('id'=>$assess['id']))}">
-                                        {$Think.lang.statistics}
+                                        {{ trans('common.statistics') }}
                                     </a>
                                 </if>
                                 <if condition="$batch_handle['log_edit'] AND $batch_handle['edit']">&nbsp;|&nbsp;</if>
                                 <if condition="$batch_handle['edit']">
                                     <a class="btn btn-xs btn-primary" href="{:U('edit',array('id'=>$assess['id']))}">
-                                        {$Think.lang.edit}
+                                        {{ trans('common.edit') }}
                                     </a>
                                 </if>
                                 <if condition="$batch_handle['edit'] AND $batch_handle['del']">&nbsp;|&nbsp;</if>
                                 <if condition="$batch_handle['del']">
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{$Think.lang.confirm}{$Think.lang.del}{$assess.title}?','{:U('del',array('id'=>$assess['id']))}')" >
-                                        {$Think.lang.del}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$assess.title}?','{:U('del',array('id'=>$assess['id']))}')" >
+                                        {{ trans('common.del') }}
                                     </a>
                                 </if>
                             </td>

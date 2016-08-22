@@ -1,14 +1,14 @@
 
     <section class="container mt10">
         <div class="panel panel-default">
-            <div class="panel-heading">{$title}</div>
+            <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <form class="form-horizontal" role="form" action="" method="post">
                     <input type="hidden" name="id" value="{$edit_info.id}"/>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{$Think.lang.receive}{$Think.lang.member}</label>
+                                <label class="col-sm-4 control-label">{{ trans('common.receive') }}{{ trans('common.member') }}</label>
                                 <div class="col-sm-8" id="receive_member_list">
                                     <input type="hidden" name="receive_id" />
                                     <import file="js/M_select_add" />
@@ -29,7 +29,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 text-center">{$Think.lang.send}{$Think.lang.content}</div>
+                        <div class="col-sm-12 text-center">{{ trans('common.send') }}{{ trans('common.content') }}</div>
                         <div class="col-sm-12">
                             <textarea rows="5" class="col-sm-12" name="content">{$edit_info.reply_info}</textarea>
                         </div>
@@ -37,10 +37,10 @@
                     <div class="row mt10">
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
-                                    {$Think.lang.send}
+                                    {{ trans('common.send') }}
                             </button>
                             <a href="{:U('index')}" class="btn btn-default">
-                                    {$Think.lang.goback}
+                                    {{ trans('common.goback') }}
                             </a>
                         </div>
                     </div>

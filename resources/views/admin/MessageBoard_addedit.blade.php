@@ -1,6 +1,6 @@
     <section class="container mt10">
         <div class="panel panel-default">
-            <div class="panel-heading">{$title}</div>
+            <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <form method="post" class="form-horizontal"  role="form">
                     <input type="hidden" name="id" value="{$edit_info.id}"/>
@@ -8,7 +8,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">
-                                    {$Think.lang.messageboard}{$Think.lang.name}
+                                    {{ trans('common.messageboard') }}{{ trans('common.name') }}
                                 </label>
                                 <div class="col-sm-6">
                                     <input class="form-control" type="text" name="name" value="{$edit_info.name}" />
@@ -17,10 +17,10 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{$Think.lang.messageboard}{$Think.lang.template}</label>
+                                <label class="col-sm-4 control-label">{{ trans('common.messageboard') }}{{ trans('common.template') }}</label>
                                 <div class="col-sm-6">
                                     <select name="template" class="form-control input-sm" >
-                                        <option value="">{$Think.lang.use}{$Think.lang.default}</option>
+                                        <option value="">{{ trans('common.use') }}{{ trans('common.default') }}</option>
                                         <foreach name="template_list" item="template">
                                             <option value="{$template.value}" <if condition="$template['value'] eq $edit_info['template']">selected="selected"</if> >{$template.name}</option>
                                         </foreach>
@@ -31,9 +31,9 @@
                     </div>
                     <table class="table table-hover">
                         <tr>
-                            <th class="col-sm-6 text-center">{$Think.lang.submit}{$Think.lang.option}</th>
-                            <th class="col-sm-2 text-center">{$Think.lang.submit}{$Think.lang.type}</th>
-                            <th class="col-sm-4 text-center">{$Think.lang.option}{$Think.lang.condition}</th>
+                            <th class="col-sm-6 text-center">{{ trans('common.submit') }}{{ trans('common.option') }}</th>
+                            <th class="col-sm-2 text-center">{{ trans('common.submit') }}{{ trans('common.type') }}</th>
+                            <th class="col-sm-4 text-center">{{ trans('common.option') }}{{ trans('common.condition') }}</th>
                             <th id="btn_obj" class="col-sm-2 text-center"></th>
                         </tr>
                         <tr id="edit_obj" style="display: none">
@@ -42,24 +42,24 @@
                             </td>
                             <td class="col-sm-2">
                                 <select class="form-control" mtype="msg_type">
-                                    <option value="text" >{$Think.lang.text}</option>
-                                    <option value="radio" >{$Think.lang.radio}(name:var1,var2)</option>
-                                    <option value="checkbox" >{$Think.lang.checkbox}(name:var1,var2)</option>
-                                    <option value="textarea" >{$Think.lang.textarea}</option>
+                                    <option value="text" >{{ trans('common.text') }}</option>
+                                    <option value="radio" >{{ trans('common.radio') }}(name:var1,var2)</option>
+                                    <option value="checkbox" >{{ trans('common.checkbox') }}(name:var1,var2)</option>
+                                    <option value="textarea" >{{ trans('common.textarea') }}</option>
                                 </select>
                             </td>
                             <td class="col-sm-4" colspan="2">
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label checkbox checkbox-inline">
-                                        <input type="checkbox" value="required" mtype="msg_required" />{$Think.lang.required}
+                                        <input type="checkbox" value="required" mtype="msg_required" />{{ trans('common.required') }}
                                     </label>
                                     <label class="col-sm-3 control-label" style="font-weight:normal;">
-                                        {$Think.lang.max}{$Think.lang.length}
+                                        {{ trans('common.max') }}{{ trans('common.length') }}
                                     </label>
                                     <div class="col-sm-3">
                                         <input class="form-control" type="text" value="" onKeyup="M_in_int(this);" mtype="msg_length" />
                                     </div>
-                                    <a class="btn btn-danger" href="javascript:void(0);">{$Think.lang.del}</a>
+                                    <a class="btn btn-danger" href="javascript:void(0);">{{ trans('common.del') }}</a>
                                 </div>
                             </td>
                         </tr>
@@ -80,10 +80,10 @@
                     </table>
                     <div class="row">
                         <div class="col-sm-12 text-center">
-                            <button type="submit" class="btn btn-info">{$Think.lang.save}</button>
-                            <input class="btn btn-default" type="reset" value="{$Think.lang.reset}">
+                            <button type="submit" class="btn btn-info">{{ trans('common.save') }}</button>
+                            <input class="btn btn-default" type="reset" value="{{ trans('common.reset') }}">
                             <a href="{:U('main')}" class="btn btn-default">
-                                {$Think.lang.goback}
+                                {{ trans('common.goback') }}
                             </a>
                         </div>
                     </div>

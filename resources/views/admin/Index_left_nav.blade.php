@@ -23,7 +23,7 @@
             <div id="left_nav_menu" class="accordion">
                 <if condition="count($left_nav) gt 0">
                     <foreach name="left_nav" item="nav">
-                        <h3>{$key}</h3>
+                        <h3>{{ $key }}</h3>
                         <ul class="nav text-center" role="tablist">
                             <foreach name="nav" item="nav_link" key="key">
                             <li role="presentation">
@@ -33,10 +33,10 @@
                         </ul>
                     </foreach>
                 <else />
-                    <h3>{$Think.lang.none}{$Think.lang.privilege}</h3>
+                    <h3>{{ trans('common.none') }}{{ trans('common.privilege') }}</h3>
                     <ul class="nav text-center" role="tablist">
                         <li role="presentation">
-                            <a class="fs12" href="javascript:void(0);">{$Think.lang.not_action_privilege}</a>
+                            <a class="fs12" href="javascript:void(0);">{{ trans('common.not_action_privilege') }}</a>
                         </li>
                     </ul>
                 </if>

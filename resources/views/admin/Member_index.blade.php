@@ -1,21 +1,21 @@
 
     <section class="container mt10">
         <div class="panel panel-default">
-            <div class="panel-heading">{$title}</div>
+            <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <include file="Public:where_info" />
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{$Think.lang.id}</th>
-                        <th>{$Think.lang.member}{$Think.lang.name}</th>
-                        <th>{$Think.lang.member}{$Think.lang.group}</th>
-                        <th>{$Think.lang.register}{$Think.lang.time}</th>
-                        <th>{$Think.lang.last}{$Think.lang.login}{$Think.lang.time}</th>
-                        <th>{$Think.lang.login} IP</th>
-                        <th>{$Think.lang.yes}{$Think.lang.no}{$Think.lang.enable}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
+                        <th>{{ trans('common.member') }}{{ trans('common.name') }}</th>
+                        <th>{{ trans('common.member') }}{{ trans('common.group') }}</th>
+                        <th>{{ trans('common.register') }}{{ trans('common.time') }}</th>
+                        <th>{{ trans('common.last') }}{{ trans('common.login') }}{{ trans('common.time') }}</th>
+                        <th>{{ trans('common.login') }} IP</th>
+                        <th>{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.enable') }}</th>
                         <td class="nowrap">
                             <if condition="$batch_handle['add']">
-                                <a class="btn btn-xs btn-success" href="{:U('add')}">{$Think.lang.add}{$Think.lang.member}</a>
+                                <a class="btn btn-xs btn-success" href="{:U('add')}">{{ trans('common.add') }}{{ trans('common.member') }}</a>
                             </if>
                         </td>
                     </tr>
@@ -41,18 +41,18 @@
                                 {$member.aip}
                             </td>
                             <td>
-                                <if condition="$member['is_enable']">{$Think.lang.enable}<else />{$Think.lang.disable}</if>
+                                <if condition="$member['is_enable']">{{ trans('common.enable') }}<else />{{ trans('common.disable') }}</if>
                             </td>
                             <td class="nowrap">
                                 <if condition="$batch_handle['edit']">
                                     <a class="btn btn-xs btn-primary" href="{:U('edit',array('id'=>$member['id']))}">
-                                        {$Think.lang.edit}
+                                        {{ trans('common.edit') }}
                                     </a>
                                 </if>
                                 <if condition="$batch_handle['edit'] AND $batch_handle['del']">&nbsp;|&nbsp;</if>
                                 <if condition="$batch_handle['del']">
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{$Think.lang.confirm}{$Think.lang.del}{$member.member_name}?','{:U('del',array('id'=>$member['id']))}')" >
-                                        {$Think.lang.del}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$member.member_name}?','{:U('del',array('id'=>$member['id']))}')" >
+                                        {{ trans('common.del') }}
                                     </a>
                                 </if>
                             </td>

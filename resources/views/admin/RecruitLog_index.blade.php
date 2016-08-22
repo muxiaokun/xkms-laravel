@@ -2,19 +2,19 @@
     <import file="js/M_alert_log" />
     <section class="container mt10">
         <div class="panel panel-default">
-            <div class="panel-heading">{$title}</div>
+            <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <include file="Public:where_info" />
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{$Think.lang.id}</th>
-                        <th>{$Think.lang.re_recruit}</th>
-                        <th>{$Think.lang.recruit_name}</th>
-                        <th>{$Think.lang.recruit}{$Think.lang.time}</th>
-                        <th>{$Think.lang.recruit_birthday}</th>
-                        <th>{$Think.lang.recruit_sex}</th>
-                        <th>{$Think.lang.recruit_certificate}</th>
-                        <th>{$Think.lang.handle}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
+                        <th>{{ trans('common.re_recruit') }}</th>
+                        <th>{{ trans('common.recruit_name') }}</th>
+                        <th>{{ trans('common.recruit') }}{{ trans('common.time') }}</th>
+                        <th>{{ trans('common.recruit_birthday') }}</th>
+                        <th>{{ trans('common.recruit_sex') }}</th>
+                        <th>{{ trans('common.recruit_certificate') }}</th>
+                        <th>{{ trans('common.handle') }}</th>
                     </tr>
                     <foreach name="recruit_log_list" item="recruit_log">
                         <tr>
@@ -41,12 +41,12 @@
                                 {$recruit_log.certificate}
                             </td>
                             <td class="nowrap">
-<a id="M_alert_log_{$recruit_log.id}" class="btn btn-xs btn-primary" href="javascript:void(0);">{$Think.lang.look}</a>
+<a id="M_alert_log_{$recruit_log.id}" class="btn btn-xs btn-primary" href="javascript:void(0);">{{ trans('common.look') }}</a>
                                 <script>
                                     $(function(){
                                         var config = {
                                             'bind_obj':$('#M_alert_log_{$recruit_log.id}'),
-                                            'title':'{$Think.lang.recruit_log}',
+                                            'title':'{{ trans('common.recruit_log') }}',
                                             'message':{$recruit_log.ext_info|json_encode}
                                         }
                                         new M_alert_log(config);
@@ -54,8 +54,8 @@
                                 </script>
                                 <if condition="$batch_handle['del']">
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{$Think.lang.confirm}{$Think.lang.del}{$recruit_log.name}?','{:U('del',array('id'=>$recruit_log['id']))}')" >
-                                        {$Think.lang.del}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$recruit_log.name}?','{:U('del',array('id'=>$recruit_log['id']))}')" >
+                                        {{ trans('common.del') }}
                                     </a>
                                 </if>
                             </td>

@@ -52,7 +52,7 @@ class Article extends Frontend
         //缓存数据
         $cacheName  = MODULE_NAME . CONTROLLER_NAME . 'article' . $id;
         $cacheValue = S($cacheName);
-        if ($cacheValue && true !== APP_DEBUG) {
+        if ($cacheValue && true !== config('app.debug')) {
             $articleInfo['content'] = $cacheValue;
         } else {
             $articleInfo['content']                                = mContent2ckplayer($articleInfo['content'], $articleInfo['thumb']);
@@ -107,7 +107,7 @@ class Article extends Frontend
             //缓存数据
             $cacheName  = MODULE_NAME . CONTROLLER_NAME . 'category' . $cateId;
             $cacheValue = S($cacheName);
-            if ($cacheValue && true !== APP_DEBUG) {
+            if ($cacheValue && true !== config('app.debug')) {
                 $categoryInfo['content'] = $cacheValue;
             } else {
                 $categoryInfo['content']                                = mContent2ckplayer($categoryInfo['content'], $categoryInfo['thumb']);
@@ -241,7 +241,7 @@ class Article extends Frontend
         //缓存流程 调取模板信息 过多回调
         $cacheName  = MODULE_NAME . CONTROLLER_NAME . '_get_template' . $channelId . '_' . $cateId;
         $cacheValue = S($cacheName);
-        if ($cacheValue && true !== APP_DEBUG) {
+        if ($cacheValue && true !== config('app.debug')) {
             return $cacheValue;
         }
 
@@ -314,7 +314,7 @@ class Article extends Frontend
     {
         $cacheName  = MODULE_NAME . CONTROLLER_NAME . '_get_category_position' . $cateId;
         $cacheValue = S($cacheName);
-        if ($cacheValue && true !== APP_DEBUG) {
+        if ($cacheValue && true !== config('app.debug')) {
             return $cacheValue;
         }
 
@@ -342,7 +342,7 @@ class Article extends Frontend
     {
         !$cacheName && $cacheName = MODULE_NAME . CONTROLLER_NAME . '_get_article_position' . $cateId;
         $cacheValue                = S($cacheName);
-        if ($cacheValue && true !== APP_DEBUG) {
+        if ($cacheValue && true !== config('app.debug')) {
             return $cacheValue;
         }
 

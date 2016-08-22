@@ -1,7 +1,7 @@
 
     <section class="container mt10">
         <div class="panel panel-default">
-            <div class="panel-heading">{$title}</div>
+            <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <import file="js/M_valid" />
                 <script>
@@ -21,29 +21,29 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{$Think.lang.navigation}{$Think.lang.name}</label>
+                                <label class="col-sm-4 control-label">{{ trans('common.navigation') }}{{ trans('common.name') }}</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" placeholder="{$Think.lang.navigation}{$Think.lang.name}" name="name" value="{$edit_info.name}" onchange="M_zh2py(this,'input[name=short_name]')"  link="{:U('ajax_api')}"/>
+<input type="text" class="form-control" placeholder="{{ trans('common.navigation') }}{{ trans('common.name') }}" name="name" value="{$edit_info.name}" onchange="M_zh2py(this,'input[name=short_name]')"  link="{:U('ajax_api')}"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{$Think.lang.short}{$Think.lang.name}</label>
+                                <label class="col-sm-4 control-label">{{ trans('common.short') }}{{ trans('common.name') }}</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{$Think.lang.short}{$Think.lang.name}" name="short_name" value="{$edit_info.short_name}"/>
+                                    <input type="text" class="form-control" placeholder="{{ trans('common.short') }}{{ trans('common.name') }}" name="short_name" value="{$edit_info.short_name}"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{$Think.lang.yes}{$Think.lang.no}{$Think.lang.enable}</label>
+                                <label class="col-sm-4 control-label">{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.enable') }}</label>
                                 <div class="col-sm-3">
                                     <label class="radio-inline">
-<input type="radio" name="is_enable" value="1" <if condition="'1' heq $edit_info['is_enable'] or !isset($edit_info['is_enable'])">checked="checked"</if> />{$Think.lang.enable}
+<input type="radio" name="is_enable" value="1" <if condition="'1' heq $edit_info['is_enable'] or !isset($edit_info['is_enable'])">checked="checked"</if> />{{ trans('common.enable') }}
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="is_enable" value="0" <if condition="'0' heq $edit_info['is_enable']">checked="checked"</if> />{$Think.lang.disable}
+<input type="radio" name="is_enable" value="0" <if condition="'0' heq $edit_info['is_enable']">checked="checked"</if> />{{ trans('common.disable') }}
                                     </label>
                                 </div>
                             </div>
@@ -52,12 +52,12 @@
                     <div class="row">
                         <table id="edit_window" class="table table-condensed table-hover">
                             <tr>
-                                <th class="col-sm-3">{$Think.lang.navigation}{$Think.lang.button}{$Think.lang.name}</th>
-                                <th class="col-sm-1">{$Think.lang.target}{$Think.lang.type}</th>
+                                <th class="col-sm-3">{{ trans('common.navigation') }}{{ trans('common.button') }}{{ trans('common.name') }}</th>
+                                <th class="col-sm-1">{{ trans('common.target') }}{{ trans('common.type') }}</th>
                                 <th class="col-sm-1">URL</th>
                                 <th class="col-sm-7">
-                                    {$Think.lang.insite}{$Think.lang.colon}M/C/A?arg1=argv1,arg2=argv2<br />
-                                    {$Think.lang.outsite}{$Think.lang.colon}http:// | https:// | ftp://
+                                    {{ trans('common.insite') }}{{ trans('common.colon') }}M/C/A?arg1=argv1,arg2=argv2<br />
+                                    {{ trans('common.outsite') }}{{ trans('common.colon') }}http:// | https:// | ftp://
                                 </th>
                             </tr>
                             <tr>
@@ -92,13 +92,13 @@
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
                                 <if condition="$Think.const.ACTION_NAME eq 'add'">
-                                    {$Think.lang.add}
+                                    {{ trans('common.add') }}
                                 <elseif condition="$Think.const.ACTION_NAME eq 'edit'" />
-                                    {$Think.lang.edit}
+                                    {{ trans('common.edit') }}
                                 </if>
                             </button>
                             <a href="{:U('index')}" class="btn btn-default">
-                                    {$Think.lang.goback}
+                                    {{ trans('common.goback') }}
                             </a>
                         </div>
                     </div>

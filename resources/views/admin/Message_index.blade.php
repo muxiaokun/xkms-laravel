@@ -2,17 +2,17 @@
     <import file="js/M_alert_log" />
     <section class="container mt10">
         <div class="panel panel-default">
-            <div class="panel-heading">{$title}</div>
+            <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <include file="Public:where_info" />
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{$Think.lang.id}</th>
-                        <th>{$Think.lang.send}{$Think.lang.info}</th>
-                        <th>{$Think.lang.receive}{$Think.lang.info}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
+                        <th>{{ trans('common.send') }}{{ trans('common.info') }}</th>
+                        <th>{{ trans('common.receive') }}{{ trans('common.info') }}</th>
                         <td class="nowrap">
                             <if condition="$batch_handle['add']">
-                                <a class="btn btn-xs btn-success" href="{:U('add')}">{$Think.lang.send}{$Think.lang.message}</a>
+                                <a class="btn btn-xs btn-success" href="{:U('add')}">{{ trans('common.send') }}{{ trans('common.message') }}</a>
                             </if>
                         </td>
                     </tr>
@@ -30,16 +30,16 @@
                                 <if condition="0 lt $message['receive_time']">
                                     {$message.receive_time|M_date=C('SYS_DATE_DETAIL')}
                                 <else/>
-                                    {$Think.lang.none}{$Think.lang.receive}
+                                    {{ trans('common.none') }}{{ trans('common.receive') }}
                                 </if>]
                             </td>
                             <td class="nowrap">
-<a id="M_alert_log_{$message.id}" class="btn btn-xs btn-primary" href="javascript:void(0);" >{$Think.lang.look}</a>
+<a id="M_alert_log_{$message.id}" class="btn btn-xs btn-primary" href="javascript:void(0);" >{{ trans('common.look') }}</a>
                                 <script>
                                     $(function(){
                                         var config = {
                                             'bind_obj':$('#M_alert_log_{$message.id}'),
-                                            'title':'{$Think.lang.message}{$Think.lang.content}',
+                                            'title':'{{ trans('common.message') }}{{ trans('common.content') }}',
                                             'message':"{$message.content}"
                                             <if condition="0 eq $message['receive_id'] AND 0 eq $message['receive_time']">
                                             ,'cb_fn':M_alert_log_Message($('#M_alert_log_{$message.id}'),{$message.id},'{:M_U("ajax_api")}')
@@ -52,14 +52,14 @@
                                     &nbsp;|&nbsp;
                                     <if condition="0 lt $message['send_id']">
                                     <a class="btn btn-xs btn-primary" href="{:U('add',array('receive_id'=>$message['send_id']))}">
-                                        {$Think.lang.reply}{$Think.lang.message}
+                                        {{ trans('common.reply') }}{{ trans('common.message') }}
                                     </a>
                                     </if>
                                 </if>
                                 <if condition="$batch_handle['del']">
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{$Think.lang.confirm}{$Think.lang.del}?','{:U('del',array('id'=>$message['id']))}')" >
-                                        {$Think.lang.del}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}?','{:U('del',array('id'=>$message['id']))}')" >
+                                        {{ trans('common.del') }}
                                     </a>
                                 </if>
                             </td>

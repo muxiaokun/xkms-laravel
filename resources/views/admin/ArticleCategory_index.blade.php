@@ -2,17 +2,17 @@
     <import file="js/M_cate_tree" />
     <section class="container mt10">
         <div class="panel panel-default">
-            <div class="panel-heading">{$title}</div>
+            <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <include file="Public:where_info" />
                 <table class="table table-condensed table-hover">
                     <tr>
                         <th></th>
-                        <th class="col-sm-1" >{$Think.lang.sort}</th>
-                        <th class="col-sm-1" >{$Think.lang.yes}{$Think.lang.no}{$Think.lang.show}</th>
+                        <th class="col-sm-1" >{{ trans('common.sort') }}</th>
+                        <th class="col-sm-1" >{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.show') }}</th>
                         <td class="col-sm-3  nowrap" >
                             <if condition="$batch_handle['add']">
-                                <a class="btn btn-xs btn-success" href="{:U('add')}">{$Think.lang.add}{$Think.lang.category}</a>
+                                <a class="btn btn-xs btn-success" href="{:U('add')}">{{ trans('common.add') }}{{ trans('common.category') }}</a>
                             </if>
                         </td>
                     </tr>
@@ -30,23 +30,23 @@
                             </td>
                             <td class="nowrap">
                                 <a class="btn btn-xs btn-primary" target="_blank" href="{:U('Home/Article/category',array('cate_id'=>$article_category['id']))}">
-                                    {$Think.lang.look}
+                                    {{ trans('common.look') }}
                                 </a>
                                 <if condition="$batch_handle['edit']">
                                     &nbsp;|&nbsp;
                                     <a class="btn btn-xs btn-primary" href="{:U('edit',array('id'=>$article_category['id']))}">
-                                        {$Think.lang.edit}
+                                        {{ trans('common.edit') }}
                                     </a>
                                 </if>
                                 <if condition="$batch_handle['del']">
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{$Think.lang.confirm}{$Think.lang.del}{$article_category.name}?','{:U('del',array('id'=>$article_category['id']))}')" >
-                                        {$Think.lang.del}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$article_category.name}?','{:U('del',array('id'=>$article_category['id']))}')" >
+                                        {{ trans('common.del') }}
                                     </a>
                                 </if>
                                 &nbsp;|&nbsp;
                                 <a class="btn btn-xs btn-primary" href="{:U('Article/add',array('cate_id'=>$article_category['id']))}">
-                                    {$Think.lang.add}{$Think.lang.article}
+                                    {{ trans('common.add') }}{{ trans('common.article') }}
                                 </a>
                             </td>
                         </tr>

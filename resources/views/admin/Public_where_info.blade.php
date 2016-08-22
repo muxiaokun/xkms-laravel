@@ -10,23 +10,23 @@
                 <div class="form-group mr10">
                     <label>{$data.name}</label>
                     <if condition="'time' eq $data['type']">
-                        <input type="text" name="{$input_name}_start" class="form-control w100" value="{:I($input_name.'_start')}" onClick="$(this).val('')" />
-                        {$Think.lang.to}
-                        <input type="text" name="{$input_name}_end" class="form-control w100" value="{:I($input_name.'_end')}" onClick="$(this).val('')" />
+                        <input type="text" name="{{ $input_name }}_start" class="form-control w100" value="{:I($input_name.'_start')}" onClick="$(this).val('')" />
+                        {{ trans('common.to') }}
+                        <input type="text" name="{{ $input_name }}_end" class="form-control w100" value="{:I($input_name.'_end')}" onClick="$(this).val('')" />
                         <M:Datepicker start="$input_name" end="$input_name" />
                     <elseif condition="'input' eq $data['type']"/>
-                        <input type="text" name="{$input_name}" class="form-control w100" value="{:I($input_name)}" onClick="$(this).val('')" />
+                        <input type="text" name="{{ $input_name }}" class="form-control w100" value="{:I($input_name)}" onClick="$(this).val('')" />
                     <elseif condition="'select' eq $data['type']"/>
-                        <select type="text" name="{$input_name}" class="form-control w100">
-                            <option value="">{$Think.lang.please}{$Think.lang.selection}</option>
+                        <select type="text" name="{{ $input_name }}" class="form-control w100">
+                            <option value="">{{ trans('common.please') }}{{ trans('common.selection') }}</option>
                             <foreach name="data.value" key="value" item="name">
-<option value="{$value}" <if condition="$value eq I($input_name)">selected="selected"</if> >{$name}</option>
+<option value="{{ $value }}" <if condition="$value eq I($input_name)">selected="selected"</if> >{{ $name }}</option>
                             </foreach>
                         </select>
                     </if>
                 </div>
             </foreach>
-            <input class="btn btn-default" type="submit" value="{$Think.lang.select}" />
+            <input class="btn btn-default" type="submit" value="{{ trans('common.select') }}" />
         </form>
     </div>
 </if>

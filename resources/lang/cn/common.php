@@ -333,7 +333,8 @@ return array(
     'name_format_error'     => '不能包含空格或特殊字符(%s)',
     'pass_len_error'        => '密码长度至少6位',
     'password_again_error'  => '两次输入密码不一致',
+    'app_name'  => 'XK管理系统',
     //print_f区域
     'pfsetp'                => '第 {$setp} 步，共 {$count} 步',
-    'pfcopyright'           => '{$app_name} copyright and power by 皓雅技术 ',
+    'pfcopyright'           => ':app_name copyright and power by XKMS ',
 );

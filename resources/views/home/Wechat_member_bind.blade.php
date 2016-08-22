@@ -8,23 +8,23 @@
                     <div class="tab-pane <if condition="register neq I('t')">active</if> mt20 h350" id="login">
                         <form class="form-horizontal" role="form" method="post"">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">{$Think.lang.account}</label>
+                                <label class="col-sm-3 control-label">{{ trans('common.account') }}</label>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" placeholder="{$Think.lang.account}" name="user" />
+                                    <input type="text" class="form-control" placeholder="{{ trans('common.account') }}" name="user" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">{$Think.lang.pwd}</label>
+                                <label class="col-sm-3 control-label">{{ trans('common.pwd') }}</label>
                                 <div class="col-sm-5">
-                                    <input type="password" class="form-control" placeholder="{$Think.lang.pwd}" name="pwd" />
+                                    <input type="password" class="form-control" placeholder="{{ trans('common.pwd') }}" name="pwd" />
                                 </div>
                             </div>
                             <if condition="C('SYS_FRONTEND_VERIFY')">
                             {/*<!--验证码 开始-->*/}
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">{$Think.lang.verify_code}</label>
+                                <label class="col-sm-3 control-label">{{ trans('common.verify_code') }}</label>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" placeholder="{$Think.lang.verify_code}" name="verify" style="text-transform:uppercase;" />
+                                    <input type="text" class="form-control" placeholder="{{ trans('common.verify_code') }}" name="verify" style="text-transform:uppercase;" />
                                 </div>
                             </div>
                             <div class="form-group">
@@ -32,7 +32,7 @@
                             </div>
                             {/*<!--验证码 结束-->*/}
                             </if>
-                            <input type="submit" class="btn btn-info col-sm-offset-5" value="{$Think.lang.login}">
+                            <input type="submit" class="btn btn-info col-sm-offset-5" value="{{ trans('common.login') }}">
                         </form>
                     </div>
                 </div>

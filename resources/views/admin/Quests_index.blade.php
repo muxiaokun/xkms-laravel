@@ -1,20 +1,20 @@
 
     <section class="container mt10">
         <div class="panel panel-default">
-            <div class="panel-heading">{$title}</div>
+            <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <include file="Public:where_info" />
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{$Think.lang.id}</th>
-                        <th>{$Think.lang.title}</th>
-                        <th>{$Think.lang.portion}</th>
-                        <th>{$Think.lang.start}{$Think.lang.time}</th>
-                        <th>{$Think.lang.end}{$Think.lang.time}</th>
-                        <th>{$Think.lang.access}{$Think.lang.pass}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
+                        <th>{{ trans('common.title') }}</th>
+                        <th>{{ trans('common.portion') }}</th>
+                        <th>{{ trans('common.start') }}{{ trans('common.time') }}</th>
+                        <th>{{ trans('common.end') }}{{ trans('common.time') }}</th>
+                        <th>{{ trans('common.access') }}{{ trans('common.pass') }}</th>
                         <td class="nowrap">
                             <if condition="$batch_handle['add']">
-                                <a class="btn btn-xs btn-success" href="{:U('add')}">{$Think.lang.add}{$Think.lang.quests}</a>
+                                <a class="btn btn-xs btn-success" href="{:U('add')}">{{ trans('common.add') }}{{ trans('common.quests') }}</a>
                             </if>
                         </td>
                     </tr>
@@ -42,30 +42,30 @@
                             <td class="nowrap">
                                 <if condition="$batch_handle['answer_index']">
                                     <a class="btn btn-xs btn-primary" href="{:U('QuestsAnswer/index',array('quests_id'=>$quests['id']))}">
-                                        {$Think.lang.answer}{$Think.lang.list}
+                                        {{ trans('common.answer') }}{{ trans('common.list') }}
                                     </a>
                                 </if>
                                 <if condition="$batch_handle['answer_index'] AND $batch_handle['answer_edit']">&nbsp;|&nbsp;</if>
                                 <if condition="$batch_handle['answer_edit']">
                                     <a class="btn btn-xs btn-primary" href="{:U('QuestsAnswer/edit',array('quests_id'=>$quests['id']))}">
-                                        {$Think.lang.statistics}{$Think.lang.quests}
+                                        {{ trans('common.statistics') }}{{ trans('common.quests') }}
                                     </a>
                                 </if>
                                 <if condition="$batch_handle['answer_edit'] AND $batch_handle['edit']">&nbsp;|&nbsp;</if>
                                 <if condition="$batch_handle['edit']">
                                     <a class="btn btn-xs btn-primary" href="{:U('edit',array('id'=>$quests['id']))}">
-                                        {$Think.lang.edit}
+                                        {{ trans('common.edit') }}
                                     </a>
                                 </if>
                                 <if condition="$batch_handle['edit'] AND $batch_handle['del']">&nbsp;|&nbsp;</if>
                                 <if condition="$batch_handle['del']">
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{$Think.lang.confirm}{$Think.lang.clear}{$quests.title}{$Think.lang.answer}?',
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.clear') }}{$quests.title}{{ trans('common.answer') }}?',
 '{:U('del',array('id'=>$quests['id'],'clear'=>1))}')" >
-                                        {$Think.lang.clear}{$Think.lang.answer}
+                                        {{ trans('common.clear') }}{{ trans('common.answer') }}
                                     </a>
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{$Think.lang.confirm}{$Think.lang.del}{$quests.title}?','{:U('del',array('id'=>$quests['id']))}')" >
-                                        {$Think.lang.del}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$quests.title}?','{:U('del',array('id'=>$quests['id']))}')" >
+                                        {{ trans('common.del') }}
                                     </a>
                                 </if>
                             </td>

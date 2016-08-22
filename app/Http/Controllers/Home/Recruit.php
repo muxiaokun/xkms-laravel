@@ -79,7 +79,7 @@ class Recruit extends Frontend
         //缓存数据 下文中的thumb可以换成招聘统一的图
         $cacheName  = MODULE_NAME . CONTROLLER_NAME . 'add' . $id;
         $cacheValue = S($cacheName);
-        if ($cacheValue && true !== APP_DEBUG) {
+        if ($cacheValue && true !== config('app.debug')) {
             $recruitInfo['explains'] = $cacheValue;
         } else {
             $recruitInfo['explains']                                = mContent2ckplayer($recruitInfo['explains'], $recruitInfo['thumb']);

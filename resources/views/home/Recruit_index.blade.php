@@ -1,20 +1,20 @@
                 <section class="container">
                     <div class="col-sm-12 text-right mb10">
                         <form class="form-inline" role="form" method="get">
-                            {$Think.lang.recruit}{$Think.lang.keywords}
+                            {{ trans('common.recruit') }}{{ trans('common.keywords') }}
                             <input type="text" name="keyword" class="form-control w100 mlr10" value="{:I('keyword')}" onClick="$(this).val('')" />
                             <button class="btn btn-default" type="submit">
-                                {$Think.lang.search}{$Think.lang.recruit}
+                                {{ trans('common.search') }}{{ trans('common.recruit') }}
                             </button>
                         </form>
                     </div>
                     <div class="col-sm-12">
                         <table class="table table-condensed table-hover">
                             <tr>
-                                <th>{$Think.lang.recruit}{$Think.lang.name}</th>
-                                <th>{$Think.lang.re_recruit}{$Think.lang.number}</th>
-                                <th>{$Think.lang.recruit}{$Think.lang.time}</th>
-                                <th>{$Think.lang.description}</th>
+                                <th>{{ trans('common.recruit') }}{{ trans('common.name') }}</th>
+                                <th>{{ trans('common.re_recruit') }}{{ trans('common.number') }}</th>
+                                <th>{{ trans('common.recruit') }}{{ trans('common.time') }}</th>
+                                <th>{{ trans('common.description') }}</th>
                                 <th></th>
                             </tr>
                             <foreach name="recruit_list" item="recruit">
@@ -27,7 +27,7 @@
                                     </td>
                                     <td>
                                         {$recruit.start_time|M_date=C('SYS_DATE_DETAIL')}
-                                        {$Think.lang.to}
+                                        {{ trans('common.to') }}
                                         {$recruit.end_time|M_date=C('SYS_DATE_DETAIL')}
                                     </td>
                                     <td>
@@ -35,7 +35,7 @@
                                     </td>
                                     <td>
                                         <a class="btn btn-primary btn-xs" href="{:M_U('Recruit/edit',array('id'=>$recruit['id']))}">
-                                            {$Think.lang.look}{$Think.lang.recruit}{$Think.lang.info}
+                                            {{ trans('common.look') }}{{ trans('common.recruit') }}{{ trans('common.info') }}
                                         </a>
                                     </td>
                                 </tr>

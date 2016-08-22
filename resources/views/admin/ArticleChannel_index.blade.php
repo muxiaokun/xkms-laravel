@@ -1,18 +1,18 @@
 
     <section class="container mt10">
         <div class="panel panel-default">
-            <div class="panel-heading">{$title}</div>
+            <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <include file="Public:where_info" />
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{$Think.lang.id}</th>
-                        <th>{$Think.lang.channel}{$Think.lang.name}</th>
-                        <th>{$Think.lang.yes}{$Think.lang.no}{$Think.lang.show}</th>
-                        <th>{$Think.lang.channel}{$Think.lang.template}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
+                        <th>{{ trans('common.channel') }}{{ trans('common.name') }}</th>
+                        <th>{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.show') }}</th>
+                        <th>{{ trans('common.channel') }}{{ trans('common.template') }}</th>
                         <td class="col-sm-2 nowrap">
                             <if condition="$batch_handle['add']">
-                                <a class="btn btn-xs btn-success" href="{:U('add')}">{$Think.lang.add}{$Think.lang.channel}</a>
+                                <a class="btn btn-xs btn-success" href="{:U('add')}">{{ trans('common.add') }}{{ trans('common.channel') }}</a>
                             </if>
                         </td>
                     </tr>
@@ -26,25 +26,25 @@
                                 {$article_channel.name}
                             </td>
                             <td>
-                                <if condition="$article_channel['if_show']">{$Think.lang.show}<else />{$Think.lang.hidden}</if>
+                                <if condition="$article_channel['if_show']">{{ trans('common.show') }}<else />{{ trans('common.hidden') }}</if>
                             </td>
                             <td>
-                                <if condition="$article_channel['template']">{$article_channel.template}<else />{$Think.lang.default}</if>
+                                <if condition="$article_channel['template']">{$article_channel.template}<else />{{ trans('common.default') }}</if>
                             </td>
                             <td class="nowrap">
                                 <a class="btn btn-xs btn-primary" target="_blank" href="{:U('Home/Article/channel',array('channel_id'=>$article_channel['id']))}">
-                                    {$Think.lang.look}
+                                    {{ trans('common.look') }}
                                 </a>
                                 <if condition="$batch_handle['edit']">
                                     &nbsp;|&nbsp;
                                     <a class="btn btn-xs btn-primary" href="{:U('edit',array('id'=>$article_channel['id']))}">
-                                        {$Think.lang.edit}
+                                        {{ trans('common.edit') }}
                                     </a>
                                 </if>
                                 <if condition="$batch_handle['del']">
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{$Think.lang.confirm}{$Think.lang.del}{$article_channel.name}?','{:U('del',array('id'=>$article_channel['id']))}')" >
-                                        {$Think.lang.del}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$article_channel.name}?','{:U('del',array('id'=>$article_channel['id']))}')" >
+                                        {{ trans('common.del') }}
                                     </a>
                                 </if>
                             </td>

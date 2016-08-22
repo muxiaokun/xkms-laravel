@@ -5,22 +5,22 @@
                         <div class="col-sm-12">
                             <foreach name="message_board_info.config" item="data">
                             <div class="form-group">
-                                <label class="control-label col-sm-4">{$data.msg_name}{$Think.lang.colon}</label>
+                                <label class="control-label col-sm-4">{$data.msg_name}{{ trans('common.colon') }}</label>
                                 <div class="col-sm-4">
                                 <if condition="'text' eq $data['msg_type']">
                                     <input type="text" name="send_info[{$data.msg_name}]" class="form-control"/>
                                 <elseif condition="'radio' eq $data['msg_type']" />
                                     <foreach name="data.msg_option" item="msg_option_data">
                                         <label class="control-label checkbox checkbox-inline">
-                                            <input type="radio" name="send_info[{$data.msg_name}]" value="{$msg_option_data}"/>
-                                            {$msg_option_data}
+                                            <input type="radio" name="send_info[{$data.msg_name}]" value="{{ $msg_option_data }}"/>
+                                            {{ $msg_option_data }}
                                         </label>
                                     </foreach>
                                 <elseif condition="'checkbox' eq $data['msg_type']" />
                                     <foreach name="data.msg_option" item="msg_option_data">
                                         <label class="control-label checkbox checkbox-inline">
-                                            <input type="checkbox" name="send_info[{$data.msg_name}][]" value="{$msg_option_data}"/>
-                                            {$msg_option_data}
+                                            <input type="checkbox" name="send_info[{$data.msg_name}][]" value="{{ $msg_option_data }}"/>
+                                            {{ $msg_option_data }}
                                         </label>
                                     </foreach>
                                 <elseif condition="'textarea' eq $data['msg_type']" />
@@ -28,8 +28,8 @@
                                 </if>
                                 </div>
                                 <div class="col-sm-4">
-                                    <if condition="$data['msg_required']">{$Think.lang.required}</if>
-                                    <if condition="$data['msg_length']">{$Think.lang.max}{$Think.lang.length}{$data.msg_length}</if>
+                                    <if condition="$data['msg_required']">{{ trans('common.required') }}</if>
+                                    <if condition="$data['msg_length']">{{ trans('common.max') }}{{ trans('common.length') }}{$data.msg_length}</if>
                                 </div>
                             </div>
                             </foreach>
@@ -47,7 +47,7 @@
                         </div>
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
-                                    {$Think.lang.send}
+                                    {{ trans('common.send') }}
                             </button>
                         </div>
                     </form>
@@ -58,17 +58,17 @@
                             <tr><td>
                             <table class="table table-hover">
                                 <tr>
-                                    <td width="10%">{$Think.lang.send}{$Think.lang.time}{$Think.lang.colon}</td>
+                                    <td width="10%">{{ trans('common.send') }}{{ trans('common.time') }}{{ trans('common.colon') }}</td>
                                     <td width="90%">{$message_board_log.add_time|M_date=C('SYS_DATE_DETAIL')}</td>
                                 </tr>
                                 <foreach name="message_board_log.send_info" key="name" item="value">
                                 <tr>
-                                    <td>{$name}</td>
-                                    <td>{$value}</td>
+                                    <td>{{ $name }}</td>
+                                    <td>{{ $value }}</td>
                                 </tr>
                                 </foreach>
                                 <tr>
-                                    <td>{$Think.lang.reply}{$Think.lang.content}{$Think.lang.colon}</td>
+                                    <td>{{ trans('common.reply') }}{{ trans('common.content') }}{{ trans('common.colon') }}</td>
                                     <td>{$message_board_log.reply_info}</td>
                                 </tr>
                             </table>

@@ -1,11 +1,12 @@
-
+@extends('install.layout')
+@section('body')
         <header class="header_fixed">
             <div class="row">
                 <div class="col-sm-12">
-                    <h3>{$Think.lang.install}{$Think.lang.schedule}{$Think.lang.colon}{$setp}</h3>
+                    <h3>{{ trans('common.install') }}{{ trans('common.schedule') }}{{ trans('common.colon') }} {{ $setp }}</h3>
                     <div class="progress">
-                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: {$progress}%">
-                            <span class="sr-only">{$progress}%</span>
+                        <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: {{ $progress }}%">
+                            <span class="sr-only">{{ $progress }}%</span>
                         </div>
                     </div>
                 </div>
@@ -24,9 +25,10 @@
             $(function(){
             })
         </script>
-        <iframe id="main" name="main" class="g-iframe" src="{:U('setp0')}" width="100%" height="100%" scrolling="auto">
+        <iframe id="main" name="main" class="g-iframe" src="{{ route('Install::setp0') }}" width="100%" height="100%" scrolling="auto">
         </iframe>
         <footer class="footer_fixed text-center">
-            {:L('pfcopyright',array('app_name'=>APP_NAME))}<br />
-            {$Think.lang.version}{$Think.lang.colon} Install 1.8.0
+            {{ trans('common.pfcopyright',['app_name'=>trans('common.app_name')]) }}<br />
+            {{ trans('common.version') }}{{ trans('common.colon') }} 2.0.0
         </footer>
+@endsection

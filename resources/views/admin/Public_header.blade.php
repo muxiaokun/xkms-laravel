@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><if condition="$title">{$title} {$Think.lang.dash}</if> {$Think.APP_NAME}{$Think.lang.management}{$Think.lang.backend}</title>
+        <title><if condition="$title">{{ $title }} {{ trans('common.dash') }}</if> {$Think.APP_NAME}{{ trans('common.management') }}{{ trans('common.backend') }}</title>
         <link href="__ROOT__/Public/css/bimages/favicon.ico" type="image/ico" rel="shortcut icon" />
         <meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">

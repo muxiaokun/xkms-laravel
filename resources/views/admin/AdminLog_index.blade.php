@@ -2,24 +2,24 @@
     <import file="js/M_alert_log" />
     <section class="container mt10">
         <div class="panel panel-default">
-            <div class="panel-heading">{$title}</div>
+            <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <include file="Public:where_info" />
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{$Think.lang.id}</th>
-                        <th>{$Think.lang.admin}{$Think.lang.name}</th>
-                        <th>{$Think.lang.add}{$Think.lang.time}</th>
-                        <th>{$Think.lang.module}{$Think.lang.name}</th>
-                        <th>{$Think.lang.controller}{$Think.lang.name}</th>
-                        <th>{$Think.lang.action}{$Think.lang.name}</th>
-                        <th>{$Think.lang.model}{$Think.lang.name}</th>
-                        <th>{$Think.lang.request}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
+                        <th>{{ trans('common.admin') }}{{ trans('common.name') }}</th>
+                        <th>{{ trans('common.add') }}{{ trans('common.time') }}</th>
+                        <th>{{ trans('common.module') }}{{ trans('common.name') }}</th>
+                        <th>{{ trans('common.controller') }}{{ trans('common.name') }}</th>
+                        <th>{{ trans('common.action') }}{{ trans('common.name') }}</th>
+                        <th>{{ trans('common.model') }}{{ trans('common.name') }}</th>
+                        <th>{{ trans('common.request') }}</th>
                         <th class="nowrap">
                             <if condition="session('backend_info.id') neq 1">
-                                {$Think.lang.handle}
+                                {{ trans('common.handle') }}
                             <else />
-                                <a class="btn btn-xs btn-danger" href="{:U('del_all')}">{$Think.lang.del}{$Think.lang.all}</a>
+                                <a class="btn btn-xs btn-danger" href="{:U('del_all')}">{{ trans('common.del') }}{{ trans('common.all') }}</a>
                             </if>
                         </th>
                     </tr>
@@ -49,12 +49,12 @@
                             </td>
                             <td>
                                 <if condition="2 lt strlen($admin_log['request'])">
-<a id="M_alert_log_{$admin_log.id}" class="btn btn-xs btn-primary" href="javascript:void(0);" >{$Think.lang.look}</a>
+<a id="M_alert_log_{$admin_log.id}" class="btn btn-xs btn-primary" href="javascript:void(0);" >{{ trans('common.look') }}</a>
                                 <script>
                                     $(function(){
                                         var config = {
                                             'bind_obj':$('#M_alert_log_{$admin_log.id}'),
-                                            'title':'{$Think.lang.admin}{$Think.lang.handle}{$Think.lang.log}',
+                                            'title':'{{ trans('common.admin') }}{{ trans('common.handle') }}{{ trans('common.log') }}',
                                             'message':{$admin_log.request}
                                         }
                                         new M_alert_log(config);
@@ -64,8 +64,8 @@
                             </td>
                             <td class="nowrap">
                                 <if condition="$batch_handle['del']">
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{$Think.lang.confirm}{$Think.lang.del}?','{:U("del",array("id"=>$admin_log['id']))}')" >
-                                        {$Think.lang.del}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}?','{:U("del",array("id"=>$admin_log['id']))}')" >
+                                        {{ trans('common.del') }}
                                     </a>
                                 </if>
                             </td>

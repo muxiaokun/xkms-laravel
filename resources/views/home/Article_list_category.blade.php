@@ -20,7 +20,7 @@
                     <foreach name="article_list" key="index" item="data">
                         <div class="col-sm-12 pb10">
                             <div class="col-sm-2 pt10">
-                                <a id="prettyPhoto{$index}" href="{:M_U('article',$data['id'])}" >
+                                <a id="prettyPhoto{{ $index }}" href="{:M_U('article',$data['id'])}" >
                                     <M:Img class="img-thumbnail" src="{$data.thumb|M_exists}" />
                                 </a>
                             </div>
@@ -47,7 +47,7 @@
                                     <foreach name="data.ext_info.images_info" item="data">
                                         prettyPhoto_push({$data|json_encode});
                                     </foreach>
-                                    $("#prettyPhoto{$index}").on('click',function(){
+                                    $("#prettyPhoto{{ $index }}").on('click',function(){
                                         $.prettyPhoto.open(api_gallery,api_titles,api_descriptions);
                                         return false;
                                     });

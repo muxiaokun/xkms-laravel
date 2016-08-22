@@ -23,10 +23,10 @@
             </div>
             <div class="col-sm-7 pt30 h150 lh30" style="color:#FFF;">
                 <if condition="C('SITE_COMPANY')">{:C('SITE_COMPANY')}&nbsp;</if>
-                <if condition="C('SITE_PHONE')">{$Think.lang.phone}{$Think.lang.colon}{:C('SITE_PHONE')}&nbsp;</if>
-                <if condition="C('SITE_TELPHONE')">{$Think.lang.telphone}{$Think.lang.colon}{:C('SITE_TELPHONE')}&nbsp;<br /></if>
+                <if condition="C('SITE_PHONE')">{{ trans('common.phone') }}{{ trans('common.colon') }}{:C('SITE_PHONE')}&nbsp;</if>
+                <if condition="C('SITE_TELPHONE')">{{ trans('common.telphone') }}{{ trans('common.colon') }}{:C('SITE_TELPHONE')}&nbsp;<br /></if>
                 <if condition="C('SITE_OTHER')">{:C('SITE_OTHER')}&nbsp;<br /></if>
-                {$Think.lang.version}{$Think.lang.colon} Home Module 1.0.0
+                {{ trans('common.version') }}{{ trans('common.colon') }} Home Module 1.0.0
             </div>
             <div class="col-sm-3 lh150 hidden-xs">
                 <img class="w120" src="{:M_exists('Uploads/attached/image/index/siteqrcode.png')}" />

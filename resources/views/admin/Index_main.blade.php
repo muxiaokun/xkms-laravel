@@ -1,33 +1,33 @@
     <section class="container">
         <div class="row">
             <div class="col-sm-12 page-header">
-                <h1>{$Think.lang.welcome}{$Think.lang.use}{$Think.const.APP_NAME}</h1>
-                <a href="{:U('Index/clean_cache')}" class="hidden" >{$Think.lang.clean}{$Think.lang.cache}</a>
+                <h1>{{ trans('common.welcome') }}{{ trans('common.use') }}{$Think.const.APP_NAME}</h1>
+                <a href="{:U('Index/clean_cache')}" class="hidden" >{{ trans('common.clean') }}{{ trans('common.cache') }}</a>
             </div>
             <div class="col-sm-12 mb20 text-center quick_ico">
                 <if condition="$site_info['ico']['ico1']">
-                    <a href="{:U('Article/add')}" ><span class="mr20 ico1" title="{$Think.lang.add}{$Think.lang.article}"></span></a>
+                    <a href="{:U('Article/add')}" ><span class="mr20 ico1" title="{{ trans('common.add') }}{{ trans('common.article') }}"></span></a>
                 </if>
                 <if condition="$site_info['ico']['ico2']">
-                    <a href="{:U('ArticleCategory/add')}" ><span class="mr20 ico2" title="{$Think.lang.add}{$Think.lang.article}{$Think.lang.category}"></span></a>
+                    <a href="{:U('ArticleCategory/add')}" ><span class="mr20 ico2" title="{{ trans('common.add') }}{{ trans('common.article') }}{{ trans('common.category') }}"></span></a>
                 </if>
                 <if condition="$site_info['ico']['ico6']">
-                    <a href="{:U('Member/add')}" ><span class="mr20 ico6" title="{$Think.lang.add}{$Think.lang.member}"></span></a>
+                    <a href="{:U('Member/add')}" ><span class="mr20 ico6" title="{{ trans('common.add') }}{{ trans('common.member') }}"></span></a>
                 </if>
                 <if condition="$site_info['ico']['ico7']">
-                    <a href="{:U('MemberGroup/add')}" ><span class="mr20 ico7" title="{$Think.lang.add}{$Think.lang.member}{$Think.lang.group}"></span></a>
+                    <a href="{:U('MemberGroup/add')}" ><span class="mr20 ico7" title="{{ trans('common.add') }}{{ trans('common.member') }}{{ trans('common.group') }}"></span></a>
                 </if>
                 <if condition="$site_info['ico']['ico8']">
-                    <a href="{:U('ManageUpload/index')}" ><span class="mr20 ico8" title="{$Think.lang.management}{$Think.lang.upload}{$Think.lang.file}"></span></a>
+                    <a href="{:U('ManageUpload/index')}" ><span class="mr20 ico8" title="{{ trans('common.management') }}{{ trans('common.upload') }}{{ trans('common.file') }}"></span></a>
                 </if>
                 <if condition="$site_info['ico']['ico9']">
-                    <a href="{:U('Index/clean_log')}" ><span class="mr20 ico9" title="{$Think.lang.clean}{$Think.lang.log}"></span></a>
+                    <a href="{:U('Index/clean_log')}" ><span class="mr20 ico9" title="{{ trans('common.clean') }}{{ trans('common.log') }}"></span></a>
                 </if>
                 <if condition="$site_info['ico']['ico10']">
-                    <a href="{:U('Index/clean_cache')}" ><span class="mr20 ico10" title="{$Think.lang.clean}{$Think.lang.cache}"></span></a>
+                    <a href="{:U('Index/clean_cache')}" ><span class="mr20 ico10" title="{{ trans('common.clean') }}{{ trans('common.cache') }}"></span></a>
                 </if>
                 <if condition="$site_info['ico']['ico12']">
-                    <a href="{:U('Index/database_set')}" ><span class="mr20 ico12" title="{$Think.lang.database}{$Think.lang.config}"></span></a>
+                    <a href="{:U('Index/database_set')}" ><span class="mr20 ico12" title="{{ trans('common.database') }}{{ trans('common.config') }}"></span></a>
                 </if>
                 <script type="text/javascript">M_jqueryui_tooltip('.quick_ico span')</script>
             </div>
@@ -71,23 +71,23 @@
             </div>
             <div class="col-sm-6">
                 <div class="panel panel-default">
-                    <div class="panel-heading">{$Think.lang.current}{$Think.lang.account}{$Think.lang.info}</div>
+                    <div class="panel-heading">{{ trans('common.current') }}{{ trans('common.account') }}{{ trans('common.info') }}</div>
                     <div class="panel-body">
                         <table class="table table-condensed table-hover">
                             <tr>
-                                <td>{$Think.lang.account}{$Think.lang.name}</td>
+                                <td>{{ trans('common.account') }}{{ trans('common.name') }}</td>
                                 <td>{$Think.session.backend_info.admin_name}</td>
                             </tr>
                             <tr>
-                                <td>{$Think.lang.register}{$Think.lang.time}</td>
+                                <td>{{ trans('common.register') }}{{ trans('common.time') }}</td>
                                 <td>{$Think.session.backend_info.add_time|M_date=C('SYS_DATE_DETAIL')}</td>
                             </tr>
                             <tr>
-                                <td>{$Think.lang.login}{$Think.lang.time}</td>
+                                <td>{{ trans('common.login') }}{{ trans('common.time') }}</td>
                                 <td>{$Think.session.backend_info.last_time|M_date=C('SYS_DATE_DETAIL')}</td>
                             </tr>
                             <tr>
-                                <td>{$Think.lang.login}IP</td>
+                                <td>{{ trans('common.login') }}IP</td>
                                 <td>{$Think.session.backend_info.aip|M_iptoadd}</td>
                             </tr>
                         </table>
@@ -98,31 +98,31 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">{$Think.lang.current}{$Think.lang.system}{$Think.lang.info}</div>
+                    <div class="panel-heading">{{ trans('common.current') }}{{ trans('common.system') }}{{ trans('common.info') }}</div>
                     <div class="panel-body">
                         <table class="table table-condensed table-hover">
                             <tr>
-                                <td class="col-sm-2">{$Think.lang.system}{$Think.lang.version}</td>
+                                <td class="col-sm-2">{{ trans('common.system') }}{{ trans('common.version') }}</td>
                                 <td class="col-sm-4">{$site_info.sys_version}</td>
-                                <td class="col-sm-2">{$Think.lang.system}{$Think.lang.timezone}</td>
+                                <td class="col-sm-2">{{ trans('common.system') }}{{ trans('common.timezone') }}</td>
                                 <td class="col-sm-4">{$site_info.sys_timezone}</td>
                             </tr>
                             <tr>
-                                <td>{$Think.lang.server}IP</td>
+                                <td>{{ trans('common.server') }}IP</td>
                                 <td>{$site_info.server_ip}</td>
-                                <td>{$Think.lang.max}{$Think.lang.upload}{$Think.lang.limit}</td>
+                                <td>{{ trans('common.max') }}{{ trans('common.upload') }}{{ trans('common.limit') }}</td>
                                 <td>{$site_info.max_upload_size}</td>
                             </tr>
                             <tr>
-                                <td>PHP{$Think.lang.version}</td>
+                                <td>PHP{{ trans('common.version') }}</td>
                                 <td>{$site_info.php_version}</td>
-                                <td>MySql{$Think.lang.version}</td>
+                                <td>MySql{{ trans('common.version') }}</td>
                                 <td>{$site_info.mysql_version}</td>
                             </tr>
                             <tr>
-                                <td>{$Think.lang.system}{$Think.lang.encode}</td>
+                                <td>{{ trans('common.system') }}{{ trans('common.encode') }}</td>
                                 <td>{$site_info.sys_encode}</td>
-                                <td>MySql{$Think.lang.encode}</td>
+                                <td>MySql{{ trans('common.encode') }}</td>
                                 <td>{$site_info.mysql_encode}</td>
                             </tr>
                         </table>

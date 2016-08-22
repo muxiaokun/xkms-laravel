@@ -1,23 +1,23 @@
 
     <section class="container mt10">
         <div class="panel panel-default">
-            <div class="panel-heading">{$title}</div>
+            <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <include file="Public:where_info" />
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{$Think.lang.id}</th>
-                        <th>{$Think.lang.title}</th>
-                        <th>{$Think.lang.sort}</th>
-                        <th>{$Think.lang.channel}</th>
-                        <th>{$Think.lang.category}</th>
-                        <th>{$Think.lang.add}{$Think.lang.time}</th>
-                        <th>{$Think.lang.show}</th>
-                        <th>{$Think.lang.audit}</th>
-                        <th>{$Think.lang.click}{$Think.lang.number}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
+                        <th>{{ trans('common.title') }}</th>
+                        <th>{{ trans('common.sort') }}</th>
+                        <th>{{ trans('common.channel') }}</th>
+                        <th>{{ trans('common.category') }}</th>
+                        <th>{{ trans('common.add') }}{{ trans('common.time') }}</th>
+                        <th>{{ trans('common.show') }}</th>
+                        <th>{{ trans('common.audit') }}</th>
+                        <th>{{ trans('common.click') }}{{ trans('common.number') }}</th>
                         <td class="nowrap">
                             <if condition="$batch_handle['add']">
-                                <a class="btn btn-xs btn-success" href="{:U('add')}">{$Think.lang.add}{$Think.lang.article}</a>
+                                <a class="btn btn-xs btn-success" href="{:U('add')}">{{ trans('common.add') }}{{ trans('common.article') }}</a>
                             </if>
                         </td>
                     </tr>
@@ -43,28 +43,28 @@
                                 {$article.add_time|M_date=C('SYS_DATE_DETAIL')}
                             </td>
                             <td>
-                                <if condition="$article['if_show']">{$Think.lang.yes}<else />{$Think.lang.no}</if>
+                                <if condition="$article['if_show']">{{ trans('common.yes') }}<else />{{ trans('common.no') }}</if>
                             </td>
                             <td>
-                                <if condition="$article['is_audit']">{$Think.lang.yes}<else />{$Think.lang.no}</if>
+                                <if condition="$article['is_audit']">{{ trans('common.yes') }}<else />{{ trans('common.no') }}</if>
                             </td>
                             <td>
                                 {$article.hits}
                             </td>
                             <td class="nowrap">
                                 <a class="btn btn-xs btn-primary" target="_blank" href="{:U('Home/Article/article',array('id'=>$article['id']))}">
-                                    {$Think.lang.look}
+                                    {{ trans('common.look') }}
                                 </a>
                                 <if condition="$batch_handle['edit']">
                                     &nbsp;|&nbsp;
                                     <a class="btn btn-xs btn-primary" href="{:U('edit',array('id'=>$article['id']))}">
-                                        {$Think.lang.edit}
+                                        {{ trans('common.edit') }}
                                     </a>
                                 </if>
                                 <if condition="$batch_handle['del']">
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{$Think.lang.confirm}{$Think.lang.del}{$article.title}?','{:U('del',array('id'=>$article['id']))}')" >
-                                        {$Think.lang.del}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$article.title}?','{:U('del',array('id'=>$article['id']))}')" >
+                                        {{ trans('common.del') }}
                                     </a>
                                 </if>
                             </td>

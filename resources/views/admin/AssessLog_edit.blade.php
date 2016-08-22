@@ -2,10 +2,10 @@
     <section class="container mt10">
         <div class="panel panel-default">
             <div class="panel-heading">
-                {$title}
+                {{ $title }}
                 <if condition="$batch_handle['del']">
-<a class="fr fs10" href="javascript:void();" onClick="return M_confirm('{$Think.lang.confirm}{$Think.lang.del}{$Think.lang.all}{$Think.lang.record}?','{:U('del',array('id'=>I('id')))}')">
-                        {$Think.lang.del}{$Think.lang.all}{$Think.lang.record}
+<a class="fr fs10" href="javascript:void();" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ trans('common.all') }}{{ trans('common.record') }}?','{:U('del',array('id'=>I('id')))}')">
+                        {{ trans('common.del') }}{{ trans('common.all') }}{{ trans('common.record') }}
                     </a>
                 </if>
             </div>
@@ -15,9 +15,9 @@
                     <div class="form-group col-sm-12">
                         <label class="col-sm-2 control-label">
                             <if condition="'member' eq $assess_info['target']">
-                                {$Think.lang.by}{$Think.lang.grade}{$Think.lang.member}
+                                {{ trans('common.by') }}{{ trans('common.grade') }}{{ trans('common.member') }}
                             <elseif condition="'member_group' eq $assess_info['target']" />
-                                {$Think.lang.by}{$Think.lang.grade}{$Think.lang.member}{$Think.lang.group}
+                                {{ trans('common.by') }}{{ trans('common.grade') }}{{ trans('common.member') }}{{ trans('common.group') }}
                             </if>
                         </label>
                         <div class="col-sm-6" id="re_grade_id">
@@ -47,9 +47,9 @@
                         {/* 评分给分组 */}
                         <if condition="$assess_info.result_info" >
                             <tr>
-                                <th>{$Think.lang.project}</th>
-                                <th>{$Think.lang.factor}</th>
-                                <th>{$Think.lang.grade}</th>
+                                <th>{{ trans('common.project') }}</th>
+                                <th>{{ trans('common.factor') }}</th>
+                                <th>{{ trans('common.grade') }}</th>
                             </tr>
                             <foreach name="assess_info.result_info" item="result">
                                 <tr>
@@ -61,11 +61,11 @@
                             </tr>
                         <else />
                             <tr>
-                                <td>{$Think.lang.please}{$Think.lang.selection}
+                                <td>{{ trans('common.please') }}{{ trans('common.selection') }}
                                     <if condition="'member' eq $assess_info['target']">
-                                        {$Think.lang.member}
+                                        {{ trans('common.member') }}
                                     <elseif condition="'member_group' eq $assess_info['target']" />
-                                        {$Think.lang.member_group}
+                                        {{ trans('common.member_group') }}
                                     </if>
                                 </td>
                             </tr>
@@ -74,10 +74,10 @@
                     <div class="row mt10">
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
-                                    {$Think.lang.select}
+                                    {{ trans('common.select') }}
                             </button>
                             <a href="{:U('Assess/index')}" class="btn btn-default">
-                                    {$Think.lang.goback}
+                                    {{ trans('common.goback') }}
                             </a>
                         </div>
                     </div>

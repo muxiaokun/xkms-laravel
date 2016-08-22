@@ -2,21 +2,21 @@
     <import file="js/M_alert_log" />
     <section class="container mt10">
         <div class="panel panel-default">
-            <div class="panel-heading">{$title}</div>
+            <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <include file="Public:where_info" />
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{$Think.lang.id}</th>
-                        <th>{$Think.lang.comment}{$Think.lang.member}</th>
-                        <th>{$Think.lang.comment}{$Think.lang.time}</th>
-                        <th>{$Think.lang.audit}{$Think.lang.admin}</th>
-                        <th>{$Think.lang.controller}</th>
-                        <th>{$Think.lang.id}</th>
-                        <th>{$Think.lang.comment} IP</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
+                        <th>{{ trans('common.comment') }}{{ trans('common.member') }}</th>
+                        <th>{{ trans('common.comment') }}{{ trans('common.time') }}</th>
+                        <th>{{ trans('common.audit') }}{{ trans('common.admin') }}</th>
+                        <th>{{ trans('common.controller') }}</th>
+                        <th>{{ trans('common.id') }}</th>
+                        <th>{{ trans('common.comment') }} IP</th>
                         <td class="nowrap">
                             <if condition="$batch_handle['add']">
-                                <a class="btn btn-xs btn-success" href="{:U('add')}">{$Think.lang.config}{$Think.lang.comment}</a>
+                                <a class="btn btn-xs btn-success" href="{:U('add')}">{{ trans('common.config') }}{{ trans('common.comment') }}</a>
                             </if>
                         </td>
                     </tr>
@@ -45,12 +45,12 @@
                                 {$comment.aip}
                             </td>
                             <td class="nowrap">
-<a id="M_alert_log_{$comment.id}" class="btn btn-xs btn-primary" href="javascript:void(0);">{$Think.lang.look}</a>
+<a id="M_alert_log_{$comment.id}" class="btn btn-xs btn-primary" href="javascript:void(0);">{{ trans('common.look') }}</a>
                                 <script>
                                     $(function(){
                                         var config = {
                                             'bind_obj':$('#M_alert_log_{$comment.id}'),
-                                            'title':'{$Think.lang.comment}{$Think.lang.content}',
+                                            'title':'{{ trans('common.comment') }}{{ trans('common.content') }}',
                                             'message':"{$comment.content}"
                                         }
                                         new M_alert_log(config);
@@ -59,13 +59,13 @@
                                 <if condition="$batch_handle['edit']">
                                     &nbsp;|&nbsp;
 <a class="btn btn-xs btn-primary" href="{:U('edit',array('id'=>$comment['id']))}">
-                                        {$Think.lang.audit}
+                                        {{ trans('common.audit') }}
                                     </a>
                                 </if>
                                 <if condition="$batch_handle['del']">
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{$Think.lang.confirm}{$Think.lang.del}{$Think.lang.comment}?','{:U('del',array('id'=>$comment['id']))}')" >
-                                        {$Think.lang.del}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ trans('common.comment') }}?','{:U('del',array('id'=>$comment['id']))}')" >
+                                        {{ trans('common.del') }}
                                     </a>
                                 </if>
                             </td>

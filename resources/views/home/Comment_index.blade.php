@@ -8,7 +8,7 @@
                     <table class="table">
                         <foreach name="comment_list" item="data">
                         <tr>
-                            <td>{$data.member_name}{$Think.lang.grade}{$Think.lang.colon}{$data.level}[{$data.add_time|M_date=C('SYS_DATE_DETAIL')}]</td>
+                            <td>{$data.member_name}{{ trans('common.grade') }}{{ trans('common.colon') }}{$data.level}[{$data.add_time|M_date=C('SYS_DATE_DETAIL')}]</td>
                         </tr>
                         <tr>
                             <td>{$data.content}</td>
@@ -35,20 +35,20 @@
                 </script>
                 <form onsubmit="M_comment_editor.put_data(this);return false;">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">{$Think.lang.grade}</label>
+                        <label for="exampleInputEmail1">{{ trans('common.grade') }}</label>
                         <div class="radio">
                             <for start="1" end="6">
                                 <label class="mr100">
-                                    <input type="radio" name="comment_level" value="{$i}" <if condition="$i eq 5">checked="checked"</if> />{$i}
+                                    <input type="radio" name="comment_level" value="{{ $i }}" <if condition="$i eq 5">checked="checked"</if> />{{ $i }}
                                 </label>
                             </for>
                         </div>
                     </div>
                     <div class="form-group">
-                      <label for="exampleInputEmail1">{$Think.lang.comment}{$Think.lang.content}</label>
+                      <label for="exampleInputEmail1">{{ trans('common.comment') }}{{ trans('common.content') }}</label>
                       <textarea name="comment_content" class="form-control" style="resize:none;"></textarea>
                     </div>
-                    <button type="submit">{$Think.lang.submit}</button><span class="mlr20" style="color:red;"></span>
+                    <button type="submit">{{ trans('common.submit') }}</button><span class="mlr20" style="color:red;"></span>
                 </form>
             </div>
             <div id="comment_index" class="row"></div>

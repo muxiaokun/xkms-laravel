@@ -1,8 +1,8 @@
     <section class="container mt10">
         <div class="panel panel-default">
             <div class="panel-heading">
-                {$title}<a href="javascript:window.print()">打印</a>
-                <a class="fr fs10" href="{:U('Quests/index',array('id'=>I('id')))}">{$Think.lang.goback}</a>
+                {{ $title }}<a href="javascript:window.print()">打印</a>
+                <a class="fr fs10" href="{:U('Quests/index',array('id'=>I('id')))}">{{ trans('common.goback') }}</a>
             </div>
             <div class="panel-body">
                 <foreach name="quests_quest_list" item="quest">
@@ -11,16 +11,16 @@
                             {$quest.question}
                             <switch name="quest['answer_type']">
                                 <case value="radio">
-                                    {$Think.lang.radio}
+                                    {{ trans('common.radio') }}
                                 </case>
                                 <case value="checkbox">
-                                    {$Think.lang.checkbox}
+                                    {{ trans('common.checkbox') }}
                                 </case>
                                 <case value="text">
-                                    {$Think.lang.textarea}
+                                    {{ trans('common.textarea') }}
                                 </case>
                                 <case value="textarea">
-                                    {$Think.lang.textarea}
+                                    {{ trans('common.textarea') }}
                                 </case>
                             </switch>
                         </label>

@@ -21,9 +21,9 @@
                 <div class="form-group col-sm-12">
                     <label class="col-sm-2 control-label">
                         <if condition="'member' eq $assess_info['target']">
-                            {$Think.lang.by}{$Think.lang.grade}{$Think.lang.member}
+                            {{ trans('common.by') }}{{ trans('common.grade') }}{{ trans('common.member') }}
                         <elseif condition="'member_group' eq $assess_info['target']" />
-                            {$Think.lang.by}{$Think.lang.grade}{$Think.lang.member}{$Think.lang.group}
+                            {{ trans('common.by') }}{{ trans('common.grade') }}{{ trans('common.member') }}{{ trans('common.group') }}
                         </if>
                         {$assess_info.start_time|M_date=C('SYS_DATE_DETAIL')}
                         {$assess_info.end_time|M_date=C('SYS_DATE_DETAIL')}
@@ -51,9 +51,9 @@
                 </div>
             <table class="table table-hover">
                 <tr>
-                    <th>{$Think.lang.project}</th>
-                    <th>{$Think.lang.factor}</th>
-                    <th>{$Think.lang.grade}</th>
+                    <th>{{ trans('common.project') }}</th>
+                    <th>{{ trans('common.factor') }}</th>
+                    <th>{{ trans('common.grade') }}</th>
                 </tr>
                 <foreach name="assess_info['ext_info']" item="row">
                     <tr>
@@ -66,10 +66,10 @@
         </div>
         <div class="col-sm-12 text-center">
             <button type="submit" class="btn btn-info">
-               {$Think.lang.submit}
+               {{ trans('common.submit') }}
             </button>
            <a href="{:M_U('index')}" class="btn btn-default">
-               {$Think.lang.goback}
+               {{ trans('common.goback') }}
            </a>
         </div>
     </form>

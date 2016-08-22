@@ -2,11 +2,11 @@
 <block name="content">
     <table class="table table-condensed table-hover">
         <tr>
-            <th>{$Think.lang.id}</th>
-            <th>{$Think.lang.title}</th>
-            <th>{$Think.lang.start}{$Think.lang.time}</th>
-            <th>{$Think.lang.end}{$Think.lang.time}</th>
-            <th>{$Think.lang.access}{$Think.lang.info}</th>
+            <th>{{ trans('common.id') }}</th>
+            <th>{{ trans('common.title') }}</th>
+            <th>{{ trans('common.start') }}{{ trans('common.time') }}</th>
+            <th>{{ trans('common.end') }}{{ trans('common.time') }}</th>
+            <th>{{ trans('common.access') }}{{ trans('common.info') }}</th>
         </tr>
         <foreach name="quests_list" item="quests">
             <tr>
@@ -26,10 +26,10 @@
                     <if condition="$quests['access_info']">
                         <form action="{:M_U('Quests/add',array('id'=>$quests['id']))}" method="get">
                             <input type="text" name="access_info" />
-                            <button class="btn btn-default btn-sm">{$Think.lang.confirm}{$Think.lang.pass}</button>
+                            <button class="btn btn-default btn-sm">{{ trans('common.confirm') }}{{ trans('common.pass') }}</button>
                         </form>
                     <else/>
-                        <a href="{:M_U('Quests/add',array('id'=>$quests['id']))}">{$Think.lang.public}{$Think.lang.access}</a>
+                        <a href="{:M_U('Quests/add',array('id'=>$quests['id']))}">{{ trans('common.public') }}{{ trans('common.access') }}</a>
                     </if>
                 </td>
             </tr>

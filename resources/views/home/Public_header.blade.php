@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><if condition="$title">{$title} {$Think.lang.dash}</if> {:C('SITE_TITLE')}</title>
+        <title><if condition="$title">{{ $title }} {{ trans('common.dash') }}</if> {:C('SITE_TITLE')}</title>
         <link href="__ROOT__/favicon.ico" type="image/ico" rel="shortcut icon" />
         <meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -92,21 +92,21 @@
                             </if>
                             <div class="form-group">
                                 <select name="type" class="form-control">
-                                    <option value="title" <if condition="$request['type'] eq 'type'">selected="selected"</if> >{$Think.lang.search}{$Think.lang.type}</option>
-                                    <option value="description" <if condition="$request['type'] eq 'description'">selected="selected"</if>>{$Think.lang.description}</option>
-                                    <option value="content" <if condition="$request['type'] eq 'content'">selected="selected"</if>>{$Think.lang.content}</option>
+                                    <option value="title" <if condition="$request['type'] eq 'type'">selected="selected"</if> >{{ trans('common.search') }}{{ trans('common.type') }}</option>
+                                    <option value="description" <if condition="$request['type'] eq 'description'">selected="selected"</if>>{{ trans('common.description') }}</option>
+                                    <option value="content" <if condition="$request['type'] eq 'content'">selected="selected"</if>>{{ trans('common.content') }}</option>
                                     <if condition="isset($category_position['extend'])">
                                     <foreach name="category_position['extend']" item="extend">
-                                        <option value="extend[{$extend}]" <if condition="$request['type'] eq 'extend['.$extend.']'">selected="selected"</if>>L({$extend})</option>
+                                        <option value="extend[{{ $extend }}]" <if condition="$request['type'] eq 'extend['.$extend.']'">selected="selected"</if>>L({{ $extend }})</option>
                                     </foreach>
                                     </if>
-                                    <option value="all">{$Think.lang.all}</option>
+                                    <option value="all">{{ trans('common.all') }}</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <input name="keyword" value="{$request['keyword']}" type="text" class="form-control" placeholder="{$Think.lang.keywords}">
+                                <input name="keyword" value="{$request['keyword']}" type="text" class="form-control" placeholder="{{ trans('common.keywords') }}">
                             </div>
-                            <button type="submit" class="btn btn-default"><b>{$Think.lang.search}</b></button>
+                            <button type="submit" class="btn btn-default"><b>{{ trans('common.search') }}</b></button>
                         </form>
                     </div>
                 </div>

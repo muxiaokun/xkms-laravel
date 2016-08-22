@@ -3,10 +3,10 @@
     <import file="js/M_alert_log" />
     <table class="table table-condensed table-hover">
         <tr>
-            <th>{$Think.lang.id}</th>
-            <th>{$Think.lang.send}{$Think.lang.info}</th>
-            <th>{$Think.lang.receive}{$Think.lang.info}</th>
-            <th><a class="btn btn-xs btn-success" href="{:M_U('add')}">{$Think.lang.send}{$Think.lang.message}</a></th>
+            <th>{{ trans('common.id') }}</th>
+            <th>{{ trans('common.send') }}{{ trans('common.info') }}</th>
+            <th>{{ trans('common.receive') }}{{ trans('common.info') }}</th>
+            <th><a class="btn btn-xs btn-success" href="{:M_U('add')}">{{ trans('common.send') }}{{ trans('common.message') }}</a></th>
         </tr>
         <foreach name="message_list" item="message">
             <tr>
@@ -22,16 +22,16 @@
                     <if condition="0 lt $message['receive_time']">
                         {$message.receive_time|M_date=C('SYS_DATE_DETAIL')}
                     <else/>
-                        {$Think.lang.none}{$Think.lang.receive}
+                        {{ trans('common.none') }}{{ trans('common.receive') }}
                     </if>]
                 </td>
                 <td>
-<a id="M_alert_log_{$message.id}" class="btn btn-xs btn-primary" href="javascript:void(0);" >{$Think.lang.look}</a>
+<a id="M_alert_log_{$message.id}" class="btn btn-xs btn-primary" href="javascript:void(0);" >{{ trans('common.look') }}</a>
                     <script>
                         $(function(){
                             var config = {
                                 'bind_obj':$('#M_alert_log_{$message.id}'),
-                                'title':'{$Think.lang.message}{$Think.lang.content}',
+                                'title':'{{ trans('common.message') }}{{ trans('common.content') }}',
                                 'message':"{$message.content}"
                                 <if condition="session('frontend_info.id') eq $message['receive_id'] AND 0 eq $message['receive_time']">
                                 ,'cb_fn':M_alert_log_Message($('#M_alert_log_{$message.id}'),{$message.id},'{:M_U("ajax_api")}')
@@ -43,12 +43,12 @@
                     &nbsp;|&nbsp;
                     <if condition="0 lt $message['send_id']">
                     <a class="btn btn-xs btn-primary" href="{:M_U('add',array('receive_id'=>$message['send_id']))}">
-                        {$Think.lang.reply}{$Think.lang.message}
+                        {{ trans('common.reply') }}{{ trans('common.message') }}
                     </a>
                     &nbsp;|&nbsp;
                     </if>
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{$Think.lang.confirm}{$Think.lang.del}?','{:M_U('del',array('id'=>$message['id']))}')" >
-                        {$Think.lang.del}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}?','{:M_U('del',array('id'=>$message['id']))}')" >
+                        {{ trans('common.del') }}
                     </a>
                 </td>
             </tr>

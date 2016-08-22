@@ -2,24 +2,24 @@
         <import file="js/M_select_add" />
         <section class="container mt10">
         <div class="panel panel-default">
-            <div class="panel-heading">{$title}</div>
+            <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <form class="form-horizontal" role="form" action="" method="post" >
                     <input type="hidden" name="id" value="{$edit_info.id}"/>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{$Think.lang.category}{$Think.lang.name}</label>
+                                <label class="col-sm-4 control-label">{{ trans('common.category') }}{{ trans('common.name') }}</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{$Think.lang.category}{$Think.lang.name}" name="name" value="{$edit_info.name}"/>
+                                    <input type="text" class="form-control" placeholder="{{ trans('common.category') }}{{ trans('common.name') }}" name="name" value="{$edit_info.name}"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{$Think.lang.sort}</label>
+                                <label class="col-sm-4 control-label">{{ trans('common.sort') }}</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{$Think.lang.sort}" name="sort" value="{$edit_info.sort}" onKeyup="M_in_int(this);" />
+                                    <input type="text" class="form-control" placeholder="{{ trans('common.sort') }}" name="sort" value="{$edit_info.sort}" onKeyup="M_in_int(this);" />
                                 </div>
                             </div>
                         </div>
@@ -27,10 +27,10 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{$Think.lang.parent_level}</label>
+                                <label class="col-sm-4 control-label">{{ trans('common.parent_level') }}</label>
                                 <div class="col-sm-6">
                                     <select name="parent_id" class="form-control input-sm" >
-                                        <option value="0">{$Think.lang.top_level}{$Think.lang.enable}{$Think.lang.attribute}/{$Think.lang.extend}</option>
+                                        <option value="0">{{ trans('common.top_level') }}{{ trans('common.enable') }}{{ trans('common.attribute') }}/{{ trans('common.extend') }}</option>
                                         <foreach name="category_list" item="category">
                                             <option value="{$category.id}" <if condition="$category['id'] eq $edit_info['parent_id']">selected="selected"</if> >{$category.name}</option>
                                         </foreach>
@@ -59,13 +59,13 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{$Think.lang.yes}{$Think.lang.no}{$Think.lang.show}</label>
+                                <label class="col-sm-4 control-label">{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.show') }}</label>
                                 <div class="col-sm-3">
                                     <label class="radio-inline">
-<input type="radio" name="if_show" value="1" <if condition="'1' heq $edit_info['if_show'] or !isset($edit_info['if_show'])">checked="checked"</if> />{$Think.lang.show}
+<input type="radio" name="if_show" value="1" <if condition="'1' heq $edit_info['if_show'] or !isset($edit_info['if_show'])">checked="checked"</if> />{{ trans('common.show') }}
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="if_show" value="0" <if condition="'0' heq $edit_info['if_show']">checked="checked"</if> />{$Think.lang.hidden}
+<input type="radio" name="if_show" value="0" <if condition="'0' heq $edit_info['if_show']">checked="checked"</if> />{{ trans('common.hidden') }}
                                     </label>
                                 </div>
                             </div>
@@ -74,10 +74,10 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{$Think.lang.content}{$Think.lang.template}</label>
+                                <label class="col-sm-4 control-label">{{ trans('common.content') }}{{ trans('common.template') }}</label>
                                 <div class="col-sm-6">
                                     <select name="template" class="form-control input-sm" >
-                                        <option value="">{$Think.lang.use}{$Think.lang.default}</option>
+                                        <option value="">{{ trans('common.use') }}{{ trans('common.default') }}</option>
                                         <foreach name="template_list" item="template">
                                             <option value="{$template.value}" <if condition="$template['value'] eq $edit_info['template']">selected="selected"</if> >{$template.name}</option>
                                         </foreach>
@@ -85,10 +85,10 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{$Think.lang.article}{$Think.lang.template}</label>
+                                <label class="col-sm-4 control-label">{{ trans('common.article') }}{{ trans('common.template') }}</label>
                                 <div class="col-sm-6">
                                     <select name="article_template" class="form-control input-sm" >
-                                        <option value="">{$Think.lang.use}{$Think.lang.default}</option>
+                                        <option value="">{{ trans('common.use') }}{{ trans('common.default') }}</option>
                                         <foreach name="article_template_list" item="template">
                                             <option value="{$template.value}" <if condition="$template['value'] eq $edit_info['article_template']">selected="selected"</if> >{$template.name}</option>
                                         </foreach>
@@ -96,10 +96,10 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{$Think.lang.list}{$Think.lang.template}</label>
+                                <label class="col-sm-4 control-label">{{ trans('common.list') }}{{ trans('common.template') }}</label>
                                 <div class="col-sm-6">
                                     <select name="list_template" class="form-control input-sm" >
-                                        <option value="">{$Think.lang.use}{$Think.lang.default}</option>
+                                        <option value="">{{ trans('common.use') }}{{ trans('common.default') }}</option>
                                         <foreach name="list_template_list" item="template">
                                             <option value="{$template.value}" <if condition="$template['value'] eq $edit_info['list_template']">selected="selected"</if> >{$template.name}</option>
                                         </foreach>
@@ -107,17 +107,17 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{$Think.lang.list}{$Think.lang.number}</label>
+                                <label class="col-sm-4 control-label">{{ trans('common.list') }}{{ trans('common.number') }}</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" placeholder="{$Think.lang.list}{$Think.lang.number}" name="s_limit" value="{$edit_info.s_limit}" onKeyup="M_in_int(this);" />
+<input type="text" class="form-control" placeholder="{{ trans('common.list') }}{{ trans('common.number') }}" name="s_limit" value="{$edit_info.s_limit}" onKeyup="M_in_int(this);" />
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{$Think.lang.thumb}</label>
+                                <label class="col-sm-4 control-label">{{ trans('common.thumb') }}</label>
                                 <div class="col-sm-5">
-                                    <div id="uploadbutton" title="{$Think.lang.selection}{$Think.lang.or}{$Think.lang.upload}" class="default_image">
+                                    <div id="uploadbutton" title="{{ trans('common.selection') }}{{ trans('common.or') }}{{ trans('common.upload') }}" class="default_image">
                                         <M:Img id="thumb_src" src="{:M_exists($edit_info['thumb'])}" />
                                     </div>
                                     <input id="thumb_val" type="hidden" name="thumb" value="{$edit_info.thumb}" />
@@ -140,7 +140,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{$Think.lang.admin}</label>
+                                <label class="col-sm-4 control-label">{{ trans('common.admin') }}</label>
                                 <div class="col-sm-6"><h4 id="manage_id_list" style="margin:2px 0px 0px 0px;"></h4></div>
                             </div>
                         </div>
@@ -163,7 +163,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{$Think.lang.management}{$Think.lang.group}</label>
+                                <label class="col-sm-4 control-label">{{ trans('common.management') }}{{ trans('common.group') }}</label>
                                 <div class="col-sm-6"><h4 id="manage_group_id_list" style="margin:2px 0px 0px 0px;"></h4></div>
                             </div>
                         </div>
@@ -186,7 +186,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{$Think.lang.access}{$Think.lang.member}{$Think.lang.group}</label>
+                                <label class="col-sm-4 control-label">{{ trans('common.access') }}{{ trans('common.member') }}{{ trans('common.group') }}</label>
                                 <div class="col-sm-6"><h4 id="access_group_id_list" style="margin:2px 0px 0px 0px;"></h4></div>
                             </div>
                         </div>
@@ -210,7 +210,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{$Think.lang.other}{$Think.lang.info}{$Think.lang.template}</label>
+                                <label class="col-sm-4 control-label">{{ trans('common.other') }}{{ trans('common.info') }}{{ trans('common.template') }}</label>
                                 <div class="col-sm-6"><ul id="template_list" class="list-group"></ul></div>
                             </div>
                         </div>
@@ -233,7 +233,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">{$Think.lang.attribute}{$Think.lang.template}</label>
+                                <label class="col-sm-2 control-label">{{ trans('common.attribute') }}{{ trans('common.template') }}</label>
                                 <div id="attribute" class="col-sm-8" >
                                     <import file="js/M_attribute_editor" />
                                     <script type="text/javascript">
@@ -254,22 +254,22 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">{$Think.lang.enable}{$Think.lang.category}{$Think.lang.content}</label>
+                                <label class="col-sm-2 control-label">{{ trans('common.enable') }}{{ trans('common.category') }}{{ trans('common.content') }}</label>
                                 <div class="col-sm-10">
                                     <label class="radio-inline">
 <input type="radio" name="is_content" value="1" <if condition="'1' heq $edit_info['is_content']">checked="checked"</if> />
-                                        {$Think.lang.enable}({$Think.lang.content}{$Think.lang.template})
+                                        {{ trans('common.enable') }}({{ trans('common.content') }}{{ trans('common.template') }})
                                     </label>
                                     <label class="radio-inline">
 <input type="radio" name="is_content" value="0" <if condition="'0' heq $edit_info['is_content'] or !isset($edit_info['is_content'])">checked="checked"</if> />
-                                        {$Think.lang.disable}({$Think.lang.list}{$Think.lang.template})
+                                        {{ trans('common.disable') }}({{ trans('common.list') }}{{ trans('common.template') }})
                                     </label>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-12">
-                        <label class="col-sm-12">{$Think.lang.category}{$Think.lang.content}</label>
+                        <label class="col-sm-12">{{ trans('common.category') }}{{ trans('common.content') }}</label>
                         <textarea rows="15" class="col-sm-12" name="content">{$edit_info.content}</textarea>
                     </div>
                     <div class="cb"></div>
@@ -277,13 +277,13 @@
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
                                 <if condition="$Think.const.ACTION_NAME eq 'add'">
-                                    {$Think.lang.add}
+                                    {{ trans('common.add') }}
                                 <elseif condition="$Think.const.ACTION_NAME eq 'edit'" />
-                                    {$Think.lang.edit}
+                                    {{ trans('common.edit') }}
                                 </if>
                             </button>
                             <a href="{:U('index')}" class="btn btn-default">
-                                    {$Think.lang.goback}
+                                    {{ trans('common.goback') }}
                             </a>
                         </div>
                     </div>

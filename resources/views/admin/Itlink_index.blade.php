@@ -1,21 +1,21 @@
 
     <section class="container mt10">
         <div class="panel panel-default">
-            <div class="panel-heading">{$title}</div>
+            <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <include file="Public:where_info" />
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{$Think.lang.id}</th>
-                        <th>{$Think.lang.itlink}{$Think.lang.name}</th>
-                        <th>{$Think.lang.short}{$Think.lang.name}</th>
-                        <th>{$Think.lang.yes}{$Think.lang.no}{$Think.lang.enable}</th>
-                        <th>{$Think.lang.yes}{$Think.lang.no}{$Think.lang.statistics}</th>
-                        <th>{$Think.lang.show}{$Think.lang.statistics}</th>
-                        <th>{$Think.lang.click}{$Think.lang.statistics}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
+                        <th>{{ trans('common.itlink') }}{{ trans('common.name') }}</th>
+                        <th>{{ trans('common.short') }}{{ trans('common.name') }}</th>
+                        <th>{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.enable') }}</th>
+                        <th>{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.statistics') }}</th>
+                        <th>{{ trans('common.show') }}{{ trans('common.statistics') }}</th>
+                        <th>{{ trans('common.click') }}{{ trans('common.statistics') }}</th>
                         <td class="nowrap">
                             <if condition="$batch_handle['edit']">
-                                <a class="btn btn-xs btn-success"  href="{:U('add')}">{$Think.lang.add}{$Think.lang.itlink}</a>
+                                <a class="btn btn-xs btn-success"  href="{:U('add')}">{{ trans('common.add') }}{{ trans('common.itlink') }}</a>
                             </if>
                         </td>
                     </tr>
@@ -32,10 +32,10 @@
                                 {$itlink.short_name}
                             </td>
                             <td>
-                                <if condition="$itlink['is_enable']">{$Think.lang.yes}<else />{$Think.lang.no}</if>
+                                <if condition="$itlink['is_enable']">{{ trans('common.yes') }}<else />{{ trans('common.no') }}</if>
                             </td>
                             <td>
-                                <if condition="$itlink['is_statistics']">{$Think.lang.yes}<else />{$Think.lang.no}</if>
+                                <if condition="$itlink['is_statistics']">{{ trans('common.yes') }}<else />{{ trans('common.no') }}</if>
                             </td>
                             <td>
                                 {$itlink.show_num}
@@ -46,13 +46,13 @@
                             <td class="nowrap">
                                 <if condition="$batch_handle['edit']">
                                     <a class="btn btn-xs btn-primary"  href="{:U('edit',array('id'=>$itlink['id']))}">
-                                        {$Think.lang.edit}
+                                        {{ trans('common.edit') }}
                                     </a>
                                 </if>
                                 <if condition="$batch_handle['edit'] AND $batch_handle['del']">&nbsp;|&nbsp;</if>
                                 <if condition="$batch_handle['del']">
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{$Think.lang.confirm}{$Think.lang.del}{$itlink.name}?','{:U('del',array('id'=>$itlink['id']))}')" >
-                                        {$Think.lang.del}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$itlink.name}?','{:U('del',array('id'=>$itlink['id']))}')" >
+                                        {{ trans('common.del') }}
                                     </a>
                                 </if>
                             </td>

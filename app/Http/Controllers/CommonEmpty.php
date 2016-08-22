@@ -9,7 +9,7 @@ class CommonEmpty extends Controller
 {
     public function _empty()
     {
-        if (APP_DEBUG) // && false
+        if (config('app.debug')) // && false
         {
             echo "MODULE_NAME:" . MODULE_NAME . "<br />";
             echo "CONTROLLER_NAME:" . CONTROLLER_NAME . "<br />";

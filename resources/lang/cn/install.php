@@ -3,7 +3,7 @@ return array(
     ''                         => '',
     'install_error1'           => '安装错误：安装过程已完成，无法后退（如需重新安装，请修改安装状态）',
     'install_error2'           => '安装错误：不允许重复安装（如需重新安装，请修改安装状态）',
-    'index_title'              => '安装' . APP_NAME,
+    'index_title'              => '安装XK管理系统',
     'setp0_title'              => '阅读 Apache License v2 协议',
     'setp1_title'              => '配置链接数据库',
     'setp2_title'              => '确认安装信息',

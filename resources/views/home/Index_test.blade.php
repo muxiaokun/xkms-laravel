@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><if condition="$title">{$title} {$Think.lang.dash}</if> {:C('SITE_TITLE')}</title>
+        <title><if condition="$title">{{ $title }} {{ trans('common.dash') }}</if> {:C('SITE_TITLE')}</title>
         <link href="__ROOT__/favicon.ico" type="image/ico" rel="shortcut icon" />
         <meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -34,11 +34,11 @@
         <section class="container hidden">
             <div class="jumbotron">
                 <h1>{$Think.const.APP_NAME}</h1>
-                <p>{$Think.lang.version}{$Think.lang.colon} Home Module 1.0.0</p>
+                <p>{{ trans('common.version') }}{{ trans('common.colon') }} Home Module 1.0.0</p>
                 <p><a class="btn btn-primary btn-lg" role="button" href="http://www.xjhywh.cn" target="_blank">Learn more</a></p>
             </div>
             <ul class="list-group">
-                <li class="list-group-item"><a href="{:M_U('Member/index')}">{$Think.lang.member}</a></li>
+                <li class="list-group-item"><a href="{:M_U('Member/index')}">{{ trans('common.member') }}</a></li>
                 <li class="list-group-item"><a href="{:M_U('Quests/index')}">问卷</a></li>
                 <li class="list-group-item"><a href="{:M_U('Assess/index')}">考核</a></li>
                 <li class="list-group-item"><a href="{:M_U('MessageBoard/index')}">留言板</a></li>

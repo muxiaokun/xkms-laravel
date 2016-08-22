@@ -79,7 +79,7 @@ class Wechat extends Backend
             $this->error(L('id') . L('error'), U('index'));
         }
 
-        if (!APP_DEBUG) {
+        if (!config('app.debug')) {
             $templateIdShort = C('WECHAT_TEMPLATE_ID');
             if (!$templateIdShort) {
                 $this->error('WECHAT_TEMPLATE_ID' . L('empty'), U('config'));
@@ -95,7 +95,7 @@ class Wechat extends Backend
             $errorGoLink = U('edit', array('id' => $id));
             $Wechat        = new \Common\Lib\Wechat();
             $accessToken  = $Wechat->get_access_token();
-            if (!APP_DEBUG) {
+            if (!config('app.debug')) {
                 $templateId = $Wechat->get_template($templateIdShort);
                 if (0 != $templateId['errcode']) {
                     $this->error('template_id' . L('error'), $errorGoLink);

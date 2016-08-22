@@ -22,34 +22,34 @@ class Quests extends Backend
         $where = array();
 
         //建立where
-        $v_value                         = '';
-        $v_value                         = I('title');
-        $v_value && $where['title']      = array('like', '%' . $v_value . '%');
-        $v_value                         = M_mktime_range('start_time');
-        $v_value && $where['start_time'] = $v_value;
-        $v_value                         = M_mktime_range('end_time');
-        $v_value && $where['end_time']   = $v_value;
+        $whereValue                         = '';
+        $whereValue                         = I('title');
+        $whereValue && $where['title']      = array('like', '%' . $whereValue . '%');
+        $whereValue                         = M_mktime_range('start_time');
+        $whereValue && $where['start_time'] = $whereValue;
+        $whereValue                         = M_mktime_range('end_time');
+        $whereValue && $where['end_time']   = $whereValue;
 
         $QuestsModel = D('Quests');
-        $quests_list = $QuestsModel->mSelect($where, true);
-        $this->assign('quests_list', $quests_list);
-        $this->assign('quests_list_count', $QuestsModel->getPageCount($where));
+        $questsList = $QuestsModel->mSelect($where, true);
+        $this->assign('quests_list', $questsList);
+        $this->assign('quests_list_count', $QuestsModel->mGetPageCount($where));
 
         //初始化where_info
-        $where_info               = array();
-        $where_info['title']      = array('type' => 'input', 'name' => L('title'));
-        $where_info['start_time'] = array('type' => 'time', 'name' => L('start') . L('time'));
-        $where_info['end_time']   = array('type' => 'time', 'name' => L('end') . L('time'));
-        $this->assign('where_info', $where_info);
+        $whereInfo               = array();
+        $whereInfo['title']      = array('type' => 'input', 'name' => L('title'));
+        $whereInfo['start_time'] = array('type' => 'time', 'name' => L('start') . L('time'));
+        $whereInfo['end_time']   = array('type' => 'time', 'name' => L('end') . L('time'));
+        $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batch_handle                 = array();
-        $batch_handle['add']          = $this->_check_privilege('add');
-        $batch_handle['answer_index'] = $this->_check_privilege('index', 'QuestsAnswer');
-        $batch_handle['answer_edit']  = $this->_check_privilege('edit', 'QuestsAnswer');
-        $batch_handle['edit']         = $this->_check_privilege('edit');
-        $batch_handle['del']          = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batch_handle);
+        $batchHandle                 = array();
+        $batchHandle['add']          = $this->_check_privilege('add');
+        $batchHandle['answer_index'] = $this->_check_privilege('index', 'QuestsAnswer');
+        $batchHandle['answer_edit']  = $this->_check_privilege('edit', 'QuestsAnswer');
+        $batchHandle['edit']         = $this->_check_privilege('edit');
+        $batchHandle['del']          = $this->_check_privilege('del');
+        $this->assign('batch_handle', $batchHandle);
 
         $this->assign('title', L('quests') . L('management'));
         $this->display();
@@ -60,9 +60,9 @@ class Quests extends Backend
     {
         if (IS_POST) {
             $QuestsModel = D('Quests');
-            $data        = $this->_make_data();
-            $result_add  = $QuestsModel->mAdd($data);
-            if ($result_add) {
+            $data        = $this->makeData();
+            $resultAdd  = $QuestsModel->mAdd($data);
+            if ($resultAdd) {
                 $this->success(L('quests') . L('add') . L('success'), U('Quests/index'));
                 return;
             } else {
@@ -83,18 +83,18 @@ class Quests extends Backend
 
         $QuestsModel = D('Quests');
         if (IS_POST) {
-            $data        = $this->_make_data();
-            $result_edit = $QuestsModel->mEdit($id, $data);
-            if ($result_edit) {
+            $data        = $this->makeData();
+            $resultEdit = $QuestsModel->mEdit($id, $data);
+            if ($resultEdit) {
                 $this->success(L('quests') . L('edit') . L('success'), U('Quests/index'));
                 return;
             } else {
-                $error_go_link = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-                $this->error(L('quests') . L('edit') . L('error'), $error_go_link);
+                $errorGoLink = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
+                $this->error(L('quests') . L('edit') . L('error'), $errorGoLink);
             }
         }
-        $edit_info = $QuestsModel->mFind($id);
-        $this->assign('edit_info', $edit_info);
+        $editInfo = $QuestsModel->mFind($id);
+        $this->assign('edit_info', $editInfo);
 
         $this->assign('title', L('edit') . L('quests'));
         $this->display('addedit');
@@ -111,16 +111,16 @@ class Quests extends Backend
         $clear       = I('clear');
         $QuestsModel = D('Quests');
         if (!$clear) {
-            $result_del = $QuestsModel->mDel($id);
+            $resultDel = $QuestsModel->mDel($id);
         }
 
-        if ($result_del || $clear) {
+        if ($resultDel || $clear) {
             //删除问卷会删除该问卷下的所有答案
             $QuestsAnswerModel = D('QuestsAnswer');
             //TODO 需要定义数据列
-            $result_clear      = $QuestsAnswerModel->mClean($id);
+            $resultClear      = $QuestsAnswerModel->mClean($id);
             if ($clear) {
-                if ($result_clear) {
+                if ($resultClear) {
                     $QuestsModel->where(array('id' => $id))->data(array('current_portion' => 0))->save();
                     $this->success(L('quests') . L('clear') . L('success'), U('Quests/index'));
                     return;
@@ -137,33 +137,33 @@ class Quests extends Backend
     }
 
     //构造数据
-    private function _make_data()
+    private function makeData()
     {
         $title         = I('title');
-        $max_portion   = I('max_portion');
-        $start_time    = I('start_time');
-        $end_time      = I('end_time');
-        $start_time    = M_mktime($start_time, true);
-        $end_time      = M_mktime($end_time, true);
-        $start_content = I('start_content');
-        $end_content   = I('end_content');
-        $access_info   = I('access_info');
-        $ext_info      = I('ext_info');
-        foreach ($ext_info as &$info) {
+        $maxPortion   = I('max_portion');
+        $startTime    = I('start_time');
+        $endTime      = I('end_time');
+        $startTime    = M_mktime($startTime, true);
+        $endTime      = M_mktime($endTime, true);
+        $startContent = I('start_content');
+        $endContent   = I('end_content');
+        $accessInfo   = I('access_info');
+        $extInfo      = I('ext_info');
+        foreach ($extInfo as &$info) {
             $info = htmlspecialchars_decode($info);
             $info = json_decode($info, true);
         }
-        $ext_info = json_encode($ext_info);
+        $extInfo = json_encode($extInfo);
 
         $data                                                                       = array();
         ('add' == ACTION_NAME || null !== $title) && $data['title']                 = $title;
-        ('add' == ACTION_NAME || null !== $max_portion) && $data['max_portion']     = $max_portion;
-        ('add' == ACTION_NAME || null !== $start_time) && $data['start_time']       = $start_time;
-        ('add' == ACTION_NAME || null !== $end_time) && $data['end_time']           = $end_time;
-        ('add' == ACTION_NAME || null !== $start_content) && $data['start_content'] = $start_content;
-        ('add' == ACTION_NAME || null !== $end_content) && $data['end_content']     = $end_content;
-        ('add' == ACTION_NAME || null !== $access_info) && $data['access_info']     = $access_info;
-        ('add' == ACTION_NAME || null !== $ext_info) && $data['ext_info']           = $ext_info;
+        ('add' == ACTION_NAME || null !== $maxPortion) && $data['max_portion']     = $maxPortion;
+        ('add' == ACTION_NAME || null !== $startTime) && $data['start_time']       = $startTime;
+        ('add' == ACTION_NAME || null !== $endTime) && $data['end_time']           = $endTime;
+        ('add' == ACTION_NAME || null !== $startContent) && $data['start_content'] = $startContent;
+        ('add' == ACTION_NAME || null !== $endContent) && $data['end_content']     = $endContent;
+        ('add' == ACTION_NAME || null !== $accessInfo) && $data['access_info']     = $accessInfo;
+        ('add' == ACTION_NAME || null !== $extInfo) && $data['ext_info']           = $extInfo;
         return $data;
     }
 }

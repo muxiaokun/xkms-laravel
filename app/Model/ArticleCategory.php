@@ -7,16 +7,16 @@ class ArticleCategory extends Common
 {
     public function mSelect($where = null, $page = false)
     {
-        $this->parseWhere($where);
-        $this->getPage($page);
+        $this->mParseWhere($where);
+        $this->mGetPage($page);
         !isset($this->options['order']) && $this->order('sort');
         $data = $this->where($where)->select();
-        foreach ($data as &$data_row) {$this->decodeData($data_row);}
+        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
         return $data;
     }
 
     //获得缩进的分类树
-    public function mSelect_tree($where = null, $parent_id = 0, $level = 0)
+    public function mSelect_tree($where = null, $parentId = 0, $level = 0)
     {
         $config = array(
             'list_fn'     => 'mSelect',
@@ -26,7 +26,7 @@ class ArticleCategory extends Common
             'parent_id'   => 'parent_id',
             'retract_col' => 'name',
         );
-        return $this->field('id,name')->_make_tree($config, $parent_id, $level);
+        return $this->field('id,name')->mMakeTree($config, $parentId, $level);
     }
 
     public function mDel($id)
@@ -42,27 +42,27 @@ class ArticleCategory extends Common
     }
 
     //返回子级所有分类id 数组集合
-    //$push_me 是否包含传入id
-    public function mFind_child_id($id, $push_me = true)
+    //$pushMe 是否包含传入id
+    public function mFind_child_id($id, $pushMe = true)
     {
         $where             = array('parent_id' => $id);
-        $article_category  = $this->field('id')->mSelect($where);
-        $category_child_id = array();
-        foreach ($article_category as $category) {
-            $category_child_id[] = $category['id'];
+        $articleCategory  = $this->field('id')->mSelect($where);
+        $categoryChildId = array();
+        foreach ($articleCategory as $category) {
+            $categoryChildId[] = $category['id'];
             if (0 < $this->where(array('parent_id' => $category['id']))->count()) {
-                $article_category_child = $this->mFind_child_id($category['id'], false);
-                foreach ($article_category_child as $child) {
-                    $category_child_id[] = $child;
+                $articleCategoryChild = $this->mFind_child_id($category['id'], false);
+                foreach ($articleCategoryChild as $child) {
+                    $categoryChildId[] = $child;
                 }
             }
         }
-        if ($push_me) {
-            $category_child_id[] = $id;
+        if ($pushMe) {
+            $categoryChildId[] = $id;
         }
 
         //不归组的任何人都可以管理;
-        return $category_child_id;
+        return $categoryChildId;
     }
 
     // 寻找分类的顶级分类
@@ -72,8 +72,8 @@ class ArticleCategory extends Common
             return false;
         }
 
-        $article_category_top_id = $this->mFind_top_id($id);
-        return $this->mFind($article_category_top_id);
+        $articleCategoryTopId = $this->mFind_top_id($id);
+        return $this->mFind($articleCategoryTopId);
     }
 
     // 寻找分类的顶级分类ID
@@ -83,23 +83,23 @@ class ArticleCategory extends Common
             return false;
         }
 
-        $category_info = $this->field('id,parent_id')->mFind($id);
-        if (0 != $category_info['parent_id']) {
-            return $this->mFind_top_id($category_info['parent_id']);
+        $categoryInfo = $this->field('id,parent_id')->mFind($id);
+        if (0 != $categoryInfo['parent_id']) {
+            return $this->mFind_top_id($categoryInfo['parent_id']);
         }
 
-        return $category_info['id'];
+        return $categoryInfo['id'];
     }
 
     // 寻找分类的顶级分类列
-    public function mFind_top_column($id, $column_name)
+    public function mFindTopColumn($id, $columnName)
     {
         if (!$id) {
             return false;
         }
 
-        $article_category_top_id = $this->mFind_top_id($id);
-        return $this->mFindColumn($article_category_top_id, $column_name);
+        $articleCategoryTopId = $this->mFind_top_id($id);
+        return $this->mFindColumn($articleCategoryTopId, $columnName);
     }
 
     //返回有权管理的频道
@@ -116,26 +116,26 @@ class ArticleCategory extends Common
             $where['manage_group_id'] = session('backend_info.group_id');
         }
 
-        $mFind_allow = array(0);
+        $mFindAllow = array(0);
         if (empty($where['manage_id']) && empty($where['manage_group_id'])) {
-            return $mFind_allow;
+            return $mFindAllow;
         }
 
-        $article_category = $this->field('id')->mSelect($where);
-        foreach ($article_category as $category) {
-            $mFind_allow[] = $category['id'];
+        $articleCategory = $this->field('id')->mSelect($where);
+        foreach ($articleCategory as $category) {
+            $mFindAllow[] = $category['id'];
         }
-        return $mFind_allow;
+        return $mFindAllow;
     }
 
-    protected function parseWhere(&$where)
+    protected function mParseWhere(&$where)
     {
         if (is_null($where)) {
             return;
         }
 
-        isset($where['manage_id']) && $where['manage_id']             = $this->_make_like_arr($where['manage_id']);
-        isset($where['manage_group_id']) && $where['manage_group_id'] = $this->_make_like_arr($where['manage_group_id']);
+        isset($where['manage_id']) && $where['manage_id']             = $this->mMakeLikeArray($where['manage_id']);
+        isset($where['manage_group_id']) && $where['manage_group_id'] = $this->mMakeLikeArray($where['manage_group_id']);
 
         if ($where['manage_id'] && $where['manage_group_id']) {
             $where['_complex'] = array(
@@ -148,7 +148,7 @@ class ArticleCategory extends Common
         }
     }
 
-    protected function encodeData(&$data)
+    protected function mEncodeData(&$data)
     {
         //只有顶级可以设置扩展模板和属性
         if (isset($data['parent_id']) && 0 < $data['parent_id']) {
@@ -158,12 +158,12 @@ class ArticleCategory extends Common
         isset($data['manage_id']) && $data['manage_id']             = '|' . implode('|', $data['manage_id']) . '|';
         isset($data['manage_group_id']) && $data['manage_group_id'] = '|' . implode('|', $data['manage_group_id']) . '|';
         isset($data['access_group_id']) && $data['access_group_id'] = serialize($data['access_group_id']);
-        isset($data['content']) && $data['content']                 = $this->_encode_content($data['content']);
+        isset($data['content']) && $data['content']                 = $this->mEncodeContent($data['content']);
         isset($data['extend']) && $data['extend']                   = serialize($data['extend']);
         isset($data['attribute']) && $data['attribute']             = serialize($data['attribute']);
     }
 
-    protected function decodeData(&$data)
+    protected function mDecodeData(&$data)
     {
         isset($data['manage_id']) && $data['manage_id']             = explode('|', substr($data['manage_id'], 1, strlen($data['manage_id']) - 2));
         isset($data['manage_group_id']) && $data['manage_group_id'] = explode('|', substr($data['manage_group_id'], 1, strlen($data['manage_group_id']) - 2));

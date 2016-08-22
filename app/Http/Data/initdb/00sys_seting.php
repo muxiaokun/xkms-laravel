@@ -5,9 +5,9 @@ return array(
     'privilege'     => array(
         'Admin' => array(
             'Index'    => array(
-                'website_set'  => '网站配置',
-                'system_set'   => '系统配置',
-                'database_set' => '数据库配置',
+                'websiteSet'  => '网站配置',
+                'systemSet'   => '系统配置',
+                'databaseSet' => '数据库配置',
                 'edit_my_pass' => '修改密码',
                 'clean_cache'  => '清空缓存',
                 'clean_log'    => '清除日志',

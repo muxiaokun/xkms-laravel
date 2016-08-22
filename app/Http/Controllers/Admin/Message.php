@@ -26,34 +26,34 @@ class Message extends Backend
         $where['_complex']['_logic']     = 'OR';
         $where['_complex']['receive_id'] = $where['_complex']['send_id'] = 0;
         //建立where
-        $v_value                         = '';
-        $v_value                         = I('receive_id');
-        $v_value && $where['receive_id'] = array(
+        $whereValue                         = '';
+        $whereValue                         = I('receive_id');
+        $whereValue && $where['receive_id'] = array(
             'in',
-            $MemberModel->where(array('member_name' => array('like', '%' . $v_value . '%')))->col_arr('id'),
+            $MemberModel->where(array('member_name' => array('like', '%' . $whereValue . '%')))->mColumn2Array('id'),
         );
-        $v_value                        = M_mktime_range('send_time');
-        $v_value && $where['send_time'] = $v_value;
+        $whereValue                        = M_mktime_range('send_time');
+        $whereValue && $where['send_time'] = $whereValue;
 
-        $message_list = $MessageModel->order('receive_time asc,send_time desc')->mSelect($where, true);
-        foreach ($message_list as &$message) {
+        $messageList = $MessageModel->order('receive_time asc,send_time desc')->mSelect($where, true);
+        foreach ($messageList as &$message) {
             $message['send_name']    = ($message['send_id']) ? $MemberModel->mFindColumn($message['send_id'], 'member_name') : L('system');
             $message['receive_name'] = ($message['receive_id']) ? $MemberModel->mFindColumn($message['receive_id'], 'member_name') : L('system');
         }
-        $this->assign('message_list', $message_list);
-        $this->assign('message_list_count', $MessageModel->getPageCount($where));
+        $this->assign('message_list', $messageList);
+        $this->assign('message_list_count', $MessageModel->mGetPageCount($where));
 
         //初始化where_info
-        $where_info               = array();
-        $where_info['receive_id'] = array('type' => 'input', 'name' => L('receive') . L('member'));
-        $where_info['send_time']  = array('type' => 'time', 'name' => L('send') . L('time'));
-        $this->assign('where_info', $where_info);
+        $whereInfo               = array();
+        $whereInfo['receive_id'] = array('type' => 'input', 'name' => L('receive') . L('member'));
+        $whereInfo['send_time']  = array('type' => 'time', 'name' => L('send') . L('time'));
+        $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batch_handle        = array();
-        $batch_handle['add'] = $this->_check_privilege('add');
-        $batch_handle['del'] = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batch_handle);
+        $batchHandle        = array();
+        $batchHandle['add'] = $this->_check_privilege('add');
+        $batchHandle['del'] = $this->_check_privilege('del');
+        $this->assign('batch_handle', $batchHandle);
 
         $this->assign('title', L('message') . L('management'));
         $this->display();
@@ -62,7 +62,7 @@ class Message extends Backend
     //发送信息
     public function add()
     {
-        $receive_id   = I('receive_id');
+        $receiveId   = I('receive_id');
         $MessageModel = D('Message');
         if (IS_POST) {
             $content = I('content');
@@ -70,17 +70,17 @@ class Message extends Backend
                 $this->error(L('content') . L('not') . L('empty'), U('index'));
             }
 
-            if (null == $receive_id) {
+            if (null == $receiveId) {
                 $this->error(L('receive') . L('member') . L('error'), U('index'));
             }
 
             $data = array(
                 'send_id'    => session('frontend_info.id'),
-                'receive_id' => $receive_id,
+                'receive_id' => $receiveId,
                 'content'    => $content,
             );
-            $result_add = $MessageModel->mAdd($data);
-            if ($result_add) {
+            $resultAdd = $MessageModel->mAdd($data);
+            if ($resultAdd) {
                 $this->success(L('send') . L('success'), U('index'));
                 return;
             } else {
@@ -88,9 +88,9 @@ class Message extends Backend
             }
         }
 
-        if ($receive_id) {
+        if ($receiveId) {
             $MemberModel = D('Member');
-            $this->assign('receive_info', $MemberModel->mFind($receive_id));
+            $this->assign('receive_info', $MemberModel->mFind($receiveId));
         }
 
         $this->assign('title', L('send') . L('message'));
@@ -106,8 +106,8 @@ class Message extends Backend
         }
 
         $MessageModel = D('Message');
-        $result_del   = $MessageModel->mDel($id);
-        if ($result_del) {
+        $resultDel   = $MessageModel->mDel($id);
+        if ($resultDel) {
             $this->success(L('message') . L('del') . L('success'), U('index'));
             return;
         } else {
@@ -116,7 +116,7 @@ class Message extends Backend
     }
 
     //异步数据获取
-    protected function _get_data($field, $data)
+    protected function getData($field, $data)
     {
         $where  = array();
         $result = array('status' => true, 'info' => array());
@@ -125,18 +125,18 @@ class Message extends Backend
                 isset($data['inserted']) && $where['id']         = array('not in', $data['inserted']);
                 isset($data['keyword']) && $where['member_name'] = array('like', '%' . $data['keyword'] . '%');
                 $MemberModel                                     = D('Member');
-                $member_user_list                                = $MemberModel->mSelect($where);
-                foreach ($member_user_list as $member_user) {
-                    $result['info'][] = array('value' => $member_user['id'], 'html' => $member_user['member_name']);
+                $memberUserList                                = $MemberModel->mSelect($where);
+                foreach ($memberUserList as $memberUser) {
+                    $result['info'][] = array('value' => $memberUser['id'], 'html' => $memberUser['member_name']);
                 }
                 break;
             case 'read_message':
                 $MessageModel = D('Message');
-                $current_time = time();
+                $currentTime = time();
                 $where        = array('receive_id' => 0);
-                $result_edit  = $MessageModel->where($where)->mEdit($data['id'], array('receive_time' => $current_time));
-                if ($result_edit) {
-                    $result['info'] = date(C('SYS_DATE_DETAIL'), $current_time);
+                $resultEdit  = $MessageModel->where($where)->mEdit($data['id'], array('receive_time' => $currentTime));
+                if ($resultEdit) {
+                    $result['info'] = date(C('SYS_DATE_DETAIL'), $currentTime);
                 } else {
                     $result['status'] = false;
                 }

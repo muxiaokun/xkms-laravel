@@ -21,41 +21,44 @@ class Assess extends Backend
     {
         $AssessModel      = D('Assess');
         $MemberGroupModel = D('MemberGroup');
-        $where            = array();
+        $where            = [];
         //建立where
-        $v_value                          = '';
-        $v_value                          = I('title');
-        $v_value && $where['title']       = array('like', '%' . $v_value . '%');
-        $v_value                          = I('group_level');
-        $v_value && $where['group_level'] = $MemberGroupModel->where(array('name' => array('like', '%' . $v_value . '%')))->col_arr('id');
-        $v_value                          = M_mktime_range('start_time');
-        $v_value && $where['start_time']  = $v_value;
-        $v_value                          = I('is_enable');
-        $v_value && $where['is_enable']   = (1 == $v_value) ? 1 : 0;
+        $whereValue = '';
+        $whereValue = I('title');
+        $whereValue && $where['title'] = ['like', '%' . $whereValue . '%'];
+        $whereValue = I('group_level');
+        $whereValue && $where['group_level'] = $MemberGroupModel->where(['name' => ['like',
+            '%' . $whereValue . '%']])->mColumn2Array('id');
+        $whereValue = M_mktime_range('start_time');
+        $whereValue && $where['start_time'] = $whereValue;
+        $whereValue = I('is_enable');
+        $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $assess_list = $AssessModel->mSelect($where, true);
-        foreach ($assess_list as &$assess) {
+        $assessList = $AssessModel->mSelect($where, true);
+        foreach ($assessList as &$assess) {
             $assess['group_name'] = ($assess['group_level']) ? $MemberGroupModel->mFindColumn($assess['group_level'], 'name') : L('empty');
         }
-        $this->assign('assess_list', $assess_list);
-        $this->assign('assess_list_count', $AssessModel->getPageCount($where));
+        $this->assign('assess_list', $assessList);
+        $this->assign('assess_list_count', $AssessModel->mGetPageCount($where));
 
         //初始化where_info
-        $where_info                = array();
-        $where_info['title']       = array('type' => 'input', 'name' => L('title'));
-        $where_info['group_level'] = array('type' => 'input', 'name' => L('assess') . L('group'));
-        $where_info['start_time']  = array('type' => 'time', 'name' => L('add') . L('time'));
-        $where_info['is_enable']   = array('type' => 'select', 'name' => L('yes') . L('no') . L('enable'), 'value' => array(1 => L('enable'), 2 => L('disable')));
-        $this->assign('where_info', $where_info);
+        $whereInfo                = [];
+        $whereInfo['title']       = ['type' => 'input', 'name' => L('title')];
+        $whereInfo['group_level'] = ['type' => 'input', 'name' => L('assess') . L('group')];
+        $whereInfo['start_time']  = ['type' => 'time', 'name' => L('add') . L('time')];
+        $whereInfo['is_enable']   = ['type'  => 'select',
+                                     'name'  => L('yes') . L('no') . L('enable'),
+                                     'value' => [1 => L('enable'), 2 => L('disable')]];
+        $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batch_handle             = array();
-        $batch_handle['add']      = $this->_check_privilege('add');
-        $batch_handle['edit']     = $this->_check_privilege('edit');
-        $batch_handle['log_edit'] = $this->_check_privilege('edit', 'AssessLog');
-        $batch_handle['del']      = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batch_handle);
+        $batchHandle             = [];
+        $batchHandle['add']      = $this->_check_privilege('add');
+        $batchHandle['edit']     = $this->_check_privilege('edit');
+        $batchHandle['log_edit'] = $this->_check_privilege('edit', 'AssessLog');
+        $batchHandle['del']      = $this->_check_privilege('del');
+        $this->assign('batch_handle', $batchHandle);
 
         $this->assign('title', L('assess') . L('management'));
         $this->display();
@@ -66,10 +69,11 @@ class Assess extends Backend
     {
         if (IS_POST) {
             $AssessModel = D('Assess');
-            $data        = $this->_make_data();
-            $result_add  = $AssessModel->mAdd($data);
-            if ($result_add) {
+            $data        = $this->makeData();
+            $resultAdd   = $AssessModel->mAdd($data);
+            if ($resultAdd) {
                 $this->success(L('assess') . L('add') . L('success'), U('index'));
+
                 return;
             } else {
                 $this->error(L('assess') . L('add') . L('error'), U('add'));
@@ -90,21 +94,22 @@ class Assess extends Backend
 
         $AssessModel = D('Assess');
         if (IS_POST) {
-            $data        = $this->_make_data();
-            $result_edit = $AssessModel->mEdit($id, $data);
-            if ($result_edit) {
+            $data       = $this->makeData();
+            $resultEdit = $AssessModel->mEdit($id, $data);
+            if ($resultEdit) {
                 $this->success(L('assess') . L('edit') . L('success'), U('index'));
+
                 return;
             } else {
-                $error_go_link = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-                $this->error(L('assess') . L('edit') . L('error'), $error_go_link);
+                $errorGoLink = (is_array($id)) ? U('index') : U('edit', ['id' => $id]);
+                $this->error(L('assess') . L('edit') . L('error'), $errorGoLink);
             }
         }
 
-        $edit_info               = $AssessModel->mFind($id);
-        $MemberGroupModel        = D('MemberGroup');
-        $edit_info['group_name'] = $MemberGroupModel->mFindColumn($edit_info['group_level'], 'name');
-        $this->assign('edit_info', $edit_info);
+        $editInfo               = $AssessModel->mFind($id);
+        $MemberGroupModel       = D('MemberGroup');
+        $editInfo['group_name'] = $MemberGroupModel->mFindColumn($editInfo['group_level'], 'name');
+        $this->assign('edit_info', $editInfo);
 
         $this->assign('title', L('assess') . L('edit'));
         $this->display('addedit');
@@ -119,9 +124,10 @@ class Assess extends Backend
         }
 
         $AssessModel = D('Assess');
-        $result_del  = $AssessModel->mDel($id);
-        if ($result_del) {
+        $resultDel   = $AssessModel->mDel($id);
+        if ($resultDel) {
             $this->success(L('assess') . L('del') . L('success'), U('index'));
+
             return;
         } else {
             $this->error(L('assess') . L('del') . L('error'), U('index'));
@@ -129,18 +135,18 @@ class Assess extends Backend
     }
 
     //异步数据获取
-    protected function _get_data($field, $data)
+    protected function getData($field, $data)
     {
-        $where  = array();
-        $result = array('status' => true, 'info' => array());
+        $where  = [];
+        $result = ['status' => true, 'info' => []];
         switch ($field) {
             case 'group_level':
-                isset($data['inserted']) && $where['id']  = array('not in', $data['inserted']);
-                isset($data['keyword']) && $where['name'] = array('like', '%' . $data['keyword'] . '%');
-                $MemberGroupModel                         = D('MemberGroup');
-                $member_group_list                        = $MemberGroupModel->mSelect($where);
-                foreach ($member_group_list as $member_group) {
-                    $result['info'][] = array('value' => $member_group['id'], 'html' => $member_group['name']);
+                isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
+                isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
+                $MemberGroupModel  = D('MemberGroup');
+                $memberGroupList = $MemberGroupModel->mSelect($where);
+                foreach ($memberGroupList as $memberGroup) {
+                    $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
                 }
                 break;
         }
@@ -149,35 +155,36 @@ class Assess extends Backend
     }
 
     //构造数据
-    private function _make_data()
+    private function makeData()
     {
         //初始化参数
         $id            = I('get.id');
         $title         = I('title');
         $explains      = I('explains');
-        $group_level   = I('group_level');
-        $start_time    = I('start_time');
-        $end_time      = I('end_time');
-        $start_time    = M_mktime($start_time, true);
-        $end_time      = M_mktime($end_time, true);
-        $is_enable     = I('is_enable');
+        $groupLevel    = I('group_level');
+        $startTime     = I('start_time');
+        $endTime       = I('end_time');
+        $startTime     = M_mktime($startTime, true);
+        $endTime       = M_mktime($endTime, true);
+        $isEnable      = I('is_enable');
         $target        = I('target');
-        $ext_info      = array();
-        $grade_project = array();
+        $extInfo       = [];
+        $gradeProject = [];
         foreach (I('ext_info') as $value) {
-            $grade_project[] = json_decode(str_replace('&quot;', '"', $value), true);
+            $gradeProject[] = json_decode(str_replace('&quot;', '"', $value), true);
         }
-        $ext_info = json_encode($grade_project);
+        $extInfo = json_encode($gradeProject);
 
-        $data                                                                   = array();
-        ('add' == ACTION_NAME || null !== $title) && $data['title']             = $title;
-        ('add' == ACTION_NAME || null !== $explains) && $data['explains']       = $explains;
-        ('add' == ACTION_NAME || null !== $group_level) && $data['group_level'] = $group_level;
-        ('add' == ACTION_NAME || null !== $start_time) && $data['start_time']   = $start_time;
-        ('add' == ACTION_NAME || null !== $end_time) && $data['end_time']       = $end_time;
-        ('add' == ACTION_NAME || null !== $is_enable) && $data['is_enable']     = $is_enable;
-        ('add' == ACTION_NAME || null !== $target) && $data['target']           = $target;
-        ('add' == ACTION_NAME || null !== $ext_info) && $data['ext_info']       = $ext_info;
+        $data = [];
+        ('add' == ACTION_NAME || null !== $title) && $data['title'] = $title;
+        ('add' == ACTION_NAME || null !== $explains) && $data['explains'] = $explains;
+        ('add' == ACTION_NAME || null !== $groupLevel) && $data['group_level'] = $groupLevel;
+        ('add' == ACTION_NAME || null !== $startTime) && $data['start_time'] = $startTime;
+        ('add' == ACTION_NAME || null !== $endTime) && $data['end_time'] = $endTime;
+        ('add' == ACTION_NAME || null !== $isEnable) && $data['is_enable'] = $isEnable;
+        ('add' == ACTION_NAME || null !== $target) && $data['target'] = $target;
+        ('add' == ACTION_NAME || null !== $extInfo) && $data['ext_info'] = $extInfo;
+
         return $data;
     }
 }

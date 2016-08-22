@@ -7,19 +7,19 @@ class Quests extends Common
 {
     public function mSelect($where = null, $page = false)
     {
-        $this->getPage($page);
+        $this->mGetPage($page);
         !isset($this->options['order']) && $this->order('id desc');
         $data = $this->where($where)->select();
-        foreach ($data as &$data_row) {$this->decodeData($data_row);}
+        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
         return $data;
     }
 
-    protected function encodeData(&$data)
+    protected function mEncodeData(&$data)
     {
         isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
     }
 
-    protected function decodeData(&$data)
+    protected function mDecodeData(&$data)
     {
         isset($data['ext_info']) && $data['ext_info'] = unserialize($data['ext_info']);
     }

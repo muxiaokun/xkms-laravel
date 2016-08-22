@@ -25,36 +25,36 @@ class AdminLog extends Backend
         $where         = array();
 
         //建立where
-        $v_value                       = '';
-        $v_value                       = M_mktime_range('add_time');
-        $v_value && $where['add_time'] = $v_value;
-        $v_value                       = I('admin_id');
-        $v_value && $where['admin_id'] = array(
+        $whereValue                       = '';
+        $whereValue                       = M_mktime_range('add_time');
+        $whereValue && $where['add_time'] = $whereValue;
+        $whereValue                       = I('admin_id');
+        $whereValue && $where['admin_id'] = array(
             'in',
-            $AdminModel->where(array('admin_name' => array('like', '%' . $v_value . '%')))->col_arr('id'),
+            $AdminModel->where(array('admin_name' => array('like', '%' . $whereValue . '%')))->mColumn2Array('id'),
         );
-        $v_value                              = I('controller_name');
-        $v_value && $where['controller_name'] = $v_value;
+        $whereValue                              = I('controller_name');
+        $whereValue && $where['controller_name'] = $whereValue;
 
         //初始化翻页 和 列表数据
-        $admin_log_list = $AdminLogModel->mSelect($where, true);
-        foreach ($admin_log_list as &$admin_log) {
-            $admin_log['admin_name'] = $AdminModel->mFindColumn($admin_log['admin_id'], 'admin_name');
+        $adminLogList = $AdminLogModel->mSelect($where, true);
+        foreach ($adminLogList as &$adminLog) {
+            $adminLog['admin_name'] = $AdminModel->mFindColumn($adminLog['admin_id'], 'admin_name');
         }
-        $this->assign('admin_log_list', $admin_log_list);
-        $this->assign('admin_log_list_count', $AdminLogModel->getPageCount($where));
+        $this->assign('admin_log_list', $adminLogList);
+        $this->assign('admin_log_list_count', $AdminLogModel->mGetPageCount($where));
 
         //初始化where_info
-        $where_info                    = array();
-        $where_info['add_time']        = array('type' => 'time', 'name' => L('add') . L('time'));
-        $where_info['admin_id']        = array('type' => 'input', 'name' => L('admin') . L('name'));
-        $where_info['controller_name'] = array('type' => 'input', 'name' => L('controller') . L('name'));
-        $this->assign('where_info', $where_info);
+        $whereInfo                    = array();
+        $whereInfo['add_time']        = array('type' => 'time', 'name' => L('add') . L('time'));
+        $whereInfo['admin_id']        = array('type' => 'input', 'name' => L('admin') . L('name'));
+        $whereInfo['controller_name'] = array('type' => 'input', 'name' => L('controller') . L('name'));
+        $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batch_handle        = array();
-        $batch_handle['del'] = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batch_handle);
+        $batchHandle        = array();
+        $batchHandle['del'] = $this->_check_privilege('del');
+        $this->assign('batch_handle', $batchHandle);
 
         $this->assign('title', L('admin') . L('log') . L('management'));
         $this->display();
@@ -69,8 +69,8 @@ class AdminLog extends Backend
         }
 
         $AdminLogModel = D('AdminLog');
-        $result_del    = $AdminLogModel->mDel($id);
-        if ($result_del) {
+        $resultDel    = $AdminLogModel->mDel($id);
+        if ($resultDel) {
             $this->success(L('log') . L('del') . L('success'), U('index'));
         } else {
             $this->error(L('log') . L('del') . L('error'), U('index'));
@@ -85,8 +85,8 @@ class AdminLog extends Backend
         }
 
         $AdminLogModel = D('AdminLog');
-        $result_del    = $AdminLogModel->mDel_all();
-        if ($result_del) {
+        $resultDel    = $AdminLogModel->mDel_all();
+        if ($resultDel) {
             $this->success(L('log') . L('del') . L('success'), U('index'));
         } else {
             $this->error(L('log') . L('del') . L('error'), U('index'));

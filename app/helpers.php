@@ -21,8 +21,8 @@ function M_substr($str, $len, $suffix = true, $start = 0)
     $re['gbk']    = "/[\x01-\x7f]|[\x81-\xfe][\x40-\xfe]/";
     $re['big5']   = "/[\x01-\x7f]|[\x81-\xfe]([\x40-\x7e]|\xa1-\xfe])/";
     preg_match_all($re[$charset], $str, $match);
-    $str_len = ($match[0]) ? count($match[0]) : strlen($str);
-    if ($len > $str_len) {
+    $strLen = ($match[0]) ? count($match[0]) : strlen($str);
+    if ($len > $strLen) {
         return $str;
     } else {
         $slice = join("", array_slice($match[0], $start, $len));
@@ -32,36 +32,36 @@ function M_substr($str, $len, $suffix = true, $start = 0)
 
 //转换本系统的格式时间到时间戳
 //暂时只支持基本的格式YmdHis
-function M_mktime($date, $is_detail = false)
+function M_mktime($date, $isDetail = false)
 {
     if ('' === $date) {
         return $date;
     }
 
-    $date_format  = ($is_detail) ? C('SYS_DATE_DETAIL') : C('SYS_DATE');
-    $match_format = $date_format;
-    $str_search   = array('-', '[', ']', '(', ')', '^', '$');
-    $str_replace  = array('\-', '\[', '\]', '\(', '\)', '\^', '\$');
-    $match_format = '/' . str_replace($str_search, $str_replace, $match_format) . '/';
+    $dateFormat  = ($isDetail) ? C('SYS_DATE_DETAIL') : C('SYS_DATE');
+    $matchFormat = $dateFormat;
+    $strSearch   = array('-', '[', ']', '(', ')', '^', '$');
+    $strReplace  = array('\-', '\[', '\]', '\(', '\)', '\^', '\$');
+    $matchFormat = '/' . str_replace($strSearch, $strReplace, $matchFormat) . '/';
     //注意d 一定要放第一个 否则会和替换值重复
-    $date_search  = array('d', 'Y', 'm', 'H', 'i', 's');
-    $date_replace = array('(\d{2})', '(\d{4})', '(\d{2})', '(\d{2})', '(\d{2})', '(\d{2})');
+    $dateSearch  = array('d', 'Y', 'm', 'H', 'i', 's');
+    $dateReplace = array('(\d{2})', '(\d{4})', '(\d{2})', '(\d{2})', '(\d{2})', '(\d{2})');
     $pos          = array();
-    foreach ($date_search as $v) {
-        $pos[$v] = strpos($date_format, $v);
+    foreach ($dateSearch as $v) {
+        $pos[$v] = strpos($dateFormat, $v);
     }
-    $match_format = str_replace($date_search, $date_replace, $match_format);
+    $matchFormat = str_replace($dateSearch, $dateReplace, $matchFormat);
     asort($pos);
     $i       = 1;
-    $sub_pos = array();
+    $subPos = array();
     foreach ($pos as $k => $v) {
         if ($v !== false) {
-            $sub_pos[$k] = $i++;
+            $subPos[$k] = $i++;
         }
 
     }
-    $pos = $sub_pos;
-    if (preg_match($match_format, $date, $sub)) {
+    $pos = $subPos;
+    if (preg_match($matchFormat, $date, $sub)) {
         $time = mktime($sub[$pos['H']], $sub[$pos['i']], $sub[$pos['s']], $sub[$pos['m']], $sub[$pos['d']], $sub[$pos['Y']]);
     } else {
         $time = null;
@@ -70,39 +70,39 @@ function M_mktime($date, $is_detail = false)
 }
 
 //创建where_info中时间范围的数组
-function M_mktime_range($input_name)
+function M_mktime_range($inputName)
 {
-    $time_range = array();
-    $gt_time    = M_mktime(I($input_name . '_start'));
-    $lt_time    = M_mktime(I($input_name . '_end')) + 86400;
-    if (I($input_name . '_start') && 0 < $gt_time) {
-        $time_range[] = array('gt', $gt_time);
+    $timeRange = array();
+    $gtTime    = M_mktime(I($inputName . '_start'));
+    $ltTime    = M_mktime(I($inputName . '_end')) + 86400;
+    if (I($inputName . '_start') && 0 < $gtTime) {
+        $timeRange[] = array('gt', $gtTime);
     }
 
-    if (I($input_name . '_end') && 0 < $lt_time) {
-        $time_range[] = array('lt', $lt_time);
+    if (I($inputName . '_end') && 0 < $ltTime) {
+        $timeRange[] = array('lt', $ltTime);
     }
 
-    return $time_range;
+    return $timeRange;
 }
 
-function M_exists($url, $is_thumb = false)
+function M_exists($url, $isThumb = false)
 {
     if (!$url || !is_file($url)) {
-        $system_default = "Public/css/bimages/default.png";
+        $systemDefault = "Public/css/bimages/default.png";
         switch (MODULE_NAME) {
             case 'Home':
-                $url = C('SYS_DEFAULT_IMAGE', null, $system_default);
+                $url = C('SYS_DEFAULT_IMAGE', null, $systemDefault);
                 break;
             default:
-                $url = $system_default;
+                $url = $systemDefault;
         }
-    } elseif ($is_thumb) {
+    } elseif ($isThumb) {
         $pathinfo = pathinfo($url);
-        $new_name = $pathinfo['filename'] . '_thumb.' . $pathinfo['extension'];
-        $new_file = $pathinfo['dirname'] . '/' . $new_name;
-        if (is_file($new_file)) {
-            return $new_file;
+        $newName = $pathinfo['filename'] . '_thumb.' . $pathinfo['extension'];
+        $newFile = $pathinfo['dirname'] . '/' . $newName;
+        if (is_file($newFile)) {
+            return $newFile;
         }
 
     }
@@ -112,8 +112,8 @@ function M_exists($url, $is_thumb = false)
 // 获得字符串中的本站资源链接
 function M_get_content_upload($str)
 {
-    preg_match_all('/(&quot;|\')\s*(?!(http:\/\/|https:\/\/|ftp:\/\/))[^\1]*?(Uploads[^\1]*?)\1/i', $str, $upload_links);
-    return $upload_links[3];
+    preg_match_all('/(&quot;|\')\s*(?!(http:\/\/|https:\/\/|ftp:\/\/))[^\1]*?(Uploads[^\1]*?)\1/i', $str, $uploadLinks);
+    return $uploadLinks[3];
 }
 
 //将内容中的IMG标签替换成异步IMG标签
@@ -121,9 +121,9 @@ function M_sync_img($content)
 {
     $pattern = '/(<img.*?)\ssrc=([\'|\"])(.*?)\2(.*?\/?>)/i';
     $content = preg_replace_callback($pattern, function ($match) {
-        $new_element = base64_encode($match[1] . $match[4]);
+        $newElement = base64_encode($match[1] . $match[4]);
         $replacement = '<img src="' . M_exists(C('SYS_SYNC_IMAGE')) . '" ';
-        $replacement .= 'M_Img="' . $new_element . '" ';
+        $replacement .= 'M_Img="' . $newElement . '" ';
         $replacement .= 'M_img_src=' . $match[2] . $match[3] . $match[2] . ' />';
         return $replacement;
     }, $content);
@@ -135,10 +135,10 @@ function M_ckplayer($config)
 {
     $id           = $config['id'];
     $src          = $config['src'];
-    $path_info    = pathinfo($src);
-    $suffix       = $path_info['extension'];
-    $allow_suffix = array('flv', 'f4v', 'mp4', 'm3u8', 'webm', 'ogg', 'flv', 'f4v', 'mp4');
-    if (!$id || !$src || !in_array($suffix, $allow_suffix)) {
+    $pathInfo    = pathinfo($src);
+    $suffix       = $pathInfo['extension'];
+    $allowSuffix = array('flv', 'f4v', 'mp4', 'm3u8', 'webm', 'ogg', 'flv', 'f4v', 'mp4');
+    if (!$id || !$src || !in_array($suffix, $allowSuffix)) {
         return '';
     }
 
@@ -146,11 +146,11 @@ function M_ckplayer($config)
     $loop       = ($config['loop']) ? $config['loop'] : 2; //1repeat 2stop 2
     $volume     = ($config['volume']) ? $config['volume'] : 100; //0-100 100
     $autostart  = ($config['autostart']) ? $config['autostart'] : 2; //0stop 1play 2notload 2
-    $config_xml = ($config['right_close']) ? 'ckplayer_min.xml' : 'ckplayer.xml';
+    $configXml = ($config['right_close']) ? 'ckplayer_min.xml' : 'ckplayer.xml';
     return <<<EOF
 <script type="text/javascript" src="Public/ckplayer/ckplayer.js"></script>
 <script type="text/javascript">
-    var flashvars={f:<ntag url='{$src}' />,e:'{$loop}',v:'{$volume}',p:'{$autostart}',i:<ntag url='{$img}' />,c:1,x:'{$config_xml}'};
+    var flashvars={f:<ntag url='{$src}' />,e:'{$loop}',v:'{$volume}',p:'{$autostart}',i:<ntag url='{$img}' />,c:1,x:'{$configXml}'};
     CKobject.embed(<ntag url='Public/ckplayer/ckplayer.swf' />,'{$id}','','100%','100%',false,flashvars);
 </script>
 EOF;
@@ -159,21 +159,21 @@ EOF;
 //将内容中的视频替换成CKplayer
 //custom_id 自定义输出div id
 //jop=>just one player 只返回一个视频
-function M_content2ckplayer($content, $image, $custom_id = false, $jop = false)
+function M_content2ckplayer($content, $image, $customId = false, $jop = false)
 {
     if (!preg_match_all('/<embed.*?\/>/i', $content, $elements)) {
         return $content;
     }
 
-    $allow_suffix = array('flv', 'f4v', 'mp4', 'm3u8', 'webm', 'ogg', 'flv', 'f4v', 'mp4');
-    $attr_pattern = array(
-        '(\ssrc=(\'|")(.*?(' . implode('|', $allow_suffix) . '))\3)', //4
+    $allowSuffix = array('flv', 'f4v', 'mp4', 'm3u8', 'webm', 'ogg', 'flv', 'f4v', 'mp4');
+    $attrPattern = array(
+        '(\ssrc=(\'|")(.*?(' . implode('|', $allowSuffix) . '))\3)', //4
         '(\swidth=(\'|")(.*?)\7)', //8
         '(\sheight=(\'|")(.*?)\10)', //11
         '(\sautostart=(\'|")(.*?)\13)', //14
         '(\sloop=(\'|")(.*?)\16)', //17
     );
-    $pattern = '/(' . implode('|', $attr_pattern) . ')/i'; //1
+    $pattern = '/(' . implode('|', $attrPattern) . ')/i'; //1
     foreach ($elements[0] as $id => $element) {
         if (!preg_match_all($pattern, $element, $matches)) {
             continue;
@@ -186,30 +186,30 @@ function M_content2ckplayer($content, $image, $custom_id = false, $jop = false)
             $autostart = ('true' == $matches[14][3]) ? 1 : 2;
             $loop      = ('true' == $matches[17][4]) ? 1 : 2;
             $image     = M_exists($image);
-            $div_id    = ($custom_id) ? $custom_id : 'content2ckplayer_' . $id;
+            $divId    = ($customId) ? $customId : 'content2ckplayer_' . $id;
             if ($jop) {
                 $width  = '100%';
                 $height = '100%';
                 $id     = mt_rand();
             }
             $config = array(
-                'id'          => $div_id,
+                'id'          => $divId,
                 'src'         => $src,
                 'img'         => $image,
                 'autostart'   => $autostart,
                 'loop'        => $loop,
                 'right_close' => 'true',
             );
-            $M_tag = M_ckplayer($config);
-            if ('' != $M_tag) {
-                $re_content = 'span id="' . $div_id . '" style="display:block;margin:0 auto;';
-                $re_content .= 'width:' . $width . ';height:' . $height . ';" >' . $M_tag . '</span';
+            $MTag = M_ckplayer($config);
+            if ('' != $MTag) {
+                $reContent = 'span id="' . $divId . '" style="display:block;margin:0 auto;';
+                $reContent .= 'width:' . $width . ';height:' . $height . ';" >' . $MTag . '</span';
                 //替换时左右 <> 会被当成正则符号 所以默认返回内容缺少 <>
                 if ($jop) {
-                    return '<' . $re_content . '>';
+                    return '<' . $reContent . '>';
                 }
 
-                $content = preg_replace($element, $re_content, $content, 1);
+                $content = preg_replace($element, $reContent, $content, 1);
             }
         }
     }
@@ -224,14 +224,14 @@ function M_str2url($url)
     if ($url && preg_match('/^(\w*?:\/\/|javascript|#).*/', $url)) {
         return $url;
     } elseif ($url && preg_match('/^[\w\/]*?\??[\w=,]*?$/', $url)) {
-        $var_url           = explode('?', $url);
-        $var_url_array     = array();
-        $var_url_array_str = explode(',', $var_url[1]);
-        foreach ($var_url_array_str as $var_url_value) {
-            list($key, $value)   = explode('=', trim($var_url_value));
-            $var_url_array[$key] = $value;
+        $varUrl           = explode('?', $url);
+        $varUrlArray     = array();
+        $varUrlArrayStr = explode(',', $varUrl[1]);
+        foreach ($varUrlArrayStr as $varUrlValue) {
+            list($key, $value)   = explode('=', trim($varUrlValue));
+            $varUrlArray[$key] = $value;
         }
-        return M_U(trim($var_url[0]), $var_url_array);
+        return M_U(trim($varUrl[0]), $varUrlArray);
     } else {
         return ($url) ? '#' . $url : M_U();
     }
@@ -252,94 +252,94 @@ function M_in_array($target, $source)
     }
 }
 
-function M_attribute_arr($attribute, $cate_id = 0)
+function M_attribute_arr($attribute, $cateId = 0)
 {
-    $attr_strs = I('attr');
+    $attrStrs = I('attr');
     //清空非合法属性格式
-    if ($attr_strs && !preg_match('/^((\d+)(_(\d+))+-?)+$/', $attr_strs)) {
-        $attr_strs = '';
+    if ($attrStrs && !preg_match('/^((\d+)(_(\d+))+-?)+$/', $attrStrs)) {
+        $attrStrs = '';
     }
     $request                        = I();
-    $cate_id && $request['cate_id'] = $cate_id;
+    $cateId && $request['cate_id'] = $cateId;
     if (C('TOKEN_ON')) {
         unset($request[C('TOKEN_NAME', null, '__hash__')]);
     }
 
-    $cache_name  = 'M_attribute_arr' . serialize($attribute) . $attr_strs . serialize($request);
-    $cache_value = S($cache_name);
-    if ($cache_value && true !== APP_DEBUG) {
-        return $cache_value;
+    $cacheName  = 'M_attribute_arr' . serialize($attribute) . $attrStrs . serialize($request);
+    $cacheValue = S($cacheName);
+    if ($cacheValue && true !== APP_DEBUG) {
+        return $cacheValue;
     }
 
-    $validate_data = array();
+    $validateData = array();
     $key           = 0;
     foreach ($attribute as $values) {
-        $validate_data[$key] = count($values);
+        $validateData[$key] = count($values);
         ++$key;
     }
 
     //解析attr字符串 开始
-    $attr_value = array();
-    foreach (explode('-', $attr_strs) as $attr_str) {
-        $attr_arr = explode('_', $attr_str);
-        $k        = array_shift($attr_arr);
+    $attrValue = array();
+    foreach (explode('-', $attrStrs) as $attrStr) {
+        $attrArr = explode('_', $attrStr);
+        $k        = array_shift($attrArr);
         if ('' == $k) {
             continue;
         }
 
-        foreach ($attr_arr as $v) {
-            if (!preg_match('/_' . $value_key . '(?!\d)/', $data[$key]) && $v < $validate_data[$k]) {
-                $attr_value[$k] .= '_' . $v;
+        foreach ($attrArr as $v) {
+            if (!preg_match('/_' . $valueKey . '(?!\d)/', $data[$key]) && $v < $validateData[$k]) {
+                $attrValue[$k] .= '_' . $v;
             }
         }
-        isset($attr_value[$k]) && $attr_value[$k] = $k . $attr_value[$k];
+        isset($attrValue[$k]) && $attrValue[$k] = $k . $attrValue[$k];
     }
     //解析attr字符串 结束
 
-    $attribute_list = array();
+    $attributeList = array();
     $key            = 0;
     foreach ($attribute as $name => $values) {
         unset($request['attr']);
-        $data    = $attr_value;
+        $data    = $attrValue;
         $checked = !isset($data[$key]);
         if (!$checked) {
             unset($data[$key]);
         }
 
-        $data_str                     = implode('-', $data);
-        $data_str && $request['attr'] = $data_str;
-        $attribute_list[$key][]       = array(
+        $dataStr                     = implode('-', $data);
+        $dataStr && $request['attr'] = $dataStr;
+        $attributeList[$key][]       = array(
             'name'    => $name,
             'checked' => $checked,
             'link'    => $checked ? 'javascript:void(0);' : M_U('article_category', $request),
         );
-        foreach ($values as $value_key => $value) {
+        foreach ($values as $valueKey => $value) {
             unset($request['attr']);
-            $data    = $attr_value;
+            $data    = $attrValue;
             $checked = false;
-            if (!preg_match('/_' . $value_key . '(?!\d)/', $data[$key])) {
+            if (!preg_match('/_' . $valueKey . '(?!\d)/', $data[$key])) {
                 //添加参数
                 if (!isset($data[$key])) {
                     $data[$key] = $key;
                 }
 
-                $data[$key] .= '_' . $value_key;
+                $data[$key] .= '_' . $valueKey;
             } else {
                 //削减参数
                 $checked  = true;
-                $old_data = explode('_', preg_replace('/^' . $key . '_/', '', $data[$key]));
-                $new_data = array();
+                $oldData = explode('_', preg_replace('/^' . $key . '_/', '', $data[$key]));
+                $newData = array();
                 //BUG创建新数据时错误
-                array_walk($old_data, function ($v, $k) use ($value_key, &$new_data) {($v != $value_key) && $new_data[] = $v;});
-                if (0 < count($new_data)) {
-                    $data[$key] = $key . '_' . implode('_', $new_data);
+                array_walk($oldData, function ($v, $k) use ($valueKey, &$newData) {($v != $valueKey) && $newData[] = $v;});
+                if (0 < count($newData)) {
+                    $data[$key] = $key . '_' . implode('_', $newData);
                 } else {
                     unset($data[$key]);
                 }
             }
-            $data_str                     = implode('-', $data);
-            $data_str && $request['attr'] = $data_str;
-            $attribute_list[$key][]       = array(
+            $dataStr                     = implode('-', $data);
+            $dataStr && $request['attr'] = $dataStr;
+            $attributeList[$key][]       = array(
                 'name'    => $value,
                 'checked' => $checked,
                 'link'    => M_U('article_category', $request),
@@ -348,45 +348,45 @@ function M_attribute_arr($attribute, $cate_id = 0)
         ++$key;
     }
 
-    $cache_value = $attribute_list;
-    S($cache_name, $cache_value, C('SYS_TD_CACHE'));
+    $cacheValue = $attributeList;
+    S($cacheName, $cacheValue, C('SYS_TD_CACHE'));
 
-    return $attribute_list;
+    return $attributeList;
 }
 
 function M_attribute_where($attribute, $attr)
 {
-    $attr_strs = I('attr', $attr);
+    $attrStrs = I('attr', $attr);
     //清空非合法属性格式
-    if ($attr_strs && !preg_match('/^((\d+)(_(\d+))+-?)+$/', $attr_strs)) {
-        $attr_strs = '';
+    if ($attrStrs && !preg_match('/^((\d+)(_(\d+))+-?)+$/', $attrStrs)) {
+        $attrStrs = '';
     }
 
-    $cache_name  = 'M_attribute_arr' . serialize($attribute) . $attr_strs;
-    $cache_value = S($cache_name);
-    if ($cache_value && true !== APP_DEBUG) {
-        return $cache_value;
+    $cacheName  = 'M_attribute_arr' . serialize($attribute) . $attrStrs;
+    $cacheValue = S($cacheName);
+    if ($cacheValue && true !== APP_DEBUG) {
+        return $cacheValue;
     }
 
     $where      = array();
-    $attr_value = array();
-    foreach (explode('-', $attr_strs) as $attr_str) {
-        $attr_arr = explode('_', $attr_str);
-        $k        = array_shift($attr_arr);
+    $attrValue = array();
+    foreach (explode('-', $attrStrs) as $attrStr) {
+        $attrArr = explode('_', $attrStr);
+        $k        = array_shift($attrArr);
         if ('' == $k) {
             continue;
         }
 
-        $attr_value[$k];
-        foreach ($attr_arr as $v) {
-            $attr_value[$k][$v] = $v;
+        $attrValue[$k];
+        foreach ($attrArr as $v) {
+            $attrValue[$k][$v] = $v;
         }
     }
     $key = 0;
     foreach ($attribute as $name => $values) {
         $twhere = array();
-        foreach ($values as $value_key => $value) {
-            if (isset($attr_value[$key][$value_key])) {
+        foreach ($values as $valueKey => $value) {
+            if (isset($attrValue[$key][$valueKey])) {
                 $twhere[] = $name . ":" . $value;
             }
         }
@@ -394,13 +394,13 @@ function M_attribute_where($attribute, $attr)
         ++$key;
     }
 
-    $cache_value = $where;
-    S($cache_name, $cache_value, C('SYS_TD_CACHE'));
+    $cacheValue = $where;
+    S($cacheName, $cacheValue, C('SYS_TD_CACHE'));
 
     return $where;
 }
 
-function M_date($timestamp, $format, $to_zh = false)
+function M_date($timestamp, $format, $toZh = false)
 {
     if (!$timestamp) {
         return '';
@@ -408,7 +408,7 @@ function M_date($timestamp, $format, $to_zh = false)
 
     !$format && $format = C('SYS_DATE_DETAIL');
     $date               = date($format, $timestamp);
-    if ($to_zh) {
+    if ($toZh) {
         $date = str_replace(array(
             'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday',
             'January', 'February', 'March', 'April', 'May', 'June', 'July',
@@ -433,20 +433,20 @@ function M_iptoadd($ip, $type = 0)
     }
 
     $IpLocation = new \Org\Net\IpLocation('../../../../Public/UTFWry.dat');
-    $ip_info    = $IpLocation->getlocation($ip);
-    $re_str     = '';
+    $ipInfo    = $IpLocation->getlocation($ip);
+    $reStr     = '';
     switch ($type) {
         case 1:
-            $ip_info['country'];
+            $ipInfo['country'];
             break;
         case 2:
-            $ip_info['area'];
+            $ipInfo['area'];
             break;
         default:
-            $re_str .= $ip_info['country'] . ' ' . $ip_info['area'];
+            $reStr .= $ipInfo['country'] . ' ' . $ipInfo['area'];
     }
-    $re_str = mb_convert_encoding($re_str, 'utf-8', array('gbk', 'utf-8'));
-    return $re_str;
+    $reStr = mb_convert_encoding($reStr, 'utf-8', array('gbk', 'utf-8'));
+    return $reStr;
 }
 
 /*
@@ -462,26 +462,26 @@ function M_qrcode($data, $level = 'H', $size = 10, $margin = 0)
         return M_exists();
     }
 
-    $data_md5 = 'QRcode_' . md5($data . $level . $size . $margin);
-    $png_data = S($data_md5);
-    if (!$png_data) {
+    $dataMd5 = 'QRcode_' . md5($data . $level . $size . $margin);
+    $pngData = S($dataMd5);
+    if (!$pngData) {
         $QRcode   = new \Common\Lib\QRcode();
-        $png_path = TEMP_PATH . md5($data_md5) . '.png';
-        $QRcode->png($data, $png_path, $level, $size, $margin);
-        $png_data = file_get_contents($png_path);
-        @unlink($png_path);
-        S($data_md5, $png_data);
+        $pngPath = TEMP_PATH . md5($dataMd5) . '.png';
+        $QRcode->png($data, $pngPath, $level, $size, $margin);
+        $pngData = file_get_contents($pngPath);
+        @unlink($pngPath);
+        S($dataMd5, $pngData);
     }
-    return U('Home/Index/cache', array('type' => 'qrcode', 'id' => $data_md5));
+    return U('Home/Index/cache', array('type' => 'qrcode', 'id' => $dataMd5));
 }
 
 // 构造Page html 必须放在公共函数中 配合ViewFilterBehavior
 function M_page($config)
 {
-    $max_row   = ($config['max_row']) ? $config['max_row'] : C('SYS_MAX_ROW');
-    $count_row = ($config['count_row']) ? $config['count_row'] : 0;
+    $maxRow   = ($config['max_row']) ? $config['max_row'] : C('SYS_MAX_ROW');
+    $countRow = ($config['count_row']) ? $config['count_row'] : 0;
     $roll      = ($config['roll']) ? $config['roll'] : 5;
-    if ($max_row >= $count_row) {
+    if ($maxRow >= $countRow) {
         return '';
     }
     $parameter = I('', '', 'urlencode');
@@ -489,7 +489,7 @@ function M_page($config)
         unset($parameter[C('TOKEN_NAME')]);
     }
 
-    $Page           = new \Think\Page($count_row, $max_row, $parameter);
+    $Page           = new \Think\Page($countRow, $maxRow, $parameter);
     $Page->rollPage = $roll;
     $Page->setConfig('header', '<span class="rows">' . L('inall') . ' %TOTAL_ROW% ' . L('inall') . L('item') . '</span>');
     $Page->setConfig('prev', L('previous') . L('page'));
@@ -499,18 +499,18 @@ function M_page($config)
     $Page->setConfig('theme', '%HEADER% %FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END%');
 
     unset($parameter['p']);
-    $input_jump_link                             = U(ACTION_NAME, $parameter);
-    !isset($config['preg_njump']) && $input_jump = <<<EOF
+    $inputJumpLink                             = U(ACTION_NAME, $parameter);
+    !isset($config['preg_njump']) && $inputJump = <<<EOF
     <div class="fr">
-        <form class="form-inline" action="{$input_jump_link}">
-            <input class="form-control w80" type="text" name="p" onKeyup="M_in_int_range(this,1,{$count_row});" />
+        <form class="form-inline" action="{$inputJumpLink}">
+            <input class="form-control w80" type="text" name="p" onKeyup="M_in_int_range(this,1,{$countRow});" />
             <button class="btn btn-default" type="submit" >GO</button>
         </form>
     </div>
 EOF;
     //默认的翻页样式
     $replacement = array(
-        'preg_div'     => '<ul class="pagination">' . $input_jump . '\1</ul>',
+        'preg_div'     => '<ul class="pagination">' . $inputJump . '\1</ul>',
         'preg_a'       => '<li>\1</li>',
         'preg_current' => '<li class="active"><a>\1</a></li>',
         'preg_rows'    => '<li><a>\1</a></li>',
@@ -519,13 +519,13 @@ EOF;
     isset($config['preg_a']) && $replacement['preg_a']             = $config['preg_a'];
     isset($config['preg_current']) && $replacement['preg_current'] = $config['preg_current'];
     isset($config['preg_rows']) && $replacement['preg_rows']       = $config['preg_rows'];
-    $page_str                                                      = $Page->show();
-    $page_str                                                      = preg_replace('/<div>(.*)<\/div>/', $replacement['preg_div'], $page_str);
-    $page_str                                                      = preg_replace('/(<a[^<]+<\/a>)/', $replacement['preg_a'], $page_str);
-    $page_str                                                      = preg_replace('/<span class\=\"current.+>([^<]+)<\/span>/', $replacement['preg_current'], $page_str);
-    $page_str                                                      = preg_replace('/<span class\=\"rows.+>([^<]+)<\/span>/', $replacement['preg_rows'], $page_str);
+    $pageStr                                                      = $Page->show();
+    $pageStr                                                      = preg_replace('/<div>(.*)<\/div>/', $replacement['preg_div'], $pageStr);
+    $pageStr                                                      = preg_replace('/(<a[^<]+<\/a>)/', $replacement['preg_a'], $pageStr);
+    $pageStr                                                      = preg_replace('/<span class\=\"current.+>([^<]+)<\/span>/', $replacement['preg_current'], $pageStr);
+    $pageStr                                                      = preg_replace('/<span class\=\"rows.+>([^<]+)<\/span>/', $replacement['preg_rows'], $pageStr);
 
-    return $page_str;
+    return $pageStr;
 }
 
 //扫描模板
@@ -533,7 +533,7 @@ function M_scan_template($name, $module, $controller)
 {
     $dir = APP_PATH . $module . '/' . C('DEFAULT_V_LAYER') . '/';
     C('DEFAULT_THEME') && $dir .= C('DEFAULT_THEME') . '/';
-    $theme_info = F('theme_info', '', $dir);
+    $themeInfo = F('theme_info', '', $dir);
 
     if ('/' == C('TMPL_FILE_DEPR')) {
         $dir .= $controller . '/';
@@ -541,40 +541,40 @@ function M_scan_template($name, $module, $controller)
     } else {
         $preg = '/^' . $controller . '_' . $name . '_(\w*)\./';
     }
-    $template_list = array();
+    $templateList = array();
     $dirs          = scandir($dir);
     foreach ($dirs as $file) {
         if (preg_match($preg, $file, $match)) {
             $template = array('value' => $match[1]);
-            if ($theme_info[md5($file)]) {
-                $template['name'] = $theme_info[md5($file)]['name'];
+            if ($themeInfo[md5($file)]) {
+                $template['name'] = $themeInfo[md5($file)]['name'];
             } else {
                 $template['name'] = $match[1];
             }
-            $template_list[] = $template;
+            $templateList[] = $template;
         }
     }
-    return $template_list;
+    return $templateList;
 }
 
 //生成处理url的preg
 function M_get_urlpreg($prefix = '')
 {
-    $preg_root = '((\.\.\/){0,})(?!';
-    $preg_root .= (__ROOT__) ? str_replace('/', '\/', __ROOT__) : '\/';
-    $preg_root .= '|#|\w*:)';
+    $pregRoot = '((\.\.\/){0,})(?!';
+    $pregRoot .= (__ROOT__) ? str_replace('/', '\/', __ROOT__) : '\/';
+    $pregRoot .= '|#|\w*:)';
     $urlpreg['pattern'] = array(
-        '/(<a.*?\shref=)([\'|\"])' . $preg_root . '(.*?)\2(.*?>)/is',
-        '/(<script.*?\ssrc=)([\'|\"])' . $preg_root . '(.*?)\2(.*?>)/is',
-        '/(<link.*?\shref=)([\'|\"])' . $preg_root . '(.*?)\2(.*?\/?>)/is',
-        '/(<img.*?\ssrc=)([\'|\"])' . $preg_root . '(.*?)\2(.*?\/?>)/is',
-        '/(url\()([\'|\"]?)' . $preg_root . '(.*?)\2(.*?\))/is',
-        '/(<embed.*?\ssrc=)([\'|\"])' . $preg_root . '(.*?)\2(.*?\/?>)/is',
+        '/(<a.*?\shref=)([\'|\"])' . $pregRoot . '(.*?)\2(.*?>)/is',
+        '/(<script.*?\ssrc=)([\'|\"])' . $pregRoot . '(.*?)\2(.*?>)/is',
+        '/(<link.*?\shref=)([\'|\"])' . $pregRoot . '(.*?)\2(.*?\/?>)/is',
+        '/(<img.*?\ssrc=)([\'|\"])' . $pregRoot . '(.*?)\2(.*?\/?>)/is',
+        '/(url\()([\'|\"]?)' . $pregRoot . '(.*?)\2(.*?\))/is',
+        '/(<embed.*?\ssrc=)([\'|\"])' . $pregRoot . '(.*?)\2(.*?\/?>)/is',
         //分割注视 上：html 下:自定义的
         //异步加载图片功能
-        '/(<img.*?\sM_img_src=)([\'|\"])' . $preg_root . '(.*?)\2(.*?\/?>)/is',
+        '/(<img.*?\sM_img_src=)([\'|\"])' . $pregRoot . '(.*?)\2(.*?\/?>)/is',
         //处理获得src
-        '/(.?)<ntag.*?\surl=([\'|\"])' . $preg_root . '(.*?)\2.*?\/?>(.?)/is',
+        '/(.?)<ntag.*?\surl=([\'|\"])' . $pregRoot . '(.*?)\2.*?\/?>(.?)/is',
     );
     $urlpreg['replacement'] = '\1\2' . $prefix . '\5\2\6';
     return $urlpreg;

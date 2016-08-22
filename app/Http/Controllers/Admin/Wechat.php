@@ -22,31 +22,31 @@ class Wechat extends Backend
         $WechatModel                      = D('Wechat');
         $MemberModel                      = D('Member');
         $where                            = array();
-        $v_value                          = I('member_name');
-        $v_value && $where['member_name'] = $v_value;
-        $v_value                          = M_mktime_range('bind_time');
-        $v_value && $where['bind_time']   = $v_value;
+        $whereValue                          = I('member_name');
+        $whereValue && $where['member_name'] = $whereValue;
+        $whereValue                          = M_mktime_range('bind_time');
+        $whereValue && $where['bind_time']   = $whereValue;
 
         //初始化翻页 和 列表数据
-        $wechat_list = $WechatModel->mSelect($where, true);
-        foreach ($wechat_list as &$wechat) {
+        $wechatList = $WechatModel->mSelect($where, true);
+        foreach ($wechatList as &$wechat) {
             $wechat['member_name'] = $MemberModel->mFindColumn($wechat['member_id'], 'member_name');
         }
-        $this->assign('wechat_list', $wechat_list);
-        $this->assign('wechat_list_count', $WechatModel->getPageCount($where));
+        $this->assign('wechat_list', $wechatList);
+        $this->assign('wechat_list_count', $WechatModel->mGetPageCount($where));
 
         //初始化where_info
-        $where_info                = array();
-        $where_info['member_name'] = array('type' => 'input', 'name' => L('member') . L('name'));
-        $where_info['bind_time']   = array('type' => 'time', 'name' => L('bind') . L('time'));
-        $this->assign('where_info', $where_info);
+        $whereInfo                = array();
+        $whereInfo['member_name'] = array('type' => 'input', 'name' => L('member') . L('name'));
+        $whereInfo['bind_time']   = array('type' => 'time', 'name' => L('bind') . L('time'));
+        $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batch_handle         = array();
-        $batch_handle['add']  = $this->_check_privilege('add');
-        $batch_handle['edit'] = $this->_check_privilege('edit');
-        $batch_handle['del']  = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batch_handle);
+        $batchHandle         = array();
+        $batchHandle['add']  = $this->_check_privilege('add');
+        $batchHandle['edit'] = $this->_check_privilege('edit');
+        $batchHandle['del']  = $this->_check_privilege('del');
+        $this->assign('batch_handle', $batchHandle);
 
         $this->assign('title', L('wechat') . L('management'));
         $this->display();
@@ -71,10 +71,10 @@ class Wechat extends Backend
 
         //认证连接
         $Wechat   = new \Common\Lib\Wechat();
-        $Api_link = 'http://' . $_SERVER['SERVER_NAME'] . U(C('DEFAULT_MODULE') . '/Wechat/member_bind');
-        $this->assign('Api_link', $Api_link);
-        $Oauth2_link = $Wechat->Oauth2_enlink($Api_link);
-        $this->assign('Oauth2_link', $Oauth2_link);
+        $ApiLink = 'http://' . $_SERVER['SERVER_NAME'] . U(C('DEFAULT_MODULE') . '/Wechat/member_bind');
+        $this->assign('Api_link', $ApiLink);
+        $Oauth2Link = $Wechat->Oauth2_enlink($ApiLink);
+        $this->assign('Oauth2_link', $Oauth2Link);
 
         $this->assign('title', L('config') . L('wechat'));
         $this->display();
@@ -89,44 +89,44 @@ class Wechat extends Backend
         }
 
         if (!APP_DEBUG) {
-            $template_id_short = C('WECHAT_TEMPLATE_ID');
-            if (!$template_id_short) {
+            $templateIdShort = C('WECHAT_TEMPLATE_ID');
+            if (!$templateIdShort) {
                 $this->error('WECHAT_TEMPLATE_ID' . L('empty'), U('config'));
             }
 
         }
         $WechatModel              = D('Wechat');
-        $edit_info                = $WechatModel->mFind($id);
+        $editInfo                = $WechatModel->mFind($id);
         $MemberModel              = D('Member');
-        $edit_info['member_name'] = $MemberModel->mFindColumn($edit_info['member_id'], 'member_name');
-        $this->assign('edit_info', $edit_info);
+        $editInfo['member_name'] = $MemberModel->mFindColumn($editInfo['member_id'], 'member_name');
+        $this->assign('edit_info', $editInfo);
         if (IS_POST) {
-            $error_go_link = U('edit', array('id' => $id));
+            $errorGoLink = U('edit', array('id' => $id));
             $Wechat        = new \Common\Lib\Wechat();
-            $access_token  = $Wechat->get_access_token();
+            $accessToken  = $Wechat->get_access_token();
             if (!APP_DEBUG) {
-                $template_id = $Wechat->get_template($template_id_short);
-                if (0 != $template_id['errcode']) {
-                    $this->error('template_id' . L('error'), $error_go_link);
+                $templateId = $Wechat->get_template($templateIdShort);
+                if (0 != $templateId['errcode']) {
+                    $this->error('template_id' . L('error'), $errorGoLink);
                 }
 
-                $template_id = $template_id['template_id'];
+                $templateId = $templateId['template_id'];
             } else {
-                $template_id = 'LDB2O9YxLivGqFr-ihZt8EcXf7QlRIH4yRA7kIHlPq4';
+                $templateId = 'LDB2O9YxLivGqFr-ihZt8EcXf7QlRIH4yRA7kIHlPq4';
             }
             $data = array(
-                "touser"      => $edit_info['openid'],
-                "template_id" => $template_id,
+                "touser"      => $editInfo['openid'],
+                "template_id" => $templateId,
                 "url"         => "http://ms.xjhywh.cn",
                 "topcolor"    => "#000000",
             );
-            $data['data'] = $this->_make_data();
-            $put_template = $Wechat->put_template($data);
-            if (0 === $put_template['errcode']) {
+            $data['data'] = $this->makeData();
+            $putTemplate = $Wechat->put_template($data);
+            if (0 === $putTemplate['errcode']) {
                 $this->success(L('wechat') . L('send') . L('success'), U('Wechat/index'));
                 return;
             } else {
-                $this->error(L('wechat') . L('send') . L('error') . L('error' . $put_template['errcode']), $error_go_link);
+                $this->error(L('wechat') . L('send') . L('error') . L('error' . $putTemplate['errcode']), $errorGoLink);
             }
         }
 
@@ -143,8 +143,8 @@ class Wechat extends Backend
         }
 
         $WechatModel = D('Wechat');
-        $result_del  = $WechatModel->mDel($id);
-        if ($result_del) {
+        $resultDel  = $WechatModel->mDel($id);
+        if ($resultDel) {
             $this->success(L('wechat') . L('bind') . L('del') . L('success'), U('Wechat/index'));
             return;
         } else {
@@ -153,22 +153,22 @@ class Wechat extends Backend
     }
 
     //构造数据
-    private function _make_data()
+    private function makeData()
     {
-        $start_content       = I('start_content');
-        $start_content_color = I('start_content_color');
-        $end_content         = I('end_content');
-        $end_content_color   = I('end_content_color');
+        $startContent       = I('start_content');
+        $startContentColor = I('start_content_color');
+        $endContent         = I('end_content');
+        $endContentColor   = I('end_content_color');
         $content1            = I('content1');
-        $content1_color      = I('content1_color');
+        $content1Color      = I('content1_color');
         $content2            = I('content2');
-        $content2_color      = I('content2_color');
+        $content2Color      = I('content2_color');
 
         $data = array(
-            'first'    => array('value' => $start_content, 'color' => $start_content_color),
-            'keyword1' => array('value' => $content1, 'color' => $content1_color),
-            'keyword2' => array('value' => $content2, 'color' => $content2_color),
-            'remark'   => array('value' => $end_content, 'color' => $end_content_color),
+            'first'    => array('value' => $startContent, 'color' => $startContentColor),
+            'keyword1' => array('value' => $content1, 'color' => $content1Color),
+            'keyword2' => array('value' => $content2, 'color' => $content2Color),
+            'remark'   => array('value' => $endContent, 'color' => $endContentColor),
         );
 
         return $data;

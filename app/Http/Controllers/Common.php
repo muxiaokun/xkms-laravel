@@ -18,8 +18,8 @@ class Common extends Controller
     {
         //没有安装，跳转到安装页
         $privilege    = F('privilege');
-        $allow_module = array('Install');
-        if (!$privilege && !in_array(MODULE_NAME, $allow_module)) {
+        $allowModule = array('Install');
+        if (!$privilege && !in_array(MODULE_NAME, $allowModule)) {
             $this->error(L('please') . L('install') . APP_NAME, U('Install/Index/index'));
         }
         //保存表单验证错误之前的GET
@@ -68,21 +68,21 @@ class Common extends Controller
             return;
         }
 
-        $echo_cache = '';
+        $echoCache = '';
         //解决文件出现Byte Order Mark  BOM
         //ob_clean();
         switch ($type) {
             case 'qrcode':
                 header('Content-Type:image/png');
-                $echo_cache = $cache;
+                $echoCache = $cache;
                 break;
         }
-        echo $echo_cache;
+        echo $echoCache;
         return;
     }
 
     //生成验证码
-    public function verify_img()
+    public function verifyImg()
     {
         $config = array(
             'expire'   => 300, // 验证码的有效期（秒）
@@ -113,7 +113,7 @@ class Common extends Controller
     }
 
     //检查验证码是否正确
-    protected function _verify_check($code, $t = '')
+    protected function verifyCheck($code, $t = '')
     {
         $Verify = new \Think\Verify();
         $id     = MODULE_NAME . CONTROLLER_NAME;
@@ -127,47 +127,47 @@ class Common extends Controller
     //生成中文拼音首字母缩写
     protected function _zh2py($str)
     {
-        $M_zh2py = new \Common\Lib\M_zh2py();
-        return $M_zh2py->encode($str, false);
+        $MZh2py = new \Common\Lib\M_zh2py();
+        return $MZh2py->encode($str, false);
     }
 
     //生成缩略图 是源文件名后加 thumb
-    protected function _image_thumb($file, $width = 195, $height = 120)
+    protected function imageThumb($file, $width = 195, $height = 120)
     {
         if (!is_file($file) || !$width || !$height) {
             return '';
         }
 
         $pathinfo = pathinfo($file);
-        $new_name = $pathinfo['filename'] . '_thumb.' . $pathinfo['extension'];
-        $new_file = $pathinfo['dirname'] . '/' . $new_name;
+        $newName = $pathinfo['filename'] . '_thumb.' . $pathinfo['extension'];
+        $newFile = $pathinfo['dirname'] . '/' . $newName;
         //保证只生成一个缩略图
-        if (false !== strpos($file, $new_name)) {
-            $new_file = $file;
+        if (false !== strpos($file, $newName)) {
+            $newFile = $file;
         }
 
         //如果文件不存在就生成
-        if (!is_file($new_file)) {
+        if (!is_file($newFile)) {
             $Image = new \Think\Image();
             $Image->open($file);
-            $Image->thumb($width, $height)->save($new_file);
+            $Image->thumb($width, $height)->save($newFile);
         }
 
         //如果记录不存在 追加新生成文件的记录
         $ManageUploadModel = D('ManageUpload');
-        $file_info         = $ManageUploadModel->mFind($new_file, true);
-        if (!$file_info) {
+        $fileInfo         = $ManageUploadModel->mFind($newFile, true);
+        if (!$fileInfo) {
             $data = array(
-                'name'   => $new_name,
-                'path'   => $new_file,
-                'size'   => filesize($new_file),
+                'name'   => $newName,
+                'path'   => $newFile,
+                'size'   => filesize($newFile),
                 'mime'   => '',
                 'suffix' => $pathinfo['extension'],
             );
             $ManageUploadModel->mAdd($data);
         }
 
-        return $new_file;
+        return $newFile;
     }
 
     //Ajax 接口
@@ -177,25 +177,25 @@ class Common extends Controller
             return;
         }
 
-        $current_action = get_class_methods($this);
+        $currentAction = get_class_methods($this);
         switch (I('type')) {
             case 'validform':
-                if (!in_array('_validform', $current_action)) {
+                if (!in_array('doValidateForm', $currentAction)) {
                     $this->error(L('none') . L('ajax') . 'validform API');
                 }
-                $result = $this->_validform(I('field'), I('data'));
+                $result = $this->doValidateForm(I('field'), I('data'));
                 break;
             case 'line_edit':
-                if (!$this->_check_privilege('edit') || !in_array('_line_edit', $current_action)) {
+                if (!$this->_check_privilege('edit') || !in_array('_line_edit', $currentAction)) {
                     $this->error(L('none') . L('ajax') . L('edit'));
                 }
                 $result = $this->_line_edit(I('field'), I('data'));
                 break;
             case 'get_data':
-                if (!in_array('_get_data', $current_action)) {
+                if (!in_array('getData', $currentAction)) {
                     $this->error(L('none') . L('ajax') . 'get_data API');
                 }
-                $result = $this->_get_data(I('field'), I('data'));
+                $result = $this->getData(I('field'), I('data'));
                 break;
             case 'zh2py':
                 $result           = array();
@@ -211,32 +211,32 @@ class Common extends Controller
     }
 
     //登录功能
-    protected function _login($user_name, $password)
+    protected function doLogin($userName, $password)
     {}
     //登出功能
-    protected function _logout()
+    protected function doLogout()
     {}
     //是否登录的接口
-    protected function _is_login()
+    protected function isLogin()
     {}
 
     //获取权限数据
-    protected function _get_privilege($module, $contrast = false)
+    protected function getPrivilege($module, $contrast = false)
     {
         if (!in_array($module, array('Admin', 'Home'))) {
             return array();
         }
 
-        $privilege_old = F('privilege');
+        $privilegeOld = F('privilege');
         $privilege     = array();
-        foreach ($privilege_old[$module] as $controllers_name => $controllers) {
-            foreach ($controllers as $controller_name => $controller) {
-                foreach ($controller as $action_name => $action) {
-                    if (is_array($contrast) && (!in_array('all', $contrast) && !in_array($controller_name . "_" . $action_name, $contrast))) {
+        foreach ($privilegeOld[$module] as $controllersName => $controllers) {
+            foreach ($controllers as $controllerName => $controller) {
+                foreach ($controller as $actionName => $action) {
+                    if (is_array($contrast) && (!in_array('all', $contrast) && !in_array($controllerName . "_" . $actionName, $contrast))) {
                         continue;
                     }
 
-                    $privilege[$controllers_name][$controller_name][$action_name] = $action;
+                    $privilege[$controllersName][$controllerName][$actionName] = $action;
                 }
             }
         }
@@ -246,8 +246,8 @@ class Common extends Controller
     //调用 404 的默认控制器和默认方法
     public function _empty()
     {
-        $Empty_Controller = A('Common/CommonEmpty');
-        $Empty_Controller->_empty();
+        $EmptyController = A('Common/CommonEmpty');
+        $EmptyController->_empty();
     }
 
     //检查权限默认方法
@@ -257,23 +257,23 @@ class Common extends Controller
     }
 
     //输出页面提示
-    protected function show_confirm($lang)
+    protected function showConfirm($lang)
     {
         if ('yes' == I('confirm')) {
             return true;
         }
 
         //防止缓存
-        $current_time = time();
-        $html_str     = <<< EOF
+        $currentTime = time();
+        $htmlStr     = <<< EOF
 <script type='text/javascript'>
-    //{$current_time}
+    //{$currentTime}
    (function(){
        M_confirm('{$lang}?','{:U('',array('confirm'=>'yes'))}',true);
    })();
 </script>
 EOF;
-        $this->show($html_str);
+        $this->show($htmlStr);
         return false;
     }
 

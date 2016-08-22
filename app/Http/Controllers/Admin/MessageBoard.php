@@ -23,28 +23,28 @@ class MessageBoard extends Backend
         $where             = array();
 
         //建立where
-        $v_value                   = '';
-        $v_value                   = I('name');
-        $v_value && $where['name'] = array('like', '%' . $v_value . '%');
+        $whereValue                   = '';
+        $whereValue                   = I('name');
+        $whereValue && $where['name'] = array('like', '%' . $whereValue . '%');
 
-        $message_board_list = $MessageBoardModel->mSelect($where, true);
-        foreach ($message_board_list as &$message_board) {
+        $messageBoardList = $MessageBoardModel->mSelect($where, true);
+        foreach ($messageBoardList as &$messageBoard) {
             $option = array();
-            foreach ($message_board['config'] as $name => $value) {
+            foreach ($messageBoard['config'] as $name => $value) {
                 $option[] = $name;
             }
-            $message_board['option'] = M_substr(implode(',', $option), 40);
+            $messageBoard['option'] = M_substr(implode(',', $option), 40);
         }
-        $this->assign('message_board_list', $message_board_list);
-        $this->assign('message_board_list_count', $MessageBoardModel->getPageCount($where));
+        $this->assign('message_board_list', $messageBoardList);
+        $this->assign('message_board_list_count', $MessageBoardModel->mGetPageCount($where));
 
         //初始化batch_handle
-        $batch_handle              = array();
-        $batch_handle['log_index'] = $this->_check_privilege('index', 'MessageBoardLog');
-        $batch_handle['add']       = $this->_check_privilege('add');
-        $batch_handle['edit']      = $this->_check_privilege('edit');
-        $batch_handle['del']       = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batch_handle);
+        $batchHandle              = array();
+        $batchHandle['log_index'] = $this->_check_privilege('index', 'MessageBoardLog');
+        $batchHandle['add']       = $this->_check_privilege('add');
+        $batchHandle['edit']      = $this->_check_privilege('edit');
+        $batchHandle['del']       = $this->_check_privilege('del');
+        $this->assign('batch_handle', $batchHandle);
 
         $this->assign('title', L('messageboard') . L('management'));
         $this->display();
@@ -54,11 +54,11 @@ class MessageBoard extends Backend
     public function add()
     {
         if (IS_POST) {
-            $data              = $this->_make_data();
+            $data              = $this->makeData();
             $MessageBoardModel = D('MessageBoard');
-            $result_add        = $MessageBoardModel->mAdd($data);
-            if ($result_add) {
-                $this->success(L('messageboard') . L('add') . L('success'), $reback_link);
+            $resultAdd        = $MessageBoardModel->mAdd($data);
+            if ($resultAdd) {
+                $this->success(L('messageboard') . L('add') . L('success'), $rebackLink);
                 return;
             } else {
                 $this->error(L('messageboard') . L('add') . L('error'), U('add', array('cate_id' => I('get.cate_id'))));
@@ -80,20 +80,20 @@ class MessageBoard extends Backend
 
         $MessageBoardModel = D('MessageBoard');
         if (IS_POST) {
-            $data        = $this->_make_data();
-            $result_edit = $MessageBoardModel->mEdit($id, $data);
-            if ($result_edit) {
+            $data        = $this->makeData();
+            $resultEdit = $MessageBoardModel->mEdit($id, $data);
+            if ($resultEdit) {
                 $this->success(L('messageboard') . L('edit') . L('success'), U('index'));
                 return;
             } else {
-                $error_go_link = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-                $this->error(L('messageboard') . L('edit') . L('error'), $error_go_link);
+                $errorGoLink = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
+                $this->error(L('messageboard') . L('edit') . L('error'), $errorGoLink);
             }
         }
 
-        $edit_info           = $MessageBoardModel->mFind($id);
-        $edit_info['config'] = json_encode($edit_info['config']);
-        $this->assign('edit_info', $edit_info);
+        $editInfo           = $MessageBoardModel->mFind($id);
+        $editInfo['config'] = json_encode($editInfo['config']);
+        $this->assign('edit_info', $editInfo);
 
         $this->assign('template_list', M_scan_template('index', C('DEFAULT_MODULE'), 'MessageBoard'));
         $this->assign('title', L('messageboard') . L('edit'));
@@ -109,8 +109,8 @@ class MessageBoard extends Backend
         }
 
         $MessageBoardModel = D('MessageBoard');
-        $result_del        = $MessageBoardModel->mDel($id);
-        if ($result_del) {
+        $resultDel        = $MessageBoardModel->mDel($id);
+        if ($resultDel) {
             $this->success(L('messageboard') . L('del') . L('success'), U('index'));
             return;
         } else {
@@ -119,7 +119,7 @@ class MessageBoard extends Backend
     }
 
     //构造数据
-    private function _make_data()
+    private function makeData()
     {
         $name     = I('name');
         $template = I('template');

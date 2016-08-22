@@ -7,10 +7,10 @@ class Wechat extends Common
 {
     public function mSelect($where = null, $page = false)
     {
-        $this->getPage($page);
+        $this->mGetPage($page);
         !isset($this->options['order']) && $this->order('id desc');
         $data = $this->where($where)->select();
-        foreach ($data as &$data_row) {$this->decodeData($data_row);}
+        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
         return $data;
     }
 
@@ -20,8 +20,8 @@ class Wechat extends Common
             return false;
         }
 
-        $wechat_id = $this->mFindId($data['open_id']);
-        if ($wechat_id) {
+        $wechatId = $this->mFindId($data['open_id']);
+        if ($wechatId) {
             return $this->mEdit($data['open_id'], $data);
         } else {
             return $this->mAdd($data);

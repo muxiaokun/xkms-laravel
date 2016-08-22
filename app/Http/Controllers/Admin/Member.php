@@ -24,43 +24,43 @@ class Member extends Backend
         $where            = array();
 
         //建立where
-        $v_value                            = '';
-        $v_value                            = I('member_name');
-        $v_value && $where['member_name']   = array('like', '%' . $v_value . '%');
-        $v_value                            = I('group_id');
-        $v_value && $where['group_id']      = $MemberGroupModel->mFindId(array('like', '%' . $v_value . '%'));
-        $v_value                            = M_mktime_range('register_time');
-        $v_value && $where['register_time'] = $v_value;
-        $v_value                            = M_mktime_range('last_time');
-        $v_value && $where['last_time']     = $v_value;
+        $whereValue                            = '';
+        $whereValue                            = I('member_name');
+        $whereValue && $where['member_name']   = array('like', '%' . $whereValue . '%');
+        $whereValue                            = I('group_id');
+        $whereValue && $where['group_id']      = $MemberGroupModel->mFindId(array('like', '%' . $whereValue . '%'));
+        $whereValue                            = M_mktime_range('register_time');
+        $whereValue && $where['register_time'] = $whereValue;
+        $whereValue                            = M_mktime_range('last_time');
+        $whereValue && $where['last_time']     = $whereValue;
 
-        $member_list = $MemberModel->mSelect($where, true);
-        foreach ($member_list as &$member) {
-            foreach ($member['group_id'] as $group_id) {
-                $group_name = $MemberGroupModel->mFindColumn($group_id, 'name');
+        $memberList = $MemberModel->mSelect($where, true);
+        foreach ($memberList as &$member) {
+            foreach ($member['group_id'] as $groupId) {
+                $groupName = $MemberGroupModel->mFindColumn($groupId, 'name');
                 isset($member['group_name']) && $member['group_name'] .= " | ";
-                $member['group_name'] .= $group_name;
+                $member['group_name'] .= $groupName;
             }
             !isset($member['group_name']) && $member['group_name'] = L('empty');
             !isset($member['add_time']) && $member['add_time']     = L('system') . L('add');
         }
-        $this->assign('member_list', $member_list);
-        $this->assign('member_list_count', $MemberModel->getPageCount($where));
+        $this->assign('member_list', $memberList);
+        $this->assign('member_list_count', $MemberModel->mGetPageCount($where));
 
         //初始化where_info
-        $where_info                  = array();
-        $where_info['member_name']   = array('type' => 'input', 'name' => L('member') . L('name'));
-        $where_info['group_id']      = array('type' => 'input', 'name' => L('group') . L('name'));
-        $where_info['register_time'] = array('type' => 'time', 'name' => L('register') . L('time'));
-        $where_info['last_time']     = array('type' => 'time', 'name' => L('login') . L('time'));
-        $this->assign('where_info', $where_info);
+        $whereInfo                  = array();
+        $whereInfo['member_name']   = array('type' => 'input', 'name' => L('member') . L('name'));
+        $whereInfo['group_id']      = array('type' => 'input', 'name' => L('group') . L('name'));
+        $whereInfo['register_time'] = array('type' => 'time', 'name' => L('register') . L('time'));
+        $whereInfo['last_time']     = array('type' => 'time', 'name' => L('login') . L('time'));
+        $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batch_handle         = array();
-        $batch_handle['add']  = $this->_check_privilege('add');
-        $batch_handle['edit'] = $this->_check_privilege('edit');
-        $batch_handle['del']  = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batch_handle);
+        $batchHandle         = array();
+        $batchHandle['add']  = $this->_check_privilege('add');
+        $batchHandle['edit'] = $this->_check_privilege('edit');
+        $batchHandle['del']  = $this->_check_privilege('del');
+        $this->assign('batch_handle', $batchHandle);
 
         $this->assign('title', L('member') . L('management'));
         $this->display();
@@ -71,16 +71,16 @@ class Member extends Backend
     {
         if (IS_POST) {
             $MemberModel = D('Member');
-            $data        = $this->_make_data();
-            $result_add  = $MemberModel->mAdd($data);
-            if ($result_add) {
+            $data        = $this->makeData();
+            $resultAdd  = $MemberModel->mAdd($data);
+            if ($resultAdd) {
                 $this->success(L('member') . L('add') . L('success'), U('index'));
                 return;
             } else {
                 $this->error(L('member') . L('add') . L('error'), U('add'));
             }
         }
-        $this->_add_edit_common();
+        $this->addEditCommon();
         $this->assign('title', L('member') . L('add'));
         $this->display('addedit');
     }
@@ -95,27 +95,27 @@ class Member extends Backend
 
         $MemberModel = D('Member');
         if (IS_POST) {
-            $data        = $this->_make_data(false);
-            $result_edit = $MemberModel->mEdit($id, $data);
-            if ($result_edit) {
+            $data        = $this->makeData(false);
+            $resultEdit = $MemberModel->mEdit($id, $data);
+            if ($resultEdit) {
                 $this->success(L('member') . L('edit') . L('success'), U('index'));
                 return;
             } else {
-                $error_go_link = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-                $this->error(L('member') . L('edit') . L('error'), $error_go_link);
+                $errorGoLink = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
+                $this->error(L('member') . L('edit') . L('error'), $errorGoLink);
             }
         }
 
-        $edit_info        = $MemberModel->mFind($id);
+        $editInfo        = $MemberModel->mFind($id);
         $MemberGroupModel = D('MemberGroup');
-        foreach ($edit_info['group_id'] as &$group_id) {
-            $member_group_name = $MemberGroupModel->mFindColumn($group_id, 'name');
-            $group_id          = array('value' => $group_id, 'html' => $member_group_name);
+        foreach ($editInfo['group_id'] as &$groupId) {
+            $memberGroupName = $MemberGroupModel->mFindColumn($groupId, 'name');
+            $groupId          = array('value' => $groupId, 'html' => $memberGroupName);
         }
-        $edit_info['group_id'] = json_encode($edit_info['group_id']);
-        $this->assign('edit_info', $edit_info);
+        $editInfo['group_id'] = json_encode($editInfo['group_id']);
+        $this->assign('edit_info', $editInfo);
 
-        $this->_add_edit_common();
+        $this->addEditCommon();
         $this->assign('title', L('member') . L('edit'));
         $this->display('addedit');
     }
@@ -134,8 +134,8 @@ class Member extends Backend
         }
 
         $MemberModel = D('Member');
-        $result_del  = $MemberModel->mDel($id);
-        if ($result_del) {
+        $resultDel  = $MemberModel->mDel($id);
+        if ($resultDel) {
             $this->success(L('member') . L('del') . L('success'), U('index'));
             return;
         } else {
@@ -165,7 +165,7 @@ class Member extends Backend
     }
 
     //异步和表单数据验证
-    protected function _validform($field, $data)
+    protected function doValidateForm($field, $data)
     {
         $result = array('status' => true, 'info' => '');
         switch ($field) {
@@ -187,8 +187,8 @@ class Member extends Backend
                 }
                 //检查用户名是否存在
                 $MemberModel = D('Member');
-                $member_info = $MemberModel->mSelect(array('member_name' => $data['member_name'], 'id' => array('neq', $data['id'])));
-                if (0 < count($member_info)) {
+                $memberInfo = $MemberModel->mSelect(array('member_name' => $data['member_name'], 'id' => array('neq', $data['id'])));
+                if (0 < count($memberInfo)) {
                     $result['info'] = L('member') . L('name') . L('exists');
                     break;
                 }
@@ -247,7 +247,7 @@ class Member extends Backend
     }
 
     //异步数据获取
-    protected function _get_data($field, $data)
+    protected function getData($field, $data)
     {
         $where  = array();
         $result = array('status' => true, 'info' => array());
@@ -256,9 +256,9 @@ class Member extends Backend
                 isset($data['inserted']) && $where['id']  = array('not in', $data['inserted']);
                 $MemberGroupModel                         = D('MemberGroup');
                 isset($data['keyword']) && $where['name'] = array('like', '%' . $data['keyword'] . '%');
-                $member_group_list                        = $MemberGroupModel->mSelect($where);
-                foreach ($member_group_list as $member_group) {
-                    $result['info'][] = array('value' => $member_group['id'], 'html' => $member_group['name']);
+                $memberGroupList                        = $MemberGroupModel->mSelect($where);
+                foreach ($memberGroupList as $memberGroup) {
+                    $result['info'][] = array('value' => $memberGroup['id'], 'html' => $memberGroup['name']);
                 }
                 break;
         }
@@ -266,69 +266,69 @@ class Member extends Backend
     }
 
     //构造数据
-    private function _make_data($is_pwd = true)
+    private function makeData($isPwd = true)
     {
         //初始化参数
         $id             = I('id');
-        $member_name    = I('member_name');
+        $memberName    = I('member_name');
         $password       = I('password');
-        $password_again = I('password_again');
+        $passwordAgain = I('password_again');
         $email          = I('email');
         $phone          = I('phone');
-        $group_id       = I('group_id');
-        $is_enable      = I('is_enable');
+        $groupId       = I('group_id');
+        $isEnable      = I('is_enable');
 
         //检测初始化参数是否合法
-        $error_go_link = (!$id) ? U('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-        if ('add' == ACTION_NAME || null !== $member_name) {
-            $result = $this->_validform('member_name', array('id' => $id, 'member_name' => $member_name));
+        $errorGoLink = (!$id) ? U('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));
+        if ('add' == ACTION_NAME || null !== $memberName) {
+            $result = $this->doValidateForm('member_name', array('id' => $id, 'member_name' => $memberName));
             if (!$result['status']) {
-                $this->error($result['info'], $error_go_link);
+                $this->error($result['info'], $errorGoLink);
             }
 
         }
         if ('add' == ACTION_NAME || null !== $password) {
-            $result = $this->_validform('password', array('password' => $password, 'is_pwd' => $is_pwd));
+            $result = $this->doValidateForm('password', array('password' => $password, 'is_pwd' => $isPwd));
             if (!$result['status']) {
-                $this->error($result['info'], $error_go_link);
+                $this->error($result['info'], $errorGoLink);
             }
 
-            $result = $this->_validform('password_again', array('password' => $password, 'password_again' => $password_again));
+            $result = $this->doValidateForm('password_again', array('password' => $password, 'password_again' => $passwordAgain));
             if (!$result['status']) {
-                $this->error($result['info'], $error_go_link);
+                $this->error($result['info'], $errorGoLink);
             }
 
         }
         if ('add' == ACTION_NAME || null !== $email) {
-            $result = $this->_validform('email', array('email' => $email));
+            $result = $this->doValidateForm('email', array('email' => $email));
             if (!$result['status']) {
-                $this->error($result['info'], $error_go_link);
+                $this->error($result['info'], $errorGoLink);
             }
 
         }
         if ('add' == ACTION_NAME || null !== $phone) {
-            $result = $this->_validform('phone', array('phone' => $phone));
+            $result = $this->doValidateForm('phone', array('phone' => $phone));
             if (!$result['status']) {
-                $this->error($result['info'], $error_go_link);
+                $this->error($result['info'], $errorGoLink);
             }
 
         }
 
         $data                                                                   = array();
-        ('add' == ACTION_NAME || null !== $member_name) && $data['member_name'] = $member_name;
+        ('add' == ACTION_NAME || null !== $memberName) && $data['member_name'] = $memberName;
         ('add' == ACTION_NAME || null !== $password) && $data['member_pwd']     = $password;
         ('add' == ACTION_NAME || null !== $email) && $data['email']             = $email;
         ('add' == ACTION_NAME || null !== $phone) && $data['phone']             = $phone;
-        ('add' == ACTION_NAME || null !== $group_id) && $data['group_id']       = $group_id;
-        ('add' == ACTION_NAME || null !== $is_enable) && $data['is_enable']     = $is_enable;
+        ('add' == ACTION_NAME || null !== $groupId) && $data['group_id']       = $groupId;
+        ('add' == ACTION_NAME || null !== $isEnable) && $data['is_enable']     = $isEnable;
         return $data;
     }
 
     //构造管理员assign公共数据
-    private function _add_edit_common()
+    private function addEditCommon()
     {
         $MemberGroupModel  = D('MemberGroup');
-        $member_group_list = $MemberGroupModel->mSelect();
-        $this->assign('member_group_list', $member_group_list);
+        $memberGroupList = $MemberGroupModel->mSelect();
+        $this->assign('member_group_list', $memberGroupList);
     }
 }

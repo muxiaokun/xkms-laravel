@@ -20,56 +20,60 @@ class Admin extends Backend
     {
         return 'test';
     }
+
     //列表
     public function index()
     {
         $AdminModel      = D('Admin');
         $AdminGroupModel = D('AdminGroup');
-        $where           = array();
+        $where           = [];
         if (1 != session('backend_info.id')) {
             //非root需要权限
-            $mFind_allow      = $AdminGroupModel->mFind_allow();
-            $where['group_id'] = $mFind_allow;
+            $mFindAllow        = $AdminGroupModel->mFind_allow();
+            $where['group_id'] = $mFindAllow;
         }
         //建立where
-        $v_value                         = '';
-        $v_value                         = I('admin_name');
-        $v_value && $where['admin_name'] = array('like', '%' . $v_value . '%');
-        $v_value                         = I('group_id');
-        $v_value && $where['group_id']   = $AdminGroupModel->where(array('name' => array('like', '%' . $v_value . '%')))->col_arr('id');
-        $v_value                         = M_mktime_range('last_time');
-        $v_value && $where['last_time']  = $v_value;
-        $v_value                         = I('is_enable');
-        $v_value && $where['is_enable']  = (1 == $v_value) ? 1 : 0;
+        $whereValue = '';
+        $whereValue = I('admin_name');
+        $whereValue && $where['admin_name'] = ['like', '%' . $whereValue . '%'];
+        $whereValue = I('group_id');
+        $whereValue && $where['group_id'] = $AdminGroupModel->where(['name' => ['like',
+            '%' . $whereValue . '%']])->mColumn2Array('id');
+        $whereValue = M_mktime_range('last_time');
+        $whereValue && $where['last_time'] = $whereValue;
+        $whereValue = I('is_enable');
+        $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $admin_list = $AdminModel->mSelect($where, true);
-        foreach ($admin_list as &$admin) {
-            foreach ($admin['group_id'] as $group_id) {
-                $group_name = $AdminGroupModel->mFindColumn($group_id, 'name');
+        $adminList = $AdminModel->mSelect($where, true);
+        foreach ($adminList as &$admin) {
+            foreach ($admin['group_id'] as $groupId) {
+                $groupName = $AdminGroupModel->mFindColumn($groupId, 'name');
                 isset($admin['group_name']) && $admin['group_name'] .= " | ";
-                $admin['group_name'] .= $group_name;
+                $admin['group_name'] .= $groupName;
             }
             !isset($admin['group_name']) && $admin['group_name'] = L('empty');
-            !isset($admin['add_time']) && $admin['add_time']     = L('system') . L('add');
+            !isset($admin['add_time']) && $admin['add_time'] = L('system') . L('add');
         }
-        $this->assign('admin_list', $admin_list);
-        $this->assign('admin_list_count', $AdminModel->getPageCount($where));
+        $this->assign('admin_list', $adminList);
+        $this->assign('admin_list_count', $AdminModel->mGetPageCount($where));
 
         //初始化where_info
-        $where_info               = array();
-        $where_info['admin_name'] = array('type' => 'input', 'name' => L('admin') . L('name'));
-        $where_info['group_id']   = array('type' => 'input', 'name' => L('group') . L('name'));
-        $where_info['last_time']  = array('type' => 'time', 'name' => L('login') . L('time'));
-        $where_info['is_enable']  = array('type' => 'select', 'name' => L('yes') . L('no') . L('enable'), 'value' => array(1 => L('enable'), 2 => L('disable')));
-        $this->assign('where_info', $where_info);
+        $whereInfo               = [];
+        $whereInfo['admin_name'] = ['type' => 'input', 'name' => L('admin') . L('name')];
+        $whereInfo['group_id']   = ['type' => 'input', 'name' => L('group') . L('name')];
+        $whereInfo['last_time']  = ['type' => 'time', 'name' => L('login') . L('time')];
+        $whereInfo['is_enable']  = ['type'  => 'select',
+                                    'name'  => L('yes') . L('no') . L('enable'),
+                                    'value' => [1 => L('enable'), 2 => L('disable')]];
+        $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batch_handle         = array();
-        $batch_handle['add']  = $this->_check_privilege('add');
-        $batch_handle['edit'] = $this->_check_privilege('edit');
-        $batch_handle['del']  = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batch_handle);
+        $batchHandle         = [];
+        $batchHandle['add']  = $this->_check_privilege('add');
+        $batchHandle['edit'] = $this->_check_privilege('edit');
+        $batchHandle['del']  = $this->_check_privilege('del');
+        $this->assign('batch_handle', $batchHandle);
 
         $this->assign('title', L('admin') . L('management'));
         $this->display();
@@ -80,16 +84,17 @@ class Admin extends Backend
     {
         if (IS_POST) {
             $AdminModel = D('Admin');
-            $data       = $this->_make_data();
-            $result_add = $AdminModel->mAdd($data);
-            if ($result_add) {
+            $data       = $this->makeData();
+            $resultAdd  = $AdminModel->mAdd($data);
+            if ($resultAdd) {
                 $this->success(L('admin') . L('add') . L('success'), U('index'));
+
                 return;
             } else {
                 $this->error(L('admin') . L('add') . L('error'), U('add'));
             }
         }
-        $this->_add_edit_common();
+        $this->addEditCommon();
         $this->assign('title', L('admin') . L('add'));
         $this->display('addedit');
     }
@@ -104,27 +109,28 @@ class Admin extends Backend
 
         $AdminModel = D('Admin');
         if (IS_POST) {
-            $data        = $this->_make_data();
-            $result_edit = $AdminModel->mEdit($id, $data);
-            if ($result_edit) {
+            $data       = $this->makeData();
+            $resultEdit = $AdminModel->mEdit($id, $data);
+            if ($resultEdit) {
                 $this->success(L('admin') . L('edit') . L('success'), U('index'));
+
                 return;
             } else {
-                $error_go_link = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-                $this->error(L('admin') . L('edit') . L('error'), $error_go_link);
+                $errorGoLink = (is_array($id)) ? U('index') : U('edit', ['id' => $id]);
+                $this->error(L('admin') . L('edit') . L('error'), $errorGoLink);
             }
         }
 
-        $edit_info       = $AdminModel->mFind($id);
+        $editInfo        = $AdminModel->mFind($id);
         $AdminGroupModel = D('AdminGroup');
-        foreach ($edit_info['group_id'] as &$group_id) {
-            $admin_group_name = $AdminGroupModel->mFindColumn($group_id, 'name');
-            $group_id         = array('value' => $group_id, 'html' => $admin_group_name);
+        foreach ($editInfo['group_id'] as &$groupId) {
+            $adminGroupName = $AdminGroupModel->mFindColumn($groupId, 'name');
+            $groupId        = ['value' => $groupId, 'html' => $adminGroupName];
         }
-        $edit_info['group_id'] = json_encode($edit_info['group_id']);
-        $this->assign('edit_info', $edit_info);
+        $editInfo['group_id'] = json_encode($editInfo['group_id']);
+        $this->assign('edit_info', $editInfo);
 
-        $this->_add_edit_common();
+        $this->addEditCommon();
         $this->assign('title', L('admin') . L('edit'));
         $this->display('addedit');
     }
@@ -138,9 +144,10 @@ class Admin extends Backend
         }
 
         $AdminModel = D('Admin');
-        $result_del = $AdminModel->mDel($id);
-        if ($result_del) {
+        $resultDel  = $AdminModel->mDel($id);
+        if ($resultDel) {
             $this->success(L('admin') . L('del') . L('success'), U('index'));
+
             return;
         } else {
             $this->error(L('admin') . L('del') . L('error'), U('index'));
@@ -152,14 +159,15 @@ class Admin extends Backend
     {
         if (IS_POST) {
             //表单提交的名称
-            $col = array(
+            $col = [
                 'SYS_ADMIN_AUTO_LOG',
                 'SYS_BACKEND_VERIFY',
                 'SYS_BACKEND_TIMEOUT',
                 'SYS_BACKEND_LOGIN_NUM',
                 'SYS_BACKEND_LOCK_TIME',
-            );
+            ];
             $this->_put_config($col, 'system');
+
             return;
         }
 
@@ -168,9 +176,9 @@ class Admin extends Backend
     }
 
     //异步和表单数据验证
-    protected function _validform($field, $data)
+    protected function doValidateForm($field, $data)
     {
-        $result = array('status' => true, 'info' => '');
+        $result = ['status' => true, 'info' => ''];
         switch ($field) {
             case 'admin_name':
                 //不能为空
@@ -185,13 +193,13 @@ class Admin extends Backend
 
                 preg_match('/([^\x80-\xffa-zA-Z0-9\s]*)/', $data['admin_name'], $matches);
                 if ('' != $matches[1]) {
-                    $result['info'] = L('name_format_error', array('string' => $matches[1]));
+                    $result['info'] = L('name_format_error', ['string' => $matches[1]]);
                     break;
                 }
                 //检查用户名是否存在
                 $AdminModel = D('Admin');
-                $admin_info = $AdminModel->mSelect(array('admin_name' => $data['admin_name'], 'id' => array('neq', $data['id'])));
-                if (0 < count($admin_info)) {
+                $adminInfo  = $AdminModel->mSelect(['admin_name' => $data['admin_name'], 'id' => ['neq', $data['id']]]);
+                if (0 < count($adminInfo)) {
                     $result['info'] = L('admin') . L('name') . L('exists');
                     break;
                 }
@@ -226,17 +234,17 @@ class Admin extends Backend
                 break;
             case 'privilege':
                 //对比权限
-                $privilege       = $this->_get_privilege('Admin', session('backend_info.privilege'));
-                $check_privilege = array();
-                foreach ($privilege as $controller_cn => $privs) {
-                    foreach ($privs as $controller_name => $controller) {
-                        foreach ($controller as $action_name => $action) {
-                            $check_privilege[] = $controller_name . '_' . $action_name;
+                $privilege      = $this->getPrivilege('Admin', session('backend_info.privilege'));
+                $checkPrivilege = [];
+                foreach ($privilege as $controllerCn => $privs) {
+                    foreach ($privs as $controllerName => $controller) {
+                        foreach ($controller as $actionName => $action) {
+                            $checkPrivilege[] = $controllerName . '_' . $actionName;
                         }
                     }
                 }
                 foreach ($data as $priv) {
-                    if (!in_array($priv, $check_privilege)) {
+                    if (!in_array($priv, $checkPrivilege)) {
                         $result['info'] = L('privilege') . L('submit') . L('error');
                         break;
                     }
@@ -252,68 +260,70 @@ class Admin extends Backend
     }
 
     //异步数据获取
-    protected function _get_data($field, $data)
+    protected function getData($field, $data)
     {
-        $where  = array();
-        $result = array('status' => true, 'info' => array());
+        $where  = [];
+        $result = ['status' => true, 'info' => []];
         switch ($field) {
             case 'group_id':
                 if (1 != session('backend_info.id')) {
                     $where['manage_id'] = session('backend_info.id');
                 }
-                isset($data['inserted']) && $where['id']  = array('not in', $data['inserted']);
-                $AdminGroupModel                          = D('AdminGroup');
-                isset($data['keyword']) && $where['name'] = array('like', '%' . $data['keyword'] . '%');
-                $admin_group_list                         = $AdminGroupModel->mSelect($where);
-                foreach ($admin_group_list as $admin_group) {
-                    $result['info'][] = array('value' => $admin_group['id'], 'html' => $admin_group['name']);
+                isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
+                $AdminGroupModel = D('AdminGroup');
+                isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
+                $adminGroupList = $AdminGroupModel->mSelect($where);
+                foreach ($adminGroupList as $adminGroup) {
+                    $result['info'][] = ['value' => $adminGroup['id'], 'html' => $adminGroup['name']];
                 }
                 break;
         }
+
         return $result;
     }
 
     //构造数据
-    //$is_pwd 是否检测密码规则
-    private function _make_data()
+    //$isPwd 是否检测密码规则
+    private function makeData()
     {
         //初始化参数
-        $id             = I('id');
-        $admin_name     = I('admin_name');
-        $password       = I('password');
-        $password_again = I('password_again');
-        $group_id       = I('group_id');
-        $privilege      = I('privilege');
-        $is_enable      = I('is_enable');
+        $id            = I('id');
+        $adminName     = I('admin_name');
+        $password      = I('password');
+        $passwordAgain = I('password_again');
+        $groupId       = I('group_id');
+        $privilege     = I('privilege');
+        $isEnable      = I('is_enable');
 
-        $error_go_link = (!$id) ? U('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));
+        $errorGoLink = (!$id) ? U('add') : (is_array($id)) ? U('index') : U('edit', ['id' => $id]);
         //检测初始化参数是否合法
-        if ('add' == ACTION_NAME || null !== $admin_name) {
-            $result = $this->_validform('admin_name', array('id' => $id, 'admin_name' => $admin_name));
+        if ('add' == ACTION_NAME || null !== $adminName) {
+            $result = $this->doValidateForm('admin_name', ['id' => $id, 'admin_name' => $adminName]);
             if (!$result['status']) {
-                $this->error($result['info'], $error_go_link);
+                $this->error($result['info'], $errorGoLink);
             }
 
         }
         if ('add' == ACTION_NAME || null !== $password) {
-            $is_pwd = ('add' == ACTION_NAME) ? true : false;
-            $result = $this->_validform('password', array('password' => $password, 'is_pwd' => $is_pwd));
+            $isPwd  = ('add' == ACTION_NAME) ? true : false;
+            $result = $this->doValidateForm('password', ['password' => $password, 'is_pwd' => $isPwd]);
             if (!$result['status']) {
-                $this->error($result['info'], $error_go_link);
+                $this->error($result['info'], $errorGoLink);
             }
 
         }
         if ('add' == ACTION_NAME || null !== $password) {
-            $result = $this->_validform('password_again', array('password' => $password, 'password_again' => $password_again));
+            $result = $this->doValidateForm('password_again', ['password'       => $password,
+                                                               'password_again' => $passwordAgain]);
             if (!$result['status']) {
-                $this->error($result['info'], $error_go_link);
+                $this->error($result['info'], $errorGoLink);
             }
 
         }
         if ('add' == ACTION_NAME || null !== $privilege) {
-            $result = $this->_validform('privilege', $privilege);
+            $result = $this->doValidateForm('privilege', $privilege);
             if (!$result['status']) {
-                $this->error($result['info'], $error_go_link);
+                $this->error($result['info'], $errorGoLink);
             }
 
         }
@@ -321,25 +331,26 @@ class Admin extends Backend
         //最高级管理不检查该项 管理员可否被当前管理员添加编辑
         if (1 != session('backend_info.id')) {
             $AdminGroupModel = D('AdminGroup');
-            $mFind_allow    = $AdminGroupModel->mFind_allow();
-            if (!M_in_array($group_id, $mFind_allow)) {
+            $mFindAllow      = $AdminGroupModel->mFind_allow();
+            if (!M_in_array($groupId, $mFindAllow)) {
                 $this->error(L('you') . L('none') . L('privilege'));
             }
 
         }
 
-        $data                                                                 = array();
-        ('add' == ACTION_NAME || null !== $admin_name) && $data['admin_name'] = $admin_name;
-        ('add' == ACTION_NAME || null !== $password) && $data['admin_pwd']    = $password;
-        ('add' == ACTION_NAME || null !== $group_id) && $data['group_id']     = $group_id;
-        ('add' == ACTION_NAME || null !== $privilege) && $data['privilege']   = $privilege;
-        ('add' == ACTION_NAME || null !== $is_enable) && $data['is_enable']   = $is_enable;
+        $data = [];
+        ('add' == ACTION_NAME || null !== $adminName) && $data['admin_name'] = $adminName;
+        ('add' == ACTION_NAME || null !== $password) && $data['admin_pwd'] = $password;
+        ('add' == ACTION_NAME || null !== $groupId) && $data['group_id'] = $groupId;
+        ('add' == ACTION_NAME || null !== $privilege) && $data['privilege'] = $privilege;
+        ('add' == ACTION_NAME || null !== $isEnable) && $data['is_enable'] = $isEnable;
+
         return $data;
     }
 
     //构造管理员assign公共数据
-    private function _add_edit_common()
+    private function addEditCommon()
     {
-        $this->assign('privilege', $this->_get_privilege('Admin', session('backend_info.privilege')));
+        $this->assign('privilege', $this->getPrivilege('Admin', session('backend_info.privilege')));
     }
 }

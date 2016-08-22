@@ -7,11 +7,11 @@ class Admin extends Common
 {
     public function mSelect($where = null, $page = false)
     {
-        $this->parseWhere($where);
-        $this->getPage($page);
+        $this->mParseWhere($where);
+        $this->mGetPage($page);
         !isset($this->options['order']) && $this->order('id desc');
         $data = $this->field('*,inet_ntoa(login_ip) as aip')->where($where)->select();
-        foreach ($data as &$data_row) {$this->decodeData($data_row);}
+        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
         return $data;
     }
 
@@ -50,38 +50,38 @@ class Admin extends Common
             'admin_name' => $user,
             'is_enable'  => '1',
         );
-        $admin_info = $this->where($where)->find();
-        if ($admin_info['admin_pwd'] == md5($pwd . $admin_info['admin_rand'])) {
+        $adminInfo = $this->where($where)->find();
+        if ($adminInfo['admin_pwd'] == md5($pwd . $adminInfo['admin_rand'])) {
             $data = array(
                 'last_time' => time(),
                 'login_ip'  => array('exp', 'inet_aton("' . $_SERVER['REMOTE_ADDR'] . '")'),
             );
-            $this->where(array('id' => $admin_info['id']))->data($data)->save();
-            $admin_info = $this->mFind($admin_info['id']);
-            return $admin_info;
+            $this->where(array('id' => $adminInfo['id']))->data($data)->save();
+            $adminInfo = $this->mFind($adminInfo['id']);
+            return $adminInfo;
         } else {
             return false;
         }
     }
 
-    protected function parseWhere(&$where)
+    protected function mParseWhere(&$where)
     {
         if (is_null($where)) {
             return;
         }
 
-        isset($where['group_id']) && $where['group_id'] = $this->_make_like_arr($where['group_id']);
+        isset($where['group_id']) && $where['group_id'] = $this->mMakeLikeArray($where['group_id']);
     }
 
-    protected function encodeData(&$data)
+    protected function mEncodeData(&$data)
     {
         if (isset($data['id']) && (1 == $data['id'] || (is_array($data['id']) && in_array(1, $data['id'])))) {
             unset($data['privilege']);
         }
         if ($data['admin_pwd']) {
-            $rand_str           = $this->_make_rand();
-            $data['admin_pwd']  = md5($data['admin_pwd'] . $rand_str);
-            $data['admin_rand'] = $rand_str;
+            $randStr           = $this->_make_rand();
+            $data['admin_pwd']  = md5($data['admin_pwd'] . $randStr);
+            $data['admin_rand'] = $randStr;
         } else {
             unset($data['admin_pwd']);
             unset($data['admin_rand']);
@@ -92,7 +92,7 @@ class Admin extends Common
         isset($data['ext_info']) && $data['ext_info']   = serialize($data['ext_info']);
     }
 
-    protected function decodeData(&$data)
+    protected function mDecodeData(&$data)
     {
         unset($data['admin_pwd']);
         unset($data['admin_rand']);

@@ -25,14 +25,14 @@ class CommonEmpty extends Controller
             echo "ACTION_NAME:" . ACTION_NAME . "<br />";
             dump($_REQUEST);
         } else {
-            $hold_time = 10;
+            $holdTime = 10;
             //小于10秒 该公益页面也就没有意义了 将自动跳回默认页面
-            $app_name = APP_NAME;
+            $appName = APP_NAME;
             $root     = __ROOT__;
             $html     = <<< EOF
 <!DOCTYPE>
 <html><head>
-<title> 网页没有找到 404 —— {$app_name}</title>
+<title> 网页没有找到 404 —— {$appName}</title>
 <base href="{$root}/" />
 <meta http-equiv="Content-Type" Content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,7 +44,7 @@ class CommonEmpty extends Controller
             <img style="width:100%;" src="Public/css/bimages/404.png" />
         </div>
     </div>
-    <div class="row text-center"><p>页面自动 <a id="href" href="javascript:history.go(-1);">跳转</a> 等待时间： <b id="wait">{$hold_time}</b></p></div>
+    <div class="row text-center"><p>页面自动 <a id="href" href="javascript:history.go(-1);">跳转</a> 等待时间： <b id="wait">{$holdTime}</b></p></div>
 </section>
 <script type="text/javascript">
     (function(){

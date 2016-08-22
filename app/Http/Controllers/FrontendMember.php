@@ -22,24 +22,24 @@ class FrontendMember extends Frontend
             $this->error(L('member') . L('none') . L('enable'), U('Index/index'));
         }
 
-        if ($this->_is_login()) {
-            $frontend_info = session('frontend_info');
+        if ($this->isLogin()) {
+            $frontendInfo = session('frontend_info');
             //自动登出时间
-            if (time() - C('SYS_FRONTEND_TIMEOUT') < $frontend_info['login_time']) {
-                $frontend_info['login_time'] = time();
-                session('frontend_info', $frontend_info);
+            if (time() - C('SYS_FRONTEND_TIMEOUT') < $frontendInfo['login_time']) {
+                $frontendInfo['login_time'] = time();
+                session('frontend_info', $frontendInfo);
             } else {
-                $this->_logout();
+                $this->doLogout();
                 $this->error(L('login') . L('timeout'), U('Member/Index/index'));
             }
 
             //检查管理员或者管理员组权限变动 先检查数量 提高效率
             $MemberModel            = D('Member');
-            $member_info            = $MemberModel->mFind($frontend_info['id']);
+            $memberInfo            = $MemberModel->mFind($frontendInfo['id']);
             $MemberGroupModel       = D('MemberGroup');
-            $member_group_privilege = $MemberGroupModel->mFind_privilege($member_info['group_id']);
-            if ($frontend_info['group_privilege'] !== $member_group_privilege) {
-                $this->_logout();
+            $memberGroupPrivilege = $MemberGroupModel->mFind_privilege($memberInfo['group_id']);
+            if ($frontendInfo['group_privilege'] !== $memberGroupPrivilege) {
+                $this->doLogout();
                 $this->error(L('privilege') . L('change') . L('please') . L('login'), U('Member/index'));
             }
 
@@ -52,9 +52,9 @@ class FrontendMember extends Frontend
             $this->assign('left_nav', $this->_get_left_nav());
         } else {
             //检测不登陆就可以访问的
-            $allow_action['Member'] = array('index', 'login', 'verify_img', 'ajax_api', 'register');
-            if (!in_array(ACTION_NAME, $allow_action[CONTROLLER_NAME])) {
-                $this->error(L('not_login') . L('frontend'), U('Member/index'));
+            $allowAction['Member'] = array('index', 'login', 'verifyImg', 'ajax_api', 'register');
+            if (!in_array(ACTION_NAME, $allowAction[CONTROLLER_NAME])) {
+                $this->error(L('notdoLogin') . L('frontend'), U('Member/index'));
             }
         }
     }
@@ -62,53 +62,53 @@ class FrontendMember extends Frontend
     private function _get_left_nav()
     {
         //if(没有在权限中找到列表 就显示默认的列表)
-        $member_group_priv = session('frontend_info.group_privilege');
+        $memberGroupPriv = session('frontend_info.group_privilege');
         $privilege         = F('privilege');
-        $left_nav          = array();
+        $leftNav          = array();
         //跳过系统基本操作 增删改 异步接口,
-        $deny_link = array('add', 'del', 'edit', 'ajax_port');
-        foreach ($privilege['Home'] as $control_group) {
-            foreach ($control_group as $control_name => $action) {
-                foreach ($action as $action_name => $action_value) {
+        $denyLink = array('add', 'del', 'edit', 'ajax_port');
+        foreach ($privilege['Home'] as $controlGroup) {
+            foreach ($controlGroup as $controlName => $action) {
+                foreach ($action as $actionName => $actionValue) {
                     //跳过系统基本操作
-                    if (in_array($action_name, $deny_link)) {
+                    if (in_array($actionName, $denyLink)) {
                         continue;
                     }
 
                     //跳过没有权限的功能
                     if (
-                        !in_array('all', $member_group_priv) &&
-                        !in_array($control_name . '_' . $action_name, $member_group_priv)
+                        !in_array('all', $memberGroupPriv) &&
+                        !in_array($controlName . '_' . $actionName, $memberGroupPriv)
                     ) {
                         continue;
                     }
 
-                    $left_nav[] = array(
-                        'link' => U('Home/' . $control_name . '/' . $action_name),
-                        'name' => $action_value,
+                    $leftNav[] = array(
+                        'link' => U('Home/' . $controlName . '/' . $actionName),
+                        'name' => $actionValue,
                     );
                 }
             }
         }
-        $left_nav[] = array(
+        $leftNav[] = array(
             'link' => U('Home/Member/logout'),
             'name' => L('logout') . L('member'),
         );
-        return $left_nav;
+        return $leftNav;
     }
 
-    public function _check_privilege($action_name = ACTION_NAME, $controller_name = CONTROLLER_NAME)
+    public function _check_privilege($actionName = ACTION_NAME, $controllerName = CONTROLLER_NAME)
     {
         //登录后 检查是否有权限可以操作 1.不是默认框架控制器 2.拥有权限 3.ajax_api接口 4.不需要权限就能访问的
-        $allow_action['Member']     = array('index', 'logout');
-        $allow_action['Uploadfile'] = array('uploadfile', 'managefile');
-        $frontend_info              = session('frontend_info');
-        $member_group_priv          = ($frontend_info['group_privilege']) ? $frontend_info['group_privilege'] : array();
+        $allowAction['Member']     = array('index', 'logout');
+        $allowAction['Uploadfile'] = array('uploadfile', 'managefile');
+        $frontendInfo              = session('frontend_info');
+        $memberGroupPriv          = ($frontendInfo['group_privilege']) ? $frontendInfo['group_privilege'] : array();
         if (
-            'ajax_api' != $action_name &&
-            !in_array($action_name, $allow_action[$controller_name]) &&
-            !in_array('all', $member_group_priv) &&
-            !in_array($controller_name . '_' . $action_name, $member_group_priv)
+            'ajax_api' != $actionName &&
+            !in_array($actionName, $allowAction[$controllerName]) &&
+            !in_array('all', $memberGroupPriv) &&
+            !in_array($controllerName . '_' . $actionName, $memberGroupPriv)
         ) {
             return false;
         }
@@ -119,8 +119,8 @@ class FrontendMember extends Frontend
     // 加强ajax_api接口安全性
     public function ajax_api()
     {
-        $allow_ajax_api = array('validform', 'get_data');
-        if (!$this->_is_login() && !in_array(I('type'), $allow_ajax_api)) {
+        $allowAjaxApi = array('validform', 'get_data');
+        if (!$this->isLogin() && !in_array(I('type'), $allowAjaxApi)) {
             return;
         }
 

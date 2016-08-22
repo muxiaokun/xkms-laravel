@@ -20,53 +20,53 @@ class ManageUpload extends Backend
     public function index()
     {
         //建立where
-        $v_value                        = '';
-        $v_value                        = I('suffix');
-        $v_value && $where['suffix']    = $v_value;
-        $v_value                        = I('bind_info');
-        $v_value && $where['bind_info'] = array('like', '%|' . $v_value . ':%');
-        $v_value                        = M_mktime_range('add_time');
-        $v_value && $where['add_time']  = $v_value;
+        $whereValue                        = '';
+        $whereValue                        = I('suffix');
+        $whereValue && $where['suffix']    = $whereValue;
+        $whereValue                        = I('bind_info');
+        $whereValue && $where['bind_info'] = array('like', '%|' . $whereValue . ':%');
+        $whereValue                        = M_mktime_range('add_time');
+        $whereValue && $where['add_time']  = $whereValue;
 
         //初始化翻页 和 列表数据
         $AdminModel         = D('Admin');
         $MemberModel        = D('Member');
         $ManageUploadModel  = D('ManageUpload');
-        $manage_upload_list = $ManageUploadModel->mSelect($where, true);
-        foreach ($manage_upload_list as &$manage_upload) {
-            switch ($manage_upload['user_type']) {
+        $manageUploadList = $ManageUploadModel->mSelect($where, true);
+        foreach ($manageUploadList as &$manageUpload) {
+            switch ($manageUpload['user_type']) {
                 case 1:
-                    $manage_upload['user_name'] = $AdminModel->mFindColumn($manage_upload['user_id'], 'admin_name');
+                    $manageUpload['user_name'] = $AdminModel->mFindColumn($manageUpload['user_id'], 'admin_name');
                     break;
                 case 2:
-                    $manage_upload['user_name'] = $MemberModel->mFindColumn($manage_upload['user_id'], 'member_name');
+                    $manageUpload['user_name'] = $MemberModel->mFindColumn($manageUpload['user_id'], 'member_name');
                     break;
             }
-            $bind_info     = array(L('controller') => L('relevance') . L('id'));
-            $bind_info_arr = explode('|', $manage_upload['bind_info']);
-            foreach ($bind_info_arr as $info) {
+            $bindInfo     = array(L('controller') => L('relevance') . L('id'));
+            $bindInfoArr = explode('|', $manageUpload['bind_info']);
+            foreach ($bindInfoArr as $info) {
                 if ($info) {
-                    $bind_info_tmp                = explode(':', $info);
-                    $bind_info[$bind_info_tmp[0]] = $bind_info_tmp[1];
+                    $bindInfoTmp                = explode(':', $info);
+                    $bindInfo[$bindInfoTmp[0]] = $bindInfoTmp[1];
                 }
             }
-            $manage_upload['bind_info'] = json_encode($bind_info);
+            $manageUpload['bind_info'] = json_encode($bindInfo);
         }
-        $this->assign('manage_upload_list', $manage_upload_list);
-        $this->assign('manage_upload_list_count', $ManageUploadModel->getPageCount($where));
+        $this->assign('manage_upload_list', $manageUploadList);
+        $this->assign('manage_upload_list_count', $ManageUploadModel->mGetPageCount($where));
 
         //初始化where_info
-        $where_info              = array();
-        $where_info['add_time']  = array('type' => 'time', 'name' => L('add') . L('time'));
-        $where_info['suffix']    = array('type' => 'input', 'name' => L('suffix'));
-        $where_info['bind_info'] = array('type' => 'input', 'name' => L('bind') . L('controller'));
-        $this->assign('where_info', $where_info);
+        $whereInfo              = array();
+        $whereInfo['add_time']  = array('type' => 'time', 'name' => L('add') . L('time'));
+        $whereInfo['suffix']    = array('type' => 'input', 'name' => L('suffix'));
+        $whereInfo['bind_info'] = array('type' => 'input', 'name' => L('bind') . L('controller'));
+        $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batch_handle         = array();
-        $batch_handle['edit'] = $this->_check_privilege('edit');
-        $batch_handle['del']  = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batch_handle);
+        $batchHandle         = array();
+        $batchHandle['edit'] = $this->_check_privilege('edit');
+        $batchHandle['del']  = $this->_check_privilege('del');
+        $this->assign('batch_handle', $batchHandle);
 
         $this->assign('title', L('file') . L('management'));
         $this->display();
@@ -81,8 +81,8 @@ class ManageUpload extends Backend
         }
 
         $ManageUploadModel = D('ManageUpload');
-        $result_del        = $ManageUploadModel->mDel($id);
-        if ($result_del) {
+        $resultDel        = $ManageUploadModel->mDel($id);
+        if ($resultDel) {
             $this->success(L('file') . L('del') . L('success'), U('index'));
             return;
         } else {
@@ -94,17 +94,17 @@ class ManageUpload extends Backend
     public function edit()
     {
         $lang = L('yes') . L('no') . L('confirm') . L('clear');
-        if (!$this->show_confirm($lang)) {
+        if (!$this->showConfirm($lang)) {
             return;
         }
 
         $ManageUploadModel  = D('ManageUpload');
         $where['_string']   = '(bind_info is NULL OR bind_info = "")';
-        $manage_upload_list = $ManageUploadModel->mSelect($where, $ManageUploadModel->where($where)->count());
-        foreach ($manage_upload_list as $manage_upload) {
-            $result_del = $ManageUploadModel->mDel($manage_upload['id']);
-            if (!$result_del) {
-                $this->error(L('clear') . L('file') . $manage_upload['path'] . L('error'), U('index'));
+        $manageUploadList = $ManageUploadModel->mSelect($where, $ManageUploadModel->where($where)->count());
+        foreach ($manageUploadList as $manageUpload) {
+            $resultDel = $ManageUploadModel->mDel($manageUpload['id']);
+            if (!$resultDel) {
+                $this->error(L('clear') . L('file') . $manageUpload['path'] . L('error'), U('index'));
             }
         }
         $this->success(L('clear') . L('file') . L('success'), U('index'));

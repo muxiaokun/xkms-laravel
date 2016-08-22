@@ -7,10 +7,10 @@ class MessageBoardLog extends Common
 {
     public function mSelect($where = null, $page = false)
     {
-        $this->getPage($page);
+        $this->mGetPage($page);
         !isset($this->options['order']) && $this->order('add_time desc');
         $data = $this->field('*,inet_ntoa(add_ip) as aip')->where($where)->select();
-        foreach ($data as &$data_row) {$this->decodeData($data_row);}
+        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
         return $data;
     }
 
@@ -38,12 +38,12 @@ class MessageBoardLog extends Common
         return ($this->where($where)->count()) ? true : false;
     }
 
-    protected function encodeData(&$data)
+    protected function mEncodeData(&$data)
     {
         isset($data['send_info']) && $data['send_info'] = serialize($data['send_info']);
     }
 
-    protected function decodeData(&$data)
+    protected function mDecodeData(&$data)
     {
         isset($data['send_info']) && $data['send_info'] = unserialize($data['send_info']);
     }

@@ -20,15 +20,15 @@ class Quests extends FrontendMember
     public function index()
     {
         $QuestsModel  = D('Quests');
-        $current_time = time();
+        $currentTime = time();
         $where        = array(
-            'start_time' => array('lt', $current_time),
-            'end_time'   => array('gt', $current_time),
+            'start_time' => array('lt', $currentTime),
+            'end_time'   => array('gt', $currentTime),
             '(current_portion < max_portion OR max_portion = 0)',
         );
-        $quests_list = $QuestsModel->mSelect($where, true);
-        $this->assign('quests_list', $quests_list);
-        $this->assign('quests_list_count', $QuestsModel->getPageCount($where));
+        $questsList = $QuestsModel->mSelect($where, true);
+        $this->assign('quests_list', $questsList);
+        $this->assign('quests_list_count', $QuestsModel->mGetPageCount($where));
 
         $this->assign('title', L('quests'));
         $this->display();
@@ -44,23 +44,23 @@ class Quests extends FrontendMember
         }
 
         $QuestsModel = D('Quests');
-        $quests_info = $QuestsModel->mFind($id);
+        $questsInfo = $QuestsModel->mFind($id);
         //检测是否能够提交
-        $current_time = time();
-        if ($quests_info['start_time'] < $current_time && $quests_info['end_time'] < $current_time) {
+        $currentTime = time();
+        if ($questsInfo['start_time'] < $currentTime && $questsInfo['end_time'] < $currentTime) {
             $this->error(L('start') . L('end') . L('time') . L('error'), U('Quests/index'));
         }
-        if (0 != $quests_info['max_portion'] && $quests_info['current_portion'] >= $quests_info['max_portion']) {
+        if (0 != $questsInfo['max_portion'] && $questsInfo['current_portion'] >= $questsInfo['max_portion']) {
             $this->error(L('gt') . L('max') . L('portion'), U('Quests/index'));
         }
-        $access_info = I('access_info');
-        if (isset($quests_info['access_info']) && $quests_info['access_info'] != $access_info) {
+        $accessInfo = I('access_info');
+        if (isset($questsInfo['access_info']) && $questsInfo['access_info'] != $accessInfo) {
             $this->error(L('access') . L('pass') . L('error'), U('Quests/index'));
         }
         //初始化问题
-        $quests_quest_list = json_decode($quests_info['ext_info'], true);
-        foreach ($quests_quest_list as $quest_id => $quest) {
-            $quests_quest_list[$quest_id]['answer'] = explode('|', $quests_quest_list[$quest_id]['answer']);
+        $questsQuestList = json_decode($questsInfo['ext_info'], true);
+        foreach ($questsQuestList as $questId => $quest) {
+            $questsQuestList[$questId]['answer'] = explode('|', $questsQuestList[$questId]['answer']);
         }
         //存入数据
         if (IS_POST) {
@@ -68,20 +68,20 @@ class Quests extends FrontendMember
             session('frontend.id') && $data['member_id'] = session('frontend.id');
             $data['quests_id']                           = $id;
             $data['answer']                              = '|';
-            $quests_answer                               = I('quests');
-            foreach ($quests_quest_list as $quest_id => $quest) {
+            $questsAnswer                               = I('quests');
+            foreach ($questsQuestList as $questId => $quest) {
                 if ($quest['answer_type'] == 'checkbox') {
-                    foreach ($quests_answer[$quest_id] as $value) {
-                        $data['answer'] .= $quest_id . ':' . $value . '|';
+                    foreach ($questsAnswer[$questId] as $value) {
+                        $data['answer'] .= $questId . ':' . $value . '|';
                     }
                 } else {
-                    $data['answer'] .= $quest_id . ':' . $quests_answer[$quest_id] . '|';
+                    $data['answer'] .= $questId . ':' . $questsAnswer[$questId] . '|';
                 }
             }
             $QuestsAnswerModel = D('QuestsAnswer');
-            $result_add        = $QuestsAnswerModel->mAdd($data);
-            if ($result_add) {
-                $QuestsModel->where(array('id' => $quests_info['id']))->setInc('current_portion');
+            $resultAdd        = $QuestsAnswerModel->mAdd($data);
+            if ($resultAdd) {
+                $QuestsModel->where(array('id' => $questsInfo['id']))->setInc('current_portion');
                 $this->success(L('answer') . L('add') . L('success'), U('Quests/index'));
             } else {
                 $this->error(L('answer') . L('add') . L('error'), U('index'));
@@ -89,8 +89,8 @@ class Quests extends FrontendMember
             return;
         }
 
-        $this->assign('quests_quest_list', $quests_quest_list);
-        $this->assign('quests_info', $quests_info);
+        $this->assign('quests_quest_list', $questsQuestList);
+        $this->assign('quests_info', $questsInfo);
         $this->assign('title', L('write') . L('quests'));
         $this->display();
     }

@@ -25,9 +25,9 @@ class Common extends Model
      */
     public function mSelect($where = null, $page = false)
     {
-        $this->getPage($page);
+        $this->mGetPage($page);
         $data = $this->where($where)->select();
-        foreach ($data as &$data_row) {$this->decodeData($data_row);}
+        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
         return $data;
     }
 
@@ -42,7 +42,7 @@ class Common extends Model
             return false;
         }
 
-        $this->encodeData($data);
+        $this->mEncodeData($data);
         return $this->add($data);
     }
 
@@ -74,7 +74,7 @@ class Common extends Model
         }
 
         is_array($id) && $id = array('in', $id);
-        $this->encodeData($data);
+        $this->mEncodeData($data);
         return $this->where(array('id' => $id))->data($data)->save();
     }
 
@@ -90,72 +90,72 @@ class Common extends Model
         }
 
         $data = $this->where(array('id' => $id))->find();
-        $this->decodeData($data);
+        $this->mDecodeData($data);
         return $data;
     }
 
     /**
      * 查找数据id
      * @param string $value
-     * @param string $column_name
+     * @param string $columnName
      * @return string
      */
-    public function mFindId($value, $column_name = '')
+    public function mFindId($value, $columnName = '')
     {
         if (!$value) {
             return false;
         }
 
         //默认查询id的列为第二列
-        if (!$column_name) {
-            $column_name = $this->fields[1];
+        if (!$columnName) {
+            $columnName = $this->fields[1];
         }
-        $column = $this->field('id')->where(array($column_name => $value))->find();
+        $column = $this->field('id')->where(array($columnName => $value))->find();
         return $column['id'];
     }
 
     /**
      * 查找数据
      * @param int $id
-     * @param string $column_name
+     * @param string $columnName
      * @return string
      */
-    public function mFindColumn($id, $column_name)
+    public function mFindColumn($id, $columnName)
     {
-        if (!$id || !$column_name) {
+        if (!$id || !$columnName) {
             return false;
         }
 
-        $column = $this->field($column_name)->where(array('id' => $id))->find();
-        $this->decodeData($column);
-        return $column[$column_name];
+        $column = $this->field($columnName)->where(array('id' => $id))->find();
+        $this->mDecodeData($column);
+        return $column[$columnName];
     }
 
     /**
      * 清除数据
      * @param mixed $id
-     * @param string $column_name
+     * @param string $columnName
      * @param string $data
      * @return boolean
      */
-    public function mClean($id, $column_name = '', $data = false)
+    public function mClean($id, $columnName = '', $data = false)
     {
         if (!$id) {
             return false;
         }
 
         //默认清除id的列为第二列
-        if (!$column_name) {
-            $column_name = $this->fields[1];
+        if (!$columnName) {
+            $columnName = $this->fields[1];
         }
 
         is_array($id) && $id = array('in', $id);
-        $this->where(array($column_name => $id));
+        $this->where(array($columnName => $id));
         if (0 == $this->count()) {
             return true;
         }
-        $this->where(array($column_name => $id));
-        return (false === $data) ? $this->delete() : $this->save(array($column_name => $data));
+        $this->where(array($columnName => $id));
+        return (false === $data) ? $this->delete() : $this->save(array($columnName => $data));
     }
 
     /**
@@ -164,12 +164,12 @@ class Common extends Model
      * @param array $where 查询条件
      * @return int 最大页数
      */
-    public function getPageCount($where)
+    public function mGetPageCount($where)
     {
-        $this->parseWhere($where);
-        $page_count   = $this->where($where)->count();
-        $sys_max_page = C('SYS_MAX_PAGE') * C('SYS_MAX_ROW');
-        return ($page_count < $sys_max_page) ? $page_count : $sys_max_page;
+        $this->mParseWhere($where);
+        $pageCount   = $this->where($where)->count();
+        $sysMaxPage = C('SYS_MAX_PAGE') * C('SYS_MAX_ROW');
+        return ($pageCount < $sysMaxPage) ? $pageCount : $sysMaxPage;
     }
 
     /**
@@ -178,43 +178,43 @@ class Common extends Model
      * @param string $column 列名称
      * @return array 指定列数组合集
      */
-    public function col_arr($column)
+    public function mColumn2Array($column)
     {
         $where = $this->options['where'];
         $this->limit($this->count());
-        $select_result = $this->field($column)->where($where)->select();
-        $re_arr        = array();
-        foreach ($select_result as $row) {
-            $re_arr[] = $row[$column];
+        $selectResult = $this->field($column)->where($where)->select();
+        $reArr        = array();
+        foreach ($selectResult as $row) {
+            $reArr[] = $row[$column];
         }
-        return $re_arr;
+        return $reArr;
     }
 
     /**
      * 设置翻页中数据数量
-     * @param int $max_num
+     * @param int $maxNum
      */
-    protected function getPage($max_num)
+    protected function mGetPage($maxNum)
     {
-        if (!$max_num) {
+        if (!$maxNum) {
             return;
         }
 
-        $max_num = (true === $max_num) ? C('SYS_MAX_ROW') : $max_num;
+        $maxNum = (true === $maxNum) ? C('SYS_MAX_ROW') : $maxNum;
         //p 是 Think\Page中的p的配置
         $p       = I('p');
         $p       = ($p < C('SYS_MAX_PAGE')) ? $p : C('SYS_MAX_PAGE');
-        $max_num = ($p) ? $p . "," . $max_num : "1," . $max_num;
-        $this->page($max_num);
+        $maxNum = ($p) ? $p . "," . $maxNum : "1," . $maxNum;
+        $this->page($maxNum);
     }
 
     /**
      * 构造查询时用的like数组
-     * @param array $where_arr
+     * @param array $whereArr
      * @param string $logic AND or OR
      * @return boolean
      */
-    protected function _make_like_arr($where, $logic = 'OR')
+    protected function mMakeLikeArray($where, $logic = 'OR')
     {
         //将$where转换成数组
         is_string($where) && $where = explode('|', $where);
@@ -239,7 +239,7 @@ class Common extends Model
      */
     protected function _make_rand($length = 4)
     {
-        $rand_arr = array(
+        $randArray = array(
             '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
             'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -248,7 +248,7 @@ class Common extends Model
         );
         $rand = '';
         for ($i = 0; $i < $length; $i++) {
-            $rand .= $rand_arr[rand(0, count($rand_arr) - 1)];
+            $rand .= $randArray[rand(0, count($randArray) - 1)];
         }
         return $rand;
     }
@@ -256,39 +256,39 @@ class Common extends Model
     /**
      * 建立缩进树状数据(自动去除查询数量限制)
      * @param array $config
-     * @param int $parent_id
+     * @param int $parentId
      * @param int $level
      * @return array
      */
-    protected function _make_tree($config, $parent_id = 0, $level = 0)
+    protected function mMakeTree($config, $parentId = 0, $level = 0)
     {
-        $list_where = $config['list_where'];
-        if (!is_array($list_where)) {
-            $list_where = array();
+        $listWhere = $config['list_where'];
+        if (!is_array($listWhere)) {
+            $listWhere = array();
         }
 
-        $list_where[$config['parent_id']] = $parent_id;
-        $count_row                        = $this->where($list_where)->count();
-        $parent_list                      = $this->limit($count_row)->$config['list_fn']($list_where);
+        $listWhere[$config['parent_id']] = $parentId;
+        $countRow                        = $this->where($listWhere)->count();
+        $parentList                      = $this->limit($countRow)->$config['list_fn']($listWhere);
         //占位符
-        $retract_str = '&nbsp;';
-        for ($i = 0; $i < $level; $i++) {$retract_str .= $retract_str;}
-        $parent_tree = array();
+        $retractStr = '&nbsp;';
+        for ($i = 0; $i < $level; $i++) {$retractStr .= $retractStr;}
+        $parentTree = array();
         $level++;
-        foreach ($parent_list as $parent_key => $parent) {
-            if (0 != $parent_id) {
-                $tag                            = ($parent_list[$parent_key + 1][$config['retract_col']]) ? "├" : "└";
-                $parent[$config['retract_col']] = $retract_str . $tag . $parent[$config['retract_col']];
+        foreach ($parentList as $parentKey => $parent) {
+            if (0 != $parentId) {
+                $tag                            = ($parentList[$parentKey + 1][$config['retract_col']]) ? "├" : "└";
+                $parent[$config['retract_col']] = $retractStr . $tag . $parent[$config['retract_col']];
             }
-            $parent_tree[] = $parent;
+            $parentTree[] = $parent;
             //这里的limit解除系统限制的数量
-            $count_row  = $this->where($list_where)->count();
-            $child_list = $this->limit($count_row)->$config['tree_fn']($list_where, $parent[$config['id']], $level);
-            foreach ($child_list as $child) {
-                $parent_tree[] = $child;
+            $countRow  = $this->where($listWhere)->count();
+            $childList = $this->limit($countRow)->$config['tree_fn']($listWhere, $parent[$config['id']], $level);
+            foreach ($childList as $child) {
+                $parentTree[] = $child;
             }
         }
-        return $parent_tree;
+        return $parentTree;
     }
 
     /**
@@ -297,7 +297,7 @@ class Common extends Model
      * @param string $content
      * @return string
      */
-    protected function _encode_content($content)
+    protected function mEncodeContent($content)
     {
         //删除相对路径前的../
         $content = htmlspecialchars_decode($content);
@@ -313,15 +313,15 @@ class Common extends Model
      * 格式化查询条件接口
      * @param type &$data
      */
-    protected function parseWhere(&$where)
+    protected function mParseWhere(&$where)
     {}
 
     /**
      * 格式化数据接口
      * @param type &$data
      */
-    protected function encodeData(&$data)
+    protected function mEncodeData(&$data)
     {}
-    protected function decodeData(&$data)
+    protected function mDecodeData(&$data)
     {}
 }

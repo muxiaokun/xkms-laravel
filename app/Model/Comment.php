@@ -7,10 +7,10 @@ class Comment extends Common
 {
     public function mSelect($where = null, $page = false)
     {
-        $this->getPage($page);
+        $this->mGetPage($page);
         !isset($this->options['order']) && $this->order('add_time desc');
         $data = $this->field('*,inet_ntoa(add_ip) as aip')->where($where)->select();
-        foreach ($data as &$data_row) {$this->decodeData($data_row);}
+        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
         return $data;
     }
 

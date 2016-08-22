@@ -23,29 +23,29 @@ class MemberGroup extends Backend
         $where            = array();
 
         //建立where
-        $v_value                        = '';
-        $v_value                        = I('name');
-        $v_value && $where['name']      = array('like', '%' . $v_value . '%');
-        $v_value                        = I('is_enable');
-        $v_value && $where['is_enable'] = (1 == $v_value) ? 1 : 0;
+        $whereValue                        = '';
+        $whereValue                        = I('name');
+        $whereValue && $where['name']      = array('like', '%' . $whereValue . '%');
+        $whereValue                        = I('is_enable');
+        $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $member_group_list = $MemberGroupModel->mSelect($where, true);
-        $this->assign('member_group_list', $member_group_list);
-        $this->assign('member_group_list_count', $MemberGroupModel->getPageCount($where));
+        $memberGroupList = $MemberGroupModel->mSelect($where, true);
+        $this->assign('member_group_list', $memberGroupList);
+        $this->assign('member_group_list_count', $MemberGroupModel->mGetPageCount($where));
 
         //初始化where_info
-        $where_info              = array();
-        $where_info['name']      = array('type' => 'input', 'name' => L('group') . L('name'));
-        $where_info['is_enable'] = array('type' => 'select', 'name' => L('yes') . L('no') . L('enable'), 'value' => array(1 => L('enable'), 2 => L('disable')));
-        $this->assign('where_info', $where_info);
+        $whereInfo              = array();
+        $whereInfo['name']      = array('type' => 'input', 'name' => L('group') . L('name'));
+        $whereInfo['is_enable'] = array('type' => 'select', 'name' => L('yes') . L('no') . L('enable'), 'value' => array(1 => L('enable'), 2 => L('disable')));
+        $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batch_handle         = array();
-        $batch_handle['add']  = $this->_check_privilege('add');
-        $batch_handle['edit'] = $this->_check_privilege('edit');
-        $batch_handle['del']  = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batch_handle);
+        $batchHandle         = array();
+        $batchHandle['add']  = $this->_check_privilege('add');
+        $batchHandle['edit'] = $this->_check_privilege('edit');
+        $batchHandle['del']  = $this->_check_privilege('del');
+        $this->assign('batch_handle', $batchHandle);
 
         $this->assign('title', L('member') . L('group') . L('management'));
         $this->display();
@@ -57,9 +57,9 @@ class MemberGroup extends Backend
         $MemberModel      = D('Member');
         $MemberGroupModel = D('MemberGroup');
         if (IS_POST) {
-            $data       = $this->_make_data();
-            $result_add = $MemberGroupModel->mAdd($data);
-            if ($result_add) {
+            $data       = $this->makeData();
+            $resultAdd = $MemberGroupModel->mAdd($data);
+            if ($resultAdd) {
                 $this->success(L('member') . L('group') . L('add') . L('success'), U('index'));
                 return;
             } else {
@@ -67,7 +67,7 @@ class MemberGroup extends Backend
             }
         }
 
-        $this->_add_edit_common();
+        $this->addEditCommon();
         $this->assign('title', L('member') . L('group') . L('add'));
         $this->display('addedit');
     }
@@ -83,26 +83,26 @@ class MemberGroup extends Backend
         $MemberModel      = D('Member');
         $MemberGroupModel = D('MemberGroup');
         if (IS_POST) {
-            $data        = $this->_make_data();
-            $result_edit = $MemberGroupModel->mEdit($id, $data);
-            if ($result_edit) {
+            $data        = $this->makeData();
+            $resultEdit = $MemberGroupModel->mEdit($id, $data);
+            if ($resultEdit) {
                 $this->success(L('member') . L('group') . L('edit') . L('success'), U('index'));
                 return;
             } else {
-                $error_go_link = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-                $this->error(L('member') . L('group') . L('edit') . L('error'), $error_go_link);
+                $errorGoLink = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
+                $this->error(L('member') . L('group') . L('edit') . L('error'), $errorGoLink);
             }
         }
         //获取分组默认信息
-        $edit_info = $MemberGroupModel->mFind($id);
-        foreach ($edit_info['manage_id'] as $manage_key => $manage_id) {
-            $member_name                         = $MemberModel->mFindColumn($manage_id, 'member_name');
-            $edit_info['manage_id'][$manage_key] = array('value' => $manage_id, 'html' => $member_name);
+        $editInfo = $MemberGroupModel->mFind($id);
+        foreach ($editInfo['manage_id'] as $manageKey => $manageId) {
+            $memberName                         = $MemberModel->mFindColumn($manageId, 'member_name');
+            $editInfo['manage_id'][$manageKey] = array('value' => $manageId, 'html' => $memberName);
         }
-        $edit_info['manage_id'] = json_encode($edit_info['manage_id']);
-        $this->assign('edit_info', $edit_info);
+        $editInfo['manage_id'] = json_encode($editInfo['manage_id']);
+        $this->assign('edit_info', $editInfo);
 
-        $this->_add_edit_common();
+        $this->addEditCommon();
         $this->assign('title', L('member') . L('group') . L('edit'));
         $this->display('addedit');
     }
@@ -117,8 +117,8 @@ class MemberGroup extends Backend
         }
 
         $MemberGroupModel = D('MemberGroup');
-        $result_del       = $MemberGroupModel->mDel($id);
-        if ($result_del) {
+        $resultDel       = $MemberGroupModel->mDel($id);
+        if ($resultDel) {
             //删除成功后 删除管理员与组的关系
             $MemberModel = D('Member');
             $MemberModel->mClean($id, 'group_id');
@@ -130,7 +130,7 @@ class MemberGroup extends Backend
     }
 
     //异步和表单数据验证
-    protected function _validform($field, $data)
+    protected function doValidateForm($field, $data)
     {
         $result = array('status' => true, 'info' => '');
         switch ($field) {
@@ -152,26 +152,26 @@ class MemberGroup extends Backend
                 }
                 //检查管理组名是否存在
                 $MemberGroupModel = D('MemberGroup');
-                $member_info      = $MemberGroupModel->mSelect(array('name' => $data['name'], 'id' => array('neq', $data['id'])));
-                if (0 < count($member_info)) {
+                $memberInfo      = $MemberGroupModel->mSelect(array('name' => $data['name'], 'id' => array('neq', $data['id'])));
+                if (0 < count($memberInfo)) {
                     $result['info'] = L('member') . L('group') . L('name') . L('exists');
                     break;
                 }
                 break;
             case 'privilege':
                 //对比权限
-                $privilege       = $this->_get_privilege('Home');
-                $check_privilege = array();
-                foreach ($privilege as $controller_cn => $privs) {
-                    foreach ($privs as $controller_name => $controller) {
-                        foreach ($controller as $action_name => $action) {
-                            $check_privilege[] = $controller_name . '_' . $action_name;
+                $privilege       = $this->getPrivilege('Home');
+                $checkPrivilege = array();
+                foreach ($privilege as $controllerCn => $privs) {
+                    foreach ($privs as $controllerName => $controller) {
+                        foreach ($controller as $actionName => $action) {
+                            $checkPrivilege[] = $controllerName . '_' . $actionName;
 
                         }
                     }
                 }
                 foreach ($data as $priv) {
-                    if (!in_array($priv, $check_privilege)) {
+                    if (!in_array($priv, $checkPrivilege)) {
                         $result['info'] = L('privilege') . L('submit') . L('error');
                         break;
                     }
@@ -187,7 +187,7 @@ class MemberGroup extends Backend
     }
 
     //异步数据获取
-    protected function _get_data($field, $data)
+    protected function getData($field, $data)
     {
         $where  = array();
         $result = array('status' => true, 'info' => array());
@@ -196,9 +196,9 @@ class MemberGroup extends Backend
                 isset($data['keyword']) && $where['member_name'] = array('like', '%' . $data['keyword'] . '%');
                 isset($data['inserted']) && $where['id']         = array('not in', $data['inserted']);
                 $MemberModel                                     = D('Member');
-                $member_user_list                                = $MemberModel->mSelect($where);
-                foreach ($member_user_list as $member_user) {
-                    $result['info'][] = array('value' => $member_user['id'], 'html' => $member_user['member_name']);
+                $memberUserList                                = $MemberModel->mSelect($where);
+                foreach ($memberUserList as $memberUser) {
+                    $result['info'][] = array('value' => $memberUser['id'], 'html' => $memberUser['member_name']);
                 }
                 break;
         }
@@ -206,45 +206,45 @@ class MemberGroup extends Backend
     }
 
     //构造数据
-    private function _make_data()
+    private function makeData()
     {
         //初始化参数
         $id        = I('id');
-        $manage_id = I('manage_id');
+        $manageId = I('manage_id');
         $name      = I('name');
         $explains  = I('explains');
         $privilege = I('privilege');
-        $is_enable = I('is_enable');
+        $isEnable = I('is_enable');
 
         //检测初始化参数是否合法
-        $error_go_link = (!$id) ? U('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));
+        $errorGoLink = (!$id) ? U('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));
         if ('add' == ACTION_NAME || null !== $name) {
-            $result = $this->_validform('name', array('id' => $id, 'name' => $name));
+            $result = $this->doValidateForm('name', array('id' => $id, 'name' => $name));
             if (!$result['status']) {
-                $this->error($result['info'], $error_go_link);
+                $this->error($result['info'], $errorGoLink);
             }
 
         }
         if ('add' == ACTION_NAME || null !== $privilege) {
-            $result = $this->_validform('privilege', $privilege);
+            $result = $this->doValidateForm('privilege', $privilege);
             if (!$result['status']) {
-                $this->error($result['info'], $error_go_link);
+                $this->error($result['info'], $errorGoLink);
             }
 
         }
 
         $data                                                               = array();
-        ('add' == ACTION_NAME || null !== $manage_id) && $data['manage_id'] = $manage_id;
+        ('add' == ACTION_NAME || null !== $manageId) && $data['manage_id'] = $manageId;
         ('add' == ACTION_NAME || null !== $name) && $data['name']           = $name;
         ('add' == ACTION_NAME || null !== $explains) && $data['explains']   = $explains;
         ('add' == ACTION_NAME || null !== $privilege) && $data['privilege'] = $privilege;
-        ('add' == ACTION_NAME || null !== $is_enable) && $data['is_enable'] = $is_enable;
+        ('add' == ACTION_NAME || null !== $isEnable) && $data['is_enable'] = $isEnable;
         return $data;
     }
 
     //构造assign公共数据
-    private function _add_edit_common()
+    private function addEditCommon()
     {
-        $this->assign('privilege', $this->_get_privilege('Home'));
+        $this->assign('privilege', $this->getPrivilege('Home'));
     }
 }

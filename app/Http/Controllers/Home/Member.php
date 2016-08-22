@@ -18,7 +18,7 @@ class Member extends FrontendMember
 {
     public function index()
     {
-        if (!$this->_is_login()) {
+        if (!$this->isLogin()) {
             $this->display('login');
             return;
         }
@@ -32,9 +32,9 @@ class Member extends FrontendMember
             return;
         }
 
-        $member_name = I('user');
-        $member_pwd  = I('pwd');
-        switch ($this->_login($member_name, $member_pwd)) {
+        $memberName = I('user');
+        $memberPwd  = I('pwd');
+        switch ($this->doLogin($memberName, $memberPwd)) {
             case 'user_pwd_error':
                 $this->error(L('account') . L('or') . L('pass') . L('error'), U('Member/index'));
                 break;
@@ -53,30 +53,30 @@ class Member extends FrontendMember
     public function register()
     {
         if (IS_POST) {
-            if (!$this->_verify_check(I('verify'), 'register') && C('SYS_FRONTEND_VERIFY')) {
+            if (!$this->verifyCheck(I('verify'), 'register') && C('SYS_FRONTEND_VERIFY')) {
                 $this->error(L('verify_code') . L('error'), U('index', array('t' => 'register')));
             }
-            $member_name      = I('re_member_name');
-            $member_pwd       = I('password');
-            $member_pwd_again = I('password_again');
+            $memberName      = I('re_member_name');
+            $memberPwd       = I('password');
+            $memberPwdAgain = I('password_again');
 
             //检测初始化参数是否合法
-            if ('add' == ACTION_NAME || null !== $member_name) {
-                $result = $this->_validform('re_member_name', array('re_member_name' => $member_name));
+            if ('add' == ACTION_NAME || null !== $memberName) {
+                $result = $this->doValidateForm('re_member_name', array('re_member_name' => $memberName));
                 if (!$result['status']) {
                     $this->error($result['info'], U('index', array('t' => 'register')));
                 }
 
             }
-            if ('add' == ACTION_NAME || null !== $member_pwd) {
-                $result = $this->_validform('password', array('password' => $member_pwd));
+            if ('add' == ACTION_NAME || null !== $memberPwd) {
+                $result = $this->doValidateForm('password', array('password' => $memberPwd));
                 if (!$result['status']) {
                     $this->error($result['info'], U('index', array('t' => 'register')));
                 }
 
             }
-            if ('add' == ACTION_NAME || null !== $member_pwd_again) {
-                $result = $this->_validform('password_again', array('password' => $member_pwd, 'password_again' => $member_pwd_again));
+            if ('add' == ACTION_NAME || null !== $memberPwdAgain) {
+                $result = $this->doValidateForm('password_again', array('password' => $memberPwd, 'password_again' => $memberPwdAgain));
                 if (!$result['status']) {
                     $this->error($result['info'], U('index', array('t' => 'register')));
                 }
@@ -84,16 +84,16 @@ class Member extends FrontendMember
             }
 
             //是否自动启用
-            $is_enable = C('SYS_MEMBER_AUTO_ENABLE') ? 1 : 0;
+            $isEnable = C('SYS_MEMBER_AUTO_ENABLE') ? 1 : 0;
             $data      = array(
-                'member_name' => $member_name,
-                'member_pwd'  => $member_pwd,
-                'is_enable'   => $is_enable,
+                'member_name' => $memberName,
+                'member_pwd'  => $memberPwd,
+                'is_enable'   => $isEnable,
             );
             $MemberModel = D('Member');
-            $add_result  = $MemberModel->mAdd($data);
-            if ($add_result) {
-                $this->_login($member_name, $member_pwd, false);
+            $addResult  = $MemberModel->mAdd($data);
+            if ($addResult) {
+                $this->doLogin($memberName, $memberPwd, false);
                 $this->success(L('member') . L('register') . L('success'), U('index'));
                 return;
             } else {
@@ -105,12 +105,12 @@ class Member extends FrontendMember
     //登出
     public function logout()
     {
-        $this->_logout();
+        $this->doLogout();
         $this->success(L('logout') . L('account') . L('success'), U('Index/index'));
     }
 
     //表单数据验证
-    protected function _validform($field, $data)
+    protected function doValidateForm($field, $data)
     {
         $result = array('status' => true, 'info' => '');
         switch ($field) {
@@ -122,8 +122,8 @@ class Member extends FrontendMember
                 }
                 //检查用户名是否存在
                 $MemberModel = D('Member');
-                $member_info = $MemberModel->mSelect(array('member_name' => $data['user']));
-                if (0 >= count($member_info)) {
+                $memberInfo = $MemberModel->mSelect(array('member_name' => $data['user']));
+                if (0 >= count($memberInfo)) {
                     $result['info'] = L('member') . L('name') . L('dont') . L('exists');
                     break;
                 }
@@ -170,8 +170,8 @@ class Member extends FrontendMember
                 }
                 //检查用户名是否存在
                 $MemberModel = D('Member');
-                $member_info = $MemberModel->mSelect(array('member_name' => $data['re_member_name']));
-                if (0 < count($member_info)) {
+                $memberInfo = $MemberModel->mSelect(array('member_name' => $data['re_member_name']));
+                if (0 < count($memberInfo)) {
                     $result['info'] = L('member') . L('name') . L('exists');
                     break;
                 }

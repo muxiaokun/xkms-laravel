@@ -7,10 +7,10 @@ class AssessLog extends Common
 {
     public function mSelect($where = null, $page = false)
     {
-        $this->getPage($page);
+        $this->mGetPage($page);
         !isset($this->options['order']) && $this->order('add_time desc');
         $data = $this->where($where)->select();
-        foreach ($data as &$data_row) {$this->decodeData($data_row);}
+        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
         return $data;
     }
 
@@ -22,12 +22,12 @@ class AssessLog extends Common
 
         if (isset($data['a_id']) && isset($data['grade_id']) && isset($data['re_grade_id'])) {
             $where       = array('a_id' => $data['a_id'], 'grade_id' => $data['grade_id'], 're_grade_id' => $data['re_grade_id']);
-            $assess_info = $this->where($where)->find();
+            $assessInfo = $this->where($where)->find();
         }
-        $this->encodeData($data);
+        $this->mEncodeData($data);
         $data['add_time'] = time();
         //是否已经评价 决定编辑还是添加
-        if ($assess_info) {
+        if ($assessInfo) {
             $result = $this->where($where)->data($data)->save();
         } else {
             $result = $this->add($data);
@@ -35,12 +35,12 @@ class AssessLog extends Common
         return $result;
     }
 
-    protected function encodeData(&$data)
+    protected function mEncodeData(&$data)
     {
         isset($data['score']) && $data['score'] = serialize($data['score']);
     }
 
-    protected function decodeData(&$data)
+    protected function mDecodeData(&$data)
     {
         isset($data['score']) && $data['score'] = unserialize($data['score']);
     }

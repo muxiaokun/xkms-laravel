@@ -17,27 +17,27 @@ class Backend extends Common
     public function _initialize()
     {
         /*parent::_initialize();
-        if ($this->_is_login()) {
+        if ($this->isLogin()) {
             $backendInfo = session('backend_info');
             //自动登出时间
             if (time() - C('SYS_BACKEND_TIMEOUT') < $backendInfo['login_time']) {
                 $backendInfo['login_time'] = time();
                 session('backend_info', $backendInfo);
             } else {
-                $this->_logout();
+                $this->doLogout();
                 $this->error(L('login') . L('timeout'), U('Admin/Index/index'));
             }
 
             //检查管理员或者管理员组权限变动 先检查数量 提高效率
             $AdminModel            = D('Admin');
-            $admin_info            = $AdminModel->mFind($backendInfo['id']);
+            $adminInfo            = $AdminModel->mFind($backendInfo['id']);
             $AdminGroupModel       = D('AdminGroup');
-            $admin_group_privilege = $AdminGroupModel->mFind_privilege($admin_info['group_id']);
+            $adminGroupPrivilege = $AdminGroupModel->mFind_privilege($adminInfo['group_id']);
             if (
-                $backendInfo['privilege'] !== $admin_info['privilege'] ||
-                $backendInfo['group_privilege'] !== $admin_group_privilege
+                $backendInfo['privilege'] !== $adminInfo['privilege'] ||
+                $backendInfo['group_privilege'] !== $adminGroupPrivilege
             ) {
-                $this->_logout();
+                $this->doLogout();
                 $this->error(L('privilege') . L('change') . L('please') . L('login'), U('Admin/Index/index'));
             }
 
@@ -48,48 +48,48 @@ class Backend extends Common
 
             //是否开启管理员日志 记录除了root 和 非POST(不记录来自ajax_api)提交数据
             if (C('SYS_ADMIN_AUTO_LOG') && 1 != session('backend_info.id') && IS_POST && 'ajax_api' != ACTION_NAME) {
-                $deny_log['Index'] = array('index', 'top_nav', 'left_nav', 'main', 'logout');
-                if (!in_array(ACTION_NAME, $deny_log[CONTROLLER_NAME])) {
+                $denyLog['Index'] = array('index', 'top_nav', 'left_nav', 'main', 'logout');
+                if (!in_array(ACTION_NAME, $denyLog[CONTROLLER_NAME])) {
                     $AdminLogModel = D('AdminLog');
                     $AdminLogModel->mAdd($backendInfo['id']);
                 }
             }
         } else {
             //检测不登陆就可以访问的
-            $allow_action['Index'] = array('index', 'login', 'verify_img');
-            if (!in_array(ACTION_NAME, $allow_action[CONTROLLER_NAME])) {
-                $this->error(L('not_login') . L('backend'), U('Admin/Index/index'));
+            $allowAction['Index'] = array('index', 'login', 'verifyImg');
+            if (!in_array(ACTION_NAME, $allowAction[CONTROLLER_NAME])) {
+                $this->error(L('notdoLogin') . L('backend'), U('Admin/Index/index'));
             }
         }*/
     }
 
     //生成验证码
-    public function verify_img()
+    public function verifyImg()
     {
         //查看配置是否需要验证码
         if (!C('SYS_BACKEND_VERIFY')) {
             return;
         }
 
-        return parent::verify_img();
+        return parent::verifyImg();
     }
 
     //检查验证码是否正确
-    protected function _verify_check($code, $t = '')
+    protected function verifyCheck($code, $t = '')
     {
         //查看配置是否需要验证码
         if (!C('SYS_BACKEND_VERIFY')) {
             return true;
         }
 
-        return parent::_verify_check($code, $t);
+        return parent::verifyCheck($code, $t);
     }
 
     // 加强ajax_api接口安全性
     public function ajax_api()
     {
-        $allow_ajax_api = array('validform', 'get_data');
-        if (!$this->_is_login() && !in_array(I('type'), $allow_ajax_api)) {
+        $allowAjaxApi = array('validform', 'get_data');
+        if (!$this->isLogin() && !in_array(I('type'), $allowAjaxApi)) {
             return;
         }
 
@@ -97,57 +97,57 @@ class Backend extends Common
     }
 
     //登录功能
-    protected function _login($user_name, $password)
+    protected function doLogin($userName, $password)
     {
-        if (!$this->_verify_check(I('verify'))) {
+        if (!$this->verifyCheck(I('verify'))) {
             return 'verify_error';
         }
 
         $AdminModel = D('Admin');
         //检测后台尝试登陆次数
-        $login_num = C('SYS_BACKEND_LOGIN_NUM');
-        $lock_time = C('SYS_BACKEND_LOCK_TIME');
-        if (0 != $login_num) {
-            $login_info = $AdminModel->mFind($AdminModel->mFindId($user_name));
-            if (0 != $login_info['lock_time'] && $login_info['lock_time'] > (time() - $lock_time)) {
-                $AdminModel->data(array('lock_time' => time()))->where(array('id' => $login_info['id']))->save();
+        $loginNum = C('SYS_BACKEND_LOGIN_NUM');
+        $lockTime = C('SYS_BACKEND_LOCK_TIME');
+        if (0 != $loginNum) {
+            $loginInfo = $AdminModel->mFind($AdminModel->mFindId($userName));
+            if (0 != $loginInfo['lock_time'] && $loginInfo['lock_time'] > (time() - $lockTime)) {
+                $AdminModel->data(array('lock_time' => time()))->where(array('id' => $loginInfo['id']))->save();
                 return 'lock_user_error';
             }
         }
         //验证用户名密码
-        $admin_info = $AdminModel->authorized($user_name, $password);
-        if ($admin_info) {
+        $adminInfo = $AdminModel->authorized($userName, $password);
+        if ($adminInfo) {
             //管理员有组的 加载分组权限
-            if (0 < count($admin_info['group_id'])) {
+            if (0 < count($adminInfo['group_id'])) {
                 $AdminGroupModel               = D('AdminGroup');
-                $admin_info['group_privilege'] = $AdminGroupModel->mFind_privilege($admin_info['group_id']);
+                $adminInfo['group_privilege'] = $AdminGroupModel->mFind_privilege($adminInfo['group_id']);
             }
             //重置登录次数
-            if (0 != $admin_info['login_num']) {
-                $login_data = array('login_num' => 0, 'lock_time' => 0);
-                $AdminModel->data($login_data)->where(array('id' => $login_info['id']))->save();
+            if (0 != $adminInfo['login_num']) {
+                $loginData = array('login_num' => 0, 'lock_time' => 0);
+                $AdminModel->data($loginData)->where(array('id' => $loginInfo['id']))->save();
             }
-            $admin_info['login_time'] = time();
-            session('backend_info', $admin_info);
+            $adminInfo['login_time'] = time();
+            session('backend_info', $adminInfo);
             return 'login_success';
         } else {
             //检测后台尝试登陆次数
-            if (0 != $login_num) {
-                $login_data              = array();
-                $login_data['login_num'] = $login_info['login_num'] + 1;
-                $login_data['lock_time'] = ($login_num <= $login_data['login_num']) ? time() : 0;
-                $AdminModel->data($login_data)->where(array('id' => $login_info['id']))->save();
+            if (0 != $loginNum) {
+                $loginData              = array();
+                $loginData['login_num'] = $loginInfo['login_num'] + 1;
+                $loginData['lock_time'] = ($loginNum <= $loginData['login_num']) ? time() : 0;
+                $AdminModel->data($loginData)->where(array('id' => $loginInfo['id']))->save();
             }
             return 'user_pwd_error';
         }
     }
     //登出功能
-    protected function _logout()
+    protected function doLogout()
     {
         session('backend_info', null);
     }
     //子类调用的是否登录的接口
-    protected function _is_login()
+    protected function isLogin()
     {
         if (session('backend_info')) {
             return true;
@@ -159,26 +159,26 @@ class Backend extends Common
     //调用 404 的默认控制器和默认方法
     public function _empty()
     {
-        $Empty_Controller = A('Common/CommonEmpty');
-        $Empty_Controller->_empty();
+        $EmptyController = A('Common/CommonEmpty');
+        $EmptyController->_empty();
     }
 
     //检测权限
-    public function _check_privilege($action_name = ACTION_NAME, $controller_name = CONTROLLER_NAME)
+    public function _check_privilege($actionName = ACTION_NAME, $controllerName = CONTROLLER_NAME)
     {
         //登录后 检查是否有权限可以操作 1.不是默认框架控制器 2.拥有管理员管理组全部权限 3.拥有权限 4.ajax_api接口 4.不需要权限就能访问的
-        $allow_action['Index']        = array('index', 'top_nav', 'left_nav', 'main', 'logout');
-        $allow_action['ManageUpload'] = array('UploadFile', 'ManageFile');
+        $allowAction['Index']        = array('index', 'top_nav', 'left_nav', 'main', 'logout');
+        $allowAction['ManageUpload'] = array('UploadFile', 'ManageFile');
         $backendInfo                 = session('backend_info');
-        $admin_priv                   = $backendInfo['privilege'];
-        $admin_group_priv             = ($backendInfo['group_privilege']) ? $backendInfo['group_privilege'] : array();
+        $adminPriv                   = $backendInfo['privilege'];
+        $adminGroupPriv             = ($backendInfo['group_privilege']) ? $backendInfo['group_privilege'] : array();
         if (
-            'ajax_api' != $action_name &&
-            !in_array($action_name, $allow_action[$controller_name]) &&
-            !in_array('all', $admin_priv) &&
-            !in_array($controller_name . '_' . $action_name, $admin_priv) &&
-            !in_array('all', $admin_group_priv) &&
-            !in_array($controller_name . '_' . $action_name, $admin_group_priv)
+            'ajax_api' != $actionName &&
+            !in_array($actionName, $allowAction[$controllerName]) &&
+            !in_array('all', $adminPriv) &&
+            !in_array($controllerName . '_' . $actionName, $adminPriv) &&
+            !in_array('all', $adminGroupPriv) &&
+            !in_array($controllerName . '_' . $actionName, $adminGroupPriv)
         ) {
             return false;
         }
@@ -198,26 +198,26 @@ class Backend extends Common
             return false;
         }
 
-        $cfg_file    = CONF_PATH . $file . '.php';
-        $save_config = include $cfg_file;
-        if (!is_array($save_config)) {
-            $save_config = array();
+        $cfgFile    = CONF_PATH . $file . '.php';
+        $saveConfig = include $cfgFile;
+        if (!is_array($saveConfig)) {
+            $saveConfig = array();
         }
 
         foreach ($col as $option) {
-            $save_config[$option] = I($option);
+            $saveConfig[$option] = I($option);
         }
-        $config_str     = var_export($save_config, true);
-        $Core_Copyright = C('CORE_COPYRIGHT');
-        $put_config     = <<<EOF
+        $configStr     = var_export($saveConfig, true);
+        $CoreCopyright = C('CORE_COPYRIGHT');
+        $putConfig     = <<<EOF
 <?php
-{$Core_Copyright}
+{$CoreCopyright}
 // {$file} config file
-return {$config_str};
+return {$configStr};
 ?>
 EOF;
-        $put_result = file_put_contents($cfg_file, $put_config);
-        if ($put_result) {
+        $putResult = file_put_contents($cfgFile, $putConfig);
+        if ($putResult) {
             $this->success(L('save') . L('success'), U(ACTION_NAME));
         } else {
             $this->error(L('save') . L('error'), U(ACTION_NAME));

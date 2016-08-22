@@ -21,38 +21,38 @@ class Region extends Backend
     {
         $RegionModel = D('Region');
         //建立where
-        $v_value                          = '';
-        $v_value                          = I('region_name');
-        $v_value && $where['region_name'] = array('like', '%' . $v_value . '%');
-        $v_value                          = I('short_spell');
-        $v_value && $where['short_spell'] = array('like', '%' . $v_value . '%');
-        $v_value                          = I('areacode');
-        $v_value && $where['areacode']    = array('like', '%' . $v_value . '%');
-        $v_value                          = I('postcode');
-        $v_value && $where['postcode']    = array('like', '%' . $v_value . '%');
+        $whereValue                          = '';
+        $whereValue                          = I('region_name');
+        $whereValue && $where['region_name'] = array('like', '%' . $whereValue . '%');
+        $whereValue                          = I('short_spell');
+        $whereValue && $where['short_spell'] = array('like', '%' . $whereValue . '%');
+        $whereValue                          = I('areacode');
+        $whereValue && $where['areacode']    = array('like', '%' . $whereValue . '%');
+        $whereValue                          = I('postcode');
+        $whereValue && $where['postcode']    = array('like', '%' . $whereValue . '%');
 
         //初始化翻页 和 列表数据
-        $region_list = $RegionModel->mSelect($where, true);
-        foreach ($region_list as &$region) {
+        $regionList = $RegionModel->mSelect($where, true);
+        foreach ($regionList as &$region) {
             $region['parent_name'] = $RegionModel->mFindColumn($region['parent_id'], 'region_name');
         }
 
-        $this->assign('region_list', $region_list);
-        $this->assign('region_list_count', $RegionModel->getPageCount($where));
+        $this->assign('region_list', $regionList);
+        $this->assign('region_list_count', $RegionModel->mGetPageCount($where));
 
         //初始化where_info
-        $where_info['region_name'] = array('type' => 'input', 'name' => L('region_name'));
-        $where_info['short_spell'] = array('type' => 'input', 'name' => L('short_spell'));
-        $where_info['areacode']    = array('type' => 'input', 'name' => L('areacode'));
-        $where_info['postcode']    = array('type' => 'input', 'name' => L('postcode'));
-        $this->assign('where_info', $where_info);
+        $whereInfo['region_name'] = array('type' => 'input', 'name' => L('region_name'));
+        $whereInfo['short_spell'] = array('type' => 'input', 'name' => L('short_spell'));
+        $whereInfo['areacode']    = array('type' => 'input', 'name' => L('areacode'));
+        $whereInfo['postcode']    = array('type' => 'input', 'name' => L('postcode'));
+        $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batch_handle         = array();
-        $batch_handle['add']  = $this->_check_privilege('add');
-        $batch_handle['edit'] = $this->_check_privilege('edit');
-        $batch_handle['del']  = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batch_handle);
+        $batchHandle         = array();
+        $batchHandle['add']  = $this->_check_privilege('add');
+        $batchHandle['edit'] = $this->_check_privilege('edit');
+        $batchHandle['del']  = $this->_check_privilege('del');
+        $this->assign('batch_handle', $batchHandle);
 
         $this->assign('title', L('region') . L('management'));
         $this->display();
@@ -63,9 +63,9 @@ class Region extends Backend
     {
         if (IS_POST) {
             $RegionModel = D('Region');
-            $data        = $this->_make_data();
-            $result_add  = $RegionModel->mAdd($data);
-            if ($result_add) {
+            $data        = $this->makeData();
+            $resultAdd  = $RegionModel->mAdd($data);
+            if ($resultAdd) {
                 $this->success(L('region') . L('add') . L('success'), U('index'));
                 return;
             } else {
@@ -87,20 +87,20 @@ class Region extends Backend
 
         $RegionModel = D('Region');
         if (IS_POST) {
-            $data        = $this->_make_data();
-            $result_edit = $RegionModel->mEdit($id, $data);
-            if ($result_edit) {
+            $data        = $this->makeData();
+            $resultEdit = $RegionModel->mEdit($id, $data);
+            if ($resultEdit) {
                 $this->success(L('region') . L('edit') . L('success'), U('index'));
                 return;
             } else {
-                $error_go_link = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-                $this->error(L('region') . L('edit') . L('error'), $error_go_link);
+                $errorGoLink = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
+                $this->error(L('region') . L('edit') . L('error'), $errorGoLink);
             }
         }
 
-        $edit_info                = $RegionModel->mFind($id);
-        $edit_info['parent_name'] = $RegionModel->mFindColumn($edit_info['parent_id'], 'region_name');
-        $this->assign('edit_info', $edit_info);
+        $editInfo                = $RegionModel->mFind($id);
+        $editInfo['parent_name'] = $RegionModel->mFindColumn($editInfo['parent_id'], 'region_name');
+        $this->assign('edit_info', $editInfo);
         $this->assign('title', L('region') . L('edit'));
         $this->display('addedit');
     }
@@ -114,8 +114,8 @@ class Region extends Backend
         }
 
         $RegionModel = D('Region');
-        $result_del  = $RegionModel->mDel($id);
-        if ($result_del) {
+        $resultDel  = $RegionModel->mDel($id);
+        if ($resultDel) {
             $this->success(L('region') . L('del') . L('success'), U('index'));
             return;
         } else {
@@ -124,25 +124,25 @@ class Region extends Backend
     }
 
     //构造数据
-    private function _make_data()
+    private function makeData()
     {
         //初始化参数
-        $parent_id   = I('parent_id');
-        $region_name = I('region_name');
-        $short_name  = I('short_name');
-        $short_spell = I('short_spell');
+        $parentId   = I('parent_id');
+        $regionName = I('region_name');
+        $shortName  = I('short_name');
+        $shortSpell = I('short_spell');
         $areacode    = I('areacode');
         $postcode    = I('postcode');
-        $if_show     = I('if_show');
+        $ifShow     = I('if_show');
 
         $data                                                                   = array();
-        ('add' == ACTION_NAME || null !== $parent_id) && $data['parent_id']     = $parent_id;
-        ('add' == ACTION_NAME || null !== $region_name) && $data['region_name'] = $region_name;
-        ('add' == ACTION_NAME || null !== $short_name) && $data['short_name']   = $short_name;
-        ('add' == ACTION_NAME || null !== $short_spell) && $data['short_spell'] = $short_spell;
+        ('add' == ACTION_NAME || null !== $parentId) && $data['parent_id']     = $parentId;
+        ('add' == ACTION_NAME || null !== $regionName) && $data['region_name'] = $regionName;
+        ('add' == ACTION_NAME || null !== $shortName) && $data['short_name']   = $shortName;
+        ('add' == ACTION_NAME || null !== $shortSpell) && $data['short_spell'] = $shortSpell;
         ('add' == ACTION_NAME || null !== $areacode) && $data['areacode']       = $areacode;
         ('add' == ACTION_NAME || null !== $postcode) && $data['postcode']       = $postcode;
-        ('add' == ACTION_NAME || null !== $if_show) && $data['if_show']         = $if_show;
+        ('add' == ACTION_NAME || null !== $ifShow) && $data['if_show']         = $ifShow;
         return $data;
     }
 

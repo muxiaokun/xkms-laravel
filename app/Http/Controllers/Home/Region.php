@@ -17,7 +17,7 @@ use App\Http\Controllers\Frontend;
 class Region extends Frontend
 {
     //异步获取数据接口
-    protected function _get_data($field, $data)
+    protected function getData($field, $data)
     {
         $where  = array();
         $result = array('status' => true, 'info' => array());
@@ -26,8 +26,8 @@ class Region extends Frontend
                 $where['parent_id'] = ($data['id']) ? $data['id'] : 0;
                 $RegionModel        = D('Region');
                 $count              = $RegionModel->where($where)->count();
-                $region_user_list   = $RegionModel->field('id,region_name')->limit($count)->mSelect($where);
-                $result['info']     = $region_user_list;
+                $regionUserList   = $RegionModel->field('id,region_name')->limit($count)->mSelect($where);
+                $result['info']     = $regionUserList;
                 break;
         }
         return $result;

@@ -21,9 +21,9 @@ class Index extends Common
 {
     public function _initialize()
     {
-        $loaded_ext = get_loaded_extensions();
+        $loadedExt = get_loaded_extensions();
         //没有加载mysql模块不能进行安装
-        if (!in_array('pdo_mysql', $loaded_ext)) {
+        if (!in_array('pdo_mysql', $loadedExt)) {
             die('require pdo_mysql extension!!!');
         }
 
@@ -42,8 +42,8 @@ class Index extends Common
     // 加强ajax_api接口安全性
     public function ajax_api()
     {
-        $allow_ajax_api = array('get_data');
-        if (!in_array(I('type'), $allow_ajax_api)) {
+        $allowAjaxApi = array('get_data');
+        if (!in_array(I('type'), $allowAjaxApi)) {
             return;
         }
 
@@ -68,46 +68,46 @@ class Index extends Common
     //第二页 检测扩展模块，设置数据库
     public function setp1()
     {
-        $loaded_ext = get_loaded_extensions();
+        $loadedExt = get_loaded_extensions();
         //检测有可能会依赖的扩展模块
-        $must_ext = array('iconv', 'json', 'mcrypt', 'session', 'PDO', 'bz2', 'openssl',
+        $mustExt = array('iconv', 'json', 'mcrypt', 'session', 'PDO', 'bz2', 'openssl',
             'curl', 'fileinfo', 'gd', 'mbstring', 'pdo_mysql');
-        $unload_ext = array();
-        foreach ($must_ext as $ext) {
-            if (!in_array($ext, $loaded_ext)) {
-                $unload_ext[] = $ext;
+        $unloadExt = array();
+        foreach ($mustExt as $ext) {
+            if (!in_array($ext, $loadedExt)) {
+                $unloadExt[] = $ext;
             }
 
         }
-        $this->assign('note', $unload_ext);
+        $this->assign('note', $unloadExt);
         //读取默认数据库配置
         $this->assign('database_list', $this->_compare_database());
-        $default_config = include XKMS_DEFAULT_CONFIG . 'database.php';
+        $defaultConfig = include XKMS_DEFAULT_CONFIG . 'database.php';
         if (C('DB_HOST')) {
-            $default_config['DB_HOST'] = C('DB_HOST');
+            $defaultConfig['DB_HOST'] = C('DB_HOST');
         }
 
         if (C('DB_NAME')) {
-            $default_config['DB_NAME'] = C('DB_NAME');
+            $defaultConfig['DB_NAME'] = C('DB_NAME');
         }
 
         if (C('DB_USER')) {
-            $default_config['DB_USER'] = C('DB_USER');
+            $defaultConfig['DB_USER'] = C('DB_USER');
         }
 
         if (C('DB_PWD')) {
-            $default_config['DB_PWD'] = C('DB_PWD');
+            $defaultConfig['DB_PWD'] = C('DB_PWD');
         }
 
         if (C('DB_PORT')) {
-            $default_config['DB_PORT'] = C('DB_PORT');
+            $defaultConfig['DB_PORT'] = C('DB_PORT');
         }
 
         if (C('DB_PREFIX')) {
-            $default_config['DB_PREFIX'] = C('DB_PREFIX');
+            $defaultConfig['DB_PREFIX'] = C('DB_PREFIX');
         }
 
-        $this->assign('default_config', $default_config); //读取默认数据库配置
+        $this->assign('default_config', $defaultConfig); //读取默认数据库配置
         $this->assign('setp', L('pfsetp', array('setp' => L('one'), 'count' => L('four'))));
         $this->assign('title', L('setp1_title'));
         $this->display();
@@ -138,8 +138,8 @@ class Index extends Common
         ob_flush();
         flush();
         //初始化需要安装的数据库
-        $compare_database_info = $this->_compare_database(true);
-        if (1 != $compare_database_info['if_exists']) {
+        $compareDatabaseInfo = $this->_compare_database(true);
+        if (1 != $compareDatabaseInfo['if_exists']) {
             try
             {
                 $db = M('', '', array(
@@ -150,31 +150,31 @@ class Index extends Common
                     'db_port' => C('DB_PORT'),
                 ))->db()->connect();
             } catch (\Think\Exception $e) {
-                $error_msg = mb_convert_encoding($e->getMessage(), 'utf-8', array('gbk', 'utf-8'));
+                $errorMsg = mb_convert_encoding($e->getMessage(), 'utf-8', array('gbk', 'utf-8'));
             }
             $result = $db->query('CREATE DATABASE `' . C('DB_NAME') . '` DEFAULT CHARACTER SET = utf8');
 
-            $lang_str = L('install') . L('database') . C('DB_NAME');
+            $langStr = L('install') . L('database') . C('DB_NAME');
             if ($result) {
-                $lang_str .= L('success');
+                $langStr .= L('success');
                 $type = 'success';
             } else {
-                $lang_str .= L('error');
-                $error_msg = $db->errorInfo();
-                $lang_str .= L('error') . $error_msg[0] . $error_msg[1] . $error_msg[2];
+                $langStr .= L('error');
+                $errorMsg = $db->errorInfo();
+                $langStr .= L('error') . $errorMsg[0] . $errorMsg[1] . $errorMsg[2];
                 $type = 'danger';
             }
-            echo '<script type="text/javascript">show_install_message("#show_box","' . $lang_str . '","' . $type . '")</script>';
+            echo '<script type="text/javascript">show_install_message("#show_box","' . $langStr . '","' . $type . '")</script>';
         } else {
-            $lang_str = L('database') . C('DB_NAME') . L('exists');
-            echo '<script type="text/javascript">show_install_message("#show_box","' . $lang_str . '","info")</script>';
+            $langStr = L('database') . C('DB_NAME') . L('exists');
+            echo '<script type="text/javascript">show_install_message("#show_box","' . $langStr . '","info")</script>';
         }
         //初始化需要安装的数据表
-        $compare_tables_info = $this->_compare_tables(true);
+        $compareTablesInfo = $this->_compare_tables(true);
         //必装的表有6个
-        if (6 > count($compare_tables_info)) {
-            $lang_str = L('setp3_commont1');
-            echo '<script type="text/javascript">show_install_message("#show_box","' . $lang_str . '","danger")</script>';
+        if (6 > count($compareTablesInfo)) {
+            $langStr = L('setp3_commont1');
+            echo '<script type="text/javascript">show_install_message("#show_box","' . $langStr . '","danger")</script>';
             echo '<script type="text/javascript">setTimeout(\'window.location.href=\"' . U('', array('setp' => 2)) . '\"\',3000)</script>';
             return;
         }
@@ -191,82 +191,82 @@ class Index extends Common
             ))->db()->connect();
             $db->query('set names utf8');
         } catch (\Think\Exception $e) {
-            $error_msg = mb_convert_encoding($e->getMessage(), 'utf-8', array('gbk', 'utf-8'));
+            $errorMsg = mb_convert_encoding($e->getMessage(), 'utf-8', array('gbk', 'utf-8'));
         }
 
-        $create_tables_success = 0;
-        $create_tables_error   = 0;
+        $createTablesSuccess = 0;
+        $createTablesError   = 0;
         //清空权限缓存
         F('privilege', null);
-        $install_control = I('install_control');
+        $installControl = I('install_control');
 
-        $tables_count         = 0;
-        $install_tables_count = 0;
-        foreach ($compare_tables_info as $control_index => $control) {
+        $tablesCount         = 0;
+        $installTablesCount = 0;
+        foreach ($compareTablesInfo as $controlIndex => $control) {
             //跳过未选中的控制器数据表 不能跳过必装的控制器0-1
-            if (!in_array($control_index, $install_control['install']) && 1 < $control['category']) {
+            if (!in_array($controlIndex, $installControl['install']) && 1 < $control['category']) {
                 continue;
             }
-            $tables_count += count($control['tables']);
+            $tablesCount += count($control['tables']);
         }
 
-        foreach ($compare_tables_info as $control_index => $control) {
+        foreach ($compareTablesInfo as $controlIndex => $control) {
             //跳过未选中的控制器数据表 不能跳过必装的控制器0-1
-            if (!in_array($control_index, $install_control['install']) && 1 < $control['category']) {
+            if (!in_array($controlIndex, $installControl['install']) && 1 < $control['category']) {
                 continue;
             }
 
             //安装表
-            foreach ($control['tables'] as $table_name => $table) {
-                $reset = in_array($table_name, $install_control['reset']);
+            foreach ($control['tables'] as $tableName => $table) {
+                $reset = in_array($tableName, $installControl['reset']);
                 //由于有默认数据的自动写入重置必须执行
                 if ($reset) {
-                    $db->query("DROP TABLE IF EXISTS " . $table_name);
+                    $db->query("DROP TABLE IF EXISTS " . $tableName);
                 }
 
                 $result = $db->query($table['create_sql']);
 
-                $lang_str = L('install') . L('controller') . '&nbsp;' . $control['control_info'] . '&nbsp;' . L('table') . $table['table_info'] . $table_name;
+                $langStr = L('install') . L('controller') . '&nbsp;' . $control['control_info'] . '&nbsp;' . L('table') . $table['table_info'] . $tableName;
                 if ($result) {
-                    $create_tables_success++;
-                    $lang_str .= L('success');
+                    $createTablesSuccess++;
+                    $langStr .= L('success');
                     $type = 'success';
                 } else {
-                    $create_tables_error++;
-                    $error_msg = $db->errorInfo();
-                    $lang_str .= L('error') . $error_msg[0] . $error_msg[1] . $error_msg[2];
+                    $createTablesError++;
+                    $errorMsg = $db->errorInfo();
+                    $langStr .= L('error') . $errorMsg[0] . $errorMsg[1] . $errorMsg[2];
                     $type = 'danger';
                 }
-                echo '<script type="text/javascript">show_install_progress(' . ($install_tables_count++ / $tables_count) . ');</script>';
-                echo '<script type="text/javascript">show_install_message("#show_box","' . $lang_str . '","' . $type . '")</script>';
+                echo '<script type="text/javascript">show_install_progress(' . ($installTablesCount++ / $tablesCount) . ');</script>';
+                echo '<script type="text/javascript">show_install_message("#show_box","' . $langStr . '","' . $type . '")</script>';
                 ob_flush();
                 flush();
                 //表不存在或者选择重置将初始化数据
                 if ((!$table['if_exists'] || $reset) && 0 < count($table['insert_row'])) {
-                    foreach ($table['insert_row'] as $insert_row) {
-                        $db->exec('INSERT INTO ' . $table_name . $insert_row);
+                    foreach ($table['insert_row'] as $insertRow) {
+                        $db->exec('INSERT INTO ' . $tableName . $insertRow);
                     }
                 }
             }
             //安装权限
             $privilege = F('privilege');
-            foreach ($control['privilege'] as $group => $control_priv) {
-                foreach ($control_priv as $control_name => $action_priv) {
-                    $privilege[$group][$control['control_group']][$control_name] = $action_priv;
+            foreach ($control['privilege'] as $group => $controlPriv) {
+                foreach ($controlPriv as $controlName => $actionPriv) {
+                    $privilege[$group][$control['control_group']][$controlName] = $actionPriv;
                 }
             }
             F('privilege', $privilege);
         }
 
         //返回安装报告
-        $lang_str = L('success') . L('initialize') . $create_tables_success . L('table') . L('error') . $create_tables_error . L('table');
-        if (0 == $create_tables_error) {
-            $lang_str .= L('three_second_next_setp');
-            echo '<script type="text/javascript">show_install_message("#show_box","' . $lang_str . '","success")</script>';
+        $langStr = L('success') . L('initialize') . $createTablesSuccess . L('table') . L('error') . $createTablesError . L('table');
+        if (0 == $createTablesError) {
+            $langStr .= L('three_second_next_setp');
+            echo '<script type="text/javascript">show_install_message("#show_box","' . $langStr . '","success")</script>';
             echo '<script type="text/javascript">setTimeout(\'window.location.href=\"' . U('setp4') . '\"\',3000)</script>';
         } else {
-            $button_str = '<a class=\"mr30 w100 btn btn-success\" href=\"' . U('setp2') . '\">' . L('previous') . L('setp') . '</a>';
-            echo '<script type="text/javascript">show_install_message("#show_box","' . $button_str . $lang_str . '","danger")</script>';
+            $buttonStr = '<a class=\"mr30 w100 btn btn-success\" href=\"' . U('setp2') . '\">' . L('previous') . L('setp') . '</a>';
+            echo '<script type="text/javascript">show_install_message("#show_box","' . $buttonStr . $langStr . '","danger")</script>';
         }
         ob_flush();
         flush();
@@ -282,7 +282,7 @@ class Index extends Common
         $status['install_status'] = 2;
         F('sys_status', $status);
         $article = htmlspecialchars_decode(F('install_end', '', XKMS_ARTICLES));
-        $article = str_replace('{$app_name}', APP_NAME, $article);
+        $article = str_replace('{$appName}', APP_NAME, $article);
         $this->assign('article', $article); //读取安装完毕的文字
         $this->assign('setp', L('pfsetp', array('setp' => L('four'), 'count' => L('four'))));
         $this->assign('title', L('setp4_title'));
@@ -290,13 +290,13 @@ class Index extends Common
     }
 
     //AJAX 查询接口
-    protected function _get_data($field, $data)
+    protected function getData($field, $data)
     {
         switch ($field) {
             //第二部 验证数据库
             case 'check_mysql';
-                $current_date = date(C('SYS_DATE_DETAIL')) . " ";
-                $error_msg    = false;
+                $currentDate = date(C('SYS_DATE_DETAIL')) . " ";
+                $errorMsg    = false;
                 //检测是否能连接到数据库服务器
                 try
                 {
@@ -308,14 +308,14 @@ class Index extends Common
                         'db_port' => $data['port'],
                     ))->db()->connect();
                 } catch (\Think\Exception $e) {
-                    $error_msg = mb_convert_encoding($e->getMessage(), 'utf-8', array('gbk', 'utf-8'));
+                    $errorMsg = mb_convert_encoding($e->getMessage(), 'utf-8', array('gbk', 'utf-8'));
                 }
-                if ($error_msg) {
-                    return array('status' => false, 'info' => array('msg' => $current_date . $error_msg, 'type' => 1));
+                if ($errorMsg) {
+                    return array('status' => false, 'info' => array('msg' => $currentDate . $errorMsg, 'type' => 1));
                 }
 
                 //只要能链接数据库就 保存配置
-                $save_config = array(
+                $saveConfig = array(
                     'DB_HOST'   => $data['host'],
                     'DB_NAME'   => $data['name'],
                     'DB_USER'   => $data['user'],
@@ -323,17 +323,17 @@ class Index extends Common
                     'DB_PORT'   => $data['port'],
                     'DB_PREFIX' => $data['prefix'],
                 );
-                $config_str     = var_export($save_config, true);
-                $Core_Copyright = C('CORE_COPYRIGHT');
-                $put_config     = <<<EOF
+                $configStr     = var_export($saveConfig, true);
+                $CoreCopyright = C('CORE_COPYRIGHT');
+                $putConfig     = <<<EOF
 <?php
-{$Core_Copyright}
+{$CoreCopyright}
 // database config file
-return {$config_str};
+return {$configStr};
 ?>
 EOF;
-                file_put_contents(CONF_PATH . 'database.php', $put_config);
-                $result = array('status' => true, 'info' => array('msg' => $current_date . L('save_config_success') . L('three_second_next_setp'), 'type' => 3));
+                file_put_contents(CONF_PATH . 'database.php', $putConfig);
+                $result = array('status' => true, 'info' => array('msg' => $currentDate . L('save_config_success') . L('three_second_next_setp'), 'type' => 3));
                 return $result;
                 break;
         }
@@ -342,8 +342,8 @@ EOF;
     //返回数据库基本信息$database = true  和 已有数据库列表$database = false
     private function _compare_database($database = false)
     {
-        $database_name = C('DB_NAME');
-        $server_link   = (C('DB_PORT')) ? C('DB_HOST') . ":" . C('DB_PORT') : C('DB_HOST');
+        $databaseName = C('DB_NAME');
+        $serverLink   = (C('DB_PORT')) ? C('DB_HOST') . ":" . C('DB_PORT') : C('DB_HOST');
         try
         {
             $db = M('', '', array(
@@ -360,35 +360,35 @@ EOF;
         }
 
         //不显示的数据库
-        $not_list_database = array('information_schema', 'mysql', 'performance_schema');
-        $database_list     = array();
+        $notListDatabase = array('information_schema', 'mysql', 'performance_schema');
+        $databaseList     = array();
         foreach ($db->query('show databases') as $row) {
-            if (!in_array($row[0], $not_list_database)) {
-                $database_list[] = $row[0];
+            if (!in_array($row[0], $notListDatabase)) {
+                $databaseList[] = $row[0];
             }
 
         }
 
-        $re_compare_info = array();
+        $reCompareInfo = array();
         if ($database) {
-            $re_compare_info['name']      = $database_name;
-            $re_compare_info['if_exists'] = (in_array($database_name, $database_list)) ? 1 : 0;
+            $reCompareInfo['name']      = $databaseName;
+            $reCompareInfo['if_exists'] = (in_array($databaseName, $databaseList)) ? 1 : 0;
         } else {
-            $re_compare_info = $database_list;
+            $reCompareInfo = $databaseList;
         }
-        return $re_compare_info;
+        return $reCompareInfo;
     }
 
     //返回数据表基本信息
-    private function _compare_tables($if_install = false)
+    private function _compare_tables($ifInstall = false)
     {
         //初始化参数
         $controls        = scandir(XKMS_TABLES);
-        $re_compare_info = array();
+        $reCompareInfo = array();
         $tables          = array();
         //检测数据库是否存在 如果存在就初始化已有表数组
-        $compare_database_info = $this->_compare_database(C('DB_NAME'));
-        if ($compare_database_info['if_exists'] == 1) {
+        $compareDatabaseInfo = $this->_compare_database(C('DB_NAME'));
+        if ($compareDatabaseInfo['if_exists'] == 1) {
             try
             {
                 $db = M('', '', array(
@@ -409,45 +409,45 @@ EOF;
         }
         foreach ($controls as $control) {
             //跳过不是文件和不是.php 结尾的文件
-            if (!preg_match('/(\d)([^\.]*)\.php$/i', $control, $p_str)
+            if (!preg_match('/(\d)([^\.]*)\.php$/i', $control, $pStr)
                 || !is_file(XKMS_TABLES . $control)) {
                 continue;
             }
 
-            $control_info = include XKMS_TABLES . $control;
-            foreach ($control_info['tables'] as $table => $table_value) {
-                $new_tab = C('DB_PREFIX') . $table;
+            $controlInfo = include XKMS_TABLES . $control;
+            foreach ($controlInfo['tables'] as $table => $tableValue) {
+                $newTab = C('DB_PREFIX') . $table;
                 //增加表名前缀
-                $control_info['tables'][$new_tab] = $control_info['tables'][$table];
-                unset($control_info['tables'][$table]);
-                if ($if_install) {
-                    $create_sql = '';
+                $controlInfo['tables'][$newTab] = $controlInfo['tables'][$table];
+                unset($controlInfo['tables'][$table]);
+                if ($ifInstall) {
+                    $createSql = '';
                     $attribute  = '';
-                    foreach ($control_info['tables'][$new_tab]['column'] as $column) {
-                        if ($create_sql) {
-                            $create_sql .= ',';
+                    foreach ($controlInfo['tables'][$newTab]['column'] as $column) {
+                        if ($createSql) {
+                            $createSql .= ',';
                         }
 
-                        $create_sql .= $column;
+                        $createSql .= $column;
                     }
-                    foreach ($control_info['tables'][$new_tab]['attribute'] as $a_name => $a_value) {
+                    foreach ($controlInfo['tables'][$newTab]['attribute'] as $aName => $aValue) {
                         if ($attribute) {
                             $attribute .= ' ';
                         }
 
-                        if ($a_name && $a_value) {
-                            $attribute .= $a_name . ' = ' . $a_value;
+                        if ($aName && $aValue) {
+                            $attribute .= $aName . ' = ' . $aValue;
                         }
 
                     }
-                    $control_info['tables'][$new_tab]['create_sql'] = 'CREATE TABLE IF NOT EXISTS ' . $new_tab . '(' . $create_sql . ')' . $attribute;
+                    $controlInfo['tables'][$newTab]['create_sql'] = 'CREATE TABLE IF NOT EXISTS ' . $newTab . '(' . $createSql . ')' . $attribute;
                 }
-                $control_info['tables'][$new_tab]['if_exists'] = (in_array($new_tab, $tables)) ? 1 : 0;
+                $controlInfo['tables'][$newTab]['if_exists'] = (in_array($newTab, $tables)) ? 1 : 0;
             }
             //用于菜单归类
-            $control_info['category'] = $p_str[1];
-            $re_compare_info[]        = $control_info;
+            $controlInfo['category'] = $pStr[1];
+            $reCompareInfo[]        = $controlInfo;
         }
-        return $re_compare_info;
+        return $reCompareInfo;
     }
 }

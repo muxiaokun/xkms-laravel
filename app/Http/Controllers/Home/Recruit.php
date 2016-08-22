@@ -20,11 +20,11 @@ class Recruit extends Frontend
     public function index()
     {
         $RecruitModel = D('Recruit');
-        $current_time = time();
-        $log_count    = 0;
+        $currentTime = time();
+        $logCount    = 0;
         $where        = array(
-            'start_time' => array('lt', $current_time),
-            'end_time'   => array('gt', $current_time),
+            'start_time' => array('lt', $currentTime),
+            'end_time'   => array('gt', $currentTime),
             '(current_portion < max_portion OR max_portion = 0)',
         );
         $keyword = I('keyword');
@@ -36,9 +36,9 @@ class Recruit extends Frontend
             $where['_complex']   = $complex;
         }
 
-        $recruit_list = $RecruitModel->mSelect($where);
-        $this->assign('recruit_list', $recruit_list);
-        $this->assign('recruit_list_count', $RecruitModel->getPageCount($where));
+        $recruitList = $RecruitModel->mSelect($where);
+        $this->assign('recruit_list', $recruitList);
+        $this->assign('recruit_list_count', $RecruitModel->mGetPageCount($where));
 
         $this->assign('title', L('recruit'));
         $this->display();
@@ -54,13 +54,13 @@ class Recruit extends Frontend
         }
 
         $RecruitModel = D('Recruit');
-        $recruit_info = $RecruitModel->mFind($id);
+        $recruitInfo = $RecruitModel->mFind($id);
         //检测是否能够提交
-        $current_time = time();
-        if ($recruit_info['start_time'] < $current_time && $recruit_info['end_time'] < $current_time) {
+        $currentTime = time();
+        if ($recruitInfo['start_time'] < $currentTime && $recruitInfo['end_time'] < $currentTime) {
             $this->error(L('start') . L('end') . L('time') . L('error'), U('Recruit/index'));
         }
-        if (0 != $recruit_info['max_portion'] && $recruit_info['current_portion'] >= $recruit_info['max_portion']) {
+        if (0 != $recruitInfo['max_portion'] && $recruitInfo['current_portion'] >= $recruitInfo['max_portion']) {
             $this->error(L('re_recruit') . L('number') . L('gt') . L('recruit') . L('number'), U('Quests/index'));
         }
         //存入数据
@@ -74,10 +74,10 @@ class Recruit extends Frontend
             $data['ext_info']    = I('ext_info');
             $data['file_path']   = I('file_path');
             $RecruitLogModel     = D('RecruitLog');
-            $result_add          = $RecruitLogModel->mAdd($data);
-            if ($result_add) {
+            $resultAdd          = $RecruitLogModel->mAdd($data);
+            if ($resultAdd) {
                 $RecruitModel = D('Recruit');
-                $RecruitModel->where(array('id' => $recruit_info['id']))->setInc('current_portion');
+                $RecruitModel->where(array('id' => $recruitInfo['id']))->setInc('current_portion');
                 $this->success(L('resume') . L('submit') . L('success'), U('Recruit/index'));
             } else {
                 $this->error(L('resume') . L('submit') . L('error'), U('index'));
@@ -86,20 +86,20 @@ class Recruit extends Frontend
         }
 
         //缓存数据 下文中的thumb可以换成招聘统一的图
-        $cache_name  = MODULE_NAME . CONTROLLER_NAME . 'add' . $id;
-        $cache_value = S($cache_name);
-        if ($cache_value && true !== APP_DEBUG) {
-            $recruit_info['explains'] = $cache_value;
+        $cacheName  = MODULE_NAME . CONTROLLER_NAME . 'add' . $id;
+        $cacheValue = S($cacheName);
+        if ($cacheValue && true !== APP_DEBUG) {
+            $recruitInfo['explains'] = $cacheValue;
         } else {
-            $recruit_info['explains']                                = M_content2ckplayer($recruit_info['explains'], $recruit_info['thumb']);
-            C('SYS_ARTICLE_SYNC_IMAGE') && $recruit_info['explains'] = M_sync_img($recruit_info['explains']);
-            $cache_value                                             = $recruit_info['explains'];
-            S($cache_name, $cache_value, C('SYS_TD_CACHE'));
+            $recruitInfo['explains']                                = M_content2ckplayer($recruitInfo['explains'], $recruitInfo['thumb']);
+            C('SYS_ARTICLE_SYNC_IMAGE') && $recruitInfo['explains'] = M_sync_img($recruitInfo['explains']);
+            $cacheValue                                             = $recruitInfo['explains'];
+            S($cacheName, $cacheValue, C('SYS_TD_CACHE'));
         }
 
         //以法定成年年龄为基准减去 18 + (10 = select_rang/2)
-        $start_year = date(C('SYS_DATE'), mktime(0, 0, 0, date('m'), date('d'), date('Y') - 28));
-        $this->assign('start_year', $start_year);
+        $startYear = date(C('SYS_DATE'), mktime(0, 0, 0, date('m'), date('d'), date('Y') - 28));
+        $this->assign('start_year', $startYear);
         $this->assign('title', L('write') . L('recruit'));
         $this->display();
     }
@@ -114,8 +114,8 @@ class Recruit extends Frontend
         }
 
         $RecruitModel = D('Recruit');
-        $recruit_info = $RecruitModel->mFind($id);
-        $this->assign('recruit_info', $recruit_info);
+        $recruitInfo = $RecruitModel->mFind($id);
+        $this->assign('recruit_info', $recruitInfo);
         $this->assign('title', L('look') . L('recruit'));
         $this->display();
     }

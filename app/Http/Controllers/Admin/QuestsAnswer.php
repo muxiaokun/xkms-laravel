@@ -24,39 +24,39 @@ class QuestsAnswer extends Backend
         $where       = array();
 
         //建立where
-        $v_value                        = '';
-        $v_value                        = I('quests_id');
-        $v_value && $where['quests_id'] = $v_value;
-        $v_value                        = I('quests_title');
-        $v_value && $where['quests_id'] = array(
+        $whereValue                        = '';
+        $whereValue                        = I('quests_id');
+        $whereValue && $where['quests_id'] = $whereValue;
+        $whereValue                        = I('quests_title');
+        $whereValue && $where['quests_id'] = array(
             'in',
-            $QuestsModel->where(array('title' => array('like', '%' . $v_value . '%')))->col_arr('id'),
+            $QuestsModel->where(array('title' => array('like', '%' . $whereValue . '%')))->mColumn2Array('id'),
         );
-        $v_value                        = I('member_id');
-        $v_value && $where['member_id'] = array(
+        $whereValue                        = I('member_id');
+        $whereValue && $where['member_id'] = array(
             'in',
-            $MemberModel->where(array('member_name' => array('like', '%' . $v_value . '%')))->col_arr('id'),
+            $MemberModel->where(array('member_name' => array('like', '%' . $whereValue . '%')))->mColumn2Array('id'),
         );
 
         $QuestsAnswerModel  = D('QuestsAnswer');
-        $quests_answer_list = $QuestsAnswerModel->mSelect($where, true);
-        foreach ($quests_answer_list as &$quests_answer) {
-            $member_name                  = $MemberModel->mFindColumn($group_id, 'name');
-            $quests_answer['member_name'] = ($member_name) ? $member_name : L('anonymous');
+        $questsAnswerList = $QuestsAnswerModel->mSelect($where, true);
+        foreach ($questsAnswerList as &$questsAnswer) {
+            $memberName                  = $MemberModel->mFindColumn($groupId, 'name');
+            $questsAnswer['member_name'] = ($memberName) ? $memberName : L('anonymous');
         }
-        $this->assign('quests_answer_list', $quests_answer_list);
-        $this->assign('quests_answer_list_count', $QuestsAnswerModel->getPageCount($where));
+        $this->assign('quests_answer_list', $questsAnswerList);
+        $this->assign('quests_answer_list_count', $QuestsAnswerModel->mGetPageCount($where));
         //初始化where_info
-        $where_info                 = array();
-        $where_info['quests_title'] = array('type' => 'input', 'name' => L('quests') . L('name'));
-        $where_info['member_id']    = array('type' => 'input', 'name' => L('member') . L('name'));
-        $this->assign('where_info', $where_info);
+        $whereInfo                 = array();
+        $whereInfo['quests_title'] = array('type' => 'input', 'name' => L('quests') . L('name'));
+        $whereInfo['member_id']    = array('type' => 'input', 'name' => L('member') . L('name'));
+        $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batch_handle        = array();
-        $batch_handle['add'] = $this->_check_privilege('add');
-        $batch_handle['del'] = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batch_handle);
+        $batchHandle        = array();
+        $batchHandle['add'] = $this->_check_privilege('add');
+        $batchHandle['del'] = $this->_check_privilege('del');
+        $this->assign('batch_handle', $batchHandle);
 
         $this->assign('title', L('quests') . L('answer') . L('management'));
         $this->display();
@@ -72,24 +72,24 @@ class QuestsAnswer extends Backend
 
         $QuestsModel        = D('Quests');
         $QuestsAnswerModel  = D('QuestsAnswer');
-        $quests_answer_info = $QuestsAnswerModel->mFind($id);
-        $quests_info        = $QuestsModel->mFind($quests_answer_info['quests_id']);
+        $questsAnswerInfo = $QuestsAnswerModel->mFind($id);
+        $questsInfo        = $QuestsModel->mFind($questsAnswerInfo['quests_id']);
 
         //初始化问题
-        $quests_quest_list = json_decode($quests_info['ext_info'], true);
-        foreach ($quests_quest_list as $quest_id => $quest) {
-            $quests_quest_list[$quest_id]['answer'] = explode('|', $quests_quest_list[$quest_id]['answer']);
+        $questsQuestList = json_decode($questsInfo['ext_info'], true);
+        foreach ($questsQuestList as $questId => $quest) {
+            $questsQuestList[$questId]['answer'] = explode('|', $questsQuestList[$questId]['answer']);
         }
-        $quests_answer_list = array();
-        foreach (explode('|', $quests_answer_info['answer']) as $quest_answer) {
-            list($key, $value)                        = explode(':', $quest_answer);
-            '' != $key && $quests_answer_list[$key][] = $value;
+        $questsAnswerList = array();
+        foreach (explode('|', $questsAnswerInfo['answer']) as $questAnswer) {
+            list($key, $value)                        = explode(':', $questAnswer);
+            '' != $key && $questsAnswerList[$key][] = $value;
         }
 
-        $this->assign('quests_quest_list', $quests_quest_list);
-        $this->assign('quests_answer_list', $quests_answer_list);
-        $this->assign('quests_info', $quests_info);
-        $this->assign('quests_answer_info', $quests_answer_info);
+        $this->assign('quests_quest_list', $questsQuestList);
+        $this->assign('quests_answer_list', $questsAnswerList);
+        $this->assign('quests_info', $questsInfo);
+        $this->assign('quests_answer_info', $questsAnswerInfo);
         $this->assign('title', L('quests') . L('answer'));
         $this->display();
     }
@@ -97,44 +97,44 @@ class QuestsAnswer extends Backend
     //统计问卷答案
     public function edit()
     {
-        $quests_id = I('quests_id');
-        if (!$quests_id) {
+        $questsId = I('quests_id');
+        if (!$questsId) {
             $this->error(L('id') . L('error'), U('index'));
         }
 
         //读取问题
         $QuestsModel = D('Quests');
-        $quests_info = $QuestsModel->mFind($quests_id);
+        $questsInfo = $QuestsModel->mFind($questsId);
         //初始化问题
-        $quests_quest_list = json_decode($quests_info['ext_info'], true);
+        $questsQuestList = json_decode($questsInfo['ext_info'], true);
         $QuestsAnswerModel = D('QuestsAnswer');
-        foreach ($quests_quest_list as $quest_id => $quest) {
-            $answer_name = explode('|', $quests_quest_list[$quest_id]['answer']);
+        foreach ($questsQuestList as $questId => $quest) {
+            $answerName = explode('|', $questsQuestList[$questId]['answer']);
             $answer      = array();
             switch ($quest['answer_type']) {
                 case 'radio':
-                    foreach ($answer_name as $k => $name) {
+                    foreach ($answerName as $k => $name) {
                         $answer[$k]['name']  = $name;
-                        $answer[$k]['count'] = $QuestsAnswerModel->count_quests_answer($quests_id, '%|' . $quest_id . ':' . $k . "|%");
+                        $answer[$k]['count'] = $QuestsAnswerModel->count_quests_answer($questsId, '%|' . $questId . ':' . $k . "|%");
                     }
                     break;
                 case 'checkbox':
-                    foreach ($answer_name as $k => $name) {
+                    foreach ($answerName as $k => $name) {
                         $answer[$k]['name']  = $name;
-                        $answer[$k]['count'] = $QuestsAnswerModel->count_quests_answer($quests_id, '%|' . $quest_id . ':' . $k . "|%");
+                        $answer[$k]['count'] = $QuestsAnswerModel->count_quests_answer($questsId, '%|' . $questId . ':' . $k . "|%");
                     }
                     break;
                 case 'text':
-                    $answer[$k]['count'] = $QuestsAnswerModel->count_quests_answer($quests_id, "%|" . $quest_id . ":%");
+                    $answer[$k]['count'] = $QuestsAnswerModel->count_quests_answer($questsId, "%|" . $questId . ":%");
                     break;
                 case 'textarea':
-                    $answer[$k]['count'] = $QuestsAnswerModel->count_quests_answer($quests_id, "%|" . $quest_id . ":%");
+                    $answer[$k]['count'] = $QuestsAnswerModel->count_quests_answer($questsId, "%|" . $questId . ":%");
                     break;
             }
-            $quests_quest_list[$quest_id]['answer']    = $answer;
-            $quests_quest_list[$quest_id]['max_count'] = $QuestsAnswerModel->count_quests_answer($quests_id);
+            $questsQuestList[$questId]['answer']    = $answer;
+            $questsQuestList[$questId]['max_count'] = $QuestsAnswerModel->count_quests_answer($questsId);
         }
-        $this->assign('quests_quest_list', $quests_quest_list);
+        $this->assign('quests_quest_list', $questsQuestList);
 
         $this->assign('title', L('quests') . L('answer') . L('statistics'));
         $this->display();
@@ -149,11 +149,11 @@ class QuestsAnswer extends Backend
         }
 
         $QuestsAnswerModel  = D('QuestsAnswer');
-        $quests_answer_info = $QuestsAnswerModel->mFind($id);
-        $result_del         = $QuestsAnswerModel->mDel($quests_answer_info['id']);
-        if ($result_del) {
+        $questsAnswerInfo = $QuestsAnswerModel->mFind($id);
+        $resultDel         = $QuestsAnswerModel->mDel($questsAnswerInfo['id']);
+        if ($resultDel) {
             $QuestsModel = D('Quests');
-            $QuestsModel->where(array('id' => $quests_answer_info['quests_id']))->setDec('current_portion');
+            $QuestsModel->where(array('id' => $questsAnswerInfo['quests_id']))->setDec('current_portion');
             $this->success(L('del') . L('answer') . L('success'), U('index'));
         } else {
             $this->error(L('del') . L('answer') . L('error'), U('index'));

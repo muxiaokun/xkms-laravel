@@ -38,120 +38,120 @@ class CommonManageUploadController
     public function UploadFile()
     {
         $UploadUtil    = new \Think\Upload($this->config);
-        $get_path_exts = $this->get_path_exts();
-        if (!$get_path_exts) {
+        $getPathExts = $this->get_path_exts();
+        if (!$getPathExts) {
             return;
         }
 
-        $UploadUtil->savePath = $get_path_exts['path'] . $get_path_exts['dir_name'];
-        $UploadUtil->exts     = $get_path_exts['exts'];
+        $UploadUtil->savePath = $getPathExts['path'] . $getPathExts['dir_name'];
+        $UploadUtil->exts     = $getPathExts['exts'];
         //大文件上传
         set_time_limit(0);
-        $file_info = $UploadUtil->uploadOne($_FILES['imgFile']);
-        if (!$file_info) {
+        $fileInfo = $UploadUtil->uploadOne($_FILES['imgFile']);
+        if (!$fileInfo) {
             // 上传错误提示错误信息
             $this->kind_json($UploadUtil->getError());
         } else {
-            $file_url = $UploadUtil->rootPath . $file_info['savepath'] . $file_info['savename'];
+            $fileUrl = $UploadUtil->rootPath . $fileInfo['savepath'] . $fileInfo['savename'];
             // 上传文件的信息写入数据库
             $ManageUploadModel = D('ManageUpload');
             $data              = array(
-                'name'   => substr($file_info['name'], 0, strrpos($file_info['name'], '.')),
-                'path'   => $file_url,
-                'mime'   => $file_info['type'],
-                'size'   => $file_info['size'],
-                'suffix' => $file_info['ext'],
+                'name'   => substr($fileInfo['name'], 0, strrpos($fileInfo['name'], '.')),
+                'path'   => $fileUrl,
+                'mime'   => $fileInfo['type'],
+                'size'   => $fileInfo['size'],
+                'suffix' => $fileInfo['ext'],
             );
             $ManageUploadModel->mAdd($data);
             // 上传成功 返回文件信息 伪静态目录结构__ROOT__ . '/' .
-            $this->kind_json(__ROOT__ . '/' . $file_url, false);
+            $this->kind_json(__ROOT__ . '/' . $fileUrl, false);
         }
     }
     //kindeditor文件管理器接口
     public function ManageFile()
     {
-        $get_path_exts = $this->get_path_exts();
-        if (!$get_path_exts) {
+        $getPathExts = $this->get_path_exts();
+        if (!$getPathExts) {
             return;
         }
 
         $UploadUtil = new \Think\Upload($this->config);
-        $root_path  = $UploadUtil->rootPath . $get_path_exts['path'];
+        $rootPath  = $UploadUtil->rootPath . $getPathExts['path'];
         //目录名
-        $dir_name = $get_path_exts['dir_name'];
-        if ($dir_name !== '') {
-            $root_path .= $dir_name;
-            $root_url = $root_path;
-            if (!file_exists($root_path)) {
-                mkdir($root_path, 0755, true);
+        $dirName = $getPathExts['dir_name'];
+        if ($dirName !== '') {
+            $rootPath .= $dirName;
+            $rootUrl = $rootPath;
+            if (!file_exists($rootPath)) {
+                mkdir($rootPath, 0755, true);
             }
         }
         //根据path参数，设置各路径和URL
-        $get_path = I('get.path');
-        if (!$get_path) {
-            $current_path     = $root_path;
-            $current_url      = $root_url;
-            $current_dir_path = '';
-            $moveup_dir_path  = '';
+        $getPath = I('get.path');
+        if (!$getPath) {
+            $currentPath     = $rootPath;
+            $currentUrl      = $rootUrl;
+            $currentDirPath = '';
+            $moveupDirPath  = '';
         } else {
-            $current_path     = $root_path . '/' . $get_path;
-            $current_url      = $root_url . $get_path;
-            $current_dir_path = $get_path;
-            $moveup_dir_path  = preg_replace('/(.*?)[^\/]+\/$/', '$1', $current_dir_path);
+            $currentPath     = $rootPath . '/' . $getPath;
+            $currentUrl      = $rootUrl . $getPath;
+            $currentDirPath = $getPath;
+            $moveupDirPath  = preg_replace('/(.*?)[^\/]+\/$/', '$1', $currentDirPath);
         }
         $order = I('get.order') ? I('get.order') : 'name';
 
         //不允许使用..移动到上一级目录
-        if (preg_match('/\.\./', $current_path)) {
+        if (preg_match('/\.\./', $currentPath)) {
             echo 'Access is not allowed.';
             return;
         }
         //最后一个字符不是/
-        if (!preg_match('/\/$/', $current_path)) {
+        if (!preg_match('/\/$/', $currentPath)) {
             echo 'Parameter is not valid.';
             return;
         }
         //目录不存在或不是目录
-        if (!file_exists($current_path) || !is_dir($current_path)) {
+        if (!file_exists($currentPath) || !is_dir($currentPath)) {
             echo 'Directory does not exist.';
             return;
         }
 
         //图片扩展名
-        $ext_arr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
+        $extArr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
         //遍历目录取得文件信息
-        $file_list = array();
-        if ($handle = opendir($current_path)) {
+        $fileList = array();
+        if ($handle = opendir($currentPath)) {
             $i = 0;
             while (false !== ($filename = readdir($handle))) {
                 if ($filename{0} == '.') {
                     continue;
                 }
 
-                $file = $current_path . $filename;
+                $file = $currentPath . $filename;
                 if (is_dir($file)) {
-                    $file_list[$i]['is_dir']   = true; //是否文件夹
-                    $file_list[$i]['has_file'] = (count(scandir($file)) > 2); //文件夹是否包含文件
-                    $file_list[$i]['filesize'] = 0; //文件大小
-                    $file_list[$i]['is_photo'] = false; //是否图片
-                    $file_list[$i]['filetype'] = ''; //文件类别，用扩展名判断
+                    $fileList[$i]['is_dir']   = true; //是否文件夹
+                    $fileList[$i]['has_file'] = (count(scandir($file)) > 2); //文件夹是否包含文件
+                    $fileList[$i]['filesize'] = 0; //文件大小
+                    $fileList[$i]['is_photo'] = false; //是否图片
+                    $fileList[$i]['filetype'] = ''; //文件类别，用扩展名判断
                 } else {
-                    $file_list[$i]['is_dir']   = false;
-                    $file_list[$i]['has_file'] = false;
-                    $file_list[$i]['filesize'] = filesize($file);
-                    $file_list[$i]['dir_path'] = '';
-                    $file_ext                  = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-                    $file_list[$i]['is_photo'] = in_array($file_ext, $ext_arr);
-                    $file_list[$i]['filetype'] = $file_ext;
+                    $fileList[$i]['is_dir']   = false;
+                    $fileList[$i]['has_file'] = false;
+                    $fileList[$i]['filesize'] = filesize($file);
+                    $fileList[$i]['dir_path'] = '';
+                    $fileExt                  = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                    $fileList[$i]['is_photo'] = in_array($fileExt, $extArr);
+                    $fileList[$i]['filetype'] = $fileExt;
                 }
-                $file_list[$i]['filename'] = $filename; //文件名，包含扩展名
-                $file_list[$i]['datetime'] = date('Y-m-d H:i:s', filemtime($file)); //文件最后修改时间
+                $fileList[$i]['filename'] = $filename; //文件名，包含扩展名
+                $fileList[$i]['datetime'] = date('Y-m-d H:i:s', filemtime($file)); //文件最后修改时间
                 $i++;
             }
             closedir($handle);
         }
         //匿名函数phpversion>5.3.0
-        usort($file_list, function ($a, $b) {
+        usort($fileList, function ($a, $b) {
             $order = I('get.order', null, 'strtolower');
             if ($a['is_dir'] && !$b['is_dir']) {
                 return -1;
@@ -176,25 +176,25 @@ class CommonManageUploadController
 
         $result = array();
         //相对于根目录的上一级目录
-        $result['moveup_dir_path'] = $moveup_dir_path;
+        $result['moveup_dir_path'] = $moveupDirPath;
         //相对于根目录的当前目录
-        $result['current_dir_path'] = $current_dir_path;
+        $result['current_dir_path'] = $currentDirPath;
         //当前目录的URL 伪静态目录结构__ROOT__ . '/' .
-        $result['current_url'] = __ROOT__ . '/' . $current_url;
+        $result['current_url'] = __ROOT__ . '/' . $currentUrl;
         //文件数
-        $result['total_count'] = count($file_list);
+        $result['total_count'] = count($fileList);
         //文件列表数组
-        $result['file_list'] = $file_list;
+        $result['file_list'] = $fileList;
 
         //输出JSON字符串
         header('Content-type: application/json; charset=UTF-8');
         echo json_encode($result);
     }
 
-    private function kind_json($msg, $is_error = true)
+    private function kind_json($msg, $isError = true)
     {
         header('Content-type: text/html; charset=UTF-8');
-        if ($is_error) {
+        if ($isError) {
             echo json_encode(array('error' => 1, 'message' => $msg));
         } else {
             echo json_encode(array('error' => 0, 'url' => $msg));
@@ -204,19 +204,19 @@ class CommonManageUploadController
 
     private function get_path_exts()
     {
-        $allow_arr = array(
+        $allowArr = array(
             'image' => array('gif', 'jpg', 'jpeg', 'png', 'bmp'),
             'flash' => array('swf', 'flv'),
             'media' => array('swf', 'flv', 'mp3', 'wav', 'wma', 'wmv', 'mid', 'avi', 'mpg', 'asf', 'rm', 'rmvb'),
             'file'  => array('doc', 'docx', 'xls', 'xlsx', 'ppt', 'htm', 'html', 'txt', 'zip', 'rar', 'gz', 'bz2'),
         );
-        $dir_name = I('get.dir') ? I('get.dir') : '';
-        if (empty($allow_arr[$dir_name]) && '' != $dir_name) {
+        $dirName = I('get.dir') ? I('get.dir') : '';
+        if (empty($allowArr[$dirName]) && '' != $dirName) {
             $this->kind_json("Invalid Directory name.");
             return false;
         }
-        if ($dir_name) {
-            $dir_name .= '/';
+        if ($dirName) {
+            $dirName .= '/';
         }
 
         switch (I('t')) {
@@ -227,6 +227,6 @@ class CommonManageUploadController
                 $path = 'other/';
         }
 
-        return array('path' => $path, 'exts' => $allow_arr[$dir_name], 'dir_name' => $dir_name);
+        return array('path' => $path, 'exts' => $allowArr[$dirName], 'dir_name' => $dirName);
     }
 }

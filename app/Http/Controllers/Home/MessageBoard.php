@@ -24,26 +24,26 @@ class MessageBoard extends Frontend
         }
 
         $MessageBoardModel  = D('MessageBoard');
-        $message_board_info = $MessageBoardModel->mFind($id);
-        if (!$message_board_info) {
+        $messageBoardInfo = $MessageBoardModel->mFind($id);
+        if (!$messageBoardInfo) {
             $this->error(L('messageboard') . L('dont') . L('exists'));
         }
 
-        $this->assign('message_board_info', $message_board_info);
+        $this->assign('message_board_info', $messageBoardInfo);
 
         $MessageBoardLogModel   = D('MessageBoardLog');
         $where                  = array();
         $where['audit_id']      = array('gt', 0);
-        $message_board_log_list = $MessageBoardLogModel->order('add_time desc')->mSelect($where, true);
-        foreach ($message_board_log_list as &$message_board_log) {
-            $message_board_log['reply_info'] = ($message_board_log['reply_info']) ? $message_board_log['reply_info'] : L('admin') . L('reply') . L('empty');
-            $message_board_log['send_info']  = json_decode($message_board_log['send_info'], true);
+        $messageBoardLogList = $MessageBoardLogModel->order('add_time desc')->mSelect($where, true);
+        foreach ($messageBoardLogList as &$messageBoardLog) {
+            $messageBoardLog['reply_info'] = ($messageBoardLog['reply_info']) ? $messageBoardLog['reply_info'] : L('admin') . L('reply') . L('empty');
+            $messageBoardLog['send_info']  = json_decode($messageBoardLog['send_info'], true);
         }
-        $this->assign('message_board_log_list', $message_board_log_list);
-        $this->assign('message_board_log_list_count', $MessageBoardLogModel->getPageCount($where));
+        $this->assign('message_board_log_list', $messageBoardLogList);
+        $this->assign('message_board_log_list_count', $MessageBoardLogModel->mGetPageCount($where));
 
-        $def_template = CONTROLLER_NAME . C('TMPL_FILE_DEPR') . ACTION_NAME;
-        $template     = ($message_board_info['template']) ? $def_template . '_' . $message_board_info['template'] : $def_template;
+        $defTemplate = CONTROLLER_NAME . C('TMPL_FILE_DEPR') . ACTION_NAME;
+        $template     = ($messageBoardInfo['template']) ? $defTemplate . '_' . $messageBoardInfo['template'] : $defTemplate;
 
         $this->assign('title', L('messageboard'));
         $this->display($template);
@@ -59,22 +59,22 @@ class MessageBoard extends Frontend
             }
 
             $MessageBoardModel  = D('MessageBoard');
-            $message_board_info = $MessageBoardModel->mFind($id);
-            if (!$message_board_info) {
+            $messageBoardInfo = $MessageBoardModel->mFind($id);
+            if (!$messageBoardInfo) {
                 $this->error(L('id') . L('error'));
             }
 
-            if (!$this->_verify_check(I('verify')) && C('SYS_FRONTEND_VERIFY')) {
+            if (!$this->verifyCheck(I('verify')) && C('SYS_FRONTEND_VERIFY')) {
                 $this->error(L('verify_code') . L('error'), U('index', array('id' => $id)));
             }
-            $submit_time  = 300;
+            $submitTime  = 300;
             $MessageBoard = D('MessageBoardLog');
-            if ($MessageBoard->check_dont_submit($submit_time)) {
-                $this->error($submit_time . L('second') . L('later') . L('again') . L('send'), U('index', array('id' => $id)));
+            if ($MessageBoard->check_dont_submit($submitTime)) {
+                $this->error($submitTime . L('second') . L('later') . L('again') . L('send'), U('index', array('id' => $id)));
             }
-            $data       = $this->_make_data();
-            $result_add = $MessageBoard->mAdd($data);
-            if ($result_add) {
+            $data       = $this->makeData();
+            $resultAdd = $MessageBoard->mAdd($data);
+            if ($resultAdd) {
                 $this->success(L('send') . L('success'), U('index', array('id' => $id)));
                 return;
             } else {
@@ -84,12 +84,12 @@ class MessageBoard extends Frontend
     }
 
     //建立数据
-    private function _make_data()
+    private function makeData()
     {
 
         $id        = I('id');
-        $send_info = I('send_info');
-        foreach ($send_info as &$info) {
+        $sendInfo = I('send_info');
+        foreach ($sendInfo as &$info) {
             if (is_array($info)) {
                 $info = implode(',', $info);
             }
@@ -97,9 +97,9 @@ class MessageBoard extends Frontend
         }
         //检测数据
         $MessageBoardModel  = D('MessageBoard');
-        $message_board_info = $MessageBoardModel->mFind($id);
-        $config             = $message_board_info['config'];
-        foreach ($send_info as $name => $value) {
+        $messageBoardInfo = $MessageBoardModel->mFind($id);
+        $config             = $messageBoardInfo['config'];
+        foreach ($sendInfo as $name => $value) {
             //合法
             if (!is_array($config[$name])) {
                 $this->error(L('submit') . L('error'), U('index', array('id' => $id)));
@@ -116,13 +116,13 @@ class MessageBoard extends Frontend
             }
         }
 
-        $send_info                                  = json_encode($send_info);
-        $member_id                                  = session('frontend_info.id');
-        $member_id                                  = ($member_id) ? $member_id : 0;
+        $sendInfo                                  = json_encode($sendInfo);
+        $memberId                                  = session('frontend_info.id');
+        $memberId                                  = ($memberId) ? $memberId : 0;
         $data                                       = array();
-        (null !== $member_id) && $data['msg_id']    = $id;
-        (null !== $member_id) && $data['send_id']   = $member_id;
-        (null !== $send_info) && $data['send_info'] = $send_info;
+        (null !== $memberId) && $data['msg_id']    = $id;
+        (null !== $memberId) && $data['send_id']   = $memberId;
+        (null !== $sendInfo) && $data['send_info'] = $sendInfo;
 
         return $data;
     }

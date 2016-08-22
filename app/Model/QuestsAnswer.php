@@ -16,14 +16,14 @@ class QuestsAnswer extends Common
     }
 
     //统计答案
-    public function count_quests_answer($quests_id, $answer = false)
+    public function count_quests_answer($questsId, $answer = false)
     {
-        if (!$quests_id) {
+        if (!$questsId) {
             return false;
         }
 
         $answer    = ($answer) ? 'answer like "' . $answer . '"' : '1 = 1';
-        $count_num = $this->where(array('quests_id' => $quests_id, $answer))->count();
-        return $count_num;
+        $countNum = $this->where(array('quests_id' => $questsId, $answer))->count();
+        return $countNum;
     }
 }

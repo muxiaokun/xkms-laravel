@@ -16,12 +16,12 @@ use App\Http\Controllers\Backend;
 
 class Template extends Backend
 {
-    //$tpl_info_file 与 Common/Common/function.php M_scan_template一致
-    private $tpl_info_file = 'theme_info';
-    private $config_file   = '';
-    private $default_theme = '';
-    private $view_path     = '';
-    private $view_files    = array();
+    //$tplInfoFile 与 Common/Common/function.php M_scan_template一致
+    private $tplInfoFile = 'theme_info';
+    private $configFile   = '';
+    private $defaultTheme = '';
+    private $viewPath     = '';
+    private $viewFiles    = array();
     public function _initialize()
     {
         parent::_initialize();
@@ -51,33 +51,33 @@ class Template extends Backend
         }
 
         //修改默认主题配置
-        $default_theme = I('default_theme');
-        if (null !== $default_theme) {
-            if ('empty' == $default_theme) {
-                $default_theme = '';
+        $defaultTheme = I('default_theme');
+        if (null !== $defaultTheme) {
+            if ('empty' == $defaultTheme) {
+                $defaultTheme = '';
             }
 
-            $config['DEFAULT_THEME'] = $default_theme;
-            $config_str              = var_export($config, true);
-            $Core_Copyright          = C('CORE_COPYRIGHT');
-            $put_config              = <<<EOF
+            $config['DEFAULT_THEME'] = $defaultTheme;
+            $configStr              = var_export($config, true);
+            $CoreCopyright          = C('CORE_COPYRIGHT');
+            $putConfig              = <<<EOF
 <?php
-{$Core_Copyright}
+{$CoreCopyright}
 // Home 配置
-return {$config_str};
+return {$configStr};
 ?>
 EOF;
-            file_put_contents($this->config_file, $put_config);
+            file_put_contents($this->config_file, $putConfig);
             $this->success(L('theme') . L('selection') . L('success'), U('index'));
             return;
         }
 
         //修改模板文件信息
         if (IS_POST) {
-            foreach ($this->view_files as $file_md5 => $info) {
-                $post_info                           = I($file_md5);
-                $this->view_files[$file_md5]['name'] = $post_info['name'];
-                $this->view_files[$file_md5]['info'] = $post_info['info'];
+            foreach ($this->view_files as $fileMd5 => $info) {
+                $postInfo                           = I($fileMd5);
+                $this->view_files[$fileMd5]['name'] = $postInfo['name'];
+                $this->view_files[$fileMd5]['info'] = $postInfo['info'];
             }
 
             //保存缓存
@@ -91,11 +91,11 @@ EOF;
         $this->assign('theme_info_list', $this->view_files);
 
         //初始化batch_handle
-        $batch_handle         = array();
-        $batch_handle['add']  = $this->_check_privilege('add');
-        $batch_handle['edit'] = $this->_check_privilege('edit');
-        $batch_handle['del']  = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batch_handle);
+        $batchHandle         = array();
+        $batchHandle['add']  = $this->_check_privilege('add');
+        $batchHandle['edit'] = $this->_check_privilege('edit');
+        $batchHandle['del']  = $this->_check_privilege('del');
+        $this->assign('batch_handle', $batchHandle);
 
         $this->assign('title', L('theme') . L('template') . L('management'));
         $this->display();
@@ -106,27 +106,27 @@ EOF;
     {
         if (IS_POST) {
             //添加时不可以创建新的目录 必须使用系统设置的后缀
-            $file_name = trim(I('file_name'));
+            $fileName = trim(I('file_name'));
             //处理2级目录
-            $file_path = explode('/', $file_name);
-            if (preg_match('/\.\.\//', $file_name)
-                || !preg_match('/' . str_ireplace('.', '\.', C('TMPL_TEMPLATE_SUFFIX')) . '$/', $file_name)
+            $filePath = explode('/', $fileName);
+            if (preg_match('/\.\.\//', $fileName)
+                || !preg_match('/' . str_ireplace('.', '\.', C('TMPL_TEMPLATE_SUFFIX')) . '$/', $fileName)
             ) {
                 $this->error(L('file') . L('name') . L('error'), U('index'));
             }
-            if (!$file_name) {
+            if (!$fileName) {
                 $this->error(L('file') . L('name') . L('not') . L('empty'), U('index'));
             }
 
-            $file_path = $this->view_path . $file_name;
-            $file_md5  = ($file_path);
-            if (is_array($this->view_files[$file_md5])) {
+            $filePath = $this->view_path . $fileName;
+            $fileMd5  = ($filePath);
+            if (is_array($this->view_files[$fileMd5])) {
                 $this->error(L('file') . L('name') . L('repeat'), U('index'));
             }
 
             $content     = I('content', '', false);
-            $result_edit = file_put_contents($file_path, $content);
-            if (false !== $result_edit) {
+            $resultEdit = file_put_contents($filePath, $content);
+            if (false !== $resultEdit) {
                 $this->_refresh_view_files();
                 $this->success(L('theme') . L('template') . L('add') . L('success'), U('index'));
                 return;
@@ -147,12 +147,12 @@ EOF;
             $this->error(L('id') . L('error'), U('index'));
         }
 
-        $file_name = $this->view_files[$id]['file_name'];
-        $file_path = $this->view_path . $file_name;
+        $fileName = $this->view_files[$id]['file_name'];
+        $filePath = $this->view_path . $fileName;
         if (IS_POST) {
             $content     = I('content', '', false);
-            $result_edit = file_put_contents($file_path, $content);
-            if ($result_edit) {
+            $resultEdit = file_put_contents($filePath, $content);
+            if ($resultEdit) {
                 $this->success(L('theme') . L('template') . L('edit') . L('success'), U('index'));
                 return;
             } else {
@@ -160,10 +160,10 @@ EOF;
             }
         }
 
-        $edit_info            = $this->view_files[$id];
-        $edit_info['content'] = htmlspecialchars(file_get_contents($file_path));
+        $editInfo            = $this->view_files[$id];
+        $editInfo['content'] = htmlspecialchars(file_get_contents($filePath));
         $this->assign('id', $id);
-        $this->assign('edit_info', $edit_info);
+        $this->assign('edit_info', $editInfo);
 
         $this->assign('title', L('edit') . L('theme') . L('template') . L('template'));
         $this->display('addedit');
@@ -177,10 +177,10 @@ EOF;
             $this->error(L('id') . L('error'), U('index'));
         }
 
-        $file_name  = $this->view_files[$id]['file_name'];
-        $file_path  = $this->view_path . $file_name;
-        $result_del = unlink($file_path);
-        if ($result_del) {
+        $fileName  = $this->view_files[$id]['file_name'];
+        $filePath  = $this->view_path . $fileName;
+        $resultDel = unlink($filePath);
+        if ($resultDel) {
             $this->_refresh_view_files();
             $this->success(L('theme') . L('template') . L('del') . L('success'), U('index'));
             return;
@@ -192,23 +192,23 @@ EOF;
     //获取模板主题
     private function _get_theme_list()
     {
-        $theme_list = array();
+        $themeList = array();
         if (C('DEFAULT_THEME')) {
-            $theme_path = str_ireplace(C('DEFAULT_THEME') . '/', '', $this->view_path);
+            $themePath = str_ireplace(C('DEFAULT_THEME') . '/', '', $this->view_path);
         }
 
-        $scan_info   = scandir($theme_path);
-        $deny_change = array('.', '..', 'index.html');
-        foreach ($scan_info as $info) {
-            if (in_array($info, $deny_change)) {
+        $scanInfo   = scandir($themePath);
+        $denyChange = array('.', '..', 'index.html');
+        foreach ($scanInfo as $info) {
+            if (in_array($info, $denyChange)) {
                 continue;
             }
 
-            if (is_dir($theme_path . $info)) {
-                $theme_list[] = $info;
+            if (is_dir($themePath . $info)) {
+                $themeList[] = $info;
             }
         }
-        return $theme_list;
+        return $themeList;
     }
 
     //刷新模板文件列表
@@ -230,34 +230,34 @@ EOF;
         }
 
         //把文件中的缓存取出
-        $theme_info = F($this->tpl_info_file, '', $path);
+        $themeInfo = F($this->tpl_info_file, '', $path);
 
         //构造模板文件
         //只扫描两级目录不进行递归 跳过 'index.html'
-        $scan_info = scandir($path);
+        $scanInfo = scandir($path);
 
-        $deny_change = array('.', '..', 'theme_info.php');
+        $denyChange = array('.', '..', 'theme_info.php');
         if (2 == $level) {
-            array_push($deny_change, 'index.html');
+            array_push($denyChange, 'index.html');
         }
 
-        foreach ($scan_info as $info) {
-            if (in_array($info, $deny_change)) {
+        foreach ($scanInfo as $info) {
+            if (in_array($info, $denyChange)) {
                 continue;
             }
 
-            $new_path = $path . $info;
-            if (is_dir($new_path)) {
-                $this->_get_view_files($new_path . '/', $level - 1);
-            } elseif (is_file($new_path)) {
-                $relative_view_path          = str_ireplace($this->view_path, '', $new_path);
-                $file_md5                    = md5($relative_view_path);
-                $this->view_files[$file_md5] = array(
-                    'file_name' => $relative_view_path,
+            $newPath = $path . $info;
+            if (is_dir($newPath)) {
+                $this->_get_view_files($newPath . '/', $level - 1);
+            } elseif (is_file($newPath)) {
+                $relativeViewPath          = str_ireplace($this->view_path, '', $newPath);
+                $fileMd5                    = md5($relativeViewPath);
+                $this->view_files[$fileMd5] = array(
+                    'file_name' => $relativeViewPath,
                 );
-                if ($theme_info && $theme_info[$file_md5]) {
-                    $this->view_files[$file_md5]['name'] = $theme_info[$file_md5]['name'];
-                    $this->view_files[$file_md5]['info'] = $theme_info[$file_md5]['info'];
+                if ($themeInfo && $themeInfo[$fileMd5]) {
+                    $this->view_files[$fileMd5]['name'] = $themeInfo[$fileMd5]['name'];
+                    $this->view_files[$fileMd5]['info'] = $themeInfo[$fileMd5]['info'];
                 }
             }
         }

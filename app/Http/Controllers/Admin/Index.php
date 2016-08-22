@@ -19,7 +19,7 @@ class Index extends Backend
     //登录 或者 后台页面框架
     public function index()
     {
-        if ($this->_is_login()) {
+        if ($this->isLogin()) {
             $this->display();
         } else {
             $this->assign('title', L('login') . L('backend'));
@@ -28,7 +28,7 @@ class Index extends Backend
     }
 
     //网站基本设置
-    public function website_set()
+    public function websiteSet()
     {
         if (IS_POST) {
             //表单提交的名称
@@ -54,7 +54,7 @@ class Index extends Backend
     }
 
     //系统基本设置
-    public function system_set()
+    public function systemSet()
     {
         if (IS_POST) {
             //表单提交的名称
@@ -77,78 +77,78 @@ class Index extends Backend
     }
 
     //网站数据库配置设置
-    public function database_set()
+    public function databaseSet()
     {
         //备份数据库
         if (IS_GET && '1' == I('backup')) {
             $db                  = M();
             $tables              = $db->query('SHOW TABLES');
-            $back_str            = '';
-            $is_magic_quotes_gpc = get_magic_quotes_gpc();
+            $backStr            = '';
+            $isMagicQuotesGpc = get_magic_quotes_gpc();
             foreach ($tables as $table) {
-                $table_name = $table[key($table)];
-                $back_str .= "DROP TABLE IF EXISTS `$table_name` ;\n";
-                $create_table = $db->query('SHOW CREATE TABLE `' . $table_name . '`');
-                $create_table = array_pop($create_table[0]);
-                $back_str .= str_replace("\n", "", $create_table) . " ;\n";
-                $columns    = $db->query('SHOW COLUMNS FROM `' . $table_name . '`');
-                $insert_col = '';
+                $tableName = $table[key($table)];
+                $backStr .= "DROP TABLE IF EXISTS `$tableName` ;\n";
+                $createTable = $db->query('SHOW CREATE TABLE `' . $tableName . '`');
+                $createTable = array_pop($createTable[0]);
+                $backStr .= str_replace("\n", "", $createTable) . " ;\n";
+                $columns    = $db->query('SHOW COLUMNS FROM `' . $tableName . '`');
+                $insertColumn = '';
                 foreach ($columns as $column) {
-                    if ($insert_col) {
-                        $insert_col .= ',';
+                    if ($insertColumn) {
+                        $insertColumn .= ',';
                     }
 
-                    $insert_col .= '`' . array_shift($column) . '`';
+                    $insertColumn .= '`' . array_shift($column) . '`';
                 }
-                $values = $db->query('SELECT * FROM `' . $table_name . '`');
+                $values = $db->query('SELECT * FROM `' . $tableName . '`');
                 foreach ($values as $val) {
-                    $insert_val = '';
-                    $insert_v   = '';
+                    $insertVal = '';
+                    $insertV   = '';
                     foreach ($val as $v) {
-                        if ($insert_v) {
-                            $insert_v .= ',';
+                        if ($insertV) {
+                            $insertV .= ',';
                         }
 
-                        $insert_v .= ($is_magic_quotes_gpc) ? "'$v'" : "'" . addslashes($v) . "'";
+                        $insertV .= ($isMagicQuotesGpc) ? "'$v'" : "'" . addslashes($v) . "'";
                     }
-                    $insert_val .= "($insert_v)";
-                    if ($insert_val) {
-                        $insert_val = str_replace(array("\n", "\r"), array("", ""), $insert_val);
-                        $back_str .= "INSERT INTO `$table_name`($insert_col) VALUES$insert_val ;\n";
+                    $insertVal .= "($insertV)";
+                    if ($insertVal) {
+                        $insertVal = str_replace(array("\n", "\r"), array("", ""), $insertVal);
+                        $backStr .= "INSERT INTO `$tableName`($insertColumn) VALUES$insertVal ;\n";
                     }
                 }
             }
             ob_end_clean();
             Header("Content-type: application/octet-stream");
             Header("Accept-Ranges: bytes");
-            Header("Accept-Length: " . strlen($back_str));
+            Header("Accept-Length: " . strlen($backStr));
             Header("Content-Disposition: attachment; filename=" . 'backup' . date('YmdHis') . '.sql');
-            echo $back_str;
+            echo $backStr;
             return;
         }
 
         //还原数据库
         if (IS_POST && isset($_FILES['restore_file']) && 0 == $_FILES['restore_file']['error']) {
             $db          = M();
-            $file_handle = fopen($_FILES['restore_file']['tmp_name'], 'r');
-            if (!$file_handle) {
-                $this->error(L('open') . L('file') . L('error'), U('database_set'));
+            $fileHandle = fopen($_FILES['restore_file']['tmp_name'], 'r');
+            if (!$fileHandle) {
+                $this->error(L('open') . L('file') . L('error'), U('databaseSet'));
             }
 
-            while (false !== ($query_str = fgets($file_handle, 10240))) {
-                $preg_match = '/^' . implode('|', array(
+            while (false !== ($queryStr = fgets($fileHandle, 10240))) {
+                $pregMatch = '/^' . implode('|', array(
                     'DROP\sTABLE',
                     'INSERT\sINTO',
                     'CREATE\sTABLE',
                 )) . '/i';
-                if (!preg_match($preg_match, $query_str)) {
-                    $this->error(L('restore') . L('database') . ' SQL ' . L('error'), U('database_set'));
+                if (!preg_match($pregMatch, $queryStr)) {
+                    $this->error(L('restore') . L('database') . ' SQL ' . L('error'), U('databaseSet'));
                 }
 
-                $db->execute($query_str);
+                $db->execute($queryStr);
             }
-            fclose($file_handle);
-            $this->success(L('restore') . L('database') . L('success'), U('database_set'));
+            fclose($fileHandle);
+            $this->success(L('restore') . L('database') . L('success'), U('databaseSet'));
             return;
         }
 
@@ -179,29 +179,29 @@ class Index extends Backend
     public function edit_my_pass()
     {
         if (IS_POST) {
-            $cur_password = I('cur_password');
+            $curPassword = I('cur_password');
             $AdminModel   = D('Admin');
-            $admin_info   = $AdminModel->authorized(session('backend_info.admin_name'), $cur_password);
-            if (!$admin_info) {
+            $adminInfo   = $AdminModel->authorized(session('backend_info.admin_name'), $curPassword);
+            if (!$adminInfo) {
                 $this->error(L('current') . L('pass') . L('error'));
             }
 
             $password       = I('password');
-            $password_again = I('password_again');
+            $passwordAgain = I('password_again');
 
             //只有一个分支的提交 不进行判断必须检测
-            $result = $this->_validform('password', array('password' => $password));
+            $result = $this->doValidateForm('password', array('password' => $password));
             if (!$result['status']) {
                 $this->error($result['info'], U(ACTION_NAME));
             }
 
-            $result = $this->_validform('password_again', array('password' => $password, 'password_again' => $password_again));
+            $result = $this->doValidateForm('password_again', array('password' => $password, 'password_again' => $passwordAgain));
             if (!$result['status']) {
                 $this->error($result['info'], U(ACTION_NAME));
             }
 
-            $result_edit = $AdminModel->mEdit($admin_info['id'], array('admin_pwd' => $password));
-            if ($result_edit) {
+            $resultEdit = $AdminModel->mEdit($adminInfo['id'], array('admin_pwd' => $password));
+            if ($resultEdit) {
                 $this->success(L('edit') . L('pass') . L('success'), U('edit_my_pass'));
                 return;
             } else {
@@ -215,28 +215,28 @@ class Index extends Backend
     //清除缓存
     public function clean_cache()
     {
-        $message_str = L('cache') . L('file') . L('and') . L('temp') . L('file');
-        $lang        = L('yes') . L('no') . L('confirm') . L('clean') . $message_str;
-        if (!$this->show_confirm($lang)) {
+        $messageStr = L('cache') . L('file') . L('and') . L('temp') . L('file');
+        $lang        = L('yes') . L('no') . L('confirm') . L('clean') . $messageStr;
+        if (!$this->showConfirm($lang)) {
             return;
         }
 
-        $runtime_file = scandir(RUNTIME_PATH);
+        $runtimeFile = scandir(RUNTIME_PATH);
         // 清除runtime 文件
-        foreach ($runtime_file as $file) {
+        foreach ($runtimeFile as $file) {
             if (preg_match('/\~runtime\.php$/', $file)) {
                 unlink(RUNTIME_PATH . $file);
             }
         }
-        $clean_cache_result = $this->_clean_dir(CACHE_PATH);
-        $clean_temp_result  = $this->_clean_dir(TEMP_PATH);
-        if ($clean_cache_result && $clean_temp_result) {
+        $cleanCacheResult = $this->cleanDir(CACHE_PATH);
+        $cleanTempResult  = $this->cleanDir(TEMP_PATH);
+        if ($cleanCacheResult && $cleanTempResult) {
             //写入日志
             $AdminLogModel = D('AdminLog');
             $AdminLogModel->mAdd(session('backend_info.id'));
-            $this->success($message_str . L('clean') . L('success'), U('main'));
+            $this->success($messageStr . L('clean') . L('success'), U('main'));
         } else {
-            $this->error($message_str . L('clean') . L('error'), U('main'));
+            $this->error($messageStr . L('clean') . L('error'), U('main'));
         }
     }
 
@@ -244,12 +244,12 @@ class Index extends Backend
     public function clean_log()
     {
         $lang = L('yes') . L('no') . L('confirm') . L('clean') . L('log');
-        if (!$this->show_confirm($lang)) {
+        if (!$this->showConfirm($lang)) {
             return;
         }
 
-        $clean_result = $this->_clean_dir(LOG_PATH);
-        if ($clean_result) {
+        $cleanResult = $this->cleanDir(LOG_PATH);
+        if ($cleanResult) {
             //写入日志
             $AdminLogModel = D('AdminLog');
             $AdminLogModel->mAdd(session('backend_info.id'));
@@ -270,37 +270,37 @@ class Index extends Backend
     public function left_nav()
     {
         //if(没有在权限中找到列表 就显示默认的列表)
-        $admin_priv       = session('backend_info.privilege');
-        $admin_group_priv = session('backend_info.group_privilege');
+        $adminPriv       = session('backend_info.privilege');
+        $adminGroupPriv = session('backend_info.group_privilege');
         $privilege        = F('privilege');
-        $left_nav         = array();
+        $leftNav         = array();
         //跳过系统基本操作 增删改 异步接口,
-        $deny_link = array('add', 'del', 'edit', 'ajax_port');
-        foreach ($privilege['Admin'] as $control => $control_group) {
-            foreach ($control_group as $control_name => $action) {
-                foreach ($action as $action_name => $action_value) {
+        $denyLink = array('add', 'del', 'edit', 'ajax_port');
+        foreach ($privilege['Admin'] as $control => $controlGroup) {
+            foreach ($controlGroup as $controlName => $action) {
+                foreach ($action as $actionName => $actionValue) {
                     if (
                         //跳过系统基本操作
-                        in_array($action_name, $deny_link) ||
+                        in_array($actionName, $denyLink) ||
                         //跳过没有权限的功能
                         (
-                            !in_array('all', $admin_priv) &&
-                            !in_array($control_name . '_' . $action_name, $admin_priv) &&
-                            !in_array('all', $admin_group_priv) &&
-                            !in_array($control_name . '_' . $action_name, $admin_group_priv)
+                            !in_array('all', $adminPriv) &&
+                            !in_array($controlName . '_' . $actionName, $adminPriv) &&
+                            !in_array('all', $adminGroupPriv) &&
+                            !in_array($controlName . '_' . $actionName, $adminGroupPriv)
                         )
                     ) {
                         continue;
                     }
 
-                    $left_nav[$control][] = array(
-                        'link' => U('Admin/' . $control_name . '/' . $action_name),
-                        'name' => $action_value,
+                    $leftNav[$control][] = array(
+                        'link' => U('Admin/' . $controlName . '/' . $actionName),
+                        'name' => $actionValue,
                     );
                 }
             }
         }
-        $this->assign('left_nav', $left_nav);
+        $this->assign('left_nav', $leftNav);
         $this->assign('title', L('nav_left') . L('nav'));
         $this->display();
     }
@@ -308,16 +308,16 @@ class Index extends Backend
     //管理主页面
     public function main()
     {
-        $site_info                    = array();
-        $site_info['sys_version']     = PHP_OS;
-        $site_info['php_version']     = PHP_VERSION;
-        $site_info['server_ip']       = $_SERVER['SERVER_ADDR'];
-        $site_info['max_upload_size'] = ini_get('post_max_size');
-        $site_info['sys_encode']      = C('DEFAULT_CHARSET');
-        $site_info['sys_timezone']    = C('DEFAULT_TIMEZONE');
-        $site_info['mysql_version']   = mysql_get_server_info(M()->db()->connect());
-        $site_info['mysql_encode']    = C('DB_CHARSET');
-        $site_info['ico']             = array(
+        $siteInfo                    = array();
+        $siteInfo['sys_version']     = PHP_OS;
+        $siteInfo['php_version']     = PHP_VERSION;
+        $siteInfo['server_ip']       = $_SERVER['SERVER_ADDR'];
+        $siteInfo['max_upload_size'] = ini_get('post_max_size');
+        $siteInfo['sys_encode']      = C('DEFAULT_CHARSET');
+        $siteInfo['sys_timezone']    = C('DEFAULT_TIMEZONE');
+        $siteInfo['mysql_version']   = mysql_get_server_info(M()->db()->connect());
+        $siteInfo['mysql_encode']    = C('DB_CHARSET');
+        $siteInfo['ico']             = array(
             'ico1'  => $this->_check_privilege('add', 'Article'),
             'ico2'  => $this->_check_privilege('add', 'ArticleCategory'),
             'ico6'  => $this->_check_privilege('add', 'Member'),
@@ -327,7 +327,7 @@ class Index extends Backend
             'ico10' => $this->_check_privilege('clean_cache', 'Index'),
             'ico12' => $this->_check_privilege('index', 'ManageUpload'),
         );
-        $this->assign('site_info', $site_info);
+        $this->assign('site_info', $siteInfo);
         $this->assign('title', L('info') . L('page'));
         $this->display();
     }
@@ -338,9 +338,9 @@ class Index extends Backend
             return;
         }
 
-        $admin_name = I('user');
-        $admin_pwd  = I('pwd');
-        switch ($this->_login($admin_name, $admin_pwd)) {
+        $adminName = I('user');
+        $adminPwd  = I('pwd');
+        switch ($this->doLogin($adminName, $adminPwd)) {
             case 'user_pwd_error':
                 $this->error(L('account') . L('or') . L('pass') . L('error'), U('Index/index'));
                 break;
@@ -358,12 +358,12 @@ class Index extends Backend
     //登出
     public function logout()
     {
-        $this->_logout();
+        $this->doLogout();
         $this->success(L('logout') . L('account') . L('success'), U('Index/index'));
     }
 
     //页面验证
-    protected function _validform($field, $data)
+    protected function doValidateForm($field, $data)
     {
         $result = array('status' => true, 'info' => '');
         switch ($field) {
@@ -401,7 +401,7 @@ class Index extends Backend
     }
 
     //清除指定目录的文件
-    private function _clean_dir($dir)
+    private function cleanDir($dir)
     {
         if (!is_dir($dir)) {
             return false;
@@ -409,17 +409,17 @@ class Index extends Backend
 
         $dirs = scandir($dir);
         //不删除的默认文件数组
-        $deny_del = array('.', '..', 'index.html');
+        $denyDel = array('.', '..', 'index.html');
         foreach ($dirs as $file) {
-            if (in_array($file, $deny_del)) {
+            if (in_array($file, $denyDel)) {
                 continue;
             }
 
-            $new_dir = $dir . '/' . $file;
-            if (is_dir($new_dir)) {
-                $this->_clean_dir($new_dir);
+            $newDir = $dir . '/' . $file;
+            if (is_dir($newDir)) {
+                $this->cleanDir($newDir);
             } else {
-                unlink($new_dir);
+                unlink($newDir);
             }
         }
         return true;

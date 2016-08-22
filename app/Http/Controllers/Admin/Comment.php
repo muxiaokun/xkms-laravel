@@ -25,45 +25,45 @@ class Comment extends Backend
         $where        = array();
 
         //建立where
-        $v_value                       = '';
-        $v_value                       = I('audit_id');
-        $v_value && $where['audit_id'] = array(
+        $whereValue                       = '';
+        $whereValue                       = I('audit_id');
+        $whereValue && $where['audit_id'] = array(
             'in',
-            $AdminModel->where(array('admin_name' => array('like', '%' . $v_value . '%')))->col_arr('id'),
+            $AdminModel->where(array('admin_name' => array('like', '%' . $whereValue . '%')))->mColumn2Array('id'),
         );
-        $v_value                      = I('send_id');
-        $v_value && $where['send_id'] = array(
+        $whereValue                      = I('send_id');
+        $whereValue && $where['send_id'] = array(
             'in',
-            $MemberModel->where(array('member_name' => array('like', '%' . $v_value . '%')))->col_arr('id'),
+            $MemberModel->where(array('member_name' => array('like', '%' . $whereValue . '%')))->mColumn2Array('id'),
         );
-        $v_value                         = I('controller');
-        $v_value && $where['controller'] = $v_value;
-        $v_value                         = I('item');
-        $v_value && $where['item']       = $v_value;
+        $whereValue                         = I('controller');
+        $whereValue && $where['controller'] = $whereValue;
+        $whereValue                         = I('item');
+        $whereValue && $where['item']       = $whereValue;
 
-        $comment_list = $CommentModel->order('add_time desc')->mSelect($where, true);
-        foreach ($comment_list as &$comment) {
+        $commentList = $CommentModel->order('add_time desc')->mSelect($where, true);
+        foreach ($commentList as &$comment) {
             $comment['audit_name']  = ($comment['audit_id']) ? $AdminModel->mFindColumn($comment['audit_id'], 'admin_name') : L('none') . L('audit');
-            $member_name            = $MemberModel->mFindColumn($comment['member_id'], 'member_name');
-            $comment['member_name'] = ($member_name) ? $member_name : L('anonymous');
+            $memberName            = $MemberModel->mFindColumn($comment['member_id'], 'member_name');
+            $comment['member_name'] = ($memberName) ? $memberName : L('anonymous');
         }
-        $this->assign('comment_list', $comment_list);
-        $this->assign('comment_list_count', $CommentModel->getPageCount($where));
+        $this->assign('comment_list', $commentList);
+        $this->assign('comment_list_count', $CommentModel->mGetPageCount($where));
 
         //初始化where_info
-        $where_info               = array();
-        $where_info['audit_id']   = array('type' => 'input', 'name' => L('audit') . L('admin') . L('name'));
-        $where_info['send_id']    = array('type' => 'input', 'name' => L('send') . L('member') . L('name'));
-        $where_info['controller'] = array('type' => 'input', 'name' => L('controller'));
-        $where_info['item']       = array('type' => 'input', 'name' => L('id'));
-        $this->assign('where_info', $where_info);
+        $whereInfo               = array();
+        $whereInfo['audit_id']   = array('type' => 'input', 'name' => L('audit') . L('admin') . L('name'));
+        $whereInfo['send_id']    = array('type' => 'input', 'name' => L('send') . L('member') . L('name'));
+        $whereInfo['controller'] = array('type' => 'input', 'name' => L('controller'));
+        $whereInfo['item']       = array('type' => 'input', 'name' => L('id'));
+        $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batch_handle         = array();
-        $batch_handle['add']  = $this->_check_privilege('add');
-        $batch_handle['edit'] = $this->_check_privilege('edit');
-        $batch_handle['del']  = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batch_handle);
+        $batchHandle         = array();
+        $batchHandle['add']  = $this->_check_privilege('add');
+        $batchHandle['edit'] = $this->_check_privilege('edit');
+        $batchHandle['del']  = $this->_check_privilege('del');
+        $this->assign('batch_handle', $batchHandle);
 
         $this->assign('title', L('comment') . L('management'));
         $this->display();
@@ -99,8 +99,8 @@ class Comment extends Backend
 
         $CommentModel = D('Comment');
         $data         = array('audit_id' => session('backend_info.id'));
-        $result_edit  = $CommentModel->mEdit($id, $data);
-        if ($result_edit) {
+        $resultEdit  = $CommentModel->mEdit($id, $data);
+        if ($resultEdit) {
             $this->success(L('comment') . L('audit') . L('success'), U('index'));
             return;
         } else {
@@ -117,8 +117,8 @@ class Comment extends Backend
         }
 
         $CommentModel = D('Comment');
-        $result_del   = $CommentModel->mDel($id);
-        if ($result_del) {
+        $resultDel   = $CommentModel->mDel($id);
+        if ($resultDel) {
             $this->success(L('comment') . L('del') . L('success'), U('index'));
             return;
         } else {

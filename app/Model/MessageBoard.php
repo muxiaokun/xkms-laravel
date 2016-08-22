@@ -7,10 +7,10 @@ class MessageBoard extends Common
 {
     public function mSelect($where = null, $page = false)
     {
-        $this->getPage($page);
+        $this->mGetPage($page);
         !isset($this->options['order']) && $this->order('id desc');
         $data = $this->where($where)->select();
-        foreach ($data as &$data_row) {$this->decodeData($data_row);}
+        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
         return $data;
     }
 
@@ -23,12 +23,12 @@ class MessageBoard extends Common
         return parent::mDel($id);
     }
 
-    protected function encodeData(&$data)
+    protected function mEncodeData(&$data)
     {
         isset($data['config']) && $data['config'] = serialize($data['config']);
     }
 
-    protected function decodeData(&$data)
+    protected function mDecodeData(&$data)
     {
         isset($data['config']) && $data['config'] = unserialize($data['config']);
     }

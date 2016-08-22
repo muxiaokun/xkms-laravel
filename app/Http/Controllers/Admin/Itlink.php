@@ -21,34 +21,34 @@ class Itlink extends Backend
     {
         $ItlinkModel = D('Itlink');
         //建立where
-        $v_value                            = '';
-        $v_value                            = I('name');
-        $v_value && $where['name']          = array('like', '%' . $v_value . '%');
-        $v_value                            = I('short_name');
-        $v_value && $where['short_name']    = array('like', '%' . $v_value . '%');
-        $v_value                            = I('is_enable');
-        $v_value && $where['is_enable']     = (1 == $v_value) ? 1 : 0;
-        $v_value                            = I('is_statistics');
-        $v_value && $where['is_statistics'] = (1 == $v_value) ? 1 : 0;
+        $whereValue                            = '';
+        $whereValue                            = I('name');
+        $whereValue && $where['name']          = array('like', '%' . $whereValue . '%');
+        $whereValue                            = I('short_name');
+        $whereValue && $where['short_name']    = array('like', '%' . $whereValue . '%');
+        $whereValue                            = I('is_enable');
+        $whereValue && $where['is_enable']     = (1 == $whereValue) ? 1 : 0;
+        $whereValue                            = I('is_statistics');
+        $whereValue && $where['is_statistics'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $itlink_list = $ItlinkModel->mSelect($where, true);
-        $this->assign('itlink_list', $itlink_list);
-        $this->assign('itlink_list_count', $ItlinkModel->getPageCount($where));
+        $itlinkList = $ItlinkModel->mSelect($where, true);
+        $this->assign('itlink_list', $itlinkList);
+        $this->assign('itlink_list_count', $ItlinkModel->mGetPageCount($where));
 
         //初始化where_info
-        $where_info['name']          = array('type' => 'input', 'name' => L('itlink') . L('name'));
-        $where_info['short_name']    = array('type' => 'input', 'name' => L('short') . L('name'));
-        $where_info['is_enable']     = array('type' => 'select', 'name' => L('yes') . L('no') . L('enable'), 'value' => array(1 => L('yes'), 2 => L('no')));
-        $where_info['is_statistics'] = array('type' => 'select', 'name' => L('yes') . L('no') . L('statistics'), 'value' => array(1 => L('yes'), 2 => L('no')));
-        $this->assign('where_info', $where_info);
+        $whereInfo['name']          = array('type' => 'input', 'name' => L('itlink') . L('name'));
+        $whereInfo['short_name']    = array('type' => 'input', 'name' => L('short') . L('name'));
+        $whereInfo['is_enable']     = array('type' => 'select', 'name' => L('yes') . L('no') . L('enable'), 'value' => array(1 => L('yes'), 2 => L('no')));
+        $whereInfo['is_statistics'] = array('type' => 'select', 'name' => L('yes') . L('no') . L('statistics'), 'value' => array(1 => L('yes'), 2 => L('no')));
+        $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batch_handle         = array();
-        $batch_handle['add']  = $this->_check_privilege('add');
-        $batch_handle['edit'] = $this->_check_privilege('edit');
-        $batch_handle['del']  = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batch_handle);
+        $batchHandle         = array();
+        $batchHandle['add']  = $this->_check_privilege('add');
+        $batchHandle['edit'] = $this->_check_privilege('edit');
+        $batchHandle['del']  = $this->_check_privilege('del');
+        $this->assign('batch_handle', $batchHandle);
 
         $this->assign('title', L('itlink') . L('management'));
         $this->display();
@@ -59,10 +59,10 @@ class Itlink extends Backend
     {
         if (IS_POST) {
             $ItlinkModel = D('Itlink');
-            $data        = $this->_make_data();
-            $result_add  = $ItlinkModel->mAdd($data);
-            if ($result_add) {
-                $this->_add_edit_after_common($data, $id);
+            $data        = $this->makeData();
+            $resultAdd  = $ItlinkModel->mAdd($data);
+            if ($resultAdd) {
+                $this->addEditAfterCommon($data, $id);
                 $this->success(L('itlink') . L('add') . L('success'), U('index'));
                 return;
             } else {
@@ -83,20 +83,20 @@ class Itlink extends Backend
 
         $ItlinkModel = D('Itlink');
         if (IS_POST) {
-            $data        = $this->_make_data();
-            $result_edit = $ItlinkModel->mEdit($id, $data);
-            if ($result_edit) {
-                $this->_add_edit_after_common($data, $id);
+            $data        = $this->makeData();
+            $resultEdit = $ItlinkModel->mEdit($id, $data);
+            if ($resultEdit) {
+                $this->addEditAfterCommon($data, $id);
                 $this->success(L('itlink') . L('edit') . L('success'), U('index'));
                 return;
             } else {
-                $error_go_link = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-                $this->error(L('itlink') . L('edit') . L('error'), $error_go_link);
+                $errorGoLink = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
+                $this->error(L('itlink') . L('edit') . L('error'), $errorGoLink);
             }
         }
 
-        $edit_info = $ItlinkModel->mFind($id);
-        $this->assign('edit_info', $edit_info);
+        $editInfo = $ItlinkModel->mFind($id);
+        $this->assign('edit_info', $editInfo);
         $this->assign('title', L('itlink') . L('edit'));
         $this->display('addedit');
     }
@@ -110,8 +110,8 @@ class Itlink extends Backend
         }
 
         $ItlinkModel = D('Itlink');
-        $result_del  = $ItlinkModel->mDel($id);
-        if ($result_del) {
+        $resultDel  = $ItlinkModel->mDel($id);
+        if ($resultDel) {
             $ManageUploadModel = D('ManageUpload');
             $ManageUploadModel->mEdit($id);
             $this->success(L('itlink') . L('del') . L('success'), U('index'));
@@ -122,15 +122,15 @@ class Itlink extends Backend
     }
 
     //异步和表单数据验证
-    protected function _validform($field, $data)
+    protected function doValidateForm($field, $data)
     {
         $result = array('status' => true, 'info' => '');
         switch ($field) {
             case 'short_name':
                 //检查用户名是否存在
                 $ItlinkModel = D('Itlink');
-                $itlink_info = $ItlinkModel->mSelect(array('short_name' => $data['short_name'], 'id' => array('neq', $data['id'])));
-                if (0 < count($itlink_info)) {
+                $itlinkInfo = $ItlinkModel->mSelect(array('short_name' => $data['short_name'], 'id' => array('neq', $data['id'])));
+                if (0 < count($itlinkInfo)) {
                     $result['info'] = L('short') . L('name') . L('exists');
                     break;
                 }
@@ -145,60 +145,60 @@ class Itlink extends Backend
     }
 
     //构造数据
-    private function _make_data()
+    private function makeData()
     {
         //初始化参数
         $id             = I('id');
         $name           = I('name');
-        $short_name     = I('short_name');
-        $start_time     = I('start_time');
-        $end_time       = I('end_time');
-        $start_time     = M_mktime($start_time, true);
-        $end_time       = M_mktime($end_time, true);
-        $is_enable      = I('is_enable');
-        $is_statistics  = I('is_statistics');
-        $max_show_num   = I('max_show_num');
-        $max_hit_num    = I('max_hit_num');
-        $show_num       = I('show_num');
-        $hit_num        = I('hit_num');
-        $input_ext_info = I('ext_info');
-        $ext_info       = array();
-        foreach ($input_ext_info['itl_link'] as $info_key => $info) {
-            $ext_info[] = array(
+        $shortName     = I('short_name');
+        $startTime     = I('start_time');
+        $endTime       = I('end_time');
+        $startTime     = M_mktime($startTime, true);
+        $endTime       = M_mktime($endTime, true);
+        $isEnable      = I('is_enable');
+        $isStatistics  = I('is_statistics');
+        $maxShowNum   = I('max_show_num');
+        $maxHitNum    = I('max_hit_num');
+        $showNum       = I('show_num');
+        $hitNum        = I('hit_num');
+        $inputExtInfo = I('ext_info');
+        $extInfo       = array();
+        foreach ($inputExtInfo['itl_link'] as $infoKey => $info) {
+            $extInfo[] = array(
                 'itl_link'   => htmlspecialchars_decode($info),
-                'itl_text'   => htmlspecialchars_decode($input_ext_info['itl_text'][$info_key]),
-                'itl_target' => htmlspecialchars_decode($input_ext_info['itl_target'][$info_key]),
-                'itl_image'  => htmlspecialchars_decode($input_ext_info['itl_image'][$info_key]),
+                'itl_text'   => htmlspecialchars_decode($inputExtInfo['itl_text'][$infoKey]),
+                'itl_target' => htmlspecialchars_decode($inputExtInfo['itl_target'][$infoKey]),
+                'itl_image'  => htmlspecialchars_decode($inputExtInfo['itl_image'][$infoKey]),
             );
         }
 
         //检测初始化参数是否合法
-        $error_go_link = (!$id) ? U('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-        if ('add' == ACTION_NAME || null !== $short_name) {
-            $result = $this->_validform('short_name', array('id' => $id, 'short_name' => $short_name));
+        $errorGoLink = (!$id) ? U('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));
+        if ('add' == ACTION_NAME || null !== $shortName) {
+            $result = $this->doValidateForm('short_name', array('id' => $id, 'short_name' => $shortName));
             if (!$result['status']) {
-                $this->error($result['info'], $error_go_link);
+                $this->error($result['info'], $errorGoLink);
             }
 
         }
 
         $data                                                                       = array();
         ('add' == ACTION_NAME || null !== $name) && $data['name']                   = $name;
-        ('add' == ACTION_NAME || null !== $short_name) && $data['short_name']       = $short_name;
-        ('add' == ACTION_NAME || null !== $start_time) && $data['start_time']       = $start_time;
-        ('add' == ACTION_NAME || null !== $end_time) && $data['end_time']           = $end_time;
-        ('add' == ACTION_NAME || null !== $is_enable) && $data['is_enable']         = $is_enable;
-        ('add' == ACTION_NAME || null !== $is_statistics) && $data['is_statistics'] = $is_statistics;
-        ('add' == ACTION_NAME || null !== $max_show_num) && $data['max_show_num']   = $max_show_num;
-        ('add' == ACTION_NAME || null !== $max_hit_num) && $data['max_hit_num']     = $max_hit_num;
-        ('add' == ACTION_NAME || null !== $show_num) && $data['show_num']           = $show_num;
-        ('add' == ACTION_NAME || null !== $hit_num) && $data['hit_num']             = $hit_num;
-        ('add' == ACTION_NAME || 0 < count($ext_info)) && $data['ext_info']         = $ext_info;
+        ('add' == ACTION_NAME || null !== $shortName) && $data['short_name']       = $shortName;
+        ('add' == ACTION_NAME || null !== $startTime) && $data['start_time']       = $startTime;
+        ('add' == ACTION_NAME || null !== $endTime) && $data['end_time']           = $endTime;
+        ('add' == ACTION_NAME || null !== $isEnable) && $data['is_enable']         = $isEnable;
+        ('add' == ACTION_NAME || null !== $isStatistics) && $data['is_statistics'] = $isStatistics;
+        ('add' == ACTION_NAME || null !== $maxShowNum) && $data['max_show_num']   = $maxShowNum;
+        ('add' == ACTION_NAME || null !== $maxHitNum) && $data['max_hit_num']     = $maxHitNum;
+        ('add' == ACTION_NAME || null !== $showNum) && $data['show_num']           = $showNum;
+        ('add' == ACTION_NAME || null !== $hitNum) && $data['hit_num']             = $hitNum;
+        ('add' == ACTION_NAME || 0 < count($extInfo)) && $data['ext_info']         = $extInfo;
         return $data;
     }
 
     //添加 编辑 之后 公共方法
-    private function _add_edit_after_common(&$data, $id)
+    private function addEditAfterCommon(&$data, $id)
     {
         // 批量修改时不进行文件绑定
         if (is_array($id)) {
@@ -206,10 +206,10 @@ class Itlink extends Backend
         }
 
         $ManageUploadModel = D('ManageUpload');
-        $bind_file         = array();
+        $bindFile         = array();
         foreach ($data as $item) {
-            $bind_file[] = $item['link_image'];
+            $bindFile[] = $item['link_image'];
         }
-        $ManageUploadModel->mEdit($id, $bind_file);
+        $ManageUploadModel->mEdit($id, $bindFile);
     }
 }

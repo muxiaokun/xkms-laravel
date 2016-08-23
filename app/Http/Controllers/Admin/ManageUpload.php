@@ -33,7 +33,7 @@ class ManageUpload extends Backend
                     $manageUpload['user_name'] = $MemberModel->mFindColumn($manageUpload['user_id'], 'member_name');
                     break;
             }
-            $bindInfo     = array(L('controller') => L('relevance') . L('id'));
+            $bindInfo     = array(trans('controller') => L('relevance') . L('id'));
             $bindInfoArr = explode('|', $manageUpload['bind_info']);
             foreach ($bindInfoArr as $info) {
                 if ($info) {
@@ -48,9 +48,9 @@ class ManageUpload extends Backend
 
         //初始化where_info
         $whereInfo              = array();
-        $whereInfo['add_time']  = array('type' => 'time', 'name' => L('add') . L('time'));
-        $whereInfo['suffix']    = array('type' => 'input', 'name' => L('suffix'));
-        $whereInfo['bind_info'] = array('type' => 'input', 'name' => L('bind') . L('controller'));
+        $whereInfo['add_time']  = array('type' => 'time', 'name' => trans('add') . L('time'));
+        $whereInfo['suffix']    = array('type' => 'input', 'name' => trans('suffix'));
+        $whereInfo['bind_info'] = array('type' => 'input', 'name' => trans('bind') . L('controller'));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -59,7 +59,7 @@ class ManageUpload extends Backend
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', L('file') . L('management'));
+        $this->assign('title', trans('file') . L('management'));
         $this->display();
     }
 
@@ -68,23 +68,23 @@ class ManageUpload extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $ManageUploadModel = D('ManageUpload');
         $resultDel        = $ManageUploadModel->mDel($id);
         if ($resultDel) {
-            $this->success(L('file') . L('del') . L('success'), U('index'));
+            $this->success(trans('file') . L('del') . L('success'), route('index'));
             return;
         } else {
-            $this->error(L('file') . L('del') . L('error'), U('index'));
+            $this->error(trans('file') . L('del') . L('error'), route('index'));
         }
     }
 
     //清除未用
     public function edit()
     {
-        $lang = L('yes') . L('no') . L('confirm') . L('clear');
+        $lang = trans('yes') . L('no') . L('confirm') . L('clear');
         if (!$this->showConfirm($lang)) {
             return;
         }
@@ -95,10 +95,10 @@ class ManageUpload extends Backend
         foreach ($manageUploadList as $manageUpload) {
             $resultDel = $ManageUploadModel->mDel($manageUpload['id']);
             if (!$resultDel) {
-                $this->error(L('clear') . L('file') . $manageUpload['path'] . L('error'), U('index'));
+                $this->error(trans('clear') . L('file') . $manageUpload['path'] . L('error'), route('index'));
             }
         }
-        $this->success(L('clear') . L('file') . L('success'), U('index'));
+        $this->success(trans('clear') . L('file') . L('success'), route('index'));
     }
 
     //上传接口实现

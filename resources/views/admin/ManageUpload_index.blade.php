@@ -16,7 +16,7 @@
                         <th>{{ trans('common.bind') }}{{ trans('common.info') }}</th>
                         <td class="nowrap">
                             <if condition="$batch_handle['edit']">
-                                <a class="btn btn-xs btn-success"  href="{:U('edit')}">{{ trans('common.clear') }}{{ trans('common.none') }}{{ trans('common.bind') }}</a>
+                                <a class="btn btn-xs btn-success"  href="{{ route('edit') }}">{{ trans('common.clear') }}{{ trans('common.none') }}{{ trans('common.bind') }}</a>
                             </if>
                         </td>
                     </tr>
@@ -69,7 +69,7 @@
                                     {{ trans('common.copy') }}{{ trans('common.path') }}
                                 </a>
                                 <if condition="$batch_handle['del']">
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$manage_upload.name}?','{:U('del',array('id'=>$manage_upload['id']))}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$manage_upload.name}?','{{ route('del',array('id'=>$manage_upload['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 </if>
@@ -89,7 +89,7 @@
                                     'type_data':Array()
                                 };
                                 <if condition="$batch_handle['del']">
-                                    config.type_data.push({'name':$Think.lang.del,'post_link':'{:U('del')}' });
+                                    config.type_data.push({'name':$Think.lang.del,'post_link':'{{ route('del') }}' });
                                 </if>
                                 new M_batch_handle(config);
                             });

@@ -1,10 +1,10 @@
         <script type="text/javascript">
-            var progress = {:C('setp_progress.3')} - {:C('setp_progress.2')}; //上一步的
+            var progress = {{ config('setp_progress.3')} - {:C('setp_progress.2') }}; //上一步的
             var show_install_progress = function(percent)
             {
                 if(parent && parent.move_progress)
                 {
-                    parent.move_progress(progress * percent + {:C('setp_progress.2')});
+                    parent.move_progress(progress * percent + {{ config('setp_progress.2') }});
                 }
             }
         </script>

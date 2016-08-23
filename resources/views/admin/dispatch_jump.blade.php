@@ -7,7 +7,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>{{ trans('common.system') }}{{ trans('common.info') }} {{ trans('common.dash') }} {:C('SITE_TITLE')}</title>
+    <title>{{ trans('common.system') }}{{ trans('common.info') }} {{ trans('common.dash') }} {{ config('SITE_TITLE') }}</title>
     <import type="css" file="css/bootstrap#min" />
     <import type="css" file="css/bootstrap-theme#min" />
     <import type="css" file="css/common" />

@@ -19,7 +19,7 @@
                             <if condition="session('backend_info.id') neq 1">
                                 {{ trans('common.handle') }}
                             <else />
-                                <a class="btn btn-xs btn-danger" href="{:U('del_all')}">{{ trans('common.del') }}{{ trans('common.all') }}</a>
+                                <a class="btn btn-xs btn-danger" href="{{ route('del_all') }}">{{ trans('common.del') }}{{ trans('common.all') }}</a>
                             </if>
                         </th>
                     </tr>
@@ -64,7 +64,7 @@
                             </td>
                             <td class="nowrap">
                                 <if condition="$batch_handle['del']">
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}?','{:U("del",array("id"=>$admin_log['id']))}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}?','{{ route("del",array("id"=>$admin_log['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 </if>
@@ -84,7 +84,7 @@
                                     'type_data':Array()
                                 };
                                 <if condition="$batch_handle['del']">
-                                    config.type_data.push({'name':$Think.lang.del,'post_link':'{:U('del')}' });
+                                    config.type_data.push({'name':$Think.lang.del,'post_link':'{{ route('del') }}' });
                                 </if>
                                 new M_batch_handle(config);
                             });

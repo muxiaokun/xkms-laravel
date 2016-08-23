@@ -16,7 +16,7 @@
                         <th>{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.show') }}</th>
                         <td class="nowrap">
                             <if condition="$batch_handle['add']">
-                                <a class="btn btn-xs btn-success"  href="{:U('add')}">{{ trans('common.add') }}{{ trans('common.region') }}</a>
+                                <a class="btn btn-xs btn-success"  href="{{ route('add') }}">{{ trans('common.add') }}{{ trans('common.region') }}</a>
                             </if>
                         </td>
                     </tr>
@@ -49,13 +49,13 @@
                             </td>
                             <td class="nowrap">
                                 <if condition="$batch_handle['edit']">
-                                    <a class="btn btn-xs btn-primary"  href="{:U('edit',array('id'=>$region['id']))}">
+                                    <a class="btn btn-xs btn-primary"  href="{{ route('edit',array('id'=>$region['id'])) }}">
                                         {{ trans('common.edit') }}
                                     </a>
                                 </if>
                                 <if condition="$batch_handle['edit'] AND $batch_handle['del']">&nbsp;|&nbsp;</if>
                                 <if condition="$batch_handle['del']">
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$region.name}?','{:U('del',array('id'=>$region['id']))}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$region.name}?','{{ route('del',array('id'=>$region['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 </if>
@@ -75,11 +75,11 @@
                                     'type_data':Array()
                                 };
                                 <if condition="$batch_handle['edit']">
-                                    config.type_data.push({'name':$Think.lang.show,'post_link':'{:U('edit')}','post_data':{'if_show':'1'} });
-                                    config.type_data.push({'name':$Think.lang.hidden,'post_link':'{:U('edit')}','post_data':{'if_show':'0'} });
+                                    config.type_data.push({'name':$Think.lang.show,'post_link':'{{ route('edit') }}','post_data':{'if_show':'1'} });
+                                    config.type_data.push({'name':$Think.lang.hidden,'post_link':'{{ route('edit') }}','post_data':{'if_show':'0'} });
                                 </if>
                                 <if condition="$batch_handle['del']">
-                                    config.type_data.push({'name':$Think.lang.del,'post_link':'{:U('del')}' });
+                                    config.type_data.push({'name':$Think.lang.del,'post_link':'{{ route('del') }}' });
                                 </if>
                                 new M_batch_handle(config);
                             });

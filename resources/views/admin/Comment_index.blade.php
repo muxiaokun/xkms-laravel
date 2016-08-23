@@ -16,7 +16,7 @@
                         <th>{{ trans('common.comment') }} IP</th>
                         <td class="nowrap">
                             <if condition="$batch_handle['add']">
-                                <a class="btn btn-xs btn-success" href="{:U('add')}">{{ trans('common.config') }}{{ trans('common.comment') }}</a>
+                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">{{ trans('common.config') }}{{ trans('common.comment') }}</a>
                             </if>
                         </td>
                     </tr>
@@ -58,13 +58,13 @@
                                 </script>
                                 <if condition="$batch_handle['edit']">
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-primary" href="{:U('edit',array('id'=>$comment['id']))}">
+<a class="btn btn-xs btn-primary" href="{{ route('edit',array('id'=>$comment['id'])) }}">
                                         {{ trans('common.audit') }}
                                     </a>
                                 </if>
                                 <if condition="$batch_handle['del']">
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ trans('common.comment') }}?','{:U('del',array('id'=>$comment['id']))}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ trans('common.comment') }}?','{{ route('del',array('id'=>$comment['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 </if>
@@ -84,10 +84,10 @@
                                     'type_data':Array()
                                 };
                                 <if condition="$batch_handle['edit']">
-                                    config.type_data.push({'name':$Think.lang.audit,'post_link':'{:U('edit')}'});
+                                    config.type_data.push({'name':$Think.lang.audit,'post_link':'{{ route('edit') }}'});
                                 </if>
                                 <if condition="$batch_handle['del']">
-                                    config.type_data.push({'name':$Think.lang.del,'post_link':'{:U('del')}' });
+                                    config.type_data.push({'name':$Think.lang.del,'post_link':'{{ route('del') }}' });
                                 </if>
                                 new M_batch_handle(config);
                             });

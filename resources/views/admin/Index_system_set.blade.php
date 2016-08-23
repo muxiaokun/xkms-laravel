@@ -10,7 +10,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.time') }}{{ trans('common.format') }}</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_DATE" value="{:C('SYS_DATE')}" class="form-control">
+                                <input type="text" name="SYS_DATE" value="{{ config('SYS_DATE') }}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -19,7 +19,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.detail') }}{{ trans('common.time') }}{{ trans('common.format') }}</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_DATE_DETAIL" value="{:C('SYS_DATE_DETAIL')}" class="form-control">
+                                <input type="text" name="SYS_DATE_DETAIL" value="{{ config('SYS_DATE_DETAIL') }}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -30,7 +30,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.database') }}{{ trans('common.cache') }}{{ trans('common.time') }}</label>
                             <div class="col-sm-7">
-                                <input type="text" name="DATA_CACHE_TIME" value="{:C('DATA_CACHE_TIME')}" class="form-control" onKeyup="M_in_int(this);">
+                                <input type="text" name="DATA_CACHE_TIME" value="{{ config('DATA_CACHE_TIME') }}" class="form-control" onKeyup="M_in_int(this);">
                             </div>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Template{{ trans('common.cache') }}{{ trans('common.time') }}</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_TD_CACHE" value="{:C('SYS_TD_CACHE')}" class="form-control" onKeyup="M_in_int(this);">
+                                <input type="text" name="SYS_TD_CACHE" value="{{ config('SYS_TD_CACHE') }}" class="form-control" onKeyup="M_in_int(this);">
                             </div>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.max') }}{{ trans('common.page') }}{{ trans('common.number') }}</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_MAX_PAGE" value="{:C('SYS_MAX_PAGE')}" class="form-control" onKeyup="M_in_int(this);">
+                                <input type="text" name="SYS_MAX_PAGE" value="{{ config('SYS_MAX_PAGE') }}" class="form-control" onKeyup="M_in_int(this);">
                             </div>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.page') }}{{ trans('common.max') }}{{ trans('common.rows') }}</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_MAX_ROW" value="{:C('SYS_MAX_ROW')}" class="form-control" onKeyup="M_in_int(this);">
+                                <input type="text" name="SYS_MAX_ROW" value="{{ config('SYS_MAX_ROW') }}" class="form-control" onKeyup="M_in_int(this);">
                             </div>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.default') }}{{ trans('common.image') }}</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_DEFAULT_IMAGE" value="{:C('SYS_DEFAULT_IMAGE')}" class="form-control">
+                                <input type="text" name="SYS_DEFAULT_IMAGE" value="{{ config('SYS_DEFAULT_IMAGE') }}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -79,7 +79,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.sync') }}{{ trans('common.loading') }}{{ trans('common.image') }}</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_SYNC_IMAGE" value="{:C('SYS_SYNC_IMAGE')}" class="form-control">
+                                <input type="text" name="SYS_SYNC_IMAGE" value="{{ config('SYS_SYNC_IMAGE') }}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                     <div class="col-sm-12 text-center">
                         <button type="submit" class="btn btn-info">{{ trans('common.save') }}</button>
                         <input class="btn btn-default" type="reset" value="{{ trans('common.reset') }}">
-                        <a href="{:U('main')}" class="btn btn-default">
+                        <a href="{{ route('main') }}" class="btn btn-default">
                             {{ trans('common.goback') }}
                         </a>
                     </div>

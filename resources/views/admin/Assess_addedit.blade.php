@@ -25,7 +25,7 @@
                                                 <if condition="$edit_info['group_level']">'def_data':{'value':'{$edit_info.group_level}','html':'{$edit_info.group_name}'},</if>
                                                 'edit_obj':$('#group_level'),
                                                 'post_name':'group_level',
-                                                'ajax_url':'{:U('ajax_api')}',
+                                                'ajax_url':'{{ route('ajax_api') }}',
                                                 'field':'group_level'
                                             };
                                             new M_select_add(config);
@@ -99,7 +99,7 @@
                                     {{ trans('common.edit') }}
                                 </if>
                             </button>
-                            <a href="{:U('index')}" class="btn btn-default">
+                            <a href="{{ route('index') }}" class="btn btn-default">
                                     {{ trans('common.goback') }}
                             </a>
                         </div>

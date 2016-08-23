@@ -12,7 +12,7 @@
                                 'password':Array('password'),
                                 'password_again':Array('password','password_again')
                             },
-                            'ajax_url':"{:U('ajax_api')}",
+                            'ajax_url':"{{ route('ajax_api') }}",
                         };
                         new M_valid(config);
                     });
@@ -44,7 +44,7 @@
                             <button type="submit" class="btn btn-info">
                                 {{ trans('common.save') }}
                             </button>
-                            <a href="{:U('Index/main')}" class="btn btn-default">
+                            <a href="{{ route('Index/main') }}" class="btn btn-default">
                                 {{ trans('common.goback') }}
                             </a>
                         </div>

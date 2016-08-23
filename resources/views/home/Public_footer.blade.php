@@ -22,10 +22,10 @@
                 <img class="w150" src="{:M_exists('Uploads/attached/image/index/sitelogo.png')}" />
             </div>
             <div class="col-sm-7 pt30 h150 lh30" style="color:#FFF;">
-                <if condition="C('SITE_COMPANY')">{:C('SITE_COMPANY')}&nbsp;</if>
-                <if condition="C('SITE_PHONE')">{{ trans('common.phone') }}{{ trans('common.colon') }}{:C('SITE_PHONE')}&nbsp;</if>
-                <if condition="C('SITE_TELPHONE')">{{ trans('common.telphone') }}{{ trans('common.colon') }}{:C('SITE_TELPHONE')}&nbsp;<br /></if>
-                <if condition="C('SITE_OTHER')">{:C('SITE_OTHER')}&nbsp;<br /></if>
+                <if condition="C('SITE_COMPANY')">{{ config('SITE_COMPANY') }}&nbsp;</if>
+                <if condition="C('SITE_PHONE')">{{ trans('common.phone') }}{{ trans('common.colon') }}{{ config('SITE_PHONE') }}&nbsp;</if>
+                <if condition="C('SITE_TELPHONE')">{{ trans('common.telphone') }}{{ trans('common.colon') }}{{ config('SITE_TELPHONE') }}&nbsp;<br /></if>
+                <if condition="C('SITE_OTHER')">{{ config('SITE_OTHER') }}&nbsp;<br /></if>
                 {{ trans('common.version') }}{{ trans('common.colon') }} Home Module 1.0.0
             </div>
             <div class="col-sm-3 lh150 hidden-xs">

@@ -29,9 +29,9 @@ class Navigation extends Backend
 
         //初始化where_info
         $whereInfo               = array();
-        $whereInfo['name']       = array('type' => 'input', 'name' => L('navigation') . L('name'));
-        $whereInfo['short_name'] = array('type' => 'input', 'name' => L('short') . L('name'));
-        $whereInfo['is_enable']  = array('type' => 'select', 'name' => L('yes') . L('no') . L('enable'), 'value' => array(1 => L('enable'), 2 => L('disable')));
+        $whereInfo['name']       = array('type' => 'input', 'name' => trans('navigation') . L('name'));
+        $whereInfo['short_name'] = array('type' => 'input', 'name' => trans('short') . L('name'));
+        $whereInfo['is_enable']  = array('type' => 'select', 'name' => trans('yes') . L('no') . L('enable'), 'value' => array(1 => L('enable'), 2 => L('disable')));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -41,7 +41,7 @@ class Navigation extends Backend
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', L('navigation') . L('management'));
+        $this->assign('title', trans('navigation') . L('management'));
         $this->display();
     }
 
@@ -53,15 +53,15 @@ class Navigation extends Backend
             $data            = $this->makeData();
             $resultAdd      = $NavigationModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(L('navigation') . L('add') . L('success'), U('index'));
+                $this->success(trans('navigation') . L('add') . L('success'), route('index'));
                 return;
             } else {
-                $this->error(L('navigation') . L('add') . L('error'), U('add'));
+                $this->error(trans('navigation') . L('add') . L('error'), route('add'));
             }
         }
 
         $this->assign('navigation_config', $this->navigation_config);
-        $this->assign('title', L('add') . L('navigation'));
+        $this->assign('title', trans('add') . L('navigation'));
         $this->display('addedit');
     }
 
@@ -70,7 +70,7 @@ class Navigation extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $NavigationModel = D('Navigation');
@@ -78,11 +78,11 @@ class Navigation extends Backend
             $data        = $this->makeData();
             $resultEdit = $NavigationModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(L('navigation') . L('edit') . L('success'), U('index'));
+                $this->success(trans('navigation') . L('edit') . L('success'), route('index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-                $this->error(L('navigation') . L('edit') . L('error'), $errorGoLink);
+                $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
+                $this->error(trans('navigation') . L('edit') . L('error'), $errorGoLink);
             }
         }
 
@@ -91,7 +91,7 @@ class Navigation extends Backend
         $this->assign('edit_info', $editInfo);
 
         $this->assign('navigation_config', $this->navigation_config);
-        $this->assign('title', L('edit') . L('navigation'));
+        $this->assign('title', trans('edit') . L('navigation'));
         $this->display('addedit');
     }
 
@@ -100,16 +100,16 @@ class Navigation extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $NavigationModel = D('Navigation');
         $resultDel      = $NavigationModel->mDel($id);
         if ($resultDel) {
-            $this->success(L('navigation') . L('del') . L('success'), U('index'));
+            $this->success(trans('navigation') . L('del') . L('success'), route('index'));
             return;
         } else {
-            $this->error(L('navigation') . L('del') . L('error'), U('index'));
+            $this->error(trans('navigation') . L('del') . L('error'), route('index'));
         }
     }
 
@@ -123,7 +123,7 @@ class Navigation extends Backend
                 $NavigationModel = D('Navigation');
                 $itlinkInfo     = $NavigationModel->mSelect(array('short_name' => $data['short_name'], 'id' => array('neq', $data['id'])));
                 if (0 < count($itlinkInfo)) {
-                    $result['info'] = L('short') . L('name') . L('exists');
+                    $result['info'] = trans('short') . L('name') . L('exists');
                     break;
                 }
                 break;
@@ -147,7 +147,7 @@ class Navigation extends Backend
         $extInfo   = $this->_make_navigation(I($this->navigation_config['post_name']));
 
         //检测初始化参数是否合法
-        $errorGoLink = (!$id) ? U('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));
+        $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));
         if ('add' == ACTION_NAME || null !== $shortName) {
             $result = $this->doValidateForm('short_name', array('id' => $id, 'short_name' => $shortName));
             if (!$result['status']) {

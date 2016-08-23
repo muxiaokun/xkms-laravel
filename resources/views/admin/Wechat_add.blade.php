@@ -44,7 +44,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">appId</label>
                             <div class="col-sm-7">
-                                <input type="text" name="WECHAT_ID" value="{:C('WECHAT_ID')}" class="form-control">
+                                <input type="text" name="WECHAT_ID" value="{{ config('WECHAT_ID') }}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">appSecret</label>
                             <div class="col-sm-7">
-                                <input type="text" name="WECHAT_SECRET" value="{:C('WECHAT_SECRET')}" class="form-control">
+                                <input type="text" name="WECHAT_SECRET" value="{{ config('WECHAT_SECRET') }}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -64,7 +64,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">token</label>
                             <div class="col-sm-7">
-                                <input type="text" name="WECHAT_TOKEN" value="{:C('WECHAT_TOKEN')}" class="form-control">
+                                <input type="text" name="WECHAT_TOKEN" value="{{ config('WECHAT_TOKEN') }}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -89,7 +89,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">AesKey</label>
                             <div class="col-sm-7">
-                                <input type="text" name="WECHAT_AESKEY" value="{:C('WECHAT_AESKEY')}" class="form-control">
+                                <input type="text" name="WECHAT_AESKEY" value="{{ config('WECHAT_AESKEY') }}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -98,7 +98,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">templateId</label>
                             <div class="col-sm-7">
-                                <input type="text" name="WECHAT_TEMPLATE_ID" value="{:C('WECHAT_TEMPLATE_ID')}" class="form-control">
+                                <input type="text" name="WECHAT_TEMPLATE_ID" value="{{ config('WECHAT_TEMPLATE_ID') }}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -107,7 +107,7 @@
                     <div class="col-sm-12 text-center">
                         <button type="submit" class="btn btn-info">{{ trans('common.save') }}</button>
                         <input class="btn btn-default" type="reset" value="{{ trans('common.reset') }}">
-                        <a href="{:U('index')}" class="btn btn-default">
+                        <a href="{{ route('index') }}" class="btn btn-default">
                             {{ trans('common.goback') }}
                         </a>
                     </div>

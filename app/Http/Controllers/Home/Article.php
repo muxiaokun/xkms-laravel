@@ -22,13 +22,13 @@ class Article extends Frontend
         $id         = I('id');
         $channelId = I('channel_id');
         if (!$id) {
-            $this->error(L('article') . L('id') . L('error'), U('Index/index'));
+            $this->error(trans('article') . L('id') . L('error'), route('Index/index'));
         }
 
         $ArticleModel = D('Article');
         $articleInfo = $ArticleModel->where($this->_get_article_where())->mFind($id);
         if (!$articleInfo) {
-            $this->error(L('article') . L('by') . L('hidden'), U('Index/index'));
+            $this->error(trans('article') . L('by') . L('hidden'), route('Index/index'));
         }
 
         $ArticleModel->where(array('id' => $id))->setInc('hits');
@@ -46,7 +46,7 @@ class Article extends Frontend
         is_array($categoryInfo['access_group_id']) && $mFindAllows = array_merge($mFindAllows, $categoryInfo['access_group_id']);
         is_array($channelInfo['access_group_id']) && $mFindAllows  = array_merge($mFindAllows, $channelInfo['access_group_id']);
         if ($mFindAllows && !mInArray($memberGroupId, $mFindAllows)) {
-            $this->error(L('none') . L('privilege') . L('access') . L('comma') . L('please') . L('login'), U('Member/index'));
+            $this->error(trans('none') . L('privilege') . L('access') . L('comma') . L('please') . L('login'), route('Member/index'));
         }
 
         //缓存数据
@@ -56,9 +56,9 @@ class Article extends Frontend
             $articleInfo['content'] = $cacheValue;
         } else {
             $articleInfo['content']                                = mContent2ckplayer($articleInfo['content'], $articleInfo['thumb']);
-            C('SYS_ARTICLE_SYNC_IMAGE') && $articleInfo['content'] = mSyncImg($articleInfo['content']);
+            config('SYS_ARTICLE_SYNC_IMAGE') && $articleInfo['content'] = mSyncImg($articleInfo['content']);
             $cacheValue                                            = $articleInfo['content'];
-            S($cacheName, $cacheValue, C('SYS_TD_CACHE'));
+            S($cacheName, $cacheValue, config('SYS_TD_CACHE'));
         }
 
         $this->assign('article_info', $articleInfo);
@@ -79,13 +79,13 @@ class Article extends Frontend
         $cateId    = I('cate_id');
         $channelId = I('channel_id');
         if (!$cateId) {
-            $this->error(L('category') . L('id') . L('error'), U('Index/index'));
+            $this->error(trans('category') . L('id') . L('error'), route('Index/index'));
         }
 
         $ArticleCategoryModel = D('ArticleCategory');
         $categoryInfo        = $ArticleCategoryModel->mFind($cateId);
         if (!$categoryInfo) {
-            $this->error(L('category') . L('id') . L('error'), U('Index/index'));
+            $this->error(trans('category') . L('id') . L('error'), route('Index/index'));
         }
 
         $ArticleChannelModel = D('ArticleChannel');
@@ -97,7 +97,7 @@ class Article extends Frontend
         is_array($categoryInfo['access_group_id']) && $mFindAllows = array_merge($mFindAllows, $categoryInfo['access_group_id']);
         is_array($channelInfo['access_group_id']) && $mFindAllows  = array_merge($mFindAllows, $channelInfo['access_group_id']);
         if ($mFindAllows && !mInArray($memberGroupId, $mFindAllows)) {
-            $this->error(L('none') . L('privilege') . L('access') . L('comma') . L('please') . L('login'), U('Member/index'));
+            $this->error(trans('none') . L('privilege') . L('access') . L('comma') . L('please') . L('login'), route('Member/index'));
         }
 
         $template = $this->_get_template($cateId, $channelId);
@@ -111,9 +111,9 @@ class Article extends Frontend
                 $categoryInfo['content'] = $cacheValue;
             } else {
                 $categoryInfo['content']                                = mContent2ckplayer($categoryInfo['content'], $categoryInfo['thumb']);
-                C('SYS_ARTICLE_SYNC_IMAGE') && $categoryInfo['content'] = mSyncImg($categoryInfo['content']);
+                config('SYS_ARTICLE_SYNC_IMAGE') && $categoryInfo['content'] = mSyncImg($categoryInfo['content']);
                 $cacheValue                                             = $categoryInfo['content'];
-                S($cacheName, $cacheValue, C('SYS_TD_CACHE'));
+                S($cacheName, $cacheValue, config('SYS_TD_CACHE'));
             }
         } else {
             //如果分类是列表页
@@ -164,7 +164,7 @@ class Article extends Frontend
         $mFindAllows                                               = array();
         is_array($channelInfo['access_group_id']) && $mFindAllows = array_merge($mFindAllows, $channelInfo['access_group_id']);
         if ($mFindAllows && !mInArray($memberGroupId, $mFindAllows)) {
-            $this->error(L('none') . L('privilege') . L('access') . L('comma') . L('please') . L('login'), U('Member/index'));
+            $this->error(trans('none') . L('privilege') . L('access') . L('comma') . L('please') . L('login'), route('Member/index'));
         }
 
         $this->assign('channel_info', $channelInfo);
@@ -178,7 +178,7 @@ class Article extends Frontend
     {
         $keyword = I('keyword');
         if ('' == $keyword) {
-            $this->error(L('please') . L('input') . L('keywords'), U('Index/index'));
+            $this->error(trans('please') . L('input') . L('keywords'), route('Index/index'));
         }
         $keyword = '%' . $keyword . '%';
 
@@ -230,7 +230,7 @@ class Article extends Frontend
 
         $request = I();
         $this->assign('request', $request);
-        $this->assign('title', L('search') . L('article'));
+        $this->assign('title', trans('search') . L('article'));
         $template = $this->_get_template(0);
         $this->display($template['list_template']);
     }
@@ -250,7 +250,7 @@ class Article extends Frontend
         if ($channelId) {
             $ArticleChannelModel  = D('ArticleChannel');
             $channelInfo         = $ArticleChannelModel->mFind($channelId);
-            $defChannelTemplate = CONTROLLER_NAME . C('TMPL_FILE_DEPR') . 'channel';
+            $defChannelTemplate = CONTROLLER_NAME . config('TMPL_FILE_DEPR') . 'channel';
             $data                 = $channelInfo['ext_info'];
             $template             = array(
                 's_limit'          => $this->_get_channel_template($cateId, 's_limit', $data),
@@ -267,15 +267,15 @@ class Article extends Frontend
         empty($template['article_template']) && $template['article_template'] = $this->_get_category_template($cateId, 'article_template'); //文章模板
 
         //返回最终模板文件名 加模板前缀
-        $defTemplate                 = CONTROLLER_NAME . C('TMPL_FILE_DEPR') . 'category';
-        $defListTemplate            = CONTROLLER_NAME . C('TMPL_FILE_DEPR') . 'list_category';
-        $defArticleTemplate         = CONTROLLER_NAME . C('TMPL_FILE_DEPR') . 'article';
+        $defTemplate                 = CONTROLLER_NAME . config('TMPL_FILE_DEPR') . 'category';
+        $defListTemplate            = CONTROLLER_NAME . config('TMPL_FILE_DEPR') . 'list_category';
+        $defArticleTemplate         = CONTROLLER_NAME . config('TMPL_FILE_DEPR') . 'article';
         $template['template']         = ($template['template']) ? $defTemplate . '_' . $template['template'] : $defTemplate;
         $template['list_template']    = ($template['list_template']) ? $defListTemplate . '_' . $template['list_template'] : $defListTemplate;
         $template['article_template'] = ($template['article_template']) ? $defArticleTemplate . '_' . $template['article_template'] : $defArticleTemplate;
 
         $cacheValue = $template;
-        S($cacheName, $cacheValue, C('SYS_TD_CACHE'));
+        S($cacheName, $cacheValue, config('SYS_TD_CACHE'));
         return $cacheValue;
     }
 
@@ -333,7 +333,7 @@ class Article extends Frontend
         $categoryPosition['category_list'] = $categoryList;
 
         $cacheValue = $categoryPosition;
-        S($cacheName, $cacheValue, C('SYS_TD_CACHE'));
+        S($cacheName, $cacheValue, config('SYS_TD_CACHE'));
         return $cacheValue;
     }
 
@@ -350,17 +350,17 @@ class Article extends Frontend
         $articleCategoryInfo = $ArticleCategoryModel->mFind($cateId);
         $path[]                = array(
             'name' => $articleCategoryInfo['name'],
-            'link' => mU('article_category', array('cate_id' => $articleCategoryInfo['id'])),
+            'link' => mroute('article_category', array('cate_id' => $articleCategoryInfo['id'])),
         );
         if (0 == $articleCategoryInfo['parent_id']) {
             $path[] = array(
-                'name' => L('homepage'),
-                'link' => mU(),
+                'name' => trans('homepage'),
+                'link' => mroute(),
             );
             $path = array_reverse($path);
 
             $cacheValue = $path;
-            S($cacheName, $cacheValue, C('SYS_TD_CACHE'));
+            S($cacheName, $cacheValue, config('SYS_TD_CACHE'));
             return $cacheValue;
         } else {
             return $this->_get_article_position($articleCategoryInfo['parent_id'], $cacheName, $path);
@@ -375,7 +375,7 @@ class Article extends Frontend
      */
     private function _get_article_pn($id, $where = array(), $sort = 'sort asc,update_time desc')
     {
-        $limit = C('SYS_ARTICLE_PN_LIMIT');
+        $limit = config('SYS_ARTICLE_PN_LIMIT');
         if (1 > $limit) {
             return;
         }

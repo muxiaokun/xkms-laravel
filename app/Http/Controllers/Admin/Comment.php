@@ -34,19 +34,19 @@ class Comment extends Backend
 
         $commentList = $CommentModel->order('add_time desc')->mSelect($where, true);
         foreach ($commentList as &$comment) {
-            $comment['audit_name']  = ($comment['audit_id']) ? $AdminModel->mFindColumn($comment['audit_id'], 'admin_name') : L('none') . L('audit');
+            $comment['audit_name']  = ($comment['audit_id']) ? $AdminModel->mFindColumn($comment['audit_id'], 'admin_name') : trans('none') . L('audit');
             $memberName            = $MemberModel->mFindColumn($comment['member_id'], 'member_name');
-            $comment['member_name'] = ($memberName) ? $memberName : L('anonymous');
+            $comment['member_name'] = ($memberName) ? $memberName : trans('anonymous');
         }
         $this->assign('comment_list', $commentList);
         $this->assign('comment_list_count', $CommentModel->mGetPageCount($where));
 
         //初始化where_info
         $whereInfo               = array();
-        $whereInfo['audit_id']   = array('type' => 'input', 'name' => L('audit') . L('admin') . L('name'));
-        $whereInfo['send_id']    = array('type' => 'input', 'name' => L('send') . L('member') . L('name'));
-        $whereInfo['controller'] = array('type' => 'input', 'name' => L('controller'));
-        $whereInfo['item']       = array('type' => 'input', 'name' => L('id'));
+        $whereInfo['audit_id']   = array('type' => 'input', 'name' => trans('audit') . L('admin') . L('name'));
+        $whereInfo['send_id']    = array('type' => 'input', 'name' => trans('send') . L('member') . L('name'));
+        $whereInfo['controller'] = array('type' => 'input', 'name' => trans('controller'));
+        $whereInfo['item']       = array('type' => 'input', 'name' => trans('id'));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -56,7 +56,7 @@ class Comment extends Backend
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', L('comment') . L('management'));
+        $this->assign('title', trans('comment') . L('management'));
         $this->display();
     }
 
@@ -76,7 +76,7 @@ class Comment extends Backend
             return;
         }
 
-        $this->assign('title', L('config') . L('comment'));
+        $this->assign('title', trans('config') . L('comment'));
         $this->display();
     }
 
@@ -85,17 +85,17 @@ class Comment extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $CommentModel = D('Comment');
         $data         = array('audit_id' => session('backend_info.id'));
         $resultEdit  = $CommentModel->mEdit($id, $data);
         if ($resultEdit) {
-            $this->success(L('comment') . L('audit') . L('success'), U('index'));
+            $this->success(trans('comment') . L('audit') . L('success'), route('index'));
             return;
         } else {
-            $this->error(L('comment') . L('audit') . L('error'), U('index'));
+            $this->error(trans('comment') . L('audit') . L('error'), route('index'));
         }
     }
 
@@ -104,16 +104,16 @@ class Comment extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $CommentModel = D('Comment');
         $resultDel   = $CommentModel->mDel($id);
         if ($resultDel) {
-            $this->success(L('comment') . L('del') . L('success'), U('index'));
+            $this->success(trans('comment') . L('del') . L('success'), route('index'));
             return;
         } else {
-            $this->error(L('comment') . L('del') . L('error'), U('index'));
+            $this->error(trans('comment') . L('del') . L('error'), route('index'));
         }
     }
 }

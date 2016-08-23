@@ -6,7 +6,7 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">{$Think.const.APP_NAME} {{ trans('common.dash') }} {{ trans('common.login') }}{{ trans('common.backend') }}</div>
                 <div class="panel-body">
-                    <form class="form-horizontal" role="form" method="post" action="{:U('login')}">
+                    <form class="form-horizontal" role="form" method="post" action="{{ route('login') }}">
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{{ trans('common.account') }}</label>
                             <div class="col-sm-8">
@@ -28,7 +28,7 @@
                             </div>
                         </div>
                         <div class="form-group text-center">
-                            <M:Img class="col-sm-offset-4 col-sm-4" style="max-height:50px;" src="{:U('verify_img')}" onClick="M_change_verify(this,$('input[name=verify]'))" />
+                            <M:Img class="col-sm-offset-4 col-sm-4" style="max-height:50px;" src="{{ route('verify_img') }}" onClick="M_change_verify(this,$('input[name=verify]'))" />
                         </div>
                         {/*<!--验证码 结束-->*/}
                         </if>

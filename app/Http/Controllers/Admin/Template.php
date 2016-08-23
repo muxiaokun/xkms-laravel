@@ -17,8 +17,8 @@ class Template extends Backend
     {
         parent::_initialize();
         //初始化模板目录
-        $this->view_path = APP_PATH . C('DEFAULT_MODULE') . '/' . C('DEFAULT_V_LAYER') . '/';
-        C('DEFAULT_THEME') && $this->view_path .= C('DEFAULT_THEME') . '/';
+        $this->view_path = APP_PATH . config('DEFAULT_MODULE') . '/' . C('DEFAULT_V_LAYER') . '/';
+        config('DEFAULT_THEME') && $this->view_path .= C('DEFAULT_THEME') . '/';
         //初始化模本文件列表
         $this->view_files = F($this->tpl_info_file, '', $this->view_path);
         if (!$this->view_files) {
@@ -26,7 +26,7 @@ class Template extends Backend
         }
 
         //初始化配置文件所在位置
-        $this->config_file   = APP_PATH . C('DEFAULT_MODULE') . '/Conf/' . 'config.php';
+        $this->config_file   = APP_PATH . config('DEFAULT_MODULE') . '/Conf/' . 'config.php';
         $config              = include $this->config_file;
         $this->default_theme = $config['DEFAULT_THEME'];
     }
@@ -37,7 +37,7 @@ class Template extends Backend
         //刷新模本文件列表
         if (1 == I('refresh')) {
             $this->_refresh_view_files();
-            $this->success(L('theme') . L('template') . L('refresh') . L('success'), U('index'));
+            $this->success(trans('theme') . L('template') . L('refresh') . L('success'), route('index'));
             return;
         }
 
@@ -50,7 +50,7 @@ class Template extends Backend
 
             $config['DEFAULT_THEME'] = $defaultTheme;
             $configStr              = var_export($config, true);
-            $CoreCopyright          = C('CORE_COPYRIGHT');
+            $CoreCopyright          = config('CORE_COPYRIGHT');
             $putConfig              = <<<EOF
 <?php
 {$CoreCopyright}
@@ -59,7 +59,7 @@ return {$configStr};
 ?>
 EOF;
             file_put_contents($this->config_file, $putConfig);
-            $this->success(L('theme') . L('selection') . L('success'), U('index'));
+            $this->success(trans('theme') . L('selection') . L('success'), route('index'));
             return;
         }
 
@@ -73,7 +73,7 @@ EOF;
 
             //保存缓存
             F($this->tpl_info_file, $this->view_files, $this->view_path);
-            $this->success(L('theme') . L('info') . L('save') . L('success'), U('index'));
+            $this->success(trans('theme') . L('info') . L('save') . L('success'), route('index'));
             return;
         }
 
@@ -88,7 +88,7 @@ EOF;
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', L('theme') . L('template') . L('management'));
+        $this->assign('title', trans('theme') . L('template') . L('management'));
         $this->display();
     }
 
@@ -101,32 +101,32 @@ EOF;
             //处理2级目录
             $filePath = explode('/', $fileName);
             if (preg_match('/\.\.\//', $fileName)
-                || !preg_match('/' . str_ireplace('.', '\.', C('TMPL_TEMPLATE_SUFFIX')) . '$/', $fileName)
+                || !preg_match('/' . str_ireplace('.', '\.', config('TMPL_TEMPLATE_SUFFIX')) . '$/', $fileName)
             ) {
-                $this->error(L('file') . L('name') . L('error'), U('index'));
+                $this->error(trans('file') . L('name') . L('error'), route('index'));
             }
             if (!$fileName) {
-                $this->error(L('file') . L('name') . L('not') . L('empty'), U('index'));
+                $this->error(trans('file') . L('name') . L('not') . L('empty'), route('index'));
             }
 
             $filePath = $this->view_path . $fileName;
             $fileMd5  = ($filePath);
             if (is_array($this->view_files[$fileMd5])) {
-                $this->error(L('file') . L('name') . L('repeat'), U('index'));
+                $this->error(trans('file') . L('name') . L('repeat'), route('index'));
             }
 
             $content     = I('content', '', false);
             $resultEdit = file_put_contents($filePath, $content);
             if (false !== $resultEdit) {
                 $this->_refresh_view_files();
-                $this->success(L('theme') . L('template') . L('add') . L('success'), U('index'));
+                $this->success(trans('theme') . L('template') . L('add') . L('success'), route('index'));
                 return;
             } else {
-                $this->error(L('theme') . L('template') . L('add') . L('error'), U('index'));
+                $this->error(trans('theme') . L('template') . L('add') . L('error'), route('index'));
             }
         }
 
-        $this->assign('title', L('add') . L('theme') . L('template') . L('template'));
+        $this->assign('title', trans('add') . L('theme') . L('template') . L('template'));
         $this->display('addedit');
     }
 
@@ -135,7 +135,7 @@ EOF;
     {
         $id = I('id');
         if (!is_array($this->view_files[$id])) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $fileName = $this->view_files[$id]['file_name'];
@@ -144,10 +144,10 @@ EOF;
             $content     = I('content', '', false);
             $resultEdit = file_put_contents($filePath, $content);
             if ($resultEdit) {
-                $this->success(L('theme') . L('template') . L('edit') . L('success'), U('index'));
+                $this->success(trans('theme') . L('template') . L('edit') . L('success'), route('index'));
                 return;
             } else {
-                $this->error(L('theme') . L('template') . L('edit') . L('error'), U('index'));
+                $this->error(trans('theme') . L('template') . L('edit') . L('error'), route('index'));
             }
         }
 
@@ -156,7 +156,7 @@ EOF;
         $this->assign('id', $id);
         $this->assign('edit_info', $editInfo);
 
-        $this->assign('title', L('edit') . L('theme') . L('template') . L('template'));
+        $this->assign('title', trans('edit') . L('theme') . L('template') . L('template'));
         $this->display('addedit');
     }
 
@@ -165,7 +165,7 @@ EOF;
     {
         $id = I('id');
         if (!is_array($this->view_files[$id])) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $fileName  = $this->view_files[$id]['file_name'];
@@ -173,10 +173,10 @@ EOF;
         $resultDel = unlink($filePath);
         if ($resultDel) {
             $this->_refresh_view_files();
-            $this->success(L('theme') . L('template') . L('del') . L('success'), U('index'));
+            $this->success(trans('theme') . L('template') . L('del') . L('success'), route('index'));
             return;
         } else {
-            $this->error(L('theme') . L('template') . L('del') . L('error'), U('index'));
+            $this->error(trans('theme') . L('template') . L('del') . L('error'), route('index'));
         }
     }
 
@@ -184,8 +184,8 @@ EOF;
     private function _get_theme_list()
     {
         $themeList = array();
-        if (C('DEFAULT_THEME')) {
-            $themePath = str_ireplace(C('DEFAULT_THEME') . '/', '', $this->view_path);
+        if (config('DEFAULT_THEME')) {
+            $themePath = str_ireplace(config('DEFAULT_THEME') . '/', '', $this->view_path);
         }
 
         $scanInfo   = scandir($themePath);

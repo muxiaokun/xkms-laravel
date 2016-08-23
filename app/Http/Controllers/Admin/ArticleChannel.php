@@ -28,8 +28,8 @@ class ArticleChannel extends Backend
 
         //初始化where_info
         $whereInfo            = array();
-        $whereInfo['name']    = array('type' => 'input', 'name' => L('channel') . L('name'));
-        $whereInfo['if_show'] = array('type' => 'select', 'name' => L('yes') . L('no') . L('show'), 'value' => array(1 => L('show'), 2 => L('hidden')));
+        $whereInfo['name']    = array('type' => 'input', 'name' => trans('channel') . L('name'));
+        $whereInfo['if_show'] = array('type' => 'select', 'name' => trans('yes') . L('no') . L('show'), 'value' => array(1 => L('show'), 2 => L('hidden')));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -39,7 +39,7 @@ class ArticleChannel extends Backend
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', L('channel') . L('management'));
+        $this->assign('title', trans('channel') . L('management'));
         $this->display();
     }
 
@@ -55,16 +55,16 @@ class ArticleChannel extends Backend
             $data                = $this->makeData();
             $resultAdd          = $ArticleChannelModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(L('channel') . L('add') . L('success'), U('index'));
+                $this->success(trans('channel') . L('add') . L('success'), route('index'));
                 return;
             } else {
-                $this->error(L('channel') . L('add') . L('error'), U('add'));
+                $this->error(trans('channel') . L('add') . L('error'), route('add'));
             }
         }
 
         $this->addEditCommon();
 
-        $this->assign('title', L('add') . L('channel'));
+        $this->assign('title', trans('add') . L('channel'));
         $this->display('addedit');
     }
 
@@ -81,12 +81,12 @@ class ArticleChannel extends Backend
 
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         if (1 != session('backend_info.id')
             && !mInArray($id, $ArticleChannelModel->mFind_allow())) {
-            $this->error(L('none') . L('privilege') . L('edit') . L('channel'), U('index'));
+            $this->error(trans('none') . L('privilege') . L('edit') . L('channel'), route('index'));
         }
 
         $maAllowArr = $ArticleChannelModel->mFind_allow('ma');
@@ -100,11 +100,11 @@ class ArticleChannel extends Backend
             }
             $resultEdit = $ArticleChannelModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(L('channel') . L('edit') . L('success'), U('index'));
+                $this->success(trans('channel') . L('edit') . L('success'), route('index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-                $this->error(L('channel') . L('edit') . L('error'), $errorGoLink);
+                $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
+                $this->error(trans('channel') . L('edit') . L('error'), $errorGoLink);
             }
         }
 
@@ -133,7 +133,7 @@ class ArticleChannel extends Backend
         $this->assign('edit_info', $editInfo);
         $this->addEditCommon($editInfo);
 
-        $this->assign('title', L('edit') . L('channel'));
+        $this->assign('title', trans('edit') . L('channel'));
         $this->display('addedit');
     }
 
@@ -142,7 +142,7 @@ class ArticleChannel extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $ArticleChannelModel = D('ArticleChannel');
@@ -150,22 +150,22 @@ class ArticleChannel extends Backend
         if (1 != session('backend_info.id')
             && !mInArray($id, $ArticleChannelModel->mFind_allow('ma'))
         ) {
-            $this->error(L('none') . L('privilege') . L('del') . L('channel'), U('index'));
+            $this->error(trans('none') . L('privilege') . L('del') . L('channel'), route('index'));
         }
 
         //解除文章和被删除频道的关系
         $ArticleModel = D('Article');
         $resultClean = $ArticleModel->mClean($id, 'channel_id');
         if (!$resultClean) {
-            $this->error(L('article') . L('clear') . L('channel') . L('error'), U('index'));
+            $this->error(trans('article') . L('clear') . L('channel') . L('error'), route('index'));
         }
 
         $resultDel = $ArticleChannelModel->mDel($id);
         if ($resultDel) {
-            $this->success(L('channel') . L('del') . L('success'), U('index'));
+            $this->success(trans('channel') . L('del') . L('success'), route('index'));
             return;
         } else {
-            $this->error(L('channel') . L('del') . L('error'), U('index'));
+            $this->error(trans('channel') . L('del') . L('error'), route('index'));
         }
     }
 
@@ -266,10 +266,10 @@ class ArticleChannel extends Backend
         $this->assign('manage_privilege', $managePrivilgeg);
 
         $ArticleCategoryModel = D('ArticleCategory');
-        $this->assign('channel_template_list', mScanTemplate('channel', C('DEFAULT_MODULE'), 'Article'));
-        $this->assign('template_list', mScanTemplate('category', C('DEFAULT_MODULE'), 'Article'));
-        $this->assign('list_template_list', mScanTemplate('list_category', C('DEFAULT_MODULE'), 'Article'));
-        $this->assign('article_template_list', mScanTemplate('article', C('DEFAULT_MODULE'), 'Article'));
+        $this->assign('channel_template_list', mScanTemplate('channel', config('DEFAULT_MODULE'), 'Article'));
+        $this->assign('template_list', mScanTemplate('category', config('DEFAULT_MODULE'), 'Article'));
+        $this->assign('list_template_list', mScanTemplate('list_category', config('DEFAULT_MODULE'), 'Article'));
+        $this->assign('article_template_list', mScanTemplate('article', config('DEFAULT_MODULE'), 'Article'));
     }
 
     //构造频道公共ajax

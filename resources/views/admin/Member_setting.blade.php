@@ -56,7 +56,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.frontend') }}{{ trans('common.max') }}{{ trans('common.login') }}{{ trans('common.number') }}</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_FRONTEND_LOGIN_NUM" value="{:C('SYS_FRONTEND_LOGIN_NUM')}" class="form-control" onKeyup="M_in_int(this);">
+                                <input type="text" name="SYS_FRONTEND_LOGIN_NUM" value="{{ config('SYS_FRONTEND_LOGIN_NUM') }}" class="form-control" onKeyup="M_in_int(this);">
                             </div>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.frontend') }}{{ trans('common.max') }}{{ trans('common.lock') }}{{ trans('common.time') }}({{ trans('common.second') }})</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_FRONTEND_LOCK_TIME" value="{:C('SYS_FRONTEND_LOCK_TIME')}" class="form-control" onKeyup="M_in_int(this);">
+                                <input type="text" name="SYS_FRONTEND_LOCK_TIME" value="{{ config('SYS_FRONTEND_LOCK_TIME') }}" class="form-control" onKeyup="M_in_int(this);">
                             </div>
                         </div>
                     </div>
@@ -76,7 +76,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.frontend') }}{{ trans('common.login') }}{{ trans('common.timeout') }}({{ trans('common.second') }})</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_FRONTEND_TIMEOUT" value="{:C('SYS_FRONTEND_TIMEOUT')}" class="form-control" onKeyup="M_in_int(this);">
+                                <input type="text" name="SYS_FRONTEND_TIMEOUT" value="{{ config('SYS_FRONTEND_TIMEOUT') }}" class="form-control" onKeyup="M_in_int(this);">
                             </div>
                         </div>
                     </div>
@@ -85,7 +85,7 @@
                     <div class="col-sm-12 text-center">
                         <button type="submit" class="btn btn-info">{{ trans('common.save') }}</button>
                         <input class="btn btn-default" type="reset" value="{{ trans('common.reset') }}">
-                        <a href="{:U('main')}" class="btn btn-default">
+                        <a href="{{ route('main') }}" class="btn btn-default">
                             {{ trans('common.goback') }}
                         </a>
                     </div>

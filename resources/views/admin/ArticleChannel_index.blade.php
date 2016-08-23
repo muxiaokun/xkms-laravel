@@ -12,7 +12,7 @@
                         <th>{{ trans('common.channel') }}{{ trans('common.template') }}</th>
                         <td class="col-sm-2 nowrap">
                             <if condition="$batch_handle['add']">
-                                <a class="btn btn-xs btn-success" href="{:U('add')}">{{ trans('common.add') }}{{ trans('common.channel') }}</a>
+                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">{{ trans('common.add') }}{{ trans('common.channel') }}</a>
                             </if>
                         </td>
                     </tr>
@@ -32,18 +32,18 @@
                                 <if condition="$article_channel['template']">{$article_channel.template}<else />{{ trans('common.default') }}</if>
                             </td>
                             <td class="nowrap">
-                                <a class="btn btn-xs btn-primary" target="_blank" href="{:U('Home/Article/channel',array('channel_id'=>$article_channel['id']))}">
+                                <a class="btn btn-xs btn-primary" target="_blank" href="{{ route('Home/Article/channel',array('channel_id'=>$article_channel['id'])) }}">
                                     {{ trans('common.look') }}
                                 </a>
                                 <if condition="$batch_handle['edit']">
                                     &nbsp;|&nbsp;
-                                    <a class="btn btn-xs btn-primary" href="{:U('edit',array('id'=>$article_channel['id']))}">
+                                    <a class="btn btn-xs btn-primary" href="{{ route('edit',array('id'=>$article_channel['id'])) }}">
                                         {{ trans('common.edit') }}
                                     </a>
                                 </if>
                                 <if condition="$batch_handle['del']">
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$article_channel.name}?','{:U('del',array('id'=>$article_channel['id']))}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$article_channel.name}?','{{ route('del',array('id'=>$article_channel['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 </if>
@@ -63,11 +63,11 @@
                                     'type_data':Array()
                                 };
                                 <if condition="$batch_handle['edit']">
-                                    config.type_data.push({'name':$Think.lang.show,'post_link':'{:U('edit')}','post_data':{'if_show':'1'} });
-                                    config.type_data.push({'name':$Think.lang.hidden,'post_link':'{:U('edit')}','post_data':{'if_show':'0'} });
+                                    config.type_data.push({'name':$Think.lang.show,'post_link':'{{ route('edit') }}','post_data':{'if_show':'1'} });
+                                    config.type_data.push({'name':$Think.lang.hidden,'post_link':'{{ route('edit') }}','post_data':{'if_show':'0'} });
                                 </if>
                                 <if condition="$batch_handle['del']">
-                                    config.type_data.push({'name':$Think.lang.del,'post_link':'{:U('del')}' });
+                                    config.type_data.push({'name':$Think.lang.del,'post_link':'{{ route('del') }}' });
                                 </if>
                                 new M_batch_handle(config);
                             });

@@ -18,7 +18,7 @@
                                                 <if condition="$receive_info['id']">'def_data':{'value':'{$receive_info.id}','html':'{$receive_info.member_name}'},</if>
                                                 'edit_obj':$('#receive_member_list'),
                                                 'post_name':'receive_id',
-                                                'ajax_url':'{:U('ajax_api')}',
+                                                'ajax_url':'{{ route('ajax_api') }}',
                                                 'field':'receive_id'
                                             };
                                             new M_select_add(config);
@@ -39,7 +39,7 @@
                             <button type="submit" class="btn btn-info">
                                     {{ trans('common.send') }}
                             </button>
-                            <a href="{:U('index')}" class="btn btn-default">
+                            <a href="{{ route('index') }}" class="btn btn-default">
                                     {{ trans('common.goback') }}
                             </a>
                         </div>

@@ -11,26 +11,26 @@ class Common extends Controller
         $privilege    = F('privilege');
         $allowModule = array('Install');
         if (!$privilege && !in_array(MODULE_NAME, $allowModule)) {
-            $this->error(L('please') . L('install') . APP_NAME, U('Install/Index/index'));
+            $this->error(trans('please') . L('install') . APP_NAME, route('Install/Index/index'));
         }
         //保存表单验证错误之前的GET
-        if (C('TOKEN_ON') && IS_GET && !IS_AJAX) {
+        if (config('TOKEN_ON') && IS_GET && !IS_AJAX) {
             session('token_back_page', __SELF__);
         }
         //POST提交必须检查表单验证
         if (IS_POST && !IS_AJAX && !isset($_FILES['imgFile']) && !$this->token_check()) {
-            $this->error(L('token') . L('error') . '(' . L('refresh') . L('later') . L('submit') . ')', session('token_back_page')); //后台统一检查表单令牌
+            $this->error(trans('token') . L('error') . '(' . L('refresh') . L('later') . L('submit') . ')', session('token_back_page')); //后台统一检查表单令牌
         }
     }
 
     //检查表单令牌
     private function token_check()
     {
-        if (!C('TOKEN_ON')) {
+        if (!config('TOKEN_ON')) {
             return true;
         }
 
-        $name = C('TOKEN_NAME', null, '__hash__');
+        $name = config('TOKEN_NAME', null, '__hash__');
         $hash = I($name);
         if (!isset($hash) || !isset($_SESSION[$name])) { // 令牌数据无效
             return false;
@@ -172,19 +172,19 @@ class Common extends Controller
         switch (I('type')) {
             case 'validform':
                 if (!in_array('doValidateForm', $currentAction)) {
-                    $this->error(L('none') . L('ajax') . 'validform API');
+                    $this->error(trans('none') . L('ajax') . 'validform API');
                 }
                 $result = $this->doValidateForm(I('field'), I('data'));
                 break;
             case 'line_edit':
                 if (!$this->_check_privilege('edit') || !in_array('_line_edit', $currentAction)) {
-                    $this->error(L('none') . L('ajax') . L('edit'));
+                    $this->error(trans('none') . L('ajax') . L('edit'));
                 }
                 $result = $this->_line_edit(I('field'), I('data'));
                 break;
             case 'get_data':
                 if (!in_array('getData', $currentAction)) {
-                    $this->error(L('none') . L('ajax') . 'get_data API');
+                    $this->error(trans('none') . L('ajax') . 'get_data API');
                 }
                 $result = $this->getData(I('field'), I('data'));
                 break;
@@ -260,7 +260,7 @@ class Common extends Controller
 <script type='text/javascript'>
     //{$currentTime}
    (function(){
-       mConfirm('{$lang}?','{:U('',array('confirm'=>'yes'))}',true);
+       mConfirm('{$lang}?','{:route('',array('confirm'=>'yes'))}',true);
    })();
 </script>
 EOF;

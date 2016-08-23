@@ -11,12 +11,12 @@ class Backend extends Common
         if ($this->isLogin()) {
             $backendInfo = session('backend_info');
             //自动登出时间
-            if (time() - C('SYS_BACKEND_TIMEOUT') < $backendInfo['login_time']) {
+            if (time() - config('SYS_BACKEND_TIMEOUT') < $backendInfo['login_time']) {
                 $backendInfo['login_time'] = time();
                 session('backend_info', $backendInfo);
             } else {
                 $this->doLogout();
-                $this->error(L('login') . L('timeout'), U('Admin/Index/index'));
+                $this->error(trans('login') . L('timeout'), route('Admin/Index/index'));
             }
 
             //检查管理员或者管理员组权限变动 先检查数量 提高效率
@@ -29,16 +29,16 @@ class Backend extends Common
                 $backendInfo['group_privilege'] !== $adminGroupPrivilege
             ) {
                 $this->doLogout();
-                $this->error(L('privilege') . L('change') . L('please') . L('login'), U('Admin/Index/index'));
+                $this->error(trans('privilege') . L('change') . L('please') . L('login'), route('Admin/Index/index'));
             }
 
             //登录后 检查权限
             if (!$this->_check_privilege()) {
-                $this->error(L('you') . L('none') . L('privilege'));
+                $this->error(trans('you') . L('none') . L('privilege'));
             }
 
             //是否开启管理员日志 记录除了root 和 非POST(不记录来自ajax_api)提交数据
-            if (C('SYS_ADMIN_AUTO_LOG') && 1 != session('backend_info.id') && IS_POST && 'ajax_api' != ACTION_NAME) {
+            if (config('SYS_ADMIN_AUTO_LOG') && 1 != session('backend_info.id') && IS_POST && 'ajax_api' != ACTION_NAME) {
                 $denyLog['Index'] = array('index', 'top_nav', 'left_nav', 'main', 'logout');
                 if (!in_array(ACTION_NAME, $denyLog[CONTROLLER_NAME])) {
                     $AdminLogModel = D('AdminLog');
@@ -49,7 +49,7 @@ class Backend extends Common
             //检测不登陆就可以访问的
             $allowAction['Index'] = array('index', 'login', 'verifyImg');
             if (!in_array(ACTION_NAME, $allowAction[CONTROLLER_NAME])) {
-                $this->error(L('notdoLogin') . L('backend'), U('Admin/Index/index'));
+                $this->error(trans('notdoLogin') . L('backend'), route('Admin/Index/index'));
             }
         }*/
     }
@@ -58,7 +58,7 @@ class Backend extends Common
     public function verifyImg()
     {
         //查看配置是否需要验证码
-        if (!C('SYS_BACKEND_VERIFY')) {
+        if (!config('SYS_BACKEND_VERIFY')) {
             return;
         }
 
@@ -69,7 +69,7 @@ class Backend extends Common
     protected function verifyCheck($code, $t = '')
     {
         //查看配置是否需要验证码
-        if (!C('SYS_BACKEND_VERIFY')) {
+        if (!config('SYS_BACKEND_VERIFY')) {
             return true;
         }
 
@@ -96,8 +96,8 @@ class Backend extends Common
 
         $AdminModel = D('Admin');
         //检测后台尝试登陆次数
-        $loginNum = C('SYS_BACKEND_LOGIN_NUM');
-        $lockTime = C('SYS_BACKEND_LOCK_TIME');
+        $loginNum = config('SYS_BACKEND_LOGIN_NUM');
+        $lockTime = config('SYS_BACKEND_LOCK_TIME');
         if (0 != $loginNum) {
             $loginInfo = $AdminModel->mFind($AdminModel->mFindId($userName));
             if (0 != $loginInfo['lock_time'] && $loginInfo['lock_time'] > (time() - $lockTime)) {
@@ -185,7 +185,7 @@ class Backend extends Common
         }
 
         //流程 1.读取旧的配置 2.存入新的配置 3.输出到文件
-        if (!in_array($file, explode(',', C('LOAD_EXT_CONFIG')))) {
+        if (!in_array($file, explode(',', config('LOAD_EXT_CONFIG')))) {
             return false;
         }
 
@@ -199,7 +199,7 @@ class Backend extends Common
             $saveConfig[$option] = I($option);
         }
         $configStr     = var_export($saveConfig, true);
-        $CoreCopyright = C('CORE_COPYRIGHT');
+        $CoreCopyright = config('CORE_COPYRIGHT');
         $putConfig     = <<<EOF
 <?php
 {$CoreCopyright}
@@ -209,9 +209,9 @@ return {$configStr};
 EOF;
         $putResult = file_put_contents($cfgFile, $putConfig);
         if ($putResult) {
-            $this->success(L('save') . L('success'), U(ACTION_NAME));
+            $this->success(trans('save') . L('success'), route(ACTION_NAME));
         } else {
-            $this->error(L('save') . L('error'), U(ACTION_NAME));
+            $this->error(trans('save') . L('error'), route(ACTION_NAME));
         }
         //此函数不做任何返回
     }

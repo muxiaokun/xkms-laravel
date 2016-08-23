@@ -13,7 +13,7 @@ class Index extends Backend
         if ($this->isLogin()) {
             $this->display();
         } else {
-            $this->assign('title', L('login') . L('backend'));
+            $this->assign('title', trans('login') . L('backend'));
             $this->display('login');
         }
     }
@@ -40,7 +40,7 @@ class Index extends Backend
             return;
         }
 
-        $this->assign('title', L('website') . L('config'));
+        $this->assign('title', trans('website') . L('config'));
         $this->display();
     }
 
@@ -63,7 +63,7 @@ class Index extends Backend
             return;
         }
 
-        $this->assign('title', L('system') . L('config'));
+        $this->assign('title', trans('system') . L('config'));
         $this->display();
     }
 
@@ -123,7 +123,7 @@ class Index extends Backend
             $db          = M();
             $fileHandle = fopen($_FILES['restore_file']['tmp_name'], 'r');
             if (!$fileHandle) {
-                $this->error(L('open') . L('file') . L('error'), U('databaseSet'));
+                $this->error(trans('open') . L('file') . L('error'), route('databaseSet'));
             }
 
             while (false !== ($queryStr = fgets($fileHandle, 10240))) {
@@ -133,13 +133,13 @@ class Index extends Backend
                     'CREATE\sTABLE',
                 )) . '/i';
                 if (!preg_match($pregMatch, $queryStr)) {
-                    $this->error(L('restore') . L('database') . ' SQL ' . L('error'), U('databaseSet'));
+                    $this->error(trans('restore') . L('database') . ' SQL ' . L('error'), route('databaseSet'));
                 }
 
                 $db->execute($queryStr);
             }
             fclose($fileHandle);
-            $this->success(L('restore') . L('database') . L('success'), U('databaseSet'));
+            $this->success(trans('restore') . L('database') . L('success'), route('databaseSet'));
             return;
         }
 
@@ -162,7 +162,7 @@ class Index extends Backend
             return;
         }
 
-        $this->assign('title', L('database') . L('config'));
+        $this->assign('title', trans('database') . L('config'));
         $this->display();
     }
 
@@ -174,7 +174,7 @@ class Index extends Backend
             $AdminModel   = D('Admin');
             $adminInfo   = $AdminModel->authorized(session('backend_info.admin_name'), $curPassword);
             if (!$adminInfo) {
-                $this->error(L('current') . L('pass') . L('error'));
+                $this->error(trans('current') . L('pass') . L('error'));
             }
 
             $password       = I('password');
@@ -183,31 +183,31 @@ class Index extends Backend
             //只有一个分支的提交 不进行判断必须检测
             $result = $this->doValidateForm('password', array('password' => $password));
             if (!$result['status']) {
-                $this->error($result['info'], U(ACTION_NAME));
+                $this->error($result['info'], route(ACTION_NAME));
             }
 
             $result = $this->doValidateForm('password_again', array('password' => $password, 'password_again' => $passwordAgain));
             if (!$result['status']) {
-                $this->error($result['info'], U(ACTION_NAME));
+                $this->error($result['info'], route(ACTION_NAME));
             }
 
             $resultEdit = $AdminModel->mEdit($adminInfo['id'], array('admin_pwd' => $password));
             if ($resultEdit) {
-                $this->success(L('edit') . L('pass') . L('success'), U('edit_my_pass'));
+                $this->success(trans('edit') . L('pass') . L('success'), route('edit_my_pass'));
                 return;
             } else {
-                $this->error(L('edit') . L('pass') . L('error'), U('edit_my_pass'));
+                $this->error(trans('edit') . L('pass') . L('error'), route('edit_my_pass'));
             }
         }
-        $this->assign('title', L('edit') . L('pass'));
+        $this->assign('title', trans('edit') . L('pass'));
         $this->display();
     }
 
     //清除缓存
     public function clean_cache()
     {
-        $messageStr = L('cache') . L('file') . L('and') . L('temp') . L('file');
-        $lang        = L('yes') . L('no') . L('confirm') . L('clean') . $messageStr;
+        $messageStr = trans('cache') . L('file') . L('and') . L('temp') . L('file');
+        $lang        = trans('yes') . L('no') . L('confirm') . L('clean') . $messageStr;
         if (!$this->showConfirm($lang)) {
             return;
         }
@@ -225,16 +225,16 @@ class Index extends Backend
             //写入日志
             $AdminLogModel = D('AdminLog');
             $AdminLogModel->mAdd(session('backend_info.id'));
-            $this->success($messageStr . L('clean') . L('success'), U('main'));
+            $this->success($messageStr . trans('clean') . L('success'), route('main'));
         } else {
-            $this->error($messageStr . L('clean') . L('error'), U('main'));
+            $this->error($messageStr . trans('clean') . L('error'), route('main'));
         }
     }
 
     //清除日志
     public function clean_log()
     {
-        $lang = L('yes') . L('no') . L('confirm') . L('clean') . L('log');
+        $lang = trans('yes') . L('no') . L('confirm') . L('clean') . L('log');
         if (!$this->showConfirm($lang)) {
             return;
         }
@@ -244,16 +244,16 @@ class Index extends Backend
             //写入日志
             $AdminLogModel = D('AdminLog');
             $AdminLogModel->mAdd(session('backend_info.id'));
-            $this->success(L('clean') . L('log') . L('success'), U('main'));
+            $this->success(trans('clean') . L('log') . L('success'), route('main'));
         } else {
-            $this->error(L('clean') . L('log') . L('error'), U('main'));
+            $this->error(trans('clean') . L('log') . L('error'), route('main'));
         }
     }
 
     //管理页面TOP NAV
     public function top_nav()
     {
-        $this->assign('title', L('nav_top') . L('nav'));
+        $this->assign('title', trans('nav_top') . L('nav'));
         $this->display();
     }
 
@@ -285,14 +285,14 @@ class Index extends Backend
                     }
 
                     $leftNav[$control][] = array(
-                        'link' => U('Admin/' . $controlName . '/' . $actionName),
+                        'link' => route('Admin/' . $controlName . '/' . $actionName),
                         'name' => $actionValue,
                     );
                 }
             }
         }
         $this->assign('left_nav', $leftNav);
-        $this->assign('title', L('nav_left') . L('nav'));
+        $this->assign('title', trans('nav_left') . L('nav'));
         $this->display();
     }
 
@@ -304,10 +304,10 @@ class Index extends Backend
         $siteInfo['php_version']     = PHP_VERSION;
         $siteInfo['server_ip']       = $_SERVER['SERVER_ADDR'];
         $siteInfo['max_upload_size'] = ini_get('post_max_size');
-        $siteInfo['sys_encode']      = C('DEFAULT_CHARSET');
-        $siteInfo['sys_timezone']    = C('DEFAULT_TIMEZONE');
+        $siteInfo['sys_encode']      = config('DEFAULT_CHARSET');
+        $siteInfo['sys_timezone']    = config('DEFAULT_TIMEZONE');
         $siteInfo['mysql_version']   = mysql_get_server_info(M()->db()->connect());
-        $siteInfo['mysql_encode']    = C('DB_CHARSET');
+        $siteInfo['mysql_encode']    = config('DB_CHARSET');
         $siteInfo['ico']             = array(
             'ico1'  => $this->_check_privilege('add', 'Article'),
             'ico2'  => $this->_check_privilege('add', 'ArticleCategory'),
@@ -319,7 +319,7 @@ class Index extends Backend
             'ico12' => $this->_check_privilege('index', 'ManageUpload'),
         );
         $this->assign('site_info', $siteInfo);
-        $this->assign('title', L('info') . L('page'));
+        $this->assign('title', trans('info') . L('page'));
         $this->display();
     }
 
@@ -333,16 +333,16 @@ class Index extends Backend
         $adminPwd  = I('pwd');
         switch ($this->doLogin($adminName, $adminPwd)) {
             case 'user_pwd_error':
-                $this->error(L('account') . L('or') . L('pass') . L('error'), U('Index/index'));
+                $this->error(trans('account') . L('or') . L('pass') . L('error'), route('Index/index'));
                 break;
             case 'verify_error':
-                $this->error(L('verify_code') . L('error'), U('Index/index'));
+                $this->error(trans('verify_code') . L('error'), route('Index/index'));
                 break;
             case 'lock_user_error':
-                $this->error(L('admin') . L('by') . L('lock') . L('please') . C('SYS_BACKEND_LOCK_TIME') . L('second') . L('again') . L('login'), U('Index/index'));
+                $this->error(trans('admin') . L('by') . L('lock') . L('please') . config('SYS_BACKEND_LOCK_TIME') . L('second') . L('again') . L('login'), route('Index/index'));
                 break;
             default:
-                $this->success(L('login') . L('success'), U('Index/index'));
+                $this->success(trans('login') . L('success'), route('Index/index'));
         }
     }
 
@@ -350,7 +350,7 @@ class Index extends Backend
     public function logout()
     {
         $this->doLogout();
-        $this->success(L('logout') . L('account') . L('success'), U('Index/index'));
+        $this->success(trans('logout') . L('account') . L('success'), route('Index/index'));
     }
 
     //页面验证
@@ -361,24 +361,24 @@ class Index extends Backend
             case 'password':
                 //不能为空
                 if ('' == $data['password']) {
-                    $result['info'] = L('pass') . L('not') . L('empty');
+                    $result['info'] = trans('pass') . L('not') . L('empty');
                     break;
                 }
                 //密码长度不能小于6
                 if (6 > strlen($data['password'])) {
-                    $result['info'] = L('pass_len_error');
+                    $result['info'] = trans('pass_len_error');
                     break;
                 }
                 break;
             case 'password_again':
                 //检测再一次输入的密码是否一致
                 if ($data['password'] != $data['password_again']) {
-                    $result['info'] = L('password_again_error');
+                    $result['info'] = trans('password_again_error');
                     break;
                 }
                 //不能为空
                 if ('' == $data['password_again']) {
-                    $result['info'] = L('pass') . L('not') . L('empty');
+                    $result['info'] = trans('pass') . L('not') . L('empty');
                     break;
                 }
                 break;

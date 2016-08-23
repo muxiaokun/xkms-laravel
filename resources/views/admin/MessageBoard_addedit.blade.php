@@ -82,7 +82,7 @@
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">{{ trans('common.save') }}</button>
                             <input class="btn btn-default" type="reset" value="{{ trans('common.reset') }}">
-                            <a href="{:U('main')}" class="btn btn-default">
+                            <a href="{{ route('main') }}" class="btn btn-default">
                                 {{ trans('common.goback') }}
                             </a>
                         </div>

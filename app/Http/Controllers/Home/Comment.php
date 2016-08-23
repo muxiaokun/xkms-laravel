@@ -12,7 +12,7 @@ class Comment extends Frontend
     {
         $where  = array();
         $result = array('status' => true, 'info' => array());
-        if (!C('COMMENT_SWITCH')) {
+        if (!config('COMMENT_SWITCH')) {
             exit();
         }
 
@@ -20,16 +20,16 @@ class Comment extends Frontend
             case 'put_data':
                 $CommentModel = D('Comment');
                 $data         = $this->makeData();
-                if (!C('COMMENT_ANONY') && 0 == $data['send_id']) {
-                    $result = array('status' => false, 'info' => L('comment_error2'));
+                if (!config('COMMENT_ANONY') && 0 == $data['send_id']) {
+                    $result = array('status' => false, 'info' => trans('comment_error2'));
                     break;
                 }
-                if (!in_array($data['controller'], C('COMMENT_ALLOW')) || !$data['item']) {
-                    $result = array('status' => false, 'info' => L('comment_error3'));
+                if (!in_array($data['controller'], config('COMMENT_ALLOW')) || !$data['item']) {
+                    $result = array('status' => false, 'info' => trans('comment_error3'));
                     break;
                 }
                 if (20 > strlen($data['content'])) {
-                    $result = array('status' => false, 'info' => L('comment_error5'));
+                    $result = array('status' => false, 'info' => trans('comment_error5'));
                     break;
                 }
                 $where = array(
@@ -37,16 +37,16 @@ class Comment extends Frontend
                     'controller' => $data['controller'],
                     'item'       => $data['item'],
                     'add_ip'     => array('exp', '= inet_aton("' . $_SERVER['REMOTE_ADDR'] . '")'),
-                    'add_time'   => array('gt', time() - C('COMMENT_INTERVAL')),
+                    'add_time'   => array('gt', time() - config('COMMENT_INTERVAL')),
                 );
                 $countComment = $CommentModel->where($where)->count();
                 if (0 < $countComment) {
-                    $result = array('status' => false, 'info' => L('comment_error4'));
+                    $result = array('status' => false, 'info' => trans('comment_error4'));
                     break;
                 }
 
                 $addResult     = $CommentModel->mAdd($data);
-                $result['info'] = ($addResult) ? L('send') . L('success') : L('send') . L('error');
+                $result['info'] = ($addResult) ? trans('send') . L('success') : L('send') . L('error');
                 break;
             case 'get_data':
                 if (!$data['controller'] || !$data['item']) {
@@ -63,7 +63,7 @@ class Comment extends Frontend
                 $commentList = $CommentModel->mSelect($where, true);
                 foreach ($commentList as &$comment) {
                     $memberName            = $MemberModel->mFindColumn($comment['member_id'], 'member_name');
-                    $comment['member_name'] = ($memberName) ? $memberName : L('anonymous');
+                    $comment['member_name'] = ($memberName) ? $memberName : trans('anonymous');
                 }
                 $this->assign('comment_list', $commentList);
                 $this->assign('comment_list_count', $CommentModel->mGetPageCount($where));

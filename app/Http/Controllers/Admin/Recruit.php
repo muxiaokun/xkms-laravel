@@ -26,9 +26,9 @@ class Recruit extends Backend
 
         //初始化where_info
         $whereInfo               = array();
-        $whereInfo['name']       = array('type' => 'input', 'name' => L('recruit') . L('name'));
-        $whereInfo['start_time'] = array('type' => 'time', 'name' => L('start') . L('time'));
-        $whereInfo['end_time']   = array('type' => 'time', 'name' => L('end') . L('time'));
+        $whereInfo['name']       = array('type' => 'input', 'name' => trans('recruit') . L('name'));
+        $whereInfo['start_time'] = array('type' => 'time', 'name' => trans('start') . L('time'));
+        $whereInfo['end_time']   = array('type' => 'time', 'name' => trans('end') . L('time'));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -39,7 +39,7 @@ class Recruit extends Backend
         $batchHandle['del']       = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', L('recruit') . L('management'));
+        $this->assign('title', trans('recruit') . L('management'));
         $this->display();
     }
 
@@ -51,13 +51,13 @@ class Recruit extends Backend
             $data         = $this->makeData();
             $resultAdd   = $RecruitModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(L('recruit') . L('add') . L('success'), U('index'));
+                $this->success(trans('recruit') . L('add') . L('success'), route('index'));
                 return;
             } else {
-                $this->error(L('recruit') . L('add') . L('error'), U('add'));
+                $this->error(trans('recruit') . L('add') . L('error'), route('add'));
             }
         }
-        $this->assign('title', L('add') . L('recruit'));
+        $this->assign('title', trans('add') . L('recruit'));
         $this->display('addedit');
     }
 
@@ -66,7 +66,7 @@ class Recruit extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $RecruitModel = D('Recruit');
@@ -74,18 +74,18 @@ class Recruit extends Backend
             $data        = $this->makeData();
             $resultEdit = $RecruitModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(L('recruit') . L('edit') . L('success'), U('index'));
+                $this->success(trans('recruit') . L('edit') . L('success'), route('index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-                $this->error(L('recruit') . L('edit') . L('error'), $errorGoLink);
+                $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
+                $this->error(trans('recruit') . L('edit') . L('error'), $errorGoLink);
             }
         }
 
         $editInfo = $RecruitModel->mFind($id);
         $this->assign('edit_info', $editInfo);
 
-        $this->assign('title', L('edit') . L('recruit'));
+        $this->assign('title', trans('edit') . L('recruit'));
         $this->display('addedit');
     }
 
@@ -94,7 +94,7 @@ class Recruit extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $RecruitModel = D('Recruit');
@@ -103,10 +103,10 @@ class Recruit extends Backend
             $RecruitLogModel = D('RecruitLog');
             //TODO 需要定义数据列
             $resultDel      = $RecruitLogModel->mClean($id);
-            $this->success(L('recruit') . L('del') . L('success'), U('index'));
+            $this->success(trans('recruit') . L('del') . L('success'), route('index'));
             return;
         } else {
-            $this->error(L('recruit') . L('del') . L('error'), U('index'));
+            $this->error(trans('recruit') . L('del') . L('error'), route('index'));
         }
     }
 

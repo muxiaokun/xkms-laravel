@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Install;
 
 use App\Http\Controllers\Common;
 use App\Http\Requests\Request;
-use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Storage;
 
 class Index extends Common
 {
@@ -26,11 +26,11 @@ class Index extends Common
         //install_status 0 没有安装 1安装完毕但没有显示最后一页 2安装完毕
 //        $status = F('sys_status');
 //        if (!config('app.debug') && 1 == $status['install_status'] && 'setp4' != ACTION_NAME) {
-//            $this->error(L('install_error1'), U('Install/Index/index', ['setp' => 4]));
+//            $this->error(trans('install_error1'), route('Install/Index/index', ['setp' => 4]));
 //            return;
 //        }
 //        if (!config('app.debug') && 2 == $status['install_status']) {
-//            $this->error(L('install_error2'), U('Home/Index/index'));
+//            $this->error(trans('install_error2'), route('Home/Index/index'));
 //            return;
 //        }
     }
@@ -60,13 +60,12 @@ class Index extends Common
 
     public function setp0()
     {
-//        $this->assign('article', htmlspecialchars_decode(F('licenses', '', XKMS_ARTICLES)));
         $assign = [
             'show_height'=>true,
             'progress'=>0,
             'setp' => trans('common.welcome') . trans('common.use'),
             'title' => trans('install.setp0_title'),
-            'article'=>'',
+            'article'=>Storage::get('xkms/article/licenses.php'),
         ];
         return view('install.Index_setp0',$assign);
     }
@@ -95,38 +94,44 @@ class Index extends Common
             }
 
         }
-        $this->assign('note', $unloadExt);
-        //读取默认数据库配置
-        $this->assign('database_list', $this->_compare_database());
-        $defaultConfig = include XKMS_DEFAULT_CONFIG . 'database.php';
-        if (C('DB_HOST')) {
-            $defaultConfig['DB_HOST'] = C('DB_HOST');
+
+        $defaultConfig = Storage::get('xkms/config/database.php');
+        if (config('connections.mysql.host')) {
+            $defaultConfig['DB_HOST'] = config('connections.mysql.host');
         }
 
-        if (C('DB_NAME')) {
-            $defaultConfig['DB_NAME'] = C('DB_NAME');
+        if (config('DB_NAME')) {
+            $defaultConfig['DB_NAME'] = config('DB_NAME');
         }
 
-        if (C('DB_USER')) {
-            $defaultConfig['DB_USER'] = C('DB_USER');
+        if (config('DB_USER')) {
+            $defaultConfig['DB_USER'] = config('DB_USER');
         }
 
-        if (C('DB_PWD')) {
-            $defaultConfig['DB_PWD'] = C('DB_PWD');
+        if (config('DB_PWD')) {
+            $defaultConfig['DB_PWD'] = config('DB_PWD');
         }
 
-        if (C('DB_PORT')) {
-            $defaultConfig['DB_PORT'] = C('DB_PORT');
+        if (config('DB_PORT')) {
+            $defaultConfig['DB_PORT'] = config('DB_PORT');
         }
 
-        if (C('DB_PREFIX')) {
-            $defaultConfig['DB_PREFIX'] = C('DB_PREFIX');
+        if (config('DB_PREFIX')) {
+            $defaultConfig['DB_PREFIX'] = config('DB_PREFIX');
         }
 
-        $this->assign('default_config', $defaultConfig); //读取默认数据库配置
-        $this->assign('setp', L('pfsetp', ['setp' => L('one'), 'count' => L('four')]));
-        $this->assign('title', L('setp1_title'));
-        $this->display();
+        $assign = [
+            'show_height'=>true,
+            'progress'=>0,
+            'setp' => trans('install.pfsetp',['setp' => trans('common.one'), 'count' => trans('common.four')]),
+            'title' => trans('install.setp1_title'),
+            'article'=>Storage::get('xkms/article/licenses.php'),
+            'note'=>$unloadExt,
+            //'database_list'=>$this->_compare_database(),
+            'default_config'=>$defaultConfig,
+
+        ];
+        return view('install.Index_setp1',$assign);
     }
 
     //第三页 安装数据库
@@ -134,8 +139,8 @@ class Index extends Common
     {
         $this->assign('compare_database_info', $this->_compare_database(true));
         $this->assign('compare_tables_info', $this->_compare_tables());
-        $this->assign('setp', L('pfsetp', ['setp' => L('two'), 'count' => L('four')]));
-        $this->assign('title', L('setp2_title'));
+        $this->assign('setp', trans('pfsetp', ['setp' => L('two'), 'count' => L('four')]));
+        $this->assign('title', trans('setp2_title'));
         $this->display();
     }
 
@@ -148,8 +153,8 @@ class Index extends Common
         }
 
         set_time_limit(0);
-        $this->assign('setp', L('pfsetp', ['setp' => L('three'), 'count' => L('four')]));
-        $this->assign('title', L('setp3_title'));
+        $this->assign('setp', trans('pfsetp', ['setp' => L('three'), 'count' => L('four')]));
+        $this->assign('title', trans('setp3_title'));
         $this->display();
         ob_flush();
         flush();
@@ -159,49 +164,49 @@ class Index extends Common
             try {
                 $db = M('', '', [
                     'db_type' => 'mysql',
-                    'db_host' => C('DB_HOST'),
-                    'db_user' => C('DB_USER'),
-                    'db_pwd'  => C('DB_PWD'),
-                    'db_port' => C('DB_PORT'),
+                    'db_host' => config('DB_HOST'),
+                    'db_user' => config('DB_USER'),
+                    'db_pwd'  => config('DB_PWD'),
+                    'db_port' => config('DB_PORT'),
                 ])->db()->connect();
             } catch (\Think\Exception $e) {
                 $errorMsg = mb_convert_encoding($e->getMessage(), 'utf-8', ['gbk', 'utf-8']);
             }
-            $result = $db->query('CREATE DATABASE `' . C('DB_NAME') . '` DEFAULT CHARACTER SET = utf8');
+            $result = $db->query('CREATE DATABASE `' . config('DB_NAME') . '` DEFAULT CHARACTER SET = utf8');
 
-            $langStr = L('install') . L('database') . C('DB_NAME');
+            $langStr = trans('install') . L('database') . config('DB_NAME');
             if ($result) {
-                $langStr .= L('success');
+                $langStr .= trans('success');
                 $type = 'success';
             } else {
-                $langStr .= L('error');
+                $langStr .= trans('error');
                 $errorMsg = $db->errorInfo();
-                $langStr .= L('error') . $errorMsg[0] . $errorMsg[1] . $errorMsg[2];
+                $langStr .= trans('error') . $errorMsg[0] . $errorMsg[1] . $errorMsg[2];
                 $type = 'danger';
             }
             echo '<script type="text/javascript">show_install_message("#show_box","' . $langStr . '","' . $type . '")</script>';
         } else {
-            $langStr = L('database') . C('DB_NAME') . L('exists');
+            $langStr = trans('database') . config('DB_NAME') . L('exists');
             echo '<script type="text/javascript">show_install_message("#show_box","' . $langStr . '","info")</script>';
         }
         //初始化需要安装的数据表
         $compareTablesInfo = $this->_compare_tables(true);
         //必装的表有6个
         if (6 > count($compareTablesInfo)) {
-            $langStr = L('setp3_commont1');
+            $langStr = trans('setp3_commont1');
             echo '<script type="text/javascript">show_install_message("#show_box","' . $langStr . '","danger")</script>';
-            echo '<script type="text/javascript">setTimeout(\'window.location.href=\"' . U('', ['setp' => 2]) . '\"\',3000)</script>';
+            echo '<script type="text/javascript">setTimeout(\'window.location.href=\"' . route('', ['setp' => 2]) . '\"\',3000)</script>';
             return;
         }
 
         try {
             $db = M('', '', [
                 'db_type' => 'mysql',
-                'db_host' => C('DB_HOST'),
-                'db_user' => C('DB_USER'),
-                'db_pwd'  => C('DB_PWD'),
-                'db_port' => C('DB_PORT'),
-                'db_name' => C('DB_NAME'),
+                'db_host' => config('DB_HOST'),
+                'db_user' => config('DB_USER'),
+                'db_pwd'  => config('DB_PWD'),
+                'db_port' => config('DB_PORT'),
+                'db_name' => config('DB_NAME'),
             ])->db()->connect();
             $db->query('set names utf8');
         } catch (\Think\Exception $e) {
@@ -240,15 +245,15 @@ class Index extends Common
 
                 $result = $db->query($table['create_sql']);
 
-                $langStr = L('install') . L('controller') . '&nbsp;' . $control['control_info'] . '&nbsp;' . L('table') . $table['table_info'] . $tableName;
+                $langStr = trans('install') . L('controller') . '&nbsp;' . $control['control_info'] . '&nbsp;' . L('table') . $table['table_info'] . $tableName;
                 if ($result) {
                     $createTablesSuccess++;
-                    $langStr .= L('success');
+                    $langStr .= trans('success');
                     $type = 'success';
                 } else {
                     $createTablesError++;
                     $errorMsg = $db->errorInfo();
-                    $langStr .= L('error') . $errorMsg[0] . $errorMsg[1] . $errorMsg[2];
+                    $langStr .= trans('error') . $errorMsg[0] . $errorMsg[1] . $errorMsg[2];
                     $type = 'danger';
                 }
                 echo '<script type="text/javascript">show_install_progress(' . ($installTablesCount++ / $tablesCount) . ');</script>';
@@ -273,13 +278,13 @@ class Index extends Common
         }
 
         //返回安装报告
-        $langStr = L('success') . L('initialize') . $createTablesSuccess . L('table') . L('error') . $createTablesError . L('table');
+        $langStr = trans('success') . L('initialize') . $createTablesSuccess . L('table') . L('error') . $createTablesError . L('table');
         if (0 == $createTablesError) {
-            $langStr .= L('three_second_next_setp');
+            $langStr .= trans('three_second_next_setp');
             echo '<script type="text/javascript">show_install_message("#show_box","' . $langStr . '","success")</script>';
-            echo '<script type="text/javascript">setTimeout(\'window.location.href=\"' . U('setp4') . '\"\',3000)</script>';
+            echo '<script type="text/javascript">setTimeout(\'window.location.href=\"' . route('setp4') . '\"\',3000)</script>';
         } else {
-            $buttonStr = '<a class=\"mr30 w100 btn btn-success\" href=\"' . U('setp2') . '\">' . L('previous') . L('setp') . '</a>';
+            $buttonStr = '<a class=\"mr30 w100 btn btn-success\" href=\"' . route('setp2') . '\">' . trans('previous') . L('setp') . '</a>';
             echo '<script type="text/javascript">show_install_message("#show_box","' . $buttonStr . $langStr . '","danger")</script>';
         }
         ob_flush();
@@ -298,8 +303,8 @@ class Index extends Common
         $article = htmlspecialchars_decode(F('install_end', '', XKMS_ARTICLES));
         $article = str_replace('{$appName}', APP_NAME, $article);
         $this->assign('article', $article); //读取安装完毕的文字
-        $this->assign('setp', L('pfsetp', ['setp' => L('four'), 'count' => L('four')]));
-        $this->assign('title', L('setp4_title'));
+        $this->assign('setp', trans('pfsetp', ['setp' => L('four'), 'count' => L('four')]));
+        $this->assign('title', trans('setp4_title'));
         $this->display();
     }
 
@@ -309,7 +314,7 @@ class Index extends Common
         switch ($field) {
             //第二部 验证数据库
             case 'check_mysql';
-                $currentDate = date(C('SYS_DATE_DETAIL')) . " ";
+                $currentDate = date(config('SYS_DATE_DETAIL')) . " ";
                 $errorMsg    = false;
                 //检测是否能连接到数据库服务器
                 try {
@@ -337,7 +342,7 @@ class Index extends Common
                     'DB_PREFIX' => $data['prefix'],
                 ];
                 $configStr     = var_export($saveConfig, true);
-                $CoreCopyright = C('CORE_COPYRIGHT');
+                $CoreCopyright = config('CORE_COPYRIGHT');
                 $putConfig     = <<<EOF
 <?php
 {$CoreCopyright}
@@ -347,7 +352,7 @@ return {$configStr};
 EOF;
                 file_put_contents(CONF_PATH . 'database.php', $putConfig);
                 $result = ['status' => true,
-                           'info'   => ['msg'  => $currentDate . L('save_config_success') . L('three_second_next_setp'),
+                           'info'   => ['msg'  => $currentDate . trans('save_config_success') . L('three_second_next_setp'),
                                         'type' => 3]];
                 return $result;
                 break;
@@ -357,16 +362,16 @@ EOF;
     //返回数据库基本信息$database = true  和 已有数据库列表$database = false
     private function _compare_database($database = false)
     {
-        $databaseName = C('DB_NAME');
-        $serverLink   = (C('DB_PORT')) ? C('DB_HOST') . ":" . C('DB_PORT') : C('DB_HOST');
+        $databaseName = config('DB_NAME');
+        $serverLink   = (config('DB_PORT')) ? C('DB_HOST') . ":" . C('DB_PORT') : C('DB_HOST');
         try {
             $db = M('', '', [
                 'db_type' => 'mysql',
-                'db_host' => C('DB_HOST'),
-                'db_user' => C('DB_USER'),
-                'db_pwd'  => C('DB_PWD'),
-                'db_port' => C('DB_PORT'),
-                'db_name' => C('DB_NAME'),
+                'db_host' => config('DB_HOST'),
+                'db_user' => config('DB_USER'),
+                'db_pwd'  => config('DB_PWD'),
+                'db_port' => config('DB_PORT'),
+                'db_name' => config('DB_NAME'),
             ])->db()->connect();
         } catch (\Think\Exception $e) {
             //echo $e->getMessage();
@@ -401,16 +406,16 @@ EOF;
         $reCompareInfo = [];
         $tables        = [];
         //检测数据库是否存在 如果存在就初始化已有表数组
-        $compareDatabaseInfo = $this->_compare_database(C('DB_NAME'));
+        $compareDatabaseInfo = $this->_compare_database(config('DB_NAME'));
         if ($compareDatabaseInfo['if_exists'] == 1) {
             try {
                 $db = M('', '', [
                     'db_type' => 'mysql',
-                    'db_host' => C('DB_HOST'),
-                    'db_user' => C('DB_USER'),
-                    'db_pwd'  => C('DB_PWD'),
-                    'db_port' => C('DB_PORT'),
-                    'db_name' => C('DB_NAME'),
+                    'db_host' => config('DB_HOST'),
+                    'db_user' => config('DB_USER'),
+                    'db_pwd'  => config('DB_PWD'),
+                    'db_port' => config('DB_PORT'),
+                    'db_name' => config('DB_NAME'),
                 ])->db()->connect();
             } catch (\Think\Exception $e) {
                 //echo $e->getMessage();
@@ -430,7 +435,7 @@ EOF;
 
             $controlInfo = include XKMS_TABLES . $control;
             foreach ($controlInfo['tables'] as $table => $tableValue) {
-                $newTab = C('DB_PREFIX') . $table;
+                $newTab = config('DB_PREFIX') . $table;
                 //增加表名前缀
                 $controlInfo['tables'][$newTab] = $controlInfo['tables'][$table];
                 unset($controlInfo['tables'][$table]);

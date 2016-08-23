@@ -4,7 +4,7 @@
             <div class="panel-heading">
                 {{ $title }}
                 <if condition="$batch_handle['del']">
-<a class="fr fs10" href="javascript:void();" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ trans('common.all') }}{{ trans('common.record') }}?','{:U('del',array('id'=>I('id')))}')">
+<a class="fr fs10" href="javascript:void();" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ trans('common.all') }}{{ trans('common.record') }}?','{{ route('del',array('id'=>I('id'))) }}')">
                         {{ trans('common.del') }}{{ trans('common.all') }}{{ trans('common.record') }}
                     </a>
                 </if>
@@ -28,7 +28,7 @@
                                     var config = {
                                         'edit_obj':$('#re_grade_id'),
                                         'post_name':'re_grade_id',
-                                        'ajax_url':'{:U('ajax_api')}',
+                                        'ajax_url':'{{ route('ajax_api') }}',
                                         'field':
                                                 <if condition="'member' eq $assess_info['target']">
                                                     'member'
@@ -76,7 +76,7 @@
                             <button type="submit" class="btn btn-info">
                                     {{ trans('common.select') }}
                             </button>
-                            <a href="{:U('Assess/index')}" class="btn btn-default">
+                            <a href="{{ route('Assess/index') }}" class="btn btn-default">
                                     {{ trans('common.goback') }}
                             </a>
                         </div>

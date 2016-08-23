@@ -32,18 +32,18 @@ class Member extends Backend
                 isset($member['group_name']) && $member['group_name'] .= " | ";
                 $member['group_name'] .= $groupName;
             }
-            !isset($member['group_name']) && $member['group_name'] = L('empty');
-            !isset($member['add_time']) && $member['add_time']     = L('system') . L('add');
+            !isset($member['group_name']) && $member['group_name'] = trans('empty');
+            !isset($member['add_time']) && $member['add_time']     = trans('system') . L('add');
         }
         $this->assign('member_list', $memberList);
         $this->assign('member_list_count', $MemberModel->mGetPageCount($where));
 
         //初始化where_info
         $whereInfo                  = array();
-        $whereInfo['member_name']   = array('type' => 'input', 'name' => L('member') . L('name'));
-        $whereInfo['group_id']      = array('type' => 'input', 'name' => L('group') . L('name'));
-        $whereInfo['register_time'] = array('type' => 'time', 'name' => L('register') . L('time'));
-        $whereInfo['last_time']     = array('type' => 'time', 'name' => L('login') . L('time'));
+        $whereInfo['member_name']   = array('type' => 'input', 'name' => trans('member') . L('name'));
+        $whereInfo['group_id']      = array('type' => 'input', 'name' => trans('group') . L('name'));
+        $whereInfo['register_time'] = array('type' => 'time', 'name' => trans('register') . L('time'));
+        $whereInfo['last_time']     = array('type' => 'time', 'name' => trans('login') . L('time'));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -53,7 +53,7 @@ class Member extends Backend
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', L('member') . L('management'));
+        $this->assign('title', trans('member') . L('management'));
         $this->display();
     }
 
@@ -65,14 +65,14 @@ class Member extends Backend
             $data        = $this->makeData();
             $resultAdd  = $MemberModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(L('member') . L('add') . L('success'), U('index'));
+                $this->success(trans('member') . L('add') . L('success'), route('index'));
                 return;
             } else {
-                $this->error(L('member') . L('add') . L('error'), U('add'));
+                $this->error(trans('member') . L('add') . L('error'), route('add'));
             }
         }
         $this->addEditCommon();
-        $this->assign('title', L('member') . L('add'));
+        $this->assign('title', trans('member') . L('add'));
         $this->display('addedit');
     }
 
@@ -81,7 +81,7 @@ class Member extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $MemberModel = D('Member');
@@ -89,11 +89,11 @@ class Member extends Backend
             $data        = $this->makeData(false);
             $resultEdit = $MemberModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(L('member') . L('edit') . L('success'), U('index'));
+                $this->success(trans('member') . L('edit') . L('success'), route('index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-                $this->error(L('member') . L('edit') . L('error'), $errorGoLink);
+                $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
+                $this->error(trans('member') . L('edit') . L('error'), $errorGoLink);
             }
         }
 
@@ -107,7 +107,7 @@ class Member extends Backend
         $this->assign('edit_info', $editInfo);
 
         $this->addEditCommon();
-        $this->assign('title', L('member') . L('edit'));
+        $this->assign('title', trans('member') . L('edit'));
         $this->display('addedit');
     }
 
@@ -116,21 +116,21 @@ class Member extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         //不能删除root用户
         if ($id == 1) {
-            $this->error(L('id') . L('not') . L('del'), U('index'));
+            $this->error(trans('id') . L('not') . L('del'), route('index'));
         }
 
         $MemberModel = D('Member');
         $resultDel  = $MemberModel->mDel($id);
         if ($resultDel) {
-            $this->success(L('member') . L('del') . L('success'), U('index'));
+            $this->success(trans('member') . L('del') . L('success'), route('index'));
             return;
         } else {
-            $this->error(L('member') . L('del') . L('error'), U('index'));
+            $this->error(trans('member') . L('del') . L('error'), route('index'));
         }
     }
 
@@ -151,7 +151,7 @@ class Member extends Backend
             return;
         }
 
-        $this->assign('title', L('member') . L('config'));
+        $this->assign('title', trans('member') . L('config'));
         $this->display();
     }
 
@@ -163,24 +163,24 @@ class Member extends Backend
             case 'member_name':
                 //不能为空
                 if ('' == $data['member_name']) {
-                    $result['info'] = L('member') . L('name') . L('not') . L('empty');
+                    $result['info'] = trans('member') . L('name') . L('not') . L('empty');
                     break;
                 }
                 //检查用户名规则
-                if ('utf-8' != C('DEFAULT_CHARSET')) {
-                    $data['member_name'] = iconv(C('DEFAULT_CHARSET'), 'utf-8', $data['member_name']);
+                if ('utf-8' != config('DEFAULT_CHARSET')) {
+                    $data['member_name'] = iconv(config('DEFAULT_CHARSET'), 'utf-8', $data['member_name']);
                 }
 
                 preg_match('/([^\x80-\xffa-zA-Z0-9\s]*)/', $data['member_name'], $matches);
                 if ('' != $matches[1]) {
-                    $result['info'] = L('name_format_error', array('string' => $matches[1]));
+                    $result['info'] = trans('name_format_error', array('string' => $matches[1]));
                     break;
                 }
                 //检查用户名是否存在
                 $MemberModel = D('Member');
                 $memberInfo = $MemberModel->mSelect(array('member_name' => $data['member_name'], 'id' => array('neq', $data['id'])));
                 if (0 < count($memberInfo)) {
-                    $result['info'] = L('member') . L('name') . L('exists');
+                    $result['info'] = trans('member') . L('name') . L('exists');
                     break;
                 }
                 break;
@@ -188,12 +188,12 @@ class Member extends Backend
                 if ($data['is_pwd'] || '' != $data['password']) {
                     //不能为空
                     if ('' == $data['password']) {
-                        $result['info'] = L('pass') . L('not') . L('empty');
+                        $result['info'] = trans('pass') . L('not') . L('empty');
                         break;
                     }
                     //密码长度不能小于6
                     if (6 > strlen($data['password'])) {
-                        $result['info'] = L('pass_len_error');
+                        $result['info'] = trans('pass_len_error');
                         break;
                     }
                 }
@@ -202,12 +202,12 @@ class Member extends Backend
                 if ($data['is_pwd'] || '' != $data['password'] || '' != $data['password_again']) {
                     //检测再一次输入的密码是否一致
                     if ($data['password'] != $data['password_again']) {
-                        $result['info'] = L('password_again_error');
+                        $result['info'] = trans('password_again_error');
                         break;
                     }
                     //不能为空
                     if ('' == $data['password_again']) {
-                        $result['info'] = L('pass') . L('not') . L('empty');
+                        $result['info'] = trans('pass') . L('not') . L('empty');
                         break;
                     }
                 }
@@ -216,7 +216,7 @@ class Member extends Backend
                 //检查邮箱名规则
                 preg_match('/^(\w+@[\w+\.]+\w+)$/', $data['email'], $matches);
                 if ('' != $data['email'] && $matches[1] != $data['email']) {
-                    $result['info'] = L('email') . L('format') . L('error');
+                    $result['info'] = trans('email') . L('format') . L('error');
                     break;
                 }
                 break;
@@ -224,7 +224,7 @@ class Member extends Backend
                 //检查手机号规则
                 preg_match('/^(1\d{10})$/', $data['phone'], $matches);
                 if ('' != $data['phone'] && $matches[1] != $data['phone']) {
-                    $result['info'] = L('phone') . L('format') . L('error');
+                    $result['info'] = trans('phone') . L('format') . L('error');
                     break;
                 }
                 break;
@@ -270,7 +270,7 @@ class Member extends Backend
         $isEnable      = I('is_enable');
 
         //检测初始化参数是否合法
-        $errorGoLink = (!$id) ? U('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));
+        $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));
         if ('add' == ACTION_NAME || null !== $memberName) {
             $result = $this->doValidateForm('member_name', array('id' => $id, 'member_name' => $memberName));
             if (!$result['status']) {

@@ -3,7 +3,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 {{ $title }}
-                <a class="fr fs10" href="{:U('Quests/index',array('id'=>I('id')))}">{{ trans('common.goback') }}</a>
+                <a class="fr fs10" href="{{ route('Quests/index',array('id'=>I('id'))) }}">{{ trans('common.goback') }}</a>
             </div>
             <div class="panel-body">
                 <include file="Public:where_info" />
@@ -28,13 +28,13 @@
                             </td>
                             <td class="nowrap">
                                 <if condition="$batch_handle['add']">
-                                    <a class="btn btn-xs btn-primary" href="{:U('QuestsAnswer/add',array('id'=>$quests_answer['id']))}">
+                                    <a class="btn btn-xs btn-primary" href="{{ route('QuestsAnswer/add',array('id'=>$quests_answer['id'])) }}">
                                         {{ trans('common.look') }}
                                     </a>
                                 </if>
                                 <if condition="$batch_handle['add'] AND $batch_handle['del']">&nbsp;|&nbsp;</if>
                                 <if condition="$batch_handle['del']">
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}?','{:U('del',array('id'=>$quests_answer['id']))}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}?','{{ route('del',array('id'=>$quests_answer['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 </if>
@@ -54,7 +54,7 @@
                                     'type_data':Array()
                                 };
                                 <if condition="$batch_handle['del']">
-                                    config.type_data.push({'name':$Think.lang.del,'post_link':'{:U('del')}' });
+                                    config.type_data.push({'name':$Think.lang.del,'post_link':'{{ route('del') }}' });
                                 </if>
                                 new M_batch_handle(config);
                             });

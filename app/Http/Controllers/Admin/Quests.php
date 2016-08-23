@@ -28,9 +28,9 @@ class Quests extends Backend
 
         //初始化where_info
         $whereInfo               = array();
-        $whereInfo['title']      = array('type' => 'input', 'name' => L('title'));
-        $whereInfo['start_time'] = array('type' => 'time', 'name' => L('start') . L('time'));
-        $whereInfo['end_time']   = array('type' => 'time', 'name' => L('end') . L('time'));
+        $whereInfo['title']      = array('type' => 'input', 'name' => trans('title'));
+        $whereInfo['start_time'] = array('type' => 'time', 'name' => trans('start') . L('time'));
+        $whereInfo['end_time']   = array('type' => 'time', 'name' => trans('end') . L('time'));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -42,7 +42,7 @@ class Quests extends Backend
         $batchHandle['del']          = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', L('quests') . L('management'));
+        $this->assign('title', trans('quests') . L('management'));
         $this->display();
     }
 
@@ -54,13 +54,13 @@ class Quests extends Backend
             $data        = $this->makeData();
             $resultAdd  = $QuestsModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(L('quests') . L('add') . L('success'), U('Quests/index'));
+                $this->success(trans('quests') . L('add') . L('success'), route('Quests/index'));
                 return;
             } else {
-                $this->error(L('quests') . L('add') . L('error'), U('Quests/add'));
+                $this->error(trans('quests') . L('add') . L('error'), route('Quests/add'));
             }
         }
-        $this->assign('title', L('add') . L('quests'));
+        $this->assign('title', trans('add') . L('quests'));
         $this->display('addedit');
     }
 
@@ -69,7 +69,7 @@ class Quests extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $QuestsModel = D('Quests');
@@ -77,17 +77,17 @@ class Quests extends Backend
             $data        = $this->makeData();
             $resultEdit = $QuestsModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(L('quests') . L('edit') . L('success'), U('Quests/index'));
+                $this->success(trans('quests') . L('edit') . L('success'), route('Quests/index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-                $this->error(L('quests') . L('edit') . L('error'), $errorGoLink);
+                $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
+                $this->error(trans('quests') . L('edit') . L('error'), $errorGoLink);
             }
         }
         $editInfo = $QuestsModel->mFind($id);
         $this->assign('edit_info', $editInfo);
 
-        $this->assign('title', L('edit') . L('quests'));
+        $this->assign('title', trans('edit') . L('quests'));
         $this->display('addedit');
     }
 
@@ -96,7 +96,7 @@ class Quests extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('Quests/index'));
+            $this->error(trans('id') . L('error'), route('Quests/index'));
         }
 
         $clear       = I('clear');
@@ -113,17 +113,17 @@ class Quests extends Backend
             if ($clear) {
                 if ($resultClear) {
                     $QuestsModel->where(array('id' => $id))->data(array('current_portion' => 0))->save();
-                    $this->success(L('quests') . L('clear') . L('success'), U('Quests/index'));
+                    $this->success(trans('quests') . L('clear') . L('success'), route('Quests/index'));
                     return;
                 } else {
-                    $this->error(L('quests') . L('clear') . L('error'), U('Quests/index'));
+                    $this->error(trans('quests') . L('clear') . L('error'), route('Quests/index'));
 
                 }
             }
-            $this->success(L('quests') . L('del') . L('success'), U('Quests/index'));
+            $this->success(trans('quests') . L('del') . L('success'), route('Quests/index'));
             return;
         } else {
-            $this->error(L('quests') . L('del') . L('error'), U('Quests/edit', array('id' => $id)));
+            $this->error(trans('quests') . L('del') . L('error'), route('Quests/edit', array('id' => $id)));
         }
     }
 

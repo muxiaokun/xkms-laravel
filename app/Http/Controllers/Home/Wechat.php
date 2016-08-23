@@ -12,7 +12,7 @@ class Wechat extends Frontend
     //重写构造方法 绕过令牌检测
     public function _initialize()
     {
-        C('TOKEN_ON', false);
+        config('TOKEN_ON', false);
         $this->Wechat = new \Common\Lib\Wechat();
         parent::_initialize();
     }
@@ -68,12 +68,12 @@ class Wechat extends Frontend
         $content = '';
         switch ($msgInfo['Content']) {
             case '登录':
-                $ApiLink    = 'http://' . $_SERVER['SERVER_NAME'] . U(C('DEFAULT_MODULE') . '/Wechat/member_bind');
+                $ApiLink    = 'http://' . $_SERVER['SERVER_NAME'] . route(config('DEFAULT_MODULE') . '/Wechat/member_bind');
                 $Oauth2Link = $this->Wechat->Oauth2_enlink($ApiLink);
                 $content     = $Oauth2Link;
                 break;
             case '时间':
-                $content = L('server') . L('time') . ':' . date(C('SYS_DATE_DETAIL'));
+                $content = trans('server') . L('time') . ':' . date(config('SYS_DATE_DETAIL'));
                 break;
             default:
                 $content = '您发送的内容是：' . $msgInfo['Content'];
@@ -132,16 +132,16 @@ class Wechat extends Frontend
     {
         switch ($msg) {
             case 'user_pwd_error':
-                $this->error(L('account') . L('or') . L('pass') . L('error'), U(ACTION_NAME));
+                $this->error(trans('account') . L('or') . L('pass') . L('error'), route(ACTION_NAME));
                 break;
             case 'verify_error':
-                $this->error(L('verify_code') . L('error'), U(ACTION_NAME));
+                $this->error(trans('verify_code') . L('error'), route(ACTION_NAME));
                 break;
             case 'lock_user_error':
-                $this->error(L('admin') . L('by') . L('lock') . L('please') . C('SYS_FRONTEND_LOCK_TIME') . L('second') . L('again') . L('login'), U(ACTION_NAME));
+                $this->error(trans('admin') . L('by') . L('lock') . L('please') . config('SYS_FRONTEND_LOCK_TIME') . L('second') . L('again') . L('login'), route(ACTION_NAME));
                 break;
             default:
-                $this->success(L('login') . L('success'), U('Member/index'));
+                $this->success(trans('login') . L('success'), route('Member/index'));
         }
     }
 

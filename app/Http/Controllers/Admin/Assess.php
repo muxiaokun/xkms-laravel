@@ -28,19 +28,19 @@ class Assess extends Backend
         //初始化翻页 和 列表数据
         $assessList = $AssessModel->mSelect($where, true);
         foreach ($assessList as &$assess) {
-            $assess['group_name'] = ($assess['group_level']) ? $MemberGroupModel->mFindColumn($assess['group_level'], 'name') : L('empty');
+            $assess['group_name'] = ($assess['group_level']) ? $MemberGroupModel->mFindColumn($assess['group_level'], 'name') : trans('empty');
         }
         $this->assign('assess_list', $assessList);
         $this->assign('assess_list_count', $AssessModel->mGetPageCount($where));
 
         //初始化where_info
         $whereInfo                = [];
-        $whereInfo['title']       = ['type' => 'input', 'name' => L('title')];
-        $whereInfo['group_level'] = ['type' => 'input', 'name' => L('assess') . L('group')];
-        $whereInfo['start_time']  = ['type' => 'time', 'name' => L('add') . L('time')];
+        $whereInfo['title']       = ['type' => 'input', 'name' => trans('title')];
+        $whereInfo['group_level'] = ['type' => 'input', 'name' => trans('assess') . L('group')];
+        $whereInfo['start_time']  = ['type' => 'time', 'name' => trans('add') . L('time')];
         $whereInfo['is_enable']   = ['type'  => 'select',
-                                     'name'  => L('yes') . L('no') . L('enable'),
-                                     'value' => [1 => L('enable'), 2 => L('disable')]];
+                                     'name'  => trans('yes') . L('no') . L('enable'),
+                                     'value' => [1 => trans('enable'), 2 => L('disable')]];
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -51,7 +51,7 @@ class Assess extends Backend
         $batchHandle['del']      = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', L('assess') . L('management'));
+        $this->assign('title', trans('assess') . L('management'));
         $this->display();
     }
 
@@ -63,15 +63,15 @@ class Assess extends Backend
             $data        = $this->makeData();
             $resultAdd   = $AssessModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(L('assess') . L('add') . L('success'), U('index'));
+                $this->success(trans('assess') . L('add') . L('success'), route('index'));
 
                 return;
             } else {
-                $this->error(L('assess') . L('add') . L('error'), U('add'));
+                $this->error(trans('assess') . L('add') . L('error'), route('add'));
             }
         }
 
-        $this->assign('title', L('assess') . L('add'));
+        $this->assign('title', trans('assess') . L('add'));
         $this->display('addedit');
     }
 
@@ -80,7 +80,7 @@ class Assess extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $AssessModel = D('Assess');
@@ -88,12 +88,12 @@ class Assess extends Backend
             $data       = $this->makeData();
             $resultEdit = $AssessModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(L('assess') . L('edit') . L('success'), U('index'));
+                $this->success(trans('assess') . L('edit') . L('success'), route('index'));
 
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? U('index') : U('edit', ['id' => $id]);
-                $this->error(L('assess') . L('edit') . L('error'), $errorGoLink);
+                $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
+                $this->error(trans('assess') . L('edit') . L('error'), $errorGoLink);
             }
         }
 
@@ -102,7 +102,7 @@ class Assess extends Backend
         $editInfo['group_name'] = $MemberGroupModel->mFindColumn($editInfo['group_level'], 'name');
         $this->assign('edit_info', $editInfo);
 
-        $this->assign('title', L('assess') . L('edit'));
+        $this->assign('title', trans('assess') . L('edit'));
         $this->display('addedit');
     }
 
@@ -111,17 +111,17 @@ class Assess extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $AssessModel = D('Assess');
         $resultDel   = $AssessModel->mDel($id);
         if ($resultDel) {
-            $this->success(L('assess') . L('del') . L('success'), U('index'));
+            $this->success(trans('assess') . L('del') . L('success'), route('index'));
 
             return;
         } else {
-            $this->error(L('assess') . L('del') . L('error'), U('index'));
+            $this->error(trans('assess') . L('del') . L('error'), route('index'));
         }
     }
 

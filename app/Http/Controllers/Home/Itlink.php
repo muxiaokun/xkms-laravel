@@ -11,7 +11,7 @@ class Itlink extends Frontend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('itlink') . L('id') . L('error'), U('Index/index'));
+            $this->error(trans('itlink') . L('id') . L('error'), route('Index/index'));
         }
 
         $link        = I('link');

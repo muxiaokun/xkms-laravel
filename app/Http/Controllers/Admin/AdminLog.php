@@ -37,9 +37,9 @@ class AdminLog extends Backend
 
         //初始化where_info
         $whereInfo                    = array();
-        $whereInfo['add_time']        = array('type' => 'time', 'name' => L('add') . L('time'));
-        $whereInfo['admin_id']        = array('type' => 'input', 'name' => L('admin') . L('name'));
-        $whereInfo['controller_name'] = array('type' => 'input', 'name' => L('controller') . L('name'));
+        $whereInfo['add_time']        = array('type' => 'time', 'name' => trans('add') . L('time'));
+        $whereInfo['admin_id']        = array('type' => 'input', 'name' => trans('admin') . L('name'));
+        $whereInfo['controller_name'] = array('type' => 'input', 'name' => trans('controller') . L('name'));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -47,7 +47,7 @@ class AdminLog extends Backend
         $batchHandle['del'] = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', L('admin') . L('log') . L('management'));
+        $this->assign('title', trans('admin') . L('log') . L('management'));
         $this->display();
     }
 
@@ -56,15 +56,15 @@ class AdminLog extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $AdminLogModel = D('AdminLog');
         $resultDel    = $AdminLogModel->mDel($id);
         if ($resultDel) {
-            $this->success(L('log') . L('del') . L('success'), U('index'));
+            $this->success(trans('log') . L('del') . L('success'), route('index'));
         } else {
-            $this->error(L('log') . L('del') . L('error'), U('index'));
+            $this->error(trans('log') . L('del') . L('error'), route('index'));
         }
     }
 
@@ -72,15 +72,15 @@ class AdminLog extends Backend
     public function del_all()
     {
         if (session('backend_info.id') != 1) {
-            $this->error('only ROOT privilege', U('index'));
+            $this->error('only ROOT privilege', route('index'));
         }
 
         $AdminLogModel = D('AdminLog');
         $resultDel    = $AdminLogModel->mDel_all();
         if ($resultDel) {
-            $this->success(L('log') . L('del') . L('success'), U('index'));
+            $this->success(trans('log') . L('del') . L('success'), route('index'));
         } else {
-            $this->error(L('log') . L('del') . L('error'), U('index'));
+            $this->error(trans('log') . L('del') . L('error'), route('index'));
         }
     }
 

@@ -22,7 +22,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.permit') }}{{ trans('common.controller') }} A,B</label>
                             <div class="col-sm-7">
-                                <input type="text" name="COMMENT_ALLOW" value="{:C('COMMENT_ALLOW')}" class="form-control">
+                                <input type="text" name="COMMENT_ALLOW" value="{{ config('COMMENT_ALLOW') }}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.comment') }}{{ trans('common.time') }}{{ trans('common.interval') }}({{ trans('common.second') }})</label>
                             <div class="col-sm-7">
-                                <input type="text" name="COMMENT_INTERVAL" value="{:C('COMMENT_INTERVAL')}" class="form-control" onKeyup="M_in_int(this);">
+                                <input type="text" name="COMMENT_INTERVAL" value="{{ config('COMMENT_INTERVAL') }}" class="form-control" onKeyup="M_in_int(this);">
                             </div>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
                     <div class="col-sm-12 text-center">
                         <button type="submit" class="btn btn-info">{{ trans('common.save') }}</button>
                         <input class="btn btn-default" type="reset" value="{{ trans('common.reset') }}">
-                        <a href="{:U('index')}" class="btn btn-default">
+                        <a href="{{ route('index') }}" class="btn btn-default">
                             {{ trans('common.goback') }}
                         </a>
                     </div>

@@ -4,10 +4,10 @@
             $(function(){
                 var doc = $(document);
                 doc.on('scroll',function(event,a1,a2){
-                    var progress = doc.scrollTop()/doc.height() * {:C('setp_progress.0')};
+                    var progress = doc.scrollTop()/doc.height() * {{ config('install.setp_progress.0') }};
                     if(parent && parent.move_progress)
                     {
-                        parent.move_progress(progress);
+                        parent.move_progress(progress,{{ config('install.setp_progress.1') }});
                     }
                 });
             });
@@ -16,7 +16,7 @@
         <section class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    {{ $article }}
+                    <pre>{{ $article }}</pre>
                 </div>
                 <div class="col-sm-12 text-center">
                     <div class="checkbox">
@@ -24,8 +24,8 @@
                             <input type="checkbox" value="1" id="checkGnu" />{{ trans('install.setp0_commont1') }}
                         </label>
                     </div>
-                    <a class="btn btn-lg btn-primary" onClick="return check_checkBoxVal('#checkGnu','{{ trans('common.setp0_commont2') }}')" href="{:U('setp1')}">
-                        {{ trans('common.setp0') }}
+                    <a class="btn btn-lg btn-primary" onClick="return check_checkBoxVal('#checkGnu','{{ trans('install.setp0_commont2') }}')" href="{{ route('Install::setp1') }}">
+                        {{ trans('install.setp0') }}
                     </a>
                 </div>
             </div>

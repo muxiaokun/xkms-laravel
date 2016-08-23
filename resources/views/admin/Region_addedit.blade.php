@@ -10,7 +10,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.region_name') }}</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" placeholder="{{ trans('common.region_name') }}" name="region_name" value="{$edit_info.region_name}" onchange="M_zh2py(this,'input[name=short_name]')"  link="{:U('ajax_api')}"/>
+<input type="text" class="form-control" placeholder="{{ trans('common.region_name') }}" name="region_name" value="{$edit_info.region_name}" onchange="M_zh2py(this,'input[name=short_name]')"  link="{{ route('ajax_api') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                                                 <if condition="$edit_info['parent_id']">'def_data':{'value':{$edit_info.parent_id},'html':'{$edit_info.parent_name}'},</if>
                                                 'edit_obj':$('#region_list'),
                                                 'post_name':'parent_id',
-                                                'ajax_url':'{:U('ajax_api')}',
+                                                'ajax_url':'{{ route('ajax_api') }}',
                                                 'field':'parent_id'
                                             };
                                             new M_select_add(config);
@@ -104,7 +104,7 @@
                                     {{ trans('common.edit') }}
                                 </if>
                             </button>
-                            <a href="{:U('index')}" class="btn btn-default">
+                            <a href="{{ route('index') }}" class="btn btn-default">
                                     {{ trans('common.goback') }}
                             </a>
                         </div>

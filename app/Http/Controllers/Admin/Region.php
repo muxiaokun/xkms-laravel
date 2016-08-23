@@ -32,10 +32,10 @@ class Region extends Backend
         $this->assign('region_list_count', $RegionModel->mGetPageCount($where));
 
         //初始化where_info
-        $whereInfo['region_name'] = array('type' => 'input', 'name' => L('region_name'));
-        $whereInfo['short_spell'] = array('type' => 'input', 'name' => L('short_spell'));
-        $whereInfo['areacode']    = array('type' => 'input', 'name' => L('areacode'));
-        $whereInfo['postcode']    = array('type' => 'input', 'name' => L('postcode'));
+        $whereInfo['region_name'] = array('type' => 'input', 'name' => trans('region_name'));
+        $whereInfo['short_spell'] = array('type' => 'input', 'name' => trans('short_spell'));
+        $whereInfo['areacode']    = array('type' => 'input', 'name' => trans('areacode'));
+        $whereInfo['postcode']    = array('type' => 'input', 'name' => trans('postcode'));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -45,7 +45,7 @@ class Region extends Backend
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', L('region') . L('management'));
+        $this->assign('title', trans('region') . L('management'));
         $this->display();
     }
 
@@ -57,14 +57,14 @@ class Region extends Backend
             $data        = $this->makeData();
             $resultAdd  = $RegionModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(L('region') . L('add') . L('success'), U('index'));
+                $this->success(trans('region') . L('add') . L('success'), route('index'));
                 return;
             } else {
-                $this->error(L('region') . L('add') . L('error'), U('add'));
+                $this->error(trans('region') . L('add') . L('error'), route('add'));
             }
         }
 
-        $this->assign('title', L('region') . L('add'));
+        $this->assign('title', trans('region') . L('add'));
         $this->display('addedit');
     }
 
@@ -73,7 +73,7 @@ class Region extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $RegionModel = D('Region');
@@ -81,18 +81,18 @@ class Region extends Backend
             $data        = $this->makeData();
             $resultEdit = $RegionModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(L('region') . L('edit') . L('success'), U('index'));
+                $this->success(trans('region') . L('edit') . L('success'), route('index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-                $this->error(L('region') . L('edit') . L('error'), $errorGoLink);
+                $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
+                $this->error(trans('region') . L('edit') . L('error'), $errorGoLink);
             }
         }
 
         $editInfo                = $RegionModel->mFind($id);
         $editInfo['parent_name'] = $RegionModel->mFindColumn($editInfo['parent_id'], 'region_name');
         $this->assign('edit_info', $editInfo);
-        $this->assign('title', L('region') . L('edit'));
+        $this->assign('title', trans('region') . L('edit'));
         $this->display('addedit');
     }
 
@@ -101,16 +101,16 @@ class Region extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $RegionModel = D('Region');
         $resultDel  = $RegionModel->mDel($id);
         if ($resultDel) {
-            $this->success(L('region') . L('del') . L('success'), U('index'));
+            $this->success(trans('region') . L('del') . L('success'), route('index'));
             return;
         } else {
-            $this->error(L('region') . L('del') . L('error'), U('index'));
+            $this->error(trans('region') . L('del') . L('error'), route('index'));
         }
     }
 

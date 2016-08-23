@@ -12,10 +12,10 @@
         <![endif]-->
     </head>
     <frameset  rows="50,*" framespacing="0" border="0">
-        <frame id="top_nav" name="top_nav" src="{:U('Index/top_nav')}" frameborder="no" scrolling="no" />
+        <frame id="top_nav" name="top_nav" src="{{ route('Index/top_nav') }}" frameborder="no" scrolling="no" />
         <frameset rows="*" cols="220,*" framespacing="0" border="0" >
-            <frame id="left_nav" name="left_nav" src="{:U('Index/left_nav',array('menu_type'=>$default_menu_type))}" frameborder="no" scrolling="yes" />
-            <frame id="main" name="main" src="{:U('Index/main')}" frameborder="no" scrolling="yes" />
+            <frame id="left_nav" name="left_nav" src="{{ route('Index/left_nav',array('menu_type'=>$default_menu_type)) }}" frameborder="no" scrolling="yes" />
+            <frame id="main" name="main" src="{{ route('Index/main') }}" frameborder="no" scrolling="yes" />
         </frameset>
     </frameset>
 </html>

@@ -24,7 +24,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.before') }}{{ trans('common.later') }}{{ trans('common.piece') }}{{ trans('common.limit') }}</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_ARTICLE_PN_LIMIT" value="{:C('SYS_ARTICLE_PN_LIMIT')}" class="form-control" onKeyup="M_in_int(this);">
+                                <input type="text" name="SYS_ARTICLE_PN_LIMIT" value="{{ config('SYS_ARTICLE_PN_LIMIT') }}" class="form-control" onKeyup="M_in_int(this);">
                             </div>
                         </div>
                     </div>
@@ -35,7 +35,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.article') }}{{ trans('common.thumb') }}{{ trans('common.width') }}PX</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_ARTICLE_THUMB_WIDTH" value="{:C('SYS_ARTICLE_THUMB_WIDTH')}" class="form-control" onKeyup="M_in_int(this);">
+                                <input type="text" name="SYS_ARTICLE_THUMB_WIDTH" value="{{ config('SYS_ARTICLE_THUMB_WIDTH') }}" class="form-control" onKeyup="M_in_int(this);">
                             </div>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.article') }}{{ trans('common.thumb') }}{{ trans('common.height') }}PX</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_ARTICLE_THUMB_HEIGHT" value="{:C('SYS_ARTICLE_THUMB_HEIGHT')}" class="form-control" onKeyup="M_in_int(this);">
+                                <input type="text" name="SYS_ARTICLE_THUMB_HEIGHT" value="{{ config('SYS_ARTICLE_THUMB_HEIGHT') }}" class="form-control" onKeyup="M_in_int(this);">
                             </div>
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                     <div class="col-sm-12 text-center">
                         <button type="submit" class="btn btn-info">{{ trans('common.save') }}</button>
                         <input class="btn btn-default" type="reset" value="{{ trans('common.reset') }}">
-                        <a href="{:U('main')}" class="btn btn-default">
+                        <a href="{{ route('main') }}" class="btn btn-default">
                             {{ trans('common.goback') }}
                         </a>
                     </div>

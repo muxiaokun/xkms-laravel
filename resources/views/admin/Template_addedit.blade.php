@@ -12,9 +12,9 @@
                                 <label class="col-sm-4 control-label">
                                     {{ trans('common.template') }}{{ trans('common.file') }}{{ trans('common.name') }}
                                     (<if condition="'/' eq C('TMPL_FILE_DEPR')">
-                                        controller/file_name{:C('TMPL_TEMPLATE_SUFFIX')}
+                                        controller/file_name{{ config('TMPL_TEMPLATE_SUFFIX') }}
                                     <else/>
-                                        file_name{:C('TMPL_TEMPLATE_SUFFIX')}
+                                        file_name{{ config('TMPL_TEMPLATE_SUFFIX') }}
                                     </if>)
                                 </label>
                                 <div class="col-sm-4">
@@ -34,7 +34,7 @@
                              <button type="submit" class="btn btn-info">
                                 {{ trans('common.save') }}
                              </button>
-                            <a href="{:U('Index/main')}" class="btn btn-default">
+                            <a href="{{ route('Index/main') }}" class="btn btn-default">
                                 {{ trans('common.goback') }}
                             </a>
                         </div>

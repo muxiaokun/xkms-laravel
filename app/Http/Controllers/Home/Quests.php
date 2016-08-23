@@ -21,7 +21,7 @@ class Quests extends FrontendMember
         $this->assign('quests_list', $questsList);
         $this->assign('quests_list_count', $QuestsModel->mGetPageCount($where));
 
-        $this->assign('title', L('quests'));
+        $this->assign('title', trans('quests'));
         $this->display();
     }
 
@@ -31,7 +31,7 @@ class Quests extends FrontendMember
         //初始化参数
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('Quests/index'));
+            $this->error(trans('id') . L('error'), route('Quests/index'));
         }
 
         $QuestsModel = D('Quests');
@@ -39,14 +39,14 @@ class Quests extends FrontendMember
         //检测是否能够提交
         $currentTime = time();
         if ($questsInfo['start_time'] < $currentTime && $questsInfo['end_time'] < $currentTime) {
-            $this->error(L('start') . L('end') . L('time') . L('error'), U('Quests/index'));
+            $this->error(trans('start') . L('end') . L('time') . L('error'), route('Quests/index'));
         }
         if (0 != $questsInfo['max_portion'] && $questsInfo['current_portion'] >= $questsInfo['max_portion']) {
-            $this->error(L('gt') . L('max') . L('portion'), U('Quests/index'));
+            $this->error(trans('gt') . L('max') . L('portion'), route('Quests/index'));
         }
         $accessInfo = I('access_info');
         if (isset($questsInfo['access_info']) && $questsInfo['access_info'] != $accessInfo) {
-            $this->error(L('access') . L('pass') . L('error'), U('Quests/index'));
+            $this->error(trans('access') . L('pass') . L('error'), route('Quests/index'));
         }
         //初始化问题
         $questsQuestList = json_decode($questsInfo['ext_info'], true);
@@ -73,16 +73,16 @@ class Quests extends FrontendMember
             $resultAdd        = $QuestsAnswerModel->mAdd($data);
             if ($resultAdd) {
                 $QuestsModel->where(array('id' => $questsInfo['id']))->setInc('current_portion');
-                $this->success(L('answer') . L('add') . L('success'), U('Quests/index'));
+                $this->success(trans('answer') . L('add') . L('success'), route('Quests/index'));
             } else {
-                $this->error(L('answer') . L('add') . L('error'), U('index'));
+                $this->error(trans('answer') . L('add') . L('error'), route('index'));
             }
             return;
         }
 
         $this->assign('quests_quest_list', $questsQuestList);
         $this->assign('quests_info', $questsInfo);
-        $this->assign('title', L('write') . L('quests'));
+        $this->assign('title', trans('write') . L('quests'));
         $this->display();
     }
 }

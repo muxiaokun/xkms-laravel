@@ -12,7 +12,7 @@ class AssessLog extends Backend
     {
         $id = I('get.id');
         if (!$id) {
-            $this->error(L('assess') . L('id') . L('error'), U('Assess/index'));
+            $this->error(trans('assess') . L('id') . L('error'), route('Assess/index'));
         }
 
         $AssessModel                  = D('Assess');
@@ -62,7 +62,7 @@ class AssessLog extends Backend
         $batchHandle['del'] = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', L('assess') . L('statistics'));
+        $this->assign('title', trans('assess') . L('statistics'));
         $this->display();
     }
 
@@ -71,16 +71,16 @@ class AssessLog extends Backend
     {
         $id = I('get.id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('edit', array('id' => $id)));
+            $this->error(trans('id') . L('error'), route('edit', array('id' => $id)));
         }
 
         $AssessLogModel = D('AssessLog');
         $resultDel     = $AssessLogModel->mDel($id);
         if ($resultDel) {
-            $this->success(L('assess') . L('del') . L('success'), U('Assess/index'));
+            $this->success(trans('assess') . L('del') . L('success'), route('Assess/index'));
             return;
         } else {
-            $this->error(L('assess') . L('del') . L('error'), U('edit', array('id' => $id)));
+            $this->error(trans('assess') . L('del') . L('error'), route('edit', array('id' => $id)));
         }
     }
 

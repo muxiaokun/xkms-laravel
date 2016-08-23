@@ -2,7 +2,7 @@
             $(function(){
                 if(parent && parent.move_progress)
                 {
-                    parent.move_progress({:C('setp_progress.1')});
+                    parent.move_progress({{ config('install.setp_progress.1') }});
                 }
             });
         </script>
@@ -42,14 +42,14 @@
                 </form>
                 </div>
                 <div class="col-sm-12 text-center">
-                    <a class="btn btn-lg btn-primary mt20 mr80" href="{:U('')}">{{ trans('common.previous') }}{{ trans('common.setp') }}</a>
+                    <a class="btn btn-lg btn-primary mt20 mr80" href="{{ route('') }}">{{ trans('common.previous') }}{{ trans('common.setp') }}</a>
                     <a id="mysql_config_btn" class="btn btn-lg btn-primary mt20" href="javascript:void(0);">{{ trans('common.setp1') }}</a>
                     <script type="text/javascript">
                         var config = {
                             'out_obj':'#mysql_config_btn',
                             'edit_obj':'#mysql_config',
-                            'next_link':'{:U('setp2')}',
-                            'ajax_url':'{:U('ajax_api')}'
+                            'next_link':'{{ route('setp2') }}',
+                            'ajax_url':'{{ route('ajax_api') }}'
                         }
                         new M_check_mysql(config);
                     </script>

@@ -91,7 +91,7 @@
                     <div class="col-sm-12 text-center">
                         <button type="submit" class="btn btn-info">{{ trans('common.send') }}</button>
                         <input class="btn btn-default" type="reset" value="{{ trans('common.reset') }}">
-                        <a href="{:U('index')}" class="btn btn-default">
+                        <a href="{{ route('index') }}" class="btn btn-default">
                                 {{ trans('common.goback') }}
                         </a>
                     </div>

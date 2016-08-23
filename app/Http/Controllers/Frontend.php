@@ -22,7 +22,7 @@ class Frontend extends Common
     public function verifyImg()
     {
         //查看配置是否需要验证码
-        if (!C('SYS_FRONTEND_VERIFY')) {
+        if (!config('SYS_FRONTEND_VERIFY')) {
             return;
         }
 
@@ -33,7 +33,7 @@ class Frontend extends Common
     protected function verifyCheck($code, $t = '')
     {
         //查看配置是否需要验证码
-        if (!C('SYS_FRONTEND_VERIFY')) {
+        if (!config('SYS_FRONTEND_VERIFY')) {
             return true;
         }
 
@@ -51,8 +51,8 @@ class Frontend extends Common
             $controllerGroup && $allController = array_merge($allController, $controllerGroup);
         }
         $rePosition = array(array(
-            'name' => L('homepage'),
-            'link' => U(C('DEFAULT_MODULE') . '/' . C('DEFAULT_CONTROLLER') . '/' . C('DEFAULT_ACTION')),
+            'name' => trans('homepage'),
+            'link' => route(config('DEFAULT_MODULE') . '/' . C('DEFAULT_CONTROLLER') . '/' . C('DEFAULT_ACTION')),
         ));
         $positionName = $allController[CONTROLLER_NAME][ACTION_NAME];
         if ($positionName) {
@@ -61,7 +61,7 @@ class Frontend extends Common
             if (ACTION_NAME != 'index' && $allControl[CONTROLLER_NAME]['index']) {
                 $rePosition[] = array(
                     'name' => $allControl[CONTROLLER_NAME]['index'],
-                    'link' => U(MODULE_NAME . '/' . CONTROLLER_NAME . '/index'),
+                    'link' => route(MODULE_NAME . '/' . CONTROLLER_NAME . '/index'),
                 );
             }
             $rePosition[] = array(
@@ -97,8 +97,8 @@ class Frontend extends Common
 
         $MemberModel = D('Member');
         //检测前台尝试登陆次数
-        $loginNum = C('SYS_FRONTEND_LOGIN_NUM');
-        $lockTime = C('SYS_FRONTEND_LOCK_TIME');
+        $loginNum = config('SYS_FRONTEND_LOGIN_NUM');
+        $lockTime = config('SYS_FRONTEND_LOCK_TIME');
         if (0 != $loginNum) {
             $loginInfo = $MemberModel->mFind($MemberModel->mFindId($userName));
             if (0 != $loginInfo['lock_time'] && $loginInfo['lock_time'] > (time() - $lockTime)) {

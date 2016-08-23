@@ -9,19 +9,19 @@ class FrontendMember extends Frontend
     {
         parent::_initialize();
         //是否启用了会员类的控制器
-        if (!C('SYS_MEMBER_ENABLE')) {
-            $this->error(L('member') . L('none') . L('enable'), U('Index/index'));
+        if (!config('SYS_MEMBER_ENABLE')) {
+            $this->error(trans('member') . L('none') . L('enable'), route('Index/index'));
         }
 
         if ($this->isLogin()) {
             $frontendInfo = session('frontend_info');
             //自动登出时间
-            if (time() - C('SYS_FRONTEND_TIMEOUT') < $frontendInfo['login_time']) {
+            if (time() - config('SYS_FRONTEND_TIMEOUT') < $frontendInfo['login_time']) {
                 $frontendInfo['login_time'] = time();
                 session('frontend_info', $frontendInfo);
             } else {
                 $this->doLogout();
-                $this->error(L('login') . L('timeout'), U('Member/Index/index'));
+                $this->error(trans('login') . L('timeout'), route('Member/Index/index'));
             }
 
             //检查管理员或者管理员组权限变动 先检查数量 提高效率
@@ -31,12 +31,12 @@ class FrontendMember extends Frontend
             $memberGroupPrivilege = $MemberGroupModel->mFind_privilege($memberInfo['group_id']);
             if ($frontendInfo['group_privilege'] !== $memberGroupPrivilege) {
                 $this->doLogout();
-                $this->error(L('privilege') . L('change') . L('please') . L('login'), U('Member/index'));
+                $this->error(trans('privilege') . L('change') . L('please') . L('login'), route('Member/index'));
             }
 
             //登录后 检查权限
             if (!$this->_check_privilege()) {
-                $this->error(L('you') . L('none') . L('privilege'));
+                $this->error(trans('you') . L('none') . L('privilege'));
             }
 
             //建立会员中心左侧菜单
@@ -45,7 +45,7 @@ class FrontendMember extends Frontend
             //检测不登陆就可以访问的
             $allowAction['Member'] = array('index', 'login', 'verifyImg', 'ajax_api', 'register');
             if (!in_array(ACTION_NAME, $allowAction[CONTROLLER_NAME])) {
-                $this->error(L('notdoLogin') . L('frontend'), U('Member/index'));
+                $this->error(trans('notdoLogin') . L('frontend'), route('Member/index'));
             }
         }
     }
@@ -75,15 +75,15 @@ class FrontendMember extends Frontend
                     }
 
                     $leftNav[] = array(
-                        'link' => U('Home/' . $controlName . '/' . $actionName),
+                        'link' => route('Home/' . $controlName . '/' . $actionName),
                         'name' => $actionValue,
                     );
                 }
             }
         }
         $leftNav[] = array(
-            'link' => U('Home/Member/logout'),
-            'name' => L('logout') . L('member'),
+            'link' => route('Home/Member/logout'),
+            'name' => trans('logout') . L('member'),
         );
         return $leftNav;
     }

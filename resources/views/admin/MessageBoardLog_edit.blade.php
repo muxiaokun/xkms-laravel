@@ -33,7 +33,7 @@
                         <button type="submit" class="btn btn-info">
                             {{ trans('common.audit') }}
                         </button>
-                        <a href="{:U('index')}" class="btn btn-default">
+                        <a href="{{ route('index') }}" class="btn btn-default">
                             {{ trans('common.goback') }}
                         </a>
                     </div>

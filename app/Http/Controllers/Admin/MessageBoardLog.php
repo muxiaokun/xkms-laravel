@@ -30,17 +30,17 @@ class MessageBoardLog extends Backend
 
         $messageBoardLogList = $MessageBoardLogModel->order('add_time desc')->mSelect($where, true);
         foreach ($messageBoardLogList as &$messageBoardLog) {
-            $messageBoardLog['admin_name']  = ($messageBoardLog['audit_id']) ? $AdminModel->mFindColumn($messageBoardLog['audit_id'], 'admin_name') : L('none') . L('audit');
+            $messageBoardLog['admin_name']  = ($messageBoardLog['audit_id']) ? $AdminModel->mFindColumn($messageBoardLog['audit_id'], 'admin_name') : trans('none') . L('audit');
             $memberName                      = $MemberModel->mFindColumn($messageBoardLog['send_id'], 'member_name');
-            $messageBoardLog['member_name'] = ($memberName) ? $memberName : L('empty');
+            $messageBoardLog['member_name'] = ($memberName) ? $memberName : trans('empty');
         }
         $this->assign('message_board_log_list', $messageBoardLogList);
         $this->assign('message_board_log_list_count', $MessageBoardLogModel->mGetPageCount($where));
 
         //初始化where_info
         $whereInfo             = array();
-        $whereInfo['audit_id'] = array('type' => 'input', 'name' => L('audit') . L('admin') . L('name'));
-        $whereInfo['add_time'] = array('type' => 'time', 'name' => L('send') . L('time'));
+        $whereInfo['audit_id'] = array('type' => 'input', 'name' => trans('audit') . L('admin') . L('name'));
+        $whereInfo['add_time'] = array('type' => 'time', 'name' => trans('send') . L('time'));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -49,7 +49,7 @@ class MessageBoardLog extends Backend
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', L('messageboard') . L('management'));
+        $this->assign('title', trans('messageboard') . L('management'));
         $this->display();
     }
 
@@ -58,7 +58,7 @@ class MessageBoardLog extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $MessageBoardLogModel = D('MessageBoardLog');
@@ -69,11 +69,11 @@ class MessageBoardLog extends Backend
             );
             $resultEdit = $MessageBoardLogModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(L('audit') . L('success'), U('index'));
+                $this->success(trans('audit') . L('success'), route('index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-                $this->error(L('audit') . L('error'), $errorGoLink);
+                $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
+                $this->error(trans('audit') . L('error'), $errorGoLink);
             }
         }
 
@@ -81,13 +81,13 @@ class MessageBoardLog extends Backend
         $MemberModel = D('Member');
 
         $editInfo                = $MessageBoardLogModel->mFind($id);
-        $editInfo['admin_name']  = ($editInfo['audit_id']) ? $AdminModel->mFindColumn($editInfo['audit_id'], 'admin_name') : L('none') . L('audit');
+        $editInfo['admin_name']  = ($editInfo['audit_id']) ? $AdminModel->mFindColumn($editInfo['audit_id'], 'admin_name') : trans('none') . L('audit');
         $memberName              = $MemberModel->mFindColumn($editInfo['send_id'], 'member_name');
-        $editInfo['member_name'] = ($memberName) ? $memberName : L('empty');
+        $editInfo['member_name'] = ($memberName) ? $memberName : trans('empty');
         $editInfo['send_info']   = json_decode($editInfo['send_info'], true);
         $this->assign('edit_info', $editInfo);
 
-        $this->assign('title', L('messageboard') . L('audit'));
+        $this->assign('title', trans('messageboard') . L('audit'));
         $this->display();
     }
 
@@ -96,16 +96,16 @@ class MessageBoardLog extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $MessageBoardLogModel = D('MessageBoardLog');
         $resultDel           = $MessageBoardLogModel->mDel($id);
         if ($resultDel) {
-            $this->success(L('messageboard') . L('log') . L('del') . L('success'), U('index'));
+            $this->success(trans('messageboard') . L('log') . L('del') . L('success'), route('index'));
             return;
         } else {
-            $this->error(L('messageboard') . L('log') . L('del') . L('error'), U('index'));
+            $this->error(trans('messageboard') . L('log') . L('del') . L('error'), route('index'));
         }
     }
 }

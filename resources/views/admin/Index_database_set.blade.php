@@ -9,7 +9,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{{ trans('common.host') }}</label>
                             <div class="col-sm-7">
-                                <input type="text" name="DB_HOST" value="{:C('DB_HOST')}" class="form-control">
+                                <input type="text" name="DB_HOST" value="{{ config('DB_HOST') }}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -17,7 +17,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{{ trans('common.database') }}</label>
                             <div class="col-sm-7">
-                                <input type="text" name="DB_NAME" value="{:C('DB_NAME')}" class="form-control">
+                                <input type="text" name="DB_NAME" value="{{ config('DB_NAME') }}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -27,7 +27,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{{ trans('common.user') }}</label>
                             <div class="col-sm-7">
-                                <input type="text" name="DB_USER" value="{:C('DB_USER')}" class="form-control">
+                                <input type="text" name="DB_USER" value="{{ config('DB_USER') }}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{{ trans('common.port') }}</label>
                             <div class="col-sm-7">
-                                <input type="text" name="DB_PORT" value="{:C('DB_PORT')}" class="form-control">
+                                <input type="text" name="DB_PORT" value="{{ config('DB_PORT') }}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{{ trans('common.prefix') }}</label>
                             <div class="col-sm-7">
-                                <input type="text" name="DB_PREFIX" value="{:C('DB_PREFIX')}" class="form-control">
+                                <input type="text" name="DB_PREFIX" value="{{ config('DB_PREFIX') }}" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{{ trans('common.backup') }}{{ trans('common.database') }}</label>
                             <div class="col-sm-7">
-<a class="btn btn-sm btn-success" href="{:U('database_set',array('backup'=>'1'))}" target="_blank">{{ trans('common.download') }}{{ trans('common.database') }}{{ trans('common.backup') }}</a>
+<a class="btn btn-sm btn-success" href="{{ route('database_set',array('backup'=>'1')) }}" target="_blank">{{ trans('common.download') }}{{ trans('common.database') }}{{ trans('common.backup') }}</a>
                             </div>
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                     <div class="col-sm-offset-5">
                         <button type="submit" class="btn btn-info">{{ trans('common.save') }}</button>
                         <input class="btn btn-default" type="reset" value="{{ trans('common.reset') }}">
-                        <a href="{:U('main')}" class="btn btn-default">
+                        <a href="{{ route('main') }}" class="btn btn-default">
                             {{ trans('common.goback') }}
                         </a>
                     </div>

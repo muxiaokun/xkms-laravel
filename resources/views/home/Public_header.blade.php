@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><if condition="$title">{{ $title }} {{ trans('common.dash') }}</if> {:C('SITE_TITLE')}</title>
+        <title><if condition="$title">{{ $title }} {{ trans('common.dash') }}</if> {{ config('SITE_TITLE') }}</title>
         <link href="__ROOT__/favicon.ico" type="image/ico" rel="shortcut icon" />
         <meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <if condition="C('SITE_KEYWORDS')"><meta name="keywords" content="{:C('SITE_KEYWORDS')}" /></if>
-        <if condition="C('SITE_KEYWORDS')"><meta name="description" content="{:C('SITE_DESCRIPTION')}" /></if>
+        <if condition="C('SITE_KEYWORDS')"><meta name="keywords" content="{{ config('SITE_KEYWORDS') }}" /></if>
+        <if condition="C('SITE_KEYWORDS')"><meta name="description" content="{{ config('SITE_DESCRIPTION') }}" /></if>
         <if condition="L('pfcopyright')"><meta name="author" content="{:L('pfcopyright',array('app_name'=>APP_NAME))}" /></if>
         <import type="css" file="css/jquery-ui#min" />
         <import type="css" file="css/bootstrap#min" />

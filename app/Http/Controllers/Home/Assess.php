@@ -25,17 +25,17 @@ class Assess extends FrontendMember
         foreach ($assessList as &$assess) {
             switch ($assess['target']) {
                 case 'member':
-                    $assess['target_name'] = L('member');
+                    $assess['target_name'] = trans('member');
                     break;
                 case 'member_group':
-                    $assess['target_name'] = L('member') . L('group');
+                    $assess['target_name'] = trans('member') . L('group');
                     break;
             }
         }
         $this->assign('assess_list', $assessList);
         $this->assign('assess_list_conut', $AssessModel->mGetPageCount($where));
 
-        $this->assign('title', L('assess'));
+        $this->assign('title', trans('assess'));
         $this->display();
     }
 
@@ -45,7 +45,7 @@ class Assess extends FrontendMember
         //初始化和权限检测
         $id = I('get.id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $AssessModel  = D('Assess');
@@ -57,7 +57,7 @@ class Assess extends FrontendMember
             $currentTime < $assessInfo['start_time'] &&
             $currentTime > $assessInfo['end_time']
         ) {
-            $this->error(L('you') . L('none') . L('privilege') . L('assess'), U('index'));
+            $this->error(trans('you') . L('none') . L('privilege') . L('assess'), route('index'));
         }
 
         if (IS_POST) {
@@ -66,10 +66,10 @@ class Assess extends FrontendMember
             $AssessLogMode = D('AssessLog');
             $resultAdd    = $AssessLogMode->mAdd($data);
             if ($resultAdd) {
-                $this->success(L('grade') . L('success'), U('index'));
+                $this->success(trans('grade') . L('success'), route('index'));
                 return;
             } else {
-                $this->error(L('grade') . L('error'), U('add'));
+                $this->error(trans('grade') . L('error'), route('add'));
             }
         }
 
@@ -96,7 +96,7 @@ class Assess extends FrontendMember
             case 're_grade_id':
                 //不能为空
                 if ('' == $data['re_grade_id']) {
-                    $result['info'] = L('quest_error1');
+                    $result['info'] = trans('quest_error1');
                 }
                 break;
         }
@@ -143,7 +143,7 @@ class Assess extends FrontendMember
         $score       = I('score');
 
         //检测初始化参数是否合法
-        $errorGoLink = (!$id) ? U('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));
+        $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));
         if ('add' == ACTION_NAME || null !== $reGradeId) {
             $result = $this->doValidateForm('re_grade_id', array('re_grade_id' => $reGradeId));
             if (!$result['status']) {

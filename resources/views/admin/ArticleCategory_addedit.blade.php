@@ -152,7 +152,7 @@
                                         'out_obj':$('#manage_id_list'),
                                         'edit_obj':$('#admin_user_list'),
                                         'post_name':'manage_id[]',
-                                        'ajax_url':'{:U('ajax_api')}',
+                                        'ajax_url':'{{ route('ajax_api') }}',
                                         'field':'manage_id'
                                     };
                                     new M_select_add(config);
@@ -175,7 +175,7 @@
                                         'out_obj':$('#manage_group_id_list'),
                                         'edit_obj':$('#admin_group_list'),
                                         'post_name':'manage_group_id[]',
-                                        'ajax_url':'{:U('ajax_api')}',
+                                        'ajax_url':'{{ route('ajax_api') }}',
                                         'field':'manage_group_id'
                                     };
                                     new M_select_add(config);
@@ -198,7 +198,7 @@
                                         'out_obj':$('#access_group_id_list'),
                                         'edit_obj':$('#access_group_list'),
                                         'post_name':'access_group_id[]',
-                                        'ajax_url':'{:U('ajax_api')}',
+                                        'ajax_url':'{{ route('ajax_api') }}',
                                         'field':'access_group_id'
                                     };
                                     new M_select_add(config);
@@ -282,7 +282,7 @@
                                     {{ trans('common.edit') }}
                                 </if>
                             </button>
-                            <a href="{:U('index')}" class="btn btn-default">
+                            <a href="{{ route('index') }}" class="btn btn-default">
                                     {{ trans('common.goback') }}
                             </a>
                         </div>

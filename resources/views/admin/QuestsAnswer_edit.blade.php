@@ -2,7 +2,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 {{ $title }}<a href="javascript:window.print()">打印</a>
-                <a class="fr fs10" href="{:U('Quests/index',array('id'=>I('id')))}">{{ trans('common.goback') }}</a>
+                <a class="fr fs10" href="{{ route('Quests/index',array('id'=>I('id'))) }}">{{ trans('common.goback') }}</a>
             </div>
             <div class="panel-body">
                 <foreach name="quests_quest_list" item="quest">

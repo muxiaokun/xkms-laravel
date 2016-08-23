@@ -12,7 +12,7 @@
                         <th>{{ trans('common.receive') }}{{ trans('common.info') }}</th>
                         <td class="nowrap">
                             <if condition="$batch_handle['add']">
-                                <a class="btn btn-xs btn-success" href="{:U('add')}">{{ trans('common.send') }}{{ trans('common.message') }}</a>
+                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">{{ trans('common.send') }}{{ trans('common.message') }}</a>
                             </if>
                         </td>
                     </tr>
@@ -51,14 +51,14 @@
                                 <if condition="$batch_handle['add']">
                                     &nbsp;|&nbsp;
                                     <if condition="0 lt $message['send_id']">
-                                    <a class="btn btn-xs btn-primary" href="{:U('add',array('receive_id'=>$message['send_id']))}">
+                                    <a class="btn btn-xs btn-primary" href="{{ route('add',array('receive_id'=>$message['send_id'])) }}">
                                         {{ trans('common.reply') }}{{ trans('common.message') }}
                                     </a>
                                     </if>
                                 </if>
                                 <if condition="$batch_handle['del']">
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}?','{:U('del',array('id'=>$message['id']))}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}?','{{ route('del',array('id'=>$message['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 </if>
@@ -78,7 +78,7 @@
                                     'type_data':Array()
                                 };
                                 <if condition="$batch_handle['del']">
-                                    config.type_data.push({'name':$Think.lang.del,'post_link':'{:U('del')}' });
+                                    config.type_data.push({'name':$Think.lang.del,'post_link':'{{ route('del') }}' });
                                 </if>
                                 new M_batch_handle(config);
                             });

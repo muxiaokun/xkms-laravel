@@ -11,7 +11,7 @@
                             'check_list':{
                                 'name':Array('name','id')
                             },
-                            'ajax_url':"{:U('ajax_api')}",
+                            'ajax_url':"{{ route('ajax_api') }}",
                         };
                         new M_valid(config);
                     });
@@ -70,7 +70,7 @@
                                         'out_obj':$('#manage_id_list'),
                                         'edit_obj':$('#member_user_list'),
                                         'post_name':'manage_id[]',
-                                        'ajax_url':'{:U('ajax_api')}',
+                                        'ajax_url':'{{ route('ajax_api') }}',
                                         'field':'manage_id'
                                     };
                                     new M_select_add(config);
@@ -87,7 +87,7 @@
                                     {{ trans('common.edit') }}
                                 </if>
                             </button>
-                            <a href="{:U('index')}" class="btn btn-default">
+                            <a href="{{ route('index') }}" class="btn btn-default">
                                     {{ trans('common.goback') }}
                             </a>
                         </div>

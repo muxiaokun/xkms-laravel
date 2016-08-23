@@ -17,7 +17,7 @@
                         <th>{{ trans('common.click') }}{{ trans('common.number') }}</th>
                         <td class="nowrap">
                             <if condition="$batch_handle['add']">
-                                <a class="btn btn-xs btn-success" href="{:U('add')}">{{ trans('common.add') }}{{ trans('common.article') }}</a>
+                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">{{ trans('common.add') }}{{ trans('common.article') }}</a>
                             </if>
                         </td>
                     </tr>
@@ -30,7 +30,7 @@
                             <td>
                                 {$article.title}
                             </td>
-                            <td onClick="M_line_edit(this);" field_id="{$article.id}" field="sort" link="{:U('ajax_api')}">
+                            <td onClick="M_line_edit(this);" field_id="{$article.id}" field="sort" link="{{ route('ajax_api') }}">
                                 {$article.sort}
                             </td>
                             <td>
@@ -52,18 +52,18 @@
                                 {$article.hits}
                             </td>
                             <td class="nowrap">
-                                <a class="btn btn-xs btn-primary" target="_blank" href="{:U('Home/Article/article',array('id'=>$article['id']))}">
+                                <a class="btn btn-xs btn-primary" target="_blank" href="{{ route('Home/Article/article',array('id'=>$article['id'])) }}">
                                     {{ trans('common.look') }}
                                 </a>
                                 <if condition="$batch_handle['edit']">
                                     &nbsp;|&nbsp;
-                                    <a class="btn btn-xs btn-primary" href="{:U('edit',array('id'=>$article['id']))}">
+                                    <a class="btn btn-xs btn-primary" href="{{ route('edit',array('id'=>$article['id'])) }}">
                                         {{ trans('common.edit') }}
                                     </a>
                                 </if>
                                 <if condition="$batch_handle['del']">
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$article.title}?','{:U('del',array('id'=>$article['id']))}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$article.title}?','{{ route('del',array('id'=>$article['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 </if>
@@ -83,13 +83,13 @@
                                     'type_data':Array()
                                 };
                                 <if condition="$batch_handle['edit']">
-                                    config.type_data.push({'name':$Think.lang.show,'post_link':'{:U('edit')}','post_data':{'if_show':'1'} });
-                                    config.type_data.push({'name':$Think.lang.hidden,'post_link':'{:U('edit')}','post_data':{'if_show':'0'} });
-                                    config.type_data.push({'name':$Think.lang.audit,'post_link':'{:U('edit')}','post_data':{'is_audit':'1'} });
-                                    config.type_data.push({'name':$Think.lang.cancel+$Think.lang.audit,'post_link':'{:U('edit')}','post_data':{'is_audit':'0'} });
+                                    config.type_data.push({'name':$Think.lang.show,'post_link':'{{ route('edit') }}','post_data':{'if_show':'1'} });
+                                    config.type_data.push({'name':$Think.lang.hidden,'post_link':'{{ route('edit') }}','post_data':{'if_show':'0'} });
+                                    config.type_data.push({'name':$Think.lang.audit,'post_link':'{{ route('edit') }}','post_data':{'is_audit':'1'} });
+                                    config.type_data.push({'name':$Think.lang.cancel+$Think.lang.audit,'post_link':'{{ route('edit') }}','post_data':{'is_audit':'0'} });
                                 </if>
                                 <if condition="$batch_handle['del']">
-                                    config.type_data.push({'name':$Think.lang.del,'post_link':'{:U('del')}' });
+                                    config.type_data.push({'name':$Think.lang.del,'post_link':'{{ route('del') }}' });
                                 </if>
                                 new M_batch_handle(config);
                             });

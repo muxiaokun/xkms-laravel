@@ -27,16 +27,16 @@ class Member extends FrontendMember
         $memberPwd  = I('pwd');
         switch ($this->doLogin($memberName, $memberPwd)) {
             case 'user_pwd_error':
-                $this->error(L('account') . L('or') . L('pass') . L('error'), U('Member/index'));
+                $this->error(trans('account') . L('or') . L('pass') . L('error'), route('Member/index'));
                 break;
             case 'verify_error':
-                $this->error(L('verify_code') . L('error'), U('Member/index'));
+                $this->error(trans('verify_code') . L('error'), route('Member/index'));
                 break;
             case 'lock_user_error':
-                $this->error(L('admin') . L('by') . L('lock') . L('please') . C('SYS_FRONTEND_LOCK_TIME') . L('second') . L('again') . L('login'), U('index'));
+                $this->error(trans('admin') . L('by') . L('lock') . L('please') . config('SYS_FRONTEND_LOCK_TIME') . L('second') . L('again') . L('login'), route('index'));
                 break;
             default:
-                $this->success(L('login') . L('success'), U('index'));
+                $this->success(trans('login') . L('success'), route('index'));
         }
     }
 
@@ -44,8 +44,8 @@ class Member extends FrontendMember
     public function register()
     {
         if (IS_POST) {
-            if (!$this->verifyCheck(I('verify'), 'register') && C('SYS_FRONTEND_VERIFY')) {
-                $this->error(L('verify_code') . L('error'), U('index', array('t' => 'register')));
+            if (!$this->verifyCheck(I('verify'), 'register') && config('SYS_FRONTEND_VERIFY')) {
+                $this->error(trans('verify_code') . L('error'), route('index', array('t' => 'register')));
             }
             $memberName      = I('re_member_name');
             $memberPwd       = I('password');
@@ -55,27 +55,27 @@ class Member extends FrontendMember
             if ('add' == ACTION_NAME || null !== $memberName) {
                 $result = $this->doValidateForm('re_member_name', array('re_member_name' => $memberName));
                 if (!$result['status']) {
-                    $this->error($result['info'], U('index', array('t' => 'register')));
+                    $this->error($result['info'], route('index', array('t' => 'register')));
                 }
 
             }
             if ('add' == ACTION_NAME || null !== $memberPwd) {
                 $result = $this->doValidateForm('password', array('password' => $memberPwd));
                 if (!$result['status']) {
-                    $this->error($result['info'], U('index', array('t' => 'register')));
+                    $this->error($result['info'], route('index', array('t' => 'register')));
                 }
 
             }
             if ('add' == ACTION_NAME || null !== $memberPwdAgain) {
                 $result = $this->doValidateForm('password_again', array('password' => $memberPwd, 'password_again' => $memberPwdAgain));
                 if (!$result['status']) {
-                    $this->error($result['info'], U('index', array('t' => 'register')));
+                    $this->error($result['info'], route('index', array('t' => 'register')));
                 }
 
             }
 
             //是否自动启用
-            $isEnable = C('SYS_MEMBER_AUTO_ENABLE') ? 1 : 0;
+            $isEnable = config('SYS_MEMBER_AUTO_ENABLE') ? 1 : 0;
             $data      = array(
                 'member_name' => $memberName,
                 'member_pwd'  => $memberPwd,
@@ -85,10 +85,10 @@ class Member extends FrontendMember
             $addResult  = $MemberModel->mAdd($data);
             if ($addResult) {
                 $this->doLogin($memberName, $memberPwd, false);
-                $this->success(L('member') . L('register') . L('success'), U('index'));
+                $this->success(trans('member') . L('register') . L('success'), route('index'));
                 return;
             } else {
-                $this->error(L('member') . L('register') . L('error'), U('index', array('t' => 'register')));
+                $this->error(trans('member') . L('register') . L('error'), route('index', array('t' => 'register')));
             }
         }
     }
@@ -97,7 +97,7 @@ class Member extends FrontendMember
     public function logout()
     {
         $this->doLogout();
-        $this->success(L('logout') . L('account') . L('success'), U('Index/index'));
+        $this->success(trans('logout') . L('account') . L('success'), route('Index/index'));
     }
 
     //表单数据验证
@@ -108,62 +108,62 @@ class Member extends FrontendMember
             case 'user':
                 //不能为空
                 if ('' == $data['user']) {
-                    $result['info'] = L('member') . L('name') . L('not') . L('empty');
+                    $result['info'] = trans('member') . L('name') . L('not') . L('empty');
                     break;
                 }
                 //检查用户名是否存在
                 $MemberModel = D('Member');
                 $memberInfo = $MemberModel->mSelect(array('member_name' => $data['user']));
                 if (0 >= count($memberInfo)) {
-                    $result['info'] = L('member') . L('name') . L('dont') . L('exists');
+                    $result['info'] = trans('member') . L('name') . L('dont') . L('exists');
                     break;
                 }
                 break;
             case 'password':
                 //不能为空
                 if ('' == $data['password']) {
-                    $result['info'] = L('pass') . L('not') . L('empty');
+                    $result['info'] = trans('pass') . L('not') . L('empty');
                     break;
                 }
                 //密码长度不能小于6
                 if (6 > strlen($data['password'])) {
-                    $result['info'] = L('pass_len_error');
+                    $result['info'] = trans('pass_len_error');
                     break;
                 }
                 break;
             case 'password_again':
                 //检测再一次输入的密码是否一致
                 if ($data['password'] != $data['password_again']) {
-                    $result['info'] = L('password_again_error');
+                    $result['info'] = trans('password_again_error');
                     break;
                 }
                 //不能为空
                 if ('' == $data['password_again']) {
-                    $result['info'] = L('pass') . L('not') . L('empty');
+                    $result['info'] = trans('pass') . L('not') . L('empty');
                     break;
                 }
                 break;
             case 're_member_name':
                 //不能为空
                 if ('' == $data['re_member_name']) {
-                    $result['info'] = L('member') . L('name') . L('not') . L('empty');
+                    $result['info'] = trans('member') . L('name') . L('not') . L('empty');
                     break;
                 }
                 //检查用户名规则
-                if ('utf-8' != C('DEFAULT_CHARSET')) {
-                    $data['re_member_name'] = iconv(C('DEFAULT_CHARSET'), 'utf-8', $data['re_member_name']);
+                if ('utf-8' != config('DEFAULT_CHARSET')) {
+                    $data['re_member_name'] = iconv(config('DEFAULT_CHARSET'), 'utf-8', $data['re_member_name']);
                 }
 
                 preg_match('/^[\x80-\xff|a-z|A-Z|0-9]+([^\x80-\xff|^a-z|^A-Z|^0-9]).*$/', $data['re_member_name'], $matches);
                 if ('' != $matches[1]) {
-                    $result['info'] = L('name_format_error') . $matches[1];
+                    $result['info'] = trans('name_format_error') . $matches[1];
                     break;
                 }
                 //检查用户名是否存在
                 $MemberModel = D('Member');
                 $memberInfo = $MemberModel->mSelect(array('member_name' => $data['re_member_name']));
                 if (0 < count($memberInfo)) {
-                    $result['info'] = L('member') . L('name') . L('exists');
+                    $result['info'] = trans('member') . L('name') . L('exists');
                     break;
                 }
                 break;

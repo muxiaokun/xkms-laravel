@@ -11,7 +11,7 @@
                         <th>{{ trans('common.option') }}</th>
                         <td class="nowrap">
                             <if condition="$batch_handle['add']">
-                                <a class="btn btn-xs btn-success" href="{:U('add')}">{{ trans('common.add') }}{{ trans('common.messageboard') }}</a>
+                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">{{ trans('common.add') }}{{ trans('common.messageboard') }}</a>
                             </if>
                         </td>
                     </tr>
@@ -28,19 +28,19 @@
                                 {$message_board.option}
                             <td class="nowrap">
                                 <if condition="$batch_handle['log_index']">
-                                    <a class="btn btn-xs btn-primary" href="{:U('MessageBoardLog/index',array('msg_id'=>$message_board['id']))}">
+                                    <a class="btn btn-xs btn-primary" href="{{ route('MessageBoardLog/index',array('msg_id'=>$message_board['id'])) }}">
                                         {{ trans('common.look') }}
                                     </a>
                                 </if>
                                 <if condition="$batch_handle['log_index'] AND $batch_handle['edit']">&nbsp;|&nbsp;</if>
                                 <if condition="$batch_handle['edit']">
-                                    <a class="btn btn-xs btn-primary" href="{:U('edit',array('id'=>$message_board['id']))}">
+                                    <a class="btn btn-xs btn-primary" href="{{ route('edit',array('id'=>$message_board['id'])) }}">
                                         {{ trans('common.edit') }}
                                     </a>
                                 </if>
                                 <if condition="$batch_handle['edit'] AND $batch_handle['del']">&nbsp;|&nbsp;</if>
                                 <if condition="$batch_handle['del']">
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$message_board.name}?','{:U('del',array('id'=>$message_board['id']))}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$message_board.name}?','{{ route('del',array('id'=>$message_board['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 </if>
@@ -60,7 +60,7 @@
                                     'type_data':Array()
                                 };
                                 <if condition="$batch_handle['del']">
-                                    config.type_data.push({'name':$Think.lang.del,'post_link':'{:U('del')}' });
+                                    config.type_data.push({'name':$Think.lang.del,'post_link':'{{ route('del') }}' });
                                 </if>
                                 new M_batch_handle(config);
                             });

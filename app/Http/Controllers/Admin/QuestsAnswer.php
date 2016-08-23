@@ -33,14 +33,14 @@ class QuestsAnswer extends Backend
         $questsAnswerList = $QuestsAnswerModel->mSelect($where, true);
         foreach ($questsAnswerList as &$questsAnswer) {
             $memberName                  = $MemberModel->mFindColumn($groupId, 'name');
-            $questsAnswer['member_name'] = ($memberName) ? $memberName : L('anonymous');
+            $questsAnswer['member_name'] = ($memberName) ? $memberName : trans('anonymous');
         }
         $this->assign('quests_answer_list', $questsAnswerList);
         $this->assign('quests_answer_list_count', $QuestsAnswerModel->mGetPageCount($where));
         //初始化where_info
         $whereInfo                 = array();
-        $whereInfo['quests_title'] = array('type' => 'input', 'name' => L('quests') . L('name'));
-        $whereInfo['member_id']    = array('type' => 'input', 'name' => L('member') . L('name'));
+        $whereInfo['quests_title'] = array('type' => 'input', 'name' => trans('quests') . L('name'));
+        $whereInfo['member_id']    = array('type' => 'input', 'name' => trans('member') . L('name'));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -49,7 +49,7 @@ class QuestsAnswer extends Backend
         $batchHandle['del'] = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', L('quests') . L('answer') . L('management'));
+        $this->assign('title', trans('quests') . L('answer') . L('management'));
         $this->display();
     }
 
@@ -58,7 +58,7 @@ class QuestsAnswer extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $QuestsModel        = D('Quests');
@@ -81,7 +81,7 @@ class QuestsAnswer extends Backend
         $this->assign('quests_answer_list', $questsAnswerList);
         $this->assign('quests_info', $questsInfo);
         $this->assign('quests_answer_info', $questsAnswerInfo);
-        $this->assign('title', L('quests') . L('answer'));
+        $this->assign('title', trans('quests') . L('answer'));
         $this->display();
     }
 
@@ -90,7 +90,7 @@ class QuestsAnswer extends Backend
     {
         $questsId = I('quests_id');
         if (!$questsId) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         //读取问题
@@ -127,7 +127,7 @@ class QuestsAnswer extends Backend
         }
         $this->assign('quests_quest_list', $questsQuestList);
 
-        $this->assign('title', L('quests') . L('answer') . L('statistics'));
+        $this->assign('title', trans('quests') . L('answer') . L('statistics'));
         $this->display();
     }
 
@@ -136,7 +136,7 @@ class QuestsAnswer extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $QuestsAnswerModel  = D('QuestsAnswer');
@@ -145,9 +145,9 @@ class QuestsAnswer extends Backend
         if ($resultDel) {
             $QuestsModel = D('Quests');
             $QuestsModel->where(array('id' => $questsAnswerInfo['quests_id']))->setDec('current_portion');
-            $this->success(L('del') . L('answer') . L('success'), U('index'));
+            $this->success(trans('del') . L('answer') . L('success'), route('index'));
         } else {
-            $this->error(L('del') . L('answer') . L('error'), U('index'));
+            $this->error(trans('del') . L('answer') . L('error'), route('index'));
         }
     }
 }

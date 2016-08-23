@@ -2,7 +2,7 @@
             $(function(){
                 if(parent && parent.move_progress)
                 {
-                    parent.move_progress({:C('setp_progress.2')});
+                    parent.move_progress({{ config('setp_progress.2') }});
                 }
             });
         </script>
@@ -18,7 +18,7 @@
                         </if>
                     </div>
                 </div>
-                <form action="{:U('setp3')}" method="post">
+                <form action="{{ route('setp3') }}" method="post">
                 <div class="col-sm-12">
                     <input type="hidden" name="setp" value="3">
                     <table class="table table-hover">
@@ -78,7 +78,7 @@
                     </table>
                 </div>
                 <div class="col-sm-12 text-center">
-                    <a class="btn btn-lg btn-primary mt20 mr80" href="{:U('setp1')}">{{ trans('common.previous') }}{{ trans('common.setp') }}</a>
+                    <a class="btn btn-lg btn-primary mt20 mr80" href="{{ route('setp1') }}">{{ trans('common.previous') }}{{ trans('common.setp') }}</a>
                     <button id="switch_href" class="btn btn-lg btn-primary mt20" type="submit">{{ trans('common.setp2') }}</button>
                 </div>
                 </form>

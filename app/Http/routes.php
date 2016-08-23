@@ -24,7 +24,7 @@ Route::group([
     Route::get('t',function(){
         dump(config());
     });
-    Route::get('index',['as'=>'index','uses'=>'Index@index']);
+    Route::get('',['as'=>'index','uses'=>'Index@index']);
     Route::get('setp0',['as'=>'setp0','uses'=>'Index@setp0']);
     Route::get('setp1',['as'=>'setp1','uses'=>'Index@setp1']);
     Route::get('setp2',['as'=>'setp2','uses'=>'Index@setp2']);

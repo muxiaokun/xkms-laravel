@@ -31,8 +31,8 @@ class AdminGroup extends Backend
 
         //初始化where_info
         $whereInfo              = array();
-        $whereInfo['name']      = array('type' => 'input', 'name' => L('group') . L('name'));
-        $whereInfo['is_enable'] = array('type' => 'select', 'name' => L('yes') . L('no') . L('enable'), 'value' => array(1 => L('enable'), 2 => L('disable')));
+        $whereInfo['name']      = array('type' => 'input', 'name' => trans('group') . L('name'));
+        $whereInfo['is_enable'] = array('type' => 'select', 'name' => trans('yes') . L('no') . L('enable'), 'value' => array(1 => L('enable'), 2 => L('disable')));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -42,7 +42,7 @@ class AdminGroup extends Backend
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', L('admin') . L('group') . L('management'));
+        $this->assign('title', trans('admin') . L('group') . L('management'));
         $this->display();
     }
 
@@ -55,15 +55,15 @@ class AdminGroup extends Backend
             $data       = $this->makeData();
             $resultAdd = $AdminGroupModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(L('management') . L('group') . L('add') . L('success'), U('index'));
+                $this->success(trans('management') . L('group') . L('add') . L('success'), route('index'));
                 return;
             } else {
-                $this->error(L('management') . L('group') . L('add') . L('error'), U('add'));
+                $this->error(trans('management') . L('group') . L('add') . L('error'), route('add'));
             }
         }
 
         $this->addEditCommon();
-        $this->assign('title', L('admin') . L('group') . L('add'));
+        $this->assign('title', trans('admin') . L('group') . L('add'));
         $this->display('addedit');
     }
 
@@ -72,7 +72,7 @@ class AdminGroup extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $AdminModel      = D('Admin');
@@ -81,11 +81,11 @@ class AdminGroup extends Backend
             $data        = $this->makeData();
             $resultEdit = $AdminGroupModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(L('management') . L('group') . L('edit') . L('success'), U('index'));
+                $this->success(trans('management') . L('group') . L('edit') . L('success'), route('index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-                $this->error(L('management') . L('group') . L('edit') . L('error'), $errorGoLink);
+                $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
+                $this->error(trans('management') . L('group') . L('edit') . L('error'), $errorGoLink);
             }
         }
         //获取分组默认信息
@@ -98,7 +98,7 @@ class AdminGroup extends Backend
         $this->assign('edit_info', $editInfo);
 
         $this->addEditCommon();
-        $this->assign('title', L('admin') . L('group') . L('edit'));
+        $this->assign('title', trans('admin') . L('group') . L('edit'));
         $this->display('addedit');
     }
 
@@ -107,7 +107,7 @@ class AdminGroup extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $AdminGroupModel = D('AdminGroup');
@@ -116,7 +116,7 @@ class AdminGroup extends Backend
             $mFindAllow = $AdminGroupModel->mFind_allow();
         }
         if ($id == 1 || (!in_array($id, $mFindAllow) && count(0 < $mFindAllow))) {
-            $this->error(L('id') . L('not') . L('del'), U('index'));
+            $this->error(trans('id') . L('not') . L('del'), route('index'));
         }
 
         $resultDel = $AdminGroupModel->mDel($id);
@@ -124,10 +124,10 @@ class AdminGroup extends Backend
             //删除成功后 删除管理员与组的关系
             $AdminModel = D('Admin');
             $AdminModel->mClean($id, 'group_id');
-            $this->success(L('management') . L('group') . L('del') . L('success'), U('index'));
+            $this->success(trans('management') . L('group') . L('del') . L('success'), route('index'));
             return;
         } else {
-            $this->error(L('management') . L('group') . L('del') . L('error'), U('index'));
+            $this->error(trans('management') . L('group') . L('del') . L('error'), route('index'));
         }
     }
 
@@ -139,24 +139,24 @@ class AdminGroup extends Backend
             case 'name':
                 //不能为空
                 if ('' == $data['name']) {
-                    $result['info'] = L('admin') . L('group') . L('name') . L('not') . L('empty');
+                    $result['info'] = trans('admin') . L('group') . L('name') . L('not') . L('empty');
                     break;
                 }
                 //检查用户名规则
-                if ('utf-8' != C('DEFAULT_CHARSET')) {
-                    $data['name'] = iconv(C('DEFAULT_CHARSET'), 'utf-8', $data['name']);
+                if ('utf-8' != config('DEFAULT_CHARSET')) {
+                    $data['name'] = iconv(config('DEFAULT_CHARSET'), 'utf-8', $data['name']);
                 }
 
                 preg_match('/([^\x80-\xffa-zA-Z0-9\s]*)/', $data['name'], $matches);
                 if ('' != $matches[1]) {
-                    $result['info'] = L('name_format_error', array('string' => $matches[1]));
+                    $result['info'] = trans('name_format_error', array('string' => $matches[1]));
                     break;
                 }
                 //检查管理组名是否存在
                 $AdminGroupModel = D('AdminGroup');
                 $adminInfo      = $AdminGroupModel->mSelect(array('name' => $data['name'], 'id' => array('neq', $data['id'])));
                 if (0 < count($adminInfo)) {
-                    $result['info'] = L('admin') . L('group') . L('name') . L('exists');
+                    $result['info'] = trans('admin') . L('group') . L('name') . L('exists');
                     break;
                 }
                 break;
@@ -174,7 +174,7 @@ class AdminGroup extends Backend
                 }
                 foreach ($data as $priv) {
                     if (!in_array($priv, $checkPrivilege)) {
-                        $result['info'] = L('privilege') . L('submit') . L('error');
+                        $result['info'] = trans('privilege') . L('submit') . L('error');
                         break;
                     }
                 }
@@ -226,7 +226,7 @@ class AdminGroup extends Backend
         $isEnable = I('is_enable');
 
         //检测初始化参数是否合法
-        $errorGoLink = (!$id) ? U('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));
+        $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));
         if ('add' == ACTION_NAME || null !== $name) {
             $result = $this->doValidateForm('name', array('id' => $id, 'name' => $name));
             if (!$result['status']) {

@@ -30,16 +30,16 @@ class Message extends FrontendMember
 
         $messageList = $MessageModel->order('receive_time asc,send_time desc')->mSelect($where, true);
         foreach ($messageList as &$message) {
-            $message['send_name']    = ($message['send_id']) ? $MemberModel->mFindColumn($message['send_id'], 'member_name') : L('system');
-            $message['receive_name'] = ($message['receive_id']) ? $MemberModel->mFindColumn($message['receive_id'], 'member_name') : L('system');
+            $message['send_name']    = ($message['send_id']) ? $MemberModel->mFindColumn($message['send_id'], 'member_name') : trans('system');
+            $message['receive_name'] = ($message['receive_id']) ? $MemberModel->mFindColumn($message['receive_id'], 'member_name') : trans('system');
         }
         $this->assign('message_list', $messageList);
         $this->assign('message_list_count', $MessageModel->mGetPageCount($where));
 
         //初始化where_info
         $whereInfo               = array();
-        $whereInfo['receive_id'] = array('type' => 'input', 'name' => L('receive') . L('member'));
-        $whereInfo['send_time']  = array('type' => 'time', 'name' => L('send') . L('time'));
+        $whereInfo['receive_id'] = array('type' => 'input', 'name' => trans('receive') . L('member'));
+        $whereInfo['send_time']  = array('type' => 'time', 'name' => trans('send') . L('time'));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -47,7 +47,7 @@ class Message extends FrontendMember
         $batchHandle['del'] = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', L('message'));
+        $this->assign('title', trans('message'));
         $this->display();
     }
 
@@ -59,11 +59,11 @@ class Message extends FrontendMember
         if (IS_POST) {
             $content = I('content');
             if (null == $content) {
-                $this->error(L('content') . L('not') . L('empty'), U('index'));
+                $this->error(trans('content') . L('not') . L('empty'), route('index'));
             }
 
             if (null == $receiveId) {
-                $this->error(L('receive') . L('member') . L('error'), U('index'));
+                $this->error(trans('receive') . L('member') . L('error'), route('index'));
             }
 
             $data = array(
@@ -73,10 +73,10 @@ class Message extends FrontendMember
             );
             $resultAdd = $MessageModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(L('send') . L('success'), U('index'));
+                $this->success(trans('send') . L('success'), route('index'));
                 return;
             } else {
-                $this->error(L('send') . L('error'), U('index'));
+                $this->error(trans('send') . L('error'), route('index'));
             }
         }
 
@@ -85,7 +85,7 @@ class Message extends FrontendMember
             $this->assign('receive_info', $MemberModel->mFind($receiveId));
         }
 
-        $this->assign('title', L('send') . L('message'));
+        $this->assign('title', trans('send') . L('message'));
         $this->display();
     }
 
@@ -94,16 +94,16 @@ class Message extends FrontendMember
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $MessageModel = D('Message');
         $resultDel   = $MessageModel->mDel($id);
         if ($resultDel) {
-            $this->success(L('message') . L('del') . L('success'), U('index'));
+            $this->success(trans('message') . L('del') . L('success'), route('index'));
             return;
         } else {
-            $this->error(L('message') . L('del') . L('error'), U('index'));
+            $this->error(trans('message') . L('del') . L('error'), route('index'));
         }
     }
 
@@ -118,7 +118,7 @@ class Message extends FrontendMember
                 isset($data['inserted']) && $where['id']         = array('not in', $data['inserted']);
                 $MemberModel                                     = D('Member');
                 $memberUserList                                = $MemberModel->mSelect($where);
-                $result['info'][]                                = array('value' => 0, 'html' => L('system'));
+                $result['info'][]                                = array('value' => 0, 'html' => trans('system'));
                 foreach ($memberUserList as $memberUser) {
                     $result['info'][] = array('value' => $memberUser['id'], 'html' => $memberUser['member_name']);
                 }
@@ -130,7 +130,7 @@ class Message extends FrontendMember
                 $where        = array('receive_id' => $memberId);
                 $resultEdit  = $MessageModel->where($where)->mEdit($data['id'], array('receive_time' => $currentTime));
                 if ($resultEdit) {
-                    $result['info'] = date(C('SYS_DATE_DETAIL'), $currentTime);
+                    $result['info'] = date(config('SYS_DATE_DETAIL'), $currentTime);
                 } else {
                     $result['status'] = false;
                 }

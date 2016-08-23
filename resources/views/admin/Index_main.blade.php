@@ -2,32 +2,32 @@
         <div class="row">
             <div class="col-sm-12 page-header">
                 <h1>{{ trans('common.welcome') }}{{ trans('common.use') }}{$Think.const.APP_NAME}</h1>
-                <a href="{:U('Index/clean_cache')}" class="hidden" >{{ trans('common.clean') }}{{ trans('common.cache') }}</a>
+                <a href="{{ route('Index/clean_cache') }}" class="hidden" >{{ trans('common.clean') }}{{ trans('common.cache') }}</a>
             </div>
             <div class="col-sm-12 mb20 text-center quick_ico">
                 <if condition="$site_info['ico']['ico1']">
-                    <a href="{:U('Article/add')}" ><span class="mr20 ico1" title="{{ trans('common.add') }}{{ trans('common.article') }}"></span></a>
+                    <a href="{{ route('Article/add') }}" ><span class="mr20 ico1" title="{{ trans('common.add') }}{{ trans('common.article') }}"></span></a>
                 </if>
                 <if condition="$site_info['ico']['ico2']">
-                    <a href="{:U('ArticleCategory/add')}" ><span class="mr20 ico2" title="{{ trans('common.add') }}{{ trans('common.article') }}{{ trans('common.category') }}"></span></a>
+                    <a href="{{ route('ArticleCategory/add') }}" ><span class="mr20 ico2" title="{{ trans('common.add') }}{{ trans('common.article') }}{{ trans('common.category') }}"></span></a>
                 </if>
                 <if condition="$site_info['ico']['ico6']">
-                    <a href="{:U('Member/add')}" ><span class="mr20 ico6" title="{{ trans('common.add') }}{{ trans('common.member') }}"></span></a>
+                    <a href="{{ route('Member/add') }}" ><span class="mr20 ico6" title="{{ trans('common.add') }}{{ trans('common.member') }}"></span></a>
                 </if>
                 <if condition="$site_info['ico']['ico7']">
-                    <a href="{:U('MemberGroup/add')}" ><span class="mr20 ico7" title="{{ trans('common.add') }}{{ trans('common.member') }}{{ trans('common.group') }}"></span></a>
+                    <a href="{{ route('MemberGroup/add') }}" ><span class="mr20 ico7" title="{{ trans('common.add') }}{{ trans('common.member') }}{{ trans('common.group') }}"></span></a>
                 </if>
                 <if condition="$site_info['ico']['ico8']">
-                    <a href="{:U('ManageUpload/index')}" ><span class="mr20 ico8" title="{{ trans('common.management') }}{{ trans('common.upload') }}{{ trans('common.file') }}"></span></a>
+                    <a href="{{ route('ManageUpload/index') }}" ><span class="mr20 ico8" title="{{ trans('common.management') }}{{ trans('common.upload') }}{{ trans('common.file') }}"></span></a>
                 </if>
                 <if condition="$site_info['ico']['ico9']">
-                    <a href="{:U('Index/clean_log')}" ><span class="mr20 ico9" title="{{ trans('common.clean') }}{{ trans('common.log') }}"></span></a>
+                    <a href="{{ route('Index/clean_log') }}" ><span class="mr20 ico9" title="{{ trans('common.clean') }}{{ trans('common.log') }}"></span></a>
                 </if>
                 <if condition="$site_info['ico']['ico10']">
-                    <a href="{:U('Index/clean_cache')}" ><span class="mr20 ico10" title="{{ trans('common.clean') }}{{ trans('common.cache') }}"></span></a>
+                    <a href="{{ route('Index/clean_cache') }}" ><span class="mr20 ico10" title="{{ trans('common.clean') }}{{ trans('common.cache') }}"></span></a>
                 </if>
                 <if condition="$site_info['ico']['ico12']">
-                    <a href="{:U('Index/database_set')}" ><span class="mr20 ico12" title="{{ trans('common.database') }}{{ trans('common.config') }}"></span></a>
+                    <a href="{{ route('Index/database_set') }}" ><span class="mr20 ico12" title="{{ trans('common.database') }}{{ trans('common.config') }}"></span></a>
                 </if>
                 <script type="text/javascript">M_jqueryui_tooltip('.quick_ico span')</script>
             </div>

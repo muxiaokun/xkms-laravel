@@ -28,10 +28,10 @@ class Itlink extends Backend
         $this->assign('itlink_list_count', $ItlinkModel->mGetPageCount($where));
 
         //初始化where_info
-        $whereInfo['name']          = array('type' => 'input', 'name' => L('itlink') . L('name'));
-        $whereInfo['short_name']    = array('type' => 'input', 'name' => L('short') . L('name'));
-        $whereInfo['is_enable']     = array('type' => 'select', 'name' => L('yes') . L('no') . L('enable'), 'value' => array(1 => L('yes'), 2 => L('no')));
-        $whereInfo['is_statistics'] = array('type' => 'select', 'name' => L('yes') . L('no') . L('statistics'), 'value' => array(1 => L('yes'), 2 => L('no')));
+        $whereInfo['name']          = array('type' => 'input', 'name' => trans('itlink') . L('name'));
+        $whereInfo['short_name']    = array('type' => 'input', 'name' => trans('short') . L('name'));
+        $whereInfo['is_enable']     = array('type' => 'select', 'name' => trans('yes') . L('no') . L('enable'), 'value' => array(1 => L('yes'), 2 => L('no')));
+        $whereInfo['is_statistics'] = array('type' => 'select', 'name' => trans('yes') . L('no') . L('statistics'), 'value' => array(1 => L('yes'), 2 => L('no')));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -41,7 +41,7 @@ class Itlink extends Backend
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', L('itlink') . L('management'));
+        $this->assign('title', trans('itlink') . L('management'));
         $this->display();
     }
 
@@ -54,14 +54,14 @@ class Itlink extends Backend
             $resultAdd  = $ItlinkModel->mAdd($data);
             if ($resultAdd) {
                 $this->addEditAfterCommon($data, $id);
-                $this->success(L('itlink') . L('add') . L('success'), U('index'));
+                $this->success(trans('itlink') . L('add') . L('success'), route('index'));
                 return;
             } else {
-                $this->error(L('itlink') . L('add') . L('error'), U('add'));
+                $this->error(trans('itlink') . L('add') . L('error'), route('add'));
             }
         }
 
-        $this->assign('title', L('itlink') . L('add'));
+        $this->assign('title', trans('itlink') . L('add'));
         $this->display('addedit');
     }
     //编辑
@@ -69,7 +69,7 @@ class Itlink extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $ItlinkModel = D('Itlink');
@@ -78,17 +78,17 @@ class Itlink extends Backend
             $resultEdit = $ItlinkModel->mEdit($id, $data);
             if ($resultEdit) {
                 $this->addEditAfterCommon($data, $id);
-                $this->success(L('itlink') . L('edit') . L('success'), U('index'));
+                $this->success(trans('itlink') . L('edit') . L('success'), route('index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-                $this->error(L('itlink') . L('edit') . L('error'), $errorGoLink);
+                $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
+                $this->error(trans('itlink') . L('edit') . L('error'), $errorGoLink);
             }
         }
 
         $editInfo = $ItlinkModel->mFind($id);
         $this->assign('edit_info', $editInfo);
-        $this->assign('title', L('itlink') . L('edit'));
+        $this->assign('title', trans('itlink') . L('edit'));
         $this->display('addedit');
     }
 
@@ -97,7 +97,7 @@ class Itlink extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $ItlinkModel = D('Itlink');
@@ -105,10 +105,10 @@ class Itlink extends Backend
         if ($resultDel) {
             $ManageUploadModel = D('ManageUpload');
             $ManageUploadModel->mEdit($id);
-            $this->success(L('itlink') . L('del') . L('success'), U('index'));
+            $this->success(trans('itlink') . L('del') . L('success'), route('index'));
             return;
         } else {
-            $this->error(L('itlink') . L('del') . L('error'), U('index'));
+            $this->error(trans('itlink') . L('del') . L('error'), route('index'));
         }
     }
 
@@ -122,7 +122,7 @@ class Itlink extends Backend
                 $ItlinkModel = D('Itlink');
                 $itlinkInfo = $ItlinkModel->mSelect(array('short_name' => $data['short_name'], 'id' => array('neq', $data['id'])));
                 if (0 < count($itlinkInfo)) {
-                    $result['info'] = L('short') . L('name') . L('exists');
+                    $result['info'] = trans('short') . L('name') . L('exists');
                     break;
                 }
                 break;
@@ -164,7 +164,7 @@ class Itlink extends Backend
         }
 
         //检测初始化参数是否合法
-        $errorGoLink = (!$id) ? U('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));
+        $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));
         if ('add' == ACTION_NAME || null !== $shortName) {
             $result = $this->doValidateForm('short_name', array('id' => $id, 'short_name' => $shortName));
             if (!$result['status']) {

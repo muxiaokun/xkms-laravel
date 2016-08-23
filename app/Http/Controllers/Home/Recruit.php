@@ -31,7 +31,7 @@ class Recruit extends Frontend
         $this->assign('recruit_list', $recruitList);
         $this->assign('recruit_list_count', $RecruitModel->mGetPageCount($where));
 
-        $this->assign('title', L('recruit'));
+        $this->assign('title', trans('recruit'));
         $this->display();
     }
 
@@ -41,7 +41,7 @@ class Recruit extends Frontend
         //初始化参数
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('Recruit/index'));
+            $this->error(trans('id') . L('error'), route('Recruit/index'));
         }
 
         $RecruitModel = D('Recruit');
@@ -49,10 +49,10 @@ class Recruit extends Frontend
         //检测是否能够提交
         $currentTime = time();
         if ($recruitInfo['start_time'] < $currentTime && $recruitInfo['end_time'] < $currentTime) {
-            $this->error(L('start') . L('end') . L('time') . L('error'), U('Recruit/index'));
+            $this->error(trans('start') . L('end') . L('time') . L('error'), route('Recruit/index'));
         }
         if (0 != $recruitInfo['max_portion'] && $recruitInfo['current_portion'] >= $recruitInfo['max_portion']) {
-            $this->error(L('re_recruit') . L('number') . L('gt') . L('recruit') . L('number'), U('Quests/index'));
+            $this->error(trans('re_recruit') . L('number') . L('gt') . L('recruit') . L('number'), route('Quests/index'));
         }
         //存入数据
         if (IS_POST) {
@@ -69,9 +69,9 @@ class Recruit extends Frontend
             if ($resultAdd) {
                 $RecruitModel = D('Recruit');
                 $RecruitModel->where(array('id' => $recruitInfo['id']))->setInc('current_portion');
-                $this->success(L('resume') . L('submit') . L('success'), U('Recruit/index'));
+                $this->success(trans('resume') . L('submit') . L('success'), route('Recruit/index'));
             } else {
-                $this->error(L('resume') . L('submit') . L('error'), U('index'));
+                $this->error(trans('resume') . L('submit') . L('error'), route('index'));
             }
             return;
         }
@@ -83,15 +83,15 @@ class Recruit extends Frontend
             $recruitInfo['explains'] = $cacheValue;
         } else {
             $recruitInfo['explains']                                = mContent2ckplayer($recruitInfo['explains'], $recruitInfo['thumb']);
-            C('SYS_ARTICLE_SYNC_IMAGE') && $recruitInfo['explains'] = mSyncImg($recruitInfo['explains']);
+            config('SYS_ARTICLE_SYNC_IMAGE') && $recruitInfo['explains'] = mSyncImg($recruitInfo['explains']);
             $cacheValue                                             = $recruitInfo['explains'];
-            S($cacheName, $cacheValue, C('SYS_TD_CACHE'));
+            S($cacheName, $cacheValue, config('SYS_TD_CACHE'));
         }
 
         //以法定成年年龄为基准减去 18 + (10 = select_rang/2)
-        $startYear = date(C('SYS_DATE'), mktime(0, 0, 0, date('m'), date('d'), date('Y') - 28));
+        $startYear = date(config('SYS_DATE'), mktime(0, 0, 0, date('m'), date('d'), date('Y') - 28));
         $this->assign('start_year', $startYear);
-        $this->assign('title', L('write') . L('recruit'));
+        $this->assign('title', trans('write') . L('recruit'));
         $this->display();
     }
 
@@ -101,13 +101,13 @@ class Recruit extends Frontend
         //初始化参数
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('Recruit/index'));
+            $this->error(trans('id') . L('error'), route('Recruit/index'));
         }
 
         $RecruitModel = D('Recruit');
         $recruitInfo = $RecruitModel->mFind($id);
         $this->assign('recruit_info', $recruitInfo);
-        $this->assign('title', L('look') . L('recruit'));
+        $this->assign('title', trans('look') . L('recruit'));
         $this->display();
     }
 }

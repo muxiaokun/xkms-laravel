@@ -11,7 +11,7 @@
                             'check_list':{
                                 'short_name':Array('short_name','id')
                             },
-                            'ajax_url':"{:U('ajax_api')}",
+                            'ajax_url':"{{ route('ajax_api') }}",
                         };
                         new M_valid(config);
                     });
@@ -23,7 +23,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.itlink') }}{{ trans('common.name') }}</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" placeholder="{{ trans('common.itlink') }}{{ trans('common.name') }}" name="name" value="{$edit_info.name}" onchange="M_zh2py(this,'input[name=short_name]')"  link="{:U('ajax_api')}"/>
+<input type="text" class="form-control" placeholder="{{ trans('common.itlink') }}{{ trans('common.name') }}" name="name" value="{$edit_info.name}" onchange="M_zh2py(this,'input[name=short_name]')"  link="{{ route('ajax_api') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -148,7 +148,7 @@
                                     {{ trans('common.edit') }}
                                 </if>
                             </button>
-                            <a href="{:U('index')}" class="btn btn-default">
+                            <a href="{{ route('index') }}" class="btn btn-default">
                                     {{ trans('common.goback') }}
                             </a>
                         </div>

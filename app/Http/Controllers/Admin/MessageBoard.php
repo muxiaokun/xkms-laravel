@@ -37,7 +37,7 @@ class MessageBoard extends Backend
         $batchHandle['del']       = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', L('messageboard') . L('management'));
+        $this->assign('title', trans('messageboard') . L('management'));
         $this->display();
     }
 
@@ -49,15 +49,15 @@ class MessageBoard extends Backend
             $MessageBoardModel = D('MessageBoard');
             $resultAdd        = $MessageBoardModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(L('messageboard') . L('add') . L('success'), $rebackLink);
+                $this->success(trans('messageboard') . L('add') . L('success'), $rebackLink);
                 return;
             } else {
-                $this->error(L('messageboard') . L('add') . L('error'), U('add', array('cate_id' => I('get.cate_id'))));
+                $this->error(trans('messageboard') . L('add') . L('error'), route('add', array('cate_id' => I('get.cate_id'))));
             }
         }
 
-        $this->assign('template_list', mScanTemplate('index', C('DEFAULT_MODULE'), 'MessageBoard'));
-        $this->assign('title', L('messageboard') . L('add'));
+        $this->assign('template_list', mScanTemplate('index', config('DEFAULT_MODULE'), 'MessageBoard'));
+        $this->assign('title', trans('messageboard') . L('add'));
         $this->display('addedit');
     }
 
@@ -66,7 +66,7 @@ class MessageBoard extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $MessageBoardModel = D('MessageBoard');
@@ -74,11 +74,11 @@ class MessageBoard extends Backend
             $data        = $this->makeData();
             $resultEdit = $MessageBoardModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(L('messageboard') . L('edit') . L('success'), U('index'));
+                $this->success(trans('messageboard') . L('edit') . L('success'), route('index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? U('index') : U('edit', array('id' => $id));
-                $this->error(L('messageboard') . L('edit') . L('error'), $errorGoLink);
+                $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
+                $this->error(trans('messageboard') . L('edit') . L('error'), $errorGoLink);
             }
         }
 
@@ -86,8 +86,8 @@ class MessageBoard extends Backend
         $editInfo['config'] = json_encode($editInfo['config']);
         $this->assign('edit_info', $editInfo);
 
-        $this->assign('template_list', mScanTemplate('index', C('DEFAULT_MODULE'), 'MessageBoard'));
-        $this->assign('title', L('messageboard') . L('edit'));
+        $this->assign('template_list', mScanTemplate('index', config('DEFAULT_MODULE'), 'MessageBoard'));
+        $this->assign('title', trans('messageboard') . L('edit'));
         $this->display('addedit');
     }
 
@@ -96,16 +96,16 @@ class MessageBoard extends Backend
     {
         $id = I('id');
         if (!$id) {
-            $this->error(L('id') . L('error'), U('index'));
+            $this->error(trans('id') . L('error'), route('index'));
         }
 
         $MessageBoardModel = D('MessageBoard');
         $resultDel        = $MessageBoardModel->mDel($id);
         if ($resultDel) {
-            $this->success(L('messageboard') . L('del') . L('success'), U('index'));
+            $this->success(trans('messageboard') . L('del') . L('success'), route('index'));
             return;
         } else {
-            $this->error(L('messageboard') . L('del') . L('error'), U('index'));
+            $this->error(trans('messageboard') . L('del') . L('error'), route('index'));
         }
     }
 

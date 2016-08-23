@@ -1,4 +1,8 @@
 *
-!xkms/
 !public/
 !.gitignore
+!xkms/
+!xkms/*
+!xkms/config/*
+!xkms/article/*
+!xkms/initdb/*

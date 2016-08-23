@@ -1,6 +1,5 @@
-{__NOLAYOUT__}
-<include file="Public:header" />
-        <import file="js/M_history" />
+@include('Public:header')
+        <script type="text/javascript" src="{{ asset('js/M_history.js') }}"></script>
         <script>
             $(function(){
                 if(M_history)
@@ -21,25 +20,25 @@
         </script>
         <section class="left_nav">
             <div id="left_nav_menu" class="accordion">
-                <if condition="count($left_nav) gt 0">
-                    <foreach name="left_nav" item="nav">
+                @if (count($left_nav) gt 0)
+                    @foreach ($left_nav as $nav)
                         <h3>{{ $key }}</h3>
                         <ul class="nav text-center" role="tablist">
-                            <foreach name="nav" item="nav_link" key="key">
+                            @foreach ($nav as $key => $nav_link)
                             <li role="presentation">
                                 <a class="fs12" href="{$nav_link.link}" target="main" >{$nav_link.name}</a>
                             </li>
-                            </foreach>
+                            @endforeach
                         </ul>
-                    </foreach>
-                <else />
+                    @endforeach
+                @else
                     <h3>{{ trans('common.none') }}{{ trans('common.privilege') }}</h3>
                     <ul class="nav text-center" role="tablist">
                         <li role="presentation">
                             <a class="fs12" href="javascript:void(0);">{{ trans('common.not_action_privilege') }}</a>
                         </li>
                     </ul>
-                </if>
+                @endif
                 <h3>技术支持</h3>
                     <ul class="nav text-center" role="tablist">
                     <li role="presentation">

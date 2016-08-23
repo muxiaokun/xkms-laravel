@@ -19,7 +19,7 @@
                                 <input type="password" class="form-control" placeholder="{{ trans('common.pwd') }}" name="pwd" />
                             </div>
                         </div>
-                        <if condition="C('SYS_BACKEND_VERIFY')">
+                        @if (C('SYS_BACKEND_VERIFY'))
                         {/*<!--验证码 开始-->*/}
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{{ trans('common.verify_code') }}</label>
@@ -31,7 +31,7 @@
                             <M:Img class="col-sm-offset-4 col-sm-4" style="max-height:50px;" src="{{ route('verify_img') }}" onClick="M_change_verify(this,$('input[name=verify]'))" />
                         </div>
                         {/*<!--验证码 结束-->*/}
-                        </if>
+                        @endif
                         <input type="submit" class="btn btn-primary col-sm-offset-5" value="{{ trans('common.login') }}">
                     </form>
                 </div>

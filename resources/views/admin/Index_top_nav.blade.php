@@ -1,5 +1,4 @@
-{__NOLAYOUT__}
-<include file="Public:header" />
+@include('Public:header')
         <header class="top_nav h50">
             <div class="title"></div>
             <div class="companytitle pt20 pl30 text-left fs12">{{ config('SITE_COMPANY') }}</div>

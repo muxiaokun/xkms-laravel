@@ -17,7 +17,7 @@
                                 <th>{{ trans('common.description') }}</th>
                                 <th></th>
                             </tr>
-                            <foreach name="recruit_list" item="recruit">
+                            @foreach ($recruit_list as $recruit)
                                 <tr>
                                     <td>
                                         {$recruit.title}
@@ -39,7 +39,7 @@
                                         </a>
                                     </td>
                                 </tr>
-                            </foreach>
+                            @endforeach
                         </table>
                     </div>
                     <M:Page name="recruit_list">

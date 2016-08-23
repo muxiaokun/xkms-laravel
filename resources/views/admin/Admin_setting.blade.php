@@ -11,10 +11,10 @@
                             <label class="col-sm-4 control-label">{{ trans('common.auto') }}{{ trans('common.record') }}{{ trans('common.log') }}</label>
                             <div class="col-sm-7">
                                 <label class="radio-inline">
-                                    <input type="radio" name="SYS_ADMIN_AUTO_LOG" value="1" <if condition="'1' heq C('SYS_ADMIN_AUTO_LOG')">checked="checked"</if> >{{ trans('common.open') }}
+                                    <input type="radio" name="SYS_ADMIN_AUTO_LOG" value="1" @if ('1' heq C('SYS_ADMIN_AUTO_LOG'))checked="checked"@endif >{{ trans('common.open') }}
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="SYS_ADMIN_AUTO_LOG" value="0" <if condition="'0' heq C('SYS_ADMIN_AUTO_LOG')">checked="checked"</if> >{{ trans('common.close') }}
+                                    <input type="radio" name="SYS_ADMIN_AUTO_LOG" value="0" @if ('0' heq C('SYS_ADMIN_AUTO_LOG'))checked="checked"@endif >{{ trans('common.close') }}
                                 </label>
                             </div>
                         </div>
@@ -25,10 +25,10 @@
                             <label class="col-sm-4 control-label">{{ trans('common.backend') }}{{ trans('common.verify_code') }}</label>
                             <div class="col-sm-7">
                                 <label class="radio-inline">
-                                    <input type="radio" name="SYS_BACKEND_VERIFY" value="1" <if condition="'1' heq C('SYS_BACKEND_VERIFY')">checked="checked"</if> >{{ trans('common.open') }}
+                                    <input type="radio" name="SYS_BACKEND_VERIFY" value="1" @if ('1' heq C('SYS_BACKEND_VERIFY'))checked="checked"@endif >{{ trans('common.open') }}
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="SYS_BACKEND_VERIFY" value="0" <if condition="'0' heq C('SYS_BACKEND_VERIFY')">checked="checked"</if> >{{ trans('common.close') }}
+                                    <input type="radio" name="SYS_BACKEND_VERIFY" value="0" @if ('0' heq C('SYS_BACKEND_VERIFY'))checked="checked"@endif >{{ trans('common.close') }}
                                 </label>
                             </div>
                         </div>

@@ -1,14 +1,13 @@
-{__NOLAYOUT__}
 <!DOCTYPE html>
 <html>
     <head>
         <title>{$Think.const.APP_NAME}{{ trans('common.management') }}{{ trans('common.backend') }}</title>
         <link href="__ROOT__/Public/css/bimages/favicon.ico" type="image/ico" rel="shortcut icon" />
         <meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <import type="css" file="css/bootstrap#min" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="{{ asset('css/bootstrap#min.css') }}" />
         <!--[if lt IE 10]>
-            <import file="js/supporthtml5" />
+            <script type="text/javascript" src="{{ asset('js/supporthtml5.js') }}"></script>
         <![endif]-->
     </head>
     <frameset  rows="50,*" framespacing="0" border="0">

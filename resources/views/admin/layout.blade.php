@@ -1,3 +1,3 @@
-<include file="Public:header" />
+@include('Public:header')
 {__CONTENT__}
-<include file="Public:footer" />
+@include('Public:footer')

@@ -58,10 +58,10 @@
                                 <label class="col-sm-4 control-label">{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.enable') }}</label>
                                 <div class="col-sm-3">
                                     <label class="radio-inline">
-<input type="radio" name="is_enable" value="1" <if condition="'1' heq $edit_info['is_enable'] or !isset($edit_info['is_enable'])">checked="checked"</if> />{{ trans('common.enable') }}
+<input type="radio" name="is_enable" value="1" @if ('1' heq $edit_info['is_enable'] or !isset($edit_info['is_enable']))checked="checked"@endif />{{ trans('common.enable') }}
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="is_enable" value="0" <if condition="'0' heq $edit_info['is_enable']">checked="checked"</if> />{{ trans('common.disable') }}
+<input type="radio" name="is_enable" value="0" @if ('0' heq $edit_info['is_enable'])checked="checked"@endif />{{ trans('common.disable') }}
                                     </label>
                                 </div>
                             </div>
@@ -78,11 +78,11 @@
                         </div>
                     </div>
                     <div id="ext_info_list" class="row">
-                        <import file="js/M_exttpl_editor" />
+                        <script type="text/javascript" src="{{ asset('js/M_exttpl_editor.js') }}"></script>
                         <script type="text/javascript">
                             $(function(){
                                 var config = {
-                                    <if condition="$edit_info['ext_info']">'def_data':{$edit_info.ext_info|json_encode},</if>
+                                    @if ($edit_info['ext_info'])'def_data':{$edit_info.ext_info|json_encode},@endif
                                     'run_type':'add_edit',
                                     'out_obj':$('#ext_info_list'),
                                     'edit_obj':$('#edit_obj'),
@@ -100,11 +100,11 @@
                     <div class="row mt10">
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
-                                <if condition="$Think.const.ACTION_NAME eq 'add'">
+                                @if ($Think.const.ACTION_NAME eq 'add')
                                     {{ trans('common.add') }}
-                                <elseif condition="$Think.const.ACTION_NAME eq 'edit'" />
+                                @elseif ($Think.const.ACTION_NAME eq 'edit')
                                     {{ trans('common.edit') }}
-                                </if>
+                                @endif
                             </button>
                             <a href="{{ route('index') }}" class="btn btn-default">
                                     {{ trans('common.goback') }}

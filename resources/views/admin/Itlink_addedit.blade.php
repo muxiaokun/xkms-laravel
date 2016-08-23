@@ -3,7 +3,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
-                <import file="js/M_valid" />
+                <script type="text/javascript" src="{{ asset('js/M_valid.js') }}"></script>
                 <script>
                     $(function(){
                         var config = {
@@ -42,10 +42,10 @@
                                 <label class="col-sm-4 control-label">{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.enable') }}</label>
                                 <div class="col-sm-4">
                                     <label class="radio-inline">
-<input type="radio" name="is_enable" value="1" <if condition="'1' heq $edit_info['is_enable'] or !isset($edit_info['is_enable'])">checked="checked"</if> />{{ trans('common.yes') }}
+<input type="radio" name="is_enable" value="1" @if ('1' heq $edit_info['is_enable'] or !isset($edit_info['is_enable']))checked="checked"@endif />{{ trans('common.yes') }}
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="is_enable" value="0" <if condition="'0' heq $edit_info['is_enable']">checked="checked"</if> />{{ trans('common.no') }}
+<input type="radio" name="is_enable" value="0" @if ('0' heq $edit_info['is_enable'])checked="checked"@endif />{{ trans('common.no') }}
                                     </label>
                                 </div>
                             </div>
@@ -117,13 +117,13 @@
                                     <M:Uploadfile id="uploadsbutton" type="multiimage" dir="kindeditor" cb_fn="M_callback_itlink" />
                                 </div>
                             </div>
-                            <import file="js/M_itlink_editor" />
+                            <script type="text/javascript" src="{{ asset('js/M_itlink_editor.js') }}"></script>
                             <script type="text/javascript">
                                 //向全局注册 变量 空回调函数 用于kind和itlink_editor沟通
                                 var M_callback_itlink = function(){console.log("bind M_itlink_editor error");}
                                 $(function(){
                                     var config = {
-                                        <if condition="$edit_info['ext_info']">'def_data':{$edit_info.ext_info|json_encode},</if>
+                                        @if ($edit_info['ext_info'])'def_data':{$edit_info.ext_info|json_encode},@endif
                                         'global_var':'itlink_editor',
                                         'out_obj':$('#ext_info'),
                                         'upload_btn':'#uploadsbutton',
@@ -142,11 +142,11 @@
                     <div class="row mt10">
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
-                                <if condition="$Think.const.ACTION_NAME eq 'add'">
+                                @if ($Think.const.ACTION_NAME eq 'add')
                                     {{ trans('common.add') }}
-                                <elseif condition="$Think.const.ACTION_NAME eq 'edit'" />
+                                @elseif ($Think.const.ACTION_NAME eq 'edit')
                                     {{ trans('common.edit') }}
-                                </if>
+                                @endif
                             </button>
                             <a href="{{ route('index') }}" class="btn btn-default">
                                     {{ trans('common.goback') }}

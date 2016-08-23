@@ -1,5 +1,5 @@
-<extend name="Member:base" />
-<block name="content">
+@extends('Member:base')
+@section('content')
     <table class="table table-condensed table-hover">
         <tr>
             <th>{{ trans('common.id') }}</th>
@@ -9,7 +9,7 @@
             <th>{{ trans('common.end') }}{{ trans('common.time') }}</th>
             <th></th>
         </tr>
-        <foreach name="assess_list" item="assess">
+        @foreach ($assess_list as $assess)
             <tr>
                 <td>
                     {$assess.id}
@@ -32,11 +32,11 @@
                     </a>
                 </td>
             </tr>
-        </foreach>
+        @endforeach
     </table>
     <M:Page name="assess_list">
         <table class="table"><tr><td class="text-right">
             <config></config>
         </td></tr></table>
     </M:Page>
-</block>
+@endsection

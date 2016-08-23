@@ -10,12 +10,12 @@
         <section class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="text-center alert <if condition="$compare_database_info['if_exists'] eq 1">alert-success<else />alert-warning</if>">
-                        <if condition="$compare_database_info['if_exists'] eq 1">
+                    <div class="text-center alert @if ($compare_database_info['if_exists'] eq 1">alert-success@elsealert-warning@endif)
+                        @if ($compare_database_info['if_exists'] eq 1)
                             {{ trans('common.database') }}{$compare_database_info.name}{{ trans('common.exists') }}
-                        <else />
+                        @else
                             {{ trans('common.database') }}{$compare_database_info.name}{{ trans('common.dont') }}{{ trans('common.exists') }}{{ trans('common.auto_create') }}
-                        </if>
+                        @endif
                     </div>
                 </div>
                 <form action="{{ route('setp3') }}" method="post">
@@ -41,40 +41,40 @@
                                 </label>
                             </th>
                         </tr>
-                        <foreach name="compare_tables_info" key="control_index" item="data">
+                        @foreach ($compare_tables_info as $control_index => $data)
                         <tr>
                             <td>
                                 [{$data.control_group}]{$data.control_info}
                             </td>
                             <td>
-                                <if condition="1 lt $data['category']">
+                                @if (1 lt $data['category'])
                                     <input type="checkbox" name="install_control[install][]" value="{{ $control_index }}"  mtype="install"/>
-                                <else />
+                                @else
                                     <input type="checkbox" disabled="disabled" checked="checked"/>
-                                </if>
+                                @endif
                             </td>
                             <td class="text-left">
-                                <if condition="$data['tables']">
-                                    <foreach name="data.tables" key="table_name" item="table">
+                                @if ($data['tables'])
+                                    @foreach ($data['tables'] as $table_name => $table)
                                         <div class="fl">
                                         {$table.table_info}{{ $table_name }}(
-                                        <if condition="$table['if_exists'] eq 1">
+                                        @if ($table['if_exists'] eq 1)
                                             <label class="checkbox-inline">
                                                 <input type="checkbox" name="install_control[reset][]" value="{{ $table_name }}"  mtype="reset"/>
                                                 <span style="color:red;">{{ trans('common.exists') }}</span>
                                             </label>
-                                        <else />
+                                        @else
                                             <span style="color:green;">{{ trans('common.create') }}</span>
-                                        </if>
+                                        @endif
                                         )&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         </div>
-                                    </foreach>
-                                <else />
+                                    @endforeach
+                                @else
                                     {{ trans('common.none') }}{{ trans('common.table') }}{{ trans('common.info') }}
-                                </if>
+                                @endif
                             </td>
                         </tr>
-                        </foreach>
+                        @endforeach
                     </table>
                 </div>
                 <div class="col-sm-12 text-center">

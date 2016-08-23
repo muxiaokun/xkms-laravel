@@ -3,7 +3,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
-                <import file="js/M_valid" />
+                <script type="text/javascript" src="{{ asset('js/M_valid.js') }}"></script>
                 <script>
                     $(function(){
                         var config = {
@@ -34,9 +34,9 @@
                         <label class="col-sm-2 col-sm-offset-2 control-label">{{ trans('common.again') }}{{ trans('common.input') }}{{ trans('common.pass') }}</label>
                         <div class="col-sm-3">
                             <input type="password" class="form-control" placeholder="{{ trans('common.again') }}{{ trans('common.input') }}{{ trans('common.pass') }}" name="password_again" />
-                            <if condition="$edit_info">
+                            @if ($edit_info)
                                 <span class="help-block">{{ trans('common.not_input_pass') }}</span>
-                            </if>
+                            @endif
                         </div>
                     </div>
                     <div class="form-group">

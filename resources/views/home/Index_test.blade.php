@@ -1,8 +1,7 @@
-{__NOLAYOUT__}
 <!DOCTYPE html>
 <html>
     <head>
-        <title><if condition="$title">{{ $title }} {{ trans('common.dash') }}</if> {{ config('SITE_TITLE') }}</title>
+        <title>@if ($title){{ $title }} {{ trans('common.dash') }}@endif {{ config('SITE_TITLE') }}</title>
         <link href="__ROOT__/favicon.ico" type="image/ico" rel="shortcut icon" />
         <meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,19 +9,19 @@
         <meta name="keywords" content="{{ config('SITE_KEYWORDS') }}" />
         <meta name="description" content="{{ config('SITE_DESCRIPTION') }}" />
         <meta name="author" content="{:L('pfcopyright',array('app_name'=>APP_NAME))}" />
-        <import type="css" file="css/jquery-ui#min" />
-        <import type="css" file="css/bootstrap#min" />
-        <import type="css" file="css/bootstrap-theme#min" />
-        <import type="css" file="css/common" />
-        <import type="css" file="css/home" />
-        <import file="js/jquery#min" />
-        <import file="js/bootstrap#min" />
-        <import file="js/jquery-ui#min" />
-        <import file="js/common" />
+        <link rel="stylesheet" href="{{ asset('css/jquery-ui#min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('css/bootstrap#min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('css/bootstrap-theme#min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('css/common.css') }}" />
+        <link rel="stylesheet" href="{{ asset('css/home.css') }}" />
+        <script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/jquery-ui.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/common.js') }}"></script>
         <!--[if lt IE 10]>
-            <import file="js/supporthtml5" />
+            <script type="text/javascript" src="{{ asset('js/supporthtml5.js') }}"></script>
         <![endif]-->
-        <!--[if lt IE 10]><import file="js/supporthtml5" /><![endif]-->
+        <!--[if lt IE 10]><script type="text/javascript" src="{{ asset('js/supporthtml5.js') }}"></script><![endif]-->
     </head>
     <body>
         <section class="container">

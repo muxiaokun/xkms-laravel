@@ -10,10 +10,10 @@
                             <label class="col-sm-4 control-label">{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.enable') }}</label>
                             <div class="col-sm-7">
                                 <label class="radio-inline">
-                                    <input type="radio" name="COMMENT_SWITCH" value="1" <if condition="'1' heq C('COMMENT_SWITCH')">checked="checked"</if> >{{ trans('common.enable') }}
+                                    <input type="radio" name="COMMENT_SWITCH" value="1" @if ('1' heq C('COMMENT_SWITCH'))checked="checked"@endif >{{ trans('common.enable') }}
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="COMMENT_SWITCH" value="0" <if condition="'0' heq C('COMMENT_SWITCH')">checked="checked"</if> >{{ trans('common.disable') }}
+                                    <input type="radio" name="COMMENT_SWITCH" value="0" @if ('0' heq C('COMMENT_SWITCH'))checked="checked"@endif >{{ trans('common.disable') }}
                                 </label>
                             </div>
                         </div>
@@ -33,10 +33,10 @@
                             <label class="col-sm-4 control-label">{{ trans('common.enable') }}{{ trans('common.anonymous') }}{{ trans('common.comment') }}</label>
                             <div class="col-sm-7">
                                 <label class="radio-inline">
-                                    <input type="radio" name="COMMENT_ANONY" value="1" <if condition="'1' heq C('COMMENT_ANONY')">checked="checked"</if> >{{ trans('common.enable') }}
+                                    <input type="radio" name="COMMENT_ANONY" value="1" @if ('1' heq C('COMMENT_ANONY'))checked="checked"@endif >{{ trans('common.enable') }}
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="COMMENT_ANONY" value="0" <if condition="'0' heq C('COMMENT_ANONY')">checked="checked"</if> >{{ trans('common.disable') }}
+                                    <input type="radio" name="COMMENT_ANONY" value="0" @if ('0' heq C('COMMENT_ANONY'))checked="checked"@endif >{{ trans('common.disable') }}
                                 </label>
                             </div>
                         </div>

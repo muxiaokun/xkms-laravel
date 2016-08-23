@@ -5,7 +5,7 @@
                 <a class="fr fs10" href="{{ route('Quests/index',array('id'=>I('id'))) }}">{{ trans('common.goback') }}</a>
             </div>
             <div class="panel-body">
-                <foreach name="quests_quest_list" item="quest">
+                @foreach ($quests_quest_list as $quest)
                     <div class="form-group">
                         <label class="col-sm-12">
                             {$quest.question}
@@ -25,14 +25,14 @@
                             </switch>
                         </label>
                         <div class="col-sm-12">
-                            <foreach name="quest.answer" item="answer">
+                            @foreach ($quest['answer'] as $answer)
                                 <div class="col-sm-2">{:L('sf_answer_conut',array('name'=>$answer['name'],'count'=>$answer['count']))}</div>
-                            </foreach>
+                            @endforeach
                             <div class="cb">{:L('sf_answer_all_conut',array('count'=>$quest['max_count']))}</div>
                         </div>
                     </div>
                     <div class="cb h20"></div>
-                </foreach>
+                @endforeach
             </div>
         </div>
     </section>

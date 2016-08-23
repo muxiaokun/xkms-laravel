@@ -37,9 +37,9 @@
                             <div class="col-sm-5">
                                 <input type="password" name="DB_PWD" class="form-control">
                             </div>
-                            <if condition="0 lt strlen(C('DB_PWD'))">
+                            @if (0 lt strlen(C('DB_PWD')))
                                 <div class="col-sm-4" style="color:green;">{{ trans('common.exists') }}{{ trans('common.pass') }}</div>
-                            </if>
+                            @endif
                         </div>
                     </div>
                 </div>

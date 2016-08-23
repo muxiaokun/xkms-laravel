@@ -72,11 +72,11 @@
                     </div>
                     <div class="col-sm-12 text-center">
                         <button type="submit" class="btn btn-info">
-                            <if condition="$Think.const.ACTION_NAME eq 'add'">
+                            @if ($Think.const.ACTION_NAME eq 'add')
                                 {{ trans('common.add') }}
-                            <elseif condition="$Think.const.ACTION_NAME eq 'edit'" />
+                            @elseif ($Think.const.ACTION_NAME eq 'edit')
                                 {{ trans('common.edit') }}
-                            </if>
+                            @endif
                         </button>
                         <a href="{{ route('index') }}" class="btn btn-default">
                                 {{ trans('common.goback') }}
@@ -135,11 +135,11 @@
                         <div id="quests_area" class="col-sm-offset-2 col-sm-9 list-group">
                         </div>
                     </div>
-                    <import file="js/M_quests_editor" />
+                    <script type="text/javascript" src="{{ asset('js/M_quests_editor.js') }}"></script>
                     <script type="text/javascript">
                         $(function(){
                             var config = {
-                                <if condition="$edit_info['ext_info']">'def_data':{$edit_info.ext_info},</if>
+                                @if ($edit_info['ext_info'])'def_data':{$edit_info.ext_info},@endif
                                 'out_obj':$('#quests_area'),
                                 'edit_obj':$('#quests_edit'),
                                 'post_name':'ext_info'

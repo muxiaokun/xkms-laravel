@@ -7,7 +7,7 @@
                     </div>
                     <div class="list_images">
                         <M:D name="Article" fn="m_select" fn_arg="cate_id between 1|is_audit gt 0" limit="8" item="function_article"/>
-                        <foreach name="function_article" item="data">
+                        @foreach ($function_article as $data)
                         <div class="col-sm-3">
                             <div class="thumbnail">
                                 <a href="{:M_U('article',$data['id'])}" >
@@ -23,7 +23,7 @@
                                 </div>
                             </div>
                         </div>
-                        </foreach>
+                        @endforeach
                     </div>
                 </div>
                 <div class="clearfix">
@@ -32,7 +32,7 @@
                     </div>
                     <div class="list_images">
                         <M:D name="Article" fn="m_select" fn_arg="cate_id eq 3|is_audit gt 0" limit="8" item="case_article"/>
-                        <foreach name="case_article" item="data">
+                        @foreach ($case_article as $data)
                         <div class="col-sm-3">
                             <div class="thumbnail">
                                 <a href="{:M_U('article',$data['id'])}" >
@@ -48,12 +48,12 @@
                                 </div>
                             </div>
                         </div>
-                        </foreach>
+                        @endforeach
                     </div>
                 </div>
             </div>
             <div class="col-sm-4">
-                <include file="Public:right" />
+                @include('Public:right')
             </div>
         </div>
     </section>

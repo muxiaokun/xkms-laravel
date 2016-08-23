@@ -1,5 +1,5 @@
     
-        <import file="js/M_select_add" />
+        <script type="text/javascript" src="{{ asset('js/M_select_add.js') }}"></script>
         <section class="container mt10">
         <div class="panel panel-default">
             <div class="panel-heading">{{ $title }}</div>
@@ -31,9 +31,9 @@
                                 <div class="col-sm-6">
                                     <select name="parent_id" class="form-control input-sm" >
                                         <option value="0">{{ trans('common.top_level') }}{{ trans('common.enable') }}{{ trans('common.attribute') }}/{{ trans('common.extend') }}</option>
-                                        <foreach name="category_list" item="category">
-                                            <option value="{$category.id}" <if condition="$category['id'] eq $edit_info['parent_id']">selected="selected"</if> >{$category.name}</option>
-                                        </foreach>
+                                        @foreach ($category_list as $category)
+                                            <option value="{$category.id}" @if ($category['id'] eq $edit_info['parent_id'])selected="selected"@endif >{$category.name}</option>
+                                        @endforeach
                                     </select>
                                     <script type="text/javascript">
                                         $(function(){
@@ -62,10 +62,10 @@
                                 <label class="col-sm-4 control-label">{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.show') }}</label>
                                 <div class="col-sm-3">
                                     <label class="radio-inline">
-<input type="radio" name="if_show" value="1" <if condition="'1' heq $edit_info['if_show'] or !isset($edit_info['if_show'])">checked="checked"</if> />{{ trans('common.show') }}
+<input type="radio" name="if_show" value="1" @if ('1' heq $edit_info['if_show'] or !isset($edit_info['if_show']))checked="checked"@endif />{{ trans('common.show') }}
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="if_show" value="0" <if condition="'0' heq $edit_info['if_show']">checked="checked"</if> />{{ trans('common.hidden') }}
+<input type="radio" name="if_show" value="0" @if ('0' heq $edit_info['if_show'])checked="checked"@endif />{{ trans('common.hidden') }}
                                     </label>
                                 </div>
                             </div>
@@ -78,9 +78,9 @@
                                 <div class="col-sm-6">
                                     <select name="template" class="form-control input-sm" >
                                         <option value="">{{ trans('common.use') }}{{ trans('common.default') }}</option>
-                                        <foreach name="template_list" item="template">
-                                            <option value="{$template.value}" <if condition="$template['value'] eq $edit_info['template']">selected="selected"</if> >{$template.name}</option>
-                                        </foreach>
+                                        @foreach ($template_list as $template)
+                                            <option value="{$template.value}" @if ($template['value'] eq $edit_info['template'])selected="selected"@endif >{$template.name}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -89,9 +89,9 @@
                                 <div class="col-sm-6">
                                     <select name="article_template" class="form-control input-sm" >
                                         <option value="">{{ trans('common.use') }}{{ trans('common.default') }}</option>
-                                        <foreach name="article_template_list" item="template">
-                                            <option value="{$template.value}" <if condition="$template['value'] eq $edit_info['article_template']">selected="selected"</if> >{$template.name}</option>
-                                        </foreach>
+                                        @foreach ($article_template_list as $template)
+                                            <option value="{$template.value}" @if ($template['value'] eq $edit_info['article_template'])selected="selected"@endif >{$template.name}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -100,9 +100,9 @@
                                 <div class="col-sm-6">
                                     <select name="list_template" class="form-control input-sm" >
                                         <option value="">{{ trans('common.use') }}{{ trans('common.default') }}</option>
-                                        <foreach name="list_template_list" item="template">
-                                            <option value="{$template.value}" <if condition="$template['value'] eq $edit_info['list_template']">selected="selected"</if> >{$template.name}</option>
-                                        </foreach>
+                                        @foreach ($list_template_list as $template)
+                                            <option value="{$template.value}" @if ($template['value'] eq $edit_info['list_template'])selected="selected"@endif >{$template.name}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -136,7 +136,7 @@
                         </div>
                     </div>
                     {//是否可以管理权限}
-                    <if condition="$manage_privilege">
+                    @if ($manage_privilege)
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -148,7 +148,7 @@
                             <script type="text/javascript">
                                 $(function(){
                                     var config = {
-                                        <if condition="$edit_info['manage_id']">'def_data':{$edit_info.manage_id},</if>
+                                        @if ($edit_info['manage_id'])'def_data':{$edit_info.manage_id},@endif
                                         'out_obj':$('#manage_id_list'),
                                         'edit_obj':$('#admin_user_list'),
                                         'post_name':'manage_id[]',
@@ -171,7 +171,7 @@
                             <script type="text/javascript">
                                 $(function(){
                                     var config = {
-                                        <if condition="$edit_info['manage_group_id']">'def_data':{$edit_info.manage_group_id},</if>
+                                        @if ($edit_info['manage_group_id'])'def_data':{$edit_info.manage_group_id},@endif
                                         'out_obj':$('#manage_group_id_list'),
                                         'edit_obj':$('#admin_group_list'),
                                         'post_name':'manage_group_id[]',
@@ -194,7 +194,7 @@
                             <script type="text/javascript">
                                 $(function(){
                                     var config = {
-                                        <if condition="$edit_info['access_group_id']">'def_data':{$edit_info.access_group_id},</if>
+                                        @if ($edit_info['access_group_id'])'def_data':{$edit_info.access_group_id},@endif
                                         'out_obj':$('#access_group_id_list'),
                                         'edit_obj':$('#access_group_list'),
                                         'post_name':'access_group_id[]',
@@ -206,7 +206,7 @@
                             </script>
                         </div>
                     </div>
-                    </if>
+                    @endif
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -215,11 +215,11 @@
                             </div>
                         </div>
                         <div id="template_edit" class="col-sm-6">
-                            <import file="js/M_exttpl_editor" />
+                            <script type="text/javascript" src="{{ asset('js/M_exttpl_editor.js') }}"></script>
                             <script type="text/javascript">
                                 $(function(){
                                     var config = {
-                                        <if condition="$edit_info['extend']">'def_data':{$edit_info.extend|json_encode},</if>
+                                        @if ($edit_info['extend'])'def_data':{$edit_info.extend|json_encode},@endif
                                         'run_type':'add',
                                         'out_obj':$('#template_list'),
                                         'edit_obj':$('#template_edit'),
@@ -235,11 +235,11 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">{{ trans('common.attribute') }}{{ trans('common.template') }}</label>
                                 <div id="attribute" class="col-sm-8" >
-                                    <import file="js/M_attribute_editor" />
+                                    <script type="text/javascript" src="{{ asset('js/M_attribute_editor.js') }}"></script>
                                     <script type="text/javascript">
                                         $(function(){
                                             var config = {
-                                                <if condition="$edit_info['attribute']">'def_data':{$edit_info.attribute|json_encode},</if>
+                                                @if ($edit_info['attribute'])'def_data':{$edit_info.attribute|json_encode},@endif
                                                 'run_type':'edit',
                                                 'out_obj':$('#attribute'),
                                                 'post_name':'attribute'
@@ -257,11 +257,11 @@
                                 <label class="col-sm-2 control-label">{{ trans('common.enable') }}{{ trans('common.category') }}{{ trans('common.content') }}</label>
                                 <div class="col-sm-10">
                                     <label class="radio-inline">
-<input type="radio" name="is_content" value="1" <if condition="'1' heq $edit_info['is_content']">checked="checked"</if> />
+<input type="radio" name="is_content" value="1" @if ('1' heq $edit_info['is_content'])checked="checked"@endif />
                                         {{ trans('common.enable') }}({{ trans('common.content') }}{{ trans('common.template') }})
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="is_content" value="0" <if condition="'0' heq $edit_info['is_content'] or !isset($edit_info['is_content'])">checked="checked"</if> />
+<input type="radio" name="is_content" value="0" @if ('0' heq $edit_info['is_content'] or !isset($edit_info['is_content']))checked="checked"@endif />
                                         {{ trans('common.disable') }}({{ trans('common.list') }}{{ trans('common.template') }})
                                     </label>
                                 </div>
@@ -276,11 +276,11 @@
                     <div class="row mt10">
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
-                                <if condition="$Think.const.ACTION_NAME eq 'add'">
+                                @if ($Think.const.ACTION_NAME eq 'add')
                                     {{ trans('common.add') }}
-                                <elseif condition="$Think.const.ACTION_NAME eq 'edit'" />
+                                @elseif ($Think.const.ACTION_NAME eq 'edit')
                                     {{ trans('common.edit') }}
-                                </if>
+                                @endif
                             </button>
                             <a href="{{ route('index') }}" class="btn btn-default">
                                     {{ trans('common.goback') }}

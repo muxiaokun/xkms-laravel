@@ -12,13 +12,13 @@
                         {$recruit_info.end_time|M_date=C('SYS_DATE_DETAIL')}
                     </div>
                     <div class="col-sm-12 text-center mtb5">
-                        <foreach name="recruit_info.ext_info" item="data">
-                            <if condition="$data">
+                        @foreach ($recruit_info['ext_info'] as $data)
+                            @if ($data)
                                 &nbsp;&nbsp;<span class="badge">
                                     {{ $key }}{{ trans('common.colon') }}{{ $data }}
                                 </span>&nbsp;&nbsp;
-                            </if>
-                        </foreach>
+                            @endif
+                        @endforeach
                     </div>
                     <div class="col-sm-12 mtb10">
                         {$recruit_info.explains}

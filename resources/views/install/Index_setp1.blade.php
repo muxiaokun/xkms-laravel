@@ -21,9 +21,9 @@
                                 {{ trans('common.selection') }}{{ trans('common.exists') }}{{ trans('common.database') }}<span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <foreach name="database_list" item="data">
+                                @foreach ($database_list as $data)
                                     <li class="text-left"><a href="#" onclick="$('input[name=name]').val($(this).html())">{{ $data }}</a></li>
-                                </foreach>
+                                @endforeach
                             </ul>
                           </div>
                     </div>
@@ -56,9 +56,9 @@
                 </div>
                 <div class="col-sm-12 text-center"><div id="show_box" class="mt20"></div></div>
                 <script type="text/javascript">
-                    <foreach name="note" item="data">
+                    @foreach ($note as $data)
                     show_install_message("#show_box","{{ $data }}{{ trans('common.extend') }}{{ trans('common.none') }}{{ trans('common.loading') }}","warning")
-                    </foreach>
+                    @endforeach
                 </script>
             </div>
         </section>

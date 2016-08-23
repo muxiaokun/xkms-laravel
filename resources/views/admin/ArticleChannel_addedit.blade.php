@@ -1,17 +1,17 @@
     
-    <import file="js/M_cate_tree" />
+    <script type="text/javascript" src="{{ asset('js/M_cate_tree.js') }}"></script>
     <script type="text/javascript">
     $(function(){
-        <foreach name="article_category_list" item="article_category">
+        @foreach ($article_category_list as $article_category)
             {//默认展开所有的子级分类,如果不展开提交时表单数据将不存在}
-            <if condition="$article_category['checked']">
+            @if ($article_category['checked'])
 $('input[name="s_limit[{$article_category.id}]"]').val('{$edit_info['ext_info'][$article_category['id']]['s_limit']}' || 0);
 $('select[name="template_list[{$article_category.id}]"] option[value="{$edit_info['ext_info'][$article_category['id']]['template']}"]').prop('selected',true);
 $('select[name="list_template_list[{$article_category.id}]"] option[value="{$edit_info['ext_info'][$article_category['id']]['list_template']}"]').prop('selected',true);
 $('select[name="article_template_list[{$article_category.id}]"] option[value="{$edit_info['ext_info'][$article_category['id']]['article_template']}"]').prop('selected',true);
 M_cate_tree('input[name="category_list[]"][value="{$article_category.id}"]',article_channel_cb);
-            </if>
-        </foreach>
+            @endif
+        @endforeach
     });
     </script>
     <section class="container mt10">
@@ -63,9 +63,9 @@ M_cate_tree('input[name="category_list[]"][value="{$article_category.id}"]',arti
                                 <div class="col-sm-6">
                                     <select name="template" class="form-control input-sm w200 fl" >
                                         <option value="">{{ trans('common.use') }}{{ trans('common.default') }}</option>
-                                        <foreach name="channel_template_list" item="template">
-                                            <option value="{$template.value}" <if condition="$template['value'] eq $edit_info['template']">selected="selected"</if> >{$template.name}</option>
-                                        </foreach>
+                                        @foreach ($channel_template_list as $template)
+                                            <option value="{$template.value}" @if ($template['value'] eq $edit_info['template'])selected="selected"@endif >{$template.name}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -75,17 +75,17 @@ M_cate_tree('input[name="category_list[]"][value="{$article_category.id}"]',arti
                                 <label class="col-sm-4 control-label">{{ trans('common.channel') }}{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.show') }}</label>
                                 <div class="col-sm-3">
                                     <label class="radio-inline">
-<input type="radio" name="if_show" value="1" <if condition="'1' heq $edit_info['if_show'] or !isset($edit_info['if_show'])">checked="checked"</if> />{{ trans('common.show') }}
+<input type="radio" name="if_show" value="1" @if ('1' heq $edit_info['if_show'] or !isset($edit_info['if_show']))checked="checked"@endif />{{ trans('common.show') }}
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="if_show" value="0" <if condition="'0' heq $edit_info['if_show']">checked="checked"</if> />{{ trans('common.hidden') }}
+<input type="radio" name="if_show" value="0" @if ('0' heq $edit_info['if_show'])checked="checked"@endif />{{ trans('common.hidden') }}
                                     </label>
                                 </div>
                             </div>
                         </div>
                     </div>
                     {//是否可以管理权限}
-                    <if condition="$manage_privilege">
+                    @if ($manage_privilege)
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -94,11 +94,11 @@ M_cate_tree('input[name="category_list[]"][value="{$article_category.id}"]',arti
                             </div>
                         </div>
                         <div class="col-sm-6" id="admin_user_list">
-                            <import file="js/M_select_add" />
+                            <script type="text/javascript" src="{{ asset('js/M_select_add.js') }}"></script>
                             <script type="text/javascript">
                                 $(function(){
                                     var config = {
-                                        <if condition="$edit_info['manage_id']">'def_data':{$edit_info.manage_id},</if>
+                                        @if ($edit_info['manage_id'])'def_data':{$edit_info.manage_id},@endif
                                         'out_obj':$('#manage_id_list'),
                                         'edit_obj':$('#admin_user_list'),
                                         'post_name':'manage_id[]',
@@ -121,7 +121,7 @@ M_cate_tree('input[name="category_list[]"][value="{$article_category.id}"]',arti
                             <script type="text/javascript">
                                 $(function(){
                                     var config = {
-                                        <if condition="$edit_info['manage_group_id']">'def_data':{$edit_info.manage_group_id},</if>
+                                        @if ($edit_info['manage_group_id'])'def_data':{$edit_info.manage_group_id},@endif
                                         'out_obj':$('#manage_group_id_list'),
                                         'edit_obj':$('#admin_group_list'),
                                         'post_name':'manage_group_id[]',
@@ -141,11 +141,11 @@ M_cate_tree('input[name="category_list[]"][value="{$article_category.id}"]',arti
                             </div>
                         </div>
                         <div class="col-sm-6" id="access_group_list">
-                            <import file="js/M_select_add" />
+                            <script type="text/javascript" src="{{ asset('js/M_select_add.js') }}"></script>
                             <script type="text/javascript">
                                 $(function(){
                                     var config = {
-                                        <if condition="$edit_info['access_group_id']">'def_data':{$edit_info.access_group_id},</if>
+                                        @if ($edit_info['access_group_id'])'def_data':{$edit_info.access_group_id},@endif
                                         'out_obj':$('#access_group_id_list'),
                                         'edit_obj':$('#access_group_list'),
                                         'post_name':'access_group_id[]',
@@ -157,7 +157,7 @@ M_cate_tree('input[name="category_list[]"][value="{$article_category.id}"]',arti
                             </script>
                         </div>
                     </div>
-                    </if>
+                    @endif
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -175,52 +175,52 @@ M_cate_tree('input[name="category_list[]"][value="{$article_category.id}"]',arti
                                     <th class="col-sm-1" >{{ trans('common.list') }}{{ trans('common.template') }}</th>
                                     <th class="col-sm-1" >{{ trans('common.article') }}{{ trans('common.template') }}</th>
                                 </tr>
-                                <foreach name="article_category_list" key="cate_key"  item="article_category">
+                                @foreach ($article_category_list as $cate_key => $article_category)
                                     <tr cate_id="{$article_category.id}" parent_id="{$article_category.parent_id}" has_child="{$article_category.has_child}" >
                                         <td>
-<span class="glyphicon <if condition="0 lt $article_category['has_child']">glyphicon-plus<else/>glyphicon-minus</if> mlr10" onclick="M_cate_tree(this,article_channel_cb);" ></span>
-<input type="checkbox" name="category_list[]" value="{$article_category.id}" <if condition="$article_category['checked']">checked="checked"</if> onClick="M_cate_checkbox(this)" />
+<span class="glyphicon @if (0 lt $article_category['has_child'])glyphicon-plus@elseglyphicon-minus@endif mlr10" onclick="M_cate_tree(this,article_channel_cb);" ></span>
+<input type="checkbox" name="category_list[]" value="{$article_category.id}" @if ($article_category['checked'])checked="checked"@endif onClick="M_cate_checkbox(this)" />
 {$article_category.name}(ID:{$article_category.id})
                                         </td>
-                                        <td <if condition="0 eq $cate_key">id="s_limit"</if>  >
+                                        <td @if (0 eq $cate_key)id="s_limit"@endif  >
                                             <input type="text" name="s_limit[{$article_category.id}]" style="width:100%;" onKeyup="M_in_int(this);" />
                                         </td>
-                                        <td <if condition="0 eq $cate_key">id="template_list"</if> >
+                                        <td @if (0 eq $cate_key)id="template_list"@endif >
                                             <select name="template_list[{$article_category.id}]">
                                                 <option value="">{{ trans('common.use') }}{{ trans('common.default') }}</option>
-                                                <foreach name="template_list" item="template">
+                                                @foreach ($template_list as $template)
                                                     <option value="{$template.value}" >{$template.name}</option>
-                                                </foreach>
+                                                @endforeach
                                             </select>
                                         </td>
-                                        <td <if condition="0 eq $cate_key">id="list_template_list"</if> >
+                                        <td @if (0 eq $cate_key)id="list_template_list"@endif >
                                             <select name="list_template_list[{$article_category.id}]">
                                                 <option value="">{{ trans('common.use') }}{{ trans('common.default') }}</option>
-                                                <foreach name="list_template_list" item="template">
+                                                @foreach ($list_template_list as $template)
                                                     <option value="{$template.value}" >{$template.name}</option>
-                                                </foreach>
+                                                @endforeach
                                             </select>
                                         </td>
-                                        <td <if condition="0 eq $cate_key">id="article_template_list"</if> >
+                                        <td @if (0 eq $cate_key)id="article_template_list"@endif >
                                             <select name="article_template_list[{$article_category.id}]">
                                                 <option value="">{{ trans('common.use') }}{{ trans('common.default') }}</option>
-                                                <foreach name="article_template_list" item="template">
+                                                @foreach ($article_template_list as $template)
                                                     <option value="{$template.value}" >{$template.name}</option>
-                                                </foreach>
+                                                @endforeach
                                             </select>
                                         </td>
                                     </tr>
-                                </foreach>
+                                @endforeach
                             </table>
                         </div>
                     </div>
                     <div class="form-group col-sm-12 text-center">
                         <button type="submit" class="btn btn-info">
-                           <if condition="$Think.const.ACTION_NAME eq 'add'">
+                           @if ($Think.const.ACTION_NAME eq 'add')
                                {{ trans('common.add') }}
-                           <elseif condition="$Think.const.ACTION_NAME eq 'edit'" />
+                           @elseif ($Think.const.ACTION_NAME eq 'edit')
                                {{ trans('common.edit') }}
-                           </if>
+                           @endif
                         </button>
                        <a href="{{ route('index') }}" class="btn btn-default">
                            {{ trans('common.goback') }}

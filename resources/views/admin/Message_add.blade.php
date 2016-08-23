@@ -11,11 +11,11 @@
                                 <label class="col-sm-4 control-label">{{ trans('common.receive') }}{{ trans('common.member') }}</label>
                                 <div class="col-sm-8" id="receive_member_list">
                                     <input type="hidden" name="receive_id" />
-                                    <import file="js/M_select_add" />
+                                    <script type="text/javascript" src="{{ asset('js/M_select_add.js') }}"></script>
                                     <script type="text/javascript">
                                         $(function(){
                                             var config = {
-                                                <if condition="$receive_info['id']">'def_data':{'value':'{$receive_info.id}','html':'{$receive_info.member_name}'},</if>
+                                                @if ($receive_info['id'])'def_data':{'value':'{$receive_info.id}','html':'{$receive_info.member_name}'},@endif
                                                 'edit_obj':$('#receive_member_list'),
                                                 'post_name':'receive_id',
                                                 'ajax_url':'{{ route('ajax_api') }}',

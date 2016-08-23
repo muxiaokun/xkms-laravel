@@ -1,10 +1,10 @@
-<extend name="Member:base" />
-<block name="content">
+@extends('Member:base')
+@section('content')
     <script type="text/javascript">
         function answer_submit()
         {
-            <foreach name="quests_quest_list" key="quest_id" item="quest">
-            <if condition="$quest['required']">
+            @foreach ($quests_quest_list as $quest_id => $quest)
+            @if ($quest['required'])
                 <switch name="quest['answer_type']">
                     <case value="radio">
                         obj_str="[name='quests[{{ $quest_id }}]']:checked";
@@ -21,8 +21,8 @@
                     window.location.hash = "quests{{ $quest_id }}";
                     return false;
                 }
-            </if>
-            </foreach>
+            @endif
+            @endforeach
             return true;
         }
     </script>
@@ -33,36 +33,36 @@
         <form id="answer_form" onSubmit="return answer_submit();" method="post">
             <input type="hidden" name="id" value="{$quests_info.id}"/>
             <input type="hidden" name="access_info" value="{$quests_info.access_info}"/>
-            <foreach name="quests_quest_list" key="quest_id" item="quest">
+            @foreach ($quests_quest_list as $quest_id => $quest)
                 <div class="col-sm-12 form-group mt20 cb">
                     <a name="quests{{ $quest_id }}"></a>
                     <label >
                         <h4>{$quest.question}
-                        <if condition="$quest['required']">
+                        @if ($quest['required'])
                             <span class="ml20" style="color:#ff0000">({{ trans('common.required') }})</span>
-                        </if>
+                        @endif
                         </h4>
                     </label>
                     <span class="help-block">{$quest.explains}</span>
                     <div>
                         <switch name="quest['answer_type']">
                             <case value="radio">
-                                <foreach name="quest['answer']" item="info">
+                                @foreach ($quest['answer'] as $info)
                                     <div class="col-sm-2">
                                         <label class="checkbox-inline">
                                             <input type="radio" name="quests[{{ $quest_id }}]" value="{{ $key }}" />{{ $info }}
                                         </label>
                                     </div>
-                                </foreach>
+                                @endforeach
                             </case>
                             <case value="checkbox">
-                                <foreach name="quest['answer']" item="info">
+                                @foreach ($quest['answer'] as $info)
                                     <div class="col-sm-2">
                                         <label class="checkbox-inline">
                                             <input type="checkbox" name="quests[{{ $quest_id }}][]" value="{{ $key }}" />{{ $info }}
                                         </label>
                                     </div>
-                                </foreach>
+                                @endforeach
                             </case>
                             <case value="text">
                                 <input class="form-control" type="text" name="quests[{{ $quest_id }}]" />
@@ -73,7 +73,7 @@
                         </switch>
                     </div>
                 </div>
-            </foreach>
+            @endforeach
             <!-- 隐藏传参 -->
             <div class="row">
                 <div class="col-sm-12 text-center">
@@ -85,4 +85,4 @@
     <div class="col-sm-12">
         {$quests_info.end_content}
     </div>
-</block>
+@endsection

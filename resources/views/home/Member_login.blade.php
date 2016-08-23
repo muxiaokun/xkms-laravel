@@ -11,12 +11,12 @@
             </div>
             <div class="col-sm-6">
                 <ul id="login_tab" class="nav nav-tabs" role="tablist">
-                    <li <if condition="register neq I('t')">class="active"</if> ><a href="#login" role="tab" data-toggle="tab">{{ trans('common.login') }}{{ trans('common.account') }}</a></li>
-                    <li <if condition="register eq I('t')">class="active"</if> ><a href="#register" role="tab" data-toggle="tab">{{ trans('common.register') }}{{ trans('common.account') }}</a></li>
+                    <li @if (register neq I('t')">class="active"@endif ><a href="#login" role="tab" data-toggle="tab){{ trans('common.login') }}{{ trans('common.account') }}</a></li>
+                    <li @if (register eq I('t')">class="active"@endif ><a href="#register" role="tab" data-toggle="tab){{ trans('common.register') }}{{ trans('common.account') }}</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane <if condition="register neq I('t')">active</if> mt20 h350" id="login">
-                        <import file="js/M_valid" />
+                    <div class="tab-pane @if (register neq I('t')">active@endif mt20 h350" id="login)
+                        <script type="text/javascript" src="{{ asset('js/M_valid.js') }}"></script>
                         <script>
                             $(function(){
                                 var config = {
@@ -42,7 +42,7 @@
                                     <input type="password" class="form-control" placeholder="{{ trans('common.pwd') }}" name="pwd" />
                                 </div>
                             </div>
-                            <if condition="C('SYS_FRONTEND_VERIFY')">
+                            @if (C('SYS_FRONTEND_VERIFY'))
                             {/*<!--验证码 开始-->*/}
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">{{ trans('common.verify_code') }}</label>
@@ -54,11 +54,11 @@
                                 <img class="col-sm-5 col-sm-offset-3" src="{:M_U('verify_img',array('t'=>'login'))}" onClick="M_change_verify(this,$('input[name=verify]'))" />
                             </div>
                             {/*<!--验证码 结束-->*/}
-                            </if>
+                            @endif
                             <input type="submit" class="btn btn-info col-sm-offset-5" value="{{ trans('common.login') }}">
                         </form>
                     </div>
-                    <div class="tab-pane <if condition="register eq I('t')">active</if> mt20 h350" id="register">
+                    <div class="tab-pane @if (register eq I('t')">active@endif mt20 h350" id="register)
                         <script>
                             $(function(){
                                 var config = {
@@ -92,7 +92,7 @@
                                     <input type="password" class="form-control" placeholder="{{ trans('common.pwd') }}" name="password_again" />
                                 </div>
                             </div>
-                            <if condition="C('SYS_FRONTEND_VERIFY')">
+                            @if (C('SYS_FRONTEND_VERIFY'))
                             {/*<!--验证码 开始-->*/}
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">{{ trans('common.verify_code') }}</label>
@@ -104,7 +104,7 @@
                                 <img class="col-sm-5 col-sm-offset-3" src="{:M_U('verify_img',array('t'=>'register'))}" onClick="M_change_verify(this,$('input[name=verify]'))" />
                             </div>
                             {/*<!--验证码 结束-->*/}
-                            </if>
+                            @endif
                             <input type="submit" class="btn btn-info col-sm-offset-5" value="{{ trans('common.register') }}">
                         </form>
                     </div>

@@ -21,9 +21,9 @@
                                 <div class="col-sm-6">
                                     <select name="template" class="form-control input-sm" >
                                         <option value="">{{ trans('common.use') }}{{ trans('common.default') }}</option>
-                                        <foreach name="template_list" item="template">
-                                            <option value="{$template.value}" <if condition="$template['value'] eq $edit_info['template']">selected="selected"</if> >{$template.name}</option>
-                                        </foreach>
+                                        @foreach ($template_list as $template)
+                                            <option value="{$template.value}" @if ($template['value'] eq $edit_info['template'])selected="selected"@endif >{$template.name}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -65,11 +65,11 @@
                         </tr>
                     </table>
                     <table id="out_obj" class="table table-hover">
-                        <import file="js/M_messageboard_editor" />
+                        <script type="text/javascript" src="{{ asset('js/M_messageboard_editor.js') }}"></script>
                         <script>
                             $(function(){
                                 new M_messageboard_editor({
-                                        <if condition="$edit_info['config']">'def_data':{$edit_info.config},</if>
+                                        @if ($edit_info['config'])'def_data':{$edit_info.config},@endif
                                         'out_obj':$('#out_obj'),
                                         'edit_obj':$('#edit_obj'),
                                         'btn_obj':$('#btn_obj'),

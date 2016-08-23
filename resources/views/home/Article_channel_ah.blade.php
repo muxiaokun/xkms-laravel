@@ -4,7 +4,7 @@
                 channnel
             </div>
             <div class="col-sm-4">
-                <include file="Public:right" />
+                @include('Public:right')
             </div>
         </div>
     </section>

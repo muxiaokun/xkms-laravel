@@ -11,10 +11,10 @@
                             <label class="col-sm-4 control-label">{{ trans('common.sync') }}{{ trans('common.content') }}{{ trans('common.image') }}</label>
                             <div class="col-sm-7">
                                 <label class="radio-inline">
-                                    <input type="radio" name="SYS_ARTICLE_SYNC_IMAGE" value="1" <if condition="'1' heq C('SYS_ARTICLE_SYNC_IMAGE')">checked="checked"</if> >{{ trans('common.enable') }}
+                                    <input type="radio" name="SYS_ARTICLE_SYNC_IMAGE" value="1" @if ('1' heq C('SYS_ARTICLE_SYNC_IMAGE'))checked="checked"@endif >{{ trans('common.enable') }}
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="SYS_ARTICLE_SYNC_IMAGE" value="0" <if condition="'0' heq C('SYS_ARTICLE_SYNC_IMAGE')">checked="checked"</if> >{{ trans('common.disable') }}
+                                    <input type="radio" name="SYS_ARTICLE_SYNC_IMAGE" value="0" @if ('0' heq C('SYS_ARTICLE_SYNC_IMAGE'))checked="checked"@endif >{{ trans('common.disable') }}
                                 </label>
                             </div>
                         </div>

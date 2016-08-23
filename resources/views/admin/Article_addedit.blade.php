@@ -37,7 +37,7 @@
                                 <label class="col-sm-4 control-label">{{ trans('common.sort') }}</label>
                                 <div class="col-sm-6">
 <input type="text" class="form-control" placeholder="{{ trans('common.sort') }}" name="sort" onKeyup="M_in_int_range(this,1,100);"
-       value="<if condition="$edit_info['sort']">{$edit_info.sort}<else />100</if>"/>
+       value="@if ($edit_info['sort']){$edit_info.sort}@else100@endif"/>
                                 </div>
                             </div>
                         </div>
@@ -49,9 +49,9 @@
                                 <div class="col-sm-6">
                                     <select name="channel_id" class="form-control input-sm" >
                                         <option value="">{{ trans('common.default') }}{{ trans('common.dont') }}{{ trans('common.pertain') }}{{ trans('common.channel') }}</option>
-                                        <foreach name="channel_list" item="channel">
-                                            <option value="{$channel.id}" <if condition="$channel['id'] eq $edit_info['channel_id']">selected="selected"</if> >{$channel.name}</option>
-                                        </foreach>
+                                        @foreach ($channel_list as $channel)
+                                            <option value="{$channel.id}" @if ($channel['id'] eq $edit_info['channel_id'])selected="selected"@endif >{$channel.name}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -62,21 +62,21 @@
                                 <div class="col-sm-6">
                                     <select class="form-control input-sm" name="cate_id">
                                         <option value="">{{ trans('common.default') }}{{ trans('common.dont') }}{{ trans('common.pertain') }}{{ trans('common.category') }}</option>
-                                        <foreach name="category_list" item="category">
-<option value="{$category.id}" <if condition="$category['id'] eq $edit_info['cate_id'] or $category['id'] eq I('cate_id')">selected="selected" mtype="def_data"</if> >{$category.name}</option>
-                                        </foreach>
+                                        @foreach ($category_list as $category)
+<option value="{$category.id}" @if ($category['id'] eq $edit_info['cate_id'] or $category['id'] eq I('cate_id'))selected="selected" mtype="def_data"@endif >{$category.name}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div id="attribute" class="row">
-                        <import file="js/M_attribute_editor" />
+                        <script type="text/javascript" src="{{ asset('js/M_attribute_editor.js') }}"></script>
                         <script type="text/javascript">
                             $(function(){
                                 var config = {
-                                    <if condition="$edit_info['attribute_tpl']">'def_data':{$edit_info.attribute_tpl|json_encode},</if>
-                                    <if condition="$edit_info['attribute']">'def_selected':{$edit_info.attribute|json_encode},</if>
+                                    @if ($edit_info['attribute_tpl'])'def_data':{$edit_info.attribute_tpl|json_encode},@endif
+                                    @if ($edit_info['attribute'])'def_selected':{$edit_info.attribute|json_encode},@endif
                                     'run_type':'select',
                                     'select_obj':$('select[name=cate_id]'),
                                     'out_obj':$('#attribute'),
@@ -88,11 +88,11 @@
                         </script>
                     </div>
                     <div id="extend_list" class="row">
-                        <import file="js/M_exttpl_editor" />
+                        <script type="text/javascript" src="{{ asset('js/M_exttpl_editor.js') }}"></script>
                         <script type="text/javascript">
                             $(function(){
                                 var config = {
-                                    <if condition="$edit_info['extend']">'def_data':{$edit_info.extend|json_encode},</if>
+                                    @if ($edit_info['extend'])'def_data':{$edit_info.extend|json_encode},@endif
                                     'run_type':'edit',
                                     'out_obj':$('#extend_list'),
                                     'edit_obj':$('select[name=cate_id]'),
@@ -109,10 +109,10 @@
                                 <label class="col-sm-4 control-label">{{ trans('common.stick') }}</label>
                                 <div class="col-sm-4">
                                     <label class="radio-inline">
-<input type="radio" name="is_stick" value="1" <if condition="'1' heq $edit_info['is_stick']">checked="checked"</if> />{{ trans('common.yes') }}
+<input type="radio" name="is_stick" value="1" @if ('1' heq $edit_info['is_stick'])checked="checked"@endif />{{ trans('common.yes') }}
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="is_stick" value="0" <if condition="'0' heq $edit_info['is_stick'] or !isset($edit_info['is_stick'])">checked="checked"</if> />{{ trans('common.no') }}
+<input type="radio" name="is_stick" value="0" @if ('0' heq $edit_info['is_stick'] or !isset($edit_info['is_stick']))checked="checked"@endif />{{ trans('common.no') }}
                                     </label>
                                 </div>
                             </div>
@@ -120,10 +120,10 @@
                                 <label class="col-sm-4 control-label">{{ trans('common.audit') }}</label>
                                 <div class="col-sm-4">
                                     <label class="radio-inline">
-<input type="radio" name="is_audit" value="1" <if condition="'1' heq $edit_info['is_audit'] or !isset($edit_info['is_audit'])">checked="checked"</if> />{{ trans('common.yes') }}
+<input type="radio" name="is_audit" value="1" @if ('1' heq $edit_info['is_audit'] or !isset($edit_info['is_audit']))checked="checked"@endif />{{ trans('common.yes') }}
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="is_audit" value="0" <if condition="'0' heq $edit_info['is_audit']">checked="checked"</if> />{{ trans('common.no') }}
+<input type="radio" name="is_audit" value="0" @if ('0' heq $edit_info['is_audit'])checked="checked"@endif />{{ trans('common.no') }}
                                     </label>
                                 </div>
                             </div>
@@ -131,10 +131,10 @@
                                 <label class="col-sm-4 control-label">{{ trans('common.show') }}</label>
                                 <div class="col-sm-4">
                                     <label class="radio-inline">
-<input type="radio" name="if_show" value="1" <if condition="'1' heq $edit_info['if_show'] or !isset($edit_info['if_show'])">checked="checked"</if> />{{ trans('common.show') }}
+<input type="radio" name="if_show" value="1" @if ('1' heq $edit_info['if_show'] or !isset($edit_info['if_show']))checked="checked"@endif />{{ trans('common.show') }}
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="if_show" value="0" <if condition="'0' heq $edit_info['if_show']">checked="checked"</if> />{{ trans('common.hidden') }}
+<input type="radio" name="if_show" value="0" @if ('0' heq $edit_info['if_show'])checked="checked"@endif />{{ trans('common.hidden') }}
                                     </label>
                                 </div>
                             </div>
@@ -206,11 +206,11 @@
                             </div>
                         </div>
                         <div class="col-sm-6" id="access_group_list">
-                            <import file="js/M_select_add" />
+                            <script type="text/javascript" src="{{ asset('js/M_select_add.js') }}"></script>
                             <script type="text/javascript">
                                 $(function(){
                                     var config = {
-                                        <if condition="$edit_info['access_group_id']">'def_data':{$edit_info.access_group_id},</if>
+                                        @if ($edit_info['access_group_id'])'def_data':{$edit_info.access_group_id},@endif
                                         'out_obj':$('#access_group_id_list'),
                                         'edit_obj':$('#access_group_list'),
                                         'post_name':'access_group_id[]',
@@ -291,13 +291,13 @@
                                             var div = $('#image_box');
                                             div.append(image_box).sortable();
                                         }
-                                        <if condition="$edit_info['album']">
+                                        @if ($edit_info['album'])
                                         $(function(){
-                                            <foreach name="edit_info.album" item="data">
-                                                 <if condition="'null' neq $data">M_article_uploadsbutton({{ $data }});</if>
-                                             </foreach>
+                                            @foreach ($edit_info['album'] as $data)
+                                                 @if ('null' neq $data)M_article_uploadsbutton({{ $data }});@endif
+                                             @endforeach
                                         });
-                                        </if>
+                                        @endif
                                     </script>
                                     <M:Uploadfile id="uploadsbutton" type="multiimage" dir="kindeditor" cb_fn="M_article_uploadsbutton" />
                                 </div>
@@ -333,11 +333,11 @@
                     <div class="row mt10">
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
-                                <if condition="$Think.const.ACTION_NAME eq 'add'">
+                                @if ($Think.const.ACTION_NAME eq 'add')
                                     {{ trans('common.add') }}
-                                <elseif condition="$Think.const.ACTION_NAME eq 'edit'" />
+                                @elseif ($Think.const.ACTION_NAME eq 'edit')
                                     {{ trans('common.edit') }}
-                                </if>
+                                @endif
                             </button>
                             <a href="{{ route('index') }}" class="btn btn-default">
                                     {{ trans('common.goback') }}

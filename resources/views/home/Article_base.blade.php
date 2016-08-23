@@ -1,12 +1,12 @@
-<include file="Public:header" />    
+@include('Public:header')
     <section class="container">
         <div class="row">
             <div class="col-sm-8">
-                <block name="content"></block>
+                @section('content')@endsection
             </div>
             <div class="col-sm-4">
-                <include file="Public:right" />
+                @include('Public:right')
             </div>
         </div>
     </section>
-<include file="Public:footer" />
+@include('Public:footer')

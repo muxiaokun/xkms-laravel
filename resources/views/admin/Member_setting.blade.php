@@ -11,10 +11,10 @@
                             <label class="col-sm-4 control-label">{{ trans('common.enable') }}{{ trans('common.member') }}{{ trans('common.controller') }}</label>
                             <div class="col-sm-7">
                                 <label class="radio-inline">
-                                    <input type="radio" name="SYS_MEMBER_ENABLE" value="1" <if condition="'1' heq C('SYS_MEMBER_ENABLE')">checked="checked"</if> >{{ trans('common.open') }}
+                                    <input type="radio" name="SYS_MEMBER_ENABLE" value="1" @if ('1' heq C('SYS_MEMBER_ENABLE'))checked="checked"@endif >{{ trans('common.open') }}
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="SYS_MEMBER_ENABLE" value="0" <if condition="'0' heq C('SYS_MEMBER_ENABLE')">checked="checked"</if> >{{ trans('common.close') }}
+                                    <input type="radio" name="SYS_MEMBER_ENABLE" value="0" @if ('0' heq C('SYS_MEMBER_ENABLE'))checked="checked"@endif >{{ trans('common.close') }}
                                 </label>
                             </div>
                         </div>
@@ -27,10 +27,10 @@
                             <label class="col-sm-4 control-label">{{ trans('common.auto') }}{{ trans('common.enable') }}{{ trans('common.member') }}</label>
                             <div class="col-sm-7">
                                 <label class="radio-inline">
-                                    <input type="radio" name="SYS_MEMBER_AUTO_ENABLE" value="1" <if condition="'1' heq C('SYS_MEMBER_AUTO_ENABLE')">checked="checked"</if> >{{ trans('common.open') }}
+                                    <input type="radio" name="SYS_MEMBER_AUTO_ENABLE" value="1" @if ('1' heq C('SYS_MEMBER_AUTO_ENABLE'))checked="checked"@endif >{{ trans('common.open') }}
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="SYS_MEMBER_AUTO_ENABLE" value="0" <if condition="'0' heq C('SYS_MEMBER_AUTO_ENABLE')">checked="checked"</if> >{{ trans('common.close') }}
+                                    <input type="radio" name="SYS_MEMBER_AUTO_ENABLE" value="0" @if ('0' heq C('SYS_MEMBER_AUTO_ENABLE'))checked="checked"@endif >{{ trans('common.close') }}
                                 </label>
                             </div>
                         </div>
@@ -41,10 +41,10 @@
                             <label class="col-sm-4 control-label">{{ trans('common.frontend') }}{{ trans('common.verify_code') }}</label>
                             <div class="col-sm-7">
                                 <label class="radio-inline">
-                                    <input type="radio" name="SYS_FRONTEND_VERIFY" value="1" <if condition="'1' heq C('SYS_FRONTEND_VERIFY')">checked="checked"</if> >{{ trans('common.open') }}
+                                    <input type="radio" name="SYS_FRONTEND_VERIFY" value="1" @if ('1' heq C('SYS_FRONTEND_VERIFY'))checked="checked"@endif >{{ trans('common.open') }}
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="SYS_FRONTEND_VERIFY" value="0" <if condition="'0' heq C('SYS_FRONTEND_VERIFY')">checked="checked"</if> >{{ trans('common.close') }}
+                                    <input type="radio" name="SYS_FRONTEND_VERIFY" value="0" @if ('0' heq C('SYS_FRONTEND_VERIFY'))checked="checked"@endif >{{ trans('common.close') }}
                                 </label>
                             </div>
                         </div>

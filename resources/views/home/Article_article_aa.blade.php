@@ -1,21 +1,21 @@
-<extend name="Article:base" />
-<block name="content">
+@extends('Article:base')
+@section('content')
                 <div class="col-sm-12 text-center">
                     <h2>{$article_info.title}</h2>
                 </div>
                 <div class="col-sm-12 text-center">
-                    <if condition="$article_info['add_time']">
+                    @if ($article_info['add_time'])
                         {{ trans('common.add') }}{{ trans('common.time') }}{{ trans('common.colon') }}{$article_info.add_time|M_date="Y-m-d"}&nbsp;&nbsp;
-                    </if>
-                    <if condition="$article_info['update_time']">
+                    @endif
+                    @if ($article_info['update_time'])
                         {{ trans('common.edit') }}{{ trans('common.time') }}{{ trans('common.colon') }}{$article_info.update_time|M_date="Y-m-d"}&nbsp;&nbsp;
-                    </if>
-                    <if condition="$article_info['hits']">
+                    @endif
+                    @if ($article_info['hits'])
                         {{ trans('common.click') }}{{ trans('common.colon') }}{$article_info.hits}&nbsp;&nbsp;
-                    </if>
-                    <if condition="$article_info['author']">
+                    @endif
+                    @if ($article_info['author'])
                         {{ trans('common.author') }}{{ trans('common.colon') }}{$article_info.author}&nbsp;&nbsp;
-                    </if>
+                    @endif
                     &nbsp;&nbsp;
                     <button id="big_obj" class="btn btn-sm btn-default" >{{ trans('common.tobig') }}{{ trans('common.font') }}</button>
                     <button id="small_obj" class="btn btn-sm btn-default">{{ trans('common.tosmall') }}{{ trans('common.font') }}</button>
@@ -23,7 +23,7 @@
                 <div id="content" class="col-sm-12 mt20">
                     {$article_info.content}
                 </div>
-                <import file="js/M_fontsize" />
+                <script type="text/javascript" src="{{ asset('js/M_fontsize.js') }}"></script>
                 <script type="text/javascript">
                     $(function(){
                         var config = {
@@ -36,21 +36,21 @@
                 </script>
                 <div class="col-sm-12 mt20">
                     <div class="col-sm-6 ">
-                        <if condition="$article_pn['p']">
+                        @if ($article_pn['p'])
                             {{ trans('common.before') }}{$article_pn.limit}{{ trans('common.piece') }}{{ trans('common.article') }}
-                            <foreach name="article_pn['p']" item="data">
+                            @foreach ($article_pn['p'] as $data)
                                 <a href="{:M_U('article',$data['id'])}">{$data.title}</a>
-                            </foreach>
-                        </if>
+                            @endforeach
+                        @endif
                     </div>
                     <div class="col-sm-6 ">
-                        <if condition="$article_pn['n']">
+                        @if ($article_pn['n'])
                             {{ trans('common.later') }}{$article_pn.limit}{{ trans('common.piece') }}{{ trans('common.article') }}
-                            <foreach name="article_pn['n']" item="data">
+                            @foreach ($article_pn['n'] as $data)
                                 <a href="{:M_U('article',$data['id'])}">{$data.title}</a>
-                            </foreach>
-                        </if>
+                            @endforeach
+                        @endif
                     </div>
                 </div>
-                <include file="Comment/index" controller="{$Think.const.CONTROLLER_NAME}" item="{$article_info.id}" />
-</block>
+                @include('Comment/index" controller="{$Think.const.CONTROLLER_NAME}" item="{$article_info.id}')
+@endsection

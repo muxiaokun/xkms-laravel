@@ -5,30 +5,30 @@
                 <a href="{{ route('Index/clean_cache') }}" class="hidden" >{{ trans('common.clean') }}{{ trans('common.cache') }}</a>
             </div>
             <div class="col-sm-12 mb20 text-center quick_ico">
-                <if condition="$site_info['ico']['ico1']">
+                @if ($site_info['ico']['ico1'])
                     <a href="{{ route('Article/add') }}" ><span class="mr20 ico1" title="{{ trans('common.add') }}{{ trans('common.article') }}"></span></a>
-                </if>
-                <if condition="$site_info['ico']['ico2']">
+                @endif
+                @if ($site_info['ico']['ico2'])
                     <a href="{{ route('ArticleCategory/add') }}" ><span class="mr20 ico2" title="{{ trans('common.add') }}{{ trans('common.article') }}{{ trans('common.category') }}"></span></a>
-                </if>
-                <if condition="$site_info['ico']['ico6']">
+                @endif
+                @if ($site_info['ico']['ico6'])
                     <a href="{{ route('Member/add') }}" ><span class="mr20 ico6" title="{{ trans('common.add') }}{{ trans('common.member') }}"></span></a>
-                </if>
-                <if condition="$site_info['ico']['ico7']">
+                @endif
+                @if ($site_info['ico']['ico7'])
                     <a href="{{ route('MemberGroup/add') }}" ><span class="mr20 ico7" title="{{ trans('common.add') }}{{ trans('common.member') }}{{ trans('common.group') }}"></span></a>
-                </if>
-                <if condition="$site_info['ico']['ico8']">
+                @endif
+                @if ($site_info['ico']['ico8'])
                     <a href="{{ route('ManageUpload/index') }}" ><span class="mr20 ico8" title="{{ trans('common.management') }}{{ trans('common.upload') }}{{ trans('common.file') }}"></span></a>
-                </if>
-                <if condition="$site_info['ico']['ico9']">
+                @endif
+                @if ($site_info['ico']['ico9'])
                     <a href="{{ route('Index/clean_log') }}" ><span class="mr20 ico9" title="{{ trans('common.clean') }}{{ trans('common.log') }}"></span></a>
-                </if>
-                <if condition="$site_info['ico']['ico10']">
+                @endif
+                @if ($site_info['ico']['ico10'])
                     <a href="{{ route('Index/clean_cache') }}" ><span class="mr20 ico10" title="{{ trans('common.clean') }}{{ trans('common.cache') }}"></span></a>
-                </if>
-                <if condition="$site_info['ico']['ico12']">
+                @endif
+                @if ($site_info['ico']['ico12'])
                     <a href="{{ route('Index/database_set') }}" ><span class="mr20 ico12" title="{{ trans('common.database') }}{{ trans('common.config') }}"></span></a>
-                </if>
+                @endif
                 <script type="text/javascript">M_jqueryui_tooltip('.quick_ico span')</script>
             </div>
             <div class="col-sm-6">
@@ -45,7 +45,7 @@
                             </tr>
                         </table>
                     </div>
-                    <if condition="!APP_DEBUG">
+                    @if (!APP_DEBUG)
                     <script type="text/javascript">
                         //加载站异步的新闻
                         $(function(){
@@ -66,7 +66,7 @@
                             });
                         });
                     </script>
-                    </if>
+                    @endif
                 </div>
             </div>
             <div class="col-sm-6">

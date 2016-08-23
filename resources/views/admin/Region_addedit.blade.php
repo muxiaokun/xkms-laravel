@@ -65,11 +65,11 @@
                                 <label class="col-sm-4 control-label">{{ trans('common.parent_level') }}</label>
                                 <div class="col-sm-6" id="region_list">
                                     <input type="hidden" name="parent_id"/>
-                                    <import file="js/M_select_add" />
+                                    <script type="text/javascript" src="{{ asset('js/M_select_add.js') }}"></script>
                                     <script type="text/javascript">
                                         $(function(){
                                             var config = {
-                                                <if condition="$edit_info['parent_id']">'def_data':{'value':{$edit_info.parent_id},'html':'{$edit_info.parent_name}'},</if>
+                                                @if ($edit_info['parent_id'])'def_data':{'value':{$edit_info.parent_id},'html':'{$edit_info.parent_name}'},@endif
                                                 'edit_obj':$('#region_list'),
                                                 'post_name':'parent_id',
                                                 'ajax_url':'{{ route('ajax_api') }}',
@@ -86,10 +86,10 @@
                                 <label class="col-sm-4 control-label">{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.show') }}</label>
                                 <div class="col-sm-4">
                                     <label class="radio-inline">
-<input type="radio" name="if_show" value="1" <if condition="'1' heq $edit_info['if_show']">checked="checked"</if> />{{ trans('common.show') }}
+<input type="radio" name="if_show" value="1" @if ('1' heq $edit_info['if_show'])checked="checked"@endif />{{ trans('common.show') }}
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="if_show" value="0" <if condition="'0' heq $edit_info['if_show'] or !isset($edit_info['if_show'])">checked="checked"</if> />{{ trans('common.hidden') }}
+<input type="radio" name="if_show" value="0" @if ('0' heq $edit_info['if_show'] or !isset($edit_info['if_show']))checked="checked"@endif />{{ trans('common.hidden') }}
                                     </label>
                                 </div>
                             </div>
@@ -98,11 +98,11 @@
                     <div class="row mt10">
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
-                                <if condition="$Think.const.ACTION_NAME eq 'add'">
+                                @if ($Think.const.ACTION_NAME eq 'add')
                                     {{ trans('common.add') }}
-                                <elseif condition="$Think.const.ACTION_NAME eq 'edit'" />
+                                @elseif ($Think.const.ACTION_NAME eq 'edit')
                                     {{ trans('common.edit') }}
-                                </if>
+                                @endif
                             </button>
                             <a href="{{ route('index') }}" class="btn btn-default">
                                     {{ trans('common.goback') }}

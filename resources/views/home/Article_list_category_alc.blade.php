@@ -1,23 +1,23 @@
-<extend name="Article:base" />
-<block name="content">
-                <import type="css" file="prettyPhoto/prettyPhoto" />
-                <import file="prettyPhoto/jquery#prettyPhoto" />
+@extends('Article:base')
+@section('content')
+                <link rel="stylesheet" href="{{ asset('prettyPhoto/prettyPhoto.css') }}" />
+                <script type="text/javascript" src="{{ asset('prettyPhoto/jquery.prettyPhoto.js') }}"></script>
                 <script type="text/javascript">
                     $("#prettyPhoto").prettyPhoto({'social_tools':'','theme':'facebook'});
                 </script>
                 <div id="prettyPhoto">
                     <div class="col-sm-12">
-                        <foreach name="t=M_attribute_arr($category_info['attribute'])" item="attrs">
+                        @foreach ($t=M_attribute_arr($category_info['attribute']) as $attrs)
                             <div class="col-sm-12 btn-group btn-group-sm mb10" role="group" aria-label="...">
-                                <foreach name="attrs" item="attr">
-                                <a class="btn btn-default <if condition="$attr['checked']">btn-info</if>" href="{$attr.link}">
+                                @foreach ($attrs as $attr)
+                                <a class="btn btn-default @if ($attr['checked']">btn-info@endif" href="{$attr.link})
                                     {$attr.name}
                                 </a>
-                                </foreach>
+                                @endforeach
                             </div>
-                        </foreach>
+                        @endforeach
                     </div>
-                    <foreach name="article_list" key="index" item="data">
+                    @foreach ($article_list as $index => $data)
                         <div class="col-sm-12 pb10">
                             <div class="col-sm-2 pt10">
                                 <a id="prettyPhoto{{ $index }}" href="{:M_U('article',$data['id'])}" >
@@ -44,9 +44,9 @@
                                         api_titles.push(data.title);
                                         api_descriptions.push(data.description);
                                     }
-                                    <foreach name="data.ext_info.images_info" item="data">
+                                    @foreach ($data['ext_info']['images_info'] as $data)
                                         prettyPhoto_push({$data|json_encode});
-                                    </foreach>
+                                    @endforeach
                                     $("#prettyPhoto{{ $index }}").on('click',function(){
                                         $.prettyPhoto.open(api_gallery,api_titles,api_descriptions);
                                         return false;
@@ -54,9 +54,9 @@
                                 });
                             </script>
                         </div>
-                    </foreach>
+                    @endforeach
                 </div>
                 <M:Page name="article_list">
                     <div class="col-sm-12"><config></config></div>
                 </M:Page>
-</block>
+@endsection

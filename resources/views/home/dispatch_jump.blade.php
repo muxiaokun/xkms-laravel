@@ -8,28 +8,28 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>{{ trans('common.system') }}{{ trans('common.info') }} {{ trans('common.dash') }} {{ config('SITE_TITLE') }}</title>
-    <import type="css" file="css/bootstrap#min" />
-    <import type="css" file="css/bootstrap-theme#min" />
-    <import type="css" file="css/common" />
-    <import file="js/jquery#min" />
+    <link rel="stylesheet" href="{{ asset('css/bootstrap#min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-theme#min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/common.css') }}" />
+    <script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
     <!--[if lt IE 9]>
-        <import file="js/supporthtml5" />
+        <script type="text/javascript" src="{{ asset('js/supporthtml5.js') }}"></script>
     <![endif]-->
 </head>
 <body>
     <section class="container">
         <div class="col-sm-8 col-sm-offset-2">
-            <div class="panel <if condition="$message">panel-info<else/>panel-danger</if> ">
+            <div class="panel @if ($message">panel-info@elsepanel-danger@endif )
                 <div class="panel-heading text-center">
-                    {{ trans('common.system') }}<if condition="$message">{{ trans('common.info') }}<else/>{{ trans('common.error') }}</if>
+                    {{ trans('common.system') }}@if ($message){{ trans('common.info') }}@else{{ trans('common.error') }}@endif
                 </div>
                 <div class="panel-body">
                     <div class="col-sm-4 text-center">
-                        <if condition="$message">
+                        @if ($message)
                             <span class="glyphicon glyphicon-ok" style="color:green;font-size:80px;"></span>
-                        <else/>
+                        @else
                             <span class="glyphicon glyphicon-warning-sign" style="color:red;font-size:80px;"></span>
-                        </if>
+                        @endif
                     </div>
                     <div class="col-sm-6  text-left" style="line-height: 40px;">
                         <span class="error"><?php echo($error); ?><?php echo($message); ?></span>

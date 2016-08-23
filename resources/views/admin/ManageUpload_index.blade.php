@@ -1,10 +1,10 @@
 
-    <import file="js/M_alert_log" />
+    <script type="text/javascript" src="{{ asset('js/M_alert_log.js') }}"></script>
     <section class="container mt10">
         <div class="panel panel-default">
             <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
-                <include file="Public:where_info" />
+                @include('Public:where_info')
                 <table class="table table-condensed table-hover">
                     <tr>
                         <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
@@ -15,12 +15,12 @@
                         <th>{{ trans('common.suffix') }}</th>
                         <th>{{ trans('common.bind') }}{{ trans('common.info') }}</th>
                         <td class="nowrap">
-                            <if condition="$batch_handle['edit']">
+                            @if ($batch_handle['edit'])
                                 <a class="btn btn-xs btn-success"  href="{{ route('edit') }}">{{ trans('common.clear') }}{{ trans('common.none') }}{{ trans('common.bind') }}</a>
-                            </if>
+                            @endif
                         </td>
                     </tr>
-                    <foreach name="manage_upload_list" item="manage_upload">
+                    @foreach ($manage_upload_list as $manage_upload)
                         <tr>
                             <td>
                                 <input name="id[]" type="checkbox" value="{$manage_upload.id}"/>
@@ -29,9 +29,9 @@
                             <td>
                                 {$manage_upload.user_name}
                                 [
-                                    <if condition="1 eq $manage_upload['user_type']">{{ trans('common.backend') }}
-                                    <elseif condition="2 eq $manage_upload['user_type']"/>{{ trans('common.frontend') }}
-                                    </if>
+                                    @if (1 eq $manage_upload['user_type']){{ trans('common.backend') }}
+                                    @elseif (2 eq $manage_upload['user_type']){{ trans('common.frontend') }}
+                                    @endif
                                 ]
                             </td>
                             <td>
@@ -47,7 +47,7 @@
                                 {$manage_upload.suffix}
                             </td>
                             <td class="nowrap">
-                                <if condition="$manage_upload['bind_info']">
+                                @if ($manage_upload['bind_info'])
 <a id="M_alert_log_{$manage_upload.id}" class="btn btn-xs btn-primary" href="javascript:void(0);" >{{ trans('common.look') }}</a>
                                     <script>
                                         $(function(){
@@ -59,28 +59,28 @@
                                             new M_alert_log(config);
                                         });
                                     </script>
-                                <else/>
+                                @else
                                     {{ trans('common.empty') }}
-                                </if>
+                                @endif
                             </td>
                             <td>
                                 <a class="btn btn-xs btn-primary" href="javascript:void(0);" id="copy_obj{$manage_upload.id}" data-clipboard-text="{$manage_upload.path}" >
                                     <script type="text/javascript" charset="utf-8">M_ZeroClipboard('copy_obj{$manage_upload.id}');</script>
                                     {{ trans('common.copy') }}{{ trans('common.path') }}
                                 </a>
-                                <if condition="$batch_handle['del']">
+                                @if ($batch_handle['del'])
 <a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$manage_upload.name}?','{{ route('del',array('id'=>$manage_upload['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
-                                </if>
+                                @endif
                             </td>
                         </tr>
-                    </foreach>
+                    @endforeach
                 </table>
                 <div class="row">
                     <div id="batch_handle"  class="col-sm-4 pagination">
-                        <if condition="$batch_handle['del']">
-                        <import file="js/M_batch_handle" />
+                        @if ($batch_handle['del'])
+                        <script type="text/javascript" src="{{ asset('js/M_batch_handle.js') }}"></script>
                         <script type="text/javascript">
                             $(function(){
                                 var config = {
@@ -88,13 +88,13 @@
                                     'post_obj':'input[name="id"]',
                                     'type_data':Array()
                                 };
-                                <if condition="$batch_handle['del']">
+                                @if ($batch_handle['del'])
                                     config.type_data.push({'name':$Think.lang.del,'post_link':'{{ route('del') }}' });
-                                </if>
+                                @endif
                                 new M_batch_handle(config);
                             });
                         </script>
-                        </if>
+                        @endif
                     </div>
                     <div class="col-sm-8 text-right">
                         <M:Page name="manage_upload_list">

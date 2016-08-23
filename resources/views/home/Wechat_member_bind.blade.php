@@ -5,7 +5,7 @@
             </div>
             <div class="col-sm-6">
                 <div class="tab-content">
-                    <div class="tab-pane <if condition="register neq I('t')">active</if> mt20 h350" id="login">
+                    <div class="tab-pane @if (register neq I('t')">active@endif mt20 h350" id="login)
                         <form class="form-horizontal" role="form" method="post"">
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">{{ trans('common.account') }}</label>
@@ -19,7 +19,7 @@
                                     <input type="password" class="form-control" placeholder="{{ trans('common.pwd') }}" name="pwd" />
                                 </div>
                             </div>
-                            <if condition="C('SYS_FRONTEND_VERIFY')">
+                            @if (C('SYS_FRONTEND_VERIFY'))
                             {/*<!--验证码 开始-->*/}
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">{{ trans('common.verify_code') }}</label>
@@ -31,7 +31,7 @@
                                 <img class="col-sm-5 col-sm-offset-3" src="{:M_U('verify_img',array('t'=>'login'))}" onClick="M_change_verify(this,$('input[name=verify]'))" />
                             </div>
                             {/*<!--验证码 结束-->*/}
-                            </if>
+                            @endif
                             <input type="submit" class="btn btn-info col-sm-offset-5" value="{{ trans('common.login') }}">
                         </form>
                     </div>

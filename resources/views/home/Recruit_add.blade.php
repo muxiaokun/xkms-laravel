@@ -26,9 +26,9 @@
                             <label class="col-sm-4 control-label">{{ trans('common.recruit_sex') }}</label>
                             <div class="col-sm-7">
                                 <select name="sex"  class="form-control">
-                                    <foreach name="Think.lang.recruit_sex_data" item="data">
+                                    @foreach ($Think['lang']['recruit_sex_data'] as $data)
                                         <option value="{{ $key }}">{{ $data }}</option>
-                                    </foreach>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -38,9 +38,9 @@
                             <label class="col-sm-4 control-label">{{ trans('common.recruit_certificate') }}</label>
                             <div class="col-sm-7">
                                 <select name="certificate"  class="form-control">
-                                    <foreach name="Think.lang.recruit_certificate_data" item="data">
+                                    @foreach ($Think['lang']['recruit_certificate_data'] as $data)
                                         <option value="{{ $key }}">{{ $data }}</option>
-                                    </foreach>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>

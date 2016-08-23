@@ -1,5 +1,5 @@
-<extend name="Article:base" />
-<block name="content">
+@extends('Article:base')
+@section('content')
                 <div class="col-sm-12 text-center">
                     <h2>{$category_info.name}</h2>
                 </div>
@@ -10,7 +10,7 @@
                 <div id="content" class="col-sm-12 mt20">
                     {$category_info.content}
                 </div>
-                <import file="js/M_fontsize" />
+                <script type="text/javascript" src="{{ asset('js/M_fontsize.js') }}"></script>
                 <script type="text/javascript">
                     $(function(){
                         var config = {
@@ -21,4 +21,4 @@
                         new M_fontsize(config);
                     });
                 </script>
-</block>
+@endsection

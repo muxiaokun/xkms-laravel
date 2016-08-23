@@ -1,5 +1,5 @@
-<extend name="Member:base" />
-<block name="content">
+@extends('Member:base')
+@section('content')
     <table class="table table-condensed table-hover">
         <tr>
             <td>{{ trans('common.account') }}{{ trans('common.name') }}</td>
@@ -18,4 +18,4 @@
             <td>{$Think.session.frontend_info.aip}</td>
         </tr>
     </table>
-</block>
+@endsection

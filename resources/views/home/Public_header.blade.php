@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><if condition="$title">{{ $title }} {{ trans('common.dash') }}</if> {{ config('SITE_TITLE') }}</title>
+        <title>@if ($title){{ $title }} {{ trans('common.dash') }}@endif {{ config('SITE_TITLE') }}</title>
         <link href="__ROOT__/favicon.ico" type="image/ico" rel="shortcut icon" />
         <meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <if condition="C('SITE_KEYWORDS')"><meta name="keywords" content="{{ config('SITE_KEYWORDS') }}" /></if>
-        <if condition="C('SITE_KEYWORDS')"><meta name="description" content="{{ config('SITE_DESCRIPTION') }}" /></if>
-        <if condition="L('pfcopyright')"><meta name="author" content="{:L('pfcopyright',array('app_name'=>APP_NAME))}" /></if>
-        <import type="css" file="css/jquery-ui#min" />
-        <import type="css" file="css/bootstrap#min" />
-        <import type="css" file="css/bootstrap-theme#min" />
-        <import type="css" file="css/common" />
-        <import type="css" file="css/home" />
-        <import file="js/jquery#min" />
-        <import file="js/bootstrap#min" />
-        <import file="js/jquery-ui#min" />
-        <import file="js/common" />
+        @if (C('SITE_KEYWORDS'))<meta name="keywords" content="{{ config('SITE_KEYWORDS') }}" />@endif
+        @if (C('SITE_KEYWORDS'))<meta name="description" content="{{ config('SITE_DESCRIPTION') }}" />@endif
+        @if (L('pfcopyright'))<meta name="author" content="{:L('pfcopyright',array('app_name'=>APP_NAME))}" />@endif
+        <link rel="stylesheet" href="{{ asset('css/jquery-ui#min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('css/bootstrap#min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('css/bootstrap-theme#min.css') }}" />
+        <link rel="stylesheet" href="{{ asset('css/common.css') }}" />
+        <link rel="stylesheet" href="{{ asset('css/home.css') }}" />
+        <script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/jquery-ui.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/common.js') }}"></script>
         <!--[if lt IE 10]>
-            <import file="js/supporthtml5" />
+            <script type="text/javascript" src="{{ asset('js/supporthtml5.js') }}"></script>
         <![endif]-->
     </head>
     <body>
@@ -69,37 +69,37 @@
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
-                            <foreach name="nav_menu" item="data">
-                                <if condition="0 lt $key">
-                                <li class="<if condition="$data['nav_active']">active</if>">
-                                    <if condition="$data['nav_child']">
+                            @foreach ($nav_menu as $data)
+                                @if (0 lt $key)
+                                <li class="@if ($data['nav_active']">active@endif)
+                                    @if ($data['nav_child'])
                                         <a  data-toggle="dropdown" href="#"><b>{$data.nav_text}</b><span class="caret"></span></a>
                                         <ul class="dropdown-menu" role="menu">
-                                            <foreach name="data.nav_child" item="child_data">
+                                            @foreach ($data['nav_child'] as $child_data)
                                                 <li><a href="{$child_data.nav_url}" target="{$child_data.nav_target}" ><b>{$child_data.nav_text}</b></a></li>
-                                            </foreach>
+                                            @endforeach
                                         </ul>
-                                    <else />
+                                    @else
                                         <a href="{$data.nav_url}" target="{$data.nav_target}" ><b>{$data.nav_text}</b></a>
-                                    </if>
+                                    @endif
                                 </li>
-                                </if>
-                            </foreach>
+                                @endif
+                            @endforeach
                         </ul>
                         <form class="navbar-form navbar-right" role="search" action="{:M_U('Article/search')}" method="post">
-                            <if condition="isset($category_position['id'])">
+                            @if (isset($category_position['id']))
                                 <input type="hidden" name="cate_id" value="{$category_position.id}">
-                            </if>
+                            @endif
                             <div class="form-group">
                                 <select name="type" class="form-control">
-                                    <option value="title" <if condition="$request['type'] eq 'type'">selected="selected"</if> >{{ trans('common.search') }}{{ trans('common.type') }}</option>
-                                    <option value="description" <if condition="$request['type'] eq 'description'">selected="selected"</if>>{{ trans('common.description') }}</option>
-                                    <option value="content" <if condition="$request['type'] eq 'content'">selected="selected"</if>>{{ trans('common.content') }}</option>
-                                    <if condition="isset($category_position['extend'])">
-                                    <foreach name="category_position['extend']" item="extend">
-                                        <option value="extend[{{ $extend }}]" <if condition="$request['type'] eq 'extend['.$extend.']'">selected="selected"</if>>L({{ $extend }})</option>
-                                    </foreach>
-                                    </if>
+                                    <option value="title" @if ($request['type'] eq 'type')selected="selected"@endif >{{ trans('common.search') }}{{ trans('common.type') }}</option>
+                                    <option value="description" @if ($request['type'] eq 'description')selected="selected"@endif>{{ trans('common.description') }}</option>
+                                    <option value="content" @if ($request['type'] eq 'content')selected="selected"@endif>{{ trans('common.content') }}</option>
+                                    @if (isset($category_position['extend']))
+                                    @foreach ($category_position['extend'] as $extend)
+                                        <option value="extend[{{ $extend }}]" @if ($request['type'] eq 'extend['.$extend.']')selected="selected"@endif>L({{ $extend }})</option>
+                                    @endforeach
+                                    @endif
                                     <option value="all">{{ trans('common.all') }}</option>
                                 </select>
                             </div>

@@ -18,12 +18,12 @@
                     </table>
                     <div class="col-sm-12 text-center"><h3>{{ trans('common.extend') }}{{ trans('common.info') }}</h3></div>
                     <table class="table table-condensed table-hover col-sm-12">
-                        <foreach name="edit_info.send_info" key="name" item="value">
+                        @foreach ($edit_info['send_info'] as $name => $value)
                         <tr>
                             <td class="col-sm-3">{{ $name }}</td>
                             <td>{{ $value }}</td>
                         </tr>
-                        </foreach>
+                        @endforeach
                     </table>
                     <div class="col-sm-12 text-center">{{ trans('common.reply') }}{{ trans('common.content') }}</div>
                     <div class="col-sm-12">

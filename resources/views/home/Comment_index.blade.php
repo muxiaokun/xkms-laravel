@@ -1,26 +1,25 @@
-{__NOLAYOUT__}
-        <if condition="IS_AJAX AND C('COMMENT_SWITCH')">{//下一行的div只是ajax获取元素时的外壳}
+        @if (IS_AJAX AND C('COMMENT_SWITCH')){//下一行的div只是ajax获取元素时的外壳}
             <div>
                 <div class="col-sm-12">
                     <M:Page name="comment_list" ><config></config></M:Page>
                 </div>
                 <div class="col-sm-12">
                     <table class="table">
-                        <foreach name="comment_list" item="data">
+                        @foreach ($comment_list as $data)
                         <tr>
                             <td>{$data.member_name}{{ trans('common.grade') }}{{ trans('common.colon') }}{$data.level}[{$data.add_time|M_date=C('SYS_DATE_DETAIL')}]</td>
                         </tr>
                         <tr>
                             <td>{$data.content}</td>
                         </tr>
-                        </foreach>
+                        @endforeach
                     </table>
                 </div>
             </div>
-        <elseif condiction=" C('COMMENT_SWITCH')">
+        @elseif ( C('COMMENT_SWITCH'))
             <div class="col-sm-12">
             <hr />
-                <import file="js/M_comment_editor" />
+                <script type="text/javascript" src="{{ asset('js/M_comment_editor.js') }}"></script>
                 <script type="text/javascript">
                     var M_comment_editor;
                     $(function(){
@@ -39,7 +38,7 @@
                         <div class="radio">
                             <for start="1" end="6">
                                 <label class="mr100">
-                                    <input type="radio" name="comment_level" value="{{ $i }}" <if condition="$i eq 5">checked="checked"</if> />{{ $i }}
+                                    <input type="radio" name="comment_level" value="{{ $i }}" @if ($i eq 5)checked="checked"@endif />{{ $i }}
                                 </label>
                             </for>
                         </div>
@@ -52,4 +51,4 @@
                 </form>
             </div>
             <div id="comment_index" class="row"></div>
-        </if>
+        @endif

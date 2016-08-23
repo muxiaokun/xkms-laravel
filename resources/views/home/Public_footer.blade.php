@@ -7,11 +7,11 @@
                         友情链接<span>Link</span>
                     </div>
                     <div class="list_link">
-                        <foreach name="flinks" item="data">
+                        @foreach ($flinks as $data)
                         <a class="label label-default list_link" href="{$data.link}" target="{$data.link_type}">
                             {$data.link_name}
                         </a>
-                        </foreach>
+                        @endforeach
                     </div>
                 </div>
                 {/*友情链接 结束*/}
@@ -22,10 +22,10 @@
                 <img class="w150" src="{:M_exists('Uploads/attached/image/index/sitelogo.png')}" />
             </div>
             <div class="col-sm-7 pt30 h150 lh30" style="color:#FFF;">
-                <if condition="C('SITE_COMPANY')">{{ config('SITE_COMPANY') }}&nbsp;</if>
-                <if condition="C('SITE_PHONE')">{{ trans('common.phone') }}{{ trans('common.colon') }}{{ config('SITE_PHONE') }}&nbsp;</if>
-                <if condition="C('SITE_TELPHONE')">{{ trans('common.telphone') }}{{ trans('common.colon') }}{{ config('SITE_TELPHONE') }}&nbsp;<br /></if>
-                <if condition="C('SITE_OTHER')">{{ config('SITE_OTHER') }}&nbsp;<br /></if>
+                @if (C('SITE_COMPANY')){{ config('SITE_COMPANY') }}&nbsp;@endif
+                @if (C('SITE_PHONE')){{ trans('common.phone') }}{{ trans('common.colon') }}{{ config('SITE_PHONE') }}&nbsp;@endif
+                @if (C('SITE_TELPHONE')){{ trans('common.telphone') }}{{ trans('common.colon') }}{{ config('SITE_TELPHONE') }}&nbsp;<br />@endif
+                @if (C('SITE_OTHER')){{ config('SITE_OTHER') }}&nbsp;<br />@endif
                 {{ trans('common.version') }}{{ trans('common.colon') }} Home Module 1.0.0
             </div>
             <div class="col-sm-3 lh150 hidden-xs">

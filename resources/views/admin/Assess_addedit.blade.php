@@ -18,11 +18,11 @@
                                 <label class="col-sm-4 control-label">{{ trans('common.assess') }}{{ trans('common.group') }}</label>
                                 <div class="col-sm-8" id="group_level">
                                     <input type="hidden" name="group_level" />
-                                    <import file="js/M_select_add" />
+                                    <script type="text/javascript" src="{{ asset('js/M_select_add.js') }}"></script>
                                     <script type="text/javascript">
                                         $(function(){
                                             var config = {
-                                                <if condition="$edit_info['group_level']">'def_data':{'value':'{$edit_info.group_level}','html':'{$edit_info.group_name}'},</if>
+                                                @if ($edit_info['group_level'])'def_data':{'value':'{$edit_info.group_level}','html':'{$edit_info.group_name}'},@endif
                                                 'edit_obj':$('#group_level'),
                                                 'post_name':'group_level',
                                                 'ajax_url':'{{ route('ajax_api') }}',
@@ -60,10 +60,10 @@
                                 <label class="col-sm-4 control-label">{{ trans('common.assess') }}{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.enable') }}</label>
                                 <div class="col-sm-6">
                                     <label class="radio-inline">
-<input type="radio" name="is_enable" value="1" <if condition="'1' heq $edit_info['is_enable'] or !isset($edit_info['is_enable'])" >checked="checked"</if> />{{ trans('common.enable') }}
+<input type="radio" name="is_enable" value="1" @if ('1' heq $edit_info['is_enable'] or !isset($edit_info['is_enable']))checked="checked"@endif />{{ trans('common.enable') }}
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="is_enable" value="0" <if condition="'0' heq $edit_info['is_enable']">checked="checked"</if> />{{ trans('common.disable') }}
+<input type="radio" name="is_enable" value="0" @if ('0' heq $edit_info['is_enable'])checked="checked"@endif />{{ trans('common.disable') }}
                                     </label>
                                 </div>
                             </div>
@@ -73,8 +73,8 @@
                                 <label class="col-sm-4 control-label">{{ trans('common.assess') }}{{ trans('common.target') }}</label>
                                 <div class="col-sm-6">
                                     <select class="form-control input-sm w260" name="target">
-<option value="member"  <if condition="'member' eq $edit_info['target']">selected="selected"</if> >{{ trans('common.member') }}</option>
-<option value="member_group"  <if condition="'member_group' eq  $edit_info['target']">selected="selected"</if> >{{ trans('common.member') }}{{ trans('common.group') }}</option>
+<option value="member"  @if ('member' eq $edit_info['target'])selected="selected"@endif >{{ trans('common.member') }}</option>
+<option value="member_group"  @if ('member_group' eq  $edit_info['target'])selected="selected"@endif >{{ trans('common.member') }}{{ trans('common.group') }}</option>
                                     </select>
                                 </div>
                             </div>
@@ -93,11 +93,11 @@
                     <div class="row">
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
-                                <if condition="$Think.const.ACTION_NAME eq 'add'">
+                                @if ($Think.const.ACTION_NAME eq 'add')
                                     {{ trans('common.add') }}
-                                <elseif condition="$Think.const.ACTION_NAME eq 'edit'" />
+                                @elseif ($Think.const.ACTION_NAME eq 'edit')
                                     {{ trans('common.edit') }}
-                                </if>
+                                @endif
                             </button>
                             <a href="{{ route('index') }}" class="btn btn-default">
                                     {{ trans('common.goback') }}
@@ -153,10 +153,10 @@
                             </table>
                         </div>
                     </div>
-                    <import file="js/M_assess_editor" />
+                    <script type="text/javascript" src="{{ asset('js/M_assess_editor.js') }}"></script>
                     <script type="text/javascript">
                         var config = {
-                            <if condition="$edit_info['ext_info']">'def_data':{$edit_info.ext_info},</if>
+                            @if ($edit_info['ext_info'])'def_data':{$edit_info.ext_info},@endif
                             'out_obj':$('#assess_area'),
                             'edit_obj':$('#quests_edit'),
                             'post_name':'ext_info'

@@ -26,7 +26,7 @@
                         <ul class="nav text-center" role="tablist">
                             @foreach ($nav as $key => $nav_link)
                             <li role="presentation">
-                                <a class="fs12" href="{$nav_link.link}" target="main" >{$nav_link.name}</a>
+                                <a class="fs12" href="{{ $nav_link['link'] }}" target="main" >{{ $nav_link['name'] }}</a>
                             </li>
                             @endforeach
                         </ul>

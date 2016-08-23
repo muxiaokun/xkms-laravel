@@ -19,14 +19,14 @@
                     });
                 </script>
                 <form id="form_valid" onSubmit="return false;" class="form-horizontal" role="form" action="" method="post" >
-                    <input type="hidden" name="id" value="{$edit_info.id}"/>
+                    <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
                     <input type="hidden" name="is_pwd" value="@if ($Think.const.ACTION_NAME eq 'add')1@else0@endif"/>
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">{{ trans('common.admin') }}{{ trans('common.name') }}</label>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.admin') }}{{ trans('common.name') }}" name="admin_name" value="{$edit_info.admin_name}"/>
+                                    <input type="text" class="form-control" placeholder="{{ trans('common.admin') }}{{ trans('common.name') }}" name="admin_name" value="{{ $edit_info['admin_name'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -81,7 +81,7 @@
                             <script type="text/javascript">
                                 $(function(){
                                     var config = {
-                                        @if ($edit_info['group_id'])'def_data':{$edit_info.group_id},@endif
+                                        @if ($edit_info['group_id'])'def_data':{{ $edit_info['group_id'] }},@endif
                                         'out_obj':$('#group_id_list'),
                                         'edit_obj':$('#group_list'),
                                         'post_name':'group_id[]',

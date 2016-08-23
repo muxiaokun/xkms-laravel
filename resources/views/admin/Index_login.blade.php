@@ -4,7 +4,7 @@
     <section class="container">
         <div class="col-sm-6 col-sm-offset-3 login">
             <div class="panel panel-primary">
-                <div class="panel-heading">{$Think.const.APP_NAME} {{ trans('common.dash') }} {{ trans('common.login') }}{{ trans('common.backend') }}</div>
+                <div class="panel-heading">{{ $Think['const']['APP_NAME'] }} {{ trans('common.dash') }} {{ trans('common.login') }}{{ trans('common.backend') }}</div>
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="post" action="{{ route('login') }}">
                         <div class="form-group">
@@ -20,7 +20,7 @@
                             </div>
                         </div>
                         @if (C('SYS_BACKEND_VERIFY'))
-                        {/*<!--验证码 开始-->*/}
+                        {{--验证码 开始--}}
                         <div class="form-group">
                             <label class="col-sm-3 control-label">{{ trans('common.verify_code') }}</label>
                             <div class="col-sm-8">
@@ -30,7 +30,7 @@
                         <div class="form-group text-center">
                             <M:Img class="col-sm-offset-4 col-sm-4" style="max-height:50px;" src="{{ route('verify_img') }}" onClick="M_change_verify(this,$('input[name=verify]'))" />
                         </div>
-                        {/*<!--验证码 结束-->*/}
+                        {{--验证码 结束--}}
                         @endif
                         <input type="submit" class="btn btn-primary col-sm-offset-5" value="{{ trans('common.login') }}">
                     </form>

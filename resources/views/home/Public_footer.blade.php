@@ -8,8 +8,8 @@
                     </div>
                     <div class="list_link">
                         @foreach ($flinks as $data)
-                        <a class="label label-default list_link" href="{$data.link}" target="{$data.link_type}">
-                            {$data.link_name}
+                        <a class="label label-default list_link" href="{{ $data['link'] }}" target="{{ $data['link_type'] }}">
+                            {{ $data['link_name'] }}
                         </a>
                         @endforeach
                     </div>

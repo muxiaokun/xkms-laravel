@@ -4,13 +4,13 @@
             <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <form class="form-horizontal" role="form" action="" method="post" >
-                    <input type="hidden" name="id" value="{$edit_info.id}"/>
+                    <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.title') }}</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.title') }}" name="title" value="{$edit_info.title}"/>
+                                    <input type="text" class="form-control" placeholder="{{ trans('common.title') }}" name="title" value="{{ $edit_info['title'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -18,7 +18,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.max') }}{{ trans('common.portion') }}</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" onKeyup="M_in_int(this);" placeholder="{{ trans('common.max') }}{{ trans('common.portion') }}" name="max_portion" value="{$edit_info.max_portion}"/>
+<input type="text" class="form-control" onKeyup="M_in_int(this);" placeholder="{{ trans('common.max') }}{{ trans('common.portion') }}" name="max_portion" value="{{ $edit_info['max_portion'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -28,7 +28,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.start') }}{{ trans('common.time') }}</label>
                                 <div class="col-sm-6 ">
-<input type="text" class="form-control" placeholder="{{ trans('common.start') }}{{ trans('common.time') }}" name="start_time" value="{$edit_info.start_time|M_date=C('SYS_DATE_DETAIL')}"/>
+<input type="text" class="form-control" placeholder="{{ trans('common.start') }}{{ trans('common.time') }}" name="start_time" value="{{ $edit_info['start_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -36,7 +36,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.end') }}{{ trans('common.time') }}</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" placeholder="{{ trans('common.end') }}{{ trans('common.time') }}" name="end_time" value="{$edit_info.end_time|M_date=C('SYS_DATE_DETAIL')}"/>
+<input type="text" class="form-control" placeholder="{{ trans('common.end') }}{{ trans('common.time') }}" name="end_time" value="{{ $edit_info['end_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -47,7 +47,7 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">{{ trans('common.access') }}{{ trans('common.pass') }}</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.quests_note1') }}" name="access_info" value="{$edit_info.access_info}"/>
+                                    <input type="text" class="form-control" placeholder="{{ trans('common.quests_note1') }}" name="access_info" value="{{ $edit_info['access_info'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -57,7 +57,7 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">{{ trans('common.start') }}{{ trans('common.content') }}</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="start_content" value="{$edit_info.start_content}" />
+                                    <input type="text" class="form-control" name="start_content" value="{{ $edit_info['start_content'] }}" />
                                 </div>
                             </div>
                         </div>
@@ -65,7 +65,7 @@
                             <div class="form-group">
                                 <label class="col-sm-2  control-label">{{ trans('common.end') }}{{ trans('common.content') }}</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="end_content" value="{$edit_info.end_content}" />
+                                    <input type="text" class="form-control" name="end_content" value="{{ $edit_info['end_content'] }}" />
                                 </div>
                             </div>
                         </div>
@@ -139,7 +139,7 @@
                     <script type="text/javascript">
                         $(function(){
                             var config = {
-                                @if ($edit_info['ext_info'])'def_data':{$edit_info.ext_info},@endif
+                                @if ($edit_info['ext_info'])'def_data':{{ $edit_info['ext_info'] }},@endif
                                 'out_obj':$('#quests_area'),
                                 'edit_obj':$('#quests_edit'),
                                 'post_name':'ext_info'

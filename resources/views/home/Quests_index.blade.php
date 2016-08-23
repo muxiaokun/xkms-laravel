@@ -11,16 +11,16 @@
         @foreach ($quests_list as $quests)
             <tr>
                 <td>
-                    {$quests.id}
+                    {{ $quests['id'] }}
                 </td>
                 <td>
-                    {$quests.title}
+                    {{ $quests['title'] }}
                 </td>
                 <td>
-                    {$quests.start_time|M_date=C('SYS_DATE_DETAIL')}
+                    {{ $quests['start_time']|M_date=C('SYS_DATE_DETAIL') }}
                 </td>
                 <td>
-                    {$quests.end_time|M_date=C('SYS_DATE_DETAIL')}
+                    {{ $quests['end_time']|M_date=C('SYS_DATE_DETAIL') }}
                 </td>
                 <td>
                     @if ($quests['access_info'])

@@ -162,7 +162,7 @@ class Common extends Controller
     }
 
     //Ajax 接口
-    protected function _ajax_api()
+    protected function doAjaxApi()
     {
         if (!IS_AJAX) {
             return;

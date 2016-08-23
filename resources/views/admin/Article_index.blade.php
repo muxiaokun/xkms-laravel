@@ -24,23 +24,23 @@
                     @foreach ($article_list as $article)
                         <tr>
                             <td>
-                                <input name="id[]" type="checkbox" value="{$article.id}"/>
-                                &nbsp;{$article.id}
+                                <input name="id[]" type="checkbox" value="{{ $article['id'] }}"/>
+                                &nbsp;{{ $article['id'] }}
                             </td>
                             <td>
-                                {$article.title}
+                                {{ $article['title'] }}
                             </td>
-                            <td onClick="M_line_edit(this);" field_id="{$article.id}" field="sort" link="{{ route('ajax_api') }}">
-                                {$article.sort}
-                            </td>
-                            <td>
-                                {$article.channel_name}
+                            <td onClick="M_line_edit(this);" field_id="{{ $article['id'] }}" field="sort" link="{{ route('ajax_api') }}">
+                                {{ $article['sort'] }}
                             </td>
                             <td>
-                                {$article.cate_name}
+                                {{ $article['channel_name'] }}
                             </td>
                             <td>
-                                {$article.add_time|M_date=C('SYS_DATE_DETAIL')}
+                                {{ $article['cate_name'] }}
+                            </td>
+                            <td>
+                                {{ $article['add_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td>
                                 @if ($article['if_show']){{ trans('common.yes') }}@else{{ trans('common.no') }}@endif
@@ -49,7 +49,7 @@
                                 @if ($article['is_audit']){{ trans('common.yes') }}@else{{ trans('common.no') }}@endif
                             </td>
                             <td>
-                                {$article.hits}
+                                {{ $article['hits'] }}
                             </td>
                             <td class="nowrap">
                                 <a class="btn btn-xs btn-primary" target="_blank" href="{{ route('Home/Article/article',array('id'=>$article['id'])) }}">
@@ -63,7 +63,7 @@
                                 @endif
                                 @if ($batch_handle['del'])
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$article.title}?','{{ route('del',array('id'=>$article['id'])) }}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $article['title'] }}?','{{ route('del',array('id'=>$article['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 @endif

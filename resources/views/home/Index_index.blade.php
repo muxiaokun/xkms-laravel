@@ -11,14 +11,14 @@
                         <div class="col-sm-3">
                             <div class="thumbnail">
                                 <a href="{:M_U('article',$data['id'])}" >
-                                    <M:Img src="{$data.thumb|M_exists}" />
+                                    <M:Img src="{{ $data['thumb']|M_exists }}" />
                                 </a>
                                 <div class="caption">
                                     <a href="{:M_U('article',$data['id'])}" >
-                                        <h4>{$data.title|M_substr=6}</h4>
+                                        <h4>{{ $data['title']|M_substr=6 }}</h4>
                                     </a>
                                     <a href="{:M_U('article',$data['id'])}" >
-                                        <p>{$data.description|M_substr=20}</p>
+                                        <p>{{ $data['description']|M_substr=20 }}</p>
                                     </a>
                                 </div>
                             </div>
@@ -36,14 +36,14 @@
                         <div class="col-sm-3">
                             <div class="thumbnail">
                                 <a href="{:M_U('article',$data['id'])}" >
-                                    <M:Img src="{$data.thumb|M_exists}" />
+                                    <M:Img src="{{ $data['thumb']|M_exists }}" />
                                 </a>
                                 <div class="caption">
                                     <a href="{:M_U('article',$data['id'])}" >
-                                        <h4>{$data.title|M_substr=6}</h4>
+                                        <h4>{{ $data['title']|M_substr=6 }}</h4>
                                     </a>
                                     <a href="{:M_U('article',$data['id'])}" >
-                                        <p>{$data.description|M_substr=20}</p>
+                                        <p>{{ $data['description']|M_substr=20 }}</p>
                                     </a>
                                 </div>
                             </div>

@@ -22,14 +22,14 @@
                     @foreach ($itlink_list as $itlink)
                         <tr>
                             <td>
-                                <input name="id[]" type="checkbox" value="{$itlink.id}"/>
-                                &nbsp;{$itlink.id}
+                                <input name="id[]" type="checkbox" value="{{ $itlink['id'] }}"/>
+                                &nbsp;{{ $itlink['id'] }}
                             </td>
                             <td>
-                                {$itlink.name}
+                                {{ $itlink['name'] }}
                             </td>
                             <td>
-                                {$itlink.short_name}
+                                {{ $itlink['short_name'] }}
                             </td>
                             <td>
                                 @if ($itlink['is_enable']){{ trans('common.yes') }}@else{{ trans('common.no') }}@endif
@@ -38,10 +38,10 @@
                                 @if ($itlink['is_statistics']){{ trans('common.yes') }}@else{{ trans('common.no') }}@endif
                             </td>
                             <td>
-                                {$itlink.show_num}
+                                {{ $itlink['show_num'] }}
                             </td>
                             <td>
-                                {$itlink.hit_num}
+                                {{ $itlink['hit_num'] }}
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])
@@ -51,7 +51,7 @@
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$itlink.name}?','{{ route('del',array('id'=>$itlink['id'])) }}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $itlink['name'] }}?','{{ route('del',array('id'=>$itlink['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 @endif

@@ -22,26 +22,26 @@
                     @foreach ($wechat_list as $wechat)
                         <tr>
                             <td>
-                                <input name="id[]" type="checkbox" value="{$wechat.id}"/>
-                                &nbsp;{$wechat.id}
+                                <input name="id[]" type="checkbox" value="{{ $wechat['id'] }}"/>
+                                &nbsp;{{ $wechat['id'] }}
                             </td>
                             <td>
-                               {$wechat.member_name}
+                               {{ $wechat['member_name'] }}
                             </td>
                             <td>
-                                <a href="{$wechat.headimgurl}" target="_blank">{{ trans('common.look') }}</a>
+                                <a href="{{ $wechat['headimgurl'] }}" target="_blank">{{ trans('common.look') }}</a>
                             </td>
                             <td>
-                                {$wechat.nickname}
+                                {{ $wechat['nickname'] }}
                             </td>
                             <td>
-                                {$wechat.sex}
+                                {{ $wechat['sex'] }}
                             </td>
                             <td>
-                                {$wechat.country}{$wechat.province}{$wechat.city}[{$wechat.language}]
+                                {{ $wechat['country'] }}{{ $wechat['province'] }}{{ $wechat['city'] }}[{{ $wechat['language'] }}]
                             </td>
                             <td>
-                                {$wechat.bind_time|M_date=C('SYS_DATE_DETAIL')}
+                                {{ $wechat['bind_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])
@@ -51,7 +51,7 @@
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$wechat.member_name}?','{{ route('del',array('id'=>$wechat['id'])) }}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $wechat['member_name'] }}?','{{ route('del',array('id'=>$wechat['id'])) }}')" >
                                     {{ trans('common.del') }}
                                     </a>
                                 @endif

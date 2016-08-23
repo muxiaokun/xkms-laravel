@@ -23,35 +23,35 @@
                     @foreach ($comment_list as $comment)
                         <tr>
                             <td>
-                                <input name="id[]" type="checkbox" value="{$comment.id}"/>
-                                &nbsp;{$comment.id}
+                                <input name="id[]" type="checkbox" value="{{ $comment['id'] }}"/>
+                                &nbsp;{{ $comment['id'] }}
                             </td>
                             <td>
-                                {$comment.member_name}
+                                {{ $comment['member_name'] }}
                             </td>
                             <td>
-                                {$comment.add_time|M_date=C('SYS_DATE_DETAIL')}
+                                {{ $comment['add_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td>
-                                {$comment.audit_name}
+                                {{ $comment['audit_name'] }}
                             </td>
                             <td>
-                                {$comment.controller}
+                                {{ $comment['controller'] }}
                             </td>
                             <td>
-                                {$comment.item}
+                                {{ $comment['item'] }}
                             </td>
                             <td>
-                                {$comment.aip}
+                                {{ $comment['aip'] }}
                             </td>
                             <td class="nowrap">
-<a id="M_alert_log_{$comment.id}" class="btn btn-xs btn-primary" href="javascript:void(0);">{{ trans('common.look') }}</a>
+<a id="M_alert_log_{{ $comment['id'] }}" class="btn btn-xs btn-primary" href="javascript:void(0);">{{ trans('common.look') }}</a>
                                 <script>
                                     $(function(){
                                         var config = {
-                                            'bind_obj':$('#M_alert_log_{$comment.id}'),
+                                            'bind_obj':$('#M_alert_log_{{ $comment['id'] }}'),
                                             'title':'{{ trans('common.comment') }}{{ trans('common.content') }}',
-                                            'message':"{$comment.content}"
+                                            'message':"{{ $comment['content'] }}"
                                         }
                                         new M_alert_log(config);
                                     });

@@ -21,20 +21,20 @@
                     @foreach ($assess_list as $assess)
                         <tr>
                             <td>
-                                <input name="id[]" type="checkbox" value="{$assess.id}"/>
-                                &nbsp;{$assess.id}
+                                <input name="id[]" type="checkbox" value="{{ $assess['id'] }}"/>
+                                &nbsp;{{ $assess['id'] }}
                             </td>
                             <td>
-                                {$assess.title}
+                                {{ $assess['title'] }}
                             </td>
                             <td>
-                                {$assess.group_name}
+                                {{ $assess['group_name'] }}
                             </td>
                             <td>
-                                {$assess.start_time|M_date=C('SYS_DATE_DETAIL')}
+                                {{ $assess['start_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td>
-                                {$assess.end_time|M_date=C('SYS_DATE_DETAIL')}
+                                {{ $assess['end_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td>
                                 @if ($assess['is_enable']){{ trans('common.enable') }}@else{{ trans('common.disable') }}@endif
@@ -53,7 +53,7 @@
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$assess.title}?','{{ route('del',array('id'=>$assess['id'])) }}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $assess['title'] }}?','{{ route('del',array('id'=>$assess['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 @endif

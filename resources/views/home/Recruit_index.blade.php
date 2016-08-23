@@ -20,18 +20,18 @@
                             @foreach ($recruit_list as $recruit)
                                 <tr>
                                     <td>
-                                        {$recruit.title}
+                                        {{ $recruit['title'] }}
                                     </td>
                                     <td>
-                                        {$recruit.current_portion}/{$recruit.max_portion}
+                                        {{ $recruit['current_portion'] }}/{{ $recruit['max_portion'] }}
                                     </td>
                                     <td>
-                                        {$recruit.start_time|M_date=C('SYS_DATE_DETAIL')}
+                                        {{ $recruit['start_time']|M_date=C('SYS_DATE_DETAIL') }}
                                         {{ trans('common.to') }}
-                                        {$recruit.end_time|M_date=C('SYS_DATE_DETAIL')}
+                                        {{ $recruit['end_time']|M_date=C('SYS_DATE_DETAIL') }}
                                     </td>
                                     <td>
-                                        {$recruit.explains|strip_tags|M_substr=30}
+                                        {{ $recruit['explains']|strip_tags|M_substr=30 }}
                                     </td>
                                     <td>
                                         <a class="btn btn-primary btn-xs" href="{:M_U('Recruit/edit',array('id'=>$recruit['id']))}">

@@ -3,7 +3,7 @@
             <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <form method="post" class="form-horizontal"  role="form">
-                    <input type="hidden" name="id" value="{$edit_info.id}"/>
+                    <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -11,7 +11,7 @@
                                     {{ trans('common.messageboard') }}{{ trans('common.name') }}
                                 </label>
                                 <div class="col-sm-6">
-                                    <input class="form-control" type="text" name="name" value="{$edit_info.name}" />
+                                    <input class="form-control" type="text" name="name" value="{{ $edit_info['name'] }}" />
                                 </div>
                             </div>
                         </div>
@@ -22,7 +22,7 @@
                                     <select name="template" class="form-control input-sm" >
                                         <option value="">{{ trans('common.use') }}{{ trans('common.default') }}</option>
                                         @foreach ($template_list as $template)
-                                            <option value="{$template.value}" @if ($template['value'] eq $edit_info['template'])selected="selected"@endif >{$template.name}</option>
+                                            <option value="{{ $template['value'] }}" @if ($template['value'] eq $edit_info['template'])selected="selected"@endif >{{ $template['name'] }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -69,7 +69,7 @@
                         <script>
                             $(function(){
                                 new M_messageboard_editor({
-                                        @if ($edit_info['config'])'def_data':{$edit_info.config},@endif
+                                        @if ($edit_info['config'])'def_data':{{ $edit_info['config'] }},@endif
                                         'out_obj':$('#out_obj'),
                                         'edit_obj':$('#edit_obj'),
                                         'btn_obj':$('#btn_obj'),

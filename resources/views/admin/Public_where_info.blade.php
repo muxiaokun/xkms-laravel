@@ -2,13 +2,13 @@
     <div class="mb10 text-right">
         <form class="form-inline" role="form" method="get">
             @if (URL_COMMON eq C('URL_MODEL'))
-                <input type="hidden" name="m" value="{$Think.const.MODULE_NAME}" />
-                <input type="hidden" name="c" value="{$Think.const.CONTROLLER_NAME}" />
-                <input type="hidden" name="a" value="{$Think.const.ACTION_NAME}" />
+                <input type="hidden" name="m" value="{{ $Think['const']['MODULE_NAME'] }}" />
+                <input type="hidden" name="c" value="{{ $Think['const']['CONTROLLER_NAME'] }}" />
+                <input type="hidden" name="a" value="{{ $Think['const']['ACTION_NAME'] }}" />
             @endif
             @foreach ($where_info as $input_name => $data)
                 <div class="form-group mr10">
-                    <label>{$data.name}</label>
+                    <label>{{ $data['name'] }}</label>
                     @if ('time' eq $data['type'])
                         <input type="text" name="{{ $input_name }}_start" class="form-control w100" value="{:I($input_name.'_start')}" onClick="$(this).val('')" />
                         {{ trans('common.to') }}

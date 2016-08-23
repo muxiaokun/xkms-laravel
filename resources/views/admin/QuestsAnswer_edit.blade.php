@@ -8,7 +8,7 @@
                 @foreach ($quests_quest_list as $quest)
                     <div class="form-group">
                         <label class="col-sm-12">
-                            {$quest.question}
+                            {{ $quest['question'] }}
                             <switch name="quest['answer_type']">
                                 <case value="radio">
                                     {{ trans('common.radio') }}

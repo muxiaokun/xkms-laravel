@@ -5,7 +5,7 @@
             <div class="panel-body">
             <form method="post" class="form-horizontal"  role="form">
                 <div class="row">
-                    {/*<!--会员是否启用-->*/}
+                    {{--会员是否启用--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.enable') }}{{ trans('common.member') }}{{ trans('common.controller') }}</label>
@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    {/*<!--注册会员时是否立即启用-->*/}
+                    {{--注册会员时是否立即启用--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.auto') }}{{ trans('common.enable') }}{{ trans('common.member') }}</label>
@@ -35,7 +35,7 @@
                             </div>
                         </div>
                     </div>
-                    {/*<!--是否启用前台验证码-->*/}
+                    {{--是否启用前台验证码--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.frontend') }}{{ trans('common.verify_code') }}</label>
@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    {/*<!--前台最大登录数-->*/}
+                    {{--前台最大登录数--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.frontend') }}{{ trans('common.max') }}{{ trans('common.login') }}{{ trans('common.number') }}</label>
@@ -60,7 +60,7 @@
                             </div>
                         </div>
                     </div>
-                    {/*<!--前台登录最大锁定时间-->*/}
+                    {{--前台登录最大锁定时间--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.frontend') }}{{ trans('common.max') }}{{ trans('common.lock') }}{{ trans('common.time') }}({{ trans('common.second') }})</label>
@@ -71,7 +71,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    {/*<!--前台自动登出时间-->*/}
+                    {{--前台自动登出时间--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.frontend') }}{{ trans('common.login') }}{{ trans('common.timeout') }}({{ trans('common.second') }})</label>

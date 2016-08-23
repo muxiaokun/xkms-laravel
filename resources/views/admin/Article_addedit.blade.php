@@ -4,13 +4,13 @@
             <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <form class="form-horizontal" role="form" action="" method="post" >
-                    <input type="hidden" name="id" value="{$edit_info.id}"/>
+                    <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.title') }}</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.title') }}" name="title" value="{$edit_info.title}"/>
+                                    <input type="text" class="form-control" placeholder="{{ trans('common.title') }}" name="title" value="{{ $edit_info['title'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -18,7 +18,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.author') }}</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.author') }}" name="author" value="{$edit_info.author}"/>
+                                    <input type="text" class="form-control" placeholder="{{ trans('common.author') }}" name="author" value="{{ $edit_info['author'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -28,7 +28,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.description') }}</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.description') }}" name="description" value="{$edit_info.description}"/>
+                                    <input type="text" class="form-control" placeholder="{{ trans('common.description') }}" name="description" value="{{ $edit_info['description'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -37,7 +37,7 @@
                                 <label class="col-sm-4 control-label">{{ trans('common.sort') }}</label>
                                 <div class="col-sm-6">
 <input type="text" class="form-control" placeholder="{{ trans('common.sort') }}" name="sort" onKeyup="M_in_int_range(this,1,100);"
-       value="@if ($edit_info['sort']){$edit_info.sort}@else100@endif"/>
+       value="@if ($edit_info['sort']){{ $edit_info['sort'] }}@else100@endif"/>
                                 </div>
                             </div>
                         </div>
@@ -50,7 +50,7 @@
                                     <select name="channel_id" class="form-control input-sm" >
                                         <option value="">{{ trans('common.default') }}{{ trans('common.dont') }}{{ trans('common.pertain') }}{{ trans('common.channel') }}</option>
                                         @foreach ($channel_list as $channel)
-                                            <option value="{$channel.id}" @if ($channel['id'] eq $edit_info['channel_id'])selected="selected"@endif >{$channel.name}</option>
+                                            <option value="{{ $channel['id'] }}" @if ($channel['id'] eq $edit_info['channel_id'])selected="selected"@endif >{{ $channel['name'] }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -63,7 +63,7 @@
                                     <select class="form-control input-sm" name="cate_id">
                                         <option value="">{{ trans('common.default') }}{{ trans('common.dont') }}{{ trans('common.pertain') }}{{ trans('common.category') }}</option>
                                         @foreach ($category_list as $category)
-<option value="{$category.id}" @if ($category['id'] eq $edit_info['cate_id'] or $category['id'] eq I('cate_id'))selected="selected" mtype="def_data"@endif >{$category.name}</option>
+<option value="{{ $category['id'] }}" @if ($category['id'] eq $edit_info['cate_id'] or $category['id'] eq I('cate_id'))selected="selected" mtype="def_data"@endif >{{ $category['name'] }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -75,8 +75,8 @@
                         <script type="text/javascript">
                             $(function(){
                                 var config = {
-                                    @if ($edit_info['attribute_tpl'])'def_data':{$edit_info.attribute_tpl|json_encode},@endif
-                                    @if ($edit_info['attribute'])'def_selected':{$edit_info.attribute|json_encode},@endif
+                                    @if ($edit_info['attribute_tpl'])'def_data':{{ $edit_info['attribute_tpl']|json_encode }},@endif
+                                    @if ($edit_info['attribute'])'def_selected':{{ $edit_info['attribute']|json_encode }},@endif
                                     'run_type':'select',
                                     'select_obj':$('select[name=cate_id]'),
                                     'out_obj':$('#attribute'),
@@ -92,7 +92,7 @@
                         <script type="text/javascript">
                             $(function(){
                                 var config = {
-                                    @if ($edit_info['extend'])'def_data':{$edit_info.extend|json_encode},@endif
+                                    @if ($edit_info['extend'])'def_data':{{ $edit_info['extend']|json_encode }},@endif
                                     'run_type':'edit',
                                     'out_obj':$('#extend_list'),
                                     'edit_obj':$('select[name=cate_id]'),
@@ -146,7 +146,7 @@
                                     <div id="uploadbutton" title="{{ trans('common.selection') }}{{ trans('common.or') }}{{ trans('common.upload') }}" class="default_image">
                                         <M:Img id="thumb_src" src="{:M_exists($edit_info['thumb'])}" />
                                     </div>
-                                    <input id="thumb_val" type="hidden" name="thumb" value="{$edit_info.thumb}" />
+                                    <input id="thumb_val" type="hidden" name="thumb" value="{{ $edit_info['thumb'] }}" />
                                     <script>
                                         function M_article_uploadbutton(url,title)
                                         {
@@ -166,7 +166,7 @@
                             <div class="form-group">
                                 <label class="col-sm-6 control-label">{{ trans('common.add') }}{{ trans('common.time') }}</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" disabled="disabled" placeholder="{{ trans('common.add') }}{{ trans('common.time') }}" name="add_time" value="{$edit_info.add_time|M_date=C('SYS_DATE_DETAIL')}"/>
+<input type="text" class="form-control" disabled="disabled" placeholder="{{ trans('common.add') }}{{ trans('common.time') }}" name="add_time" value="{{ $edit_info['add_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -174,7 +174,7 @@
                             <div class="form-group">
                                 <label class="col-sm-6 control-label">{{ trans('common.update') }}{{ trans('common.time') }}</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" disabled="disabled" placeholder="{{ trans('common.update') }}{{ trans('common.time') }}" name="update_time" value="{$edit_info.update_time|M_date=C('SYS_DATE_DETAIL')}"/>
+<input type="text" class="form-control" disabled="disabled" placeholder="{{ trans('common.update') }}{{ trans('common.time') }}" name="update_time" value="{{ $edit_info['update_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -210,7 +210,7 @@
                             <script type="text/javascript">
                                 $(function(){
                                     var config = {
-                                        @if ($edit_info['access_group_id'])'def_data':{$edit_info.access_group_id},@endif
+                                        @if ($edit_info['access_group_id'])'def_data':{{ $edit_info['access_group_id'] }},@endif
                                         'out_obj':$('#access_group_id_list'),
                                         'edit_obj':$('#access_group_list'),
                                         'post_name':'access_group_id[]',
@@ -227,7 +227,7 @@
                             <div class="form-group">
                                 <label class="col-sm-1 control-label">{{ trans('common.character') }}{{ trans('common.content') }}</label>
                                 <div class="col-sm-10">
-                                    <textarea rows="15" class="col-sm-12" name="content">{$edit_info.content}</textarea>
+                                    <textarea rows="15" class="col-sm-12" name="content">{{ $edit_info['content'] }}</textarea>
                                 </div>
                             </div>
                         </div>

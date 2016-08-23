@@ -18,14 +18,14 @@
                     @foreach ($message_board_list as $message_board)
                         <tr>
                             <td>
-                                <input name="id[]" type="checkbox" value="{$message_board.id}"/>
-                                &nbsp;{$message_board.id}
+                                <input name="id[]" type="checkbox" value="{{ $message_board['id'] }}"/>
+                                &nbsp;{{ $message_board['id'] }}
                             </td>
                             <td>
-                                {$message_board.name}
+                                {{ $message_board['name'] }}
                             </td>
                             <td>
-                                {$message_board.option}
+                                {{ $message_board['option'] }}
                             <td class="nowrap">
                                 @if ($batch_handle['log_index'])
                                     <a class="btn btn-xs btn-primary" href="{{ route('MessageBoardLog/index',array('msg_id'=>$message_board['id'])) }}">
@@ -40,7 +40,7 @@
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$message_board.name}?','{{ route('del',array('id'=>$message_board['id'])) }}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $message_board['name'] }}?','{{ route('del',array('id'=>$message_board['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 @endif

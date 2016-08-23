@@ -4,13 +4,13 @@
             <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <form  class="form-horizontal" role="form" action="" method="post" >
-                    <input type="hidden" name="id" value="{$edit_info.id}"/>
+                    <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.recruit') }}{{ trans('common.name') }}</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.recruit') }}{{ trans('common.name') }}" name="title" value="{$edit_info.title}"/>
+                                    <input type="text" class="form-control" placeholder="{{ trans('common.recruit') }}{{ trans('common.name') }}" name="title" value="{{ $edit_info['title'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -20,7 +20,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.current') }}{{ trans('common.recruit') }}{{ trans('common.number') }}</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" name="current_portion" value="{$edit_info.current_portion}" onKeyup="M_in_int(this);"/>
+                                    <input type="text" class="form-control" name="current_portion" value="{{ $edit_info['current_portion'] }}" onKeyup="M_in_int(this);"/>
                                 </div>
                             </div>
                         </div>
@@ -28,7 +28,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.max') }}{{ trans('common.recruit') }}{{ trans('common.number') }}</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" name="max_portion" value="{$edit_info.max_portion}" onKeyup="M_in_int(this);"/>
+                                    <input type="text" class="form-control" name="max_portion" value="{{ $edit_info['max_portion'] }}" onKeyup="M_in_int(this);"/>
                                 </div>
                             </div>
                         </div>
@@ -38,7 +38,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.start') }}{{ trans('common.time') }}</label>
                                 <div class="col-sm-6 ">
-<input type="text" class="form-control" placeholder="{{ trans('common.start') }}{{ trans('common.time') }}" name="start_time" value="{$edit_info.start_time|M_date=C('SYS_DATE_DETAIL')}"/>
+<input type="text" class="form-control" placeholder="{{ trans('common.start') }}{{ trans('common.time') }}" name="start_time" value="{{ $edit_info['start_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -46,7 +46,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.end') }}{{ trans('common.time') }}</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" placeholder="{{ trans('common.end') }}{{ trans('common.time') }}" name="end_time" value="{$edit_info.end_time|M_date=C('SYS_DATE_DETAIL')}"/>
+<input type="text" class="form-control" placeholder="{{ trans('common.end') }}{{ trans('common.time') }}" name="end_time" value="{{ $edit_info['end_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                         <script type="text/javascript">
                             $(function(){
                                 var config = {
-                                    @if ($edit_info['ext_info'])'def_data':{$edit_info.ext_info|json_encode},@endif
+                                    @if ($edit_info['ext_info'])'def_data':{{ $edit_info['ext_info']|json_encode }},@endif
                                     'run_type':'add_edit',
                                     'out_obj':$('#ext_info_list'),
                                     'edit_obj':$('#edit_obj'),
@@ -94,7 +94,7 @@
                     </div>
                     <div class="col-sm-12">
                         <label class="col-sm-12">{{ trans('common.recruit') }}{{ trans('common.content') }}</label>
-                        <textarea rows="15" class="col-sm-12" name="explains">{$edit_info.explains}</textarea>
+                        <textarea rows="15" class="col-sm-12" name="explains">{{ $edit_info['explains'] }}</textarea>
                     </div>
                     <div class="cb"></div>
                     <div class="row mt10">

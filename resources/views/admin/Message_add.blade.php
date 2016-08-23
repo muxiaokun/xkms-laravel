@@ -4,7 +4,7 @@
             <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <form class="form-horizontal" role="form" action="" method="post">
-                    <input type="hidden" name="id" value="{$edit_info.id}"/>
+                    <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
@@ -15,7 +15,7 @@
                                     <script type="text/javascript">
                                         $(function(){
                                             var config = {
-                                                @if ($receive_info['id'])'def_data':{'value':'{$receive_info.id}','html':'{$receive_info.member_name}'},@endif
+                                                @if ($receive_info['id'])'def_data':{'value':'{{ $receive_info['id'] }}','html':'{{ $receive_info['member_name'] }}'},@endif
                                                 'edit_obj':$('#receive_member_list'),
                                                 'post_name':'receive_id',
                                                 'ajax_url':'{{ route('ajax_api') }}',
@@ -31,7 +31,7 @@
                     <div class="row">
                         <div class="col-sm-12 text-center">{{ trans('common.send') }}{{ trans('common.content') }}</div>
                         <div class="col-sm-12">
-                            <textarea rows="5" class="col-sm-12" name="content">{$edit_info.reply_info}</textarea>
+                            <textarea rows="5" class="col-sm-12" name="content">{{ $edit_info['reply_info'] }}</textarea>
                         </div>
                     </div>
                     <div class="row mt10">

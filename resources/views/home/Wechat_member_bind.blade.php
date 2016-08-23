@@ -20,7 +20,7 @@
                                 </div>
                             </div>
                             @if (C('SYS_FRONTEND_VERIFY'))
-                            {/*<!--验证码 开始-->*/}
+                            {{--验证码 开始--}}
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">{{ trans('common.verify_code') }}</label>
                                 <div class="col-sm-5">
@@ -30,7 +30,7 @@
                             <div class="form-group">
                                 <img class="col-sm-5 col-sm-offset-3" src="{:M_U('verify_img',array('t'=>'login'))}" onClick="M_change_verify(this,$('input[name=verify]'))" />
                             </div>
-                            {/*<!--验证码 结束-->*/}
+                            {{--验证码 结束--}}
                             @endif
                             <input type="submit" class="btn btn-info col-sm-offset-5" value="{{ trans('common.login') }}">
                         </form>

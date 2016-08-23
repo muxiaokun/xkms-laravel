@@ -21,23 +21,23 @@
                     @foreach ($recruit_list as $recruit)
                         <tr>
                             <td>
-                                <input name="id[]" type="checkbox" value="{$recruit.id}"/>
-                                &nbsp;{$recruit.id}
+                                <input name="id[]" type="checkbox" value="{{ $recruit['id'] }}"/>
+                                &nbsp;{{ $recruit['id'] }}
                             </td>
                             <td>
-                                {$recruit.title}
+                                {{ $recruit['title'] }}
                             </td>
                             <td>
                                 @if ($recruit['is_enable']){{ trans('common.enable') }}@else{{ trans('common.disable') }}@endif
                             </td>
                             <td>
-                                {$recruit.current_portion}/{$recruit.max_portion}
+                                {{ $recruit['current_portion'] }}/{{ $recruit['max_portion'] }}
                             </td>
                             <td>
-                                {$recruit.start_time|M_date=C('SYS_DATE_DETAIL')}
+                                {{ $recruit['start_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td>
-                                {$recruit.end_time|M_date=C('SYS_DATE_DETAIL')}
+                                {{ $recruit['end_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['log_index'])
@@ -53,7 +53,7 @@
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$recruit.title}?','{{ route('del',array('id'=>$recruit['id'])) }}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $recruit['title'] }}?','{{ route('del',array('id'=>$recruit['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 @endif

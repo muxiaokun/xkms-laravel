@@ -3,13 +3,13 @@
             <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <form class="form-horizontal" role="form" action="" method="post" >
-                    <input type="hidden" name="id" value="{$edit_info.id}"/>
+                    <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.assess') }}{{ trans('common.title') }}</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.title') }}" name="title" value="{$edit_info.title}"/>
+                                    <input type="text" class="form-control" placeholder="{{ trans('common.title') }}" name="title" value="{{ $edit_info['title'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -22,7 +22,7 @@
                                     <script type="text/javascript">
                                         $(function(){
                                             var config = {
-                                                @if ($edit_info['group_level'])'def_data':{'value':'{$edit_info.group_level}','html':'{$edit_info.group_name}'},@endif
+                                                @if ($edit_info['group_level'])'def_data':{'value':'{{ $edit_info['group_level'] }}','html':'{{ $edit_info['group_name'] }}'},@endif
                                                 'edit_obj':$('#group_level'),
                                                 'post_name':'group_level',
                                                 'ajax_url':'{{ route('ajax_api') }}',
@@ -40,7 +40,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.assess') }}{{ trans('common.start') }}{{ trans('common.time') }}</label>
                                 <div class="col-sm-6 ">
-<input type="text" class="form-control" placeholder="{{ trans('common.start') }}{{ trans('common.time') }}" name="start_time" value="{$edit_info.start_time|M_date=C('SYS_DATE_DETAIL')}"/>
+<input type="text" class="form-control" placeholder="{{ trans('common.start') }}{{ trans('common.time') }}" name="start_time" value="{{ $edit_info['start_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -48,7 +48,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.assess') }}{{ trans('common.end') }}{{ trans('common.time') }}</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" placeholder="{{ trans('common.end') }}{{ trans('common.time') }}" name="end_time" value="{$edit_info.end_time|M_date=C('SYS_DATE_DETAIL')}"/>
+<input type="text" class="form-control" placeholder="{{ trans('common.end') }}{{ trans('common.time') }}" name="end_time" value="{{ $edit_info['end_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">{{ trans('common.assess') }}{{ trans('common.explains') }}</label>
                                 <div class="col-sm-9">
-                                    <textarea class="form-control" rows="3" style="width:100%;resize:none;" name="explains" >{$edit_info.explains}</textarea>
+                                    <textarea class="form-control" rows="3" style="width:100%;resize:none;" name="explains" >{{ $edit_info['explains'] }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -156,7 +156,7 @@
                     <script type="text/javascript" src="{{ asset('js/M_assess_editor.js') }}"></script>
                     <script type="text/javascript">
                         var config = {
-                            @if ($edit_info['ext_info'])'def_data':{$edit_info.ext_info},@endif
+                            @if ($edit_info['ext_info'])'def_data':{{ $edit_info['ext_info'] }},@endif
                             'out_obj':$('#assess_area'),
                             'edit_obj':$('#quests_edit'),
                             'post_name':'ext_info'

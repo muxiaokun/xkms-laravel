@@ -23,26 +23,26 @@
                     @foreach ($region_list as $region)
                         <tr>
                             <td>
-                                <input name="id[]" type="checkbox" value="{$region.id}"/>
-                                &nbsp;{$region.id}
+                                <input name="id[]" type="checkbox" value="{{ $region['id'] }}"/>
+                                &nbsp;{{ $region['id'] }}
                             </td>
                             <td>
-                                @if ($region['parent_name'])[{$region.parent_name}]&nbsp;&nbsp;@endif{$region.region_name}
+                                @if ($region['parent_name'])[{{ $region['parent_name'] }}]&nbsp;&nbsp;@endif{{ $region['region_name'] }}
                             </td>
                             <td>
-                                {$region.short_name}
+                                {{ $region['short_name'] }}
                             </td>
                             <td>
-                                {$region.all_spell}
+                                {{ $region['all_spell'] }}
                             </td>
                             <td>
-                                {$region.short_spell}
+                                {{ $region['short_spell'] }}
                             </td>
                             <td>
-                                {$region.areacode}
+                                {{ $region['areacode'] }}
                             </td>
                             <td>
-                                {$region.postcode}
+                                {{ $region['postcode'] }}
                             </td>
                             <td>
                                 @if ($region['if_show']){{ trans('common.show') }}@else{{ trans('common.hidden') }}@endif
@@ -55,7 +55,7 @@
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$region.name}?','{{ route('del',array('id'=>$region['id'])) }}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $region['name'] }}?','{{ route('del',array('id'=>$region['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 @endif

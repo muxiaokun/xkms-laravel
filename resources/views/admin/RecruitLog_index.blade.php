@@ -19,42 +19,42 @@
                     @foreach ($recruit_log_list as $recruit_log)
                         <tr>
                             <td>
-                                <input name="id[]" type="checkbox" value="{$recruit_log.id}"/>
-                                &nbsp;{$recruit_log.id}
+                                <input name="id[]" type="checkbox" value="{{ $recruit_log['id'] }}"/>
+                                &nbsp;{{ $recruit_log['id'] }}
                             </td>
                             <td>
-                                {$recruit_log.recruit_title}
+                                {{ $recruit_log['recruit_title'] }}
                             </td>
                             <td>
-                                {$recruit_log.name}
+                                {{ $recruit_log['name'] }}
                             </td>
                             <td>
-                                {$recruit_log.add_time|M_date=C('SYS_DATE_DETAIL')}
+                                {{ $recruit_log['add_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td>
-                                {$recruit_log.birthday|M_date=C('SYS_DATE')}
+                                {{ $recruit_log['birthday']|M_date=C('SYS_DATE') }}
                             </td>
                             <td>
-                                {$recruit_log.sex}
+                                {{ $recruit_log['sex'] }}
                             </td>
                             <td>
-                                {$recruit_log.certificate}
+                                {{ $recruit_log['certificate'] }}
                             </td>
                             <td class="nowrap">
-<a id="M_alert_log_{$recruit_log.id}" class="btn btn-xs btn-primary" href="javascript:void(0);">{{ trans('common.look') }}</a>
+<a id="M_alert_log_{{ $recruit_log['id'] }}" class="btn btn-xs btn-primary" href="javascript:void(0);">{{ trans('common.look') }}</a>
                                 <script>
                                     $(function(){
                                         var config = {
-                                            'bind_obj':$('#M_alert_log_{$recruit_log.id}'),
+                                            'bind_obj':$('#M_alert_log_{{ $recruit_log['id'] }}'),
                                             'title':'{{ trans('common.recruit_log') }}',
-                                            'message':{$recruit_log.ext_info|json_encode}
+                                            'message':{{ $recruit_log['ext_info']|json_encode }}
                                         }
                                         new M_alert_log(config);
                                     });
                                 </script>
                                 @if ($batch_handle['del'])
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$recruit_log.name}?','{{ route('del',array('id'=>$recruit_log['id'])) }}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $recruit_log['name'] }}?','{{ route('del',array('id'=>$recruit_log['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 @endif

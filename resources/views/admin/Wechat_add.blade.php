@@ -5,7 +5,7 @@
             <div class="panel-body">
             <form method="post" class="form-horizontal"  role="form">
                 <div class="row">
-                    {/*<!--Api_link-->*/}
+                    {{--Api_link--}}
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Api_link</label>
@@ -21,7 +21,7 @@
                             </div>
                         </div>
                     </div>
-                    {/*<!--Oauth2_link-->*/}
+                    {{--Oauth2_link--}}
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Oauth2_link</label>
@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    {/*<!--WECHAT_ID-->*/}
+                    {{--WECHAT_ID--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">appId</label>
@@ -48,7 +48,7 @@
                             </div>
                         </div>
                     </div>
-                    {/*<!--WECHAT_SECRET-->*/}
+                    {{--WECHAT_SECRET--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">appSecret</label>
@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    {/*<!--WECHAT_TOKEN-->*/}
+                    {{--WECHAT_TOKEN--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">token</label>
@@ -68,7 +68,7 @@
                             </div>
                         </div>
                     </div>
-                    {/*<!--是否自动记录Wechat日志-->*/}
+                    {{--是否自动记录Wechat日志--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.enable') }}{{ trans('common.record') }}{{ trans('common.log') }}</label>
@@ -84,7 +84,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    {/*<!--WECHAT_AESKEY-->*/}
+                    {{--WECHAT_AESKEY--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">AesKey</label>
@@ -93,7 +93,7 @@
                             </div>
                         </div>
                     </div>
-                    {/*<!--WECHAT_TEMPLATE_ID-->*/}
+                    {{--WECHAT_TEMPLATE_ID--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">templateId</label>

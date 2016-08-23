@@ -42,13 +42,13 @@
                         @foreach ($theme_info_list as $file_md5 => $template)
                             <tr>
                                 <td>
-                                    {$template.file_name}
+                                    {{ $template['file_name'] }}
                                 </td>
                                 <td>
-                                    <input class="form-control" type="text" name="{{ $file_md5 }}[name]" value="{$template.name}" />
+                                    <input class="form-control" type="text" name="{{ $file_md5 }}[name]" value="{{ $template['name'] }}" />
                                 </td>
                                 <td>
-                                    <input class="form-control" type="text" name="{{ $file_md5 }}[info]" value="{$template.info}" />
+                                    <input class="form-control" type="text" name="{{ $file_md5 }}[info]" value="{{ $template['info'] }}" />
                                 </td>
                                 <td class="nowrap">
                                     @if ($batch_handle['edit'])
@@ -58,7 +58,7 @@
                                     @endif
                                     @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                     @if ($batch_handle['del'])
-    <a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$template.file_name}?','{{ route('del',array('id'=>$file_md5)) }}')" >
+    <a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $template['file_name'] }}?','{{ route('del',array('id'=>$file_md5)) }}')" >
                                             {{ trans('common.del') }}
                                         </a>
                                     @endif

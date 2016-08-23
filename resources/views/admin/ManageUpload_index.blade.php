@@ -23,11 +23,11 @@
                     @foreach ($manage_upload_list as $manage_upload)
                         <tr>
                             <td>
-                                <input name="id[]" type="checkbox" value="{$manage_upload.id}"/>
-                                &nbsp;{$manage_upload.id}
+                                <input name="id[]" type="checkbox" value="{{ $manage_upload['id'] }}"/>
+                                &nbsp;{{ $manage_upload['id'] }}
                             </td>
                             <td>
-                                {$manage_upload.user_name}
+                                {{ $manage_upload['user_name'] }}
                                 [
                                     @if (1 eq $manage_upload['user_type']){{ trans('common.backend') }}
                                     @elseif (2 eq $manage_upload['user_type']){{ trans('common.frontend') }}
@@ -35,26 +35,26 @@
                                 ]
                             </td>
                             <td>
-                                {$manage_upload.name}
+                                {{ $manage_upload['name'] }}
                             </td>
                             <td>
-                                {$manage_upload.add_time|M_date=C('SYS_DATE_DETAIL')}
+                                {{ $manage_upload['add_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td>
-                                {$manage_upload.size}
+                                {{ $manage_upload['size'] }}
                             </td>
                             <td>
-                                {$manage_upload.suffix}
+                                {{ $manage_upload['suffix'] }}
                             </td>
                             <td class="nowrap">
                                 @if ($manage_upload['bind_info'])
-<a id="M_alert_log_{$manage_upload.id}" class="btn btn-xs btn-primary" href="javascript:void(0);" >{{ trans('common.look') }}</a>
+<a id="M_alert_log_{{ $manage_upload['id'] }}" class="btn btn-xs btn-primary" href="javascript:void(0);" >{{ trans('common.look') }}</a>
                                     <script>
                                         $(function(){
                                             var config = {
-                                                'bind_obj':$('#M_alert_log_{$manage_upload.id}'),
+                                                'bind_obj':$('#M_alert_log_{{ $manage_upload['id'] }}'),
                                                 'title':'{{ trans('common.file') }}{{ trans('common.bind') }}{{ trans('common.info') }}',
-                                                'message':{$manage_upload.bind_info}
+                                                'message':{{ $manage_upload['bind_info'] }}
                                             }
                                             new M_alert_log(config);
                                         });
@@ -64,12 +64,12 @@
                                 @endif
                             </td>
                             <td>
-                                <a class="btn btn-xs btn-primary" href="javascript:void(0);" id="copy_obj{$manage_upload.id}" data-clipboard-text="{$manage_upload.path}" >
-                                    <script type="text/javascript" charset="utf-8">M_ZeroClipboard('copy_obj{$manage_upload.id}');</script>
+                                <a class="btn btn-xs btn-primary" href="javascript:void(0);" id="copy_obj{{ $manage_upload['id'] }}" data-clipboard-text="{{ $manage_upload['path'] }}" >
+                                    <script type="text/javascript" charset="utf-8">M_ZeroClipboard('copy_obj{{ $manage_upload['id'] }}');</script>
                                     {{ trans('common.copy') }}{{ trans('common.path') }}
                                 </a>
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$manage_upload.name}?','{{ route('del',array('id'=>$manage_upload['id'])) }}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $manage_upload['name'] }}?','{{ route('del',array('id'=>$manage_upload['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 @endif

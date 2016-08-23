@@ -20,17 +20,17 @@
                         <tr>
                             <td>
                                 @if ($admin_group['id'] neq 1)
-                                    <input name="id[]" type="checkbox" value="{$admin_group.id}"/>
+                                    <input name="id[]" type="checkbox" value="{{ $admin_group['id'] }}"/>
                                 @else
                                 &nbsp;&nbsp;&nbsp;
                                 @endif
-                                &nbsp;{$admin_group.id}
+                                &nbsp;{{ $admin_group['id'] }}
                             </td>
                             <td>
-                                {$admin_group.name}
+                                {{ $admin_group['name'] }}
                             </td>
                             <td>
-                                {$admin_group.explains}
+                                {{ $admin_group['explains'] }}
                             </td>
                             <td>
                                 @if ($admin_group['is_enable']){{ trans('common.enable') }}@else{{ trans('common.disable') }}@endif
@@ -43,7 +43,7 @@
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$admin_group.name}?','{{ route('del',array('id'=>$admin_group['id'])) }}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $admin_group['name'] }}?','{{ route('del',array('id'=>$admin_group['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 @endif

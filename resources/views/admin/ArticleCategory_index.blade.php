@@ -17,16 +17,16 @@
                         </td>
                     </tr>
                     @foreach ($article_category_list as $article_category)
-                        <tr cate_id="{$article_category.id}" parent_id="{$article_category.parent_id}" has_child="{$article_category.has_child}" >
+                        <tr cate_id="{{ $article_category['id'] }}" parent_id="{{ $article_category['parent_id'] }}" has_child="{{ $article_category['has_child'] }}" >
                             <td>
 <span class="glyphicon @if (0 lt $article_category['has_child'])glyphicon-plus@elseglyphicon-minus@endif mlr10" onclick="M_cate_tree(this,article_category_cb);" ></span>
-                                {$article_category.name}(ID:{$article_category.id})
+                                {{ $article_category['name'] }}(ID:{{ $article_category['id'] }})
                             </td>
-                            <td onClick="M_line_edit(this);" field_id="{$article_category.id}" field="sort" link="{{ route('ajax_api') }}">
-                                {$article_category.sort}
+                            <td onClick="M_line_edit(this);" field_id="{{ $article_category['id'] }}" field="sort" link="{{ route('ajax_api') }}">
+                                {{ $article_category['sort'] }}
                             </td>
                             <td>
-                                {$article_category.show}
+                                {{ $article_category['show'] }}
                             </td>
                             <td class="nowrap">
                                 <a class="btn btn-xs btn-primary" target="_blank" href="{{ route('Home/Article/category',array('cate_id'=>$article_category['id'])) }}">
@@ -40,7 +40,7 @@
                                 @endif
                                 @if ($batch_handle['del'])
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$article_category.name}?','{{ route('del',array('id'=>$article_category['id'])) }}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $article_category['name'] }}?','{{ route('del',array('id'=>$article_category['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 @endif

@@ -32,7 +32,7 @@
         </section>
         <section class="container hidden">
             <div class="jumbotron">
-                <h1>{$Think.const.APP_NAME}</h1>
+                <h1>{{ $Think['const']['APP_NAME'] }}</h1>
                 <p>{{ trans('common.version') }}{{ trans('common.colon') }} Home Module 1.0.0</p>
                 <p><a class="btn btn-primary btn-lg" role="button" href="http://www.xjhywh.cn" target="_blank">Learn more</a></p>
             </div>

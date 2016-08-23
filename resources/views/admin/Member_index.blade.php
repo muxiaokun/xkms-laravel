@@ -22,23 +22,23 @@
                     @foreach ($member_list as $member)
                         <tr>
                             <td>
-                                <input name="id[]" type="checkbox" value="{$member.id}"/>
-                                &nbsp;{$member.id}
+                                <input name="id[]" type="checkbox" value="{{ $member['id'] }}"/>
+                                &nbsp;{{ $member['id'] }}
                             </td>
                             <td>
-                                {$member.member_name}
+                                {{ $member['member_name'] }}
                             </td>
                             <td>
-                                {$member.group_name}
+                                {{ $member['group_name'] }}
                             </td>
                             <td>
-                                {$member.register_time|M_date=C('SYS_DATE_DETAIL')}
+                                {{ $member['register_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td>
-                                {$member.last_time|M_date=C('SYS_DATE_DETAIL')}
+                                {{ $member['last_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td>
-                                {$member.aip}
+                                {{ $member['aip'] }}
                             </td>
                             <td>
                                 @if ($member['is_enable']){{ trans('common.enable') }}@else{{ trans('common.disable') }}@endif
@@ -51,7 +51,7 @@
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$member.member_name}?','{{ route('del',array('id'=>$member['id'])) }}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $member['member_name'] }}?','{{ route('del',array('id'=>$member['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 @endif

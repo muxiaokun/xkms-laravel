@@ -1,3 +1,6 @@
+@extends('install.layout')
+@section('body')
+        @push('scripts')
         <script type="text/javascript">
             $(function(){
                 if(parent && parent.move_progress)
@@ -6,7 +9,8 @@
                 }
             });
         </script>
-        {/*<!--安装第四步界面 开始-->*/}
+        @endpush
+        {{--安装第四步界面 开始--}}
         <section class="container">
             <div class="row">
                 <div class="col-sm-12">
@@ -24,4 +28,5 @@
                 </div>
             </div>
         </section>
-        {/*<!--安装第四步界面 结束-->*/}
+        {{--安装第四步界面 结束--}}
+@endsection

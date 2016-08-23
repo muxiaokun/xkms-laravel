@@ -17,14 +17,14 @@
                     @foreach ($quests_answer_list as $quests_answer)
                         <tr>
                             <td>
-                                <input name="id[]" type="checkbox" value="{$quests_answer.id}"/>
-                                &nbsp;{$quests_answer.id}
+                                <input name="id[]" type="checkbox" value="{{ $quests_answer['id'] }}"/>
+                                &nbsp;{{ $quests_answer['id'] }}
                             </td>
                             <td>
-                                {$quests_answer.member_name}
+                                {{ $quests_answer['member_name'] }}
                             </td>
                             <td>
-                                {$quests_answer.add_time|M_date=C('SYS_DATE_DETAIL')}
+                                {{ $quests_answer['add_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['add'])

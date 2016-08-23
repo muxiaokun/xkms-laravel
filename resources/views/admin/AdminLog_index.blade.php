@@ -26,36 +26,36 @@
                     @foreach ($admin_log_list as $admin_log)
                         <tr>
                             <td>
-                                <input name="id[]" type="checkbox" value="{$admin_log.id}"/>
-                                &nbsp;{$admin_log.id}
+                                <input name="id[]" type="checkbox" value="{{ $admin_log['id'] }}"/>
+                                &nbsp;{{ $admin_log['id'] }}
                             </td>
                             <td>
-                                {$admin_log.admin_name}
+                                {{ $admin_log['admin_name'] }}
                             </td>
                             <td>
-                                {$admin_log.add_time|M_date=C('SYS_DATE_DETAIL')}
+                                {{ $admin_log['add_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td>
-                                {$admin_log.module_name}
+                                {{ $admin_log['module_name'] }}
                             </td>
                             <td>
-                                {$admin_log.controller_name}
+                                {{ $admin_log['controller_name'] }}
                             </td>
                             <td>
-                                {$admin_log.action_name}
+                                {{ $admin_log['action_name'] }}
                             </td>
                             <td>
-                                {$admin_log.model_name}
+                                {{ $admin_log['model_name'] }}
                             </td>
                             <td>
                                 @if (2 lt strlen($admin_log['request']))
-<a id="M_alert_log_{$admin_log.id}" class="btn btn-xs btn-primary" href="javascript:void(0);" >{{ trans('common.look') }}</a>
+<a id="M_alert_log_{{ $admin_log['id'] }}" class="btn btn-xs btn-primary" href="javascript:void(0);" >{{ trans('common.look') }}</a>
                                 <script>
                                     $(function(){
                                         var config = {
-                                            'bind_obj':$('#M_alert_log_{$admin_log.id}'),
+                                            'bind_obj':$('#M_alert_log_{{ $admin_log['id'] }}'),
                                             'title':'{{ trans('common.admin') }}{{ trans('common.handle') }}{{ trans('common.log') }}',
-                                            'message':{$admin_log.request}
+                                            'message':{{ $admin_log['request'] }}
                                         }
                                         new M_alert_log(config);
                                     });

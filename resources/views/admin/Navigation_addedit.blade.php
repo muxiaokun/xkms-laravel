@@ -17,13 +17,13 @@
                     });
                 </script>
                 <form id="form_valid" onSubmit="return false;"  class="form-horizontal" role="form" action="" method="post" >
-                    <input type="hidden" name="id" value="{$edit_info.id}"/>
+                    <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.navigation') }}{{ trans('common.name') }}</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" placeholder="{{ trans('common.navigation') }}{{ trans('common.name') }}" name="name" value="{$edit_info.name}" onchange="M_zh2py(this,'input[name=short_name]')"  link="{{ route('ajax_api') }}"/>
+<input type="text" class="form-control" placeholder="{{ trans('common.navigation') }}{{ trans('common.name') }}" name="name" value="{{ $edit_info['name'] }}" onchange="M_zh2py(this,'input[name=short_name]')"  link="{{ route('ajax_api') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -31,7 +31,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.short') }}{{ trans('common.name') }}</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.short') }}{{ trans('common.name') }}" name="short_name" value="{$edit_info.short_name}"/>
+                                    <input type="text" class="form-control" placeholder="{{ trans('common.short') }}{{ trans('common.name') }}" name="short_name" value="{{ $edit_info['short_name'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -78,11 +78,11 @@
                             <script>
                                 $(function(){
                                     new M_navigation_editor({
-                                            @if ($edit_info['ext_info'])'def_data':{$edit_info.ext_info},@endif
+                                            @if ($edit_info['ext_info'])'def_data':{{ $edit_info['ext_info'] }},@endif
                                             'out_obj':$('#navigation_out'),
                                             'edit_obj':$('#edit_window'),
-                                            'post_name':'{$navigation_config.post_name}',
-                                            'max_level':{$navigation_config.navigation_level},
+                                            'post_name':'{{ $navigation_config['post_name'] }}',
+                                            'max_level':{{ $navigation_config['navigation_level'] }},
                                         });
                                 });
                             </script>

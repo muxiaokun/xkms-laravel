@@ -17,13 +17,13 @@
                     });
                 </script>
                 <form id="form_valid" onSubmit="return false;"  class="form-horizontal" role="form" action="" method="post" >
-                    <input type="hidden" name="id" value="{$edit_info.id}"/>
+                    <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.itlink') }}{{ trans('common.name') }}</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" placeholder="{{ trans('common.itlink') }}{{ trans('common.name') }}" name="name" value="{$edit_info.name}" onchange="M_zh2py(this,'input[name=short_name]')"  link="{{ route('ajax_api') }}"/>
+<input type="text" class="form-control" placeholder="{{ trans('common.itlink') }}{{ trans('common.name') }}" name="name" value="{{ $edit_info['name'] }}" onchange="M_zh2py(this,'input[name=short_name]')"  link="{{ route('ajax_api') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -31,7 +31,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.short') }}{{ trans('common.name') }}</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.short') }}{{ trans('common.name') }}" name="short_name" value="{$edit_info.short_name}"/>
+                                    <input type="text" class="form-control" placeholder="{{ trans('common.short') }}{{ trans('common.name') }}" name="short_name" value="{{ $edit_info['short_name'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.start') }}{{ trans('common.time') }}</label>
                                 <div class="col-sm-6 ">
-<input type="text" class="form-control" placeholder="{{ trans('common.start') }}{{ trans('common.time') }}" name="start_time" value="{$edit_info.start_time|M_date=C('SYS_DATE_DETAIL')}"/>
+<input type="text" class="form-control" placeholder="{{ trans('common.start') }}{{ trans('common.time') }}" name="start_time" value="{{ $edit_info['start_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -64,7 +64,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.end') }}{{ trans('common.time') }}</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" placeholder="{{ trans('common.end') }}{{ trans('common.time') }}" name="end_time" value="{$edit_info.end_time|M_date=C('SYS_DATE_DETAIL')}"/>
+<input type="text" class="form-control" placeholder="{{ trans('common.end') }}{{ trans('common.time') }}" name="end_time" value="{{ $edit_info['end_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -75,7 +75,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.max') }}{{ trans('common.show') }}{{ trans('common.number') }}</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" placeholder="{{ trans('common.max') }}{{ trans('common.show') }}{{ trans('common.number') }}" name="max_show_num" value="{$edit_info.max_show_num}"/>
+<input type="text" class="form-control" placeholder="{{ trans('common.max') }}{{ trans('common.show') }}{{ trans('common.number') }}" name="max_show_num" value="{{ $edit_info['max_show_num'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -83,7 +83,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.show') }}{{ trans('common.number') }}</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" placeholder="{{ trans('common.show') }}{{ trans('common.number') }}" name="show_num" value="{$edit_info.show_num}"/>
+<input type="text" class="form-control" placeholder="{{ trans('common.show') }}{{ trans('common.number') }}" name="show_num" value="{{ $edit_info['show_num'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -93,7 +93,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.max') }}{{ trans('common.click') }}{{ trans('common.number') }}</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" placeholder="{{ trans('common.max') }}{{ trans('common.click') }}{{ trans('common.number') }}" name="max_hit_num" value="{$edit_info.max_hit_num}"/>
+<input type="text" class="form-control" placeholder="{{ trans('common.max') }}{{ trans('common.click') }}{{ trans('common.number') }}" name="max_hit_num" value="{{ $edit_info['max_hit_num'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -101,7 +101,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.click') }}{{ trans('common.number') }}</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" placeholder="{{ trans('common.click') }}{{ trans('common.number') }}" name="hit_num" value="{$edit_info.hit_num}"/>
+<input type="text" class="form-control" placeholder="{{ trans('common.click') }}{{ trans('common.number') }}" name="hit_num" value="{{ $edit_info['hit_num'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -123,7 +123,7 @@
                                 var M_callback_itlink = function(){console.log("bind M_itlink_editor error");}
                                 $(function(){
                                     var config = {
-                                        @if ($edit_info['ext_info'])'def_data':{$edit_info.ext_info|json_encode},@endif
+                                        @if ($edit_info['ext_info'])'def_data':{{ $edit_info['ext_info']|json_encode }},@endif
                                         'global_var':'itlink_editor',
                                         'out_obj':$('#ext_info'),
                                         'upload_btn':'#uploadsbutton',

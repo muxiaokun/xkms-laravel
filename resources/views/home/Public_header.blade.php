@@ -65,7 +65,7 @@
                           <span class="icon-bar"></span>
                           <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="{$nav_menu[0]['nav_url']}"><b>{$nav_menu[0]['nav_text']}</b></a>
+                        <a class="navbar-brand" href="{{ $nav_menu[0]['nav_url'] }}"><b>{{ $nav_menu[0]['nav_text'] }}</b></a>
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
@@ -73,14 +73,14 @@
                                 @if (0 lt $key)
                                 <li class="@if ($data['nav_active']">active@endif)
                                     @if ($data['nav_child'])
-                                        <a  data-toggle="dropdown" href="#"><b>{$data.nav_text}</b><span class="caret"></span></a>
+                                        <a  data-toggle="dropdown" href="#"><b>{{ $data['nav_text'] }}</b><span class="caret"></span></a>
                                         <ul class="dropdown-menu" role="menu">
                                             @foreach ($data['nav_child'] as $child_data)
-                                                <li><a href="{$child_data.nav_url}" target="{$child_data.nav_target}" ><b>{$child_data.nav_text}</b></a></li>
+                                                <li><a href="{{ $child_data['nav_url'] }}" target="{{ $child_data['nav_target'] }}" ><b>{{ $child_data['nav_text'] }}</b></a></li>
                                             @endforeach
                                         </ul>
                                     @else
-                                        <a href="{$data.nav_url}" target="{$data.nav_target}" ><b>{$data.nav_text}</b></a>
+                                        <a href="{{ $data['nav_url'] }}" target="{{ $data['nav_target'] }}" ><b>{{ $data['nav_text'] }}</b></a>
                                     @endif
                                 </li>
                                 @endif
@@ -88,7 +88,7 @@
                         </ul>
                         <form class="navbar-form navbar-right" role="search" action="{:M_U('Article/search')}" method="post">
                             @if (isset($category_position['id']))
-                                <input type="hidden" name="cate_id" value="{$category_position.id}">
+                                <input type="hidden" name="cate_id" value="{{ $category_position['id'] }}">
                             @endif
                             <div class="form-group">
                                 <select name="type" class="form-control">
@@ -104,7 +104,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <input name="keyword" value="{$request['keyword']}" type="text" class="form-control" placeholder="{{ trans('common.keywords') }}">
+                                <input name="keyword" value="{{ $request['keyword'] }}" type="text" class="form-control" placeholder="{{ trans('common.keywords') }}">
                             </div>
                             <button type="submit" class="btn btn-default"><b>{{ trans('common.search') }}</b></button>
                         </form>

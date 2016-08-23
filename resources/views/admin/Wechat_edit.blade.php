@@ -4,13 +4,13 @@
             <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
             <form method="post" class="form-horizontal"  role="form">
-                <input type="hidden" name="id" value="{$edit_info.id}"/>
+                <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.send') }}{{ trans('common.to') }}</label>
                             <div class="col-sm-7">
-                                <input type="text" value="{$edit_info.member_name}" class="form-control" disabled="disabled">
+                                <input type="text" value="{{ $edit_info['member_name'] }}" class="form-control" disabled="disabled">
                             </div>
                         </div>
                     </div>

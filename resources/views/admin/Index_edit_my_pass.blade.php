@@ -21,7 +21,7 @@
                     <div class="form-group">
                         <label class="col-sm-2 col-sm-offset-2 control-label">{{ trans('common.current') }}{{ trans('common.pass') }}</label>
                         <div class="col-sm-3">
-                            <input type="password" class="form-control" placeholder="{{ trans('common.current') }}{{ trans('common.pass') }}" name="cur_password" value="{$edit_info.admin_name}"/>
+                            <input type="password" class="form-control" placeholder="{{ trans('common.current') }}{{ trans('common.pass') }}" name="cur_password" value="{{ $edit_info['admin_name'] }}"/>
                         </div>
                     </div>
                     <div class="form-group">

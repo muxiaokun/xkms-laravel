@@ -21,23 +21,23 @@
                     @foreach ($quests_list as $quests)
                         <tr>
                             <td>
-                                <input name="id[]" type="checkbox" value="{$quests.id}"/>
-                                &nbsp;{$quests.id}
+                                <input name="id[]" type="checkbox" value="{{ $quests['id'] }}"/>
+                                &nbsp;{{ $quests['id'] }}
                             </td>
                             <td>
-                                {$quests.title}
+                                {{ $quests['title'] }}
                             </td>
                             <td>
-                                {$quests.current_portion}/{$quests.max_portion}
+                                {{ $quests['current_portion'] }}/{{ $quests['max_portion'] }}
                             </td>
                             <td>
-                                {$quests.start_time|M_date=C('SYS_DATE_DETAIL')}
+                                {{ $quests['start_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td>
-                                {$quests.end_time|M_date=C('SYS_DATE_DETAIL')}
+                                {{ $quests['end_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td>
-                                {$quests.access_info}
+                                {{ $quests['access_info'] }}
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['answer_index'])
@@ -59,12 +59,12 @@
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.clear') }}{$quests.title}{{ trans('common.answer') }}?',
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.clear') }}{{ $quests['title'] }}{{ trans('common.answer') }}?',
 '{{ route('del',array('id'=>$quests['id'],'clear'=>1)) }}')" >
                                         {{ trans('common.clear') }}{{ trans('common.answer') }}
                                     </a>
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$quests.title}?','{{ route('del',array('id'=>$quests['id'])) }}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $quests['title'] }}?','{{ route('del',array('id'=>$quests['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 @endif

@@ -5,7 +5,7 @@
             <div class="panel-body">
             <form method="post" class="form-horizontal"  role="form">
                 <div class="row">
-                    {/*<!--是否自动记录管理员日志-->*/}
+                    {{--是否自动记录管理员日志--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.auto') }}{{ trans('common.record') }}{{ trans('common.log') }}</label>
@@ -19,7 +19,7 @@
                             </div>
                         </div>
                     </div>
-                    {/*<!--是否启用后台验证码-->*/}
+                    {{--是否启用后台验证码--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.backend') }}{{ trans('common.verify_code') }}</label>
@@ -35,7 +35,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    {/*<!--后台最大登录数-->*/}
+                    {{--后台最大登录数--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.backend') }}{{ trans('common.max') }}{{ trans('common.login') }}{{ trans('common.number') }}</label>
@@ -44,7 +44,7 @@
                             </div>
                         </div>
                     </div>
-                    {/*<!--后台登录最大锁定时间-->*/}
+                    {{--后台登录最大锁定时间--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.backend') }}{{ trans('common.max') }}{{ trans('common.lock') }}{{ trans('common.time') }}({{ trans('common.second') }})</label>
@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    {/*<!--后台自动登出时间-->*/}
+                    {{--后台自动登出时间--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.backend') }}{{ trans('common.login') }}{{ trans('common.timeout') }}({{ trans('common.second') }})</label>

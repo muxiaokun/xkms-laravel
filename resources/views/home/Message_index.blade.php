@@ -11,30 +11,30 @@
         @foreach ($message_list as $message)
             <tr>
                 <td>
-                    <input name="id[]" type="checkbox" value="{$message.id}"/>
-                    &nbsp;{$message.id}
+                    <input name="id[]" type="checkbox" value="{{ $message['id'] }}"/>
+                    &nbsp;{{ $message['id'] }}
                 </td>
                 <td>
-                    {$message.send_name}&nbsp;&nbsp;[{$message.send_time|M_date=C('SYS_DATE_DETAIL')}]
+                    {{ $message['send_name'] }}&nbsp;&nbsp;[{{ $message['send_time']|M_date=C('SYS_DATE_DETAIL') }}]
                 </td>
                 <td>
-                    {$message.receive_name}&nbsp;&nbsp;[
+                    {{ $message['receive_name'] }}&nbsp;&nbsp;[
                     @if (0 lt $message['receive_time'])
-                        {$message.receive_time|M_date=C('SYS_DATE_DETAIL')}
+                        {{ $message['receive_time']|M_date=C('SYS_DATE_DETAIL') }}
                     @else
                         {{ trans('common.none') }}{{ trans('common.receive') }}
                     @endif]
                 </td>
                 <td>
-<a id="M_alert_log_{$message.id}" class="btn btn-xs btn-primary" href="javascript:void(0);" >{{ trans('common.look') }}</a>
+<a id="M_alert_log_{{ $message['id'] }}" class="btn btn-xs btn-primary" href="javascript:void(0);" >{{ trans('common.look') }}</a>
                     <script>
                         $(function(){
                             var config = {
-                                'bind_obj':$('#M_alert_log_{$message.id}'),
+                                'bind_obj':$('#M_alert_log_{{ $message['id'] }}'),
                                 'title':'{{ trans('common.message') }}{{ trans('common.content') }}',
-                                'message':"{$message.content}"
+                                'message':"{{ $message['content'] }}"
                                 @if (session('frontend_info.id') eq $message['receive_id'] AND 0 eq $message['receive_time'])
-                                ,'cb_fn':M_alert_log_Message($('#M_alert_log_{$message.id}'),{$message.id},'{:M_U("ajax_api")}')
+                                ,'cb_fn':M_alert_log_Message($('#M_alert_log_{{ $message['id'] }}'),{{ $message['id'] }},'{:M_U("ajax_api")}')
                                 @endif
                             }
                             new M_alert_log(config);

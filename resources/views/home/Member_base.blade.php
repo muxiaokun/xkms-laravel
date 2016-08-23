@@ -4,7 +4,7 @@
             <div class="col-sm-2 text-center">
                 <ul class="nav nav-pills nav-stacked" role="tablist">
                     @foreach ($left_nav as $data)
-                        <li role="presentation"><a href="{$data.link}">{$data.name}</a></li>
+                        <li role="presentation"><a href="{{ $data['link'] }}">{{ $data['name'] }}</a></li>
                     @endforeach
                 </ul>
             </div>
@@ -13,9 +13,9 @@
                     <ol class="breadcrumb">
                         @foreach ($position as $data)
                             @if ($data['link'])
-                                <li><a href="{$data.link}">{$data.name}</a></li>
+                                <li><a href="{{ $data['link'] }}">{{ $data['name'] }}</a></li>
                             @else
-                                <li class="active">{$data.name}</li>
+                                <li class="active">{{ $data['name'] }}</li>
                             @endif
                         @endforeach
                     </ol>

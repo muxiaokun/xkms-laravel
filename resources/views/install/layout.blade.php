@@ -15,6 +15,8 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="{{ asset('js/supporthtml5.js') }}"></script>
     <![endif]-->
+    @stack('csses')
+    @stack('scripts')
 </head>
 <body>
 <style>

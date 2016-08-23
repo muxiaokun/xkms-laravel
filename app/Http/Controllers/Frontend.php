@@ -81,7 +81,7 @@ class Frontend extends Common
             return;
         }
 
-        $this->_ajax_api();
+        $this->doAjaxApi();
     }
 
     //登录功能

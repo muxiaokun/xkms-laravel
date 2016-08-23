@@ -10,13 +10,13 @@
                         <div class="form-group mt20 cb">
                             <a name="quests{{ $quest_id }}"></a>
                             <label >
-                                <h4>{$quest.question}
+                                <h4>{{ $quest['question'] }}
                                 @if ($quest['required'])
                                     <span class="ml20" style="color:#ff0000">({{ trans('common.required') }})</span>
                                 @endif
                                 </h4>
                             </label>
-                            <span class="mt10 help-block">{$quest.explains}</span>
+                            <span class="mt10 help-block">{{ $quest['explains'] }}</span>
                             <div>
                                 <switch name="quest['answer_type']">
                                     <case value="radio">
@@ -36,10 +36,10 @@
                                         @endforeach
                                     </case>
                                     <case value="text">
-                                        {$quests_answer_list[$quest_id][0]}
+                                        {{ $quests_answer_list[$quest_id][0] }}
                                     </case>
                                     <case value="textarea">
-                                        {$quests_answer_list[$quest_id][0]}
+                                        {{ $quests_answer_list[$quest_id][0] }}
                                     </case>
                                 </switch>
                             </div>

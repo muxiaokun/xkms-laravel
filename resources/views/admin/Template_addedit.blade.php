@@ -18,13 +18,13 @@
                                     @endif)
                                 </label>
                                 <div class="col-sm-4">
-                                    <input class="form-control" type="text" name="file_name" value="{$edit_info.file_name}" />
+                                    <input class="form-control" type="text" name="file_name" value="{{ $edit_info['file_name'] }}" />
                                 </div>
                             </div>
                             @endif
                             <div class="form-group">
                                 <div class="col-sm-12">
-                                    <textarea rows="15" class="col-sm-12" name="content">{$edit_info.content}</textarea>
+                                    <textarea rows="15" class="col-sm-12" name="content">{{ $edit_info['content'] }}</textarea>
                                 </div>
                             </div>
                         </div>

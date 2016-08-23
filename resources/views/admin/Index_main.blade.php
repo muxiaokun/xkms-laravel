@@ -1,7 +1,7 @@
     <section class="container">
         <div class="row">
             <div class="col-sm-12 page-header">
-                <h1>{{ trans('common.welcome') }}{{ trans('common.use') }}{$Think.const.APP_NAME}</h1>
+                <h1>{{ trans('common.welcome') }}{{ trans('common.use') }}{{ $Think['const']['APP_NAME'] }}</h1>
                 <a href="{{ route('Index/clean_cache') }}" class="hidden" >{{ trans('common.clean') }}{{ trans('common.cache') }}</a>
             </div>
             <div class="col-sm-12 mb20 text-center quick_ico">
@@ -33,7 +33,7 @@
             </div>
             <div class="col-sm-6">
                 <div class="panel panel-primary">
-                    <div class="panel-heading">{$Think.const.APP_NAME}动态</div>
+                    <div class="panel-heading">{{ $Think['const']['APP_NAME'] }}动态</div>
                     <div class="panel-body">
                         <table class="table table-condensed table-hover">
                             <tr id="news_row" style="display:none">
@@ -76,19 +76,19 @@
                         <table class="table table-condensed table-hover">
                             <tr>
                                 <td>{{ trans('common.account') }}{{ trans('common.name') }}</td>
-                                <td>{$Think.session.backend_info.admin_name}</td>
+                                <td>{{ $Think['session']['backend_info']['admin_name'] }}</td>
                             </tr>
                             <tr>
                                 <td>{{ trans('common.register') }}{{ trans('common.time') }}</td>
-                                <td>{$Think.session.backend_info.add_time|M_date=C('SYS_DATE_DETAIL')}</td>
+                                <td>{{ $Think['session']['backend_info']['add_time']|M_date=C('SYS_DATE_DETAIL') }}</td>
                             </tr>
                             <tr>
                                 <td>{{ trans('common.login') }}{{ trans('common.time') }}</td>
-                                <td>{$Think.session.backend_info.last_time|M_date=C('SYS_DATE_DETAIL')}</td>
+                                <td>{{ $Think['session']['backend_info']['last_time']|M_date=C('SYS_DATE_DETAIL') }}</td>
                             </tr>
                             <tr>
                                 <td>{{ trans('common.login') }}IP</td>
-                                <td>{$Think.session.backend_info.aip|M_iptoadd}</td>
+                                <td>{{ $Think['session']['backend_info']['aip']|M_iptoadd }}</td>
                             </tr>
                         </table>
                     </div>
@@ -103,27 +103,27 @@
                         <table class="table table-condensed table-hover">
                             <tr>
                                 <td class="col-sm-2">{{ trans('common.system') }}{{ trans('common.version') }}</td>
-                                <td class="col-sm-4">{$site_info.sys_version}</td>
+                                <td class="col-sm-4">{{ $site_info['sys_version'] }}</td>
                                 <td class="col-sm-2">{{ trans('common.system') }}{{ trans('common.timezone') }}</td>
-                                <td class="col-sm-4">{$site_info.sys_timezone}</td>
+                                <td class="col-sm-4">{{ $site_info['sys_timezone'] }}</td>
                             </tr>
                             <tr>
                                 <td>{{ trans('common.server') }}IP</td>
-                                <td>{$site_info.server_ip}</td>
+                                <td>{{ $site_info['server_ip'] }}</td>
                                 <td>{{ trans('common.max') }}{{ trans('common.upload') }}{{ trans('common.limit') }}</td>
-                                <td>{$site_info.max_upload_size}</td>
+                                <td>{{ $site_info['max_upload_size'] }}</td>
                             </tr>
                             <tr>
                                 <td>PHP{{ trans('common.version') }}</td>
-                                <td>{$site_info.php_version}</td>
+                                <td>{{ $site_info['php_version'] }}</td>
                                 <td>MySql{{ trans('common.version') }}</td>
-                                <td>{$site_info.mysql_version}</td>
+                                <td>{{ $site_info['mysql_version'] }}</td>
                             </tr>
                             <tr>
                                 <td>{{ trans('common.system') }}{{ trans('common.encode') }}</td>
-                                <td>{$site_info.sys_encode}</td>
+                                <td>{{ $site_info['sys_encode'] }}</td>
                                 <td>MySql{{ trans('common.encode') }}</td>
-                                <td>{$site_info.mysql_encode}</td>
+                                <td>{{ $site_info['mysql_encode'] }}</td>
                             </tr>
                         </table>
                     </div>

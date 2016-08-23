@@ -12,19 +12,19 @@
         @foreach ($assess_list as $assess)
             <tr>
                 <td>
-                    {$assess.id}
+                    {{ $assess['id'] }}
                 </td>
                 <td>
-                    {$assess.title}
+                    {{ $assess['title'] }}
                 </td>
                 <td>
-                    {$assess.target_name}
+                    {{ $assess['target_name'] }}
                 </td>
                 <td>
-                    {$assess.start_time|M_date=C('SYS_DATE_DETAIL')}
+                    {{ $assess['start_time']|M_date=C('SYS_DATE_DETAIL') }}
                 </td>
                 <td>
-                    {$assess.end_time|M_date=C('SYS_DATE_DETAIL')}
+                    {{ $assess['end_time']|M_date=C('SYS_DATE_DETAIL') }}
                 </td>
                 <td>
                     <a href="{:M_U('Assess/add',array('id'=>$assess[id]))}">

@@ -1,35 +1,35 @@
             <section class="container">
                 <div class="row">
                     <form class="form-horizontal" action="{:M_U('add')}" method="post">
-                        <input type="hidden" name="id" value="{$message_board_info.id}"/>
+                        <input type="hidden" name="id" value="{{ $message_board_info['id'] }}"/>
                         <div class="col-sm-12">
                             @foreach ($message_board_info['config'] as $data)
                             <div class="form-group">
-                                <label class="control-label col-sm-4">{$data.msg_name}{{ trans('common.colon') }}</label>
+                                <label class="control-label col-sm-4">{{ $data['msg_name'] }}{{ trans('common.colon') }}</label>
                                 <div class="col-sm-4">
                                 @if ('text' eq $data['msg_type'])
-                                    <input type="text" name="send_info[{$data.msg_name}]" class="form-control"/>
+                                    <input type="text" name="send_info[{{ $data['msg_name'] }}]" class="form-control"/>
                                 @elseif ('radio' eq $data['msg_type'])
                                     @foreach ($data['msg_option'] as $msg_option_data)
                                         <label class="control-label checkbox checkbox-inline">
-                                            <input type="radio" name="send_info[{$data.msg_name}]" value="{{ $msg_option_data }}"/>
+                                            <input type="radio" name="send_info[{{ $data['msg_name'] }}]" value="{{ $msg_option_data }}"/>
                                             {{ $msg_option_data }}
                                         </label>
                                     @endforeach
                                 @elseif ('checkbox' eq $data['msg_type'])
                                     @foreach ($data['msg_option'] as $msg_option_data)
                                         <label class="control-label checkbox checkbox-inline">
-                                            <input type="checkbox" name="send_info[{$data.msg_name}][]" value="{{ $msg_option_data }}"/>
+                                            <input type="checkbox" name="send_info[{{ $data['msg_name'] }}][]" value="{{ $msg_option_data }}"/>
                                             {{ $msg_option_data }}
                                         </label>
                                     @endforeach
                                 @elseif ('textarea' eq $data['msg_type'])
-                                    <textarea name="send_info[{$data.msg_name}]" rows="5" class="form-control" style="resize: none;" ></textarea>
+                                    <textarea name="send_info[{{ $data['msg_name'] }}]" rows="5" class="form-control" style="resize: none;" ></textarea>
                                 @endif
                                 </div>
                                 <div class="col-sm-4">
                                     @if ($data['msg_required']){{ trans('common.required') }}@endif
-                                    @if ($data['msg_length']){{ trans('common.max') }}{{ trans('common.length') }}{$data.msg_length}@endif
+                                    @if ($data['msg_length']){{ trans('common.max') }}{{ trans('common.length') }}{{ $data['msg_length'] }}@endif
                                 </div>
                             </div>
                             @endforeach
@@ -59,7 +59,7 @@
                             <table class="table table-hover">
                                 <tr>
                                     <td width="10%">{{ trans('common.send') }}{{ trans('common.time') }}{{ trans('common.colon') }}</td>
-                                    <td width="90%">{$message_board_log.add_time|M_date=C('SYS_DATE_DETAIL')}</td>
+                                    <td width="90%">{{ $message_board_log['add_time']|M_date=C('SYS_DATE_DETAIL') }}</td>
                                 </tr>
                                 @foreach ($message_board_log['send_info'] as $name => $value)
                                 <tr>
@@ -69,7 +69,7 @@
                                 @endforeach
                                 <tr>
                                     <td>{{ trans('common.reply') }}{{ trans('common.content') }}{{ trans('common.colon') }}</td>
-                                    <td>{$message_board_log.reply_info}</td>
+                                    <td>{{ $message_board_log['reply_info'] }}</td>
                                 </tr>
                             </table>
                         @endforeach

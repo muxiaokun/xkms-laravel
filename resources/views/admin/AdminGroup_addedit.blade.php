@@ -17,14 +17,14 @@
                     });
                 </script>
                 <form id="form_valid" onSubmit="return false;" class="form-horizontal" role="form" action="" method="post" >
-                    <input type="hidden" name="id" value="{$edit_info.id}"/>
+                    <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
                     <input type="hidden" name="is_pwd" value="@if ($Think.const.ACTION_NAME eq 'add')1@else0@endif"/>
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">{{ trans('common.management') }}{{ trans('common.group') }}{{ trans('common.name') }}</label>
                                 <div class="col-sm-3">
-<input type="text" class="form-control" placeholder="{{ trans('common.management') }}{{ trans('common.group') }}{{ trans('common.name') }}" name="name" value="{$edit_info.name}"/>
+<input type="text" class="form-control" placeholder="{{ trans('common.management') }}{{ trans('common.group') }}{{ trans('common.name') }}" name="name" value="{{ $edit_info['name'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -34,7 +34,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{ trans('common.management') }}{{ trans('common.group') }}{{ trans('common.explains') }}</label>
                                 <div class="col-sm-6">
-                                    <textarea name="explains" class="form-control" style="resize:none;">{$edit_info.explains}</textarea>
+                                    <textarea name="explains" class="form-control" style="resize:none;">{{ $edit_info['explains'] }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -66,7 +66,7 @@
                             <script type="text/javascript">
                                 $(function(){
                                     var config = {
-                                        @if ($edit_info['manage_id'])'def_data':{$edit_info.manage_id},@endif
+                                        @if ($edit_info['manage_id'])'def_data':{{ $edit_info['manage_id'] }},@endif
                                         'out_obj':$('#manage_id_list'),
                                         'edit_obj':$('#admin_user_list'),
                                         'post_name':'manage_id[]',

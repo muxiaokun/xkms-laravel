@@ -1,5 +1,6 @@
 @extends('install.layout')
 @section('body')
+        @push('scripts')
         <script type="text/javascript">
             $(function(){
                 var doc = $(document);
@@ -12,6 +13,7 @@
                 });
             });
         </script>
+        @endpush
         {{-- 安装初始界面 开始 --}}
         <section class="container">
             <div class="row">

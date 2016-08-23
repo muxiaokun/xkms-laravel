@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Install;
 
 use App\Http\Controllers\Common;
 use App\Http\Requests\Request;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class Index extends Common
@@ -43,7 +45,7 @@ class Index extends Common
             return;
         }
 
-        $this->_ajax_api();
+        $this->doAjaxApi();
     }
 
     //第一页 欢迎页
@@ -92,33 +94,33 @@ class Index extends Common
             if (!in_array($ext, $loadedExt)) {
                 $unloadExt[] = $ext;
             }
-
+        }
+config();
+//        $defaultConfig = Storage::get('xkms/config/database.php');
+        if (config('database.connections.mysql.host')) {
+            $defaultConfig['DB_HOST'] = config('database.connections.mysql.host');
         }
 
-        $defaultConfig = Storage::get('xkms/config/database.php');
-        if (config('connections.mysql.host')) {
-            $defaultConfig['DB_HOST'] = config('connections.mysql.host');
+        if (config('connections.mysql.database')) {
+            $defaultConfig['DB_NAME'] = config('database.connections.mysql.database');
         }
 
-        if (config('DB_NAME')) {
-            $defaultConfig['DB_NAME'] = config('DB_NAME');
+        if (config('database.connections.mysql.username')) {
+            $defaultConfig['DB_USER'] = config('database.connections.mysql.username');
         }
 
-        if (config('DB_USER')) {
-            $defaultConfig['DB_USER'] = config('DB_USER');
+        if (config('database.connections.mysql.password')) {
+            $defaultConfig['DB_PWD'] = config('database.connections.mysql.password');
         }
 
-        if (config('DB_PWD')) {
-            $defaultConfig['DB_PWD'] = config('DB_PWD');
+        if (config('database.connections.mysql.port')) {
+            $defaultConfig['DB_PORT'] = config('database.connections.mysql.port');
         }
 
-        if (config('DB_PORT')) {
-            $defaultConfig['DB_PORT'] = config('DB_PORT');
+        if (config('database.connections.mysql.prefix')) {
+            $defaultConfig['DB_PREFIX'] = config('database.connections.mysql.prefix');
         }
-
-        if (config('DB_PREFIX')) {
-            $defaultConfig['DB_PREFIX'] = config('DB_PREFIX');
-        }
+        dump($defaultConfig);
 
         $assign = [
             'show_height'=>true,
@@ -127,7 +129,7 @@ class Index extends Common
             'title' => trans('install.setp1_title'),
             'article'=>Storage::get('xkms/article/licenses.php'),
             'note'=>$unloadExt,
-            //'database_list'=>$this->_compare_database(),
+            'database_list'=>[],//$this->_compare_database(),
             'default_config'=>$defaultConfig,
 
         ];

@@ -1,3 +1,6 @@
+@extends('install.layout')
+@section('body')
+        @push('scripts')
         <script type="text/javascript">
             $(function(){
                 if(parent && parent.move_progress)
@@ -6,15 +9,16 @@
                 }
             });
         </script>
-        {/*<!--安装第二步界面 开始-->*/}
+        @endpush
+        {{--安装第二步界面 开始--}}
         <section class="container">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="text-center alert @if ($compare_database_info['if_exists'] eq 1">alert-success@elsealert-warning@endif)
                         @if ($compare_database_info['if_exists'] eq 1)
-                            {{ trans('common.database') }}{$compare_database_info.name}{{ trans('common.exists') }}
+                            {{ trans('common.database') }}{{ $compare_database_info['name'] }}{{ trans('common.exists') }}
                         @else
-                            {{ trans('common.database') }}{$compare_database_info.name}{{ trans('common.dont') }}{{ trans('common.exists') }}{{ trans('common.auto_create') }}
+                            {{ trans('common.database') }}{{ $compare_database_info['name'] }}{{ trans('common.dont') }}{{ trans('common.exists') }}{{ trans('common.auto_create') }}
                         @endif
                     </div>
                 </div>
@@ -44,7 +48,7 @@
                         @foreach ($compare_tables_info as $control_index => $data)
                         <tr>
                             <td>
-                                [{$data.control_group}]{$data.control_info}
+                                [{{ $data['control_group'] }}]{{ $data['control_info'] }}
                             </td>
                             <td>
                                 @if (1 lt $data['category'])
@@ -57,7 +61,7 @@
                                 @if ($data['tables'])
                                     @foreach ($data['tables'] as $table_name => $table)
                                         <div class="fl">
-                                        {$table.table_info}{{ $table_name }}(
+                                        {{ $table['table_info'] }}{{ $table_name }}(
                                         @if ($table['if_exists'] eq 1)
                                             <label class="checkbox-inline">
                                                 <input type="checkbox" name="install_control[reset][]" value="{{ $table_name }}"  mtype="reset"/>
@@ -84,4 +88,5 @@
                 </form>
             </div>
         </section>
-        {/*<!--安装第二步界面 结束-->*/}
+        {{--安装第二步界面 结束--}}
+@endsection

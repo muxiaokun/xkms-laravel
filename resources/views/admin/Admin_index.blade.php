@@ -23,30 +23,30 @@
                         <tr>
                             <td>
                                 @if ($admin['id'] neq 1)
-                                    <input name="id[]" type="checkbox" value="{$admin.id}"/>
+                                    <input name="id[]" type="checkbox" value="{{ $admin['id'] }}"/>
                                 @else
                                 &nbsp;&nbsp;&nbsp;
                                 @endif
-                                &nbsp;{$admin.id}
+                                &nbsp;{{ $admin['id'] }}
                             </td>
                             <td>
-                                {$admin.admin_name}
+                                {{ $admin['admin_name'] }}
                             </td>
                             <td>
-                                {$admin.group_name}
+                                {{ $admin['group_name'] }}
                             </td>
                             <td>
                                 @if (0 lt $admin['add_time'])
-                                    {$admin.add_time|M_date=C('SYS_DATE_DETAIL')}
+                                    {{ $admin['add_time']|M_date=C('SYS_DATE_DETAIL') }}
                                 @else
                                     {{ trans('common.system') }}{{ trans('common.add') }}
                                 @endif
                             </td>
                             <td>
-                                {$admin.last_time|M_date=C('SYS_DATE_DETAIL')}
+                                {{ $admin['last_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td>
-                                {$admin.aip}
+                                {{ $admin['aip'] }}
                             </td>
                             <td>
                                 @if ($admin['is_enable']){{ trans('common.enable') }}@else{{ trans('common.disable') }}@endif
@@ -59,7 +59,7 @@
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$admin.admin_name}?','{{ route('del',array('id'=>$admin['id'])) }}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $admin['admin_name'] }}?','{{ route('del',array('id'=>$admin['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 @endif

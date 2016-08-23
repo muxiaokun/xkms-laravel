@@ -19,17 +19,17 @@
                     @foreach ($article_channel_list as $article_channel)
                         <tr>
                             <td>
-                                <input name="id[]" type="checkbox" value="{$article_channel.id}"/>
-                                &nbsp;{$article_channel.id}
+                                <input name="id[]" type="checkbox" value="{{ $article_channel['id'] }}"/>
+                                &nbsp;{{ $article_channel['id'] }}
                             </td>
                             <td>
-                                {$article_channel.name}
+                                {{ $article_channel['name'] }}
                             </td>
                             <td>
                                 @if ($article_channel['if_show']){{ trans('common.show') }}@else{{ trans('common.hidden') }}@endif
                             </td>
                             <td>
-                                @if ($article_channel['template']){$article_channel.template}@else{{ trans('common.default') }}@endif
+                                @if ($article_channel['template']){{ $article_channel['template'] }}@else{{ trans('common.default') }}@endif
                             </td>
                             <td class="nowrap">
                                 <a class="btn btn-xs btn-primary" target="_blank" href="{{ route('Home/Article/channel',array('channel_id'=>$article_channel['id'])) }}">
@@ -43,7 +43,7 @@
                                 @endif
                                 @if ($batch_handle['del'])
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$article_channel.name}?','{{ route('del',array('id'=>$article_channel['id'])) }}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $article_channel['name'] }}?','{{ route('del',array('id'=>$article_channel['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 @endif

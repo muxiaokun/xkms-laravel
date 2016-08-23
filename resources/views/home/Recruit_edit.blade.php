@@ -1,15 +1,15 @@
                 <section class="container">
                     <div class="col-sm-12 text-center">
-                        <h2>{$recruit_info.title}</h2>
+                        <h2>{{ $recruit_info['title'] }}</h2>
                     </div>
                     <div class="col-sm-12 text-center mtb5">
                         {{ trans('common.re_recruit') }}{{ trans('common.number') }}{{ trans('common.colon') }}
-                        {$recruit_info.current_portion}/{$recruit_info.max_portion}
+                        {{ $recruit_info['current_portion'] }}/{{ $recruit_info['max_portion'] }}
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         {{ trans('common.time') }}{{ trans('common.colon') }}
-                        {$recruit_info.start_time|M_date=C('SYS_DATE_DETAIL')}
+                        {{ $recruit_info['start_time']|M_date=C('SYS_DATE_DETAIL') }}
                         {{ trans('common.to') }}
-                        {$recruit_info.end_time|M_date=C('SYS_DATE_DETAIL')}
+                        {{ $recruit_info['end_time']|M_date=C('SYS_DATE_DETAIL') }}
                     </div>
                     <div class="col-sm-12 text-center mtb5">
                         @foreach ($recruit_info['ext_info'] as $data)
@@ -21,7 +21,7 @@
                         @endforeach
                     </div>
                     <div class="col-sm-12 mtb10">
-                        {$recruit_info.explains}
+                        {{ $recruit_info['explains'] }}
                     </div>
                     <div class="col-sm-12 text-center mtb10">
                         <a class="btn btn-default" href="{:M_U('Recruit/add',array('id'=>$recruit_info['id']))}">

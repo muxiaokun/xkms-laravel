@@ -16,20 +16,20 @@
                     @foreach ($message_board_log_list as $message_board_log)
                         <tr>
                             <td>
-                                <input name="id[]" type="checkbox" value="{$message_board_log.id}"/>
-                                &nbsp;{$message_board_log.id}
+                                <input name="id[]" type="checkbox" value="{{ $message_board_log['id'] }}"/>
+                                &nbsp;{{ $message_board_log['id'] }}
                             </td>
                             <td>
-                                {$message_board_log.admin_name}
+                                {{ $message_board_log['admin_name'] }}
                             </td>
                             <td>
-                                {$message_board_log.member_name}
+                                {{ $message_board_log['member_name'] }}
                             </td>
                             <td>
-                                {$message_board_log.add_time|M_date=C('SYS_DATE_DETAIL')}
+                                {{ $message_board_log['add_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td>
-                                {$message_board_log.aip}
+                                {{ $message_board_log['aip'] }}
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])

@@ -10,7 +10,7 @@
                 @endif
             </div>
             <div class="panel-body">
-                <h1>{$assess_info.title}</h1>
+                <h1>{{ $assess_info['title'] }}</h1>
                 <form method="post" class="form-horizontal" role="form">
                     <div class="form-group col-sm-12">
                         <label class="col-sm-2 control-label">
@@ -53,11 +53,11 @@
                             </tr>
                             @foreach ($assess_info['result_info'] as $result)
                                 <tr>
-                                    <td>{$result.p}</td><td>{$result.f}</td><td>{$result.g}</td>
+                                    <td>{{ $result['p'] }}</td><td>{{ $result['f'] }}</td><td>{{ $result['g'] }}</td>
                                 </tr>
                             @endforeach
                             <tr>
-                                <td colspan="2"></td><td>SUM: {$assess_info.all_grade}</td>
+                                <td colspan="2"></td><td>SUM: {{ $assess_info['all_grade'] }}</td>
                             </tr>
                         @else
                             <tr>

@@ -7,10 +7,10 @@
                     <table class="table">
                         @foreach ($comment_list as $data)
                         <tr>
-                            <td>{$data.member_name}{{ trans('common.grade') }}{{ trans('common.colon') }}{$data.level}[{$data.add_time|M_date=C('SYS_DATE_DETAIL')}]</td>
+                            <td>{{ $data['member_name'] }}{{ trans('common.grade') }}{{ trans('common.colon') }}{{ $data['level'] }}[{{ $data['add_time']|M_date=C('SYS_DATE_DETAIL') }}]</td>
                         </tr>
                         <tr>
-                            <td>{$data.content}</td>
+                            <td>{{ $data['content'] }}</td>
                         </tr>
                         @endforeach
                     </table>

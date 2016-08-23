@@ -19,14 +19,14 @@
                     @foreach ($navigation_list as $navigation)
                         <tr>
                             <td>
-                                <input name="id[]" type="checkbox" value="{$navigation.id}"/>
-                                &nbsp;{$navigation.id}
+                                <input name="id[]" type="checkbox" value="{{ $navigation['id'] }}"/>
+                                &nbsp;{{ $navigation['id'] }}
                             </td>
                             <td>
-                                {$navigation.name}
+                                {{ $navigation['name'] }}
                             </td>
                             <td>
-                                {$navigation.short_name}
+                                {{ $navigation['short_name'] }}
                             </td>
                             <td>
                                 @if ($navigation['is_enable']){{ trans('common.enable') }}@else{{ trans('common.disable') }}@endif
@@ -39,7 +39,7 @@
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;</a>@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{$navigation.name}?','{{ route('del',array('id'=>$navigation['id'])) }}')" >
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $navigation['name'] }}?','{{ route('del',array('id'=>$navigation['id'])) }}')" >
                                         {{ trans('common.del') }}
                                     </a>
                                 @endif

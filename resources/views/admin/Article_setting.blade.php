@@ -5,7 +5,7 @@
             <div class="panel-body">
             <form method="post" class="form-horizontal"  role="form">
                 <div class="row">
-                    {/*<!--是否异步加载图片-->*/}
+                    {{--是否异步加载图片--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.sync') }}{{ trans('common.content') }}{{ trans('common.image') }}</label>
@@ -19,7 +19,7 @@
                             </div>
                         </div>
                     </div>
-                    {/*<!--文章前后数量-->*/}
+                    {{--文章前后数量--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.before') }}{{ trans('common.later') }}{{ trans('common.piece') }}{{ trans('common.limit') }}</label>
@@ -30,7 +30,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    {/*<!--文章缩略图-->*/}
+                    {{--文章缩略图--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.article') }}{{ trans('common.thumb') }}{{ trans('common.width') }}PX</label>
@@ -39,7 +39,7 @@
                             </div>
                         </div>
                     </div>
-                    {/*<!--文章缩略图-->*/}
+                    {{--文章缩略图--}}
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">{{ trans('common.article') }}{{ trans('common.thumb') }}{{ trans('common.height') }}PX</label>

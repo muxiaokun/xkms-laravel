@@ -27,23 +27,23 @@
         }
     </script>
     <div class="col-sm-12">
-        {$quests_info.start_content}
+        {{ $quests_info['start_content'] }}
     </div>
     <div class="col-sm-12">
         <form id="answer_form" onSubmit="return answer_submit();" method="post">
-            <input type="hidden" name="id" value="{$quests_info.id}"/>
-            <input type="hidden" name="access_info" value="{$quests_info.access_info}"/>
+            <input type="hidden" name="id" value="{{ $quests_info['id'] }}"/>
+            <input type="hidden" name="access_info" value="{{ $quests_info['access_info'] }}"/>
             @foreach ($quests_quest_list as $quest_id => $quest)
                 <div class="col-sm-12 form-group mt20 cb">
                     <a name="quests{{ $quest_id }}"></a>
                     <label >
-                        <h4>{$quest.question}
+                        <h4>{{ $quest['question'] }}
                         @if ($quest['required'])
                             <span class="ml20" style="color:#ff0000">({{ trans('common.required') }})</span>
                         @endif
                         </h4>
                     </label>
-                    <span class="help-block">{$quest.explains}</span>
+                    <span class="help-block">{{ $quest['explains'] }}</span>
                     <div>
                         <switch name="quest['answer_type']">
                             <case value="radio">
@@ -83,6 +83,6 @@
         </form>
     </div>
     <div class="col-sm-12">
-        {$quests_info.end_content}
+        {{ $quests_info['end_content'] }}
     </div>
 @endsection

@@ -98,8 +98,6 @@ trait MocksApplicationServices
      */
     protected function withoutEvents()
     {
-        $this->withoutModelEvents();
-
         $mock = Mockery::mock('Illuminate\Contracts\Events\Dispatcher');
 
         $mock->shouldReceive('fire')->andReturnUsing(function ($called) {
@@ -315,7 +313,7 @@ trait MocksApplicationServices
     {
         $mock = Mockery::mock('Illuminate\Contracts\Bus\Dispatcher');
 
-        $mock->shouldReceive('dispatch')->andReturnUsing(function ($dispatched) {
+        $mock->shouldReceive('dispatch', 'dispatchNow')->andReturnUsing(function ($dispatched) {
             $this->dispatchedJobs[] = $dispatched;
         });
 

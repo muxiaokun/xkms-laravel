@@ -4,6 +4,7 @@ namespace Illuminate\Container;
 
 use Closure;
 use ArrayAccess;
+use LogicException;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionFunction;
@@ -603,6 +604,20 @@ class Container implements ArrayAccess, ContainerContract
     }
 
     /**
+     * Get a closure to resolve the given type from the container.
+     *
+     * @param  string  $abstract
+     * @param  array  $defaults
+     * @return \Closure
+     */
+    public function factory($abstract, array $defaults = [])
+    {
+        return function (array $params = []) use ($abstract, $defaults) {
+            return $this->make($abstract, $params + $defaults);
+        };
+    }
+
+    /**
      * Resolve the given type from the container.
      *
      * @param  string  $abstract
@@ -1070,11 +1085,17 @@ class Container implements ArrayAccess, ContainerContract
      *
      * @param  string  $abstract
      * @return string
+     *
+     * @throws \LogicException
      */
-    protected function getAlias($abstract)
+    public function getAlias($abstract)
     {
         if (! isset($this->aliases[$abstract])) {
             return $abstract;
+        }
+
+        if ($this->aliases[$abstract] === $abstract) {
+            throw new LogicException("[{$abstract}] is aliased to itself.");
         }
 
         return $this->getAlias($this->aliases[$abstract]);

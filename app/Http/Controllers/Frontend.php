@@ -8,14 +8,14 @@ class Frontend extends Common
     public function _initialize()
     {
         parent::_initialize();
-        if ($this->isLogin()) {
-            //登录后Home公共变量赋值区域
-            $this->assign('login_info', session('frontend_info'));
-        }
+//        if ($this->isLogin()) {
+//            //登录后Home公共变量赋值区域
+//            $this->assign('login_info', session('frontend_info'));
+//        }
         //当前位置
-        if (!IS_AJAX && !$_FILES && !in_array(ACTION_NAME, array('ajax_api', 'del'))) {
-            $this->_get_position();
-        }
+//        if (!IS_AJAX && !$_FILES && !in_array(ACTION_NAME, array('ajax_api', 'del'))) {
+//            $this->_get_position();
+//        }
     }
 
     //生成验证码

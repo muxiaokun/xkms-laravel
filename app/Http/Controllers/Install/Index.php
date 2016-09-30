@@ -4,10 +4,6 @@
 namespace App\Http\Controllers\Install;
 
 use App\Http\Controllers\Common;
-use App\Http\Requests\Request;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 
 class Index extends Common
 {
@@ -19,7 +15,7 @@ class Index extends Common
             die('require pdo_mysql extension!!!');
         }
 
-        //parent::_initialize();
+        parent::_initialize();
         /* 安装流程
          * 1.链接数据库检测配置是否可用
          * 2.检测已安装数据，是否覆盖式安装
@@ -52,24 +48,24 @@ class Index extends Common
     public function index()
     {
         $assign = [
-            'show_height'=>false,
-            'progress'=>0,
-            'setp' => '',
-            'title' => trans('install.index_title'),
+            'show_height' => false,
+            'progress'    => 0,
+            'setp'        => '',
+            'title'       => trans('install.index_title'),
         ];
-        return view('install.Index_index',$assign);
+        return view('install.Index_index', $assign);
     }
 
     public function setp0()
     {
         $assign = [
-            'show_height'=>true,
-            'progress'=>0,
-            'setp' => trans('common.welcome') . trans('common.use'),
-            'title' => trans('install.setp0_title'),
-            'article'=>Storage::get('xkms/article/licenses.php'),
+            'show_height' => true,
+            'progress'    => 0,
+            'setp'        => trans('common.welcome') . trans('common.use'),
+            'title'       => trans('install.setp0_title'),
+            'article'     => Storage::get('xkms/article/licenses.php'),
         ];
-        return view('install.Index_setp0',$assign);
+        return view('install.Index_setp0', $assign);
     }
 
     //第二页 检测扩展模块，设置数据库
@@ -95,8 +91,9 @@ class Index extends Common
                 $unloadExt[] = $ext;
             }
         }
-config();
-//        $defaultConfig = Storage::get('xkms/config/database.php');
+        $defaultConfig = Storage::get('xkms/config/database.php');
+        var_dump($defaultConfig);
+        env();
         if (config('database.connections.mysql.host')) {
             $defaultConfig['DB_HOST'] = config('database.connections.mysql.host');
         }
@@ -123,17 +120,18 @@ config();
         dump($defaultConfig);
 
         $assign = [
-            'show_height'=>true,
-            'progress'=>0,
-            'setp' => trans('install.pfsetp',['setp' => trans('common.one'), 'count' => trans('common.four')]),
-            'title' => trans('install.setp1_title'),
-            'article'=>Storage::get('xkms/article/licenses.php'),
-            'note'=>$unloadExt,
-            'database_list'=>[],//$this->_compare_database(),
-            'default_config'=>$defaultConfig,
+            'show_height'    => true,
+            'progress'       => 0,
+            'setp'           => trans('install.pfsetp', ['setp'  => trans('common.one'),
+                                                         'count' => trans('common.four')]),
+            'title'          => trans('install.setp1_title'),
+            'article'        => Storage::get('xkms/article/licenses.php'),
+            'note'           => $unloadExt,
+            'database_list'  => [],//$this->_compare_database(),
+            'default_config' => $defaultConfig,
 
         ];
-        return view('install.Index_setp1',$assign);
+        return view('install.Index_setp1', $assign);
     }
 
     //第三页 安装数据库
@@ -470,5 +468,33 @@ EOF;
             $reCompareInfo[]         = $controlInfo;
         }
         return $reCompareInfo;
+    }
+
+    public function scan($name = 'Home')
+    {
+        $controller_path = app_path('Http/Controllers/' . $name);
+        $controllers     = scandir($controller_path);
+        $route_cfg_str = '<pre>';
+        foreach ($controllers as $controller) {
+            if('.' == $controller || '..' == $controller)continue;
+            $controller_file = $controller_path . '/' . $controller;
+            $file_content = file_get_contents($controller_file);
+            preg_match_all('/public function ([^(_]+)/',$file_content,$matchs);
+
+            $controller_name = basename($controller,'.php');
+            $route_cfg_str .= "Route::group([
+    'as'        => '$controller_name::',
+    //'middleware'=>'auth',
+    'prefix'    => '$controller_name',
+], function () {
+";
+            foreach($matchs[1] as $method)
+            {
+                $route_cfg_str .=  "    Route::get('$method', ['as' => '$method', 'uses' => '$controller_name@$method']);".PHP_EOL;
+            }
+            $route_cfg_str .=  "});
+";
+        }
+        return $route_cfg_str . '</pre>';
     }
 }

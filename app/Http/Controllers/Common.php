@@ -3,24 +3,31 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Route;
+
 class Common extends Controller
 {
+    public function __construct(){
+        $this->_initialize();
+    }
+
     public function _initialize()
     {
         //没有安装，跳转到安装页
-        $privilege    = F('privilege');
-        $allowModule = array('Install');
-        if (!$privilege && !in_array(MODULE_NAME, $allowModule)) {
-            $this->error(trans('please') . L('install') . APP_NAME, route('Install/Index/index'));
+        if (0 == env('INSTALL_STATUS') && !Route::is("Install::*")) {
+            echo redirect()->route('Install::index');
+            exit();
         }
+        //权限检测
         //保存表单验证错误之前的GET
-        if (config('TOKEN_ON') && IS_GET && !IS_AJAX) {
-            session('token_back_page', __SELF__);
-        }
+//        if (config('TOKEN_ON') && IS_GET && !IS_AJAX) {
+//            session('token_back_page', __SELF__);
+//        }
         //POST提交必须检查表单验证
-        if (IS_POST && !IS_AJAX && !isset($_FILES['imgFile']) && !$this->token_check()) {
-            $this->error(trans('token') . L('error') . '(' . L('refresh') . L('later') . L('submit') . ')', session('token_back_page')); //后台统一检查表单令牌
-        }
+//        if (IS_POST && !IS_AJAX && !isset($_FILES['imgFile']) && !$this->token_check()) {
+//            $this->error(trans('token') . L('error') . '(' . L('refresh') . L('later') . L('submit') . ')',
+//                session('token_back_page')); //后台统一检查表单令牌
+//        }
     }
 
     //检查表单令牌
@@ -50,7 +57,7 @@ class Common extends Controller
     {
         $id   = I('id');
         $type = I('type');
-        if (!$id || !in_array($type, array('qrcode'))) {
+        if (!$id || !in_array($type, ['qrcode'])) {
             return;
         }
 
@@ -75,7 +82,7 @@ class Common extends Controller
     //生成验证码
     public function verifyImg()
     {
-        $config = array(
+        $config = [
             'expire'   => 300, // 验证码的有效期（秒）
             //            'useImgBg' => '', // 是否使用背景图片 默认为false
             //            'fontSize' => '', // 验证码字体大小（像素） 默认为25
@@ -91,7 +98,7 @@ class Common extends Controller
             //            'codeSet' => '', // 验证码字符集合 3.2.1 新增
             //            'zhSet' => '', // 验证码字符集合（中文） 3.2.1 新增
             //            'reset'     =>  true,           // 验证成功后是否重置 不能重置 方式重复利用一个验证码
-        );
+        ];
         $Verify = new \Think\Verify($config);
         $id     = MODULE_NAME . CONTROLLER_NAME;
         if (IS_GET) {
@@ -130,8 +137,8 @@ class Common extends Controller
         }
 
         $pathinfo = pathinfo($file);
-        $newName = $pathinfo['filename'] . '_thumb.' . $pathinfo['extension'];
-        $newFile = $pathinfo['dirname'] . '/' . $newName;
+        $newName  = $pathinfo['filename'] . '_thumb.' . $pathinfo['extension'];
+        $newFile  = $pathinfo['dirname'] . '/' . $newName;
         //保证只生成一个缩略图
         if (false !== strpos($file, $newName)) {
             $newFile = $file;
@@ -146,15 +153,15 @@ class Common extends Controller
 
         //如果记录不存在 追加新生成文件的记录
         $ManageUploadModel = D('ManageUpload');
-        $fileInfo         = $ManageUploadModel->mFind($newFile, true);
+        $fileInfo          = $ManageUploadModel->mFind($newFile, true);
         if (!$fileInfo) {
-            $data = array(
+            $data = [
                 'name'   => $newName,
                 'path'   => $newFile,
                 'size'   => filesize($newFile),
                 'mime'   => '',
                 'suffix' => $pathinfo['extension'],
-            );
+            ];
             $ManageUploadModel->mAdd($data);
         }
 
@@ -189,7 +196,7 @@ class Common extends Controller
                 $result = $this->getData(I('field'), I('data'));
                 break;
             case 'zh2py':
-                $result           = array();
+                $result           = [];
                 $result['status'] = 1;
                 $result['info']   = $this->_zh2py(I('data'));
                 break;
@@ -203,27 +210,34 @@ class Common extends Controller
 
     //登录功能
     protected function doLogin($userName, $password)
-    {}
+    {
+    }
+
     //登出功能
     protected function doLogout()
-    {}
+    {
+    }
+
     //是否登录的接口
     protected function isLogin()
-    {}
+    {
+    }
 
     //获取权限数据
     protected function getPrivilege($module, $contrast = false)
     {
-        if (!in_array($module, array('Admin', 'Home'))) {
-            return array();
+        if (!in_array($module, ['Admin', 'Home'])) {
+            return [];
         }
 
         $privilegeOld = F('privilege');
-        $privilege     = array();
+        $privilege    = [];
         foreach ($privilegeOld[$module] as $controllersName => $controllers) {
             foreach ($controllers as $controllerName => $controller) {
                 foreach ($controller as $actionName => $action) {
-                    if (is_array($contrast) && (!in_array('all', $contrast) && !in_array($controllerName . "_" . $actionName, $contrast))) {
+                    if (is_array($contrast) && (!in_array('all',
+                                $contrast) && !in_array($controllerName . "_" . $actionName, $contrast))
+                    ) {
                         continue;
                     }
 

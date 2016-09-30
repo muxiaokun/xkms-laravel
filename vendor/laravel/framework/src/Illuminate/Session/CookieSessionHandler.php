@@ -24,6 +24,13 @@ class CookieSessionHandler implements SessionHandlerInterface
     protected $request;
 
     /**
+     * The number of minutes the session should be valid.
+     *
+     * @var int
+     */
+    protected $minutes;
+
+    /**
      * Create a new cookie driven handler instance.
      *
      * @param  \Illuminate\Contracts\Cookie\QueueingFactory  $cookie

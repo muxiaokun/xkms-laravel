@@ -23,10 +23,10 @@
             </div>
             <div class="col-sm-7 pt30 h150 lh30" style="color:#FFF;">
                 @if (C('SITE_COMPANY')){{ config('SITE_COMPANY') }}&nbsp;@endif
-                @if (C('SITE_PHONE')){{ trans('common.phone') }}{{ trans('common.colon') }}{{ config('SITE_PHONE') }}&nbsp;@endif
-                @if (C('SITE_TELPHONE')){{ trans('common.telphone') }}{{ trans('common.colon') }}{{ config('SITE_TELPHONE') }}&nbsp;<br />@endif
+                @if (C('SITE_PHONE'))@lang('common.phone')@lang('common.colon'){{ config('SITE_PHONE') }}&nbsp;@endif
+                @if (C('SITE_TELPHONE'))@lang('common.telphone')@lang('common.colon'){{ config('SITE_TELPHONE') }}&nbsp;<br />@endif
                 @if (C('SITE_OTHER')){{ config('SITE_OTHER') }}&nbsp;<br />@endif
-                {{ trans('common.version') }}{{ trans('common.colon') }} Home Module 1.0.0
+                @lang('common.version')@lang('common.colon') Home Module 1.0.0
             </div>
             <div class="col-sm-3 lh150 hidden-xs">
                 <img class="w120" src="{:M_exists('Uploads/attached/image/index/siteqrcode.png')}" />

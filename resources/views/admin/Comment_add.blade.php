@@ -7,20 +7,20 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.enable') }}</label>
+                            <label class="col-sm-4 control-label">@lang('common.yes')@lang('common.no')@lang('common.enable')</label>
                             <div class="col-sm-7">
                                 <label class="radio-inline">
-                                    <input type="radio" name="COMMENT_SWITCH" value="1" @if ('1' heq C('COMMENT_SWITCH'))checked="checked"@endif >{{ trans('common.enable') }}
+                                    <input type="radio" name="COMMENT_SWITCH" value="1" @if ('1' heq C('COMMENT_SWITCH'))checked="checked"@endif >@lang('common.enable')
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="COMMENT_SWITCH" value="0" @if ('0' heq C('COMMENT_SWITCH'))checked="checked"@endif >{{ trans('common.disable') }}
+                                    <input type="radio" name="COMMENT_SWITCH" value="0" @if ('0' heq C('COMMENT_SWITCH'))checked="checked"@endif >@lang('common.disable')
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.permit') }}{{ trans('common.controller') }} A,B</label>
+                            <label class="col-sm-4 control-label">@lang('common.permit')@lang('common.controller') A,B</label>
                             <div class="col-sm-7">
                                 <input type="text" name="COMMENT_ALLOW" value="{{ config('COMMENT_ALLOW') }}" class="form-control">
                             </div>
@@ -30,20 +30,20 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.enable') }}{{ trans('common.anonymous') }}{{ trans('common.comment') }}</label>
+                            <label class="col-sm-4 control-label">@lang('common.enable')@lang('common.anonymous')@lang('common.comment')</label>
                             <div class="col-sm-7">
                                 <label class="radio-inline">
-                                    <input type="radio" name="COMMENT_ANONY" value="1" @if ('1' heq C('COMMENT_ANONY'))checked="checked"@endif >{{ trans('common.enable') }}
+                                    <input type="radio" name="COMMENT_ANONY" value="1" @if ('1' heq C('COMMENT_ANONY'))checked="checked"@endif >@lang('common.enable')
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="COMMENT_ANONY" value="0" @if ('0' heq C('COMMENT_ANONY'))checked="checked"@endif >{{ trans('common.disable') }}
+                                    <input type="radio" name="COMMENT_ANONY" value="0" @if ('0' heq C('COMMENT_ANONY'))checked="checked"@endif >@lang('common.disable')
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.comment') }}{{ trans('common.time') }}{{ trans('common.interval') }}({{ trans('common.second') }})</label>
+                            <label class="col-sm-4 control-label">@lang('common.comment')@lang('common.time')@lang('common.interval')(@lang('common.second'))</label>
                             <div class="col-sm-7">
                                 <input type="text" name="COMMENT_INTERVAL" value="{{ config('COMMENT_INTERVAL') }}" class="form-control" onKeyup="M_in_int(this);">
                             </div>
@@ -52,10 +52,10 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 text-center">
-                        <button type="submit" class="btn btn-info">{{ trans('common.save') }}</button>
-                        <input class="btn btn-default" type="reset" value="{{ trans('common.reset') }}">
+                        <button type="submit" class="btn btn-info">@lang('common.save')</button>
+                        <input class="btn btn-default" type="reset" value="@lang('common.reset')">
                         <a href="{{ route('index') }}" class="btn btn-default">
-                            {{ trans('common.goback') }}
+                            @lang('common.goback')
                         </a>
                     </div>
                 </div>

@@ -16,9 +16,9 @@
                 <div class="col-sm-12">
                     <div class="text-center alert @if ($compare_database_info['if_exists'] eq 1">alert-success@elsealert-warning@endif)
                         @if ($compare_database_info['if_exists'] eq 1)
-                            {{ trans('common.database') }}{{ $compare_database_info['name'] }}{{ trans('common.exists') }}
+                            @lang('common.database'){{ $compare_database_info['name'] }}@lang('common.exists')
                         @else
-                            {{ trans('common.database') }}{{ $compare_database_info['name'] }}{{ trans('common.dont') }}{{ trans('common.exists') }}{{ trans('common.auto_create') }}
+                            @lang('common.database'){{ $compare_database_info['name'] }}@lang('common.dont')@lang('common.exists')@lang('common.auto_create')
                         @endif
                     </div>
                 </div>
@@ -28,20 +28,20 @@
                     <table class="table table-hover">
                         <tr>
                             <th>
-                                {{ trans('common.controller') }}{{ trans('common.info') }}
+                                @lang('common.controller')@lang('common.info')
                             </th>
                             <th>
                                 <label class="checkbox-inline">
                                     <input type="checkbox" onClick="allselect('[mtype=install]',this);" />
-                                    {{ trans('common.allselect') }}
+                                    @lang('common.allselect')
                                 </label>
                             </th>
                             <th>
-                                {{ trans('common.table') }}{{ trans('common.info') }}
+                                @lang('common.table')@lang('common.info')
                                 &nbsp;&nbsp;
                                 <label class="checkbox-inline">
                                     <input type="checkbox" onClick="allselect('[mtype=reset]',this);" />
-                                    <span style="color:red;">{{ trans('common.setp2_commont1') }}</span>
+                                    <span style="color:red;">@lang('common.setp2_commont1')</span>
                                 </label>
                             </th>
                         </tr>
@@ -65,16 +65,16 @@
                                         @if ($table['if_exists'] eq 1)
                                             <label class="checkbox-inline">
                                                 <input type="checkbox" name="install_control[reset][]" value="{{ $table_name }}"  mtype="reset"/>
-                                                <span style="color:red;">{{ trans('common.exists') }}</span>
+                                                <span style="color:red;">@lang('common.exists')</span>
                                             </label>
                                         @else
-                                            <span style="color:green;">{{ trans('common.create') }}</span>
+                                            <span style="color:green;">@lang('common.create')</span>
                                         @endif
                                         )&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         </div>
                                     @endforeach
                                 @else
-                                    {{ trans('common.none') }}{{ trans('common.table') }}{{ trans('common.info') }}
+                                    @lang('common.none')@lang('common.table')@lang('common.info')
                                 @endif
                             </td>
                         </tr>
@@ -82,8 +82,8 @@
                     </table>
                 </div>
                 <div class="col-sm-12 text-center">
-                    <a class="btn btn-lg btn-primary mt20 mr80" href="{{ route('setp1') }}">{{ trans('common.previous') }}{{ trans('common.setp') }}</a>
-                    <button id="switch_href" class="btn btn-lg btn-primary mt20" type="submit">{{ trans('common.setp2') }}</button>
+                    <a class="btn btn-lg btn-primary mt20 mr80" href="{{ route('setp1') }}">@lang('common.previous')@lang('common.setp')</a>
+                    <button id="switch_href" class="btn btn-lg btn-primary mt20" type="submit">@lang('common.setp2')</button>
                 </div>
                 </form>
             </div>

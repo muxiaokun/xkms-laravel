@@ -22,9 +22,9 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">{{ trans('common.management') }}{{ trans('common.group') }}{{ trans('common.name') }}</label>
+                                <label class="col-sm-2 control-label">@lang('common.management')@lang('common.group')@lang('common.name')</label>
                                 <div class="col-sm-3">
-<input type="text" class="form-control" placeholder="{{ trans('common.management') }}{{ trans('common.group') }}{{ trans('common.name') }}" name="name" value="{{ $edit_info['name'] }}"/>
+<input type="text" class="form-control" placeholder="@lang('common.management')@lang('common.group')@lang('common.name')" name="name" value="{{ $edit_info['name'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -32,7 +32,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.management') }}{{ trans('common.group') }}{{ trans('common.explains') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.management')@lang('common.group')@lang('common.explains')</label>
                                 <div class="col-sm-6">
                                     <textarea name="explains" class="form-control" style="resize:none;">{{ $edit_info['explains'] }}</textarea>
                                 </div>
@@ -42,13 +42,13 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.management') }}{{ trans('common.group') }}{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.enable') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.management')@lang('common.group')@lang('common.yes')@lang('common.no')@lang('common.enable')</label>
                                 <div class="col-sm-6">
                                     <label class="radio-inline">
-<input type="radio" name="is_enable" value="1" @if ('1' heq $edit_info['is_enable'] or !isset($edit_info['is_enable']))checked="checked"@endif />{{ trans('common.enable') }}
+<input type="radio" name="is_enable" value="1" @if ('1' heq $edit_info['is_enable'] or !isset($edit_info['is_enable']))checked="checked"@endif />@lang('common.enable')
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="is_enable" value="0" @if ('0' heq $edit_info['is_enable'])checked="checked"@endif />{{ trans('common.disable') }}
+<input type="radio" name="is_enable" value="0" @if ('0' heq $edit_info['is_enable'])checked="checked"@endif />@lang('common.disable')
                                     </label>
                                 </div>
                             </div>
@@ -57,7 +57,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.group') }}{{ trans('common.admin') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.group')@lang('common.admin')</label>
                                 <div class="col-sm-6"><h4 id="manage_id_list" style="margin:2px 0px 0px 0px;"></h4></div>
                             </div>
                         </div>
@@ -82,22 +82,22 @@
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
                                 @if ($Think.const.ACTION_NAME eq 'add')
-                                    {{ trans('common.add') }}
+                                    @lang('common.add')
                                 @elseif ($Think.const.ACTION_NAME eq 'edit')
-                                    {{ trans('common.edit') }}
+                                    @lang('common.edit')
                                 @endif
                             </button>
                             <a href="{{ route('index') }}" class="btn btn-default">
-                                    {{ trans('common.goback') }}
+                                    @lang('common.goback')
                             </a>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ trans('common.management') }}{{ trans('common.group') }}{{ trans('common.default') }}{{ trans('common.privilege') }}</label>
+                                <label class="col-sm-3 control-label">@lang('common.management')@lang('common.group')@lang('common.default')@lang('common.privilege')</label>
                                 <div class="col-sm-8 mb10">
-                                    <label class="checkbox-inline"><input type="checkbox" onClick="M_allselect_par(this,'.row')" />{{ trans('common.allselect') }}</label>
+                                    <label class="checkbox-inline"><input type="checkbox" onClick="M_allselect_par(this,'.row')" />@lang('common.allselect')</label>
                                     <input type="hidden" value="" name="privilege" />
                                 </div>
                             </div>
@@ -106,7 +106,7 @@
                         <div class="col-sm-12">
                             <ul class="list-group">
                                 <li class="list-group-item list-group-item-info">
-                                    <label class="checkbox-inline"><input type="checkbox" onClick="M_allselect_par(this,'ul')" />{{ trans('common.allselect') }}{{ $controller }}</label>
+                                    <label class="checkbox-inline"><input type="checkbox" onClick="M_allselect_par(this,'ul')" />@lang('common.allselect'){{ $controller }}</label>
                                 </li>
                                 @foreach ($privs as $controller_name => $actions)
                                     <li class="list-group-item">

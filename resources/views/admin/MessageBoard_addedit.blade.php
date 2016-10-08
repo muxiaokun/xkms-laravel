@@ -8,7 +8,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">
-                                    {{ trans('common.messageboard') }}{{ trans('common.name') }}
+                                    @lang('common.messageboard')@lang('common.name')
                                 </label>
                                 <div class="col-sm-6">
                                     <input class="form-control" type="text" name="name" value="{{ $edit_info['name'] }}" />
@@ -17,10 +17,10 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.messageboard') }}{{ trans('common.template') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.messageboard')@lang('common.template')</label>
                                 <div class="col-sm-6">
                                     <select name="template" class="form-control input-sm" >
-                                        <option value="">{{ trans('common.use') }}{{ trans('common.default') }}</option>
+                                        <option value="">@lang('common.use')@lang('common.default')</option>
                                         @foreach ($template_list as $template)
                                             <option value="{{ $template['value'] }}" @if ($template['value'] eq $edit_info['template'])selected="selected"@endif >{{ $template['name'] }}</option>
                                         @endforeach
@@ -31,9 +31,9 @@
                     </div>
                     <table class="table table-hover">
                         <tr>
-                            <th class="col-sm-6 text-center">{{ trans('common.submit') }}{{ trans('common.option') }}</th>
-                            <th class="col-sm-2 text-center">{{ trans('common.submit') }}{{ trans('common.type') }}</th>
-                            <th class="col-sm-4 text-center">{{ trans('common.option') }}{{ trans('common.condition') }}</th>
+                            <th class="col-sm-6 text-center">@lang('common.submit')@lang('common.option')</th>
+                            <th class="col-sm-2 text-center">@lang('common.submit')@lang('common.type')</th>
+                            <th class="col-sm-4 text-center">@lang('common.option')@lang('common.condition')</th>
                             <th id="btn_obj" class="col-sm-2 text-center"></th>
                         </tr>
                         <tr id="edit_obj" style="display: none">
@@ -42,24 +42,24 @@
                             </td>
                             <td class="col-sm-2">
                                 <select class="form-control" mtype="msg_type">
-                                    <option value="text" >{{ trans('common.text') }}</option>
-                                    <option value="radio" >{{ trans('common.radio') }}(name:var1,var2)</option>
-                                    <option value="checkbox" >{{ trans('common.checkbox') }}(name:var1,var2)</option>
-                                    <option value="textarea" >{{ trans('common.textarea') }}</option>
+                                    <option value="text" >@lang('common.text')</option>
+                                    <option value="radio" >@lang('common.radio')(name:var1,var2)</option>
+                                    <option value="checkbox" >@lang('common.checkbox')(name:var1,var2)</option>
+                                    <option value="textarea" >@lang('common.textarea')</option>
                                 </select>
                             </td>
                             <td class="col-sm-4" colspan="2">
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label checkbox checkbox-inline">
-                                        <input type="checkbox" value="required" mtype="msg_required" />{{ trans('common.required') }}
+                                        <input type="checkbox" value="required" mtype="msg_required" />@lang('common.required')
                                     </label>
                                     <label class="col-sm-3 control-label" style="font-weight:normal;">
-                                        {{ trans('common.max') }}{{ trans('common.length') }}
+                                        @lang('common.max')@lang('common.length')
                                     </label>
                                     <div class="col-sm-3">
                                         <input class="form-control" type="text" value="" onKeyup="M_in_int(this);" mtype="msg_length" />
                                     </div>
-                                    <a class="btn btn-danger" href="javascript:void(0);">{{ trans('common.del') }}</a>
+                                    <a class="btn btn-danger" href="javascript:void(0);">@lang('common.del')</a>
                                 </div>
                             </td>
                         </tr>
@@ -80,10 +80,10 @@
                     </table>
                     <div class="row">
                         <div class="col-sm-12 text-center">
-                            <button type="submit" class="btn btn-info">{{ trans('common.save') }}</button>
-                            <input class="btn btn-default" type="reset" value="{{ trans('common.reset') }}">
+                            <button type="submit" class="btn btn-info">@lang('common.save')</button>
+                            <input class="btn btn-default" type="reset" value="@lang('common.reset')">
                             <a href="{{ route('main') }}" class="btn btn-default">
-                                {{ trans('common.goback') }}
+                                @lang('common.goback')
                             </a>
                         </div>
                     </div>

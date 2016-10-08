@@ -7,19 +7,19 @@
                 @include('Public:where_info')
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
-                        <th>{{ trans('common.admin') }}{{ trans('common.name') }}</th>
-                        <th>{{ trans('common.add') }}{{ trans('common.time') }}</th>
-                        <th>{{ trans('common.module') }}{{ trans('common.name') }}</th>
-                        <th>{{ trans('common.controller') }}{{ trans('common.name') }}</th>
-                        <th>{{ trans('common.action') }}{{ trans('common.name') }}</th>
-                        <th>{{ trans('common.model') }}{{ trans('common.name') }}</th>
-                        <th>{{ trans('common.request') }}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;@lang('common.id')</th>
+                        <th>@lang('common.admin')@lang('common.name')</th>
+                        <th>@lang('common.add')@lang('common.time')</th>
+                        <th>@lang('common.module')@lang('common.name')</th>
+                        <th>@lang('common.controller')@lang('common.name')</th>
+                        <th>@lang('common.action')@lang('common.name')</th>
+                        <th>@lang('common.model')@lang('common.name')</th>
+                        <th>@lang('common.request')</th>
                         <th class="nowrap">
                             @if (session('backend_info.id') neq 1)
-                                {{ trans('common.handle') }}
+                                @lang('common.handle')
                             @else
-                                <a class="btn btn-xs btn-danger" href="{{ route('del_all') }}">{{ trans('common.del') }}{{ trans('common.all') }}</a>
+                                <a class="btn btn-xs btn-danger" href="{{ route('del_all') }}">@lang('common.del')@lang('common.all')</a>
                             @endif
                         </th>
                     </tr>
@@ -49,12 +49,12 @@
                             </td>
                             <td>
                                 @if (2 lt strlen($admin_log['request']))
-<a id="M_alert_log_{{ $admin_log['id'] }}" class="btn btn-xs btn-primary" href="javascript:void(0);" >{{ trans('common.look') }}</a>
+<a id="M_alert_log_{{ $admin_log['id'] }}" class="btn btn-xs btn-primary" href="javascript:void(0);" >@lang('common.look')</a>
                                 <script>
                                     $(function(){
                                         var config = {
                                             'bind_obj':$('#M_alert_log_{{ $admin_log['id'] }}'),
-                                            'title':'{{ trans('common.admin') }}{{ trans('common.handle') }}{{ trans('common.log') }}',
+                                            'title':'@lang('common.admin')@lang('common.handle')@lang('common.log')',
                                             'message':{{ $admin_log['request'] }}
                                         }
                                         new M_alert_log(config);
@@ -64,8 +64,8 @@
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}?','{{ route("del",array("id"=>$admin_log['id'])) }}')" >
-                                        {{ trans('common.del') }}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('@lang('common.confirm')@lang('common.del')?','{{ route("del",array("id"=>$admin_log['id'])) }}')" >
+                                        @lang('common.del')
                                     </a>
                                 @endif
                             </td>

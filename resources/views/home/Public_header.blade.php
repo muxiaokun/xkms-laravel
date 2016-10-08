@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>@if ($title){{ $title }} {{ trans('common.dash') }}@endif {{ config('SITE_TITLE') }}</title>
+        <title>@if ($title){{ $title }} @lang('common.dash')@endif {{ config('SITE_TITLE') }}</title>
         <link href="__ROOT__/favicon.ico" type="image/ico" rel="shortcut icon" />
         <meta http-equiv="Content-Type" Content="text/html; charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -92,21 +92,21 @@
                             @endif
                             <div class="form-group">
                                 <select name="type" class="form-control">
-                                    <option value="title" @if ($request['type'] eq 'type')selected="selected"@endif >{{ trans('common.search') }}{{ trans('common.type') }}</option>
-                                    <option value="description" @if ($request['type'] eq 'description')selected="selected"@endif>{{ trans('common.description') }}</option>
-                                    <option value="content" @if ($request['type'] eq 'content')selected="selected"@endif>{{ trans('common.content') }}</option>
+                                    <option value="title" @if ($request['type'] eq 'type')selected="selected"@endif >@lang('common.search')@lang('common.type')</option>
+                                    <option value="description" @if ($request['type'] eq 'description')selected="selected"@endif>@lang('common.description')</option>
+                                    <option value="content" @if ($request['type'] eq 'content')selected="selected"@endif>@lang('common.content')</option>
                                     @if (isset($category_position['extend']))
                                     @foreach ($category_position['extend'] as $extend)
                                         <option value="extend[{{ $extend }}]" @if ($request['type'] eq 'extend['.$extend.']')selected="selected"@endif>L({{ $extend }})</option>
                                     @endforeach
                                     @endif
-                                    <option value="all">{{ trans('common.all') }}</option>
+                                    <option value="all">@lang('common.all')</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <input name="keyword" value="{{ $request['keyword'] }}" type="text" class="form-control" placeholder="{{ trans('common.keywords') }}">
+                                <input name="keyword" value="{{ $request['keyword'] }}" type="text" class="form-control" placeholder="@lang('common.keywords')">
                             </div>
-                            <button type="submit" class="btn btn-default"><b>{{ trans('common.search') }}</b></button>
+                            <button type="submit" class="btn btn-default"><b>@lang('common.search')</b></button>
                         </form>
                     </div>
                 </div>

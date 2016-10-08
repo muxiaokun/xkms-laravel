@@ -21,29 +21,29 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.navigation') }}{{ trans('common.name') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.navigation')@lang('common.name')</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" placeholder="{{ trans('common.navigation') }}{{ trans('common.name') }}" name="name" value="{{ $edit_info['name'] }}" onchange="M_zh2py(this,'input[name=short_name]')"  link="{{ route('ajax_api') }}"/>
+<input type="text" class="form-control" placeholder="@lang('common.navigation')@lang('common.name')" name="name" value="{{ $edit_info['name'] }}" onchange="M_zh2py(this,'input[name=short_name]')"  link="{{ route('ajax_api') }}"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.short') }}{{ trans('common.name') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.short')@lang('common.name')</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.short') }}{{ trans('common.name') }}" name="short_name" value="{{ $edit_info['short_name'] }}"/>
+                                    <input type="text" class="form-control" placeholder="@lang('common.short')@lang('common.name')" name="short_name" value="{{ $edit_info['short_name'] }}"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.enable') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.yes')@lang('common.no')@lang('common.enable')</label>
                                 <div class="col-sm-3">
                                     <label class="radio-inline">
-<input type="radio" name="is_enable" value="1" @if ('1' heq $edit_info['is_enable'] or !isset($edit_info['is_enable']))checked="checked"@endif />{{ trans('common.enable') }}
+<input type="radio" name="is_enable" value="1" @if ('1' heq $edit_info['is_enable'] or !isset($edit_info['is_enable']))checked="checked"@endif />@lang('common.enable')
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="is_enable" value="0" @if ('0' heq $edit_info['is_enable'])checked="checked"@endif />{{ trans('common.disable') }}
+<input type="radio" name="is_enable" value="0" @if ('0' heq $edit_info['is_enable'])checked="checked"@endif />@lang('common.disable')
                                     </label>
                                 </div>
                             </div>
@@ -52,12 +52,12 @@
                     <div class="row">
                         <table id="edit_window" class="table table-condensed table-hover">
                             <tr>
-                                <th class="col-sm-3">{{ trans('common.navigation') }}{{ trans('common.button') }}{{ trans('common.name') }}</th>
-                                <th class="col-sm-1">{{ trans('common.target') }}{{ trans('common.type') }}</th>
+                                <th class="col-sm-3">@lang('common.navigation')@lang('common.button')@lang('common.name')</th>
+                                <th class="col-sm-1">@lang('common.target')@lang('common.type')</th>
                                 <th class="col-sm-1">URL</th>
                                 <th class="col-sm-7">
-                                    {{ trans('common.insite') }}{{ trans('common.colon') }}M/C/A?arg1=argv1,arg2=argv2<br />
-                                    {{ trans('common.outsite') }}{{ trans('common.colon') }}http:// | https:// | ftp://
+                                    @lang('common.insite')@lang('common.colon')M/C/A?arg1=argv1,arg2=argv2<br />
+                                    @lang('common.outsite')@lang('common.colon')http:// | https:// | ftp://
                                 </th>
                             </tr>
                             <tr>
@@ -92,13 +92,13 @@
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
                                 @if ($Think.const.ACTION_NAME eq 'add')
-                                    {{ trans('common.add') }}
+                                    @lang('common.add')
                                 @elseif ($Think.const.ACTION_NAME eq 'edit')
-                                    {{ trans('common.edit') }}
+                                    @lang('common.edit')
                                 @endif
                             </button>
                             <a href="{{ route('index') }}" class="btn btn-default">
-                                    {{ trans('common.goback') }}
+                                    @lang('common.goback')
                             </a>
                         </div>
                     </div>

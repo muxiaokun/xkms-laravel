@@ -7,16 +7,16 @@
                 @include('Public:where_info')
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
-                        <th>{{ trans('common.comment') }}{{ trans('common.member') }}</th>
-                        <th>{{ trans('common.comment') }}{{ trans('common.time') }}</th>
-                        <th>{{ trans('common.audit') }}{{ trans('common.admin') }}</th>
-                        <th>{{ trans('common.controller') }}</th>
-                        <th>{{ trans('common.id') }}</th>
-                        <th>{{ trans('common.comment') }} IP</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;@lang('common.id')</th>
+                        <th>@lang('common.comment')@lang('common.member')</th>
+                        <th>@lang('common.comment')@lang('common.time')</th>
+                        <th>@lang('common.audit')@lang('common.admin')</th>
+                        <th>@lang('common.controller')</th>
+                        <th>@lang('common.id')</th>
+                        <th>@lang('common.comment') IP</th>
                         <td class="nowrap">
                             @if ($batch_handle['add'])
-                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">{{ trans('common.config') }}{{ trans('common.comment') }}</a>
+                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">@lang('common.config')@lang('common.comment')</a>
                             @endif
                         </td>
                     </tr>
@@ -45,12 +45,12 @@
                                 {{ $comment['aip'] }}
                             </td>
                             <td class="nowrap">
-<a id="M_alert_log_{{ $comment['id'] }}" class="btn btn-xs btn-primary" href="javascript:void(0);">{{ trans('common.look') }}</a>
+<a id="M_alert_log_{{ $comment['id'] }}" class="btn btn-xs btn-primary" href="javascript:void(0);">@lang('common.look')</a>
                                 <script>
                                     $(function(){
                                         var config = {
                                             'bind_obj':$('#M_alert_log_{{ $comment['id'] }}'),
-                                            'title':'{{ trans('common.comment') }}{{ trans('common.content') }}',
+                                            'title':'@lang('common.comment')@lang('common.content')',
                                             'message':"{{ $comment['content'] }}"
                                         }
                                         new M_alert_log(config);
@@ -59,13 +59,13 @@
                                 @if ($batch_handle['edit'])
                                     &nbsp;|&nbsp;
 <a class="btn btn-xs btn-primary" href="{{ route('edit',array('id'=>$comment['id'])) }}">
-                                        {{ trans('common.audit') }}
+                                        @lang('common.audit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['del'])
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ trans('common.comment') }}?','{{ route('del',array('id'=>$comment['id'])) }}')" >
-                                        {{ trans('common.del') }}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('@lang('common.confirm')@lang('common.del')@lang('common.comment')?','{{ route('del',array('id'=>$comment['id'])) }}')" >
+                                        @lang('common.del')
                                     </a>
                                 @endif
                             </td>

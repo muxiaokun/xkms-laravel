@@ -18,12 +18,12 @@
                 </div>
                 <div class="col-sm-3 col-sm-offset-3 text-center">
                     <a class="btn btn-lg btn-primary" target="_parent" href="{{ route(C(DEFAULT_MODULE).'/'.C(DEFAULT_CONTROLLER).'/'.C(DEFAULT_ACTION)) }}">
-                        {{ trans('common.setp4_1') }}
+                        @lang('common.setp4_1')
                     </a>
                 </div>
                 <div class="col-sm-3 text-center">
                     <a class="btn btn-lg btn-primary" target="_parent" href="{{ route('Admin/'.C(DEFAULT_CONTROLLER).'/'.C(DEFAULT_ACTION)) }}">
-                        {{ trans('common.setp4_2') }}
+                        @lang('common.setp4_2')
                     </a>
                 </div>
             </div>

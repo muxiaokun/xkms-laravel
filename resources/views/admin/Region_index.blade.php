@@ -6,17 +6,17 @@
                 @include('Public:where_info')
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
-                        <th>{{ trans('common.region_name') }}</th>
-                        <th>{{ trans('common.short_name') }}</th>
-                        <th>{{ trans('common.all_spell') }}</th>
-                        <th>{{ trans('common.short_spell') }}</th>
-                        <th>{{ trans('common.areacode') }}</th>
-                        <th>{{ trans('common.postcode') }}</th>
-                        <th>{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.show') }}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;@lang('common.id')</th>
+                        <th>@lang('common.region_name')</th>
+                        <th>@lang('common.short_name')</th>
+                        <th>@lang('common.all_spell')</th>
+                        <th>@lang('common.short_spell')</th>
+                        <th>@lang('common.areacode')</th>
+                        <th>@lang('common.postcode')</th>
+                        <th>@lang('common.yes')@lang('common.no')@lang('common.show')</th>
                         <td class="nowrap">
                             @if ($batch_handle['add'])
-                                <a class="btn btn-xs btn-success"  href="{{ route('add') }}">{{ trans('common.add') }}{{ trans('common.region') }}</a>
+                                <a class="btn btn-xs btn-success"  href="{{ route('add') }}">@lang('common.add')@lang('common.region')</a>
                             @endif
                         </td>
                     </tr>
@@ -45,18 +45,18 @@
                                 {{ $region['postcode'] }}
                             </td>
                             <td>
-                                @if ($region['if_show']){{ trans('common.show') }}@else{{ trans('common.hidden') }}@endif
+                                @if ($region['if_show'])@lang('common.show')@else@lang('common.hidden')@endif
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])
                                     <a class="btn btn-xs btn-primary"  href="{{ route('edit',array('id'=>$region['id'])) }}">
-                                        {{ trans('common.edit') }}
+                                        @lang('common.edit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $region['name'] }}?','{{ route('del',array('id'=>$region['id'])) }}')" >
-                                        {{ trans('common.del') }}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $region['name'] }}?','{{ route('del',array('id'=>$region['id'])) }}')" >
+                                        @lang('common.del')
                                     </a>
                                 @endif
                             </td>

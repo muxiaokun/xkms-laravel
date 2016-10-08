@@ -8,17 +8,17 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.title') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.title')</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.title') }}" name="title" value="{{ $edit_info['title'] }}"/>
+                                    <input type="text" class="form-control" placeholder="@lang('common.title')" name="title" value="{{ $edit_info['title'] }}"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.author') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.author')</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.author') }}" name="author" value="{{ $edit_info['author'] }}"/>
+                                    <input type="text" class="form-control" placeholder="@lang('common.author')" name="author" value="{{ $edit_info['author'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -26,17 +26,17 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.description') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.description')</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.description') }}" name="description" value="{{ $edit_info['description'] }}"/>
+                                    <input type="text" class="form-control" placeholder="@lang('common.description')" name="description" value="{{ $edit_info['description'] }}"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.sort') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.sort')</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" placeholder="{{ trans('common.sort') }}" name="sort" onKeyup="M_in_int_range(this,1,100);"
+<input type="text" class="form-control" placeholder="@lang('common.sort')" name="sort" onKeyup="M_in_int_range(this,1,100);"
        value="@if ($edit_info['sort']){{ $edit_info['sort'] }}@else100@endif"/>
                                 </div>
                             </div>
@@ -45,10 +45,10 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.channel') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.channel')</label>
                                 <div class="col-sm-6">
                                     <select name="channel_id" class="form-control input-sm" >
-                                        <option value="">{{ trans('common.default') }}{{ trans('common.dont') }}{{ trans('common.pertain') }}{{ trans('common.channel') }}</option>
+                                        <option value="">@lang('common.default')@lang('common.dont')@lang('common.pertain')@lang('common.channel')</option>
                                         @foreach ($channel_list as $channel)
                                             <option value="{{ $channel['id'] }}" @if ($channel['id'] eq $edit_info['channel_id'])selected="selected"@endif >{{ $channel['name'] }}</option>
                                         @endforeach
@@ -58,10 +58,10 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.category') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.category')</label>
                                 <div class="col-sm-6">
                                     <select class="form-control input-sm" name="cate_id">
-                                        <option value="">{{ trans('common.default') }}{{ trans('common.dont') }}{{ trans('common.pertain') }}{{ trans('common.category') }}</option>
+                                        <option value="">@lang('common.default')@lang('common.dont')@lang('common.pertain')@lang('common.category')</option>
                                         @foreach ($category_list as $category)
 <option value="{{ $category['id'] }}" @if ($category['id'] eq $edit_info['cate_id'] or $category['id'] eq I('cate_id'))selected="selected" mtype="def_data"@endif >{{ $category['name'] }}</option>
                                         @endforeach
@@ -106,44 +106,44 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.stick') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.stick')</label>
                                 <div class="col-sm-4">
                                     <label class="radio-inline">
-<input type="radio" name="is_stick" value="1" @if ('1' heq $edit_info['is_stick'])checked="checked"@endif />{{ trans('common.yes') }}
+<input type="radio" name="is_stick" value="1" @if ('1' heq $edit_info['is_stick'])checked="checked"@endif />@lang('common.yes')
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="is_stick" value="0" @if ('0' heq $edit_info['is_stick'] or !isset($edit_info['is_stick']))checked="checked"@endif />{{ trans('common.no') }}
+<input type="radio" name="is_stick" value="0" @if ('0' heq $edit_info['is_stick'] or !isset($edit_info['is_stick']))checked="checked"@endif />@lang('common.no')
                                     </label>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.audit') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.audit')</label>
                                 <div class="col-sm-4">
                                     <label class="radio-inline">
-<input type="radio" name="is_audit" value="1" @if ('1' heq $edit_info['is_audit'] or !isset($edit_info['is_audit']))checked="checked"@endif />{{ trans('common.yes') }}
+<input type="radio" name="is_audit" value="1" @if ('1' heq $edit_info['is_audit'] or !isset($edit_info['is_audit']))checked="checked"@endif />@lang('common.yes')
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="is_audit" value="0" @if ('0' heq $edit_info['is_audit'])checked="checked"@endif />{{ trans('common.no') }}
+<input type="radio" name="is_audit" value="0" @if ('0' heq $edit_info['is_audit'])checked="checked"@endif />@lang('common.no')
                                     </label>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.show') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.show')</label>
                                 <div class="col-sm-4">
                                     <label class="radio-inline">
-<input type="radio" name="if_show" value="1" @if ('1' heq $edit_info['if_show'] or !isset($edit_info['if_show']))checked="checked"@endif />{{ trans('common.show') }}
+<input type="radio" name="if_show" value="1" @if ('1' heq $edit_info['if_show'] or !isset($edit_info['if_show']))checked="checked"@endif />@lang('common.show')
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="if_show" value="0" @if ('0' heq $edit_info['if_show'])checked="checked"@endif />{{ trans('common.hidden') }}
+<input type="radio" name="if_show" value="0" @if ('0' heq $edit_info['if_show'])checked="checked"@endif />@lang('common.hidden')
                                     </label>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.thumb') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.thumb')</label>
                                 <div class="col-sm-5">
-                                    <div id="uploadbutton" title="{{ trans('common.selection') }}{{ trans('common.or') }}{{ trans('common.upload') }}" class="default_image">
+                                    <div id="uploadbutton" title="@lang('common.selection')@lang('common.or')@lang('common.upload')" class="default_image">
                                         <M:Img id="thumb_src" src="{:M_exists($edit_info['thumb'])}" />
                                     </div>
                                     <input id="thumb_val" type="hidden" name="thumb" value="{{ $edit_info['thumb'] }}" />
@@ -164,17 +164,17 @@
                     <div class="row">
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="col-sm-6 control-label">{{ trans('common.add') }}{{ trans('common.time') }}</label>
+                                <label class="col-sm-6 control-label">@lang('common.add')@lang('common.time')</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" disabled="disabled" placeholder="{{ trans('common.add') }}{{ trans('common.time') }}" name="add_time" value="{{ $edit_info['add_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
+<input type="text" class="form-control" disabled="disabled" placeholder="@lang('common.add')@lang('common.time')" name="add_time" value="{{ $edit_info['add_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-4">
                             <div class="form-group">
-                                <label class="col-sm-6 control-label">{{ trans('common.update') }}{{ trans('common.time') }}</label>
+                                <label class="col-sm-6 control-label">@lang('common.update')@lang('common.time')</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" disabled="disabled" placeholder="{{ trans('common.update') }}{{ trans('common.time') }}" name="update_time" value="{{ $edit_info['update_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
+<input type="text" class="form-control" disabled="disabled" placeholder="@lang('common.update')@lang('common.time')" name="update_time" value="{{ $edit_info['update_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -195,13 +195,13 @@
                         </script>
                         <M:Timepicker start="add_time" end="update_time" />
                         <label class="checkbox-inline">
-                            <input type="checkbox" onclick="change_time(this)" />{{ trans('common.change') }}{{ trans('common.time') }}
+                            <input type="checkbox" onclick="change_time(this)" />@lang('common.change')@lang('common.time')
                         </label>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.access') }}{{ trans('common.member') }}{{ trans('common.group') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.access')@lang('common.member')@lang('common.group')</label>
                                 <div class="col-sm-6"><h4 id="access_group_id_list" style="margin:2px 0px 0px 0px;"></h4></div>
                             </div>
                         </div>
@@ -225,7 +225,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="col-sm-1 control-label">{{ trans('common.character') }}{{ trans('common.content') }}</label>
+                                <label class="col-sm-1 control-label">@lang('common.character')@lang('common.content')</label>
                                 <div class="col-sm-10">
                                     <textarea rows="15" class="col-sm-12" name="content">{{ $edit_info['content'] }}</textarea>
                                 </div>
@@ -235,10 +235,10 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="col-sm-1 control-label">{{ trans('common.image') }}{{ trans('common.content') }}</label>
+                                <label class="col-sm-1 control-label">@lang('common.image')@lang('common.content')</label>
                                 <div class="col-sm-10">
                                     <button id="uploadsbutton" type="button" class="btn btn-default">
-                                        {{ trans('common.upload') }}{{ trans('common.image') }}{{ trans('common.group') }}
+                                        @lang('common.upload')@lang('common.image')@lang('common.group')
                                     </button>
                                     <script>
                                         function M_article_uploadsbutton(url,title,description)
@@ -307,7 +307,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="col-sm-1 control-label">{{ trans('common.image') }}{{ trans('common.title') }}</label>
+                                <label class="col-sm-1 control-label">@lang('common.image')@lang('common.title')</label>
                                 <div class="col-sm-10">
                                     <input id="image_title" disabled="disabled" type="text" class="form-control" />
                                 </div>
@@ -315,7 +315,7 @@
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="col-sm-1 control-label">{{ trans('common.image') }}{{ trans('common.description') }}</label>
+                                <label class="col-sm-1 control-label">@lang('common.image')@lang('common.description')</label>
                                 <div class="col-sm-10">
                                     <input id="image_description" disabled="disabled" type="text" class="form-control" />
                                 </div>
@@ -334,13 +334,13 @@
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
                                 @if ($Think.const.ACTION_NAME eq 'add')
-                                    {{ trans('common.add') }}
+                                    @lang('common.add')
                                 @elseif ($Think.const.ACTION_NAME eq 'edit')
-                                    {{ trans('common.edit') }}
+                                    @lang('common.edit')
                                 @endif
                             </button>
                             <a href="{{ route('index') }}" class="btn btn-default">
-                                    {{ trans('common.goback') }}
+                                    @lang('common.goback')
                             </a>
                         </div>
                     </div>

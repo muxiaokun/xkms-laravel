@@ -8,13 +8,13 @@
                     {{--是否异步加载图片--}}
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.sync') }}{{ trans('common.content') }}{{ trans('common.image') }}</label>
+                            <label class="col-sm-4 control-label">@lang('common.sync')@lang('common.content')@lang('common.image')</label>
                             <div class="col-sm-7">
                                 <label class="radio-inline">
-                                    <input type="radio" name="SYS_ARTICLE_SYNC_IMAGE" value="1" @if ('1' heq C('SYS_ARTICLE_SYNC_IMAGE'))checked="checked"@endif >{{ trans('common.enable') }}
+                                    <input type="radio" name="SYS_ARTICLE_SYNC_IMAGE" value="1" @if ('1' heq C('SYS_ARTICLE_SYNC_IMAGE'))checked="checked"@endif >@lang('common.enable')
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="SYS_ARTICLE_SYNC_IMAGE" value="0" @if ('0' heq C('SYS_ARTICLE_SYNC_IMAGE'))checked="checked"@endif >{{ trans('common.disable') }}
+                                    <input type="radio" name="SYS_ARTICLE_SYNC_IMAGE" value="0" @if ('0' heq C('SYS_ARTICLE_SYNC_IMAGE'))checked="checked"@endif >@lang('common.disable')
                                 </label>
                             </div>
                         </div>
@@ -22,7 +22,7 @@
                     {{--文章前后数量--}}
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.before') }}{{ trans('common.later') }}{{ trans('common.piece') }}{{ trans('common.limit') }}</label>
+                            <label class="col-sm-4 control-label">@lang('common.before')@lang('common.later')@lang('common.piece')@lang('common.limit')</label>
                             <div class="col-sm-7">
                                 <input type="text" name="SYS_ARTICLE_PN_LIMIT" value="{{ config('SYS_ARTICLE_PN_LIMIT') }}" class="form-control" onKeyup="M_in_int(this);">
                             </div>
@@ -33,7 +33,7 @@
                     {{--文章缩略图--}}
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.article') }}{{ trans('common.thumb') }}{{ trans('common.width') }}PX</label>
+                            <label class="col-sm-4 control-label">@lang('common.article')@lang('common.thumb')@lang('common.width')PX</label>
                             <div class="col-sm-7">
                                 <input type="text" name="SYS_ARTICLE_THUMB_WIDTH" value="{{ config('SYS_ARTICLE_THUMB_WIDTH') }}" class="form-control" onKeyup="M_in_int(this);">
                             </div>
@@ -42,7 +42,7 @@
                     {{--文章缩略图--}}
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.article') }}{{ trans('common.thumb') }}{{ trans('common.height') }}PX</label>
+                            <label class="col-sm-4 control-label">@lang('common.article')@lang('common.thumb')@lang('common.height')PX</label>
                             <div class="col-sm-7">
                                 <input type="text" name="SYS_ARTICLE_THUMB_HEIGHT" value="{{ config('SYS_ARTICLE_THUMB_HEIGHT') }}" class="form-control" onKeyup="M_in_int(this);">
                             </div>
@@ -51,10 +51,10 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 text-center">
-                        <button type="submit" class="btn btn-info">{{ trans('common.save') }}</button>
-                        <input class="btn btn-default" type="reset" value="{{ trans('common.reset') }}">
+                        <button type="submit" class="btn btn-info">@lang('common.save')</button>
+                        <input class="btn btn-default" type="reset" value="@lang('common.reset')">
                         <a href="{{ route('main') }}" class="btn btn-default">
-                            {{ trans('common.goback') }}
+                            @lang('common.goback')
                         </a>
                     </div>
                 </div>

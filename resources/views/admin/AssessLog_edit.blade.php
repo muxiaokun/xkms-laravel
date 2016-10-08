@@ -4,8 +4,8 @@
             <div class="panel-heading">
                 {{ $title }}
                 @if ($batch_handle['del'])
-<a class="fr fs10" href="javascript:void();" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ trans('common.all') }}{{ trans('common.record') }}?','{{ route('del',array('id'=>I('id'))) }}')">
-                        {{ trans('common.del') }}{{ trans('common.all') }}{{ trans('common.record') }}
+<a class="fr fs10" href="javascript:void();" onClick="return M_confirm('@lang('common.confirm')@lang('common.del')@lang('common.all')@lang('common.record')?','{{ route('del',array('id'=>I('id'))) }}')">
+                        @lang('common.del')@lang('common.all')@lang('common.record')
                     </a>
                 @endif
             </div>
@@ -15,9 +15,9 @@
                     <div class="form-group col-sm-12">
                         <label class="col-sm-2 control-label">
                             @if ('member' eq $assess_info['target'])
-                                {{ trans('common.by') }}{{ trans('common.grade') }}{{ trans('common.member') }}
+                                @lang('common.by')@lang('common.grade')@lang('common.member')
                             @elseif ('member_group' eq $assess_info['target'])
-                                {{ trans('common.by') }}{{ trans('common.grade') }}{{ trans('common.member') }}{{ trans('common.group') }}
+                                @lang('common.by')@lang('common.grade')@lang('common.member')@lang('common.group')
                             @endif
                         </label>
                         <div class="col-sm-6" id="re_grade_id">
@@ -47,9 +47,9 @@
                         {/* 评分给分组 */}
                         @if ($assess_info.result_info)
                             <tr>
-                                <th>{{ trans('common.project') }}</th>
-                                <th>{{ trans('common.factor') }}</th>
-                                <th>{{ trans('common.grade') }}</th>
+                                <th>@lang('common.project')</th>
+                                <th>@lang('common.factor')</th>
+                                <th>@lang('common.grade')</th>
                             </tr>
                             @foreach ($assess_info['result_info'] as $result)
                                 <tr>
@@ -61,11 +61,11 @@
                             </tr>
                         @else
                             <tr>
-                                <td>{{ trans('common.please') }}{{ trans('common.selection') }}
+                                <td>@lang('common.please')@lang('common.selection')
                                     @if ('member' eq $assess_info['target'])
-                                        {{ trans('common.member') }}
+                                        @lang('common.member')
                                     @elseif ('member_group' eq $assess_info['target'])
-                                        {{ trans('common.member_group') }}
+                                        @lang('common.member_group')
                                     @endif
                                 </td>
                             </tr>
@@ -74,10 +74,10 @@
                     <div class="row mt10">
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
-                                    {{ trans('common.select') }}
+                                    @lang('common.select')
                             </button>
                             <a href="{{ route('Assess/index') }}" class="btn btn-default">
-                                    {{ trans('common.goback') }}
+                                    @lang('common.goback')
                             </a>
                         </div>
                     </div>

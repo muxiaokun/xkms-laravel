@@ -26,9 +26,9 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">{{ trans('common.member') }}{{ trans('common.name') }}</label>
+                                <label class="col-sm-2 control-label">@lang('common.member')@lang('common.name')</label>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.member') }}{{ trans('common.name') }}" name="member_name" value="{{ $edit_info['member_name'] }}"/>
+                                    <input type="text" class="form-control" placeholder="@lang('common.member')@lang('common.name')" name="member_name" value="{{ $edit_info['member_name'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -36,9 +36,9 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">{{ trans('common.member') }}{{ trans('common.pass') }}</label>
+                                <label class="col-sm-2 control-label">@lang('common.member')@lang('common.pass')</label>
                                 <div class="col-sm-3">
-                                    <input type="password" class="form-control" placeholder="{{ trans('common.member') }}{{ trans('common.pass') }}" name="password" />
+                                    <input type="password" class="form-control" placeholder="@lang('common.member')@lang('common.pass')" name="password" />
                                 </div>
                             </div>
                         </div>
@@ -46,11 +46,11 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">{{ trans('common.again') }}{{ trans('common.input') }}{{ trans('common.pass') }}</label>
+                                <label class="col-sm-2 control-label">@lang('common.again')@lang('common.input')@lang('common.pass')</label>
                                 <div class="col-sm-3">
-                                    <input type="password" class="form-control" placeholder="{{ trans('common.again') }}{{ trans('common.input') }}{{ trans('common.pass') }}" name="password_again" />
+                                    <input type="password" class="form-control" placeholder="@lang('common.again')@lang('common.input')@lang('common.pass')" name="password_again" />
                                     @if ($edit_info)
-                                        <span class="help-block">{{ trans('common.not_input_pass') }}</span>
+                                        <span class="help-block">@lang('common.not_input_pass')</span>
                                     @endif
                                 </div>
                             </div>
@@ -59,9 +59,9 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">{{ trans('common.member') }}{{ trans('common.phone') }}</label>
+                                <label class="col-sm-2 control-label">@lang('common.member')@lang('common.phone')</label>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.member') }}{{ trans('common.phone') }}" name="phone" value="{{ $edit_info['phone'] }}"/>
+                                    <input type="text" class="form-control" placeholder="@lang('common.member')@lang('common.phone')" name="phone" value="{{ $edit_info['phone'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -69,9 +69,9 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">{{ trans('common.member') }}{{ trans('common.email') }}</label>
+                                <label class="col-sm-2 control-label">@lang('common.member')@lang('common.email')</label>
                                 <div class="col-sm-3">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.member') }}{{ trans('common.email') }}" name="email" value="{{ $edit_info['email'] }}"/>
+                                    <input type="text" class="form-control" placeholder="@lang('common.member')@lang('common.email')" name="email" value="{{ $edit_info['email'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -79,13 +79,13 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.member') }}{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.enable') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.member')@lang('common.yes')@lang('common.no')@lang('common.enable')</label>
                                 <div class="col-sm-6">
                                     <label class="radio-inline">
-<input type="radio" name="is_enable" value="1" @if ('1' heq $edit_info['is_enable'] or !isset($edit_info['is_enable']))checked="checked"@endif />{{ trans('common.enable') }}
+<input type="radio" name="is_enable" value="1" @if ('1' heq $edit_info['is_enable'] or !isset($edit_info['is_enable']))checked="checked"@endif />@lang('common.enable')
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="is_enable" value="0" @if ('0' heq $edit_info['is_enable'])checked="checked"@endif />{{ trans('common.disable') }}
+<input type="radio" name="is_enable" value="0" @if ('0' heq $edit_info['is_enable'])checked="checked"@endif />@lang('common.disable')
                                     </label>
                                 </div>
                             </div>
@@ -94,7 +94,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.pertain') }}{{ trans('common.group') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.pertain')@lang('common.group')</label>
                                 <div class="col-sm-6"><h4 id="group_id_list" style="margin:2px 0px 0px 0px;"></h4></div>
                             </div>
                         </div>
@@ -119,13 +119,13 @@
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
                                 @if ($Think.const.ACTION_NAME eq 'add')
-                                    {{ trans('common.add') }}
+                                    @lang('common.add')
                                 @elseif ($Think.const.ACTION_NAME eq 'edit')
-                                    {{ trans('common.edit') }}
+                                    @lang('common.edit')
                                 @endif
                             </button>
                             <a href="{{ route('index') }}" class="btn btn-default">
-                                    {{ trans('common.goback') }}
+                                    @lang('common.goback')
                             </a>
                         </div>
                     </div>

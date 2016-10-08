@@ -2,7 +2,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 {{ $title }}<a href="javascript:window.print()">打印</a>
-                <a class="fr fs10" href="{{ route('Quests/index',array('id'=>I('id'))) }}">{{ trans('common.goback') }}</a>
+                <a class="fr fs10" href="{{ route('Quests/index',array('id'=>I('id'))) }}">@lang('common.goback')</a>
             </div>
             <div class="panel-body">
                 @foreach ($quests_quest_list as $quest)
@@ -11,16 +11,16 @@
                             {{ $quest['question'] }}
                             <switch name="quest['answer_type']">
                                 <case value="radio">
-                                    {{ trans('common.radio') }}
+                                    @lang('common.radio')
                                 </case>
                                 <case value="checkbox">
-                                    {{ trans('common.checkbox') }}
+                                    @lang('common.checkbox')
                                 </case>
                                 <case value="text">
-                                    {{ trans('common.textarea') }}
+                                    @lang('common.textarea')
                                 </case>
                                 <case value="textarea">
-                                    {{ trans('common.textarea') }}
+                                    @lang('common.textarea')
                                 </case>
                             </switch>
                         </label>

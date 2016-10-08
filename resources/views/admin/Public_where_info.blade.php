@@ -11,14 +11,14 @@
                     <label>{{ $data['name'] }}</label>
                     @if ('time' eq $data['type'])
                         <input type="text" name="{{ $input_name }}_start" class="form-control w100" value="{:I($input_name.'_start')}" onClick="$(this).val('')" />
-                        {{ trans('common.to') }}
+                        @lang('common.to')
                         <input type="text" name="{{ $input_name }}_end" class="form-control w100" value="{:I($input_name.'_end')}" onClick="$(this).val('')" />
                         <M:Datepicker start="$input_name" end="$input_name" />
                     @elseif ('input' eq $data['type'])
                         <input type="text" name="{{ $input_name }}" class="form-control w100" value="{:I($input_name)}" onClick="$(this).val('')" />
                     @elseif ('select' eq $data['type'])
                         <select type="text" name="{{ $input_name }}" class="form-control w100">
-                            <option value="">{{ trans('common.please') }}{{ trans('common.selection') }}</option>
+                            <option value="">@lang('common.please')@lang('common.selection')</option>
                             @foreach ($data['value'] as $value => $name)
 <option value="{{ $value }}" @if ($value eq I($input_name))selected="selected"@endif >{{ $name }}</option>
                             @endforeach
@@ -26,7 +26,7 @@
                     @endif
                 </div>
             @endforeach
-            <input class="btn btn-default" type="submit" value="{{ trans('common.select') }}" />
+            <input class="btn btn-default" type="submit" value="@lang('common.select')" />
         </form>
     </div>
 @endif

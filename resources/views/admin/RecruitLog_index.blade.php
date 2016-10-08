@@ -7,14 +7,14 @@
                 @include('Public:where_info')
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
-                        <th>{{ trans('common.re_recruit') }}</th>
-                        <th>{{ trans('common.recruit_name') }}</th>
-                        <th>{{ trans('common.recruit') }}{{ trans('common.time') }}</th>
-                        <th>{{ trans('common.recruit_birthday') }}</th>
-                        <th>{{ trans('common.recruit_sex') }}</th>
-                        <th>{{ trans('common.recruit_certificate') }}</th>
-                        <th>{{ trans('common.handle') }}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;@lang('common.id')</th>
+                        <th>@lang('common.re_recruit')</th>
+                        <th>@lang('common.recruit_name')</th>
+                        <th>@lang('common.recruit')@lang('common.time')</th>
+                        <th>@lang('common.recruit_birthday')</th>
+                        <th>@lang('common.recruit_sex')</th>
+                        <th>@lang('common.recruit_certificate')</th>
+                        <th>@lang('common.handle')</th>
                     </tr>
                     @foreach ($recruit_log_list as $recruit_log)
                         <tr>
@@ -41,12 +41,12 @@
                                 {{ $recruit_log['certificate'] }}
                             </td>
                             <td class="nowrap">
-<a id="M_alert_log_{{ $recruit_log['id'] }}" class="btn btn-xs btn-primary" href="javascript:void(0);">{{ trans('common.look') }}</a>
+<a id="M_alert_log_{{ $recruit_log['id'] }}" class="btn btn-xs btn-primary" href="javascript:void(0);">@lang('common.look')</a>
                                 <script>
                                     $(function(){
                                         var config = {
                                             'bind_obj':$('#M_alert_log_{{ $recruit_log['id'] }}'),
-                                            'title':'{{ trans('common.recruit_log') }}',
+                                            'title':'@lang('common.recruit_log')',
                                             'message':{{ $recruit_log['ext_info']|json_encode }}
                                         }
                                         new M_alert_log(config);
@@ -54,8 +54,8 @@
                                 </script>
                                 @if ($batch_handle['del'])
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $recruit_log['name'] }}?','{{ route('del',array('id'=>$recruit_log['id'])) }}')" >
-                                        {{ trans('common.del') }}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $recruit_log['name'] }}?','{{ route('del',array('id'=>$recruit_log['id'])) }}')" >
+                                        @lang('common.del')
                                     </a>
                                 @endif
                             </td>

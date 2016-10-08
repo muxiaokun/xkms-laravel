@@ -3,16 +3,16 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 {{ $title }}
-                <a class="fr fs10" href="{{ route('Quests/index',array('id'=>I('id'))) }}">{{ trans('common.goback') }}</a>
+                <a class="fr fs10" href="{{ route('Quests/index',array('id'=>I('id'))) }}">@lang('common.goback')</a>
             </div>
             <div class="panel-body">
                 @include('Public:where_info')
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
-                        <th>{{ trans('common.title') }}</th>
-                        <th>{{ trans('common.add') }}{{ trans('common.time') }}</th>
-                        <th>{{ trans('common.handle') }}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;@lang('common.id')</th>
+                        <th>@lang('common.title')</th>
+                        <th>@lang('common.add')@lang('common.time')</th>
+                        <th>@lang('common.handle')</th>
                     </tr>
                     @foreach ($quests_answer_list as $quests_answer)
                         <tr>
@@ -29,13 +29,13 @@
                             <td class="nowrap">
                                 @if ($batch_handle['add'])
                                     <a class="btn btn-xs btn-primary" href="{{ route('QuestsAnswer/add',array('id'=>$quests_answer['id'])) }}">
-                                        {{ trans('common.look') }}
+                                        @lang('common.look')
                                     </a>
                                 @endif
                                 @if ($batch_handle['add'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}?','{{ route('del',array('id'=>$quests_answer['id'])) }}')" >
-                                        {{ trans('common.del') }}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('@lang('common.confirm')@lang('common.del')?','{{ route('del',array('id'=>$quests_answer['id'])) }}')" >
+                                        @lang('common.del')
                                     </a>
                                 @endif
                             </td>

@@ -23,35 +23,17 @@ M_cate_tree('input[name="category_list[]"][value="{{ $article_category['id'] }}"
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.channel') }}{{ trans('common.name') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.channel')@lang('common.name')</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.channel') }}{{ trans('common.name') }}" name="name" value="{{ $edit_info['name'] }}"/>
+                                    <input type="text" class="form-control" placeholder="@lang('common.channel')@lang('common.name')" name="name" value="{{ $edit_info['name'] }}"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.channel') }}{{ trans('common.keywords') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.channel')@lang('common.keywords')</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.channel') }}{{ trans('common.keywords') }}" name="keywords" value="{{ $edit_info['keywords'] }}"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.channel') }}{{ trans('common.description') }}</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.channel') }}{{ trans('common.description') }}" name="description" value="{{ $edit_info['description'] }}"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.channel') }}{{ trans('common.other') }}</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.channel') }}{{ trans('common.other') }}" name="other" value="{{ $edit_info['other'] }}"/>
+                                    <input type="text" class="form-control" placeholder="@lang('common.channel')@lang('common.keywords')" name="keywords" value="{{ $edit_info['keywords'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -59,10 +41,28 @@ M_cate_tree('input[name="category_list[]"][value="{{ $article_category['id'] }}"
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.channel') }}{{ trans('common.template') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.channel')@lang('common.description')</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" placeholder="@lang('common.channel')@lang('common.description')" name="description" value="{{ $edit_info['description'] }}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">@lang('common.channel')@lang('common.other')</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" placeholder="@lang('common.channel')@lang('common.other')" name="other" value="{{ $edit_info['other'] }}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">@lang('common.channel')@lang('common.template')</label>
                                 <div class="col-sm-6">
                                     <select name="template" class="form-control input-sm w200 fl" >
-                                        <option value="">{{ trans('common.use') }}{{ trans('common.default') }}</option>
+                                        <option value="">@lang('common.use')@lang('common.default')</option>
                                         @foreach ($channel_template_list as $template)
                                             <option value="{{ $template['value'] }}" @if ($template['value'] eq $edit_info['template'])selected="selected"@endif >{{ $template['name'] }}</option>
                                         @endforeach
@@ -72,13 +72,13 @@ M_cate_tree('input[name="category_list[]"][value="{{ $article_category['id'] }}"
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.channel') }}{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.show') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.channel')@lang('common.yes')@lang('common.no')@lang('common.show')</label>
                                 <div class="col-sm-3">
                                     <label class="radio-inline">
-<input type="radio" name="if_show" value="1" @if ('1' heq $edit_info['if_show'] or !isset($edit_info['if_show']))checked="checked"@endif />{{ trans('common.show') }}
+<input type="radio" name="if_show" value="1" @if ('1' heq $edit_info['if_show'] or !isset($edit_info['if_show']))checked="checked"@endif />@lang('common.show')
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="if_show" value="0" @if ('0' heq $edit_info['if_show'])checked="checked"@endif />{{ trans('common.hidden') }}
+<input type="radio" name="if_show" value="0" @if ('0' heq $edit_info['if_show'])checked="checked"@endif />@lang('common.hidden')
                                     </label>
                                 </div>
                             </div>
@@ -89,7 +89,7 @@ M_cate_tree('input[name="category_list[]"][value="{{ $article_category['id'] }}"
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.channel') }}{{ trans('common.admin') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.channel')@lang('common.admin')</label>
                                 <div class="col-sm-6"><h4 id="manage_id_list" style="margin:2px 0px 0px 0px;"></h4></div>
                             </div>
                         </div>
@@ -113,7 +113,7 @@ M_cate_tree('input[name="category_list[]"][value="{{ $article_category['id'] }}"
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.channel') }}{{ trans('common.management') }}{{ trans('common.group') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.channel')@lang('common.management')@lang('common.group')</label>
                                 <div class="col-sm-6"><h4 id="manage_group_id_list" style="margin:2px 0px 0px 0px;"></h4></div>
                             </div>
                         </div>
@@ -136,7 +136,7 @@ M_cate_tree('input[name="category_list[]"][value="{{ $article_category['id'] }}"
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.access') }}{{ trans('common.member') }}{{ trans('common.group') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.access')@lang('common.member')@lang('common.group')</label>
                                 <div class="col-sm-6"><h4 id="access_group_id_list" style="margin:2px 0px 0px 0px;"></h4></div>
                             </div>
                         </div>
@@ -161,7 +161,7 @@ M_cate_tree('input[name="category_list[]"][value="{{ $article_category['id'] }}"
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.channel') }}{{ trans('common.category') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.channel')@lang('common.category')</label>
                             </div>
                         </div>
                     </div>
@@ -170,10 +170,10 @@ M_cate_tree('input[name="category_list[]"][value="{{ $article_category['id'] }}"
                             <table class="table table-condensed table-hover">
                                 <tr>
                                     <th></th>
-                                    <th class="col-sm-1" >{{ trans('common.list') }}{{ trans('common.number') }}</th>
-                                    <th class="col-sm-1" >{{ trans('common.category') }}{{ trans('common.template') }}</th>
-                                    <th class="col-sm-1" >{{ trans('common.list') }}{{ trans('common.template') }}</th>
-                                    <th class="col-sm-1" >{{ trans('common.article') }}{{ trans('common.template') }}</th>
+                                    <th class="col-sm-1" >@lang('common.list')@lang('common.number')</th>
+                                    <th class="col-sm-1" >@lang('common.category')@lang('common.template')</th>
+                                    <th class="col-sm-1" >@lang('common.list')@lang('common.template')</th>
+                                    <th class="col-sm-1" >@lang('common.article')@lang('common.template')</th>
                                 </tr>
                                 @foreach ($article_category_list as $cate_key => $article_category)
                                     <tr cate_id="{{ $article_category['id'] }}" parent_id="{{ $article_category['parent_id'] }}" has_child="{{ $article_category['has_child'] }}" >
@@ -187,7 +187,7 @@ M_cate_tree('input[name="category_list[]"][value="{{ $article_category['id'] }}"
                                         </td>
                                         <td @if (0 eq $cate_key)id="template_list"@endif >
                                             <select name="template_list[{{ $article_category['id'] }}]">
-                                                <option value="">{{ trans('common.use') }}{{ trans('common.default') }}</option>
+                                                <option value="">@lang('common.use')@lang('common.default')</option>
                                                 @foreach ($template_list as $template)
                                                     <option value="{{ $template['value'] }}" >{{ $template['name'] }}</option>
                                                 @endforeach
@@ -195,7 +195,7 @@ M_cate_tree('input[name="category_list[]"][value="{{ $article_category['id'] }}"
                                         </td>
                                         <td @if (0 eq $cate_key)id="list_template_list"@endif >
                                             <select name="list_template_list[{{ $article_category['id'] }}]">
-                                                <option value="">{{ trans('common.use') }}{{ trans('common.default') }}</option>
+                                                <option value="">@lang('common.use')@lang('common.default')</option>
                                                 @foreach ($list_template_list as $template)
                                                     <option value="{{ $template['value'] }}" >{{ $template['name'] }}</option>
                                                 @endforeach
@@ -203,7 +203,7 @@ M_cate_tree('input[name="category_list[]"][value="{{ $article_category['id'] }}"
                                         </td>
                                         <td @if (0 eq $cate_key)id="article_template_list"@endif >
                                             <select name="article_template_list[{{ $article_category['id'] }}]">
-                                                <option value="">{{ trans('common.use') }}{{ trans('common.default') }}</option>
+                                                <option value="">@lang('common.use')@lang('common.default')</option>
                                                 @foreach ($article_template_list as $template)
                                                     <option value="{{ $template['value'] }}" >{{ $template['name'] }}</option>
                                                 @endforeach
@@ -217,13 +217,13 @@ M_cate_tree('input[name="category_list[]"][value="{{ $article_category['id'] }}"
                     <div class="form-group col-sm-12 text-center">
                         <button type="submit" class="btn btn-info">
                            @if ($Think.const.ACTION_NAME eq 'add')
-                               {{ trans('common.add') }}
+                               @lang('common.add')
                            @elseif ($Think.const.ACTION_NAME eq 'edit')
-                               {{ trans('common.edit') }}
+                               @lang('common.edit')
                            @endif
                         </button>
                        <a href="{{ route('index') }}" class="btn btn-default">
-                           {{ trans('common.goback') }}
+                           @lang('common.goback')
                        </a>
                     </div>
                 </form>

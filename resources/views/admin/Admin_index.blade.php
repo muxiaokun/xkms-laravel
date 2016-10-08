@@ -6,16 +6,16 @@
                 @include('Public:where_info')
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
-                        <th>{{ trans('common.admin') }}{{ trans('common.name') }}</th>
-                        <th>{{ trans('common.management') }}{{ trans('common.group') }}</th>
-                        <th>{{ trans('common.add') }}{{ trans('common.time') }}</th>
-                        <th>{{ trans('common.last') }}{{ trans('common.login') }}{{ trans('common.time') }}</th>
-                        <th>{{ trans('common.login') }} IP</th>
-                        <th>{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.enable') }}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;@lang('common.id')</th>
+                        <th>@lang('common.admin')@lang('common.name')</th>
+                        <th>@lang('common.management')@lang('common.group')</th>
+                        <th>@lang('common.add')@lang('common.time')</th>
+                        <th>@lang('common.last')@lang('common.login')@lang('common.time')</th>
+                        <th>@lang('common.login') IP</th>
+                        <th>@lang('common.yes')@lang('common.no')@lang('common.enable')</th>
                         <td class="nowrap">
                             @if ($batch_handle['add'])
-                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">{{ trans('common.add') }}{{ trans('common.admin') }}</a>
+                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">@lang('common.add')@lang('common.admin')</a>
                             @endif
                         </td>
                     </tr>
@@ -39,7 +39,7 @@
                                 @if (0 lt $admin['add_time'])
                                     {{ $admin['add_time']|M_date=C('SYS_DATE_DETAIL') }}
                                 @else
-                                    {{ trans('common.system') }}{{ trans('common.add') }}
+                                    @lang('common.system')@lang('common.add')
                                 @endif
                             </td>
                             <td>
@@ -49,18 +49,18 @@
                                 {{ $admin['aip'] }}
                             </td>
                             <td>
-                                @if ($admin['is_enable']){{ trans('common.enable') }}@else{{ trans('common.disable') }}@endif
+                                @if ($admin['is_enable'])@lang('common.enable')@else@lang('common.disable')@endif
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])
                                     <a class="btn btn-xs btn-primary" href="{{ route('edit',array('id'=>$admin['id'])) }}">
-                                        {{ trans('common.edit') }}
+                                        @lang('common.edit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $admin['admin_name'] }}?','{{ route('del',array('id'=>$admin['id'])) }}')" >
-                                        {{ trans('common.del') }}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $admin['admin_name'] }}?','{{ route('del',array('id'=>$admin['id'])) }}')" >
+                                        @lang('common.del')
                                     </a>
                                 @endif
                             </td>

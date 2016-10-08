@@ -2,11 +2,11 @@
 @section('content')
     <table class="table table-condensed table-hover">
         <tr>
-            <th>{{ trans('common.id') }}</th>
-            <th>{{ trans('common.title') }}</th>
-            <th>{{ trans('common.target') }}</th>
-            <th>{{ trans('common.start') }}{{ trans('common.time') }}</th>
-            <th>{{ trans('common.end') }}{{ trans('common.time') }}</th>
+            <th>@lang('common.id')</th>
+            <th>@lang('common.title')</th>
+            <th>@lang('common.target')</th>
+            <th>@lang('common.start')@lang('common.time')</th>
+            <th>@lang('common.end')@lang('common.time')</th>
             <th></th>
         </tr>
         @foreach ($assess_list as $assess)
@@ -28,7 +28,7 @@
                 </td>
                 <td>
                     <a href="{:M_U('Assess/add',array('id'=>$assess[id]))}">
-                        {{ trans('common.grade') }}
+                        @lang('common.grade')
                     </a>
                 </td>
             </tr>

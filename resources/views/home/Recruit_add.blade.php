@@ -4,7 +4,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.recruit_name') }}</label>
+                            <label class="col-sm-4 control-label">@lang('common.recruit_name')</label>
                             <div class="col-sm-7">
                                 <input type="text" name="name" class="form-control">
                             </div>
@@ -12,7 +12,7 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.recruit_birthday') }}</label>
+                            <label class="col-sm-4 control-label">@lang('common.recruit_birthday')</label>
                             <M:Datepicker start="birthday" />
                             <div class="col-sm-7">
                                 <input type="text" name="birthday" value="{{ $start_year }}" class="form-control">
@@ -23,7 +23,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.recruit_sex') }}</label>
+                            <label class="col-sm-4 control-label">@lang('common.recruit_sex')</label>
                             <div class="col-sm-7">
                                 <select name="sex"  class="form-control">
                                     @foreach ($Think['lang']['recruit_sex_data'] as $data)
@@ -35,7 +35,7 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.recruit_certificate') }}</label>
+                            <label class="col-sm-4 control-label">@lang('common.recruit_certificate')</label>
                             <div class="col-sm-7">
                                 <select name="certificate"  class="form-control">
                                     @foreach ($Think['lang']['recruit_certificate_data'] as $data)
@@ -49,9 +49,9 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.phone') }}</label>
+                            <label class="col-sm-4 control-label">@lang('common.phone')</label>
                             <div class="col-sm-7">
-                                <input type="text" name="ext_info[{{ trans('common.phone') }}]" class="form-control">
+                                <input type="text" name="ext_info[@lang('common.phone')]" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -67,10 +67,10 @@
                 <div class="row mt10">
                     <div class="col-sm-12 text-center">
                         <button type="submit" class="btn btn-info">
-                                {{ trans('common.submit') }}
+                                @lang('common.submit')
                         </button>
                         <a href="{:M_U('index')}" class="btn btn-default">
-                                {{ trans('common.goback') }}
+                                @lang('common.goback')
                         </a>
                     </div>
                 </div>

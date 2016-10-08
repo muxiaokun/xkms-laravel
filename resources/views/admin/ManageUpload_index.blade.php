@@ -7,16 +7,16 @@
                 @include('Public:where_info')
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
-                        <th>{{ trans('common.upload') }}{{ trans('common.person') }}</th>
-                        <th>{{ trans('common.file') }}{{ trans('common.name') }}</th>
-                        <th>{{ trans('common.add') }}{{ trans('common.time') }}</th>
-                        <th>{{ trans('common.size') }}</th>
-                        <th>{{ trans('common.suffix') }}</th>
-                        <th>{{ trans('common.bind') }}{{ trans('common.info') }}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;@lang('common.id')</th>
+                        <th>@lang('common.upload')@lang('common.person')</th>
+                        <th>@lang('common.file')@lang('common.name')</th>
+                        <th>@lang('common.add')@lang('common.time')</th>
+                        <th>@lang('common.size')</th>
+                        <th>@lang('common.suffix')</th>
+                        <th>@lang('common.bind')@lang('common.info')</th>
                         <td class="nowrap">
                             @if ($batch_handle['edit'])
-                                <a class="btn btn-xs btn-success"  href="{{ route('edit') }}">{{ trans('common.clear') }}{{ trans('common.none') }}{{ trans('common.bind') }}</a>
+                                <a class="btn btn-xs btn-success"  href="{{ route('edit') }}">@lang('common.clear')@lang('common.none')@lang('common.bind')</a>
                             @endif
                         </td>
                     </tr>
@@ -29,8 +29,8 @@
                             <td>
                                 {{ $manage_upload['user_name'] }}
                                 [
-                                    @if (1 eq $manage_upload['user_type']){{ trans('common.backend') }}
-                                    @elseif (2 eq $manage_upload['user_type']){{ trans('common.frontend') }}
+                                    @if (1 eq $manage_upload['user_type'])@lang('common.backend')
+                                    @elseif (2 eq $manage_upload['user_type'])@lang('common.frontend')
                                     @endif
                                 ]
                             </td>
@@ -48,29 +48,29 @@
                             </td>
                             <td class="nowrap">
                                 @if ($manage_upload['bind_info'])
-<a id="M_alert_log_{{ $manage_upload['id'] }}" class="btn btn-xs btn-primary" href="javascript:void(0);" >{{ trans('common.look') }}</a>
+<a id="M_alert_log_{{ $manage_upload['id'] }}" class="btn btn-xs btn-primary" href="javascript:void(0);" >@lang('common.look')</a>
                                     <script>
                                         $(function(){
                                             var config = {
                                                 'bind_obj':$('#M_alert_log_{{ $manage_upload['id'] }}'),
-                                                'title':'{{ trans('common.file') }}{{ trans('common.bind') }}{{ trans('common.info') }}',
+                                                'title':'@lang('common.file')@lang('common.bind')@lang('common.info')',
                                                 'message':{{ $manage_upload['bind_info'] }}
                                             }
                                             new M_alert_log(config);
                                         });
                                     </script>
                                 @else
-                                    {{ trans('common.empty') }}
+                                    @lang('common.empty')
                                 @endif
                             </td>
                             <td>
                                 <a class="btn btn-xs btn-primary" href="javascript:void(0);" id="copy_obj{{ $manage_upload['id'] }}" data-clipboard-text="{{ $manage_upload['path'] }}" >
                                     <script type="text/javascript" charset="utf-8">M_ZeroClipboard('copy_obj{{ $manage_upload['id'] }}');</script>
-                                    {{ trans('common.copy') }}{{ trans('common.path') }}
+                                    @lang('common.copy')@lang('common.path')
                                 </a>
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $manage_upload['name'] }}?','{{ route('del',array('id'=>$manage_upload['id'])) }}')" >
-                                        {{ trans('common.del') }}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $manage_upload['name'] }}?','{{ route('del',array('id'=>$manage_upload['id'])) }}')" >
+                                        @lang('common.del')
                                     </a>
                                 @endif
                             </td>

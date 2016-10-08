@@ -10,7 +10,7 @@
                             @if ('add' eq ACTION_NAME)
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">
-                                    {{ trans('common.template') }}{{ trans('common.file') }}{{ trans('common.name') }}
+                                    @lang('common.template')@lang('common.file')@lang('common.name')
                                     (@if ('/' eq C('TMPL_FILE_DEPR'))
                                         controller/file_name{{ config('TMPL_TEMPLATE_SUFFIX') }}
                                     @else
@@ -32,10 +32,10 @@
                     <div class="form-group">
                         <div class="col-sm-12 text-center">
                              <button type="submit" class="btn btn-info">
-                                {{ trans('common.save') }}
+                                @lang('common.save')
                              </button>
                             <a href="{{ route('Index/main') }}" class="btn btn-default">
-                                {{ trans('common.goback') }}
+                                @lang('common.goback')
                             </a>
                         </div>
                     </div>

@@ -6,18 +6,18 @@
                 @include('Public:where_info')
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
-                        <th>{{ trans('common.title') }}</th>
-                        <th>{{ trans('common.sort') }}</th>
-                        <th>{{ trans('common.channel') }}</th>
-                        <th>{{ trans('common.category') }}</th>
-                        <th>{{ trans('common.add') }}{{ trans('common.time') }}</th>
-                        <th>{{ trans('common.show') }}</th>
-                        <th>{{ trans('common.audit') }}</th>
-                        <th>{{ trans('common.click') }}{{ trans('common.number') }}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;@lang('common.id')</th>
+                        <th>@lang('common.title')</th>
+                        <th>@lang('common.sort')</th>
+                        <th>@lang('common.channel')</th>
+                        <th>@lang('common.category')</th>
+                        <th>@lang('common.add')@lang('common.time')</th>
+                        <th>@lang('common.show')</th>
+                        <th>@lang('common.audit')</th>
+                        <th>@lang('common.click')@lang('common.number')</th>
                         <td class="nowrap">
                             @if ($batch_handle['add'])
-                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">{{ trans('common.add') }}{{ trans('common.article') }}</a>
+                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">@lang('common.add')@lang('common.article')</a>
                             @endif
                         </td>
                     </tr>
@@ -43,28 +43,28 @@
                                 {{ $article['add_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td>
-                                @if ($article['if_show']){{ trans('common.yes') }}@else{{ trans('common.no') }}@endif
+                                @if ($article['if_show'])@lang('common.yes')@else@lang('common.no')@endif
                             </td>
                             <td>
-                                @if ($article['is_audit']){{ trans('common.yes') }}@else{{ trans('common.no') }}@endif
+                                @if ($article['is_audit'])@lang('common.yes')@else@lang('common.no')@endif
                             </td>
                             <td>
                                 {{ $article['hits'] }}
                             </td>
                             <td class="nowrap">
                                 <a class="btn btn-xs btn-primary" target="_blank" href="{{ route('Home/Article/article',array('id'=>$article['id'])) }}">
-                                    {{ trans('common.look') }}
+                                    @lang('common.look')
                                 </a>
                                 @if ($batch_handle['edit'])
                                     &nbsp;|&nbsp;
                                     <a class="btn btn-xs btn-primary" href="{{ route('edit',array('id'=>$article['id'])) }}">
-                                        {{ trans('common.edit') }}
+                                        @lang('common.edit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['del'])
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $article['title'] }}?','{{ route('del',array('id'=>$article['id'])) }}')" >
-                                        {{ trans('common.del') }}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $article['title'] }}?','{{ route('del',array('id'=>$article['id'])) }}')" >
+                                        @lang('common.del')
                                     </a>
                                 @endif
                             </td>

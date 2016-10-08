@@ -8,7 +8,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.receive') }}{{ trans('common.member') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.receive')@lang('common.member')</label>
                                 <div class="col-sm-8" id="receive_member_list">
                                     <input type="hidden" name="receive_id" />
                                     <script type="text/javascript" src="{{ asset('js/M_select_add.js') }}"></script>
@@ -29,7 +29,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 text-center">{{ trans('common.send') }}{{ trans('common.content') }}</div>
+                        <div class="col-sm-12 text-center">@lang('common.send')@lang('common.content')</div>
                         <div class="col-sm-12">
                             <textarea rows="5" class="col-sm-12" name="content">{{ $edit_info['reply_info'] }}</textarea>
                         </div>
@@ -37,10 +37,10 @@
                     <div class="row mt10">
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
-                                    {{ trans('common.send') }}
+                                    @lang('common.send')
                             </button>
                             <a href="{{ route('index') }}" class="btn btn-default">
-                                    {{ trans('common.goback') }}
+                                    @lang('common.goback')
                             </a>
                         </div>
                     </div>

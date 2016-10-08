@@ -39,7 +39,7 @@
                     <label >
                         <h4>{{ $quest['question'] }}
                         @if ($quest['required'])
-                            <span class="ml20" style="color:#ff0000">({{ trans('common.required') }})</span>
+                            <span class="ml20" style="color:#ff0000">(@lang('common.required'))</span>
                         @endif
                         </h4>
                     </label>
@@ -77,7 +77,7 @@
             <!-- 隐藏传参 -->
             <div class="row">
                 <div class="col-sm-12 text-center">
-                    <button class="col-sm-offset-5 col-sm-1 btn btn-info" type="submit">{{ trans('common.submit') }}</button>
+                    <button class="col-sm-offset-5 col-sm-1 btn btn-info" type="submit">@lang('common.submit')</button>
                 </div>
             </div>
         </form>

@@ -7,7 +7,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>{{ trans('common.system') }}{{ trans('common.info') }} {{ trans('common.dash') }} {{ config('SITE_TITLE') }}</title>
+    <title>@lang('common.system')@lang('common.info') @lang('common.dash') {{ config('SITE_TITLE') }}</title>
     <link rel="stylesheet" href="{{ asset('css/bootstrap#min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/bootstrap-theme#min.css') }}" />
     <link rel="stylesheet" href="{{ asset('css/common.css') }}" />
@@ -21,7 +21,7 @@
         <div class="col-sm-8 col-sm-offset-2">
             <div class="panel @if ($message">panel-info@elsepanel-danger@endif )
                 <div class="panel-heading text-center">
-                    {{ trans('common.system') }}@if ($message){{ trans('common.info') }}@else{{ trans('common.error') }}@endif
+                    @lang('common.system')@if ($message)@lang('common.info')@else@lang('common.error')@endif
                 </div>
                 <div class="panel-body">
                     <div class="col-sm-4 text-center">

@@ -8,7 +8,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.send') }}{{ trans('common.to') }}</label>
+                            <label class="col-sm-4 control-label">@lang('common.send')@lang('common.to')</label>
                             <div class="col-sm-7">
                                 <input type="text" value="{{ $edit_info['member_name'] }}" class="form-control" disabled="disabled">
                             </div>
@@ -18,7 +18,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.start') }}{{ trans('common.content') }}</label>
+                            <label class="col-sm-4 control-label">@lang('common.start')@lang('common.content')</label>
                             <div class="col-sm-7">
                                 <input type="text" name="start_content" value="" class="form-control">
                             </div>
@@ -26,7 +26,7 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.start') }}{{ trans('common.content') }}{{ trans('common.color') }}</label>
+                            <label class="col-sm-4 control-label">@lang('common.start')@lang('common.content')@lang('common.color')</label>
                             <div class="col-sm-7">
                                 <input type="text" name="start_content_color" value="#000000" class="form-control">
                             </div>
@@ -36,7 +36,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.end') }}{{ trans('common.content') }}</label>
+                            <label class="col-sm-4 control-label">@lang('common.end')@lang('common.content')</label>
                             <div class="col-sm-7">
                                 <input type="text" name="end_content" value="" class="form-control">
                             </div>
@@ -44,7 +44,7 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.end') }}{{ trans('common.content') }}{{ trans('common.color') }}</label>
+                            <label class="col-sm-4 control-label">@lang('common.end')@lang('common.content')@lang('common.color')</label>
                             <div class="col-sm-7">
                                 <input type="text" name="end_content_color" value="#000000" class="form-control">
                             </div>
@@ -54,7 +54,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.content') }}1</label>
+                            <label class="col-sm-4 control-label">@lang('common.content')1</label>
                             <div class="col-sm-7">
                                 <input type="text" name="content1" value="" class="form-control">
                             </div>
@@ -62,7 +62,7 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.content') }}1{{ trans('common.color') }}</label>
+                            <label class="col-sm-4 control-label">@lang('common.content')1@lang('common.color')</label>
                             <div class="col-sm-7">
                                 <input type="text" name="content1_color" value="#000000" class="form-control">
                             </div>
@@ -72,7 +72,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.content') }}2</label>
+                            <label class="col-sm-4 control-label">@lang('common.content')2</label>
                             <div class="col-sm-7">
                                 <input type="text" name="content2" value="" class="form-control">
                             </div>
@@ -80,7 +80,7 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">{{ trans('common.content') }}2{{ trans('common.color') }}</label>
+                            <label class="col-sm-4 control-label">@lang('common.content')2@lang('common.color')</label>
                             <div class="col-sm-7">
                                 <input type="text" name="content2_color" value="#000000" class="form-control">
                             </div>
@@ -89,10 +89,10 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 text-center">
-                        <button type="submit" class="btn btn-info">{{ trans('common.send') }}</button>
-                        <input class="btn btn-default" type="reset" value="{{ trans('common.reset') }}">
+                        <button type="submit" class="btn btn-info">@lang('common.send')</button>
+                        <input class="btn btn-default" type="reset" value="@lang('common.reset')">
                         <a href="{{ route('index') }}" class="btn btn-default">
-                                {{ trans('common.goback') }}
+                                @lang('common.goback')
                         </a>
                     </div>
                 </div>

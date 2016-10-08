@@ -23,11 +23,11 @@
                 <div class="col-sm-12 text-center">
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" value="1" id="checkGnu" />{{ trans('install.setp0_commont1') }}
+                            <input type="checkbox" value="1" id="checkGnu" />@lang('install.setp0_commont1')
                         </label>
                     </div>
-                    <a class="btn btn-lg btn-primary" onClick="return check_checkBoxVal('#checkGnu','{{ trans('install.setp0_commont2') }}')" href="{{ route('Install::setp1') }}">
-                        {{ trans('install.setp0') }}
+                    <a class="btn btn-lg btn-primary" onClick="return check_checkBoxVal('#checkGnu','@lang('install.setp0_commont2')')" href="{{ route('Install::setp1') }}">
+                        @lang('install.setp0')
                     </a>
                 </div>
             </div>

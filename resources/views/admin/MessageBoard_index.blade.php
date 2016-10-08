@@ -6,12 +6,12 @@
                 @include('Public:where_info')
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
-                        <th>{{ trans('common.name') }}</th>
-                        <th>{{ trans('common.option') }}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;@lang('common.id')</th>
+                        <th>@lang('common.name')</th>
+                        <th>@lang('common.option')</th>
                         <td class="nowrap">
                             @if ($batch_handle['add'])
-                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">{{ trans('common.add') }}{{ trans('common.messageboard') }}</a>
+                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">@lang('common.add')@lang('common.messageboard')</a>
                             @endif
                         </td>
                     </tr>
@@ -29,19 +29,19 @@
                             <td class="nowrap">
                                 @if ($batch_handle['log_index'])
                                     <a class="btn btn-xs btn-primary" href="{{ route('MessageBoardLog/index',array('msg_id'=>$message_board['id'])) }}">
-                                        {{ trans('common.look') }}
+                                        @lang('common.look')
                                     </a>
                                 @endif
                                 @if ($batch_handle['log_index'] AND $batch_handle['edit'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['edit'])
                                     <a class="btn btn-xs btn-primary" href="{{ route('edit',array('id'=>$message_board['id'])) }}">
-                                        {{ trans('common.edit') }}
+                                        @lang('common.edit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $message_board['name'] }}?','{{ route('del',array('id'=>$message_board['id'])) }}')" >
-                                        {{ trans('common.del') }}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $message_board['name'] }}?','{{ route('del',array('id'=>$message_board['id'])) }}')" >
+                                        @lang('common.del')
                                     </a>
                                 @endif
                             </td>

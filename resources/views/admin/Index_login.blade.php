@@ -4,27 +4,27 @@
     <section class="container">
         <div class="col-sm-6 col-sm-offset-3 login">
             <div class="panel panel-primary">
-                <div class="panel-heading">{{ $Think['const']['APP_NAME'] }} {{ trans('common.dash') }} {{ trans('common.login') }}{{ trans('common.backend') }}</div>
+                <div class="panel-heading">{{ $Think['const']['APP_NAME'] }} @lang('common.dash') @lang('common.login')@lang('common.backend')</div>
                 <div class="panel-body">
                     <form class="form-horizontal" role="form" method="post" action="{{ route('login') }}">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ trans('common.account') }}</label>
+                            <label class="col-sm-3 control-label">@lang('common.account')</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" placeholder="{{ trans('common.account') }}" name="user" />
+                                <input type="text" class="form-control" placeholder="@lang('common.account')" name="user" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ trans('common.pwd') }}</label>
+                            <label class="col-sm-3 control-label">@lang('common.pwd')</label>
                             <div class="col-sm-8">
-                                <input type="password" class="form-control" placeholder="{{ trans('common.pwd') }}" name="pwd" />
+                                <input type="password" class="form-control" placeholder="@lang('common.pwd')" name="pwd" />
                             </div>
                         </div>
                         @if (C('SYS_BACKEND_VERIFY'))
                         {{--验证码 开始--}}
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{ trans('common.verify_code') }}</label>
+                            <label class="col-sm-3 control-label">@lang('common.verify_code')</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" placeholder="{{ trans('common.verify_code') }}" name="verify" style="text-transform:uppercase;" />
+                                <input type="text" class="form-control" placeholder="@lang('common.verify_code')" name="verify" style="text-transform:uppercase;" />
                             </div>
                         </div>
                         <div class="form-group text-center">
@@ -32,12 +32,12 @@
                         </div>
                         {{--验证码 结束--}}
                         @endif
-                        <input type="submit" class="btn btn-primary col-sm-offset-5" value="{{ trans('common.login') }}">
+                        <input type="submit" class="btn btn-primary col-sm-offset-5" value="@lang('common.login')">
                     </form>
                 </div>
             </div>
         </div>
         <abbr class="text-center col-sm-6 col-sm-offset-3">
-            {{ trans('common.note_browser') }}
+            @lang('common.note_browser')
         </abbr>
     </section>

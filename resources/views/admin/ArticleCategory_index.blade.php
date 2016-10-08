@@ -8,11 +8,11 @@
                 <table class="table table-condensed table-hover">
                     <tr>
                         <th></th>
-                        <th class="col-sm-1" >{{ trans('common.sort') }}</th>
-                        <th class="col-sm-1" >{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.show') }}</th>
+                        <th class="col-sm-1" >@lang('common.sort')</th>
+                        <th class="col-sm-1" >@lang('common.yes')@lang('common.no')@lang('common.show')</th>
                         <td class="col-sm-3  nowrap" >
                             @if ($batch_handle['add'])
-                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">{{ trans('common.add') }}{{ trans('common.category') }}</a>
+                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">@lang('common.add')@lang('common.category')</a>
                             @endif
                         </td>
                     </tr>
@@ -30,23 +30,23 @@
                             </td>
                             <td class="nowrap">
                                 <a class="btn btn-xs btn-primary" target="_blank" href="{{ route('Home/Article/category',array('cate_id'=>$article_category['id'])) }}">
-                                    {{ trans('common.look') }}
+                                    @lang('common.look')
                                 </a>
                                 @if ($batch_handle['edit'])
                                     &nbsp;|&nbsp;
                                     <a class="btn btn-xs btn-primary" href="{{ route('edit',array('id'=>$article_category['id'])) }}">
-                                        {{ trans('common.edit') }}
+                                        @lang('common.edit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['del'])
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $article_category['name'] }}?','{{ route('del',array('id'=>$article_category['id'])) }}')" >
-                                        {{ trans('common.del') }}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $article_category['name'] }}?','{{ route('del',array('id'=>$article_category['id'])) }}')" >
+                                        @lang('common.del')
                                     </a>
                                 @endif
                                 &nbsp;|&nbsp;
                                 <a class="btn btn-xs btn-primary" href="{{ route('Article/add',array('cate_id'=>$article_category['id'])) }}">
-                                    {{ trans('common.add') }}{{ trans('common.article') }}
+                                    @lang('common.add')@lang('common.article')
                                 </a>
                             </td>
                         </tr>

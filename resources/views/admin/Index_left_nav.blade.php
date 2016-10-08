@@ -32,10 +32,10 @@
                         </ul>
                     @endforeach
                 @else
-                    <h3>{{ trans('common.none') }}{{ trans('common.privilege') }}</h3>
+                    <h3>@lang('common.none')@lang('common.privilege')</h3>
                     <ul class="nav text-center" role="tablist">
                         <li role="presentation">
-                            <a class="fs12" href="javascript:void(0);">{{ trans('common.not_action_privilege') }}</a>
+                            <a class="fs12" href="javascript:void(0);">@lang('common.not_action_privilege')</a>
                         </li>
                     </ul>
                 @endif

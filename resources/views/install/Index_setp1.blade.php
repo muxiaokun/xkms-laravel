@@ -16,13 +16,13 @@
                 <div class="col-sm-12">
                 <form id="mysql_config" class="form-horizontal" action="">
                     <div class="form-group">
-                        <label class="col-sm-1 control-label">{{ trans('common.host') }}{{ trans('common.colon') }}</label>
-                        <div class="col-sm-5"><input type="text" class="form-control"  placeholder="{{ trans('common.host') }}" value="{{ $default_config['DB_HOST'] }}" name="host"></div>
-                        <label class="col-sm-1 control-label">{{ trans('common.database') }}{{ trans('common.colon') }}</label>
-                        <div class="col-sm-3"><input type="text" class="form-control"  placeholder="{{ trans('common.database') }}" value="{{ $default_config['DB_NAME'] }}" name="name"></div>
+                        <label class="col-sm-1 control-label">@lang('common.host')@lang('common.colon')</label>
+                        <div class="col-sm-5"><input type="text" class="form-control"  placeholder="@lang('common.host')" value="{{ $default_config['DB_HOST'] }}" name="host"></div>
+                        <label class="col-sm-1 control-label">@lang('common.database')@lang('common.colon')</label>
+                        <div class="col-sm-3"><input type="text" class="form-control"  placeholder="@lang('common.database')" value="{{ $default_config['DB_NAME'] }}" name="name"></div>
                         <div class="btn-group col-sm-2">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                {{ trans('common.selection') }}{{ trans('common.exists') }}{{ trans('common.database') }}<span class="caret"></span>
+                                @lang('common.selection')@lang('common.exists')@lang('common.database')<span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
                                 @foreach ($database_list as $data)
@@ -32,22 +32,22 @@
                           </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-1 control-label">{{ trans('common.user') }}{{ trans('common.colon') }}</label>
-                        <div class="col-sm-5"><input type="text" class="form-control"  placeholder="{{ trans('common.user') }}" value="{{ $default_config['DB_USER'] }}" name="user"></div>
-                        <label class="col-sm-1 control-label">{{ trans('common.pass') }}{{ trans('common.colon') }}</label>
-                        <div class="col-sm-5"><input type="password" class="form-control"  placeholder="{{ trans('common.pass') }}" value="{{ $default_config['DB_PWD'] }}" name="pass"></div>
+                        <label class="col-sm-1 control-label">@lang('common.user')@lang('common.colon')</label>
+                        <div class="col-sm-5"><input type="text" class="form-control"  placeholder="@lang('common.user')" value="{{ $default_config['DB_USER'] }}" name="user"></div>
+                        <label class="col-sm-1 control-label">@lang('common.pass')@lang('common.colon')</label>
+                        <div class="col-sm-5"><input type="password" class="form-control"  placeholder="@lang('common.pass')" value="{{ $default_config['DB_PWD'] }}" name="pass"></div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-1 control-label">{{ trans('common.port') }}{{ trans('common.colon') }}</label>
-                        <div class="col-sm-5"><input type="text" class="form-control"  placeholder="{{ trans('common.port') }}" value="{{ $default_config['DB_PORT'] }}" name="port"></div>
-                        <label class="col-sm-1 control-label">{{ trans('common.prefix') }}{{ trans('common.colon') }}</label>
-                        <div class="col-sm-5"><input type="text" class="form-control"  placeholder="{{ trans('common.prefix') }}" value="{{ $default_config['DB_PREFIX'] }}" name="prefix"></div>
+                        <label class="col-sm-1 control-label">@lang('common.port')@lang('common.colon')</label>
+                        <div class="col-sm-5"><input type="text" class="form-control"  placeholder="@lang('common.port')" value="{{ $default_config['DB_PORT'] }}" name="port"></div>
+                        <label class="col-sm-1 control-label">@lang('common.prefix')@lang('common.colon')</label>
+                        <div class="col-sm-5"><input type="text" class="form-control"  placeholder="@lang('common.prefix')" value="{{ $default_config['DB_PREFIX'] }}" name="prefix"></div>
                     </div>
                 </form>
                 </div>
                 <div class="col-sm-12 text-center">
-                    <a class="btn btn-lg btn-primary mt20 mr80" href="{{ route('Install::') }}">{{ trans('common.previous') }}{{ trans('common.setp') }}</a>
-                    <a id="mysql_config_btn" class="btn btn-lg btn-primary mt20" href="javascript:void(0);">{{ trans('install.setp1') }}</a>
+                    <a class="btn btn-lg btn-primary mt20 mr80" href="{{ route('Install::') }}">@lang('common.previous')@lang('common.setp')</a>
+                    <a id="mysql_config_btn" class="btn btn-lg btn-primary mt20" href="javascript:void(0);">@lang('install.setp1')</a>
                     <script type="text/javascript">
                         var config = {
                             'out_obj':'#mysql_config_btn',
@@ -61,7 +61,7 @@
                 <div class="col-sm-12 text-center"><div id="show_box" class="mt20"></div></div>
                 <script type="text/javascript">
                     @foreach ($note as $data)
-                    show_install_message("#show_box","{{ $data }}{{ trans('common.extend') }}{{ trans('common.none') }}{{ trans('common.loading') }}","warning")
+                    show_install_message("#show_box","{{ $data }}@lang('common.extend')@lang('common.none')@lang('common.loading')","warning")
                     @endforeach
                 </script>
             </div>

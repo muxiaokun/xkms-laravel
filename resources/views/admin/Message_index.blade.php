@@ -7,12 +7,12 @@
                 @include('Public:where_info')
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
-                        <th>{{ trans('common.send') }}{{ trans('common.info') }}</th>
-                        <th>{{ trans('common.receive') }}{{ trans('common.info') }}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;@lang('common.id')</th>
+                        <th>@lang('common.send')@lang('common.info')</th>
+                        <th>@lang('common.receive')@lang('common.info')</th>
                         <td class="nowrap">
                             @if ($batch_handle['add'])
-                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">{{ trans('common.send') }}{{ trans('common.message') }}</a>
+                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">@lang('common.send')@lang('common.message')</a>
                             @endif
                         </td>
                     </tr>
@@ -30,16 +30,16 @@
                                 @if (0 lt $message['receive_time'])
                                     {{ $message['receive_time']|M_date=C('SYS_DATE_DETAIL') }}
                                 @else
-                                    {{ trans('common.none') }}{{ trans('common.receive') }}
+                                    @lang('common.none')@lang('common.receive')
                                 @endif]
                             </td>
                             <td class="nowrap">
-<a id="M_alert_log_{{ $message['id'] }}" class="btn btn-xs btn-primary" href="javascript:void(0);" >{{ trans('common.look') }}</a>
+<a id="M_alert_log_{{ $message['id'] }}" class="btn btn-xs btn-primary" href="javascript:void(0);" >@lang('common.look')</a>
                                 <script>
                                     $(function(){
                                         var config = {
                                             'bind_obj':$('#M_alert_log_{{ $message['id'] }}'),
-                                            'title':'{{ trans('common.message') }}{{ trans('common.content') }}',
+                                            'title':'@lang('common.message')@lang('common.content')',
                                             'message':"{{ $message['content'] }}"
                                             @if (0 eq $message['receive_id'] AND 0 eq $message['receive_time'])
                                             ,'cb_fn':M_alert_log_Message($('#M_alert_log_{{ $message['id'] }}'),{{ $message['id'] }},'{:M_U("ajax_api")}')
@@ -52,14 +52,14 @@
                                     &nbsp;|&nbsp;
                                     @if (0 lt $message['send_id'])
                                     <a class="btn btn-xs btn-primary" href="{{ route('add',array('receive_id'=>$message['send_id'])) }}">
-                                        {{ trans('common.reply') }}{{ trans('common.message') }}
+                                        @lang('common.reply')@lang('common.message')
                                     </a>
                                     @endif
                                 @endif
                                 @if ($batch_handle['del'])
                                     &nbsp;|&nbsp;
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}?','{{ route('del',array('id'=>$message['id'])) }}')" >
-                                        {{ trans('common.del') }}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('@lang('common.confirm')@lang('common.del')?','{{ route('del',array('id'=>$message['id'])) }}')" >
+                                        @lang('common.del')
                                     </a>
                                 @endif
                             </td>

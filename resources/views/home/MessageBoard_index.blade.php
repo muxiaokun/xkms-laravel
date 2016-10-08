@@ -5,7 +5,7 @@
                         <div class="col-sm-12">
                             @foreach ($message_board_info['config'] as $data)
                             <div class="form-group">
-                                <label class="control-label col-sm-4">{{ $data['msg_name'] }}{{ trans('common.colon') }}</label>
+                                <label class="control-label col-sm-4">{{ $data['msg_name'] }}@lang('common.colon')</label>
                                 <div class="col-sm-4">
                                 @if ('text' eq $data['msg_type'])
                                     <input type="text" name="send_info[{{ $data['msg_name'] }}]" class="form-control"/>
@@ -28,8 +28,8 @@
                                 @endif
                                 </div>
                                 <div class="col-sm-4">
-                                    @if ($data['msg_required']){{ trans('common.required') }}@endif
-                                    @if ($data['msg_length']){{ trans('common.max') }}{{ trans('common.length') }}{{ $data['msg_length'] }}@endif
+                                    @if ($data['msg_required'])@lang('common.required')@endif
+                                    @if ($data['msg_length'])@lang('common.max')@lang('common.length'){{ $data['msg_length'] }}@endif
                                 </div>
                             </div>
                             @endforeach
@@ -47,7 +47,7 @@
                         </div>
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
-                                    {{ trans('common.send') }}
+                                    @lang('common.send')
                             </button>
                         </div>
                     </form>
@@ -58,7 +58,7 @@
                             <tr><td>
                             <table class="table table-hover">
                                 <tr>
-                                    <td width="10%">{{ trans('common.send') }}{{ trans('common.time') }}{{ trans('common.colon') }}</td>
+                                    <td width="10%">@lang('common.send')@lang('common.time')@lang('common.colon')</td>
                                     <td width="90%">{{ $message_board_log['add_time']|M_date=C('SYS_DATE_DETAIL') }}</td>
                                 </tr>
                                 @foreach ($message_board_log['send_info'] as $name => $value)
@@ -68,7 +68,7 @@
                                 </tr>
                                 @endforeach
                                 <tr>
-                                    <td>{{ trans('common.reply') }}{{ trans('common.content') }}{{ trans('common.colon') }}</td>
+                                    <td>@lang('common.reply')@lang('common.content')@lang('common.colon')</td>
                                     <td>{{ $message_board_log['reply_info'] }}</td>
                                 </tr>
                             </table>

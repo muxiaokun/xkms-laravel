@@ -11,8 +11,8 @@
             </div>
             <div class="col-sm-6">
                 <ul id="login_tab" class="nav nav-tabs" role="tablist">
-                    <li @if (register neq I('t')">class="active"@endif ><a href="#login" role="tab" data-toggle="tab){{ trans('common.login') }}{{ trans('common.account') }}</a></li>
-                    <li @if (register eq I('t')">class="active"@endif ><a href="#register" role="tab" data-toggle="tab){{ trans('common.register') }}{{ trans('common.account') }}</a></li>
+                    <li @if (register neq I('t')">class="active"@endif ><a href="#login" role="tab" data-toggle="tab)@lang('common.login')@lang('common.account')</a></li>
+                    <li @if (register eq I('t')">class="active"@endif ><a href="#register" role="tab" data-toggle="tab)@lang('common.register')@lang('common.account')</a></li>
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane @if (register neq I('t')">active@endif mt20 h350" id="login)
@@ -31,23 +31,23 @@
                         </script>
                         <form id="form_valid_login" class="form-horizontal" role="form" method="post" action="{:M_U('login')}">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ trans('common.account') }}</label>
+                                <label class="col-sm-3 control-label">@lang('common.account')</label>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.account') }}" name="user" />
+                                    <input type="text" class="form-control" placeholder="@lang('common.account')" name="user" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ trans('common.pwd') }}</label>
+                                <label class="col-sm-3 control-label">@lang('common.pwd')</label>
                                 <div class="col-sm-5">
-                                    <input type="password" class="form-control" placeholder="{{ trans('common.pwd') }}" name="pwd" />
+                                    <input type="password" class="form-control" placeholder="@lang('common.pwd')" name="pwd" />
                                 </div>
                             </div>
                             @if (C('SYS_FRONTEND_VERIFY'))
                             {{--验证码 开始--}}
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ trans('common.verify_code') }}</label>
+                                <label class="col-sm-3 control-label">@lang('common.verify_code')</label>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.verify_code') }}" name="verify" style="text-transform:uppercase;" />
+                                    <input type="text" class="form-control" placeholder="@lang('common.verify_code')" name="verify" style="text-transform:uppercase;" />
                                 </div>
                             </div>
                             <div class="form-group">
@@ -55,7 +55,7 @@
                             </div>
                             {{--验证码 结束--}}
                             @endif
-                            <input type="submit" class="btn btn-info col-sm-offset-5" value="{{ trans('common.login') }}">
+                            <input type="submit" class="btn btn-info col-sm-offset-5" value="@lang('common.login')">
                         </form>
                     </div>
                     <div class="tab-pane @if (register eq I('t')">active@endif mt20 h350" id="register)
@@ -75,29 +75,29 @@
                         </script>
                         <form id="form_valid_register" class="form-horizontal" role="form" method="post" action="{:M_U('register')}">
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ trans('common.account') }}</label>
+                                <label class="col-sm-3 control-label">@lang('common.account')</label>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.account') }}" name="re_member_name" />
+                                    <input type="text" class="form-control" placeholder="@lang('common.account')" name="re_member_name" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ trans('common.input') }}{{ trans('common.pwd') }}</label>
+                                <label class="col-sm-3 control-label">@lang('common.input')@lang('common.pwd')</label>
                                 <div class="col-sm-5">
-                                    <input type="password" class="form-control" placeholder="{{ trans('common.pwd') }}" name="password" />
+                                    <input type="password" class="form-control" placeholder="@lang('common.pwd')" name="password" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ trans('common.again') }}{{ trans('common.input') }}</label>
+                                <label class="col-sm-3 control-label">@lang('common.again')@lang('common.input')</label>
                                 <div class="col-sm-5">
-                                    <input type="password" class="form-control" placeholder="{{ trans('common.pwd') }}" name="password_again" />
+                                    <input type="password" class="form-control" placeholder="@lang('common.pwd')" name="password_again" />
                                 </div>
                             </div>
                             @if (C('SYS_FRONTEND_VERIFY'))
                             {{--验证码 开始--}}
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">{{ trans('common.verify_code') }}</label>
+                                <label class="col-sm-3 control-label">@lang('common.verify_code')</label>
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.verify_code') }}" name="verify" style="text-transform:uppercase;" />
+                                    <input type="text" class="form-control" placeholder="@lang('common.verify_code')" name="verify" style="text-transform:uppercase;" />
                                 </div>
                             </div>
                             <div class="form-group">
@@ -105,7 +105,7 @@
                             </div>
                             {{--验证码 结束--}}
                             @endif
-                            <input type="submit" class="btn btn-info col-sm-offset-5" value="{{ trans('common.register') }}">
+                            <input type="submit" class="btn btn-info col-sm-offset-5" value="@lang('common.register')">
                         </form>
                     </div>
                 </div>

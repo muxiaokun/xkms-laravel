@@ -3,7 +3,7 @@
         <header class="header_fixed">
             <div class="row">
                 <div class="col-sm-12">
-                    <h3>{{ trans('common.install') }}{{ trans('common.schedule') }}{{ trans('common.colon') }} {{ $setp }}</h3>
+                    <h3>@lang('common.install')@lang('common.schedule')@lang('common.colon') {{ $setp }}</h3>
                     <div class="progress">
                         <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: {{ $progress }}%">
                             <span class="sr-only">{{ $progress }}%</span>
@@ -28,7 +28,7 @@
         <iframe id="main" name="main" class="g-iframe" src="{{ route('Install::setp0') }}" width="100%" height="100%" scrolling="auto">
         </iframe>
         <footer class="footer_fixed text-center">
-            {{ trans('common.pfcopyright',['app_name'=>trans('common.app_name')]) }}<br />
-            {{ trans('common.version') }}{{ trans('common.colon') }} 2.0.0
+            @lang('common.pfcopyright',['app_name'=>trans('common.app_name')])<br />
+            @lang('common.version')@lang('common.colon') 2.0.0
         </footer>
 @endsection

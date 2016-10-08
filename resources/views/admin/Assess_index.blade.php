@@ -6,15 +6,15 @@
                 @include('Public:where_info')
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
-                        <th>{{ trans('common.title') }}</th>
-                        <th>{{ trans('common.assess') }}{{ trans('common.group') }}</th>
-                        <th>{{ trans('common.start') }}{{ trans('common.time') }}</th>
-                        <th>{{ trans('common.end') }}{{ trans('common.time') }}</th>
-                        <th>{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.enable') }}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;@lang('common.id')</th>
+                        <th>@lang('common.title')</th>
+                        <th>@lang('common.assess')@lang('common.group')</th>
+                        <th>@lang('common.start')@lang('common.time')</th>
+                        <th>@lang('common.end')@lang('common.time')</th>
+                        <th>@lang('common.yes')@lang('common.no')@lang('common.enable')</th>
                         <td class="nowrap">
                             @if ($batch_handle['add'])
-                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">{{ trans('common.add') }}{{ trans('common.assess') }}</a>
+                                <a class="btn btn-xs btn-success" href="{{ route('add') }}">@lang('common.add')@lang('common.assess')</a>
                             @endif
                         </td>
                     </tr>
@@ -37,24 +37,24 @@
                                 {{ $assess['end_time']|M_date=C('SYS_DATE_DETAIL') }}
                             </td>
                             <td>
-                                @if ($assess['is_enable']){{ trans('common.enable') }}@else{{ trans('common.disable') }}@endif
+                                @if ($assess['is_enable'])@lang('common.enable')@else@lang('common.disable')@endif
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['log_edit'])
                                     <a class="btn btn-xs btn-primary" href="{{ route('AssessLog/edit',array('id'=>$assess['id'])) }}">
-                                        {{ trans('common.statistics') }}
+                                        @lang('common.statistics')
                                     </a>
                                 @endif
                                 @if ($batch_handle['log_edit'] AND $batch_handle['edit'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['edit'])
                                     <a class="btn btn-xs btn-primary" href="{{ route('edit',array('id'=>$assess['id'])) }}">
-                                        {{ trans('common.edit') }}
+                                        @lang('common.edit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $assess['title'] }}?','{{ route('del',array('id'=>$assess['id'])) }}')" >
-                                        {{ trans('common.del') }}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $assess['title'] }}?','{{ route('del',array('id'=>$assess['id'])) }}')" >
+                                        @lang('common.del')
                                     </a>
                                 @endif
                             </td>

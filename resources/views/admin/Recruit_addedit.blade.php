@@ -8,9 +8,9 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.recruit') }}{{ trans('common.name') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.recruit')@lang('common.name')</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="{{ trans('common.recruit') }}{{ trans('common.name') }}" name="title" value="{{ $edit_info['title'] }}"/>
+                                    <input type="text" class="form-control" placeholder="@lang('common.recruit')@lang('common.name')" name="title" value="{{ $edit_info['title'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -18,7 +18,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.current') }}{{ trans('common.recruit') }}{{ trans('common.number') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.current')@lang('common.recruit')@lang('common.number')</label>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control" name="current_portion" value="{{ $edit_info['current_portion'] }}" onKeyup="M_in_int(this);"/>
                                 </div>
@@ -26,7 +26,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.max') }}{{ trans('common.recruit') }}{{ trans('common.number') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.max')@lang('common.recruit')@lang('common.number')</label>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control" name="max_portion" value="{{ $edit_info['max_portion'] }}" onKeyup="M_in_int(this);"/>
                                 </div>
@@ -36,17 +36,17 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.start') }}{{ trans('common.time') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.start')@lang('common.time')</label>
                                 <div class="col-sm-6 ">
-<input type="text" class="form-control" placeholder="{{ trans('common.start') }}{{ trans('common.time') }}" name="start_time" value="{{ $edit_info['start_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
+<input type="text" class="form-control" placeholder="@lang('common.start')@lang('common.time')" name="start_time" value="{{ $edit_info['start_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.end') }}{{ trans('common.time') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.end')@lang('common.time')</label>
                                 <div class="col-sm-6">
-<input type="text" class="form-control" placeholder="{{ trans('common.end') }}{{ trans('common.time') }}" name="end_time" value="{{ $edit_info['end_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
+<input type="text" class="form-control" placeholder="@lang('common.end')@lang('common.time')" name="end_time" value="{{ $edit_info['end_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -55,13 +55,13 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.enable') }}</label>
+                                <label class="col-sm-4 control-label">@lang('common.yes')@lang('common.no')@lang('common.enable')</label>
                                 <div class="col-sm-3">
                                     <label class="radio-inline">
-<input type="radio" name="is_enable" value="1" @if ('1' heq $edit_info['is_enable'] or !isset($edit_info['is_enable']))checked="checked"@endif />{{ trans('common.enable') }}
+<input type="radio" name="is_enable" value="1" @if ('1' heq $edit_info['is_enable'] or !isset($edit_info['is_enable']))checked="checked"@endif />@lang('common.enable')
                                     </label>
                                     <label class="radio-inline">
-<input type="radio" name="is_enable" value="0" @if ('0' heq $edit_info['is_enable'])checked="checked"@endif />{{ trans('common.disable') }}
+<input type="radio" name="is_enable" value="0" @if ('0' heq $edit_info['is_enable'])checked="checked"@endif />@lang('common.disable')
                                     </label>
                                 </div>
                             </div>
@@ -69,7 +69,7 @@
                         <div class="col-sm-6">
                             <div id="edit_obj" class="form-group">
                                 <div class="col-sm-4 text-right">
-                                    <button type="button" class="btn btn-default" mtype="in_add" >{{ trans('common.add') }}{{ trans('common.extend') }}{{ trans('common.info') }}</button>
+                                    <button type="button" class="btn btn-default" mtype="in_add" >@lang('common.add')@lang('common.extend')@lang('common.info')</button>
                                 </div>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control" mtype="in_val" />
@@ -93,7 +93,7 @@
                         </script>
                     </div>
                     <div class="col-sm-12">
-                        <label class="col-sm-12">{{ trans('common.recruit') }}{{ trans('common.content') }}</label>
+                        <label class="col-sm-12">@lang('common.recruit')@lang('common.content')</label>
                         <textarea rows="15" class="col-sm-12" name="explains">{{ $edit_info['explains'] }}</textarea>
                     </div>
                     <div class="cb"></div>
@@ -101,13 +101,13 @@
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">
                                 @if ($Think.const.ACTION_NAME eq 'add')
-                                    {{ trans('common.add') }}
+                                    @lang('common.add')
                                 @elseif ($Think.const.ACTION_NAME eq 'edit')
-                                    {{ trans('common.edit') }}
+                                    @lang('common.edit')
                                 @endif
                             </button>
                             <a href="{{ route('index') }}" class="btn btn-default">
-                                    {{ trans('common.goback') }}
+                                    @lang('common.goback')
                             </a>
                         </div>
                     </div>

@@ -6,16 +6,16 @@
                 @include('Public:where_info')
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
-                        <th>{{ trans('common.itlink') }}{{ trans('common.name') }}</th>
-                        <th>{{ trans('common.short') }}{{ trans('common.name') }}</th>
-                        <th>{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.enable') }}</th>
-                        <th>{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.statistics') }}</th>
-                        <th>{{ trans('common.show') }}{{ trans('common.statistics') }}</th>
-                        <th>{{ trans('common.click') }}{{ trans('common.statistics') }}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;@lang('common.id')</th>
+                        <th>@lang('common.itlink')@lang('common.name')</th>
+                        <th>@lang('common.short')@lang('common.name')</th>
+                        <th>@lang('common.yes')@lang('common.no')@lang('common.enable')</th>
+                        <th>@lang('common.yes')@lang('common.no')@lang('common.statistics')</th>
+                        <th>@lang('common.show')@lang('common.statistics')</th>
+                        <th>@lang('common.click')@lang('common.statistics')</th>
                         <td class="nowrap">
                             @if ($batch_handle['edit'])
-                                <a class="btn btn-xs btn-success"  href="{{ route('add') }}">{{ trans('common.add') }}{{ trans('common.itlink') }}</a>
+                                <a class="btn btn-xs btn-success"  href="{{ route('add') }}">@lang('common.add')@lang('common.itlink')</a>
                             @endif
                         </td>
                     </tr>
@@ -32,10 +32,10 @@
                                 {{ $itlink['short_name'] }}
                             </td>
                             <td>
-                                @if ($itlink['is_enable']){{ trans('common.yes') }}@else{{ trans('common.no') }}@endif
+                                @if ($itlink['is_enable'])@lang('common.yes')@else@lang('common.no')@endif
                             </td>
                             <td>
-                                @if ($itlink['is_statistics']){{ trans('common.yes') }}@else{{ trans('common.no') }}@endif
+                                @if ($itlink['is_statistics'])@lang('common.yes')@else@lang('common.no')@endif
                             </td>
                             <td>
                                 {{ $itlink['show_num'] }}
@@ -46,13 +46,13 @@
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])
                                     <a class="btn btn-xs btn-primary"  href="{{ route('edit',array('id'=>$itlink['id'])) }}">
-                                        {{ trans('common.edit') }}
+                                        @lang('common.edit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $itlink['name'] }}?','{{ route('del',array('id'=>$itlink['id'])) }}')" >
-                                        {{ trans('common.del') }}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $itlink['name'] }}?','{{ route('del',array('id'=>$itlink['id'])) }}')" >
+                                        @lang('common.del')
                                     </a>
                                 @endif
                             </td>

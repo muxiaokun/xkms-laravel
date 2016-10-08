@@ -2,7 +2,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 {{ $title }}<a href="javascript:window.print()">打印</a>
-                <a class="fr fs10" href="{{ route('index',array('quests_id'=>$quests_info['id'])) }}">{{ trans('common.goback') }}</a>
+                <a class="fr fs10" href="{{ route('index',array('quests_id'=>$quests_info['id'])) }}">@lang('common.goback')</a>
             </div>
             <div class="panel-body">
                 @foreach ($quests_quest_list as $quest_id => $quest)
@@ -12,7 +12,7 @@
                             <label >
                                 <h4>{{ $quest['question'] }}
                                 @if ($quest['required'])
-                                    <span class="ml20" style="color:#ff0000">({{ trans('common.required') }})</span>
+                                    <span class="ml20" style="color:#ff0000">(@lang('common.required'))</span>
                                 @endif
                                 </h4>
                             </label>

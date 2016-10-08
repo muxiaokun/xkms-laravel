@@ -6,12 +6,12 @@
                 @include('Public:where_info')
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
-                        <th>{{ trans('common.audit') }}{{ trans('common.admin') }}</th>
-                        <th>{{ trans('common.send') }}{{ trans('common.user') }}</th>
-                        <th>{{ trans('common.send') }}{{ trans('common.time') }}</th>
-                        <th>{{ trans('common.send') }} IP</th>
-                        <th>{{ trans('common.handle') }}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;@lang('common.id')</th>
+                        <th>@lang('common.audit')@lang('common.admin')</th>
+                        <th>@lang('common.send')@lang('common.user')</th>
+                        <th>@lang('common.send')@lang('common.time')</th>
+                        <th>@lang('common.send') IP</th>
+                        <th>@lang('common.handle')</th>
                     </tr>
                     @foreach ($message_board_log_list as $message_board_log)
                         <tr>
@@ -34,13 +34,13 @@
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])
                                     <a class="btn btn-xs btn-primary" href="{{ route('edit',array('id'=>$message_board_log['id'])) }}">
-                                        {{ trans('common.audit') }}
+                                        @lang('common.audit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}?','{{ route('del',array('id'=>$message_board_log['id'])) }}')" >
-                                        {{ trans('common.del') }}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('@lang('common.confirm')@lang('common.del')?','{{ route('del',array('id'=>$message_board_log['id'])) }}')" >
+                                        @lang('common.del')
                                     </a>
                                 @endif
                             </td>

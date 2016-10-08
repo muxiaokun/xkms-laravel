@@ -6,13 +6,13 @@
                 @include('Public:where_info')
                 <table class="table table-condensed table-hover">
                     <tr>
-                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;{{ trans('common.id') }}</th>
-                        <th>{{ trans('common.management') }}{{ trans('common.group') }}{{ trans('common.name') }}</th>
-                        <th>{{ trans('common.management') }}{{ trans('common.group') }}{{ trans('common.explains') }}</th>
-                        <th>{{ trans('common.yes') }}{{ trans('common.no') }}{{ trans('common.enable') }}</th>
+                        <th><input type="checkbox" onClick="M_allselect_par(this,'table')" />&nbsp;@lang('common.id')</th>
+                        <th>@lang('common.management')@lang('common.group')@lang('common.name')</th>
+                        <th>@lang('common.management')@lang('common.group')@lang('common.explains')</th>
+                        <th>@lang('common.yes')@lang('common.no')@lang('common.enable')</th>
                         <td class="nowrap">
                             @if ($batch_handle['add'])
-                                <a class="btn btn-xs btn-success"  href="{{ route('add') }}">{{ trans('common.add') }}{{ trans('common.management') }}{{ trans('common.group') }}</a>
+                                <a class="btn btn-xs btn-success"  href="{{ route('add') }}">@lang('common.add')@lang('common.management')@lang('common.group')</a>
                             @endif
                         </td>
                     </tr>
@@ -33,18 +33,18 @@
                                 {{ $admin_group['explains'] }}
                             </td>
                             <td>
-                                @if ($admin_group['is_enable']){{ trans('common.enable') }}@else{{ trans('common.disable') }}@endif
+                                @if ($admin_group['is_enable'])@lang('common.enable')@else@lang('common.disable')@endif
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])
                                     <a class="btn btn-xs btn-primary" href="{{ route('edit',array('id'=>$admin_group['id'])) }}">
-                                        {{ trans('common.edit') }}
+                                        @lang('common.edit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
-<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('{{ trans('common.confirm') }}{{ trans('common.del') }}{{ $admin_group['name'] }}?','{{ route('del',array('id'=>$admin_group['id'])) }}')" >
-                                        {{ trans('common.del') }}
+<a class="btn btn-xs btn-danger" href="javascript:void(0);" onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $admin_group['name'] }}?','{{ route('del',array('id'=>$admin_group['id'])) }}')" >
+                                        @lang('common.del')
                                     </a>
                                 @endif
                             </td>

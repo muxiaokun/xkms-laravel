@@ -15,7 +15,7 @@ class MessageBoard extends Backend
 
         //建立where
         $whereValue                   = '';
-        $whereValue                   = I('name');
+        $whereValue                   = request('name');
         $whereValue && $where['name'] = array('like', '%' . $whereValue . '%');
 
         $messageBoardList = $MessageBoardModel->mSelect($where, true);
@@ -37,7 +37,7 @@ class MessageBoard extends Backend
         $batchHandle['del']       = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', trans('messageboard') . L('management'));
+        $this->assign('title', trans('messageboard') . trans('management'));
         $this->display();
     }
 
@@ -49,24 +49,24 @@ class MessageBoard extends Backend
             $MessageBoardModel = D('MessageBoard');
             $resultAdd        = $MessageBoardModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('messageboard') . L('add') . L('success'), $rebackLink);
+                $this->success(trans('messageboard') . trans('add') . trans('success'), $rebackLink);
                 return;
             } else {
-                $this->error(trans('messageboard') . L('add') . L('error'), route('add', array('cate_id' => I('get.cate_id'))));
+                $this->error(trans('messageboard') . trans('add') . trans('error'), route('add', array('cate_id' => request('get.cate_id'))));
             }
         }
 
         $this->assign('template_list', mScanTemplate('index', config('DEFAULT_MODULE'), 'MessageBoard'));
-        $this->assign('title', trans('messageboard') . L('add'));
+        $this->assign('title', trans('messageboard') . trans('add'));
         $this->display('addedit');
     }
 
     //编辑
     public function edit()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $MessageBoardModel = D('MessageBoard');
@@ -74,11 +74,11 @@ class MessageBoard extends Backend
             $data        = $this->makeData();
             $resultEdit = $MessageBoardModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('messageboard') . L('edit') . L('success'), route('index'));
+                $this->success(trans('messageboard') . trans('edit') . trans('success'), route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
-                $this->error(trans('messageboard') . L('edit') . L('error'), $errorGoLink);
+                $this->error(trans('messageboard') . trans('edit') . trans('error'), $errorGoLink);
             }
         }
 
@@ -87,34 +87,34 @@ class MessageBoard extends Backend
         $this->assign('edit_info', $editInfo);
 
         $this->assign('template_list', mScanTemplate('index', config('DEFAULT_MODULE'), 'MessageBoard'));
-        $this->assign('title', trans('messageboard') . L('edit'));
+        $this->assign('title', trans('messageboard') . trans('edit'));
         $this->display('addedit');
     }
 
     //删除
     public function del()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $MessageBoardModel = D('MessageBoard');
         $resultDel        = $MessageBoardModel->mDel($id);
         if ($resultDel) {
-            $this->success(trans('messageboard') . L('del') . L('success'), route('index'));
+            $this->success(trans('messageboard') . trans('del') . trans('success'), route('index'));
             return;
         } else {
-            $this->error(trans('messageboard') . L('del') . L('error'), route('index'));
+            $this->error(trans('messageboard') . trans('del') . trans('error'), route('index'));
         }
     }
 
     //构造数据
     private function makeData()
     {
-        $name     = I('name');
-        $template = I('template');
-        $config   = json_decode(htmlspecialchars_decode(I('config')), true);
+        $name     = request('name');
+        $template = request('template');
+        $config   = json_decode(htmlspecialchars_decode(request('config')), true);
 
         $data                                                             = array();
         ('add' == ACTION_NAME || null !== $name) && $data['name']         = $name;

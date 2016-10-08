@@ -13,13 +13,13 @@ class Region extends Backend
         $RegionModel = D('Region');
         //建立where
         $whereValue                          = '';
-        $whereValue                          = I('region_name');
+        $whereValue                          = request('region_name');
         $whereValue && $where['region_name'] = array('like', '%' . $whereValue . '%');
-        $whereValue                          = I('short_spell');
+        $whereValue                          = request('short_spell');
         $whereValue && $where['short_spell'] = array('like', '%' . $whereValue . '%');
-        $whereValue                          = I('areacode');
+        $whereValue                          = request('areacode');
         $whereValue && $where['areacode']    = array('like', '%' . $whereValue . '%');
-        $whereValue                          = I('postcode');
+        $whereValue                          = request('postcode');
         $whereValue && $where['postcode']    = array('like', '%' . $whereValue . '%');
 
         //初始化翻页 和 列表数据
@@ -45,7 +45,7 @@ class Region extends Backend
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', trans('region') . L('management'));
+        $this->assign('title', trans('region') . trans('management'));
         $this->display();
     }
 
@@ -57,23 +57,23 @@ class Region extends Backend
             $data        = $this->makeData();
             $resultAdd  = $RegionModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('region') . L('add') . L('success'), route('index'));
+                $this->success(trans('region') . trans('add') . trans('success'), route('index'));
                 return;
             } else {
-                $this->error(trans('region') . L('add') . L('error'), route('add'));
+                $this->error(trans('region') . trans('add') . trans('error'), route('add'));
             }
         }
 
-        $this->assign('title', trans('region') . L('add'));
+        $this->assign('title', trans('region') . trans('add'));
         $this->display('addedit');
     }
 
     //编辑
     public function edit()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $RegionModel = D('Region');
@@ -81,36 +81,36 @@ class Region extends Backend
             $data        = $this->makeData();
             $resultEdit = $RegionModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('region') . L('edit') . L('success'), route('index'));
+                $this->success(trans('region') . trans('edit') . trans('success'), route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
-                $this->error(trans('region') . L('edit') . L('error'), $errorGoLink);
+                $this->error(trans('region') . trans('edit') . trans('error'), $errorGoLink);
             }
         }
 
         $editInfo                = $RegionModel->mFind($id);
         $editInfo['parent_name'] = $RegionModel->mFindColumn($editInfo['parent_id'], 'region_name');
         $this->assign('edit_info', $editInfo);
-        $this->assign('title', trans('region') . L('edit'));
+        $this->assign('title', trans('region') . trans('edit'));
         $this->display('addedit');
     }
 
     //删除
     public function del()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $RegionModel = D('Region');
         $resultDel  = $RegionModel->mDel($id);
         if ($resultDel) {
-            $this->success(trans('region') . L('del') . L('success'), route('index'));
+            $this->success(trans('region') . trans('del') . trans('success'), route('index'));
             return;
         } else {
-            $this->error(trans('region') . L('del') . L('error'), route('index'));
+            $this->error(trans('region') . trans('del') . trans('error'), route('index'));
         }
     }
 
@@ -118,13 +118,13 @@ class Region extends Backend
     private function makeData()
     {
         //初始化参数
-        $parentId   = I('parent_id');
-        $regionName = I('region_name');
-        $shortName  = I('short_name');
-        $shortSpell = I('short_spell');
-        $areacode    = I('areacode');
-        $postcode    = I('postcode');
-        $ifShow     = I('if_show');
+        $parentId   = request('parent_id');
+        $regionName = request('region_name');
+        $shortName  = request('short_name');
+        $shortSpell = request('short_spell');
+        $areacode    = request('areacode');
+        $postcode    = request('postcode');
+        $ifShow     = request('if_show');
 
         $data                                                                   = array();
         ('add' == ACTION_NAME || null !== $parentId) && $data['parent_id']     = $parentId;

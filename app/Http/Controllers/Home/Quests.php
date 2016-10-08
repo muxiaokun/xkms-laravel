@@ -29,9 +29,9 @@ class Quests extends FrontendMember
     public function add()
     {
         //初始化参数
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('Quests/index'));
+            $this->error(trans('id') . trans('error'), route('Quests/index'));
         }
 
         $QuestsModel = D('Quests');
@@ -39,14 +39,14 @@ class Quests extends FrontendMember
         //检测是否能够提交
         $currentTime = time();
         if ($questsInfo['start_time'] < $currentTime && $questsInfo['end_time'] < $currentTime) {
-            $this->error(trans('start') . L('end') . L('time') . L('error'), route('Quests/index'));
+            $this->error(trans('start') . trans('end') . trans('time') . trans('error'), route('Quests/index'));
         }
         if (0 != $questsInfo['max_portion'] && $questsInfo['current_portion'] >= $questsInfo['max_portion']) {
-            $this->error(trans('gt') . L('max') . L('portion'), route('Quests/index'));
+            $this->error(trans('gt') . trans('max') . trans('portion'), route('Quests/index'));
         }
-        $accessInfo = I('access_info');
+        $accessInfo = request('access_info');
         if (isset($questsInfo['access_info']) && $questsInfo['access_info'] != $accessInfo) {
-            $this->error(trans('access') . L('pass') . L('error'), route('Quests/index'));
+            $this->error(trans('access') . trans('pass') . trans('error'), route('Quests/index'));
         }
         //初始化问题
         $questsQuestList = json_decode($questsInfo['ext_info'], true);
@@ -59,7 +59,7 @@ class Quests extends FrontendMember
             session('frontend.id') && $data['member_id'] = session('frontend.id');
             $data['quests_id']                           = $id;
             $data['answer']                              = '|';
-            $questsAnswer                               = I('quests');
+            $questsAnswer                               = request('quests');
             foreach ($questsQuestList as $questId => $quest) {
                 if ($quest['answer_type'] == 'checkbox') {
                     foreach ($questsAnswer[$questId] as $value) {
@@ -73,16 +73,16 @@ class Quests extends FrontendMember
             $resultAdd        = $QuestsAnswerModel->mAdd($data);
             if ($resultAdd) {
                 $QuestsModel->where(array('id' => $questsInfo['id']))->setInc('current_portion');
-                $this->success(trans('answer') . L('add') . L('success'), route('Quests/index'));
+                $this->success(trans('answer') . trans('add') . trans('success'), route('Quests/index'));
             } else {
-                $this->error(trans('answer') . L('add') . L('error'), route('index'));
+                $this->error(trans('answer') . trans('add') . trans('error'), route('index'));
             }
             return;
         }
 
         $this->assign('quests_quest_list', $questsQuestList);
         $this->assign('quests_info', $questsInfo);
-        $this->assign('title', trans('write') . L('quests'));
+        $this->assign('title', trans('write') . trans('quests'));
         $this->display();
     }
 }

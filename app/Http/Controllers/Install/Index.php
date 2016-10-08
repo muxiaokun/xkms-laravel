@@ -4,6 +4,8 @@
 namespace App\Http\Controllers\Install;
 
 use App\Http\Controllers\Common;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class Index extends Common
 {
@@ -37,7 +39,7 @@ class Index extends Common
     public function ajax_api()
     {
         $allowAjaxApi = ['get_data'];
-        if (!in_array(I('type'), $allowAjaxApi)) {
+        if (!in_array(request('type'), $allowAjaxApi)) {
             return;
         }
 
@@ -73,61 +75,45 @@ class Index extends Common
     {
         $loadedExt = get_loaded_extensions();
         //检测有可能会依赖的扩展模块
-        $mustExt   = ['iconv',
-            'json',
-            'mcrypt',
-            'session',
-            'PDO',
-            'bz2',
+        $mustExt   = [
+            //laravel
             'openssl',
+            'PDO',
+            'mbstring',
+            'tokenizer',
+            'xml',
+            // xkms
             'curl',
             'fileinfo',
             'gd',
-            'mbstring',
-            'pdo_mysql'];
+            'pdo_mysql',
+        ];
         $unloadExt = [];
         foreach ($mustExt as $ext) {
             if (!in_array($ext, $loadedExt)) {
                 $unloadExt[] = $ext;
             }
         }
-        $defaultConfig = Storage::get('xkms/config/database.php');
-        var_dump($defaultConfig);
-        env();
-        if (config('database.connections.mysql.host')) {
-            $defaultConfig['DB_HOST'] = config('database.connections.mysql.host');
-        }
 
-        if (config('connections.mysql.database')) {
-            $defaultConfig['DB_NAME'] = config('database.connections.mysql.database');
-        }
-
-        if (config('database.connections.mysql.username')) {
-            $defaultConfig['DB_USER'] = config('database.connections.mysql.username');
-        }
-
-        if (config('database.connections.mysql.password')) {
-            $defaultConfig['DB_PWD'] = config('database.connections.mysql.password');
-        }
-
-        if (config('database.connections.mysql.port')) {
-            $defaultConfig['DB_PORT'] = config('database.connections.mysql.port');
-        }
-
-        if (config('database.connections.mysql.prefix')) {
-            $defaultConfig['DB_PREFIX'] = config('database.connections.mysql.prefix');
-        }
-        dump($defaultConfig);
+        $defaultConfig = [
+            'DB_HOST'     => env('DB_HOST'),
+            'DB_PORT'     => env('DB_PORT'),
+            'DB_DATABASE' => env('DB_DATABASE'),
+            'DB_USERNAME' => env('DB_USERNAME'),
+            'DB_PASSWORD' => env('DB_PASSWORD'),
+            'DB_PREFIX'   => env('DB_PREFIX'),
+        ];
 
         $assign = [
             'show_height'    => true,
             'progress'       => 0,
-            'setp'           => trans('install.pfsetp', ['setp'  => trans('common.one'),
-                                                         'count' => trans('common.four')]),
+            'setp'           => trans('install.pfsetp', [
+                'setp'  => trans('common.one'),
+                'count' => trans('common.four'),
+            ]),
             'title'          => trans('install.setp1_title'),
-            'article'        => Storage::get('xkms/article/licenses.php'),
             'note'           => $unloadExt,
-            'database_list'  => [],//$this->_compare_database(),
+            'database_list'  => $this->_getDatabases(),
             'default_config' => $defaultConfig,
 
         ];
@@ -139,7 +125,7 @@ class Index extends Common
     {
         $this->assign('compare_database_info', $this->_compare_database(true));
         $this->assign('compare_tables_info', $this->_compare_tables());
-        $this->assign('setp', trans('pfsetp', ['setp' => L('two'), 'count' => L('four')]));
+        $this->assign('setp', trans('pfsetp', ['setp' => trans('two'), 'count' => trans('four')]));
         $this->assign('title', trans('setp2_title'));
         $this->display();
     }
@@ -153,7 +139,7 @@ class Index extends Common
         }
 
         set_time_limit(0);
-        $this->assign('setp', trans('pfsetp', ['setp' => L('three'), 'count' => L('four')]));
+        $this->assign('setp', trans('pfsetp', ['setp' => trans('three'), 'count' => trans('four')]));
         $this->assign('title', trans('setp3_title'));
         $this->display();
         ob_flush();
@@ -174,7 +160,7 @@ class Index extends Common
             }
             $result = $db->query('CREATE DATABASE `' . config('DB_NAME') . '` DEFAULT CHARACTER SET = utf8');
 
-            $langStr = trans('install') . L('database') . config('DB_NAME');
+            $langStr = trans('install') . trans('database') . config('DB_NAME');
             if ($result) {
                 $langStr .= trans('success');
                 $type = 'success';
@@ -186,7 +172,7 @@ class Index extends Common
             }
             echo '<script type="text/javascript">show_install_message("#show_box","' . $langStr . '","' . $type . '")</script>';
         } else {
-            $langStr = trans('database') . config('DB_NAME') . L('exists');
+            $langStr = trans('database') . config('DB_NAME') . trans('exists');
             echo '<script type="text/javascript">show_install_message("#show_box","' . $langStr . '","info")</script>';
         }
         //初始化需要安装的数据表
@@ -195,7 +181,8 @@ class Index extends Common
         if (6 > count($compareTablesInfo)) {
             $langStr = trans('setp3_commont1');
             echo '<script type="text/javascript">show_install_message("#show_box","' . $langStr . '","danger")</script>';
-            echo '<script type="text/javascript">setTimeout(\'window.location.href=\"' . route('', ['setp' => 2]) . '\"\',3000)</script>';
+            echo '<script type="text/javascript">setTimeout(\'window.location.href=\"' . route('',
+                    ['setp' => 2]) . '\"\',3000)</script>';
             return;
         }
 
@@ -217,7 +204,7 @@ class Index extends Common
         $createTablesError   = 0;
         //清空权限缓存
         F('privilege', null);
-        $installControl = I('install_control');
+        $installControl = request('install_control');
 
         $tablesCount        = 0;
         $installTablesCount = 0;
@@ -245,7 +232,7 @@ class Index extends Common
 
                 $result = $db->query($table['create_sql']);
 
-                $langStr = trans('install') . L('controller') . '&nbsp;' . $control['control_info'] . '&nbsp;' . L('table') . $table['table_info'] . $tableName;
+                $langStr = trans('install') . trans('controller') . '&nbsp;' . $control['control_info'] . '&nbsp;' . trans('table') . $table['table_info'] . $tableName;
                 if ($result) {
                     $createTablesSuccess++;
                     $langStr .= trans('success');
@@ -278,13 +265,13 @@ class Index extends Common
         }
 
         //返回安装报告
-        $langStr = trans('success') . L('initialize') . $createTablesSuccess . L('table') . L('error') . $createTablesError . L('table');
+        $langStr = trans('success') . trans('initialize') . $createTablesSuccess . trans('table') . trans('error') . $createTablesError . trans('table');
         if (0 == $createTablesError) {
             $langStr .= trans('three_second_next_setp');
             echo '<script type="text/javascript">show_install_message("#show_box","' . $langStr . '","success")</script>';
             echo '<script type="text/javascript">setTimeout(\'window.location.href=\"' . route('setp4') . '\"\',3000)</script>';
         } else {
-            $buttonStr = '<a class=\"mr30 w100 btn btn-success\" href=\"' . route('setp2') . '\">' . trans('previous') . L('setp') . '</a>';
+            $buttonStr = '<a class=\"mr30 w100 btn btn-success\" href=\"' . route('setp2') . '\">' . trans('previous') . trans('setp') . '</a>';
             echo '<script type="text/javascript">show_install_message("#show_box","' . $buttonStr . $langStr . '","danger")</script>';
         }
         ob_flush();
@@ -303,7 +290,7 @@ class Index extends Common
         $article = htmlspecialchars_decode(F('install_end', '', XKMS_ARTICLES));
         $article = str_replace('{$appName}', APP_NAME, $article);
         $this->assign('article', $article); //读取安装完毕的文字
-        $this->assign('setp', trans('pfsetp', ['setp' => L('four'), 'count' => L('four')]));
+        $this->assign('setp', trans('pfsetp', ['setp' => trans('four'), 'count' => trans('four')]));
         $this->assign('title', trans('setp4_title'));
         $this->display();
     }
@@ -351,12 +338,31 @@ return {$configStr};
 ?>
 EOF;
                 file_put_contents(CONF_PATH . 'database.php', $putConfig);
-                $result = ['status' => true,
-                           'info'   => ['msg'  => $currentDate . trans('save_config_success') . L('three_second_next_setp'),
-                                        'type' => 3]];
+                $result = [
+                    'status' => true,
+                    'info'   => [
+                        'msg'  => $currentDate . trans('save_config_success') . trans('three_second_next_setp'),
+                        'type' => 3,
+                    ],
+                ];
                 return $result;
                 break;
         }
+    }
+
+    private function _getDatabases()
+    {
+        //不显示的数据库
+        $notListDatabase = ['information_schema', 'mysql', 'performance_schema'];
+        $databaseList    = DB::select('show databases');
+        $reCompareInfo = [];
+        foreach (DB::select('show databases') as $db_key => $row) {
+            if (in_array($row->Database, $notListDatabase)) {
+                continue;
+            }
+            $reCompareInfo[] = $row->Database;
+        }
+        return $reCompareInfo;
     }
 
     //返回数据库基本信息$database = true  和 已有数据库列表$database = false
@@ -474,25 +480,26 @@ EOF;
     {
         $controller_path = app_path('Http/Controllers/' . $name);
         $controllers     = scandir($controller_path);
-        $route_cfg_str = '<pre>';
+        $route_cfg_str   = '<pre>';
         foreach ($controllers as $controller) {
-            if('.' == $controller || '..' == $controller)continue;
+            if ('.' == $controller || '..' == $controller) {
+                continue;
+            }
             $controller_file = $controller_path . '/' . $controller;
-            $file_content = file_get_contents($controller_file);
-            preg_match_all('/public function ([^(_]+)/',$file_content,$matchs);
+            $file_content    = file_get_contents($controller_file);
+            preg_match_all('/public function ([^(_]+)/', $file_content, $matchs);
 
-            $controller_name = basename($controller,'.php');
+            $controller_name = basename($controller, '.php');
             $route_cfg_str .= "Route::group([
     'as'        => '$controller_name::',
     //'middleware'=>'auth',
     'prefix'    => '$controller_name',
 ], function () {
 ";
-            foreach($matchs[1] as $method)
-            {
-                $route_cfg_str .=  "    Route::get('$method', ['as' => '$method', 'uses' => '$controller_name@$method']);".PHP_EOL;
+            foreach ($matchs[1] as $method) {
+                $route_cfg_str .= "    Route::get('$method', ['as' => '$method', 'uses' => '$controller_name@$method']);" . PHP_EOL;
             }
-            $route_cfg_str .=  "});
+            $route_cfg_str .= "});
 ";
         }
         return $route_cfg_str . '</pre>';

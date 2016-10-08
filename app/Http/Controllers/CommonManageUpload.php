@@ -78,7 +78,7 @@ class CommonManageUploadController
             }
         }
         //根据path参数，设置各路径和URL
-        $getPath = I('get.path');
+        $getPath = request('get.path');
         if (!$getPath) {
             $currentPath     = $rootPath;
             $currentUrl      = $rootUrl;
@@ -90,7 +90,7 @@ class CommonManageUploadController
             $currentDirPath = $getPath;
             $moveupDirPath  = preg_replace('/(.*?)[^\/]+\/$/', '$1', $currentDirPath);
         }
-        $order = I('get.order') ? I('get.order') : 'name';
+        $order = request('get.order') ? request('get.order') : 'name';
 
         //不允许使用..移动到上一级目录
         if (preg_match('/\.\./', $currentPath)) {
@@ -143,7 +143,7 @@ class CommonManageUploadController
         }
         //匿名函数phpversion>5.3.0
         usort($fileList, function ($a, $b) {
-            $order = I('get.order', null, 'strtolower');
+            $order = request('get.order', null, 'strtolower');
             if ($a['is_dir'] && !$b['is_dir']) {
                 return -1;
             } else if (!$a['is_dir'] && $b['is_dir']) {
@@ -201,7 +201,7 @@ class CommonManageUploadController
             'media' => array('swf', 'flv', 'mp3', 'wav', 'wma', 'wmv', 'mid', 'avi', 'mpg', 'asf', 'rm', 'rmvb'),
             'file'  => array('doc', 'docx', 'xls', 'xlsx', 'ppt', 'htm', 'html', 'txt', 'zip', 'rar', 'gz', 'bz2'),
         );
-        $dirName = I('get.dir') ? I('get.dir') : '';
+        $dirName = request('get.dir') ? request('get.dir') : '';
         if (empty($allowArr[$dirName]) && '' != $dirName) {
             $this->kind_json("Invalid Directory name.");
             return false;
@@ -210,7 +210,7 @@ class CommonManageUploadController
             $dirName .= '/';
         }
 
-        switch (I('t')) {
+        switch (request('t')) {
             case 'kindeditor':
                 $path = 'attached/';
                 break;

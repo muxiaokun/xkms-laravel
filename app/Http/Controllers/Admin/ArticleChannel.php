@@ -13,9 +13,9 @@ class ArticleChannel extends Backend
         $ArticleChannelModel = D('ArticleChannel');
         //建立where
         $whereValue                      = '';
-        $whereValue                      = I('name');
+        $whereValue                      = request('name');
         $whereValue && $where['name']    = array('like', '%' . $whereValue . '%');
-        $whereValue                      = I('if_show');
+        $whereValue                      = request('if_show');
         $whereValue && $where['if_show'] = (1 == $whereValue) ? 1 : 0;
         if (1 != session('backend_info.id')) {
             $allowChannel = $ArticleChannelModel->mFind_allow();
@@ -28,8 +28,8 @@ class ArticleChannel extends Backend
 
         //初始化where_info
         $whereInfo            = array();
-        $whereInfo['name']    = array('type' => 'input', 'name' => trans('channel') . L('name'));
-        $whereInfo['if_show'] = array('type' => 'select', 'name' => trans('yes') . L('no') . L('show'), 'value' => array(1 => L('show'), 2 => L('hidden')));
+        $whereInfo['name']    = array('type' => 'input', 'name' => trans('channel') . trans('name'));
+        $whereInfo['if_show'] = array('type' => 'select', 'name' => trans('yes') . trans('no') . trans('show'), 'value' => array(1 => trans('show'), 2 => trans('hidden')));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -39,7 +39,7 @@ class ArticleChannel extends Backend
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', trans('channel') . L('management'));
+        $this->assign('title', trans('channel') . trans('management'));
         $this->display();
     }
 
@@ -55,16 +55,16 @@ class ArticleChannel extends Backend
             $data                = $this->makeData();
             $resultAdd          = $ArticleChannelModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('channel') . L('add') . L('success'), route('index'));
+                $this->success(trans('channel') . trans('add') . trans('success'), route('index'));
                 return;
             } else {
-                $this->error(trans('channel') . L('add') . L('error'), route('add'));
+                $this->error(trans('channel') . trans('add') . trans('error'), route('add'));
             }
         }
 
         $this->addEditCommon();
 
-        $this->assign('title', trans('add') . L('channel'));
+        $this->assign('title', trans('add') . trans('channel'));
         $this->display('addedit');
     }
 
@@ -73,20 +73,20 @@ class ArticleChannel extends Backend
     {
         $ArticleChannelModel = D('ArticleChannel');
         if (IS_AJAX) {
-            $id        = I('get.id');
+            $id        = request('get.id');
             $editInfo = $ArticleChannelModel->mFind($id);
             $this->ajaxReturn($this->_add_edit_category_common($editInfo));
             return;
         }
 
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         if (1 != session('backend_info.id')
             && !mInArray($id, $ArticleChannelModel->mFind_allow())) {
-            $this->error(trans('none') . L('privilege') . L('edit') . L('channel'), route('index'));
+            $this->error(trans('none') . trans('privilege') . trans('edit') . trans('channel'), route('index'));
         }
 
         $maAllowArr = $ArticleChannelModel->mFind_allow('ma');
@@ -100,11 +100,11 @@ class ArticleChannel extends Backend
             }
             $resultEdit = $ArticleChannelModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('channel') . L('edit') . L('success'), route('index'));
+                $this->success(trans('channel') . trans('edit') . trans('success'), route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
-                $this->error(trans('channel') . L('edit') . L('error'), $errorGoLink);
+                $this->error(trans('channel') . trans('edit') . trans('error'), $errorGoLink);
             }
         }
 
@@ -133,16 +133,16 @@ class ArticleChannel extends Backend
         $this->assign('edit_info', $editInfo);
         $this->addEditCommon($editInfo);
 
-        $this->assign('title', trans('edit') . L('channel'));
+        $this->assign('title', trans('edit') . trans('channel'));
         $this->display('addedit');
     }
 
     //删除
     public function del()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $ArticleChannelModel = D('ArticleChannel');
@@ -150,22 +150,22 @@ class ArticleChannel extends Backend
         if (1 != session('backend_info.id')
             && !mInArray($id, $ArticleChannelModel->mFind_allow('ma'))
         ) {
-            $this->error(trans('none') . L('privilege') . L('del') . L('channel'), route('index'));
+            $this->error(trans('none') . trans('privilege') . trans('del') . trans('channel'), route('index'));
         }
 
         //解除文章和被删除频道的关系
         $ArticleModel = D('Article');
         $resultClean = $ArticleModel->mClean($id, 'channel_id');
         if (!$resultClean) {
-            $this->error(trans('article') . L('clear') . L('channel') . L('error'), route('index'));
+            $this->error(trans('article') . trans('clear') . trans('channel') . trans('error'), route('index'));
         }
 
         $resultDel = $ArticleChannelModel->mDel($id);
         if ($resultDel) {
-            $this->success(trans('channel') . L('del') . L('success'), route('index'));
+            $this->success(trans('channel') . trans('del') . trans('success'), route('index'));
             return;
         } else {
-            $this->error(trans('channel') . L('del') . L('error'), route('index'));
+            $this->error(trans('channel') . trans('del') . trans('error'), route('index'));
         }
     }
 
@@ -210,11 +210,11 @@ class ArticleChannel extends Backend
     private function makeData()
     {
         //初始化参数
-        $name        = I('name');
-        $keywords    = I('keywords');
-        $description = I('description');
-        $other       = I('other');
-        $manageId   = I('manage_id');
+        $name        = request('name');
+        $keywords    = request('keywords');
+        $description = request('description');
+        $other       = request('other');
+        $manageId   = request('manage_id');
         $addId      = session('backend_info.id');
         if (('add' == ACTION_NAME || null !== $manageId)
             && !in_array($addId, $manageId)
@@ -222,15 +222,15 @@ class ArticleChannel extends Backend
             $manageId[] = $addId;
         }
 
-        $manageGroupId       = I('manage_group_id');
-        $accessGroupId       = I('access_group_id');
-        $ifShow               = I('if_show');
-        $template              = I('template');
-        $categoryList         = I('category_list', array());
-        $sLimit               = I('s_limit');
-        $templateList         = I('template_list');
-        $listTemplateList    = I('list_template_list');
-        $articleTemplateList = I('article_template_list');
+        $manageGroupId       = request('manage_group_id');
+        $accessGroupId       = request('access_group_id');
+        $ifShow               = request('if_show');
+        $template              = request('template');
+        $categoryList         = request('category_list', array());
+        $sLimit               = request('s_limit');
+        $templateList         = request('template_list');
+        $listTemplateList    = request('list_template_list');
+        $articleTemplateList = request('article_template_list');
         $extInfo              = array();
         foreach ($categoryList as $id) {
             $extInfo[$id] = array(
@@ -261,7 +261,7 @@ class ArticleChannel extends Backend
         $this->assign('article_category_list', $this->_add_edit_category_common($channelInfo));
 
         $ArticleChannelModel = D('ArticleChannel');
-        $id                  = I('id');
+        $id                  = request('id');
         $managePrivilgeg    = in_array($id, $ArticleChannelModel->mFind_allow('ma')) || 1 == session('backend_info.id');
         $this->assign('manage_privilege', $managePrivilgeg);
 
@@ -277,7 +277,7 @@ class ArticleChannel extends Backend
     {
         $ArticleCategoryModel           = D('ArticleCategory');
         $where['parent_id']             = 0;
-        $whereValue                        = I('parent_id');
+        $whereValue                        = request('parent_id');
         $whereValue && $where['parent_id'] = $whereValue;
 
         $articleCategoryList = $ArticleCategoryModel->mSelect($where, $ArticleCategoryModel->where($where)->count());

@@ -14,7 +14,7 @@ class Quests extends Backend
 
         //建立where
         $whereValue                         = '';
-        $whereValue                         = I('title');
+        $whereValue                         = request('title');
         $whereValue && $where['title']      = array('like', '%' . $whereValue . '%');
         $whereValue                         = mMktimeRange('start_time');
         $whereValue && $where['start_time'] = $whereValue;
@@ -29,8 +29,8 @@ class Quests extends Backend
         //初始化where_info
         $whereInfo               = array();
         $whereInfo['title']      = array('type' => 'input', 'name' => trans('title'));
-        $whereInfo['start_time'] = array('type' => 'time', 'name' => trans('start') . L('time'));
-        $whereInfo['end_time']   = array('type' => 'time', 'name' => trans('end') . L('time'));
+        $whereInfo['start_time'] = array('type' => 'time', 'name' => trans('start') . trans('time'));
+        $whereInfo['end_time']   = array('type' => 'time', 'name' => trans('end') . trans('time'));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -42,7 +42,7 @@ class Quests extends Backend
         $batchHandle['del']          = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', trans('quests') . L('management'));
+        $this->assign('title', trans('quests') . trans('management'));
         $this->display();
     }
 
@@ -54,22 +54,22 @@ class Quests extends Backend
             $data        = $this->makeData();
             $resultAdd  = $QuestsModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('quests') . L('add') . L('success'), route('Quests/index'));
+                $this->success(trans('quests') . trans('add') . trans('success'), route('Quests/index'));
                 return;
             } else {
-                $this->error(trans('quests') . L('add') . L('error'), route('Quests/add'));
+                $this->error(trans('quests') . trans('add') . trans('error'), route('Quests/add'));
             }
         }
-        $this->assign('title', trans('add') . L('quests'));
+        $this->assign('title', trans('add') . trans('quests'));
         $this->display('addedit');
     }
 
     //编辑
     public function edit()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $QuestsModel = D('Quests');
@@ -77,29 +77,29 @@ class Quests extends Backend
             $data        = $this->makeData();
             $resultEdit = $QuestsModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('quests') . L('edit') . L('success'), route('Quests/index'));
+                $this->success(trans('quests') . trans('edit') . trans('success'), route('Quests/index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
-                $this->error(trans('quests') . L('edit') . L('error'), $errorGoLink);
+                $this->error(trans('quests') . trans('edit') . trans('error'), $errorGoLink);
             }
         }
         $editInfo = $QuestsModel->mFind($id);
         $this->assign('edit_info', $editInfo);
 
-        $this->assign('title', trans('edit') . L('quests'));
+        $this->assign('title', trans('edit') . trans('quests'));
         $this->display('addedit');
     }
 
     //删除
     public function del()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('Quests/index'));
+            $this->error(trans('id') . trans('error'), route('Quests/index'));
         }
 
-        $clear       = I('clear');
+        $clear       = request('clear');
         $QuestsModel = D('Quests');
         if (!$clear) {
             $resultDel = $QuestsModel->mDel($id);
@@ -113,33 +113,33 @@ class Quests extends Backend
             if ($clear) {
                 if ($resultClear) {
                     $QuestsModel->where(array('id' => $id))->data(array('current_portion' => 0))->save();
-                    $this->success(trans('quests') . L('clear') . L('success'), route('Quests/index'));
+                    $this->success(trans('quests') . trans('clear') . trans('success'), route('Quests/index'));
                     return;
                 } else {
-                    $this->error(trans('quests') . L('clear') . L('error'), route('Quests/index'));
+                    $this->error(trans('quests') . trans('clear') . trans('error'), route('Quests/index'));
 
                 }
             }
-            $this->success(trans('quests') . L('del') . L('success'), route('Quests/index'));
+            $this->success(trans('quests') . trans('del') . trans('success'), route('Quests/index'));
             return;
         } else {
-            $this->error(trans('quests') . L('del') . L('error'), route('Quests/edit', array('id' => $id)));
+            $this->error(trans('quests') . trans('del') . trans('error'), route('Quests/edit', array('id' => $id)));
         }
     }
 
     //构造数据
     private function makeData()
     {
-        $title         = I('title');
-        $maxPortion   = I('max_portion');
-        $startTime    = I('start_time');
-        $endTime      = I('end_time');
+        $title         = request('title');
+        $maxPortion   = request('max_portion');
+        $startTime    = request('start_time');
+        $endTime      = request('end_time');
         $startTime    = mMktime($startTime, true);
         $endTime      = mMktime($endTime, true);
-        $startContent = I('start_content');
-        $endContent   = I('end_content');
-        $accessInfo   = I('access_info');
-        $extInfo      = I('ext_info');
+        $startContent = request('start_content');
+        $endContent   = request('end_content');
+        $accessInfo   = request('access_info');
+        $extInfo      = request('ext_info');
         foreach ($extInfo as &$info) {
             $info = htmlspecialchars_decode($info);
             $info = json_decode($info, true);

@@ -46,7 +46,7 @@ class Comment extends Frontend
                 }
 
                 $addResult     = $CommentModel->mAdd($data);
-                $result['info'] = ($addResult) ? trans('send') . L('success') : L('send') . L('error');
+                $result['info'] = ($addResult) ? trans('send') . trans('success') : trans('send') . trans('error');
                 break;
             case 'get_data':
                 if (!$data['controller'] || !$data['item']) {
@@ -80,7 +80,7 @@ class Comment extends Frontend
         $memberId = session('frontend_info.id');
         $memberId = ($memberId) ? $memberId : 0;
 
-        $data                                     = I('data');
+        $data                                     = request('data');
         (null !== $memberId) && $data['send_id'] = $memberId;
 
         return $data;

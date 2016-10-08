@@ -19,12 +19,12 @@ class AdminLog extends Backend
         $whereValue                       = '';
         $whereValue                       = mMktimeRange('add_time');
         $whereValue && $where['add_time'] = $whereValue;
-        $whereValue                       = I('admin_id');
+        $whereValue                       = request('admin_id');
         $whereValue && $where['admin_id'] = array(
             'in',
             $AdminModel->where(array('admin_name' => array('like', '%' . $whereValue . '%')))->mColumn2Array('id'),
         );
-        $whereValue                              = I('controller_name');
+        $whereValue                              = request('controller_name');
         $whereValue && $where['controller_name'] = $whereValue;
 
         //初始化翻页 和 列表数据
@@ -37,9 +37,9 @@ class AdminLog extends Backend
 
         //初始化where_info
         $whereInfo                    = array();
-        $whereInfo['add_time']        = array('type' => 'time', 'name' => trans('add') . L('time'));
-        $whereInfo['admin_id']        = array('type' => 'input', 'name' => trans('admin') . L('name'));
-        $whereInfo['controller_name'] = array('type' => 'input', 'name' => trans('controller') . L('name'));
+        $whereInfo['add_time']        = array('type' => 'time', 'name' => trans('add') . trans('time'));
+        $whereInfo['admin_id']        = array('type' => 'input', 'name' => trans('admin') . trans('name'));
+        $whereInfo['controller_name'] = array('type' => 'input', 'name' => trans('controller') . trans('name'));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -47,24 +47,24 @@ class AdminLog extends Backend
         $batchHandle['del'] = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', trans('admin') . L('log') . L('management'));
+        $this->assign('title', trans('admin') . trans('log') . trans('management'));
         $this->display();
     }
 
     //删除
     public function del()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $AdminLogModel = D('AdminLog');
         $resultDel    = $AdminLogModel->mDel($id);
         if ($resultDel) {
-            $this->success(trans('log') . L('del') . L('success'), route('index'));
+            $this->success(trans('log') . trans('del') . trans('success'), route('index'));
         } else {
-            $this->error(trans('log') . L('del') . L('error'), route('index'));
+            $this->error(trans('log') . trans('del') . trans('error'), route('index'));
         }
     }
 
@@ -78,9 +78,9 @@ class AdminLog extends Backend
         $AdminLogModel = D('AdminLog');
         $resultDel    = $AdminLogModel->mDel_all();
         if ($resultDel) {
-            $this->success(trans('log') . L('del') . L('success'), route('index'));
+            $this->success(trans('log') . trans('del') . trans('success'), route('index'));
         } else {
-            $this->error(trans('log') . L('del') . L('error'), route('index'));
+            $this->error(trans('log') . trans('del') . trans('error'), route('index'));
         }
     }
 

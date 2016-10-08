@@ -13,7 +13,7 @@ class Recruit extends Backend
         $RecruitModel = D('Recruit');
         //建立where
         $whereValue                         = '';
-        $whereValue                         = I('name');
+        $whereValue                         = request('name');
         $whereValue && $where['name']       = array('like', '%' . $whereValue . '%');
         $whereValue                         = mMktimeRange('start_time');
         $whereValue && $where['start_time'] = $whereValue;
@@ -26,9 +26,9 @@ class Recruit extends Backend
 
         //初始化where_info
         $whereInfo               = array();
-        $whereInfo['name']       = array('type' => 'input', 'name' => trans('recruit') . L('name'));
-        $whereInfo['start_time'] = array('type' => 'time', 'name' => trans('start') . L('time'));
-        $whereInfo['end_time']   = array('type' => 'time', 'name' => trans('end') . L('time'));
+        $whereInfo['name']       = array('type' => 'input', 'name' => trans('recruit') . trans('name'));
+        $whereInfo['start_time'] = array('type' => 'time', 'name' => trans('start') . trans('time'));
+        $whereInfo['end_time']   = array('type' => 'time', 'name' => trans('end') . trans('time'));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -39,7 +39,7 @@ class Recruit extends Backend
         $batchHandle['del']       = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', trans('recruit') . L('management'));
+        $this->assign('title', trans('recruit') . trans('management'));
         $this->display();
     }
 
@@ -51,22 +51,22 @@ class Recruit extends Backend
             $data         = $this->makeData();
             $resultAdd   = $RecruitModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('recruit') . L('add') . L('success'), route('index'));
+                $this->success(trans('recruit') . trans('add') . trans('success'), route('index'));
                 return;
             } else {
-                $this->error(trans('recruit') . L('add') . L('error'), route('add'));
+                $this->error(trans('recruit') . trans('add') . trans('error'), route('add'));
             }
         }
-        $this->assign('title', trans('add') . L('recruit'));
+        $this->assign('title', trans('add') . trans('recruit'));
         $this->display('addedit');
     }
 
     //编辑
     public function edit()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $RecruitModel = D('Recruit');
@@ -74,27 +74,27 @@ class Recruit extends Backend
             $data        = $this->makeData();
             $resultEdit = $RecruitModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('recruit') . L('edit') . L('success'), route('index'));
+                $this->success(trans('recruit') . trans('edit') . trans('success'), route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
-                $this->error(trans('recruit') . L('edit') . L('error'), $errorGoLink);
+                $this->error(trans('recruit') . trans('edit') . trans('error'), $errorGoLink);
             }
         }
 
         $editInfo = $RecruitModel->mFind($id);
         $this->assign('edit_info', $editInfo);
 
-        $this->assign('title', trans('edit') . L('recruit'));
+        $this->assign('title', trans('edit') . trans('recruit'));
         $this->display('addedit');
     }
 
     //删除
     public function del()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $RecruitModel = D('Recruit');
@@ -103,10 +103,10 @@ class Recruit extends Backend
             $RecruitLogModel = D('RecruitLog');
             //TODO 需要定义数据列
             $resultDel      = $RecruitLogModel->mClean($id);
-            $this->success(trans('recruit') . L('del') . L('success'), route('index'));
+            $this->success(trans('recruit') . trans('del') . trans('success'), route('index'));
             return;
         } else {
-            $this->error(trans('recruit') . L('del') . L('error'), route('index'));
+            $this->error(trans('recruit') . trans('del') . trans('error'), route('index'));
         }
     }
 
@@ -114,14 +114,14 @@ class Recruit extends Backend
     private function makeData()
     {
         //初始化参数
-        $title           = I('title');
-        $explains        = I('explains');
-        $isEnable       = I('is_enable');
-        $currentPortion = I('current_portion');
-        $maxPortion     = I('max_portion');
-        $startTime      = mMktime(I('start_time'), true);
-        $endTime        = mMktime(I('end_time'), true);
-        $extInfo        = I('ext_info');
+        $title           = request('title');
+        $explains        = request('explains');
+        $isEnable       = request('is_enable');
+        $currentPortion = request('current_portion');
+        $maxPortion     = request('max_portion');
+        $startTime      = mMktime(request('start_time'), true);
+        $endTime        = mMktime(request('end_time'), true);
+        $extInfo        = request('ext_info');
 
         $data                                                                           = array();
         ('add' == ACTION_NAME || null !== $title) && $data['title']                     = $title;

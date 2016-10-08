@@ -19,16 +19,16 @@ class Article extends Frontend
     // 显示单一的文章
     public function article()
     {
-        $id         = I('id');
-        $channelId = I('channel_id');
+        $id         = request('id');
+        $channelId = request('channel_id');
         if (!$id) {
-            $this->error(trans('article') . L('id') . L('error'), route('Index/index'));
+            $this->error(trans('article') . trans('id') . trans('error'), route('Index/index'));
         }
 
         $ArticleModel = D('Article');
         $articleInfo = $ArticleModel->where($this->_get_article_where())->mFind($id);
         if (!$articleInfo) {
-            $this->error(trans('article') . L('by') . L('hidden'), route('Index/index'));
+            $this->error(trans('article') . trans('by') . trans('hidden'), route('Index/index'));
         }
 
         $ArticleModel->where(array('id' => $id))->setInc('hits');
@@ -46,7 +46,7 @@ class Article extends Frontend
         is_array($categoryInfo['access_group_id']) && $mFindAllows = array_merge($mFindAllows, $categoryInfo['access_group_id']);
         is_array($channelInfo['access_group_id']) && $mFindAllows  = array_merge($mFindAllows, $channelInfo['access_group_id']);
         if ($mFindAllows && !mInArray($memberGroupId, $mFindAllows)) {
-            $this->error(trans('none') . L('privilege') . L('access') . L('comma') . L('please') . L('login'), route('Member/index'));
+            $this->error(trans('none') . trans('privilege') . trans('access') . trans('comma') . trans('please') . trans('login'), route('Member/index'));
         }
 
         //缓存数据
@@ -76,16 +76,16 @@ class Article extends Frontend
     // 显示分类的 独立页面内容、文章列表、子级分类列表
     public function category()
     {
-        $cateId    = I('cate_id');
-        $channelId = I('channel_id');
+        $cateId    = request('cate_id');
+        $channelId = request('channel_id');
         if (!$cateId) {
-            $this->error(trans('category') . L('id') . L('error'), route('Index/index'));
+            $this->error(trans('category') . trans('id') . trans('error'), route('Index/index'));
         }
 
         $ArticleCategoryModel = D('ArticleCategory');
         $categoryInfo        = $ArticleCategoryModel->mFind($cateId);
         if (!$categoryInfo) {
-            $this->error(trans('category') . L('id') . L('error'), route('Index/index'));
+            $this->error(trans('category') . trans('id') . trans('error'), route('Index/index'));
         }
 
         $ArticleChannelModel = D('ArticleChannel');
@@ -97,11 +97,11 @@ class Article extends Frontend
         is_array($categoryInfo['access_group_id']) && $mFindAllows = array_merge($mFindAllows, $categoryInfo['access_group_id']);
         is_array($channelInfo['access_group_id']) && $mFindAllows  = array_merge($mFindAllows, $channelInfo['access_group_id']);
         if ($mFindAllows && !mInArray($memberGroupId, $mFindAllows)) {
-            $this->error(trans('none') . L('privilege') . L('access') . L('comma') . L('please') . L('login'), route('Member/index'));
+            $this->error(trans('none') . trans('privilege') . trans('access') . trans('comma') . trans('please') . trans('login'), route('Member/index'));
         }
 
         $template = $this->_get_template($cateId, $channelId);
-        if ($categoryInfo['is_content'] || I('is_content')) {
+        if ($categoryInfo['is_content'] || request('is_content')) {
             $template = $template['template'];
             //如果分类是单页面
             //缓存数据
@@ -151,7 +151,7 @@ class Article extends Frontend
     // 显示频道
     public function channel()
     {
-        $channelId = I('channel_id');
+        $channelId = request('channel_id');
         if (!$channelId) {
             $this->redirect('Index/index');
         }
@@ -164,7 +164,7 @@ class Article extends Frontend
         $mFindAllows                                               = array();
         is_array($channelInfo['access_group_id']) && $mFindAllows = array_merge($mFindAllows, $channelInfo['access_group_id']);
         if ($mFindAllows && !mInArray($memberGroupId, $mFindAllows)) {
-            $this->error(trans('none') . L('privilege') . L('access') . L('comma') . L('please') . L('login'), route('Member/index'));
+            $this->error(trans('none') . trans('privilege') . trans('access') . trans('comma') . trans('please') . trans('login'), route('Member/index'));
         }
 
         $this->assign('channel_info', $channelInfo);
@@ -176,14 +176,14 @@ class Article extends Frontend
     // 搜索文章
     public function search()
     {
-        $keyword = I('keyword');
+        $keyword = request('keyword');
         if ('' == $keyword) {
-            $this->error(trans('please') . L('input') . L('keywords'), route('Index/index'));
+            $this->error(trans('please') . trans('input') . trans('keywords'), route('Index/index'));
         }
         $keyword = '%' . $keyword . '%';
 
         $where   = $this->_get_article_where();
-        $cateId = I('cate_id');
+        $cateId = request('cate_id');
         if ($cateId) {
             $ArticleCategoryModel                   = D('ArticleCategory');
             $where['cate_id']                       = array('in', $ArticleCategoryModel->mFind_child_id($cateId));
@@ -192,10 +192,10 @@ class Article extends Frontend
             $attributeWhere && $where['attribute'] = $attributeWhere;
             $this->assign('category_position', $this->_get_category_position($cateId));
         }
-        $channelId                         = I('cahnnel_id');
+        $channelId                         = request('cahnnel_id');
         $channelId && $where['channel_id'] = $channelId;
 
-        $type = I('type');
+        $type = request('type');
         if (preg_match('/extend\[(.*?)\]/', $type, $matches)) {
             $type   = 'extend';
             $extend = $matches[1];
@@ -228,9 +228,9 @@ class Article extends Frontend
         $this->assign('article_list', $articleLsit);
         $this->assign('article_list_count', $ArticleModel->mGetPageCount($where));
 
-        $request = I();
+        $request = request();
         $this->assign('request', $request);
-        $this->assign('title', trans('search') . L('article'));
+        $this->assign('title', trans('search') . trans('article'));
         $template = $this->_get_template(0);
         $this->display($template['list_template']);
     }

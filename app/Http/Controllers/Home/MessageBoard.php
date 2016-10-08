@@ -9,15 +9,15 @@ class MessageBoard extends Frontend
 {
     public function index()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'));
+            $this->error(trans('id') . trans('error'));
         }
 
         $MessageBoardModel  = D('MessageBoard');
         $messageBoardInfo = $MessageBoardModel->mFind($id);
         if (!$messageBoardInfo) {
-            $this->error(trans('messageboard') . L('dont') . L('exists'));
+            $this->error(trans('messageboard') . trans('dont') . trans('exists'));
         }
 
         $this->assign('message_board_info', $messageBoardInfo);
@@ -27,7 +27,7 @@ class MessageBoard extends Frontend
         $where['audit_id']      = array('gt', 0);
         $messageBoardLogList = $MessageBoardLogModel->order('add_time desc')->mSelect($where, true);
         foreach ($messageBoardLogList as &$messageBoardLog) {
-            $messageBoardLog['reply_info'] = ($messageBoardLog['reply_info']) ? $messageBoardLog['reply_info'] : trans('admin') . L('reply') . L('empty');
+            $messageBoardLog['reply_info'] = ($messageBoardLog['reply_info']) ? $messageBoardLog['reply_info'] : trans('admin') . trans('reply') . trans('empty');
             $messageBoardLog['send_info']  = json_decode($messageBoardLog['send_info'], true);
         }
         $this->assign('message_board_log_list', $messageBoardLogList);
@@ -44,32 +44,32 @@ class MessageBoard extends Frontend
     public function add()
     {
         if (IS_POST) {
-            $id = I('id');
+            $id = request('id');
             if (!$id) {
-                $this->error(trans('id') . L('error'));
+                $this->error(trans('id') . trans('error'));
             }
 
             $MessageBoardModel  = D('MessageBoard');
             $messageBoardInfo = $MessageBoardModel->mFind($id);
             if (!$messageBoardInfo) {
-                $this->error(trans('id') . L('error'));
+                $this->error(trans('id') . trans('error'));
             }
 
-            if (!$this->verifyCheck(I('verify')) && config('SYS_FRONTEND_VERIFY')) {
-                $this->error(trans('verify_code') . L('error'), route('index', array('id' => $id)));
+            if (!$this->verifyCheck(request('verify')) && config('SYS_FRONTEND_VERIFY')) {
+                $this->error(trans('verify_code') . trans('error'), route('index', array('id' => $id)));
             }
             $submitTime  = 300;
             $MessageBoard = D('MessageBoardLog');
             if ($MessageBoard->check_dont_submit($submitTime)) {
-                $this->error($submitTime . trans('second') . L('later') . L('again') . L('send'), route('index', array('id' => $id)));
+                $this->error($submitTime . trans('second') . trans('later') . trans('again') . trans('send'), route('index', array('id' => $id)));
             }
             $data       = $this->makeData();
             $resultAdd = $MessageBoard->mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('send') . L('success'), route('index', array('id' => $id)));
+                $this->success(trans('send') . trans('success'), route('index', array('id' => $id)));
                 return;
             } else {
-                $this->error(trans('send') . L('error'), route('index', array('id' => $id)));
+                $this->error(trans('send') . trans('error'), route('index', array('id' => $id)));
             }
         }
     }
@@ -78,8 +78,8 @@ class MessageBoard extends Frontend
     private function makeData()
     {
 
-        $id        = I('id');
-        $sendInfo = I('send_info');
+        $id        = request('id');
+        $sendInfo = request('send_info');
         foreach ($sendInfo as &$info) {
             if (is_array($info)) {
                 $info = implode(',', $info);
@@ -93,7 +93,7 @@ class MessageBoard extends Frontend
         foreach ($sendInfo as $name => $value) {
             //合法
             if (!is_array($config[$name])) {
-                $this->error(trans('submit') . L('error'), route('index', array('id' => $id)));
+                $this->error(trans('submit') . trans('error'), route('index', array('id' => $id)));
             }
 
             //必选
@@ -103,7 +103,7 @@ class MessageBoard extends Frontend
 
             //长度
             if (0 < $config[$name]['msg_length'] && $config[$name]['msg_length'] < strlen($value)) {
-                $this->error($name . trans('max') . L('length') . $config[$name]['msg_length'], route('index', array('id' => $id)));
+                $this->error($name . trans('max') . trans('length') . $config[$name]['msg_length'], route('index', array('id' => $id)));
             }
         }
 

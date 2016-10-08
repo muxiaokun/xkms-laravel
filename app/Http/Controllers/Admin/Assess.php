@@ -15,14 +15,14 @@ class Assess extends Backend
         $where            = [];
         //建立where
         $whereValue = '';
-        $whereValue = I('title');
+        $whereValue = request('title');
         $whereValue && $where['title'] = ['like', '%' . $whereValue . '%'];
-        $whereValue = I('group_level');
+        $whereValue = request('group_level');
         $whereValue && $where['group_level'] = $MemberGroupModel->where(['name' => ['like',
             '%' . $whereValue . '%']])->mColumn2Array('id');
         $whereValue = mMktimeRange('start_time');
         $whereValue && $where['start_time'] = $whereValue;
-        $whereValue = I('is_enable');
+        $whereValue = request('is_enable');
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
@@ -36,11 +36,11 @@ class Assess extends Backend
         //初始化where_info
         $whereInfo                = [];
         $whereInfo['title']       = ['type' => 'input', 'name' => trans('title')];
-        $whereInfo['group_level'] = ['type' => 'input', 'name' => trans('assess') . L('group')];
-        $whereInfo['start_time']  = ['type' => 'time', 'name' => trans('add') . L('time')];
+        $whereInfo['group_level'] = ['type' => 'input', 'name' => trans('assess') . trans('group')];
+        $whereInfo['start_time']  = ['type' => 'time', 'name' => trans('add') . trans('time')];
         $whereInfo['is_enable']   = ['type'  => 'select',
-                                     'name'  => trans('yes') . L('no') . L('enable'),
-                                     'value' => [1 => trans('enable'), 2 => L('disable')]];
+                                     'name'  => trans('yes') . trans('no') . trans('enable'),
+                                     'value' => [1 => trans('enable'), 2 => trans('disable')]];
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -51,7 +51,7 @@ class Assess extends Backend
         $batchHandle['del']      = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', trans('assess') . L('management'));
+        $this->assign('title', trans('assess') . trans('management'));
         $this->display();
     }
 
@@ -63,24 +63,24 @@ class Assess extends Backend
             $data        = $this->makeData();
             $resultAdd   = $AssessModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('assess') . L('add') . L('success'), route('index'));
+                $this->success(trans('assess') . trans('add') . trans('success'), route('index'));
 
                 return;
             } else {
-                $this->error(trans('assess') . L('add') . L('error'), route('add'));
+                $this->error(trans('assess') . trans('add') . trans('error'), route('add'));
             }
         }
 
-        $this->assign('title', trans('assess') . L('add'));
+        $this->assign('title', trans('assess') . trans('add'));
         $this->display('addedit');
     }
 
     //编辑
     public function edit()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $AssessModel = D('Assess');
@@ -88,12 +88,12 @@ class Assess extends Backend
             $data       = $this->makeData();
             $resultEdit = $AssessModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('assess') . L('edit') . L('success'), route('index'));
+                $this->success(trans('assess') . trans('edit') . trans('success'), route('index'));
 
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('assess') . L('edit') . L('error'), $errorGoLink);
+                $this->error(trans('assess') . trans('edit') . trans('error'), $errorGoLink);
             }
         }
 
@@ -102,26 +102,26 @@ class Assess extends Backend
         $editInfo['group_name'] = $MemberGroupModel->mFindColumn($editInfo['group_level'], 'name');
         $this->assign('edit_info', $editInfo);
 
-        $this->assign('title', trans('assess') . L('edit'));
+        $this->assign('title', trans('assess') . trans('edit'));
         $this->display('addedit');
     }
 
     //删除
     public function del()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $AssessModel = D('Assess');
         $resultDel   = $AssessModel->mDel($id);
         if ($resultDel) {
-            $this->success(trans('assess') . L('del') . L('success'), route('index'));
+            $this->success(trans('assess') . trans('del') . trans('success'), route('index'));
 
             return;
         } else {
-            $this->error(trans('assess') . L('del') . L('error'), route('index'));
+            $this->error(trans('assess') . trans('del') . trans('error'), route('index'));
         }
     }
 
@@ -149,19 +149,19 @@ class Assess extends Backend
     private function makeData()
     {
         //初始化参数
-        $id            = I('get.id');
-        $title         = I('title');
-        $explains      = I('explains');
-        $groupLevel    = I('group_level');
-        $startTime     = I('start_time');
-        $endTime       = I('end_time');
+        $id            = request('get.id');
+        $title         = request('title');
+        $explains      = request('explains');
+        $groupLevel    = request('group_level');
+        $startTime     = request('start_time');
+        $endTime       = request('end_time');
         $startTime     = mMktime($startTime, true);
         $endTime       = mMktime($endTime, true);
-        $isEnable      = I('is_enable');
-        $target        = I('target');
+        $isEnable      = request('is_enable');
+        $target        = request('target');
         $extInfo       = [];
         $gradeProject = [];
-        foreach (I('ext_info') as $value) {
+        foreach (request('ext_info') as $value) {
             $gradeProject[] = json_decode(str_replace('&quot;', '"', $value), true);
         }
         $extInfo = json_encode($gradeProject);

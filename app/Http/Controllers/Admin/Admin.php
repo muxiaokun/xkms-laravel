@@ -25,14 +25,14 @@ class Admin extends Backend
         }
         //建立where
         $whereValue = '';
-        $whereValue = I('admin_name');
+        $whereValue = request('admin_name');
         $whereValue && $where['admin_name'] = ['like', '%' . $whereValue . '%'];
-        $whereValue = I('group_id');
+        $whereValue = request('group_id');
         $whereValue && $where['group_id'] = $AdminGroupModel->where(['name' => ['like',
             '%' . $whereValue . '%']])->mColumn2Array('id');
         $whereValue = mMktimeRange('last_time');
         $whereValue && $where['last_time'] = $whereValue;
-        $whereValue = I('is_enable');
+        $whereValue = request('is_enable');
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
@@ -44,19 +44,19 @@ class Admin extends Backend
                 $admin['group_name'] .= $groupName;
             }
             !isset($admin['group_name']) && $admin['group_name'] = trans('empty');
-            !isset($admin['add_time']) && $admin['add_time'] = trans('system') . L('add');
+            !isset($admin['add_time']) && $admin['add_time'] = trans('system') . trans('add');
         }
         $this->assign('admin_list', $adminList);
         $this->assign('admin_list_count', $AdminModel->mGetPageCount($where));
 
         //初始化where_info
         $whereInfo               = [];
-        $whereInfo['admin_name'] = ['type' => 'input', 'name' => trans('admin') . L('name')];
-        $whereInfo['group_id']   = ['type' => 'input', 'name' => trans('group') . L('name')];
-        $whereInfo['last_time']  = ['type' => 'time', 'name' => trans('login') . L('time')];
+        $whereInfo['admin_name'] = ['type' => 'input', 'name' => trans('admin') . trans('name')];
+        $whereInfo['group_id']   = ['type' => 'input', 'name' => trans('group') . trans('name')];
+        $whereInfo['last_time']  = ['type' => 'time', 'name' => trans('login') . trans('time')];
         $whereInfo['is_enable']  = ['type'  => 'select',
-                                    'name'  => trans('yes') . L('no') . L('enable'),
-                                    'value' => [1 => trans('enable'), 2 => L('disable')]];
+                                    'name'  => trans('yes') . trans('no') . trans('enable'),
+                                    'value' => [1 => trans('enable'), 2 => trans('disable')]];
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -66,7 +66,7 @@ class Admin extends Backend
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', trans('admin') . L('management'));
+        $this->assign('title', trans('admin') . trans('management'));
         $this->display();
     }
 
@@ -78,24 +78,24 @@ class Admin extends Backend
             $data       = $this->makeData();
             $resultAdd  = $AdminModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('admin') . L('add') . L('success'), route('index'));
+                $this->success(trans('admin') . trans('add') . trans('success'), route('index'));
 
                 return;
             } else {
-                $this->error(trans('admin') . L('add') . L('error'), route('add'));
+                $this->error(trans('admin') . trans('add') . trans('error'), route('add'));
             }
         }
         $this->addEditCommon();
-        $this->assign('title', trans('admin') . L('add'));
+        $this->assign('title', trans('admin') . trans('add'));
         $this->display('addedit');
     }
 
     //编辑
     public function edit()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $AdminModel = D('Admin');
@@ -103,12 +103,12 @@ class Admin extends Backend
             $data       = $this->makeData();
             $resultEdit = $AdminModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('admin') . L('edit') . L('success'), route('index'));
+                $this->success(trans('admin') . trans('edit') . trans('success'), route('index'));
 
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('admin') . L('edit') . L('error'), $errorGoLink);
+                $this->error(trans('admin') . trans('edit') . trans('error'), $errorGoLink);
             }
         }
 
@@ -122,26 +122,26 @@ class Admin extends Backend
         $this->assign('edit_info', $editInfo);
 
         $this->addEditCommon();
-        $this->assign('title', trans('admin') . L('edit'));
+        $this->assign('title', trans('admin') . trans('edit'));
         $this->display('addedit');
     }
 
     //删除
     public function del()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $AdminModel = D('Admin');
         $resultDel  = $AdminModel->mDel($id);
         if ($resultDel) {
-            $this->success(trans('admin') . L('del') . L('success'), route('index'));
+            $this->success(trans('admin') . trans('del') . trans('success'), route('index'));
 
             return;
         } else {
-            $this->error(trans('admin') . L('del') . L('error'), route('index'));
+            $this->error(trans('admin') . trans('del') . trans('error'), route('index'));
         }
     }
 
@@ -162,7 +162,7 @@ class Admin extends Backend
             return;
         }
 
-        $this->assign('title', trans('admin') . L('config'));
+        $this->assign('title', trans('admin') . trans('config'));
         $this->display();
     }
 
@@ -174,7 +174,7 @@ class Admin extends Backend
             case 'admin_name':
                 //不能为空
                 if ('' == $data['admin_name']) {
-                    $result['info'] = trans('admin') . L('name') . L('not') . L('empty');
+                    $result['info'] = trans('admin') . trans('name') . trans('not') . trans('empty');
                     break;
                 }
                 //检查用户名规则
@@ -191,7 +191,7 @@ class Admin extends Backend
                 $AdminModel = D('Admin');
                 $adminInfo  = $AdminModel->mSelect(['admin_name' => $data['admin_name'], 'id' => ['neq', $data['id']]]);
                 if (0 < count($adminInfo)) {
-                    $result['info'] = trans('admin') . L('name') . L('exists');
+                    $result['info'] = trans('admin') . trans('name') . trans('exists');
                     break;
                 }
                 break;
@@ -199,7 +199,7 @@ class Admin extends Backend
                 if ($data['is_pwd'] || '' != $data['password']) {
                     //不能为空
                     if ('' == $data['password']) {
-                        $result['info'] = trans('pass') . L('not') . L('empty');
+                        $result['info'] = trans('pass') . trans('not') . trans('empty');
                         break;
                     }
                     //密码长度不能小于6
@@ -218,7 +218,7 @@ class Admin extends Backend
                     }
                     //不能为空
                     if ('' == $data['password_again']) {
-                        $result['info'] = trans('pass') . L('not') . L('empty');
+                        $result['info'] = trans('pass') . trans('not') . trans('empty');
                         break;
                     }
                 }
@@ -236,7 +236,7 @@ class Admin extends Backend
                 }
                 foreach ($data as $priv) {
                     if (!in_array($priv, $checkPrivilege)) {
-                        $result['info'] = trans('privilege') . L('submit') . L('error');
+                        $result['info'] = trans('privilege') . trans('submit') . trans('error');
                         break;
                     }
                 }
@@ -278,13 +278,13 @@ class Admin extends Backend
     private function makeData()
     {
         //初始化参数
-        $id            = I('id');
-        $adminName     = I('admin_name');
-        $password      = I('password');
-        $passwordAgain = I('password_again');
-        $groupId       = I('group_id');
-        $privilege     = I('privilege');
-        $isEnable      = I('is_enable');
+        $id            = request('id');
+        $adminName     = request('admin_name');
+        $password      = request('password');
+        $passwordAgain = request('password_again');
+        $groupId       = request('group_id');
+        $privilege     = request('privilege');
+        $isEnable      = request('is_enable');
 
         $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', ['id' => $id]);
         //检测初始化参数是否合法
@@ -324,7 +324,7 @@ class Admin extends Backend
             $AdminGroupModel = D('AdminGroup');
             $mFindAllow      = $AdminGroupModel->mFind_allow();
             if (!mInArray($groupId, $mFindAllow)) {
-                $this->error(trans('you') . L('none') . L('privilege'));
+                $this->error(trans('you') . trans('none') . trans('privilege'));
             }
 
         }

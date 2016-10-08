@@ -16,9 +16,9 @@ class Member extends Backend
 
         //建立where
         $whereValue                            = '';
-        $whereValue                            = I('member_name');
+        $whereValue                            = request('member_name');
         $whereValue && $where['member_name']   = array('like', '%' . $whereValue . '%');
-        $whereValue                            = I('group_id');
+        $whereValue                            = request('group_id');
         $whereValue && $where['group_id']      = $MemberGroupModel->mFindId(array('like', '%' . $whereValue . '%'));
         $whereValue                            = mMktimeRange('register_time');
         $whereValue && $where['register_time'] = $whereValue;
@@ -33,17 +33,17 @@ class Member extends Backend
                 $member['group_name'] .= $groupName;
             }
             !isset($member['group_name']) && $member['group_name'] = trans('empty');
-            !isset($member['add_time']) && $member['add_time']     = trans('system') . L('add');
+            !isset($member['add_time']) && $member['add_time']     = trans('system') . trans('add');
         }
         $this->assign('member_list', $memberList);
         $this->assign('member_list_count', $MemberModel->mGetPageCount($where));
 
         //初始化where_info
         $whereInfo                  = array();
-        $whereInfo['member_name']   = array('type' => 'input', 'name' => trans('member') . L('name'));
-        $whereInfo['group_id']      = array('type' => 'input', 'name' => trans('group') . L('name'));
-        $whereInfo['register_time'] = array('type' => 'time', 'name' => trans('register') . L('time'));
-        $whereInfo['last_time']     = array('type' => 'time', 'name' => trans('login') . L('time'));
+        $whereInfo['member_name']   = array('type' => 'input', 'name' => trans('member') . trans('name'));
+        $whereInfo['group_id']      = array('type' => 'input', 'name' => trans('group') . trans('name'));
+        $whereInfo['register_time'] = array('type' => 'time', 'name' => trans('register') . trans('time'));
+        $whereInfo['last_time']     = array('type' => 'time', 'name' => trans('login') . trans('time'));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -53,7 +53,7 @@ class Member extends Backend
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', trans('member') . L('management'));
+        $this->assign('title', trans('member') . trans('management'));
         $this->display();
     }
 
@@ -65,23 +65,23 @@ class Member extends Backend
             $data        = $this->makeData();
             $resultAdd  = $MemberModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('member') . L('add') . L('success'), route('index'));
+                $this->success(trans('member') . trans('add') . trans('success'), route('index'));
                 return;
             } else {
-                $this->error(trans('member') . L('add') . L('error'), route('add'));
+                $this->error(trans('member') . trans('add') . trans('error'), route('add'));
             }
         }
         $this->addEditCommon();
-        $this->assign('title', trans('member') . L('add'));
+        $this->assign('title', trans('member') . trans('add'));
         $this->display('addedit');
     }
 
     //编辑
     public function edit()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $MemberModel = D('Member');
@@ -89,11 +89,11 @@ class Member extends Backend
             $data        = $this->makeData(false);
             $resultEdit = $MemberModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('member') . L('edit') . L('success'), route('index'));
+                $this->success(trans('member') . trans('edit') . trans('success'), route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
-                $this->error(trans('member') . L('edit') . L('error'), $errorGoLink);
+                $this->error(trans('member') . trans('edit') . trans('error'), $errorGoLink);
             }
         }
 
@@ -107,30 +107,30 @@ class Member extends Backend
         $this->assign('edit_info', $editInfo);
 
         $this->addEditCommon();
-        $this->assign('title', trans('member') . L('edit'));
+        $this->assign('title', trans('member') . trans('edit'));
         $this->display('addedit');
     }
 
     //删除
     public function del()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         //不能删除root用户
         if ($id == 1) {
-            $this->error(trans('id') . L('not') . L('del'), route('index'));
+            $this->error(trans('id') . trans('not') . trans('del'), route('index'));
         }
 
         $MemberModel = D('Member');
         $resultDel  = $MemberModel->mDel($id);
         if ($resultDel) {
-            $this->success(trans('member') . L('del') . L('success'), route('index'));
+            $this->success(trans('member') . trans('del') . trans('success'), route('index'));
             return;
         } else {
-            $this->error(trans('member') . L('del') . L('error'), route('index'));
+            $this->error(trans('member') . trans('del') . trans('error'), route('index'));
         }
     }
 
@@ -151,7 +151,7 @@ class Member extends Backend
             return;
         }
 
-        $this->assign('title', trans('member') . L('config'));
+        $this->assign('title', trans('member') . trans('config'));
         $this->display();
     }
 
@@ -163,7 +163,7 @@ class Member extends Backend
             case 'member_name':
                 //不能为空
                 if ('' == $data['member_name']) {
-                    $result['info'] = trans('member') . L('name') . L('not') . L('empty');
+                    $result['info'] = trans('member') . trans('name') . trans('not') . trans('empty');
                     break;
                 }
                 //检查用户名规则
@@ -180,7 +180,7 @@ class Member extends Backend
                 $MemberModel = D('Member');
                 $memberInfo = $MemberModel->mSelect(array('member_name' => $data['member_name'], 'id' => array('neq', $data['id'])));
                 if (0 < count($memberInfo)) {
-                    $result['info'] = trans('member') . L('name') . L('exists');
+                    $result['info'] = trans('member') . trans('name') . trans('exists');
                     break;
                 }
                 break;
@@ -188,7 +188,7 @@ class Member extends Backend
                 if ($data['is_pwd'] || '' != $data['password']) {
                     //不能为空
                     if ('' == $data['password']) {
-                        $result['info'] = trans('pass') . L('not') . L('empty');
+                        $result['info'] = trans('pass') . trans('not') . trans('empty');
                         break;
                     }
                     //密码长度不能小于6
@@ -207,7 +207,7 @@ class Member extends Backend
                     }
                     //不能为空
                     if ('' == $data['password_again']) {
-                        $result['info'] = trans('pass') . L('not') . L('empty');
+                        $result['info'] = trans('pass') . trans('not') . trans('empty');
                         break;
                     }
                 }
@@ -216,7 +216,7 @@ class Member extends Backend
                 //检查邮箱名规则
                 preg_match('/^(\w+@[\w+\.]+\w+)$/', $data['email'], $matches);
                 if ('' != $data['email'] && $matches[1] != $data['email']) {
-                    $result['info'] = trans('email') . L('format') . L('error');
+                    $result['info'] = trans('email') . trans('format') . trans('error');
                     break;
                 }
                 break;
@@ -224,7 +224,7 @@ class Member extends Backend
                 //检查手机号规则
                 preg_match('/^(1\d{10})$/', $data['phone'], $matches);
                 if ('' != $data['phone'] && $matches[1] != $data['phone']) {
-                    $result['info'] = trans('phone') . L('format') . L('error');
+                    $result['info'] = trans('phone') . trans('format') . trans('error');
                     break;
                 }
                 break;
@@ -260,14 +260,14 @@ class Member extends Backend
     private function makeData($isPwd = true)
     {
         //初始化参数
-        $id             = I('id');
-        $memberName    = I('member_name');
-        $password       = I('password');
-        $passwordAgain = I('password_again');
-        $email          = I('email');
-        $phone          = I('phone');
-        $groupId       = I('group_id');
-        $isEnable      = I('is_enable');
+        $id             = request('id');
+        $memberName    = request('member_name');
+        $password       = request('password');
+        $passwordAgain = request('password_again');
+        $email          = request('email');
+        $phone          = request('phone');
+        $groupId       = request('group_id');
+        $isEnable      = request('is_enable');
 
         //检测初始化参数是否合法
         $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));

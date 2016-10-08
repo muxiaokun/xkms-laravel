@@ -18,7 +18,7 @@ class Message extends Backend
         $where['_complex']['receive_id'] = $where['_complex']['send_id'] = 0;
         //建立where
         $whereValue                         = '';
-        $whereValue                         = I('receive_id');
+        $whereValue                         = request('receive_id');
         $whereValue && $where['receive_id'] = array(
             'in',
             $MemberModel->where(array('member_name' => array('like', '%' . $whereValue . '%')))->mColumn2Array('id'),
@@ -36,8 +36,8 @@ class Message extends Backend
 
         //初始化where_info
         $whereInfo               = array();
-        $whereInfo['receive_id'] = array('type' => 'input', 'name' => trans('receive') . L('member'));
-        $whereInfo['send_time']  = array('type' => 'time', 'name' => trans('send') . L('time'));
+        $whereInfo['receive_id'] = array('type' => 'input', 'name' => trans('receive') . trans('member'));
+        $whereInfo['send_time']  = array('type' => 'time', 'name' => trans('send') . trans('time'));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -46,23 +46,23 @@ class Message extends Backend
         $batchHandle['del'] = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', trans('message') . L('management'));
+        $this->assign('title', trans('message') . trans('management'));
         $this->display();
     }
 
     //发送信息
     public function add()
     {
-        $receiveId   = I('receive_id');
+        $receiveId   = request('receive_id');
         $MessageModel = D('Message');
         if (IS_POST) {
-            $content = I('content');
+            $content = request('content');
             if (null == $content) {
-                $this->error(trans('content') . L('not') . L('empty'), route('index'));
+                $this->error(trans('content') . trans('not') . trans('empty'), route('index'));
             }
 
             if (null == $receiveId) {
-                $this->error(trans('receive') . L('member') . L('error'), route('index'));
+                $this->error(trans('receive') . trans('member') . trans('error'), route('index'));
             }
 
             $data = array(
@@ -72,10 +72,10 @@ class Message extends Backend
             );
             $resultAdd = $MessageModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('send') . L('success'), route('index'));
+                $this->success(trans('send') . trans('success'), route('index'));
                 return;
             } else {
-                $this->error(trans('send') . L('error'), route('index'));
+                $this->error(trans('send') . trans('error'), route('index'));
             }
         }
 
@@ -84,25 +84,25 @@ class Message extends Backend
             $this->assign('receive_info', $MemberModel->mFind($receiveId));
         }
 
-        $this->assign('title', trans('send') . L('message'));
+        $this->assign('title', trans('send') . trans('message'));
         $this->display();
     }
 
     //删除
     public function del()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $MessageModel = D('Message');
         $resultDel   = $MessageModel->mDel($id);
         if ($resultDel) {
-            $this->success(trans('message') . L('del') . L('success'), route('index'));
+            $this->success(trans('message') . trans('del') . trans('success'), route('index'));
             return;
         } else {
-            $this->error(trans('message') . L('del') . L('error'), route('index'));
+            $this->error(trans('message') . trans('del') . trans('error'), route('index'));
         }
     }
 

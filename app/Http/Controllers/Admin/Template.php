@@ -35,14 +35,14 @@ class Template extends Backend
     public function index()
     {
         //刷新模本文件列表
-        if (1 == I('refresh')) {
+        if (1 == request('refresh')) {
             $this->_refresh_view_files();
-            $this->success(trans('theme') . L('template') . L('refresh') . L('success'), route('index'));
+            $this->success(trans('theme') . trans('template') . trans('refresh') . trans('success'), route('index'));
             return;
         }
 
         //修改默认主题配置
-        $defaultTheme = I('default_theme');
+        $defaultTheme = request('default_theme');
         if (null !== $defaultTheme) {
             if ('empty' == $defaultTheme) {
                 $defaultTheme = '';
@@ -59,21 +59,21 @@ return {$configStr};
 ?>
 EOF;
             file_put_contents($this->config_file, $putConfig);
-            $this->success(trans('theme') . L('selection') . L('success'), route('index'));
+            $this->success(trans('theme') . trans('selection') . trans('success'), route('index'));
             return;
         }
 
         //修改模板文件信息
         if (IS_POST) {
             foreach ($this->view_files as $fileMd5 => $info) {
-                $postInfo                           = I($fileMd5);
+                $postInfo                           = request($fileMd5);
                 $this->view_files[$fileMd5]['name'] = $postInfo['name'];
                 $this->view_files[$fileMd5]['info'] = $postInfo['info'];
             }
 
             //保存缓存
             F($this->tpl_info_file, $this->view_files, $this->view_path);
-            $this->success(trans('theme') . L('info') . L('save') . L('success'), route('index'));
+            $this->success(trans('theme') . trans('info') . trans('save') . trans('success'), route('index'));
             return;
         }
 
@@ -88,7 +88,7 @@ EOF;
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', trans('theme') . L('template') . L('management'));
+        $this->assign('title', trans('theme') . trans('template') . trans('management'));
         $this->display();
     }
 
@@ -97,57 +97,57 @@ EOF;
     {
         if (IS_POST) {
             //添加时不可以创建新的目录 必须使用系统设置的后缀
-            $fileName = trim(I('file_name'));
+            $fileName = trim(request('file_name'));
             //处理2级目录
             $filePath = explode('/', $fileName);
             if (preg_match('/\.\.\//', $fileName)
                 || !preg_match('/' . str_ireplace('.', '\.', config('TMPL_TEMPLATE_SUFFIX')) . '$/', $fileName)
             ) {
-                $this->error(trans('file') . L('name') . L('error'), route('index'));
+                $this->error(trans('file') . trans('name') . trans('error'), route('index'));
             }
             if (!$fileName) {
-                $this->error(trans('file') . L('name') . L('not') . L('empty'), route('index'));
+                $this->error(trans('file') . trans('name') . trans('not') . trans('empty'), route('index'));
             }
 
             $filePath = $this->view_path . $fileName;
             $fileMd5  = ($filePath);
             if (is_array($this->view_files[$fileMd5])) {
-                $this->error(trans('file') . L('name') . L('repeat'), route('index'));
+                $this->error(trans('file') . trans('name') . trans('repeat'), route('index'));
             }
 
-            $content     = I('content', '', false);
+            $content     = request('content', '', false);
             $resultEdit = file_put_contents($filePath, $content);
             if (false !== $resultEdit) {
                 $this->_refresh_view_files();
-                $this->success(trans('theme') . L('template') . L('add') . L('success'), route('index'));
+                $this->success(trans('theme') . trans('template') . trans('add') . trans('success'), route('index'));
                 return;
             } else {
-                $this->error(trans('theme') . L('template') . L('add') . L('error'), route('index'));
+                $this->error(trans('theme') . trans('template') . trans('add') . trans('error'), route('index'));
             }
         }
 
-        $this->assign('title', trans('add') . L('theme') . L('template') . L('template'));
+        $this->assign('title', trans('add') . trans('theme') . trans('template') . trans('template'));
         $this->display('addedit');
     }
 
     //编辑
     public function edit()
     {
-        $id = I('id');
+        $id = request('id');
         if (!is_array($this->view_files[$id])) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $fileName = $this->view_files[$id]['file_name'];
         $filePath = $this->view_path . $fileName;
         if (IS_POST) {
-            $content     = I('content', '', false);
+            $content     = request('content', '', false);
             $resultEdit = file_put_contents($filePath, $content);
             if ($resultEdit) {
-                $this->success(trans('theme') . L('template') . L('edit') . L('success'), route('index'));
+                $this->success(trans('theme') . trans('template') . trans('edit') . trans('success'), route('index'));
                 return;
             } else {
-                $this->error(trans('theme') . L('template') . L('edit') . L('error'), route('index'));
+                $this->error(trans('theme') . trans('template') . trans('edit') . trans('error'), route('index'));
             }
         }
 
@@ -156,16 +156,16 @@ EOF;
         $this->assign('id', $id);
         $this->assign('edit_info', $editInfo);
 
-        $this->assign('title', trans('edit') . L('theme') . L('template') . L('template'));
+        $this->assign('title', trans('edit') . trans('theme') . trans('template') . trans('template'));
         $this->display('addedit');
     }
 
     //删除
     public function del()
     {
-        $id = I('id');
+        $id = request('id');
         if (!is_array($this->view_files[$id])) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $fileName  = $this->view_files[$id]['file_name'];
@@ -173,10 +173,10 @@ EOF;
         $resultDel = unlink($filePath);
         if ($resultDel) {
             $this->_refresh_view_files();
-            $this->success(trans('theme') . L('template') . L('del') . L('success'), route('index'));
+            $this->success(trans('theme') . trans('template') . trans('del') . trans('success'), route('index'));
             return;
         } else {
-            $this->error(trans('theme') . L('template') . L('del') . L('error'), route('index'));
+            $this->error(trans('theme') . trans('template') . trans('del') . trans('error'), route('index'));
         }
     }
 

@@ -10,7 +10,7 @@ class FrontendMember extends Frontend
         parent::_initialize();
         //是否启用了会员类的控制器
         if (!config('SYS_MEMBER_ENABLE')) {
-            $this->error(trans('member') . L('none') . L('enable'), route('Index/index'));
+            $this->error(trans('member') . trans('none') . trans('enable'), route('Index/index'));
         }
 
         if ($this->isLogin()) {
@@ -21,7 +21,7 @@ class FrontendMember extends Frontend
                 session('frontend_info', $frontendInfo);
             } else {
                 $this->doLogout();
-                $this->error(trans('login') . L('timeout'), route('Member/Index/index'));
+                $this->error(trans('login') . trans('timeout'), route('Member/Index/index'));
             }
 
             //检查管理员或者管理员组权限变动 先检查数量 提高效率
@@ -31,12 +31,12 @@ class FrontendMember extends Frontend
             $memberGroupPrivilege = $MemberGroupModel->mFind_privilege($memberInfo['group_id']);
             if ($frontendInfo['group_privilege'] !== $memberGroupPrivilege) {
                 $this->doLogout();
-                $this->error(trans('privilege') . L('change') . L('please') . L('login'), route('Member/index'));
+                $this->error(trans('privilege') . trans('change') . trans('please') . trans('login'), route('Member/index'));
             }
 
             //登录后 检查权限
             if (!$this->_check_privilege()) {
-                $this->error(trans('you') . L('none') . L('privilege'));
+                $this->error(trans('you') . trans('none') . trans('privilege'));
             }
 
             //建立会员中心左侧菜单
@@ -45,7 +45,7 @@ class FrontendMember extends Frontend
             //检测不登陆就可以访问的
             $allowAction['Member'] = array('index', 'login', 'verifyImg', 'ajax_api', 'register');
             if (!in_array(ACTION_NAME, $allowAction[CONTROLLER_NAME])) {
-                $this->error(trans('notdoLogin') . L('frontend'), route('Member/index'));
+                $this->error(trans('notdoLogin') . trans('frontend'), route('Member/index'));
             }
         }
     }
@@ -83,7 +83,7 @@ class FrontendMember extends Frontend
         }
         $leftNav[] = array(
             'link' => route('Home/Member/logout'),
-            'name' => trans('logout') . L('member'),
+            'name' => trans('logout') . trans('member'),
         );
         return $leftNav;
     }
@@ -111,7 +111,7 @@ class FrontendMember extends Frontend
     public function ajax_api()
     {
         $allowAjaxApi = array('validform', 'get_data');
-        if (!$this->isLogin() && !in_array(I('type'), $allowAjaxApi)) {
+        if (!$this->isLogin() && !in_array(request('type'), $allowAjaxApi)) {
             return;
         }
 

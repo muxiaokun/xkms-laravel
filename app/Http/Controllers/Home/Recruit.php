@@ -18,7 +18,7 @@ class Recruit extends Frontend
             'end_time'   => array('gt', $currentTime),
             '(current_portion < max_portion OR max_portion = 0)',
         );
-        $keyword = I('keyword');
+        $keyword = request('keyword');
         if ($keyword) {
             $keyword             = '%' . $keyword . '%';
             $complex             = array('_logic' => 'or');
@@ -39,9 +39,9 @@ class Recruit extends Frontend
     public function add()
     {
         //初始化参数
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('Recruit/index'));
+            $this->error(trans('id') . trans('error'), route('Recruit/index'));
         }
 
         $RecruitModel = D('Recruit');
@@ -49,29 +49,29 @@ class Recruit extends Frontend
         //检测是否能够提交
         $currentTime = time();
         if ($recruitInfo['start_time'] < $currentTime && $recruitInfo['end_time'] < $currentTime) {
-            $this->error(trans('start') . L('end') . L('time') . L('error'), route('Recruit/index'));
+            $this->error(trans('start') . trans('end') . trans('time') . trans('error'), route('Recruit/index'));
         }
         if (0 != $recruitInfo['max_portion'] && $recruitInfo['current_portion'] >= $recruitInfo['max_portion']) {
-            $this->error(trans('re_recruit') . L('number') . L('gt') . L('recruit') . L('number'), route('Quests/index'));
+            $this->error(trans('re_recruit') . trans('number') . trans('gt') . trans('recruit') . trans('number'), route('Quests/index'));
         }
         //存入数据
         if (IS_POST) {
             $data                = array();
             $data['r_id']        = $id;
-            $data['name']        = I('name');
-            $data['birthday']    = mMktime(I('birthday'));
-            $data['sex']         = I('sex');
-            $data['certificate'] = I('certificate');
-            $data['ext_info']    = I('ext_info');
-            $data['file_path']   = I('file_path');
+            $data['name']        = request('name');
+            $data['birthday']    = mMktime(request('birthday'));
+            $data['sex']         = request('sex');
+            $data['certificate'] = request('certificate');
+            $data['ext_info']    = request('ext_info');
+            $data['file_path']   = request('file_path');
             $RecruitLogModel     = D('RecruitLog');
             $resultAdd          = $RecruitLogModel->mAdd($data);
             if ($resultAdd) {
                 $RecruitModel = D('Recruit');
                 $RecruitModel->where(array('id' => $recruitInfo['id']))->setInc('current_portion');
-                $this->success(trans('resume') . L('submit') . L('success'), route('Recruit/index'));
+                $this->success(trans('resume') . trans('submit') . trans('success'), route('Recruit/index'));
             } else {
-                $this->error(trans('resume') . L('submit') . L('error'), route('index'));
+                $this->error(trans('resume') . trans('submit') . trans('error'), route('index'));
             }
             return;
         }
@@ -91,7 +91,7 @@ class Recruit extends Frontend
         //以法定成年年龄为基准减去 18 + (10 = select_rang/2)
         $startYear = date(config('SYS_DATE'), mktime(0, 0, 0, date('m'), date('d'), date('Y') - 28));
         $this->assign('start_year', $startYear);
-        $this->assign('title', trans('write') . L('recruit'));
+        $this->assign('title', trans('write') . trans('recruit'));
         $this->display();
     }
 
@@ -99,15 +99,15 @@ class Recruit extends Frontend
     public function edit()
     {
         //初始化参数
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('Recruit/index'));
+            $this->error(trans('id') . trans('error'), route('Recruit/index'));
         }
 
         $RecruitModel = D('Recruit');
         $recruitInfo = $RecruitModel->mFind($id);
         $this->assign('recruit_info', $recruitInfo);
-        $this->assign('title', trans('look') . L('recruit'));
+        $this->assign('title', trans('look') . trans('recruit'));
         $this->display();
     }
 }

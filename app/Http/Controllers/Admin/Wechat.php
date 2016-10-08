@@ -13,7 +13,7 @@ class Wechat extends Backend
         $WechatModel                      = D('Wechat');
         $MemberModel                      = D('Member');
         $where                            = array();
-        $whereValue                          = I('member_name');
+        $whereValue                          = request('member_name');
         $whereValue && $where['member_name'] = $whereValue;
         $whereValue                          = mMktimeRange('bind_time');
         $whereValue && $where['bind_time']   = $whereValue;
@@ -28,8 +28,8 @@ class Wechat extends Backend
 
         //初始化where_info
         $whereInfo                = array();
-        $whereInfo['member_name'] = array('type' => 'input', 'name' => trans('member') . L('name'));
-        $whereInfo['bind_time']   = array('type' => 'time', 'name' => trans('bind') . L('time'));
+        $whereInfo['member_name'] = array('type' => 'input', 'name' => trans('member') . trans('name'));
+        $whereInfo['bind_time']   = array('type' => 'time', 'name' => trans('bind') . trans('time'));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -39,7 +39,7 @@ class Wechat extends Backend
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', trans('wechat') . L('management'));
+        $this->assign('title', trans('wechat') . trans('management'));
         $this->display();
     }
 
@@ -67,16 +67,16 @@ class Wechat extends Backend
         $Oauth2Link = $Wechat->Oauth2_enlink($ApiLink);
         $this->assign('Oauth2_link', $Oauth2Link);
 
-        $this->assign('title', trans('config') . L('wechat'));
+        $this->assign('title', trans('config') . trans('wechat'));
         $this->display();
     }
 
     //对单一微信发送信息
     public function edit()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         if (!config('app.debug')) {
@@ -114,46 +114,46 @@ class Wechat extends Backend
             $data['data'] = $this->makeData();
             $putTemplate = $Wechat->put_template($data);
             if (0 === $putTemplate['errcode']) {
-                $this->success(trans('wechat') . L('send') . L('success'), route('Wechat/index'));
+                $this->success(trans('wechat') . trans('send') . trans('success'), route('Wechat/index'));
                 return;
             } else {
-                $this->error(trans('wechat') . L('send') . L('error') . L('error' . $putTemplate['errcode']), $errorGoLink);
+                $this->error(trans('wechat') . trans('send') . trans('error') . trans('error' . $putTemplate['errcode']), $errorGoLink);
             }
         }
 
-        $this->assign('title', trans('send') . L('wechat'));
+        $this->assign('title', trans('send') . trans('wechat'));
         $this->display();
     }
 
     //解除绑定
     public function del()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('Wechat/index'));
+            $this->error(trans('id') . trans('error'), route('Wechat/index'));
         }
 
         $WechatModel = D('Wechat');
         $resultDel  = $WechatModel->mDel($id);
         if ($resultDel) {
-            $this->success(trans('wechat') . L('bind') . L('del') . L('success'), route('Wechat/index'));
+            $this->success(trans('wechat') . trans('bind') . trans('del') . trans('success'), route('Wechat/index'));
             return;
         } else {
-            $this->error(trans('wechat') . L('bind') . L('del') . L('error'), route('Wechat/edit', array('id' => $id)));
+            $this->error(trans('wechat') . trans('bind') . trans('del') . trans('error'), route('Wechat/edit', array('id' => $id)));
         }
     }
 
     //构造数据
     private function makeData()
     {
-        $startContent       = I('start_content');
-        $startContentColor = I('start_content_color');
-        $endContent         = I('end_content');
-        $endContentColor   = I('end_content_color');
-        $content1            = I('content1');
-        $content1Color      = I('content1_color');
-        $content2            = I('content2');
-        $content2Color      = I('content2_color');
+        $startContent       = request('start_content');
+        $startContentColor = request('start_content_color');
+        $endContent         = request('end_content');
+        $endContentColor   = request('end_content_color');
+        $content1            = request('content1');
+        $content1Color      = request('content1_color');
+        $content2            = request('content2');
+        $content2Color      = request('content2_color');
 
         $data = array(
             'first'    => array('value' => $startContent, 'color' => $startContentColor),

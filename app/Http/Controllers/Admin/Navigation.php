@@ -16,11 +16,11 @@ class Navigation extends Backend
         $NavigationModel = D('Navigation');
         //建立where
         $whereValue                         = '';
-        $whereValue                         = I('name');
+        $whereValue                         = request('name');
         $whereValue && $where['name']       = array('like', '%' . $whereValue . '%');
-        $whereValue                         = I('short_name');
+        $whereValue                         = request('short_name');
         $whereValue && $where['short_name'] = array('like', '%' . $whereValue . '%');
-        $whereValue                         = I('is_enable');
+        $whereValue                         = request('is_enable');
         $whereValue && $where['is_enable']  = (1 == $whereValue) ? 1 : 0;
         //初始化翻页 和 列表数据
         $navigationList = $NavigationModel->mSelect($where, true);
@@ -29,9 +29,9 @@ class Navigation extends Backend
 
         //初始化where_info
         $whereInfo               = array();
-        $whereInfo['name']       = array('type' => 'input', 'name' => trans('navigation') . L('name'));
-        $whereInfo['short_name'] = array('type' => 'input', 'name' => trans('short') . L('name'));
-        $whereInfo['is_enable']  = array('type' => 'select', 'name' => trans('yes') . L('no') . L('enable'), 'value' => array(1 => L('enable'), 2 => L('disable')));
+        $whereInfo['name']       = array('type' => 'input', 'name' => trans('navigation') . trans('name'));
+        $whereInfo['short_name'] = array('type' => 'input', 'name' => trans('short') . trans('name'));
+        $whereInfo['is_enable']  = array('type' => 'select', 'name' => trans('yes') . trans('no') . trans('enable'), 'value' => array(1 => trans('enable'), 2 => trans('disable')));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -41,7 +41,7 @@ class Navigation extends Backend
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', trans('navigation') . L('management'));
+        $this->assign('title', trans('navigation') . trans('management'));
         $this->display();
     }
 
@@ -53,24 +53,24 @@ class Navigation extends Backend
             $data            = $this->makeData();
             $resultAdd      = $NavigationModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('navigation') . L('add') . L('success'), route('index'));
+                $this->success(trans('navigation') . trans('add') . trans('success'), route('index'));
                 return;
             } else {
-                $this->error(trans('navigation') . L('add') . L('error'), route('add'));
+                $this->error(trans('navigation') . trans('add') . trans('error'), route('add'));
             }
         }
 
         $this->assign('navigation_config', $this->navigation_config);
-        $this->assign('title', trans('add') . L('navigation'));
+        $this->assign('title', trans('add') . trans('navigation'));
         $this->display('addedit');
     }
 
     //编辑
     public function edit()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $NavigationModel = D('Navigation');
@@ -78,11 +78,11 @@ class Navigation extends Backend
             $data        = $this->makeData();
             $resultEdit = $NavigationModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('navigation') . L('edit') . L('success'), route('index'));
+                $this->success(trans('navigation') . trans('edit') . trans('success'), route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
-                $this->error(trans('navigation') . L('edit') . L('error'), $errorGoLink);
+                $this->error(trans('navigation') . trans('edit') . trans('error'), $errorGoLink);
             }
         }
 
@@ -91,25 +91,25 @@ class Navigation extends Backend
         $this->assign('edit_info', $editInfo);
 
         $this->assign('navigation_config', $this->navigation_config);
-        $this->assign('title', trans('edit') . L('navigation'));
+        $this->assign('title', trans('edit') . trans('navigation'));
         $this->display('addedit');
     }
 
     //删除
     public function del()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $NavigationModel = D('Navigation');
         $resultDel      = $NavigationModel->mDel($id);
         if ($resultDel) {
-            $this->success(trans('navigation') . L('del') . L('success'), route('index'));
+            $this->success(trans('navigation') . trans('del') . trans('success'), route('index'));
             return;
         } else {
-            $this->error(trans('navigation') . L('del') . L('error'), route('index'));
+            $this->error(trans('navigation') . trans('del') . trans('error'), route('index'));
         }
     }
 
@@ -123,7 +123,7 @@ class Navigation extends Backend
                 $NavigationModel = D('Navigation');
                 $itlinkInfo     = $NavigationModel->mSelect(array('short_name' => $data['short_name'], 'id' => array('neq', $data['id'])));
                 if (0 < count($itlinkInfo)) {
-                    $result['info'] = trans('short') . L('name') . L('exists');
+                    $result['info'] = trans('short') . trans('name') . trans('exists');
                     break;
                 }
                 break;
@@ -140,11 +140,11 @@ class Navigation extends Backend
     private function makeData()
     {
         //初始化参数
-        $id         = I('id');
-        $name       = I('name');
-        $shortName = I('short_name');
-        $isEnable  = I('is_enable');
-        $extInfo   = $this->_make_navigation(I($this->navigation_config['post_name']));
+        $id         = request('id');
+        $name       = request('name');
+        $shortName = request('short_name');
+        $isEnable  = request('is_enable');
+        $extInfo   = $this->_make_navigation(request($this->navigation_config['post_name']));
 
         //检测初始化参数是否合法
         $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));

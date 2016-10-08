@@ -16,14 +16,14 @@ class QuestsAnswer extends Backend
 
         //建立where
         $whereValue                        = '';
-        $whereValue                        = I('quests_id');
+        $whereValue                        = request('quests_id');
         $whereValue && $where['quests_id'] = $whereValue;
-        $whereValue                        = I('quests_title');
+        $whereValue                        = request('quests_title');
         $whereValue && $where['quests_id'] = array(
             'in',
             $QuestsModel->where(array('title' => array('like', '%' . $whereValue . '%')))->mColumn2Array('id'),
         );
-        $whereValue                        = I('member_id');
+        $whereValue                        = request('member_id');
         $whereValue && $where['member_id'] = array(
             'in',
             $MemberModel->where(array('member_name' => array('like', '%' . $whereValue . '%')))->mColumn2Array('id'),
@@ -39,8 +39,8 @@ class QuestsAnswer extends Backend
         $this->assign('quests_answer_list_count', $QuestsAnswerModel->mGetPageCount($where));
         //初始化where_info
         $whereInfo                 = array();
-        $whereInfo['quests_title'] = array('type' => 'input', 'name' => trans('quests') . L('name'));
-        $whereInfo['member_id']    = array('type' => 'input', 'name' => trans('member') . L('name'));
+        $whereInfo['quests_title'] = array('type' => 'input', 'name' => trans('quests') . trans('name'));
+        $whereInfo['member_id']    = array('type' => 'input', 'name' => trans('member') . trans('name'));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -49,16 +49,16 @@ class QuestsAnswer extends Backend
         $batchHandle['del'] = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', trans('quests') . L('answer') . L('management'));
+        $this->assign('title', trans('quests') . trans('answer') . trans('management'));
         $this->display();
     }
 
     //显示问卷答案
     public function add()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $QuestsModel        = D('Quests');
@@ -81,16 +81,16 @@ class QuestsAnswer extends Backend
         $this->assign('quests_answer_list', $questsAnswerList);
         $this->assign('quests_info', $questsInfo);
         $this->assign('quests_answer_info', $questsAnswerInfo);
-        $this->assign('title', trans('quests') . L('answer'));
+        $this->assign('title', trans('quests') . trans('answer'));
         $this->display();
     }
 
     //统计问卷答案
     public function edit()
     {
-        $questsId = I('quests_id');
+        $questsId = request('quests_id');
         if (!$questsId) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         //读取问题
@@ -127,16 +127,16 @@ class QuestsAnswer extends Backend
         }
         $this->assign('quests_quest_list', $questsQuestList);
 
-        $this->assign('title', trans('quests') . L('answer') . L('statistics'));
+        $this->assign('title', trans('quests') . trans('answer') . trans('statistics'));
         $this->display();
     }
 
     //删除
     public function del()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $QuestsAnswerModel  = D('QuestsAnswer');
@@ -145,9 +145,9 @@ class QuestsAnswer extends Backend
         if ($resultDel) {
             $QuestsModel = D('Quests');
             $QuestsModel->where(array('id' => $questsAnswerInfo['quests_id']))->setDec('current_portion');
-            $this->success(trans('del') . L('answer') . L('success'), route('index'));
+            $this->success(trans('del') . trans('answer') . trans('success'), route('index'));
         } else {
-            $this->error(trans('del') . L('answer') . L('error'), route('index'));
+            $this->error(trans('del') . trans('answer') . trans('error'), route('index'));
         }
     }
 }

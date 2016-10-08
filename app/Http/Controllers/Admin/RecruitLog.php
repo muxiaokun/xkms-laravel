@@ -14,9 +14,9 @@ class RecruitLog extends Backend
         $RecruitLogModel = D('RecruitLog');
         //建立where
         $whereValue                       = '';
-        $whereValue                       = I('r_id');
+        $whereValue                       = request('r_id');
         $whereValue && $where['r_id']     = $whereValue;
-        $whereValue                       = I('name');
+        $whereValue                       = request('name');
         $whereValue && $where['name']     = array('like', '%' . $whereValue . '%');
         $whereValue                       = mMktimeRange('birthday');
         $whereValue && $where['birthday'] = $whereValue;
@@ -43,25 +43,25 @@ class RecruitLog extends Backend
         $batchHandle['del'] = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', trans('recruit_log') . L('management'));
+        $this->assign('title', trans('recruit_log') . trans('management'));
         $this->display();
     }
 
     //删除
     public function del()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $RecruitLogModel = D('RecruitLog');
         $resultDel      = $RecruitLogModel->mDel($id);
         if ($resultDel) {
-            $this->success(trans('recruit_log') . L('del') . L('success'), route('index'));
+            $this->success(trans('recruit_log') . trans('del') . trans('success'), route('index'));
             return;
         } else {
-            $this->error(trans('recruit_log') . L('del') . L('error'), route('index'));
+            $this->error(trans('recruit_log') . trans('del') . trans('error'), route('index'));
         }
     }
 

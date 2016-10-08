@@ -386,9 +386,6 @@ Route::group([
     });
 });
 
-
-use Illuminate\Support\Facades\Storage;
-
 Route::group([
     'as'        => 'Install::',
     //'middleware'=>'auth',
@@ -396,7 +393,7 @@ Route::group([
     'prefix'    => 'Install',
 ], function () {
     Route::get('t', function () {
-        dump();
+        dump(Request::ajax());
     });
     Route::get('index', ['as' => 'index', 'uses' => 'Index@index']);
     Route::get('scan/{name?}', ['as' => 'scan', 'uses' => 'Index@scan']);

@@ -10,16 +10,16 @@ class AssessLog extends Backend
     //统计考核结果
     public function edit()
     {
-        $id = I('get.id');
+        $id = request('get.id');
         if (!$id) {
-            $this->error(trans('assess') . L('id') . L('error'), route('Assess/index'));
+            $this->error(trans('assess') . trans('id') . trans('error'), route('Assess/index'));
         }
 
         $AssessModel                  = D('Assess');
         $assessInfo                  = $AssessModel->mFind($id);
         $assessInfo['all_grade']     = 0;
         $assessInfo['re_grade_name'] = '';
-        $reGradeId                  = I('re_grade_id');
+        $reGradeId                  = request('re_grade_id');
 
         switch ($assessInfo['target']) {
             case 'member':
@@ -62,25 +62,25 @@ class AssessLog extends Backend
         $batchHandle['del'] = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', trans('assess') . L('statistics'));
+        $this->assign('title', trans('assess') . trans('statistics'));
         $this->display();
     }
 
     //删除
     public function del()
     {
-        $id = I('get.id');
+        $id = request('get.id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('edit', array('id' => $id)));
+            $this->error(trans('id') . trans('error'), route('edit', array('id' => $id)));
         }
 
         $AssessLogModel = D('AssessLog');
         $resultDel     = $AssessLogModel->mDel($id);
         if ($resultDel) {
-            $this->success(trans('assess') . L('del') . L('success'), route('Assess/index'));
+            $this->success(trans('assess') . trans('del') . trans('success'), route('Assess/index'));
             return;
         } else {
-            $this->error(trans('assess') . L('del') . L('error'), route('edit', array('id' => $id)));
+            $this->error(trans('assess') . trans('del') . trans('error'), route('edit', array('id' => $id)));
         }
     }
 

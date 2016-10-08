@@ -28,7 +28,7 @@ class Assess extends FrontendMember
                     $assess['target_name'] = trans('member');
                     break;
                 case 'member_group':
-                    $assess['target_name'] = trans('member') . L('group');
+                    $assess['target_name'] = trans('member') . trans('group');
                     break;
             }
         }
@@ -43,9 +43,9 @@ class Assess extends FrontendMember
     public function add()
     {
         //初始化和权限检测
-        $id = I('get.id');
+        $id = request('get.id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $AssessModel  = D('Assess');
@@ -57,7 +57,7 @@ class Assess extends FrontendMember
             $currentTime < $assessInfo['start_time'] &&
             $currentTime > $assessInfo['end_time']
         ) {
-            $this->error(trans('you') . L('none') . L('privilege') . L('assess'), route('index'));
+            $this->error(trans('you') . trans('none') . trans('privilege') . trans('assess'), route('index'));
         }
 
         if (IS_POST) {
@@ -66,10 +66,10 @@ class Assess extends FrontendMember
             $AssessLogMode = D('AssessLog');
             $resultAdd    = $AssessLogMode->mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('grade') . L('success'), route('index'));
+                $this->success(trans('grade') . trans('success'), route('index'));
                 return;
             } else {
-                $this->error(trans('grade') . L('error'), route('add'));
+                $this->error(trans('grade') . trans('error'), route('add'));
             }
         }
 
@@ -137,10 +137,10 @@ class Assess extends FrontendMember
     //建立数据
     private function makeData()
     {
-        $assessId   = I('get.id');
+        $assessId   = request('get.id');
         $gradeId    = session('frontend_info.id');
-        $reGradeId = I('re_grade_id');
-        $score       = I('score');
+        $reGradeId = request('re_grade_id');
+        $score       = request('score');
 
         //检测初始化参数是否合法
         $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));

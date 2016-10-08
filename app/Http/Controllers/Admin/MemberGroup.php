@@ -15,9 +15,9 @@ class MemberGroup extends Backend
 
         //建立where
         $whereValue                        = '';
-        $whereValue                        = I('name');
+        $whereValue                        = request('name');
         $whereValue && $where['name']      = array('like', '%' . $whereValue . '%');
-        $whereValue                        = I('is_enable');
+        $whereValue                        = request('is_enable');
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
@@ -27,8 +27,8 @@ class MemberGroup extends Backend
 
         //初始化where_info
         $whereInfo              = array();
-        $whereInfo['name']      = array('type' => 'input', 'name' => trans('group') . L('name'));
-        $whereInfo['is_enable'] = array('type' => 'select', 'name' => trans('yes') . L('no') . L('enable'), 'value' => array(1 => L('enable'), 2 => L('disable')));
+        $whereInfo['name']      = array('type' => 'input', 'name' => trans('group') . trans('name'));
+        $whereInfo['is_enable'] = array('type' => 'select', 'name' => trans('yes') . trans('no') . trans('enable'), 'value' => array(1 => trans('enable'), 2 => trans('disable')));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -38,7 +38,7 @@ class MemberGroup extends Backend
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', trans('member') . L('group') . L('management'));
+        $this->assign('title', trans('member') . trans('group') . trans('management'));
         $this->display();
     }
 
@@ -51,24 +51,24 @@ class MemberGroup extends Backend
             $data       = $this->makeData();
             $resultAdd = $MemberGroupModel->mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('member') . L('group') . L('add') . L('success'), route('index'));
+                $this->success(trans('member') . trans('group') . trans('add') . trans('success'), route('index'));
                 return;
             } else {
-                $this->error(trans('member') . L('group') . L('add') . L('error'), route('add'));
+                $this->error(trans('member') . trans('group') . trans('add') . trans('error'), route('add'));
             }
         }
 
         $this->addEditCommon();
-        $this->assign('title', trans('member') . L('group') . L('add'));
+        $this->assign('title', trans('member') . trans('group') . trans('add'));
         $this->display('addedit');
     }
 
     //编辑
     public function edit()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $MemberModel      = D('Member');
@@ -77,11 +77,11 @@ class MemberGroup extends Backend
             $data        = $this->makeData();
             $resultEdit = $MemberGroupModel->mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('member') . L('group') . L('edit') . L('success'), route('index'));
+                $this->success(trans('member') . trans('group') . trans('edit') . trans('success'), route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
-                $this->error(trans('member') . L('group') . L('edit') . L('error'), $errorGoLink);
+                $this->error(trans('member') . trans('group') . trans('edit') . trans('error'), $errorGoLink);
             }
         }
         //获取分组默认信息
@@ -94,7 +94,7 @@ class MemberGroup extends Backend
         $this->assign('edit_info', $editInfo);
 
         $this->addEditCommon();
-        $this->assign('title', trans('member') . L('group') . L('edit'));
+        $this->assign('title', trans('member') . trans('group') . trans('edit'));
         $this->display('addedit');
     }
 
@@ -102,9 +102,9 @@ class MemberGroup extends Backend
     public function del()
     {
 
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $MemberGroupModel = D('MemberGroup');
@@ -113,10 +113,10 @@ class MemberGroup extends Backend
             //删除成功后 删除管理员与组的关系
             $MemberModel = D('Member');
             $MemberModel->mClean($id, 'group_id');
-            $this->success(trans('member') . L('group') . L('del') . L('success'), route('index'));
+            $this->success(trans('member') . trans('group') . trans('del') . trans('success'), route('index'));
             return;
         } else {
-            $this->error(trans('member') . L('group') . L('del') . L('error'), route('index'));
+            $this->error(trans('member') . trans('group') . trans('del') . trans('error'), route('index'));
         }
     }
 
@@ -128,7 +128,7 @@ class MemberGroup extends Backend
             case 'name':
                 //不能为空
                 if ('' == $data['name']) {
-                    $result['info'] = trans('member') . L('group') . L('name') . L('not') . L('empty');
+                    $result['info'] = trans('member') . trans('group') . trans('name') . trans('not') . trans('empty');
                     break;
                 }
                 //检查用户名规则
@@ -145,7 +145,7 @@ class MemberGroup extends Backend
                 $MemberGroupModel = D('MemberGroup');
                 $memberInfo      = $MemberGroupModel->mSelect(array('name' => $data['name'], 'id' => array('neq', $data['id'])));
                 if (0 < count($memberInfo)) {
-                    $result['info'] = trans('member') . L('group') . L('name') . L('exists');
+                    $result['info'] = trans('member') . trans('group') . trans('name') . trans('exists');
                     break;
                 }
                 break;
@@ -163,7 +163,7 @@ class MemberGroup extends Backend
                 }
                 foreach ($data as $priv) {
                     if (!in_array($priv, $checkPrivilege)) {
-                        $result['info'] = trans('privilege') . L('submit') . L('error');
+                        $result['info'] = trans('privilege') . trans('submit') . trans('error');
                         break;
                     }
                 }
@@ -200,12 +200,12 @@ class MemberGroup extends Backend
     private function makeData()
     {
         //初始化参数
-        $id        = I('id');
-        $manageId = I('manage_id');
-        $name      = I('name');
-        $explains  = I('explains');
-        $privilege = I('privilege');
-        $isEnable = I('is_enable');
+        $id        = request('id');
+        $manageId = request('manage_id');
+        $name      = request('name');
+        $explains  = request('explains');
+        $privilege = request('privilege');
+        $isEnable = request('is_enable');
 
         //检测初始化参数是否合法
         $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));

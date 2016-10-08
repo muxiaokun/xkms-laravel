@@ -3,11 +3,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 
 class Common extends Controller
 {
-    public function __construct(){
+    public function __construct()
+    {
         $this->_initialize();
     }
 
@@ -15,8 +17,10 @@ class Common extends Controller
     {
         //没有安装，跳转到安装页
         if (0 == env('INSTALL_STATUS') && !Route::is("Install::*")) {
-            echo redirect()->route('Install::index');
-            exit();
+            //echo redirect()->route('Install::index');
+            $message = trans('common.please') . trans('common.install') . trans('common.app_name');
+            die($this->error($message, 'Install::index'));
+
         }
         //权限检测
         //保存表单验证错误之前的GET
@@ -25,9 +29,52 @@ class Common extends Controller
 //        }
         //POST提交必须检查表单验证
 //        if (IS_POST && !IS_AJAX && !isset($_FILES['imgFile']) && !$this->token_check()) {
-//            $this->error(trans('token') . L('error') . '(' . L('refresh') . L('later') . L('submit') . ')',
+//            $this->error(trans('token') . trans('error') . '(' . trans('refresh') . trans('later') . trans('submit') . ')',
 //                session('token_back_page')); //后台统一检查表单令牌
 //        }
+    }
+
+    /**
+     * @param string $msg
+     * @param string $back_url
+     * @param int    $timeout
+     * @param bool   $ajax
+     */
+    protected function success($msg = '', $back_url = '', $timeout = 5, $ajax = false)
+    {
+
+    }
+
+    /**
+     * @param string $msg
+     * @param string $back_url
+     * @param int    $timeout
+     * @param bool   $ajax
+     */
+    protected function error(
+        $message = '',
+        $back_url = '',
+        $timeout = 5,
+        $ajax = false,
+        $template = 'common.dispatch_jump'
+    ) {
+        if ('' == $message) {
+            $message = trans('common.handle') . trans('common.error');
+        }
+        if ($ajax) {
+            $ajax_data = [
+                'status'  => false,
+                'message' => $message,
+            ];
+            return $ajax_data;
+        }
+        $assign = [
+            'status'   => false,
+            'message'  => $message,
+            'back_url' => route($back_url),
+            'timeout'  => intval($timeout),
+        ];
+        return view($template, $assign);
     }
 
     //检查表单令牌
@@ -38,7 +85,7 @@ class Common extends Controller
         }
 
         $name = config('TOKEN_NAME', null, '__hash__');
-        $hash = I($name);
+        $hash = request($name);
         if (!isset($hash) || !isset($_SESSION[$name])) { // 令牌数据无效
             return false;
         }
@@ -55,8 +102,8 @@ class Common extends Controller
 
     public function cache()
     {
-        $id   = I('id');
-        $type = I('type');
+        $id   = request('id');
+        $type = request('type');
         if (!$id || !in_array($type, ['qrcode'])) {
             return;
         }
@@ -102,7 +149,7 @@ class Common extends Controller
         $Verify = new \Think\Verify($config);
         $id     = MODULE_NAME . CONTROLLER_NAME;
         if (IS_GET) {
-            $id .= I('t');
+            $id .= request('t');
         }
 
         //解决文件出现Byte Order Mark  BOM
@@ -171,34 +218,34 @@ class Common extends Controller
     //Ajax 接口
     protected function doAjaxApi()
     {
-        if (!IS_AJAX) {
+        if (!Request::ajax()) {
             return;
         }
 
         $currentAction = get_class_methods($this);
-        switch (I('type')) {
+        switch (request('type')) {
             case 'validform':
                 if (!in_array('doValidateForm', $currentAction)) {
-                    $this->error(trans('none') . L('ajax') . 'validform API');
+                    $this->error(trans('none') . trans('ajax') . 'validform API');
                 }
-                $result = $this->doValidateForm(I('field'), I('data'));
+                $result = $this->doValidateForm(request('field'), request('data'));
                 break;
             case 'line_edit':
                 if (!$this->_check_privilege('edit') || !in_array('_line_edit', $currentAction)) {
-                    $this->error(trans('none') . L('ajax') . L('edit'));
+                    $this->error(trans('none') . trans('ajax') . trans('edit'));
                 }
-                $result = $this->_line_edit(I('field'), I('data'));
+                $result = $this->_line_edit(request('field'), request('data'));
                 break;
             case 'get_data':
                 if (!in_array('getData', $currentAction)) {
-                    $this->error(trans('none') . L('ajax') . 'get_data API');
+                    $this->error(trans('none') . trans('ajax') . 'get_data API');
                 }
-                $result = $this->getData(I('field'), I('data'));
+                $result = $this->getData(request('field'), request('data'));
                 break;
             case 'zh2py':
                 $result           = [];
                 $result['status'] = 1;
-                $result['info']   = $this->_zh2py(I('data'));
+                $result['info']   = $this->_zh2py(request('data'));
                 break;
         }
         if ($result['status']) {
@@ -264,7 +311,7 @@ class Common extends Controller
     //输出页面提示
     protected function showConfirm($lang)
     {
-        if ('yes' == I('confirm')) {
+        if ('yes' == request('confirm')) {
             return true;
         }
 

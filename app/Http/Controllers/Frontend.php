@@ -77,7 +77,7 @@ class Frontend extends Common
     public function ajax_api()
     {
         $allowAjaxApi = array('get_data');
-        if (!in_array(I('type'), $allowAjaxApi)) {
+        if (!in_array(request('type'), $allowAjaxApi)) {
             return;
         }
 
@@ -91,7 +91,7 @@ class Frontend extends Common
      */
     protected function doLogin($userName = null, $password = null, $ifVc = true, $memberId = false)
     {
-        if ($ifVc && !$this->verifyCheck(I('verify'), 'login')) {
+        if ($ifVc && !$this->verifyCheck(request('verify'), 'login')) {
             return 'verify_error';
         }
 

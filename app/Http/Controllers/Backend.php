@@ -16,7 +16,7 @@ class Backend extends Common
                 session('backend_info', $backendInfo);
             } else {
                 $this->doLogout();
-                $this->error(trans('login') . L('timeout'), route('Admin/Index/index'));
+                $this->error(trans('login') . trans('timeout'), route('Admin/Index/index'));
             }
 
             //检查管理员或者管理员组权限变动 先检查数量 提高效率
@@ -29,12 +29,12 @@ class Backend extends Common
                 $backendInfo['group_privilege'] !== $adminGroupPrivilege
             ) {
                 $this->doLogout();
-                $this->error(trans('privilege') . L('change') . L('please') . L('login'), route('Admin/Index/index'));
+                $this->error(trans('privilege') . trans('change') . trans('please') . trans('login'), route('Admin/Index/index'));
             }
 
             //登录后 检查权限
             if (!$this->_check_privilege()) {
-                $this->error(trans('you') . L('none') . L('privilege'));
+                $this->error(trans('you') . trans('none') . trans('privilege'));
             }
 
             //是否开启管理员日志 记录除了root 和 非POST(不记录来自ajax_api)提交数据
@@ -49,7 +49,7 @@ class Backend extends Common
             //检测不登陆就可以访问的
             $allowAction['Index'] = array('index', 'login', 'verifyImg');
             if (!in_array(ACTION_NAME, $allowAction[CONTROLLER_NAME])) {
-                $this->error(trans('notdoLogin') . L('backend'), route('Admin/Index/index'));
+                $this->error(trans('notdoLogin') . trans('backend'), route('Admin/Index/index'));
             }
         }*/
     }
@@ -80,7 +80,7 @@ class Backend extends Common
     public function ajax_api()
     {
         $allowAjaxApi = array('validform', 'get_data');
-        if (!$this->isLogin() && !in_array(I('type'), $allowAjaxApi)) {
+        if (!$this->isLogin() && !in_array(request('type'), $allowAjaxApi)) {
             return;
         }
 
@@ -90,7 +90,7 @@ class Backend extends Common
     //登录功能
     protected function doLogin($userName, $password)
     {
-        if (!$this->verifyCheck(I('verify'))) {
+        if (!$this->verifyCheck(request('verify'))) {
             return 'verify_error';
         }
 
@@ -196,7 +196,7 @@ class Backend extends Common
         }
 
         foreach ($col as $option) {
-            $saveConfig[$option] = I($option);
+            $saveConfig[$option] = request($option);
         }
         $configStr     = var_export($saveConfig, true);
         $CoreCopyright = config('CORE_COPYRIGHT');
@@ -209,9 +209,9 @@ return {$configStr};
 EOF;
         $putResult = file_put_contents($cfgFile, $putConfig);
         if ($putResult) {
-            $this->success(trans('save') . L('success'), route(ACTION_NAME));
+            $this->success(trans('save') . trans('success'), route(ACTION_NAME));
         } else {
-            $this->error(trans('save') . L('error'), route(ACTION_NAME));
+            $this->error(trans('save') . trans('error'), route(ACTION_NAME));
         }
         //此函数不做任何返回
     }

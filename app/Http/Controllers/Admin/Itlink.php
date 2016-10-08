@@ -13,13 +13,13 @@ class Itlink extends Backend
         $ItlinkModel = D('Itlink');
         //建立where
         $whereValue                            = '';
-        $whereValue                            = I('name');
+        $whereValue                            = request('name');
         $whereValue && $where['name']          = array('like', '%' . $whereValue . '%');
-        $whereValue                            = I('short_name');
+        $whereValue                            = request('short_name');
         $whereValue && $where['short_name']    = array('like', '%' . $whereValue . '%');
-        $whereValue                            = I('is_enable');
+        $whereValue                            = request('is_enable');
         $whereValue && $where['is_enable']     = (1 == $whereValue) ? 1 : 0;
-        $whereValue                            = I('is_statistics');
+        $whereValue                            = request('is_statistics');
         $whereValue && $where['is_statistics'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
@@ -28,10 +28,10 @@ class Itlink extends Backend
         $this->assign('itlink_list_count', $ItlinkModel->mGetPageCount($where));
 
         //初始化where_info
-        $whereInfo['name']          = array('type' => 'input', 'name' => trans('itlink') . L('name'));
-        $whereInfo['short_name']    = array('type' => 'input', 'name' => trans('short') . L('name'));
-        $whereInfo['is_enable']     = array('type' => 'select', 'name' => trans('yes') . L('no') . L('enable'), 'value' => array(1 => L('yes'), 2 => L('no')));
-        $whereInfo['is_statistics'] = array('type' => 'select', 'name' => trans('yes') . L('no') . L('statistics'), 'value' => array(1 => L('yes'), 2 => L('no')));
+        $whereInfo['name']          = array('type' => 'input', 'name' => trans('itlink') . trans('name'));
+        $whereInfo['short_name']    = array('type' => 'input', 'name' => trans('short') . trans('name'));
+        $whereInfo['is_enable']     = array('type' => 'select', 'name' => trans('yes') . trans('no') . trans('enable'), 'value' => array(1 => trans('yes'), 2 => trans('no')));
+        $whereInfo['is_statistics'] = array('type' => 'select', 'name' => trans('yes') . trans('no') . trans('statistics'), 'value' => array(1 => trans('yes'), 2 => trans('no')));
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -41,7 +41,7 @@ class Itlink extends Backend
         $batchHandle['del']  = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
-        $this->assign('title', trans('itlink') . L('management'));
+        $this->assign('title', trans('itlink') . trans('management'));
         $this->display();
     }
 
@@ -54,22 +54,22 @@ class Itlink extends Backend
             $resultAdd  = $ItlinkModel->mAdd($data);
             if ($resultAdd) {
                 $this->addEditAfterCommon($data, $id);
-                $this->success(trans('itlink') . L('add') . L('success'), route('index'));
+                $this->success(trans('itlink') . trans('add') . trans('success'), route('index'));
                 return;
             } else {
-                $this->error(trans('itlink') . L('add') . L('error'), route('add'));
+                $this->error(trans('itlink') . trans('add') . trans('error'), route('add'));
             }
         }
 
-        $this->assign('title', trans('itlink') . L('add'));
+        $this->assign('title', trans('itlink') . trans('add'));
         $this->display('addedit');
     }
     //编辑
     public function edit()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $ItlinkModel = D('Itlink');
@@ -78,26 +78,26 @@ class Itlink extends Backend
             $resultEdit = $ItlinkModel->mEdit($id, $data);
             if ($resultEdit) {
                 $this->addEditAfterCommon($data, $id);
-                $this->success(trans('itlink') . L('edit') . L('success'), route('index'));
+                $this->success(trans('itlink') . trans('edit') . trans('success'), route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
-                $this->error(trans('itlink') . L('edit') . L('error'), $errorGoLink);
+                $this->error(trans('itlink') . trans('edit') . trans('error'), $errorGoLink);
             }
         }
 
         $editInfo = $ItlinkModel->mFind($id);
         $this->assign('edit_info', $editInfo);
-        $this->assign('title', trans('itlink') . L('edit'));
+        $this->assign('title', trans('itlink') . trans('edit'));
         $this->display('addedit');
     }
 
     //删除
     public function del()
     {
-        $id = I('id');
+        $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . L('error'), route('index'));
+            $this->error(trans('id') . trans('error'), route('index'));
         }
 
         $ItlinkModel = D('Itlink');
@@ -105,10 +105,10 @@ class Itlink extends Backend
         if ($resultDel) {
             $ManageUploadModel = D('ManageUpload');
             $ManageUploadModel->mEdit($id);
-            $this->success(trans('itlink') . L('del') . L('success'), route('index'));
+            $this->success(trans('itlink') . trans('del') . trans('success'), route('index'));
             return;
         } else {
-            $this->error(trans('itlink') . L('del') . L('error'), route('index'));
+            $this->error(trans('itlink') . trans('del') . trans('error'), route('index'));
         }
     }
 
@@ -122,7 +122,7 @@ class Itlink extends Backend
                 $ItlinkModel = D('Itlink');
                 $itlinkInfo = $ItlinkModel->mSelect(array('short_name' => $data['short_name'], 'id' => array('neq', $data['id'])));
                 if (0 < count($itlinkInfo)) {
-                    $result['info'] = trans('short') . L('name') . L('exists');
+                    $result['info'] = trans('short') . trans('name') . trans('exists');
                     break;
                 }
                 break;
@@ -139,20 +139,20 @@ class Itlink extends Backend
     private function makeData()
     {
         //初始化参数
-        $id             = I('id');
-        $name           = I('name');
-        $shortName     = I('short_name');
-        $startTime     = I('start_time');
-        $endTime       = I('end_time');
+        $id             = request('id');
+        $name           = request('name');
+        $shortName     = request('short_name');
+        $startTime     = request('start_time');
+        $endTime       = request('end_time');
         $startTime     = mMktime($startTime, true);
         $endTime       = mMktime($endTime, true);
-        $isEnable      = I('is_enable');
-        $isStatistics  = I('is_statistics');
-        $maxShowNum   = I('max_show_num');
-        $maxHitNum    = I('max_hit_num');
-        $showNum       = I('show_num');
-        $hitNum        = I('hit_num');
-        $inputExtInfo = I('ext_info');
+        $isEnable      = request('is_enable');
+        $isStatistics  = request('is_statistics');
+        $maxShowNum   = request('max_show_num');
+        $maxHitNum    = request('max_hit_num');
+        $showNum       = request('show_num');
+        $hitNum        = request('hit_num');
+        $inputExtInfo = request('ext_info');
         $extInfo       = array();
         foreach ($inputExtInfo['itl_link'] as $infoKey => $info) {
             $extInfo[] = array(

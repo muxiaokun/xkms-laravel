@@ -11,11 +11,11 @@
                             <div class="col-sm-7">
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_ADMIN_AUTO_LOG" value="1"
-                                           @if ('1' heq C('SYS_ADMIN_AUTO_LOG'))checked="checked"@endif >@lang('common.open')
+                                           @if ('1' === C('SYS_ADMIN_AUTO_LOG'))checked="checked"@endif >@lang('common.open')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_ADMIN_AUTO_LOG" value="0"
-                                           @if ('0' heq C('SYS_ADMIN_AUTO_LOG'))checked="checked"@endif >@lang('common.close')
+                                           @if ('0' === C('SYS_ADMIN_AUTO_LOG'))checked="checked"@endif >@lang('common.close')
                                 </label>
                             </div>
                         </div>
@@ -27,11 +27,11 @@
                             <div class="col-sm-7">
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_BACKEND_VERIFY" value="1"
-                                           @if ('1' heq C('SYS_BACKEND_VERIFY'))checked="checked"@endif >@lang('common.open')
+                                           @if ('1' === C('SYS_BACKEND_VERIFY'))checked="checked"@endif >@lang('common.open')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_BACKEND_VERIFY" value="0"
-                                           @if ('0' heq C('SYS_BACKEND_VERIFY'))checked="checked"@endif >@lang('common.close')
+                                           @if ('0' === C('SYS_BACKEND_VERIFY'))checked="checked"@endif >@lang('common.close')
                                 </label>
                             </div>
                         </div>
@@ -44,7 +44,7 @@
                             <label class="col-sm-4 control-label">@lang('common.backend')@lang('common.max')@lang('common.login')@lang('common.number')</label>
                             <div class="col-sm-7">
                                 <input type="text" name="SYS_BACKEND_LOGIN_NUM"
-                                       value="{{ config('SYS_BACKEND_LOGIN_NUM') }}" class="form-control"
+                                       value="{{ config('system.sys_backend_login_num') }}" class="form-control"
                                        onKeyup="M_in_int(this);">
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                                 (@lang('common.second'))</label>
                             <div class="col-sm-7">
                                 <input type="text" name="SYS_BACKEND_LOCK_TIME"
-                                       value="{{ config('SYS_BACKEND_LOCK_TIME') }}" class="form-control"
+                                       value="{{ config('system.sys_backend_lock_time') }}" class="form-control"
                                        onKeyup="M_in_int(this);">
                             </div>
                         </div>
@@ -70,7 +70,7 @@
                                 (@lang('common.second'))</label>
                             <div class="col-sm-7">
                                 <input type="text" name="SYS_BACKEND_TIMEOUT"
-                                       value="{{ config('SYS_BACKEND_TIMEOUT') }}" class="form-control"
+                                       value="{{ config('system.sys_backend_timeout') }}" class="form-control"
                                        onKeyup="M_in_int(this);">
                             </div>
                         </div>

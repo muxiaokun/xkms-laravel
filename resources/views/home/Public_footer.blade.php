@@ -23,11 +23,11 @@
         <img class="w150" src="{:M_exists('Uploads/attached/image/index/sitelogo.png')}"/>
     </div>
     <div class="col-sm-7 pt30 h150 lh30" style="color:#FFF;">
-        @if (C('SITE_COMPANY')){{ config('SITE_COMPANY') }}&nbsp;@endif
-        @if (C('SITE_PHONE'))@lang('common.phone')@lang('common.colon'){{ config('SITE_PHONE') }}&nbsp;@endif
-        @if (C('SITE_TELPHONE'))@lang('common.telphone')@lang('common.colon'){{ config('SITE_TELPHONE') }}&nbsp;
+        @if (C('SITE_COMPANY')){{ config('website.site_company') }}&nbsp;@endif
+        @if (C('SITE_PHONE'))@lang('common.phone')@lang('common.colon'){{ config('website.site_phone') }}&nbsp;@endif
+        @if (C('SITE_TELPHONE'))@lang('common.telphone')@lang('common.colon'){{ config('website.site_telphone') }}&nbsp;
         <br/>@endif
-        @if (C('SITE_OTHER')){{ config('SITE_OTHER') }}&nbsp;<br/>@endif
+        @if (C('SITE_OTHER')){{ config('website.site_other') }}&nbsp;<br/>@endif
         @lang('common.version')@lang('common.colon') Home Module 1.0.0
     </div>
     <div class="col-sm-3 lh150 hidden-xs">

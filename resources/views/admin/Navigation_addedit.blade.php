@@ -46,11 +46,11 @@
                             <div class="col-sm-3">
                                 <label class="radio-inline">
                                     <input type="radio" name="is_enable" value="1"
-                                           @if ('1' heq $edit_info['is_enable'] or !isset($edit_info['is_enable']))checked="checked"@endif />@lang('common.enable')
+                                           @if ('1' === $edit_info['is_enable'] or !isset($edit_info['is_enable']))checked="checked"@endif />@lang('common.enable')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="is_enable" value="0"
-                                           @if ('0' heq $edit_info['is_enable'])checked="checked"@endif />@lang('common.disable')
+                                           @if ('0' === $edit_info['is_enable'])checked="checked"@endif />@lang('common.disable')
                                 </label>
                             </div>
                         </div>

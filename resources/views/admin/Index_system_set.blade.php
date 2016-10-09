@@ -9,7 +9,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">@lang('common.time')@lang('common.format')</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_DATE" value="{{ config('SYS_DATE') }}"
+                                <input type="text" name="SYS_DATE" value="{{ config('system.sys_date') }}"
                                        class="form-control">
                             </div>
                         </div>
@@ -19,7 +19,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">@lang('common.detail')@lang('common.time')@lang('common.format')</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_DATE_DETAIL" value="{{ config('SYS_DATE_DETAIL') }}"
+                                <input type="text" name="SYS_DATE_DETAIL" value="{{ config('system.sys_date_detail') }}"
                                        class="form-control">
                             </div>
                         </div>
@@ -31,7 +31,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">@lang('common.database')@lang('common.cache')@lang('common.time')</label>
                             <div class="col-sm-7">
-                                <input type="text" name="DATA_CACHE_TIME" value="{{ config('DATA_CACHE_TIME') }}"
+                                <input type="text" name="DATA_CACHE_TIME" value="{{ config('system.data_cache_time') }}"
                                        class="form-control" onKeyup="M_in_int(this);">
                             </div>
                         </div>
@@ -41,7 +41,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Template@lang('common.cache')@lang('common.time')</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_TD_CACHE" value="{{ config('SYS_TD_CACHE') }}"
+                                <input type="text" name="SYS_TD_CACHE" value="{{ config('system.sys_td_cache') }}"
                                        class="form-control" onKeyup="M_in_int(this);">
                             </div>
                         </div>
@@ -53,7 +53,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">@lang('common.max')@lang('common.page')@lang('common.number')</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_MAX_PAGE" value="{{ config('SYS_MAX_PAGE') }}"
+                                <input type="text" name="SYS_MAX_PAGE" value="{{ config('system.sys_max_page') }}"
                                        class="form-control" onKeyup="M_in_int(this);">
                             </div>
                         </div>
@@ -63,7 +63,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">@lang('common.page')@lang('common.max')@lang('common.rows')</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_MAX_ROW" value="{{ config('SYS_MAX_ROW') }}"
+                                <input type="text" name="SYS_MAX_ROW" value="{{ config('system.sys_max_row') }}"
                                        class="form-control" onKeyup="M_in_int(this);">
                             </div>
                         </div>
@@ -75,7 +75,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">@lang('common.default')@lang('common.image')</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_DEFAULT_IMAGE" value="{{ config('SYS_DEFAULT_IMAGE') }}"
+                                <input type="text" name="SYS_DEFAULT_IMAGE" value="{{ config('system.sys_default_image') }}"
                                        class="form-control">
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">@lang('common.sync')@lang('common.loading')@lang('common.image')</label>
                             <div class="col-sm-7">
-                                <input type="text" name="SYS_SYNC_IMAGE" value="{{ config('SYS_SYNC_IMAGE') }}"
+                                <input type="text" name="SYS_SYNC_IMAGE" value="{{ config('system.sys_sync_image') }}"
                                        class="form-control">
                             </div>
                         </div>

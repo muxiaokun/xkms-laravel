@@ -12,7 +12,7 @@ class Comment extends Frontend
     {
         $where  = [];
         $result = ['status' => true, 'info' => []];
-        if (!config('COMMENT_SWITCH')) {
+        if (!config('system.comment_switch')) {
             exit();
         }
 
@@ -20,11 +20,11 @@ class Comment extends Frontend
             case 'put_data':
                 $CommentModel = D('Comment');
                 $data         = $this->makeData();
-                if (!config('COMMENT_ANONY') && 0 == $data['send_id']) {
+                if (!config('system.comment_anony') && 0 == $data['send_id']) {
                     $result = ['status' => false, 'info' => trans('comment_error2')];
                     break;
                 }
-                if (!in_array($data['controller'], config('COMMENT_ALLOW')) || !$data['item']) {
+                if (!in_array($data['controller'], config('system.comment_allow')) || !$data['item']) {
                     $result = ['status' => false, 'info' => trans('comment_error3')];
                     break;
                 }
@@ -37,7 +37,7 @@ class Comment extends Frontend
                     'controller' => $data['controller'],
                     'item'       => $data['item'],
                     'add_ip'     => ['exp', '= inet_aton("' . $_SERVER['REMOTE_ADDR'] . '")'],
-                    'add_time'   => ['gt', time() - config('COMMENT_INTERVAL')],
+                    'add_time'   => ['gt', time() - config('system.comment_interval')],
                 ];
                 $countComment = $CommentModel->where($where)->count();
                 if (0 < $countComment) {

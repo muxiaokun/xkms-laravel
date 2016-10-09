@@ -67,11 +67,11 @@
                             <div class="col-sm-3">
                                 <label class="radio-inline">
                                     <input type="radio" name="if_show" value="1"
-                                           @if ('1' heq $edit_info['if_show'] or !isset($edit_info['if_show']))checked="checked"@endif />@lang('common.show')
+                                           @if ('1' === $edit_info['if_show'] or !isset($edit_info['if_show']))checked="checked"@endif />@lang('common.show')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="if_show" value="0"
-                                           @if ('0' heq $edit_info['if_show'])checked="checked"@endif />@lang('common.hidden')
+                                           @if ('0' === $edit_info['if_show'])checked="checked"@endif />@lang('common.hidden')
                                 </label>
                             </div>
                         </div>
@@ -279,12 +279,12 @@
                             <div class="col-sm-10">
                                 <label class="radio-inline">
                                     <input type="radio" name="is_content" value="1"
-                                           @if ('1' heq $edit_info['is_content'])checked="checked"@endif />
+                                           @if ('1' === $edit_info['is_content'])checked="checked"@endif />
                                     @lang('common.enable')(@lang('common.content')@lang('common.template'))
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="is_content" value="0"
-                                           @if ('0' heq $edit_info['is_content'] or !isset($edit_info['is_content']))checked="checked"@endif />
+                                           @if ('0' === $edit_info['is_content'] or !isset($edit_info['is_content']))checked="checked"@endif />
                                     @lang('common.disable')(@lang('common.list')@lang('common.template'))
                                 </label>
                             </div>

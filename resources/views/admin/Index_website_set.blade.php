@@ -10,7 +10,7 @@
                                 <small>SITE_TITLE</small>
                             </label>
                             <div class="col-sm-8">
-                                <input type="text" name="SITE_TITLE" value="{{ config('SITE_TITLE') }}"
+                                <input type="text" name="SITE_TITLE" value="{{ config('website.site_title') }}"
                                        class="form-control">
                             </div>
                         </div>
@@ -21,7 +21,7 @@
                                 <small>SITE_DOMAIN</small>
                             </label>
                             <div class="col-sm-8">
-                                <input type="text" name="SITE_DOMAIN" value="{{ config('SITE_DOMAIN') }}"
+                                <input type="text" name="SITE_DOMAIN" value="{{ config('website.site_domain') }}"
                                        class="form-control">
                             </div>
                         </div>
@@ -34,7 +34,7 @@
                                 <small>SITE_COMPANY</small>
                             </label>
                             <div class="col-sm-8">
-                                <input type="text" name="SITE_COMPANY" value="{{ config('SITE_COMPANY') }}"
+                                <input type="text" name="SITE_COMPANY" value="{{ config('website.site_company') }}"
                                        class="form-control">
                             </div>
                         </div>
@@ -45,7 +45,7 @@
                                 <small>SITE_ADDR</small>
                             </label>
                             <div class="col-sm-8">
-                                <input type="text" name="SITE_ADDR" value="{{ config('SITE_ADDR') }}"
+                                <input type="text" name="SITE_ADDR" value="{{ config('website.site_addr') }}"
                                        class="form-control">
                             </div>
                         </div>
@@ -58,7 +58,7 @@
                                 <small>SITE_PHONE</small>
                             </label>
                             <div class="col-sm-8">
-                                <input type="text" name="SITE_PHONE" value="{{ config('SITE_PHONE') }}"
+                                <input type="text" name="SITE_PHONE" value="{{ config('website.site_phone') }}"
                                        class="form-control">
                             </div>
                         </div>
@@ -69,7 +69,7 @@
                                 <small>SITE_TELPHONE</small>
                             </label>
                             <div class="col-sm-8">
-                                <input type="text" name="SITE_TELPHONE" value="{{ config('SITE_TELPHONE') }}"
+                                <input type="text" name="SITE_TELPHONE" value="{{ config('website.site_telphone') }}"
                                        class="form-control">
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                                 <small>SITE_ICPNUMBER</small>
                             </label>
                             <div class="col-sm-8">
-                                <input type="text" name="SITE_ICPNUMBER" value="{{ config('SITE_ICPNUMBER') }}"
+                                <input type="text" name="SITE_ICPNUMBER" value="{{ config('website.site_icpnumber') }}"
                                        class="form-control">
                             </div>
                         </div>
@@ -93,7 +93,7 @@
                                 <small>SITE_OTHER</small>
                             </label>
                             <div class="col-sm-8">
-                                <input type="text" name="SITE_OTHER" value="{{ config('SITE_OTHER') }}"
+                                <input type="text" name="SITE_OTHER" value="{{ config('website.site_other') }}"
                                        class="form-control">
                             </div>
                         </div>
@@ -107,7 +107,7 @@
                             </label>
                             <div class="col-sm-8">
                                 <textarea name="SITE_KEYWORDS" class="form-control"
-                                          style="resize:none;height:100px;">{{ config('SITE_KEYWORDS') }}</textarea>
+                                          style="resize:none;height:100px;">{{ config('website.site_keywords') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -118,7 +118,7 @@
                             </label>
                             <div class="col-sm-8">
                                 <textarea name="SITE_DESCRIPTION" class="form-control"
-                                          style="resize:none;height:100px;">{{ config('SITE_DESCRIPTION') }}</textarea>
+                                          style="resize:none;height:100px;">{{ config('website.site_description') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -131,7 +131,7 @@
                             </label>
                             <div class="col-sm-8">
                                 <textarea name="SITE_SCRIPT" class="form-control"
-                                          style="resize:none;height:100px;">{{ config('SITE_SCRIPT') }}</textarea>
+                                          style="resize:none;height:100px;">{{ config('website.site_script') }}</textarea>
                             </div>
                         </div>
                     </div>

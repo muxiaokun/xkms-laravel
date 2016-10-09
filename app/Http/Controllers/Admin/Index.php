@@ -340,7 +340,7 @@ class Index extends Backend
                 $this->error(trans('verify_code') . trans('error'), route('Index/index'));
                 break;
             case 'lock_user_error':
-                $this->error(trans('admin') . trans('by') . trans('lock') . trans('please') . config('SYS_BACKEND_LOCK_TIME') . trans('second') . trans('again') . trans('login'),
+                $this->error(trans('admin') . trans('by') . trans('lock') . trans('please') . config('system.sys_backend_lock_time') . trans('second') . trans('again') . trans('login'),
                     route('Index/index'));
                 break;
             default:

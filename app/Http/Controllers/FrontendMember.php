@@ -9,14 +9,14 @@ class FrontendMember extends Frontend
     {
         parent::_initialize();
         //是否启用了会员类的控制器
-        if (!config('SYS_MEMBER_ENABLE')) {
+        if (!config('system.sys_member_enable')) {
             $this->error(trans('member') . trans('none') . trans('enable'), route('Index/index'));
         }
 
         if ($this->isLogin()) {
             $frontendInfo = session('frontend_info');
             //自动登出时间
-            if (time() - config('SYS_FRONTEND_TIMEOUT') < $frontendInfo['login_time']) {
+            if (time() - config('system.sys_frontend_timeout') < $frontendInfo['login_time']) {
                 $frontendInfo['login_time'] = time();
                 session('frontend_info', $frontendInfo);
             } else {

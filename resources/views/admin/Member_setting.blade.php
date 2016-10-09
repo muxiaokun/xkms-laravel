@@ -11,11 +11,11 @@
                             <div class="col-sm-7">
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_MEMBER_ENABLE" value="1"
-                                           @if ('1' heq C('SYS_MEMBER_ENABLE'))checked="checked"@endif >@lang('common.open')
+                                           @if ('1' === C('SYS_MEMBER_ENABLE'))checked="checked"@endif >@lang('common.open')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_MEMBER_ENABLE" value="0"
-                                           @if ('0' heq C('SYS_MEMBER_ENABLE'))checked="checked"@endif >@lang('common.close')
+                                           @if ('0' === C('SYS_MEMBER_ENABLE'))checked="checked"@endif >@lang('common.close')
                                 </label>
                             </div>
                         </div>
@@ -29,11 +29,11 @@
                             <div class="col-sm-7">
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_MEMBER_AUTO_ENABLE" value="1"
-                                           @if ('1' heq C('SYS_MEMBER_AUTO_ENABLE'))checked="checked"@endif >@lang('common.open')
+                                           @if ('1' === C('SYS_MEMBER_AUTO_ENABLE'))checked="checked"@endif >@lang('common.open')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_MEMBER_AUTO_ENABLE" value="0"
-                                           @if ('0' heq C('SYS_MEMBER_AUTO_ENABLE'))checked="checked"@endif >@lang('common.close')
+                                           @if ('0' === C('SYS_MEMBER_AUTO_ENABLE'))checked="checked"@endif >@lang('common.close')
                                 </label>
                             </div>
                         </div>
@@ -45,11 +45,11 @@
                             <div class="col-sm-7">
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_FRONTEND_VERIFY" value="1"
-                                           @if ('1' heq C('SYS_FRONTEND_VERIFY'))checked="checked"@endif >@lang('common.open')
+                                           @if ('1' === C('SYS_FRONTEND_VERIFY'))checked="checked"@endif >@lang('common.open')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_FRONTEND_VERIFY" value="0"
-                                           @if ('0' heq C('SYS_FRONTEND_VERIFY'))checked="checked"@endif >@lang('common.close')
+                                           @if ('0' === C('SYS_FRONTEND_VERIFY'))checked="checked"@endif >@lang('common.close')
                                 </label>
                             </div>
                         </div>
@@ -62,7 +62,7 @@
                             <label class="col-sm-4 control-label">@lang('common.frontend')@lang('common.max')@lang('common.login')@lang('common.number')</label>
                             <div class="col-sm-7">
                                 <input type="text" name="SYS_FRONTEND_LOGIN_NUM"
-                                       value="{{ config('SYS_FRONTEND_LOGIN_NUM') }}" class="form-control"
+                                       value="{{ config('system.sys_frontend_login_num') }}" class="form-control"
                                        onKeyup="M_in_int(this);">
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                                 (@lang('common.second'))</label>
                             <div class="col-sm-7">
                                 <input type="text" name="SYS_FRONTEND_LOCK_TIME"
-                                       value="{{ config('SYS_FRONTEND_LOCK_TIME') }}" class="form-control"
+                                       value="{{ config('system.sys_frontend_lock_time') }}" class="form-control"
                                        onKeyup="M_in_int(this);">
                             </div>
                         </div>
@@ -88,7 +88,7 @@
                                 (@lang('common.second'))</label>
                             <div class="col-sm-7">
                                 <input type="text" name="SYS_FRONTEND_TIMEOUT"
-                                       value="{{ config('SYS_FRONTEND_TIMEOUT') }}" class="form-control"
+                                       value="{{ config('system.sys_frontend_timeout') }}" class="form-control"
                                        onKeyup="M_in_int(this);">
                             </div>
                         </div>

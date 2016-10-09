@@ -135,7 +135,7 @@ class ArticleCategory extends Backend
             }
         }
 
-        $currentConfig = config('SYS_ARTICLE_SYNC_IMAGE');
+        $currentConfig = config('system.sys_article_sync_image');
         config('SYS_ARTICLE_SYNC_IMAGE', false);
         $editInfo = $ArticleCategoryModel->mFind($id);
         config('SYS_ARTICLE_SYNC_IMAGE', $currentConfig);

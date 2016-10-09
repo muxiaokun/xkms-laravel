@@ -110,7 +110,7 @@ class Article extends Backend
         if (IS_POST) {
             $ArticleModel = D('Article');
             $data         = $this->makeData();
-            isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'], config('SYS_ARTICLE_THUMB_WIDTH'),
+            isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'], config('system.sys_article_thumb_width'),
                 C('SYS_ARTICLE_THUMB_HEIGHT'));
             $resultAdd = $ArticleModel->mAdd($data);
             //增加了一个分类快捷添加文章的回跳链接
@@ -142,7 +142,7 @@ class Article extends Backend
         $ArticleModel = D('Article');
         if (IS_POST) {
             $data = $this->makeData();
-            isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'], config('SYS_ARTICLE_THUMB_WIDTH'),
+            isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'], config('system.sys_article_thumb_width'),
                 C('SYS_ARTICLE_THUMB_HEIGHT'));
             $resultEdit = $ArticleModel->mEdit($id, $data);
             if ($resultEdit) {
@@ -155,7 +155,7 @@ class Article extends Backend
                 $this->error(trans('article') . trans('edit') . trans('error'), $errorGoLink);
             }
         }
-        $currentConfig = config('SYS_ARTICLE_SYNC_IMAGE');
+        $currentConfig = config('system.sys_article_sync_image');
         config('SYS_ARTICLE_SYNC_IMAGE', false);
         $editInfo = $ArticleModel->mFind($id);
         config('SYS_ARTICLE_SYNC_IMAGE', $currentConfig);

@@ -60,9 +60,9 @@ class Article extends Frontend
             $articleInfo['content'] = $cacheValue;
         } else {
             $articleInfo['content'] = mContent2ckplayer($articleInfo['content'], $articleInfo['thumb']);
-            config('SYS_ARTICLE_SYNC_IMAGE') && $articleInfo['content'] = mSyncImg($articleInfo['content']);
+            config('system.sys_article_sync_image') && $articleInfo['content'] = mSyncImg($articleInfo['content']);
             $cacheValue = $articleInfo['content'];
-            S($cacheName, $cacheValue, config('SYS_TD_CACHE'));
+            S($cacheName, $cacheValue, config('system.sys_td_cache'));
         }
 
         $this->assign('article_info', $articleInfo);
@@ -118,9 +118,9 @@ class Article extends Frontend
                 $categoryInfo['content'] = $cacheValue;
             } else {
                 $categoryInfo['content'] = mContent2ckplayer($categoryInfo['content'], $categoryInfo['thumb']);
-                config('SYS_ARTICLE_SYNC_IMAGE') && $categoryInfo['content'] = mSyncImg($categoryInfo['content']);
+                config('system.sys_article_sync_image') && $categoryInfo['content'] = mSyncImg($categoryInfo['content']);
                 $cacheValue = $categoryInfo['content'];
-                S($cacheName, $cacheValue, config('SYS_TD_CACHE'));
+                S($cacheName, $cacheValue, config('system.sys_td_cache'));
             }
         } else {
             //如果分类是列表页
@@ -288,7 +288,7 @@ class Article extends Frontend
         $template['article_template'] = ($template['article_template']) ? $defArticleTemplate . '_' . $template['article_template'] : $defArticleTemplate;
 
         $cacheValue = $template;
-        S($cacheName, $cacheValue, config('SYS_TD_CACHE'));
+        S($cacheName, $cacheValue, config('system.sys_td_cache'));
         return $cacheValue;
     }
 
@@ -346,7 +346,7 @@ class Article extends Frontend
         $categoryPosition['category_list'] = $categoryList;
 
         $cacheValue = $categoryPosition;
-        S($cacheName, $cacheValue, config('SYS_TD_CACHE'));
+        S($cacheName, $cacheValue, config('system.sys_td_cache'));
         return $cacheValue;
     }
 
@@ -373,7 +373,7 @@ class Article extends Frontend
             $path   = array_reverse($path);
 
             $cacheValue = $path;
-            S($cacheName, $cacheValue, config('SYS_TD_CACHE'));
+            S($cacheName, $cacheValue, config('system.sys_td_cache'));
             return $cacheValue;
         } else {
             return $this->_get_article_position($articleCategoryInfo['parent_id'], $cacheName, $path);
@@ -388,7 +388,7 @@ class Article extends Frontend
      */
     private function _get_article_pn($id, $where = [], $sort = 'sort asc,update_time desc')
     {
-        $limit = config('SYS_ARTICLE_PN_LIMIT');
+        $limit = config('system.sys_article_pn_limit');
         if (1 > $limit) {
             return;
         }

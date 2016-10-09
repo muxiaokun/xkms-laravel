@@ -33,7 +33,7 @@ class Member extends FrontendMember
                 $this->error(trans('verify_code') . trans('error'), route('Member/index'));
                 break;
             case 'lock_user_error':
-                $this->error(trans('admin') . trans('by') . trans('lock') . trans('please') . config('SYS_FRONTEND_LOCK_TIME') . trans('second') . trans('again') . trans('login'),
+                $this->error(trans('admin') . trans('by') . trans('lock') . trans('please') . config('system.sys_frontend_lock_time') . trans('second') . trans('again') . trans('login'),
                     route('index'));
                 break;
             default:
@@ -45,7 +45,7 @@ class Member extends FrontendMember
     public function register()
     {
         if (IS_POST) {
-            if (!$this->verifyCheck(request('verify'), 'register') && config('SYS_FRONTEND_VERIFY')) {
+            if (!$this->verifyCheck(request('verify'), 'register') && config('system.sys_frontend_verify')) {
                 $this->error(trans('verify_code') . trans('error'), route('index', ['t' => 'register']));
             }
             $memberName     = request('re_member_name');
@@ -77,7 +77,7 @@ class Member extends FrontendMember
             }
 
             //是否自动启用
-            $isEnable    = config('SYS_MEMBER_AUTO_ENABLE') ? 1 : 0;
+            $isEnable    = config('system.sys_member_auto_enable') ? 1 : 0;
             $data        = [
                 'member_name' => $memberName,
                 'member_pwd'  => $memberPwd,

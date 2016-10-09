@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@if ($title){{ $title }} @lang('common.dash')@endif {{ config('SITE_TITLE') }}</title>
+    <title>@if ($title){{ $title }} @lang('common.dash')@endif {{ config('website.site_title') }}</title>
     <link href="__ROOT__/favicon.ico" type="image/ico" rel="shortcut icon"/>
     <meta http-equiv="Content-Type" Content="text/html; charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="keywords" content="{{ config('SITE_KEYWORDS') }}"/>
-    <meta name="description" content="{{ config('SITE_DESCRIPTION') }}"/>
+    <meta name="keywords" content="{{ config('website.site_keywords') }}"/>
+    <meta name="description" content="{{ config('website.site_description') }}"/>
     <meta name="author" content="{:L('pfcopyright',array('app_name'=>APP_NAME))}"/>
     <link rel="stylesheet" href="{{ asset('css/jquery-ui#min.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap#min.css') }}"/>

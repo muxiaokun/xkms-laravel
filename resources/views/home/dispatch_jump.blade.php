@@ -7,7 +7,7 @@ if (C('LAYOUT_ON')) {
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>@lang('common.system')@lang('common.info') @lang('common.dash') {{ config('SITE_TITLE') }}</title>
+    <title>@lang('common.system')@lang('common.info') @lang('common.dash') {{ config('website.site_title') }}</title>
     <link rel="stylesheet" href="{{ asset('css/bootstrap#min.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap-theme#min.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/common.css') }}"/>

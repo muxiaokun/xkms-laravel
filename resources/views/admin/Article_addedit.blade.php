@@ -118,11 +118,11 @@
                             <div class="col-sm-4">
                                 <label class="radio-inline">
                                     <input type="radio" name="is_stick" value="1"
-                                           @if ('1' heq $edit_info['is_stick'])checked="checked"@endif />@lang('common.yes')
+                                           @if ('1' === $edit_info['is_stick'])checked="checked"@endif />@lang('common.yes')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="is_stick" value="0"
-                                           @if ('0' heq $edit_info['is_stick'] or !isset($edit_info['is_stick']))checked="checked"@endif />@lang('common.no')
+                                           @if ('0' === $edit_info['is_stick'] or !isset($edit_info['is_stick']))checked="checked"@endif />@lang('common.no')
                                 </label>
                             </div>
                         </div>
@@ -131,11 +131,11 @@
                             <div class="col-sm-4">
                                 <label class="radio-inline">
                                     <input type="radio" name="is_audit" value="1"
-                                           @if ('1' heq $edit_info['is_audit'] or !isset($edit_info['is_audit']))checked="checked"@endif />@lang('common.yes')
+                                           @if ('1' === $edit_info['is_audit'] or !isset($edit_info['is_audit']))checked="checked"@endif />@lang('common.yes')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="is_audit" value="0"
-                                           @if ('0' heq $edit_info['is_audit'])checked="checked"@endif />@lang('common.no')
+                                           @if ('0' === $edit_info['is_audit'])checked="checked"@endif />@lang('common.no')
                                 </label>
                             </div>
                         </div>
@@ -144,11 +144,11 @@
                             <div class="col-sm-4">
                                 <label class="radio-inline">
                                     <input type="radio" name="if_show" value="1"
-                                           @if ('1' heq $edit_info['if_show'] or !isset($edit_info['if_show']))checked="checked"@endif />@lang('common.show')
+                                           @if ('1' === $edit_info['if_show'] or !isset($edit_info['if_show']))checked="checked"@endif />@lang('common.show')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="if_show" value="0"
-                                           @if ('0' heq $edit_info['if_show'])checked="checked"@endif />@lang('common.hidden')
+                                           @if ('0' === $edit_info['if_show'])checked="checked"@endif />@lang('common.hidden')
                                 </label>
                             </div>
                         </div>

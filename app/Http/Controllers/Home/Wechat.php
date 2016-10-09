@@ -139,7 +139,7 @@ class Wechat extends Frontend
                 $this->error(trans('verify_code') . trans('error'), route(ACTION_NAME));
                 break;
             case 'lock_user_error':
-                $this->error(trans('admin') . trans('by') . trans('lock') . trans('please') . config('SYS_FRONTEND_LOCK_TIME') . trans('second') . trans('again') . trans('login'),
+                $this->error(trans('admin') . trans('by') . trans('lock') . trans('please') . config('system.sys_frontend_lock_time') . trans('second') . trans('again') . trans('login'),
                     route(ACTION_NAME));
                 break;
             default:

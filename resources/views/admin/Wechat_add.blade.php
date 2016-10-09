@@ -43,7 +43,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">appId</label>
                             <div class="col-sm-7">
-                                <input type="text" name="WECHAT_ID" value="{{ config('WECHAT_ID') }}"
+                                <input type="text" name="WECHAT_ID" value="{{ config('system.wechat_id') }}"
                                        class="form-control">
                             </div>
                         </div>
@@ -53,7 +53,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">appSecret</label>
                             <div class="col-sm-7">
-                                <input type="text" name="WECHAT_SECRET" value="{{ config('WECHAT_SECRET') }}"
+                                <input type="text" name="WECHAT_SECRET" value="{{ config('system.wechat_secret') }}"
                                        class="form-control">
                             </div>
                         </div>
@@ -65,7 +65,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">token</label>
                             <div class="col-sm-7">
-                                <input type="text" name="WECHAT_TOKEN" value="{{ config('WECHAT_TOKEN') }}"
+                                <input type="text" name="WECHAT_TOKEN" value="{{ config('system.wechat_token') }}"
                                        class="form-control">
                             </div>
                         </div>
@@ -77,11 +77,11 @@
                             <div class="col-sm-7">
                                 <label class="radio-inline">
                                     <input type="radio" name="WECHAT_RECORD_LOG" value="1"
-                                           @if ('1' heq $wechat['WECHAT_RECORD_LOG'] or !isset($wechat['WECHAT_RECORD_LOG']))checked="checked"@endif >@lang('common.open')
+                                           @if ('1' === $wechat['WECHAT_RECORD_LOG'] or !isset($wechat['WECHAT_RECORD_LOG']))checked="checked"@endif >@lang('common.open')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="WECHAT_RECORD_LOG" value="0"
-                                           @if ('0' heq $wechat['WECHAT_RECORD_LOG'])checked="checked"@endif >@lang('common.close')
+                                           @if ('0' === $wechat['WECHAT_RECORD_LOG'])checked="checked"@endif >@lang('common.close')
                                 </label>
                             </div>
                         </div>
@@ -93,7 +93,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">AesKey</label>
                             <div class="col-sm-7">
-                                <input type="text" name="WECHAT_AESKEY" value="{{ config('WECHAT_AESKEY') }}"
+                                <input type="text" name="WECHAT_AESKEY" value="{{ config('system.wechat_aeskey') }}"
                                        class="form-control">
                             </div>
                         </div>
@@ -103,7 +103,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">templateId</label>
                             <div class="col-sm-7">
-                                <input type="text" name="WECHAT_TEMPLATE_ID" value="{{ config('WECHAT_TEMPLATE_ID') }}"
+                                <input type="text" name="WECHAT_TEMPLATE_ID" value="{{ config('system.wechat_template_id') }}"
                                        class="form-control">
                             </div>
                         </div>

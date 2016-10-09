@@ -11,7 +11,7 @@ class Backend extends Common
         if ($this->isLogin()) {
             $backendInfo = session('backend_info');
             //自动登出时间
-            if (time() - config('SYS_BACKEND_TIMEOUT') < $backendInfo['login_time']) {
+            if (time() - config('system.sys_backend_timeout') < $backendInfo['login_time']) {
                 $backendInfo['login_time'] = time();
                 session('backend_info', $backendInfo);
             } else {
@@ -38,7 +38,7 @@ class Backend extends Common
             }
 
             //是否开启管理员日志 记录除了root 和 非POST(不记录来自ajax_api)提交数据
-            if (config('SYS_ADMIN_AUTO_LOG') && 1 != session('backend_info.id') && IS_POST && 'ajax_api' != ACTION_NAME) {
+            if (config('system.sys_admin_auto_log') && 1 != session('backend_info.id') && IS_POST && 'ajax_api' != ACTION_NAME) {
                 $denyLog['Index'] = array('index', 'top_nav', 'left_nav', 'main', 'logout');
                 if (!in_array(ACTION_NAME, $denyLog[CONTROLLER_NAME])) {
                     $AdminLogModel = D('AdminLog');
@@ -58,7 +58,7 @@ class Backend extends Common
     public function verifyImg()
     {
         //查看配置是否需要验证码
-        if (!config('SYS_BACKEND_VERIFY')) {
+        if (!config('system.sys_backend_verify')) {
             return;
         }
 
@@ -69,7 +69,7 @@ class Backend extends Common
     protected function verifyCheck($code, $t = '')
     {
         //查看配置是否需要验证码
-        if (!config('SYS_BACKEND_VERIFY')) {
+        if (!config('system.sys_backend_verify')) {
             return true;
         }
 
@@ -96,8 +96,8 @@ class Backend extends Common
 
         $AdminModel = D('Admin');
         //检测后台尝试登陆次数
-        $loginNum = config('SYS_BACKEND_LOGIN_NUM');
-        $lockTime = config('SYS_BACKEND_LOCK_TIME');
+        $loginNum = config('system.sys_backend_login_num');
+        $lockTime = config('system.sys_backend_lock_time');
         if (0 != $loginNum) {
             $loginInfo = $AdminModel->mFind($AdminModel->mFindId($userName));
             if (0 != $loginInfo['lock_time'] && $loginInfo['lock_time'] > (time() - $lockTime)) {

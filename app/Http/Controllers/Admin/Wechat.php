@@ -80,7 +80,7 @@ class Wechat extends Backend
         }
 
         if (!config('app.debug')) {
-            $templateIdShort = config('WECHAT_TEMPLATE_ID');
+            $templateIdShort = config('system.wechat_template_id');
             if (!$templateIdShort) {
                 $this->error('WECHAT_TEMPLATE_ID' . trans('empty'), route('config'));
             }

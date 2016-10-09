@@ -55,7 +55,7 @@ class MessageBoard extends Frontend
                 $this->error(trans('id') . trans('error'));
             }
 
-            if (!$this->verifyCheck(request('verify')) && config('SYS_FRONTEND_VERIFY')) {
+            if (!$this->verifyCheck(request('verify')) && config('system.sys_frontend_verify')) {
                 $this->error(trans('verify_code') . trans('error'), route('index', ['id' => $id]));
             }
             $submitTime   = 300;

@@ -22,7 +22,7 @@ class Frontend extends Common
     public function verifyImg()
     {
         //查看配置是否需要验证码
-        if (!config('SYS_FRONTEND_VERIFY')) {
+        if (!config('system.sys_frontend_verify')) {
             return;
         }
 
@@ -33,7 +33,7 @@ class Frontend extends Common
     protected function verifyCheck($code, $t = '')
     {
         //查看配置是否需要验证码
-        if (!config('SYS_FRONTEND_VERIFY')) {
+        if (!config('system.sys_frontend_verify')) {
             return true;
         }
 
@@ -99,8 +99,8 @@ class Frontend extends Common
 
         $MemberModel = D('Member');
         //检测前台尝试登陆次数
-        $loginNum = config('SYS_FRONTEND_LOGIN_NUM');
-        $lockTime = config('SYS_FRONTEND_LOCK_TIME');
+        $loginNum = config('system.sys_frontend_login_num');
+        $lockTime = config('system.sys_frontend_lock_time');
         if (0 != $loginNum) {
             $loginInfo = $MemberModel->mFind($MemberModel->mFindId($userName));
             if (0 != $loginInfo['lock_time'] && $loginInfo['lock_time'] > (time() - $lockTime)) {

@@ -84,13 +84,13 @@ class Recruit extends Frontend
             $recruitInfo['explains'] = $cacheValue;
         } else {
             $recruitInfo['explains'] = mContent2ckplayer($recruitInfo['explains'], $recruitInfo['thumb']);
-            config('SYS_ARTICLE_SYNC_IMAGE') && $recruitInfo['explains'] = mSyncImg($recruitInfo['explains']);
+            config('system.sys_article_sync_image') && $recruitInfo['explains'] = mSyncImg($recruitInfo['explains']);
             $cacheValue = $recruitInfo['explains'];
-            S($cacheName, $cacheValue, config('SYS_TD_CACHE'));
+            S($cacheName, $cacheValue, config('system.sys_td_cache'));
         }
 
         //以法定成年年龄为基准减去 18 + (10 = select_rang/2)
-        $startYear = date(config('SYS_DATE'), mktime(0, 0, 0, date('m'), date('d'), date('Y') - 28));
+        $startYear = date(config('system.sys_date'), mktime(0, 0, 0, date('m'), date('d'), date('Y') - 28));
         $this->assign('start_year', $startYear);
         $this->assign('title', trans('write') . trans('recruit'));
         $this->display();

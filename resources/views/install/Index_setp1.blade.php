@@ -17,13 +17,13 @@
                     <div class="form-group col-sm-6">
                         <label class="col-sm-4 control-label">@lang('common.host')@lang('common.colon')</label>
                         <div class="col-sm-8"><input type="text" class="form-control" placeholder="@lang('common.host')"
-                                                     value="{{ $default_config['DB_HOST'] }}" name="host"></div>
+                                                     value="{{ $default_config['DB_HOST'] }}" name="db_host"></div>
                     </div>
                     <div class="form-group col-sm-6">
                         <label class="col-sm-4 control-label">@lang('common.database')@lang('common.colon')</label>
                         <div class="col-sm-4"><input type="text" class="form-control"
                                                      placeholder="@lang('common.database')"
-                                                     value="{{ $default_config['DB_DATABASE'] }}" name="name"></div>
+                                                     value="{{ $default_config['DB_DATABASE'] }}" name="db_database"></div>
                         <div class="btn-group col-sm-4">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                 @lang('common.selection')@lang('common.exists')@lang('common.database')<span
@@ -41,24 +41,24 @@
                     <div class="form-group col-sm-6">
                         <label class="col-sm-4 control-label">@lang('common.user')@lang('common.colon')</label>
                         <div class="col-sm-8"><input type="text" class="form-control" placeholder="@lang('common.user')"
-                                                     value="{{ $default_config['DB_USERNAME'] }}" name="user"></div>
+                                                     value="{{ $default_config['DB_USERNAME'] }}" name="db_username"></div>
                     </div>
                     <div class="form-group col-sm-6">
                         <label class="col-sm-4 control-label">@lang('common.pass')@lang('common.colon')</label>
                         <div class="col-sm-8"><input type="password" class="form-control"
                                                      placeholder="@lang('common.pass')"
-                                                     value="{{ $default_config['DB_PASSWORD'] }}" name="pass"></div>
+                                                     value="{{ $default_config['DB_PASSWORD'] }}" name="db_password"></div>
                     </div>
                     <div class="form-group col-sm-6">
                         <label class="col-sm-4 control-label">@lang('common.port')@lang('common.colon')</label>
                         <div class="col-sm-8"><input type="text" class="form-control" placeholder="@lang('common.port')"
-                                                     value="{{ $default_config['DB_PORT'] }}" name="port"></div>
+                                                     value="{{ $default_config['DB_PORT'] }}" name="db_port"></div>
                     </div>
                     <div class="form-group col-sm-6">
                         <label class="col-sm-4 control-label">@lang('common.prefix')@lang('common.colon')</label>
                         <div class="col-sm-8"><input type="text" class="form-control"
                                                      placeholder="@lang('common.prefix')"
-                                                     value="{{ $default_config['DB_PREFIX'] }}" name="prefix"></div>
+                                                     value="{{ $default_config['DB_PREFIX'] }}" name="db_prefix"></div>
                     </div>
                 </form>
             </div>

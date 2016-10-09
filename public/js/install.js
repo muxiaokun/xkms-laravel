@@ -84,22 +84,22 @@ M_check_mysql.prototype.check = function(){
         return false;
     }
     _self.running = 1;
-    var host = _self.edit_obj.find('input[name=host]').val();
-    var name = _self.edit_obj.find('input[name=name]').val();
-    var user = _self.edit_obj.find('input[name=user]').val();
-    var pass = _self.edit_obj.find('input[name=pass]').val();
-    var port = _self.edit_obj.find('input[name=port]').val();
-    var prefix = _self.edit_obj.find('input[name=prefix]').val();
+    var db_host = _self.edit_obj.find('input[name=db_host]').val();
+    var db_port = _self.edit_obj.find('input[name=db_port]').val();
+    var db_database = _self.edit_obj.find('input[name=db_database]').val();
+    var db_username = _self.edit_obj.find('input[name=db_username]').val();
+    var db_password = _self.edit_obj.find('input[name=db_password]').val();
+    var db_prefix = _self.edit_obj.find('input[name=db_prefix]').val();
     var post_value = {
         'type':'get_data',
         'field':'check_mysql',
         'data':{
-            'host':host,
-            'name':name,
-            'user':user,
-            'pass':pass,
-            'port':port,
-            'prefix':prefix
+            'db_host':db_host,
+            'db_port':db_port,
+            'db_database':db_database,
+            'db_username':db_username,
+            'db_password':db_password,
+            'db_prefix':db_prefix
         }
     };
     $.ajax({

@@ -3,11 +3,11 @@
 
 namespace App\Http\Controllers\Install;
 
-use App\Http\Controllers\Common;
+use App\Http\Controllers\Frontend;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
-class Index extends Common
+class Index extends Frontend
 {
     public function _initialize()
     {
@@ -33,17 +33,6 @@ class Index extends Common
 //            $this->error(trans('install_error2'), route('Home/Index/index'));
 //            return;
 //        }
-    }
-
-    // 加强ajax_api接口安全性
-    public function ajax_api()
-    {
-        $allowAjaxApi = ['get_data'];
-        if (!in_array(request('type'), $allowAjaxApi)) {
-            return;
-        }
-
-        $this->doAjaxApi();
     }
 
     //第一页 欢迎页
@@ -301,43 +290,41 @@ class Index extends Common
         switch ($field) {
             //第二部 验证数据库
             case 'check_mysql';
-                $currentDate = date(config('SYS_DATE_DETAIL')) . " ";
+                $currentDate = date(config('system.sys_date_detail')) . " ";
                 $errorMsg    = false;
                 //检测是否能连接到数据库服务器
                 try {
-                    M('', '', [
-                        'db_type' => 'mysql',
-                        'db_host' => $data['host'],
-                        'db_user' => $data['user'],
-                        'db_pwd'  => $data['pass'],
-                        'db_port' => $data['port'],
-                    ])->db()->connect();
-                } catch (\Think\Exception $e) {
-                    $errorMsg = mb_convert_encoding($e->getMessage(), 'utf-8', ['gbk', 'utf-8']);
+                    config([
+                        'database.connections.install_mysql.driver'   => 'mysql',
+                        'database.connections.install_mysql.host'     => $data['db_host'],
+                        'database.connections.install_mysql.port'     => $data['db_port'],
+                        'database.connections.install_mysql.database' => $data['db_database'],
+                        'database.connections.install_mysql.username' => $data['db_username'],
+                        'database.connections.install_mysql.password' => $data['db_password'],
+                        'database.connections.install_mysql.prefix'   => $data['db_prefix'],
+                    ]);
+                    DB::connection('install_mysql')->reconnect();
+
+                } catch (\PDOException $e) {
+                    $errorMsg = $e->getMessage();
                 }
+
                 if ($errorMsg) {
                     return ['status' => false, 'info' => ['msg' => $currentDate . $errorMsg, 'type' => 1]];
                 }
 
                 //只要能链接数据库就 保存配置
-                $saveConfig    = [
-                    'DB_HOST'   => $data['host'],
-                    'DB_NAME'   => $data['name'],
-                    'DB_USER'   => $data['user'],
-                    'DB_PWD'    => $data['pass'],
-                    'DB_PORT'   => $data['port'],
-                    'DB_PREFIX' => $data['prefix'],
+                $new_config = [
+                    'DB_HOST'     => $data['db_host'],
+                    'DB_PORT'     => $data['db_port'],
+                    'DB_DATABASE' => $data['db_database'],
+                    'DB_USERNAME' => $data['db_username'],
+                    'DB_PASSWORD' => $data['db_password'],
+                    'DB_PREFIX'   => $data['db_prefix'],
                 ];
-                $configStr     = var_export($saveConfig, true);
-                $CoreCopyright = config('CORE_COPYRIGHT');
-                $putConfig     = <<<EOF
-<?php
-{$CoreCopyright}
-// database config file
-return {$configStr};
-?>
-EOF;
-                file_put_contents(CONF_PATH . 'database.php', $putConfig);
+
+                mPutenv($new_config);
+
                 $result = [
                     'status' => true,
                     'info'   => [
@@ -354,13 +341,16 @@ EOF;
     {
         //不显示的数据库
         $notListDatabase = ['information_schema', 'mysql', 'performance_schema'];
-        $databaseList    = DB::select('show databases');
         $reCompareInfo   = [];
-        foreach (DB::select('show databases') as $db_key => $row) {
-            if (in_array($row->Database, $notListDatabase)) {
-                continue;
+        try {
+            foreach (DB::select('show databases') as $db_key => $row) {
+                if (in_array($row->Database, $notListDatabase)) {
+                    continue;
+                }
+                $reCompareInfo[] = $row->Database;
             }
-            $reCompareInfo[] = $row->Database;
+        } catch (\PDOException $e) {
+
         }
         return $reCompareInfo;
     }

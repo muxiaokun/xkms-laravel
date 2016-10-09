@@ -116,7 +116,7 @@ class FrontendMember extends Frontend
             return;
         }
 
-        $this->doAjaxApi();
+        return $this->doAjaxApi();
     }
 
 }

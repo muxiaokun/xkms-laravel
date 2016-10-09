@@ -74,7 +74,7 @@ class Wechat extends Frontend
                 $content    = $Oauth2Link;
                 break;
             case '时间':
-                $content = trans('server') . trans('time') . ':' . date(config('SYS_DATE_DETAIL'));
+                $content = trans('server') . trans('time') . ':' . date(config('system.sys_date_detail'));
                 break;
             default:
                 $content = '您发送的内容是：' . $msgInfo['Content'];

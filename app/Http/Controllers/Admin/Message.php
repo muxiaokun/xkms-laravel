@@ -129,7 +129,7 @@ class Message extends Backend
                 $where        = ['receive_id' => 0];
                 $resultEdit   = $MessageModel->where($where)->mEdit($data['id'], ['receive_time' => $currentTime]);
                 if ($resultEdit) {
-                    $result['info'] = date(config('SYS_DATE_DETAIL'), $currentTime);
+                    $result['info'] = date(config('system.sys_date_detail'), $currentTime);
                 } else {
                     $result['status'] = false;
                 }

@@ -34,37 +34,37 @@ class Common extends Controller
 //        }
     }
 
-    /**
-     * @param string $msg
-     * @param string $back_url
-     * @param int    $timeout
-     * @param bool   $ajax
-     */
-    protected function success($msg = '', $back_url = '', $timeout = 5, $ajax = false)
+    protected function success($msg = '', $back_url = '', $timeout = 5)
     {
+        return $this->dispatch_jump($msg, $back_url, $timeout, true);
+    }
 
+    protected function error($msg = '', $back_url = '', $timeout = 5)
+    {
+        return $this->dispatch_jump($msg, $back_url, $timeout, false);
     }
 
     /**
-     * @param string $msg
+     * @param string $message
      * @param string $back_url
      * @param int    $timeout
-     * @param bool   $ajax
+     * @param string $template
+     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    protected function error(
+    protected function dispatch_jump(
         $message = '',
         $back_url = '',
         $timeout = 5,
-        $ajax = false,
+        $status = true,
         $template = 'common.dispatch_jump'
     ) {
         if ('' == $message) {
-            $message = trans('common.handle') . trans('common.error');
+            $message = trans('common.handle') . ($status) ? trans('common.success'):trans('common.error');
         }
-        if ($ajax) {
+        if (Request::ajax()) {
             $ajax_data = [
-                'status'  => false,
-                'message' => $message,
+                'status'  => $status,
+                'info' => $message,
             ];
             return $ajax_data;
         }
@@ -249,9 +249,9 @@ class Common extends Controller
                 break;
         }
         if ($result['status']) {
-            $this->success($result['info']);
+            return $this->success($result['info']);
         } else {
-            $this->error($result['info']);
+            return $this->error($result['info']);
         }
     }
 

@@ -35,8 +35,12 @@
         @endforeach
     </table>
     <M:Page name="assess_list">
-        <table class="table"><tr><td class="text-right">
-            <config></config>
-        </td></tr></table>
+        <table class="table">
+            <tr>
+                <td class="text-right">
+                    <config></config>
+                </td>
+            </tr>
+        </table>
     </M:Page>
 @endsection

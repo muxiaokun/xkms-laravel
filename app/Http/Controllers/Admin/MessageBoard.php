@@ -11,16 +11,16 @@ class MessageBoard extends Backend
     public function index()
     {
         $MessageBoardModel = D('MessageBoard');
-        $where             = array();
+        $where             = [];
 
         //建立where
-        $whereValue                   = '';
-        $whereValue                   = request('name');
-        $whereValue && $where['name'] = array('like', '%' . $whereValue . '%');
+        $whereValue = '';
+        $whereValue = request('name');
+        $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
 
         $messageBoardList = $MessageBoardModel->mSelect($where, true);
         foreach ($messageBoardList as &$messageBoard) {
-            $option = array();
+            $option = [];
             foreach ($messageBoard['config'] as $name => $value) {
                 $option[] = $name;
             }
@@ -30,7 +30,7 @@ class MessageBoard extends Backend
         $this->assign('message_board_list_count', $MessageBoardModel->mGetPageCount($where));
 
         //初始化batch_handle
-        $batchHandle              = array();
+        $batchHandle              = [];
         $batchHandle['log_index'] = $this->_check_privilege('index', 'MessageBoardLog');
         $batchHandle['add']       = $this->_check_privilege('add');
         $batchHandle['edit']      = $this->_check_privilege('edit');
@@ -47,12 +47,13 @@ class MessageBoard extends Backend
         if (IS_POST) {
             $data              = $this->makeData();
             $MessageBoardModel = D('MessageBoard');
-            $resultAdd        = $MessageBoardModel->mAdd($data);
+            $resultAdd         = $MessageBoardModel->mAdd($data);
             if ($resultAdd) {
                 $this->success(trans('messageboard') . trans('add') . trans('success'), $rebackLink);
                 return;
             } else {
-                $this->error(trans('messageboard') . trans('add') . trans('error'), route('add', array('cate_id' => request('get.cate_id'))));
+                $this->error(trans('messageboard') . trans('add') . trans('error'),
+                    route('add', ['cate_id' => request('get.cate_id')]));
             }
         }
 
@@ -71,13 +72,13 @@ class MessageBoard extends Backend
 
         $MessageBoardModel = D('MessageBoard');
         if (IS_POST) {
-            $data        = $this->makeData();
+            $data       = $this->makeData();
             $resultEdit = $MessageBoardModel->mEdit($id, $data);
             if ($resultEdit) {
                 $this->success(trans('messageboard') . trans('edit') . trans('success'), route('index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
+                $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
                 $this->error(trans('messageboard') . trans('edit') . trans('error'), $errorGoLink);
             }
         }
@@ -100,7 +101,7 @@ class MessageBoard extends Backend
         }
 
         $MessageBoardModel = D('MessageBoard');
-        $resultDel        = $MessageBoardModel->mDel($id);
+        $resultDel         = $MessageBoardModel->mDel($id);
         if ($resultDel) {
             $this->success(trans('messageboard') . trans('del') . trans('success'), route('index'));
             return;
@@ -116,10 +117,10 @@ class MessageBoard extends Backend
         $template = request('template');
         $config   = json_decode(htmlspecialchars_decode(request('config')), true);
 
-        $data                                                             = array();
-        ('add' == ACTION_NAME || null !== $name) && $data['name']         = $name;
+        $data = [];
+        ('add' == ACTION_NAME || null !== $name) && $data['name'] = $name;
         ('add' == ACTION_NAME || null !== $template) && $data['template'] = $template;
-        ('add' == ACTION_NAME || null !== $config) && $data['config']     = $config;
+        ('add' == ACTION_NAME || null !== $config) && $data['config'] = $config;
 
         return $data;
     }

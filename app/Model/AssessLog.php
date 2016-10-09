@@ -10,7 +10,9 @@ class AssessLog extends Common
         $this->mGetPage($page);
         !isset($this->options['order']) && $this->order('add_time desc');
         $data = $this->where($where)->select();
-        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
+        foreach ($data as &$dataRow) {
+            $this->mDecodeData($dataRow);
+        }
         return $data;
     }
 
@@ -21,7 +23,10 @@ class AssessLog extends Common
         }
 
         if (isset($data['a_id']) && isset($data['grade_id']) && isset($data['re_grade_id'])) {
-            $where       = array('a_id' => $data['a_id'], 'grade_id' => $data['grade_id'], 're_grade_id' => $data['re_grade_id']);
+            $where      = ['a_id'        => $data['a_id'],
+                           'grade_id'    => $data['grade_id'],
+                           're_grade_id' => $data['re_grade_id'],
+            ];
             $assessInfo = $this->where($where)->find();
         }
         $this->mEncodeData($data);

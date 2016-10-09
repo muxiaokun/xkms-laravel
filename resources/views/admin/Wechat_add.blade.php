@@ -1,21 +1,20 @@
-
-    <section class="container mt10">
-        <div class="panel panel-default">
-            <div class="panel-heading">{{ $title }}</div>
-            <div class="panel-body">
-            <form method="post" class="form-horizontal"  role="form">
+<section class="container mt10">
+    <div class="panel panel-default">
+        <div class="panel-heading">{{ $title }}</div>
+        <div class="panel-body">
+            <form method="post" class="form-horizontal" role="form">
                 <div class="row">
                     {{--Api_link--}}
                     <div class="col-sm-12">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Api_link</label>
                             <div class="col-sm-7">
-                                <a href="javascript:void(0);" id="Api_link" data-clipboard-text="{{ $Api_link }}" >
+                                <a href="javascript:void(0);" id="Api_link" data-clipboard-text="{{ $Api_link }}">
                                     {{ $Api_link }}
                                 </a>
                                 <br/>@lang('common.click')@lang('common.path')@lang('common.copy')
-                                <a href="{:M_qrcode($Api_link)}" target="_blank" >
-                                    <M:Img class="w100 h100" src="{:M_qrcode($Api_link)}" />
+                                <a href="{:M_qrcode($Api_link)}" target="_blank">
+                                    <M:Img class="w100 h100" src="{:M_qrcode($Api_link)}"/>
                                 </a>
                                 <script type="text/javascript" charset="utf-8">M_ZeroClipboard('Api_link');</script>
                             </div>
@@ -26,12 +25,12 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Oauth2_link</label>
                             <div class="col-sm-7">
-                                <a href="javascript:void(0);" id="Oauth2_link" data-clipboard-text="{{ $Oauth2_link }}" >
+                                <a href="javascript:void(0);" id="Oauth2_link" data-clipboard-text="{{ $Oauth2_link }}">
                                     {{ $Oauth2_link }}
                                 </a>
                                 <br/>@lang('common.click')@lang('common.path')@lang('common.copy')
-                                <a href="{:M_qrcode($Oauth2_link)}" target="_blank" >
-                                    <M:Img class="w100 h100" src="{:M_qrcode($Oauth2_link)}" />
+                                <a href="{:M_qrcode($Oauth2_link)}" target="_blank">
+                                    <M:Img class="w100 h100" src="{:M_qrcode($Oauth2_link)}"/>
                                 </a>
                                 <script type="text/javascript" charset="utf-8">M_ZeroClipboard('Oauth2_link');</script>
                             </div>
@@ -44,7 +43,8 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">appId</label>
                             <div class="col-sm-7">
-                                <input type="text" name="WECHAT_ID" value="{{ config('WECHAT_ID') }}" class="form-control">
+                                <input type="text" name="WECHAT_ID" value="{{ config('WECHAT_ID') }}"
+                                       class="form-control">
                             </div>
                         </div>
                     </div>
@@ -53,7 +53,8 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">appSecret</label>
                             <div class="col-sm-7">
-                                <input type="text" name="WECHAT_SECRET" value="{{ config('WECHAT_SECRET') }}" class="form-control">
+                                <input type="text" name="WECHAT_SECRET" value="{{ config('WECHAT_SECRET') }}"
+                                       class="form-control">
                             </div>
                         </div>
                     </div>
@@ -64,7 +65,8 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">token</label>
                             <div class="col-sm-7">
-                                <input type="text" name="WECHAT_TOKEN" value="{{ config('WECHAT_TOKEN') }}" class="form-control">
+                                <input type="text" name="WECHAT_TOKEN" value="{{ config('WECHAT_TOKEN') }}"
+                                       class="form-control">
                             </div>
                         </div>
                     </div>
@@ -74,10 +76,12 @@
                             <label class="col-sm-4 control-label">@lang('common.enable')@lang('common.record')@lang('common.log')</label>
                             <div class="col-sm-7">
                                 <label class="radio-inline">
-                                    <input type="radio" name="WECHAT_RECORD_LOG" value="1" @if ('1' heq $wechat['WECHAT_RECORD_LOG'] or !isset($wechat['WECHAT_RECORD_LOG']))checked="checked"@endif >@lang('common.open')
+                                    <input type="radio" name="WECHAT_RECORD_LOG" value="1"
+                                           @if ('1' heq $wechat['WECHAT_RECORD_LOG'] or !isset($wechat['WECHAT_RECORD_LOG']))checked="checked"@endif >@lang('common.open')
                                 </label>
                                 <label class="radio-inline">
-                                    <input type="radio" name="WECHAT_RECORD_LOG" value="0" @if ('0' heq $wechat['WECHAT_RECORD_LOG'])checked="checked"@endif >@lang('common.close')
+                                    <input type="radio" name="WECHAT_RECORD_LOG" value="0"
+                                           @if ('0' heq $wechat['WECHAT_RECORD_LOG'])checked="checked"@endif >@lang('common.close')
                                 </label>
                             </div>
                         </div>
@@ -89,7 +93,8 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">AesKey</label>
                             <div class="col-sm-7">
-                                <input type="text" name="WECHAT_AESKEY" value="{{ config('WECHAT_AESKEY') }}" class="form-control">
+                                <input type="text" name="WECHAT_AESKEY" value="{{ config('WECHAT_AESKEY') }}"
+                                       class="form-control">
                             </div>
                         </div>
                     </div>
@@ -98,7 +103,8 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">templateId</label>
                             <div class="col-sm-7">
-                                <input type="text" name="WECHAT_TEMPLATE_ID" value="{{ config('WECHAT_TEMPLATE_ID') }}" class="form-control">
+                                <input type="text" name="WECHAT_TEMPLATE_ID" value="{{ config('WECHAT_TEMPLATE_ID') }}"
+                                       class="form-control">
                             </div>
                         </div>
                     </div>
@@ -113,6 +119,6 @@
                     </div>
                 </div>
             </form>
-            </div>
         </div>
-    </section>
+    </div>
+</section>

@@ -25,7 +25,7 @@
                 <td>
                     @if ($quests['access_info'])
                         <form action="{:M_U('Quests/add',array('id'=>$quests['id']))}" method="get">
-                            <input type="text" name="access_info" />
+                            <input type="text" name="access_info"/>
                             <button class="btn btn-default btn-sm">@lang('common.confirm')@lang('common.pass')</button>
                         </form>
                     @else
@@ -36,8 +36,12 @@
         @endforeach
     </table>
     <M:Page name="quests_list">
-        <table class="table"><tr><td class="text-right">
-            <config></config>
-        </td></tr></table>
+        <table class="table">
+            <tr>
+                <td class="text-right">
+                    <config></config>
+                </td>
+            </tr>
+        </table>
     </M:Page>
 @endsection

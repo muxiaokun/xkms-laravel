@@ -10,31 +10,31 @@ class Quests extends Backend
     //列表
     public function index()
     {
-        $where = array();
+        $where = [];
 
         //建立where
-        $whereValue                         = '';
-        $whereValue                         = request('title');
-        $whereValue && $where['title']      = array('like', '%' . $whereValue . '%');
-        $whereValue                         = mMktimeRange('start_time');
+        $whereValue = '';
+        $whereValue = request('title');
+        $whereValue && $where['title'] = ['like', '%' . $whereValue . '%'];
+        $whereValue = mMktimeRange('start_time');
         $whereValue && $where['start_time'] = $whereValue;
-        $whereValue                         = mMktimeRange('end_time');
-        $whereValue && $where['end_time']   = $whereValue;
+        $whereValue = mMktimeRange('end_time');
+        $whereValue && $where['end_time'] = $whereValue;
 
         $QuestsModel = D('Quests');
-        $questsList = $QuestsModel->mSelect($where, true);
+        $questsList  = $QuestsModel->mSelect($where, true);
         $this->assign('quests_list', $questsList);
         $this->assign('quests_list_count', $QuestsModel->mGetPageCount($where));
 
         //初始化where_info
-        $whereInfo               = array();
-        $whereInfo['title']      = array('type' => 'input', 'name' => trans('title'));
-        $whereInfo['start_time'] = array('type' => 'time', 'name' => trans('start') . trans('time'));
-        $whereInfo['end_time']   = array('type' => 'time', 'name' => trans('end') . trans('time'));
+        $whereInfo               = [];
+        $whereInfo['title']      = ['type' => 'input', 'name' => trans('title')];
+        $whereInfo['start_time'] = ['type' => 'time', 'name' => trans('start') . trans('time')];
+        $whereInfo['end_time']   = ['type' => 'time', 'name' => trans('end') . trans('time')];
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batchHandle                 = array();
+        $batchHandle                 = [];
         $batchHandle['add']          = $this->_check_privilege('add');
         $batchHandle['answer_index'] = $this->_check_privilege('index', 'QuestsAnswer');
         $batchHandle['answer_edit']  = $this->_check_privilege('edit', 'QuestsAnswer');
@@ -52,7 +52,7 @@ class Quests extends Backend
         if (IS_POST) {
             $QuestsModel = D('Quests');
             $data        = $this->makeData();
-            $resultAdd  = $QuestsModel->mAdd($data);
+            $resultAdd   = $QuestsModel->mAdd($data);
             if ($resultAdd) {
                 $this->success(trans('quests') . trans('add') . trans('success'), route('Quests/index'));
                 return;
@@ -74,13 +74,13 @@ class Quests extends Backend
 
         $QuestsModel = D('Quests');
         if (IS_POST) {
-            $data        = $this->makeData();
+            $data       = $this->makeData();
             $resultEdit = $QuestsModel->mEdit($id, $data);
             if ($resultEdit) {
                 $this->success(trans('quests') . trans('edit') . trans('success'), route('Quests/index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
+                $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
                 $this->error(trans('quests') . trans('edit') . trans('error'), $errorGoLink);
             }
         }
@@ -109,10 +109,10 @@ class Quests extends Backend
             //删除问卷会删除该问卷下的所有答案
             $QuestsAnswerModel = D('QuestsAnswer');
             //TODO 需要定义数据列
-            $resultClear      = $QuestsAnswerModel->mClean($id);
+            $resultClear = $QuestsAnswerModel->mClean($id);
             if ($clear) {
                 if ($resultClear) {
-                    $QuestsModel->where(array('id' => $id))->data(array('current_portion' => 0))->save();
+                    $QuestsModel->where(['id' => $id])->data(['current_portion' => 0])->save();
                     $this->success(trans('quests') . trans('clear') . trans('success'), route('Quests/index'));
                     return;
                 } else {
@@ -123,14 +123,14 @@ class Quests extends Backend
             $this->success(trans('quests') . trans('del') . trans('success'), route('Quests/index'));
             return;
         } else {
-            $this->error(trans('quests') . trans('del') . trans('error'), route('Quests/edit', array('id' => $id)));
+            $this->error(trans('quests') . trans('del') . trans('error'), route('Quests/edit', ['id' => $id]));
         }
     }
 
     //构造数据
     private function makeData()
     {
-        $title         = request('title');
+        $title        = request('title');
         $maxPortion   = request('max_portion');
         $startTime    = request('start_time');
         $endTime      = request('end_time');
@@ -146,15 +146,15 @@ class Quests extends Backend
         }
         $extInfo = json_encode($extInfo);
 
-        $data                                                                       = array();
-        ('add' == ACTION_NAME || null !== $title) && $data['title']                 = $title;
-        ('add' == ACTION_NAME || null !== $maxPortion) && $data['max_portion']     = $maxPortion;
-        ('add' == ACTION_NAME || null !== $startTime) && $data['start_time']       = $startTime;
-        ('add' == ACTION_NAME || null !== $endTime) && $data['end_time']           = $endTime;
+        $data = [];
+        ('add' == ACTION_NAME || null !== $title) && $data['title'] = $title;
+        ('add' == ACTION_NAME || null !== $maxPortion) && $data['max_portion'] = $maxPortion;
+        ('add' == ACTION_NAME || null !== $startTime) && $data['start_time'] = $startTime;
+        ('add' == ACTION_NAME || null !== $endTime) && $data['end_time'] = $endTime;
         ('add' == ACTION_NAME || null !== $startContent) && $data['start_content'] = $startContent;
-        ('add' == ACTION_NAME || null !== $endContent) && $data['end_content']     = $endContent;
-        ('add' == ACTION_NAME || null !== $accessInfo) && $data['access_info']     = $accessInfo;
-        ('add' == ACTION_NAME || null !== $extInfo) && $data['ext_info']           = $extInfo;
+        ('add' == ACTION_NAME || null !== $endContent) && $data['end_content'] = $endContent;
+        ('add' == ACTION_NAME || null !== $accessInfo) && $data['access_info'] = $accessInfo;
+        ('add' == ACTION_NAME || null !== $extInfo) && $data['ext_info'] = $extInfo;
         return $data;
     }
 }

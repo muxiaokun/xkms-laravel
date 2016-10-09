@@ -12,27 +12,27 @@ class Recruit extends Backend
     {
         $RecruitModel = D('Recruit');
         //建立where
-        $whereValue                         = '';
-        $whereValue                         = request('name');
-        $whereValue && $where['name']       = array('like', '%' . $whereValue . '%');
-        $whereValue                         = mMktimeRange('start_time');
+        $whereValue = '';
+        $whereValue = request('name');
+        $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
+        $whereValue = mMktimeRange('start_time');
         $whereValue && $where['start_time'] = $whereValue;
-        $whereValue                         = mMktimeRange('end_time');
-        $whereValue && $where['end_time']   = $whereValue;
+        $whereValue = mMktimeRange('end_time');
+        $whereValue && $where['end_time'] = $whereValue;
         //初始化翻页 和 列表数据
         $recruitList = $RecruitModel->mSelect($where, true);
         $this->assign('recruit_list', $recruitList);
         $this->assign('recruit_list_count', $RecruitModel->mGetPageCount($where));
 
         //初始化where_info
-        $whereInfo               = array();
-        $whereInfo['name']       = array('type' => 'input', 'name' => trans('recruit') . trans('name'));
-        $whereInfo['start_time'] = array('type' => 'time', 'name' => trans('start') . trans('time'));
-        $whereInfo['end_time']   = array('type' => 'time', 'name' => trans('end') . trans('time'));
+        $whereInfo               = [];
+        $whereInfo['name']       = ['type' => 'input', 'name' => trans('recruit') . trans('name')];
+        $whereInfo['start_time'] = ['type' => 'time', 'name' => trans('start') . trans('time')];
+        $whereInfo['end_time']   = ['type' => 'time', 'name' => trans('end') . trans('time')];
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batchHandle              = array();
+        $batchHandle              = [];
         $batchHandle['log_index'] = $this->_check_privilege('add', 'RecruitLog');
         $batchHandle['add']       = $this->_check_privilege('add');
         $batchHandle['edit']      = $this->_check_privilege('edit');
@@ -49,7 +49,7 @@ class Recruit extends Backend
         if (IS_POST) {
             $RecruitModel = D('Recruit');
             $data         = $this->makeData();
-            $resultAdd   = $RecruitModel->mAdd($data);
+            $resultAdd    = $RecruitModel->mAdd($data);
             if ($resultAdd) {
                 $this->success(trans('recruit') . trans('add') . trans('success'), route('index'));
                 return;
@@ -71,13 +71,13 @@ class Recruit extends Backend
 
         $RecruitModel = D('Recruit');
         if (IS_POST) {
-            $data        = $this->makeData();
+            $data       = $this->makeData();
             $resultEdit = $RecruitModel->mEdit($id, $data);
             if ($resultEdit) {
                 $this->success(trans('recruit') . trans('edit') . trans('success'), route('index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
+                $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
                 $this->error(trans('recruit') . trans('edit') . trans('error'), $errorGoLink);
             }
         }
@@ -98,11 +98,11 @@ class Recruit extends Backend
         }
 
         $RecruitModel = D('Recruit');
-        $resultDel   = $RecruitModel->mDel($id);
+        $resultDel    = $RecruitModel->mDel($id);
         if ($resultDel) {
             $RecruitLogModel = D('RecruitLog');
             //TODO 需要定义数据列
-            $resultDel      = $RecruitLogModel->mClean($id);
+            $resultDel = $RecruitLogModel->mClean($id);
             $this->success(trans('recruit') . trans('del') . trans('success'), route('index'));
             return;
         } else {
@@ -114,8 +114,8 @@ class Recruit extends Backend
     private function makeData()
     {
         //初始化参数
-        $title           = request('title');
-        $explains        = request('explains');
+        $title          = request('title');
+        $explains       = request('explains');
         $isEnable       = request('is_enable');
         $currentPortion = request('current_portion');
         $maxPortion     = request('max_portion');
@@ -123,15 +123,15 @@ class Recruit extends Backend
         $endTime        = mMktime(request('end_time'), true);
         $extInfo        = request('ext_info');
 
-        $data                                                                           = array();
-        ('add' == ACTION_NAME || null !== $title) && $data['title']                     = $title;
-        ('add' == ACTION_NAME || null !== $explains) && $data['explains']               = $explains;
-        ('add' == ACTION_NAME || null !== $isEnable) && $data['is_enable']             = $isEnable;
+        $data = [];
+        ('add' == ACTION_NAME || null !== $title) && $data['title'] = $title;
+        ('add' == ACTION_NAME || null !== $explains) && $data['explains'] = $explains;
+        ('add' == ACTION_NAME || null !== $isEnable) && $data['is_enable'] = $isEnable;
         ('add' == ACTION_NAME || null !== $currentPortion) && $data['current_portion'] = $currentPortion;
-        ('add' == ACTION_NAME || null !== $maxPortion) && $data['max_portion']         = $maxPortion;
-        ('add' == ACTION_NAME || null !== $startTime) && $data['start_time']           = $startTime;
-        ('add' == ACTION_NAME || null !== $endTime) && $data['end_time']               = $endTime;
-        ('add' == ACTION_NAME || null !== $extInfo) && $data['ext_info']               = $extInfo;
+        ('add' == ACTION_NAME || null !== $maxPortion) && $data['max_portion'] = $maxPortion;
+        ('add' == ACTION_NAME || null !== $startTime) && $data['start_time'] = $startTime;
+        ('add' == ACTION_NAME || null !== $endTime) && $data['end_time'] = $endTime;
+        ('add' == ACTION_NAME || null !== $extInfo) && $data['ext_info'] = $extInfo;
 
         return $data;
     }

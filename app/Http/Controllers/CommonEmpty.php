@@ -19,8 +19,8 @@ class CommonEmpty extends Controller
             $holdTime = 10;
             //小于10秒 该公益页面也就没有意义了 将自动跳回默认页面
             $appName = APP_NAME;
-            $root     = __ROOT__;
-            $html     = <<< EOF
+            $root    = __ROOT__;
+            $html    = <<< EOF
 <!DOCTYPE>
 <html><head>
 <title> 网页没有找到 404 —— {$appName}</title>

@@ -10,20 +10,22 @@ class Navigation extends Common
         $this->mGetPage($page);
         !isset($this->options['order']) && $this->order('id desc');
         $data = $this->where($where)->page($page)->select();
-        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
+        foreach ($data as &$dataRow) {
+            $this->mDecodeData($dataRow);
+        }
         return $data;
     }
 
     public function mFind_data($shortName)
     {
         if (!$shortName) {
-            return array();
+            return [];
         }
 
-        $navigation = $this->where(array('is_enable' => 1, 'short_name' => $shortName))->find();
+        $navigation = $this->where(['is_enable' => 1, 'short_name' => $shortName])->find();
         $this->mDecodeData($navigation);
         $navigationData = $this->_decode_navigation_data($navigation['ext_info']);
-        return ($navigationData) ? $navigationData : array();
+        return ($navigationData) ? $navigationData : [];
     }
 
     private function _decode_navigation_data($navigationData)

@@ -13,12 +13,12 @@ class RecruitLog extends Backend
         $RecruitModel    = D('Recruit');
         $RecruitLogModel = D('RecruitLog');
         //建立where
-        $whereValue                       = '';
-        $whereValue                       = request('r_id');
-        $whereValue && $where['r_id']     = $whereValue;
-        $whereValue                       = request('name');
-        $whereValue && $where['name']     = array('like', '%' . $whereValue . '%');
-        $whereValue                       = mMktimeRange('birthday');
+        $whereValue = '';
+        $whereValue = request('r_id');
+        $whereValue && $where['r_id'] = $whereValue;
+        $whereValue = request('name');
+        $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
+        $whereValue = mMktimeRange('birthday');
         $whereValue && $where['birthday'] = $whereValue;
         //初始化翻页 和 列表数据
         $recruitLogList         = $RecruitLogModel->mSelect($where, true);
@@ -33,13 +33,13 @@ class RecruitLog extends Backend
         $this->assign('recruit_log_list_count', $RecruitLogModel->mGetPageCount($where));
 
         //初始化where_info
-        $whereInfo             = array();
-        $whereInfo['name']     = array('type' => 'input', 'name' => trans('recruit_name'));
-        $whereInfo['birthday'] = array('type' => 'time', 'name' => trans('recruit_birthday'));
+        $whereInfo             = [];
+        $whereInfo['name']     = ['type' => 'input', 'name' => trans('recruit_name')];
+        $whereInfo['birthday'] = ['type' => 'time', 'name' => trans('recruit_birthday')];
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batchHandle        = array();
+        $batchHandle        = [];
         $batchHandle['del'] = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
@@ -56,7 +56,7 @@ class RecruitLog extends Backend
         }
 
         $RecruitLogModel = D('RecruitLog');
-        $resultDel      = $RecruitLogModel->mDel($id);
+        $resultDel       = $RecruitLogModel->mDel($id);
         if ($resultDel) {
             $this->success(trans('recruit_log') . trans('del') . trans('success'), route('index'));
             return;

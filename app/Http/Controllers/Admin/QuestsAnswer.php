@@ -12,25 +12,25 @@ class QuestsAnswer extends Backend
     {
         $QuestsModel = D('Quests');
         $MemberModel = D('Member');
-        $where       = array();
+        $where       = [];
 
         //建立where
-        $whereValue                        = '';
-        $whereValue                        = request('quests_id');
+        $whereValue = '';
+        $whereValue = request('quests_id');
         $whereValue && $where['quests_id'] = $whereValue;
-        $whereValue                        = request('quests_title');
-        $whereValue && $where['quests_id'] = array(
+        $whereValue = request('quests_title');
+        $whereValue && $where['quests_id'] = [
             'in',
-            $QuestsModel->where(array('title' => array('like', '%' . $whereValue . '%')))->mColumn2Array('id'),
-        );
-        $whereValue                        = request('member_id');
-        $whereValue && $where['member_id'] = array(
+            $QuestsModel->where(['title' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+        ];
+        $whereValue = request('member_id');
+        $whereValue && $where['member_id'] = [
             'in',
-            $MemberModel->where(array('member_name' => array('like', '%' . $whereValue . '%')))->mColumn2Array('id'),
-        );
+            $MemberModel->where(['member_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+        ];
 
-        $QuestsAnswerModel  = D('QuestsAnswer');
-        $questsAnswerList = $QuestsAnswerModel->mSelect($where, true);
+        $QuestsAnswerModel = D('QuestsAnswer');
+        $questsAnswerList  = $QuestsAnswerModel->mSelect($where, true);
         foreach ($questsAnswerList as &$questsAnswer) {
             $memberName                  = $MemberModel->mFindColumn($groupId, 'name');
             $questsAnswer['member_name'] = ($memberName) ? $memberName : trans('anonymous');
@@ -38,13 +38,13 @@ class QuestsAnswer extends Backend
         $this->assign('quests_answer_list', $questsAnswerList);
         $this->assign('quests_answer_list_count', $QuestsAnswerModel->mGetPageCount($where));
         //初始化where_info
-        $whereInfo                 = array();
-        $whereInfo['quests_title'] = array('type' => 'input', 'name' => trans('quests') . trans('name'));
-        $whereInfo['member_id']    = array('type' => 'input', 'name' => trans('member') . trans('name'));
+        $whereInfo                 = [];
+        $whereInfo['quests_title'] = ['type' => 'input', 'name' => trans('quests') . trans('name')];
+        $whereInfo['member_id']    = ['type' => 'input', 'name' => trans('member') . trans('name')];
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batchHandle        = array();
+        $batchHandle        = [];
         $batchHandle['add'] = $this->_check_privilege('add');
         $batchHandle['del'] = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
@@ -61,9 +61,9 @@ class QuestsAnswer extends Backend
             $this->error(trans('id') . trans('error'), route('index'));
         }
 
-        $QuestsModel        = D('Quests');
-        $QuestsAnswerModel  = D('QuestsAnswer');
-        $questsAnswerInfo = $QuestsAnswerModel->mFind($id);
+        $QuestsModel       = D('Quests');
+        $QuestsAnswerModel = D('QuestsAnswer');
+        $questsAnswerInfo  = $QuestsAnswerModel->mFind($id);
         $questsInfo        = $QuestsModel->mFind($questsAnswerInfo['quests_id']);
 
         //初始化问题
@@ -71,9 +71,9 @@ class QuestsAnswer extends Backend
         foreach ($questsQuestList as $questId => $quest) {
             $questsQuestList[$questId]['answer'] = explode('|', $questsQuestList[$questId]['answer']);
         }
-        $questsAnswerList = array();
+        $questsAnswerList = [];
         foreach (explode('|', $questsAnswerInfo['answer']) as $questAnswer) {
-            list($key, $value)                        = explode(':', $questAnswer);
+            list($key, $value) = explode(':', $questAnswer);
             '' != $key && $questsAnswerList[$key][] = $value;
         }
 
@@ -95,24 +95,26 @@ class QuestsAnswer extends Backend
 
         //读取问题
         $QuestsModel = D('Quests');
-        $questsInfo = $QuestsModel->mFind($questsId);
+        $questsInfo  = $QuestsModel->mFind($questsId);
         //初始化问题
-        $questsQuestList = json_decode($questsInfo['ext_info'], true);
+        $questsQuestList   = json_decode($questsInfo['ext_info'], true);
         $QuestsAnswerModel = D('QuestsAnswer');
         foreach ($questsQuestList as $questId => $quest) {
             $answerName = explode('|', $questsQuestList[$questId]['answer']);
-            $answer      = array();
+            $answer     = [];
             switch ($quest['answer_type']) {
                 case 'radio':
                     foreach ($answerName as $k => $name) {
                         $answer[$k]['name']  = $name;
-                        $answer[$k]['count'] = $QuestsAnswerModel->count_quests_answer($questsId, '%|' . $questId . ':' . $k . "|%");
+                        $answer[$k]['count'] = $QuestsAnswerModel->count_quests_answer($questsId,
+                            '%|' . $questId . ':' . $k . "|%");
                     }
                     break;
                 case 'checkbox':
                     foreach ($answerName as $k => $name) {
                         $answer[$k]['name']  = $name;
-                        $answer[$k]['count'] = $QuestsAnswerModel->count_quests_answer($questsId, '%|' . $questId . ':' . $k . "|%");
+                        $answer[$k]['count'] = $QuestsAnswerModel->count_quests_answer($questsId,
+                            '%|' . $questId . ':' . $k . "|%");
                     }
                     break;
                 case 'text':
@@ -139,12 +141,12 @@ class QuestsAnswer extends Backend
             $this->error(trans('id') . trans('error'), route('index'));
         }
 
-        $QuestsAnswerModel  = D('QuestsAnswer');
-        $questsAnswerInfo = $QuestsAnswerModel->mFind($id);
+        $QuestsAnswerModel = D('QuestsAnswer');
+        $questsAnswerInfo  = $QuestsAnswerModel->mFind($id);
         $resultDel         = $QuestsAnswerModel->mDel($questsAnswerInfo['id']);
         if ($resultDel) {
             $QuestsModel = D('Quests');
-            $QuestsModel->where(array('id' => $questsAnswerInfo['quests_id']))->setDec('current_portion');
+            $QuestsModel->where(['id' => $questsAnswerInfo['quests_id']])->setDec('current_portion');
             $this->success(trans('del') . trans('answer') . trans('success'), route('index'));
         } else {
             $this->error(trans('del') . trans('answer') . trans('error'), route('index'));

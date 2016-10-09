@@ -34,7 +34,7 @@ class ArticleCategory extends Backend
         $articleCategoryList = $ArticleCategoryModel->mSelect($where, $ArticleCategoryModel->where($where)->count());
         foreach ($articleCategoryList as &$articleCategory) {
             //parent_id 用完销毁不能产生歧义
-            $where['parent_id']            = $articleCategory['id'];
+            $where['parent_id']           = $articleCategory['id'];
             $articleCategory['has_child'] = $ArticleCategoryModel->mGetPageCount($where);
             unset($where['parent_id']);
             $articleCategory['show']          = ($articleCategory['if_show']) ? trans('show') : trans('hidden');
@@ -56,9 +56,11 @@ class ArticleCategory extends Backend
         //初始化where_info
         $whereInfo            = [];
         $whereInfo['name']    = ['type' => 'input', 'name' => trans('article') . trans('category') . trans('name')];
-        $whereInfo['if_show'] = ['type'  => 'select',
-                                 'name'  => trans('yes') . trans('no') . trans('show'),
-                                 'value' => [1 => trans('show'), 2 => trans('hidden')]];
+        $whereInfo['if_show'] = [
+            'type'  => 'select',
+            'name'  => trans('yes') . trans('no') . trans('show'),
+            'value' => [1 => trans('show'), 2 => trans('hidden')],
+        ];
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -107,7 +109,8 @@ class ArticleCategory extends Backend
         if (1 != session('backend_info.id')
             && !mInArray($id, $ArticleCategoryModel->mFind_allow())
         ) {
-            $this->error(trans('none') . trans('privilege') . trans('edit') . trans('article') . trans('category'), route('index'));
+            $this->error(trans('none') . trans('privilege') . trans('edit') . trans('article') . trans('category'),
+                route('index'));
         }
 
         $maAllowArr = $ArticleCategoryModel->mFind_allow('ma');
@@ -127,7 +130,8 @@ class ArticleCategory extends Backend
 
                 return;
             } else {
-                $this->error(trans('article') . trans('category') . trans('edit') . trans('error'), route('edit', ['id' => $id]));
+                $this->error(trans('article') . trans('category') . trans('edit') . trans('error'),
+                    route('edit', ['id' => $id]));
             }
         }
 
@@ -177,12 +181,13 @@ class ArticleCategory extends Backend
         if (!mInArray($id, $ArticleCategoryModel->mFind_allow('ma'))
             && 1 != session('backend_info.id')
         ) {
-            $this->error(trans('none') . trans('privilege') . trans('del') . trans('article') . trans('category'), route('index'));
+            $this->error(trans('none') . trans('privilege') . trans('del') . trans('article') . trans('category'),
+                route('index'));
         }
 
         //解除文章和被删除分类的关系
         $ArticleModel = D('Article');
-        $resultClean = $ArticleModel->mClean($id, 'cate_id');
+        $resultClean  = $ArticleModel->mClean($id, 'cate_id');
         if (!$resultClean) {
             $this->error(trans('article') . trans('clear') . trans('category') . trans('error'), route('index'));
         }
@@ -264,24 +269,24 @@ class ArticleCategory extends Backend
         $parentId = request('parent_id');
         $name     = request('name');
         $manageId = request('manage_id');
-        $addId   = session('backend_info.id');
+        $addId    = session('backend_info.id');
         if (('add' == ACTION_NAME || null !== $manageId)
             && !in_array($addId, $manageId)
         ) {
             $manageId[] = $addId;
         }
 
-        $manageGroupId  = request('manage_group_id');
-        $accessGroupId  = request('access_group_id');
-        $thumb          = request('thumb');
-        $sort           = request('sort');
-        $sLimit         = request('s_limit');
-        $ifShow         = request('if_show');
-        $isContent      = request('is_content');
-        $content        = request('content');
-        $extend         = request('extend');
+        $manageGroupId = request('manage_group_id');
+        $accessGroupId = request('access_group_id');
+        $thumb         = request('thumb');
+        $sort          = request('sort');
+        $sLimit        = request('s_limit');
+        $ifShow        = request('if_show');
+        $isContent     = request('is_content');
+        $content       = request('content');
+        $extend        = request('extend');
         $postAttribute = request('attribute');
-        $attribute      = [];
+        $attribute     = [];
         foreach ($postAttribute as $attrs) {
             $attribute[$attrs['name']] = [];
             foreach ($attrs['value'] as $attrValue) {
@@ -317,8 +322,8 @@ class ArticleCategory extends Backend
     private function addEditAfterCommon(&$data, $id)
     {
         $ManageUploadModel = D('ManageUpload');
-        $bindFile         = mGetContentUpload($data['content']);
-        $bindFile[]       = $data['thumb'];
+        $bindFile          = mGetContentUpload($data['content']);
+        $bindFile[]        = $data['thumb'];
         $ManageUploadModel->mEdit($id, $bindFile);
     }
 

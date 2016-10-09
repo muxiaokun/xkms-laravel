@@ -23,7 +23,7 @@ class Index extends Backend
     {
         if (IS_POST) {
             //表单提交的名称
-            $col = array(
+            $col = [
                 'SITE_TITLE',
                 'SITE_DOMAIN',
                 'SITE_KEYWORDS',
@@ -35,7 +35,7 @@ class Index extends Backend
                 'SITE_ADDR',
                 'SITE_ICPNUMBER',
                 'SITE_SCRIPT',
-            );
+            ];
             $this->_put_config($col, 'website');
             return;
         }
@@ -49,7 +49,7 @@ class Index extends Backend
     {
         if (IS_POST) {
             //表单提交的名称
-            $col = array(
+            $col = [
                 'SYS_DATE',
                 'SYS_DATE_DETAIL',
                 'SYS_MAX_ROW',
@@ -58,7 +58,7 @@ class Index extends Backend
                 'DATA_CACHE_TIME', //修改核心系统的数据缓存时间
                 'SYS_DEFAULT_IMAGE',
                 'SYS_SYNC_IMAGE',
-            );
+            ];
             $this->_put_config($col, 'system');
             return;
         }
@@ -72,9 +72,9 @@ class Index extends Backend
     {
         //备份数据库
         if (IS_GET && '1' == request('backup')) {
-            $db                  = M();
-            $tables              = $db->query('SHOW TABLES');
-            $backStr            = '';
+            $db               = M();
+            $tables           = $db->query('SHOW TABLES');
+            $backStr          = '';
             $isMagicQuotesGpc = get_magic_quotes_gpc();
             foreach ($tables as $table) {
                 $tableName = $table[key($table)];
@@ -82,7 +82,7 @@ class Index extends Backend
                 $createTable = $db->query('SHOW CREATE TABLE `' . $tableName . '`');
                 $createTable = array_pop($createTable[0]);
                 $backStr .= str_replace("\n", "", $createTable) . " ;\n";
-                $columns    = $db->query('SHOW COLUMNS FROM `' . $tableName . '`');
+                $columns      = $db->query('SHOW COLUMNS FROM `' . $tableName . '`');
                 $insertColumn = '';
                 foreach ($columns as $column) {
                     if ($insertColumn) {
@@ -104,7 +104,7 @@ class Index extends Backend
                     }
                     $insertVal .= "($insertV)";
                     if ($insertVal) {
-                        $insertVal = str_replace(array("\n", "\r"), array("", ""), $insertVal);
+                        $insertVal = str_replace(["\n", "\r"], ["", ""], $insertVal);
                         $backStr .= "INSERT INTO `$tableName`($insertColumn) VALUES$insertVal ;\n";
                     }
                 }
@@ -120,18 +120,18 @@ class Index extends Backend
 
         //还原数据库
         if (IS_POST && isset($_FILES['restore_file']) && 0 == $_FILES['restore_file']['error']) {
-            $db          = M();
+            $db         = M();
             $fileHandle = fopen($_FILES['restore_file']['tmp_name'], 'r');
             if (!$fileHandle) {
                 $this->error(trans('open') . trans('file') . trans('error'), route('databaseSet'));
             }
 
             while (false !== ($queryStr = fgets($fileHandle, 10240))) {
-                $pregMatch = '/^' . implode('|', array(
-                    'DROP\sTABLE',
-                    'INSERT\sINTO',
-                    'CREATE\sTABLE',
-                )) . '/i';
+                $pregMatch = '/^' . implode('|', [
+                        'DROP\sTABLE',
+                        'INSERT\sINTO',
+                        'CREATE\sTABLE',
+                    ]) . '/i';
                 if (!preg_match($pregMatch, $queryStr)) {
                     $this->error(trans('restore') . trans('database') . ' SQL ' . trans('error'), route('databaseSet'));
                 }
@@ -146,14 +146,14 @@ class Index extends Backend
         //保存数据库配置
         if (IS_POST) {
             //表单提交的名称
-            $col = array(
+            $col = [
                 'DB_HOST',
                 'DB_NAME',
                 'DB_USER',
                 //'DB_PWD',单独拿出来
                 'DB_PORT',
                 'DB_PREFIX',
-            );
+            ];
             if (null !== request('DB_PWD')) {
                 array_push($database, 'DB_PWD');
             }
@@ -171,27 +171,28 @@ class Index extends Backend
     {
         if (IS_POST) {
             $curPassword = request('cur_password');
-            $AdminModel   = D('Admin');
+            $AdminModel  = D('Admin');
             $adminInfo   = $AdminModel->authorized(session('backend_info.admin_name'), $curPassword);
             if (!$adminInfo) {
                 $this->error(trans('current') . trans('pass') . trans('error'));
             }
 
-            $password       = request('password');
+            $password      = request('password');
             $passwordAgain = request('password_again');
 
             //只有一个分支的提交 不进行判断必须检测
-            $result = $this->doValidateForm('password', array('password' => $password));
+            $result = $this->doValidateForm('password', ['password' => $password]);
             if (!$result['status']) {
                 $this->error($result['info'], route(ACTION_NAME));
             }
 
-            $result = $this->doValidateForm('password_again', array('password' => $password, 'password_again' => $passwordAgain));
+            $result = $this->doValidateForm('password_again',
+                ['password' => $password, 'password_again' => $passwordAgain]);
             if (!$result['status']) {
                 $this->error($result['info'], route(ACTION_NAME));
             }
 
-            $resultEdit = $AdminModel->mEdit($adminInfo['id'], array('admin_pwd' => $password));
+            $resultEdit = $AdminModel->mEdit($adminInfo['id'], ['admin_pwd' => $password]);
             if ($resultEdit) {
                 $this->success(trans('edit') . trans('pass') . trans('success'), route('edit_my_pass'));
                 return;
@@ -207,7 +208,7 @@ class Index extends Backend
     public function clean_cache()
     {
         $messageStr = trans('cache') . trans('file') . trans('and') . trans('temp') . trans('file');
-        $lang        = trans('yes') . trans('no') . trans('confirm') . trans('clean') . $messageStr;
+        $lang       = trans('yes') . trans('no') . trans('confirm') . trans('clean') . $messageStr;
         if (!$this->showConfirm($lang)) {
             return;
         }
@@ -261,12 +262,12 @@ class Index extends Backend
     public function left_nav()
     {
         //if(没有在权限中找到列表 就显示默认的列表)
-        $adminPriv       = session('backend_info.privilege');
+        $adminPriv      = session('backend_info.privilege');
         $adminGroupPriv = session('backend_info.group_privilege');
-        $privilege        = F('privilege');
-        $leftNav         = array();
+        $privilege      = F('privilege');
+        $leftNav        = [];
         //跳过系统基本操作 增删改 异步接口,
-        $denyLink = array('add', 'del', 'edit', 'ajax_port');
+        $denyLink = ['add', 'del', 'edit', 'ajax_port'];
         foreach ($privilege['Admin'] as $control => $controlGroup) {
             foreach ($controlGroup as $controlName => $action) {
                 foreach ($action as $actionName => $actionValue) {
@@ -284,10 +285,10 @@ class Index extends Backend
                         continue;
                     }
 
-                    $leftNav[$control][] = array(
+                    $leftNav[$control][] = [
                         'link' => route('Admin/' . $controlName . '/' . $actionName),
                         'name' => $actionValue,
-                    );
+                    ];
                 }
             }
         }
@@ -299,7 +300,7 @@ class Index extends Backend
     //管理主页面
     public function main()
     {
-        $siteInfo                    = array();
+        $siteInfo                    = [];
         $siteInfo['sys_version']     = PHP_OS;
         $siteInfo['php_version']     = PHP_VERSION;
         $siteInfo['server_ip']       = $_SERVER['SERVER_ADDR'];
@@ -308,7 +309,7 @@ class Index extends Backend
         $siteInfo['sys_timezone']    = config('DEFAULT_TIMEZONE');
         $siteInfo['mysql_version']   = mysql_get_server_info(M()->db()->connect());
         $siteInfo['mysql_encode']    = config('DB_CHARSET');
-        $siteInfo['ico']             = array(
+        $siteInfo['ico']             = [
             'ico1'  => $this->_check_privilege('add', 'Article'),
             'ico2'  => $this->_check_privilege('add', 'ArticleCategory'),
             'ico6'  => $this->_check_privilege('add', 'Member'),
@@ -317,7 +318,7 @@ class Index extends Backend
             'ico9'  => $this->_check_privilege('clean_log', 'Index'),
             'ico10' => $this->_check_privilege('clean_cache', 'Index'),
             'ico12' => $this->_check_privilege('index', 'ManageUpload'),
-        );
+        ];
         $this->assign('site_info', $siteInfo);
         $this->assign('title', trans('info') . trans('page'));
         $this->display();
@@ -339,7 +340,8 @@ class Index extends Backend
                 $this->error(trans('verify_code') . trans('error'), route('Index/index'));
                 break;
             case 'lock_user_error':
-                $this->error(trans('admin') . trans('by') . trans('lock') . trans('please') . config('SYS_BACKEND_LOCK_TIME') . trans('second') . trans('again') . trans('login'), route('Index/index'));
+                $this->error(trans('admin') . trans('by') . trans('lock') . trans('please') . config('SYS_BACKEND_LOCK_TIME') . trans('second') . trans('again') . trans('login'),
+                    route('Index/index'));
                 break;
             default:
                 $this->success(trans('login') . trans('success'), route('Index/index'));
@@ -356,7 +358,7 @@ class Index extends Backend
     //页面验证
     protected function doValidateForm($field, $data)
     {
-        $result = array('status' => true, 'info' => '');
+        $result = ['status' => true, 'info' => ''];
         switch ($field) {
             case 'password':
                 //不能为空
@@ -400,7 +402,7 @@ class Index extends Backend
 
         $dirs = scandir($dir);
         //不删除的默认文件数组
-        $denyDel = array('.', '..', 'index.html');
+        $denyDel = ['.', '..', 'index.html'];
         foreach ($dirs as $file) {
             if (in_array($file, $denyDel)) {
                 continue;

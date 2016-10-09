@@ -44,30 +44,32 @@ class Frontend extends Common
     protected function _get_position()
     {
         $privilege = F('privilege');
-        $reData   = array();
+        $reData    = [];
         //跳过系统基本操作 删 异步接口,
-        $allController = array();
+        $allController = [];
         foreach ($privilege['Home'] as $controllerGroup) {
             $controllerGroup && $allController = array_merge($allController, $controllerGroup);
         }
-        $rePosition = array(array(
-            'name' => trans('homepage'),
-            'link' => route(config('DEFAULT_MODULE') . '/' . C('DEFAULT_CONTROLLER') . '/' . C('DEFAULT_ACTION')),
-        ));
+        $rePosition   = [
+            [
+                'name' => trans('homepage'),
+                'link' => route(config('DEFAULT_MODULE') . '/' . C('DEFAULT_CONTROLLER') . '/' . C('DEFAULT_ACTION')),
+            ],
+        ];
         $positionName = $allController[CONTROLLER_NAME][ACTION_NAME];
         if ($positionName) {
             //给title赋默认值
             $this->assign('title', $positionName);
             if (ACTION_NAME != 'index' && $allControl[CONTROLLER_NAME]['index']) {
-                $rePosition[] = array(
+                $rePosition[] = [
                     'name' => $allControl[CONTROLLER_NAME]['index'],
                     'link' => route(MODULE_NAME . '/' . CONTROLLER_NAME . '/index'),
-                );
+                ];
             }
-            $rePosition[] = array(
+            $rePosition[] = [
                 'name' => $positionName,
                 'link' => false,
-            );
+            ];
             //给控制器类型的面包屑导航赋默认值
             $this->assign('position', $rePosition);
         }
@@ -76,7 +78,7 @@ class Frontend extends Common
     // 加强ajax_api接口安全性
     public function ajax_api()
     {
-        $allowAjaxApi = array('get_data');
+        $allowAjaxApi = ['get_data'];
         if (!in_array(request('type'), $allowAjaxApi)) {
             return;
         }
@@ -102,7 +104,7 @@ class Frontend extends Common
         if (0 != $loginNum) {
             $loginInfo = $MemberModel->mFind($MemberModel->mFindId($userName));
             if (0 != $loginInfo['lock_time'] && $loginInfo['lock_time'] > (time() - $lockTime)) {
-                $MemberModel->data(array('lock_time' => time()))->where(array('id' => $loginInfo['id']))->save();
+                $MemberModel->data(['lock_time' => time()])->where(['id' => $loginInfo['id']])->save();
                 return 'lock_user_error';
             }
         }
@@ -111,13 +113,13 @@ class Frontend extends Common
         if ($memberInfo) {
             //会员有组的 验证组是否启用
             if (0 < count($memberInfo['group_id'])) {
-                $MemberGroupModel               = D('MemberGroup');
+                $MemberGroupModel              = D('MemberGroup');
                 $memberInfo['group_privilege'] = $MemberGroupModel->mFind_privilege($memberInfo['group_id']);
             }
             //重置登录次数
             if (0 != $memberInfo['login_num']) {
-                $loginData = array('login_num' => 0, 'lock_time' => 0);
-                $MemberModel->data($loginData)->where(array('id' => $loginInfo['id']))->save();
+                $loginData = ['login_num' => 0, 'lock_time' => 0];
+                $MemberModel->data($loginData)->where(['id' => $loginInfo['id']])->save();
             }
             $memberInfo['login_time'] = time();
             session('frontend_info', $memberInfo);
@@ -125,10 +127,10 @@ class Frontend extends Common
         } else {
             //检测前台尝试登陆次数
             if (0 != $loginNum) {
-                $loginData              = array();
+                $loginData              = [];
                 $loginData['login_num'] = $loginInfo['login_num'] + 1;
                 $loginData['lock_time'] = ($loginNum <= $loginData['login_num']) ? time() : 0;
-                $MemberModel->data($loginData)->where(array('id' => $loginInfo['id']))->save();
+                $MemberModel->data($loginData)->where(['id' => $loginInfo['id']])->save();
             }
             return 'user_pwd_error';
         }

@@ -14,7 +14,9 @@ class Article extends Common
         $this->mGetPage($page);
         !isset($this->options['order']) && $this->order('is_stick desc,sort asc,update_time desc');
         $data = $this->where($where)->select();
-        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
+        foreach ($data as &$dataRow) {
+            $this->mDecodeData($dataRow);
+        }
         return $data;
     }
 
@@ -35,7 +37,7 @@ class Article extends Common
         }
 
         if (isset($where['attribute'])) {
-            $attribute = array();
+            $attribute = [];
             foreach ($where['attribute'] as $attr) {
                 $attr && $attribute[] = $this->mMakeLikeArray($attr);
             }
@@ -48,18 +50,18 @@ class Article extends Common
 
     protected function mEncodeData(&$data)
     {
-        !isset($data['update_time']) && $data['update_time']        = time();
+        !isset($data['update_time']) && $data['update_time'] = time();
         isset($data['access_group_id']) && $data['access_group_id'] = serialize($data['access_group_id']);
-        isset($data['content']) && $data['content']                 = $this->mEncodeContent($data['content']);
+        isset($data['content']) && $data['content'] = $this->mEncodeContent($data['content']);
         if (isset($data['extend']) && is_array($data['extend'])) {
-            $newExtend = array();
+            $newExtend = [];
             foreach ($data['extend'] as $key => $value) {
                 $newExtend[] = $key . ':' . $value;
             }
             $data['extend'] = '|' . implode('|', $newExtend) . '|';
         }
         if (isset($data['attribute']) && is_array($data['attribute'])) {
-            $newAttribute = array();
+            $newAttribute = [];
             foreach ($data['attribute'] as $key => $value) {
                 $newAttribute[] = $key . ':' . $value;
             }
@@ -73,18 +75,18 @@ class Article extends Common
         isset($data['access_group_id']) && $data['access_group_id'] = unserialize($data['access_group_id']);
         if (isset($data['extend']) && $data['extend']) {
             $data['extend'] = explode('|', substr($data['extend'], 1, strlen($data['extend']) - 2));
-            $newExtend     = array();
+            $newExtend      = [];
             foreach ($data['extend'] as $valueStr) {
                 list($key, $value) = explode(':', $valueStr);
-                $newExtend[$key]  = $value;
+                $newExtend[$key] = $value;
             }
             $data['extend'] = $newExtend;
         }
         if (isset($data['attribute']) && $data['attribute']) {
             $data['attribute'] = explode('|', substr($data['attribute'], 1, strlen($data['attribute']) - 2));
-            $newAttribute     = array();
+            $newAttribute      = [];
             foreach ($data['attribute'] as $valueStr) {
-                list($key, $value)   = explode(':', $valueStr);
+                list($key, $value) = explode(':', $valueStr);
                 $newAttribute[$key] = $value;
             }
             $data['attribute'] = $newAttribute;

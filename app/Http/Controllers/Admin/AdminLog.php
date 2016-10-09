@@ -13,18 +13,18 @@ class AdminLog extends Backend
         //初始化页面参数
         $AdminModel    = D('Admin');
         $AdminLogModel = D('AdminLog');
-        $where         = array();
+        $where         = [];
 
         //建立where
-        $whereValue                       = '';
-        $whereValue                       = mMktimeRange('add_time');
+        $whereValue = '';
+        $whereValue = mMktimeRange('add_time');
         $whereValue && $where['add_time'] = $whereValue;
-        $whereValue                       = request('admin_id');
-        $whereValue && $where['admin_id'] = array(
+        $whereValue = request('admin_id');
+        $whereValue && $where['admin_id'] = [
             'in',
-            $AdminModel->where(array('admin_name' => array('like', '%' . $whereValue . '%')))->mColumn2Array('id'),
-        );
-        $whereValue                              = request('controller_name');
+            $AdminModel->where(['admin_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+        ];
+        $whereValue = request('controller_name');
         $whereValue && $where['controller_name'] = $whereValue;
 
         //初始化翻页 和 列表数据
@@ -36,14 +36,14 @@ class AdminLog extends Backend
         $this->assign('admin_log_list_count', $AdminLogModel->mGetPageCount($where));
 
         //初始化where_info
-        $whereInfo                    = array();
-        $whereInfo['add_time']        = array('type' => 'time', 'name' => trans('add') . trans('time'));
-        $whereInfo['admin_id']        = array('type' => 'input', 'name' => trans('admin') . trans('name'));
-        $whereInfo['controller_name'] = array('type' => 'input', 'name' => trans('controller') . trans('name'));
+        $whereInfo                    = [];
+        $whereInfo['add_time']        = ['type' => 'time', 'name' => trans('add') . trans('time')];
+        $whereInfo['admin_id']        = ['type' => 'input', 'name' => trans('admin') . trans('name')];
+        $whereInfo['controller_name'] = ['type' => 'input', 'name' => trans('controller') . trans('name')];
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batchHandle        = array();
+        $batchHandle        = [];
         $batchHandle['del'] = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
@@ -60,7 +60,7 @@ class AdminLog extends Backend
         }
 
         $AdminLogModel = D('AdminLog');
-        $resultDel    = $AdminLogModel->mDel($id);
+        $resultDel     = $AdminLogModel->mDel($id);
         if ($resultDel) {
             $this->success(trans('log') . trans('del') . trans('success'), route('index'));
         } else {
@@ -76,7 +76,7 @@ class AdminLog extends Backend
         }
 
         $AdminLogModel = D('AdminLog');
-        $resultDel    = $AdminLogModel->mDel_all();
+        $resultDel     = $AdminLogModel->mDel_all();
         if ($resultDel) {
             $this->success(trans('log') . trans('del') . trans('success'), route('index'));
         } else {

@@ -18,8 +18,12 @@ class Assess extends Backend
         $whereValue = request('title');
         $whereValue && $where['title'] = ['like', '%' . $whereValue . '%'];
         $whereValue = request('group_level');
-        $whereValue && $where['group_level'] = $MemberGroupModel->where(['name' => ['like',
-            '%' . $whereValue . '%']])->mColumn2Array('id');
+        $whereValue && $where['group_level'] = $MemberGroupModel->where([
+            'name' => [
+                'like',
+                '%' . $whereValue . '%',
+            ],
+        ])->mColumn2Array('id');
         $whereValue = mMktimeRange('start_time');
         $whereValue && $where['start_time'] = $whereValue;
         $whereValue = request('is_enable');
@@ -28,7 +32,8 @@ class Assess extends Backend
         //初始化翻页 和 列表数据
         $assessList = $AssessModel->mSelect($where, true);
         foreach ($assessList as &$assess) {
-            $assess['group_name'] = ($assess['group_level']) ? $MemberGroupModel->mFindColumn($assess['group_level'], 'name') : trans('empty');
+            $assess['group_name'] = ($assess['group_level']) ? $MemberGroupModel->mFindColumn($assess['group_level'],
+                'name') : trans('empty');
         }
         $this->assign('assess_list', $assessList);
         $this->assign('assess_list_count', $AssessModel->mGetPageCount($where));
@@ -38,9 +43,11 @@ class Assess extends Backend
         $whereInfo['title']       = ['type' => 'input', 'name' => trans('title')];
         $whereInfo['group_level'] = ['type' => 'input', 'name' => trans('assess') . trans('group')];
         $whereInfo['start_time']  = ['type' => 'time', 'name' => trans('add') . trans('time')];
-        $whereInfo['is_enable']   = ['type'  => 'select',
-                                     'name'  => trans('yes') . trans('no') . trans('enable'),
-                                     'value' => [1 => trans('enable'), 2 => trans('disable')]];
+        $whereInfo['is_enable']   = [
+            'type'  => 'select',
+            'name'  => trans('yes') . trans('no') . trans('enable'),
+            'value' => [1 => trans('enable'), 2 => trans('disable')],
+        ];
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -134,8 +141,8 @@ class Assess extends Backend
             case 'group_level':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $MemberGroupModel  = D('MemberGroup');
-                $memberGroupList = $MemberGroupModel->mSelect($where);
+                $MemberGroupModel = D('MemberGroup');
+                $memberGroupList  = $MemberGroupModel->mSelect($where);
                 foreach ($memberGroupList as $memberGroup) {
                     $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
                 }
@@ -149,17 +156,17 @@ class Assess extends Backend
     private function makeData()
     {
         //初始化参数
-        $id            = request('get.id');
-        $title         = request('title');
-        $explains      = request('explains');
-        $groupLevel    = request('group_level');
-        $startTime     = request('start_time');
-        $endTime       = request('end_time');
-        $startTime     = mMktime($startTime, true);
-        $endTime       = mMktime($endTime, true);
-        $isEnable      = request('is_enable');
-        $target        = request('target');
-        $extInfo       = [];
+        $id           = request('get.id');
+        $title        = request('title');
+        $explains     = request('explains');
+        $groupLevel   = request('group_level');
+        $startTime    = request('start_time');
+        $endTime      = request('end_time');
+        $startTime    = mMktime($startTime, true);
+        $endTime      = mMktime($endTime, true);
+        $isEnable     = request('is_enable');
+        $target       = request('target');
+        $extInfo      = [];
         $gradeProject = [];
         foreach (request('ext_info') as $value) {
             $gradeProject[] = json_decode(str_replace('&quot;', '"', $value), true);

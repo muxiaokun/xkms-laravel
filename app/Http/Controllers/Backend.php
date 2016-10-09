@@ -79,7 +79,7 @@ class Backend extends Common
     // 加强ajax_api接口安全性
     public function ajax_api()
     {
-        $allowAjaxApi = array('validform', 'get_data');
+        $allowAjaxApi = ['validform', 'get_data'];
         if (!$this->isLogin() && !in_array(request('type'), $allowAjaxApi)) {
             return;
         }
@@ -101,7 +101,7 @@ class Backend extends Common
         if (0 != $loginNum) {
             $loginInfo = $AdminModel->mFind($AdminModel->mFindId($userName));
             if (0 != $loginInfo['lock_time'] && $loginInfo['lock_time'] > (time() - $lockTime)) {
-                $AdminModel->data(array('lock_time' => time()))->where(array('id' => $loginInfo['id']))->save();
+                $AdminModel->data(['lock_time' => time()])->where(['id' => $loginInfo['id']])->save();
                 return 'lock_user_error';
             }
         }
@@ -110,13 +110,13 @@ class Backend extends Common
         if ($adminInfo) {
             //管理员有组的 加载分组权限
             if (0 < count($adminInfo['group_id'])) {
-                $AdminGroupModel               = D('AdminGroup');
+                $AdminGroupModel              = D('AdminGroup');
                 $adminInfo['group_privilege'] = $AdminGroupModel->mFind_privilege($adminInfo['group_id']);
             }
             //重置登录次数
             if (0 != $adminInfo['login_num']) {
-                $loginData = array('login_num' => 0, 'lock_time' => 0);
-                $AdminModel->data($loginData)->where(array('id' => $loginInfo['id']))->save();
+                $loginData = ['login_num' => 0, 'lock_time' => 0];
+                $AdminModel->data($loginData)->where(['id' => $loginInfo['id']])->save();
             }
             $adminInfo['login_time'] = time();
             session('backend_info', $adminInfo);
@@ -124,19 +124,21 @@ class Backend extends Common
         } else {
             //检测后台尝试登陆次数
             if (0 != $loginNum) {
-                $loginData              = array();
+                $loginData              = [];
                 $loginData['login_num'] = $loginInfo['login_num'] + 1;
                 $loginData['lock_time'] = ($loginNum <= $loginData['login_num']) ? time() : 0;
-                $AdminModel->data($loginData)->where(array('id' => $loginInfo['id']))->save();
+                $AdminModel->data($loginData)->where(['id' => $loginInfo['id']])->save();
             }
             return 'user_pwd_error';
         }
     }
+
     //登出功能
     protected function doLogout()
     {
         session('backend_info', null);
     }
+
     //子类调用的是否登录的接口
     protected function isLogin()
     {
@@ -158,11 +160,11 @@ class Backend extends Common
     public function _check_privilege($actionName = ACTION_NAME, $controllerName = CONTROLLER_NAME)
     {
         //登录后 检查是否有权限可以操作 1.不是默认框架控制器 2.拥有管理员管理组全部权限 3.拥有权限 4.ajax_api接口 4.不需要权限就能访问的
-        $allowAction['Index']        = array('index', 'top_nav', 'left_nav', 'main', 'logout');
-        $allowAction['ManageUpload'] = array('UploadFile', 'ManageFile');
+        $allowAction['Index']        = ['index', 'top_nav', 'left_nav', 'main', 'logout'];
+        $allowAction['ManageUpload'] = ['UploadFile', 'ManageFile'];
         $backendInfo                 = session('backend_info');
         $adminPriv                   = $backendInfo['privilege'];
-        $adminGroupPriv             = ($backendInfo['group_privilege']) ? $backendInfo['group_privilege'] : array();
+        $adminGroupPriv              = ($backendInfo['group_privilege']) ? $backendInfo['group_privilege'] : [];
         if (
             'ajax_api' != $actionName &&
             !in_array($actionName, $allowAction[$controllerName]) &&
@@ -192,7 +194,7 @@ class Backend extends Common
         $cfgFile    = CONF_PATH . $file . '.php';
         $saveConfig = include $cfgFile;
         if (!is_array($saveConfig)) {
-            $saveConfig = array();
+            $saveConfig = [];
         }
 
         foreach ($col as $option) {
@@ -207,7 +209,7 @@ class Backend extends Common
 return {$configStr};
 ?>
 EOF;
-        $putResult = file_put_contents($cfgFile, $putConfig);
+        $putResult     = file_put_contents($cfgFile, $putConfig);
         if ($putResult) {
             $this->success(trans('save') . trans('success'), route(ACTION_NAME));
         } else {

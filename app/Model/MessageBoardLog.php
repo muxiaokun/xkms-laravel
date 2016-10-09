@@ -10,7 +10,9 @@ class MessageBoardLog extends Common
         $this->mGetPage($page);
         !isset($this->options['order']) && $this->order('add_time desc');
         $data = $this->field('*,inet_ntoa(add_ip) as aip')->where($where)->select();
-        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
+        foreach ($data as &$dataRow) {
+            $this->mDecodeData($dataRow);
+        }
         return $data;
     }
 
@@ -21,7 +23,7 @@ class MessageBoardLog extends Common
         }
 
         $data['add_time'] = time();
-        $data['add_ip']   = array('exp', 'inet_aton("' . $_SERVER['REMOTE_ADDR'] . '")');
+        $data['add_ip']   = ['exp', 'inet_aton("' . $_SERVER['REMOTE_ADDR'] . '")'];
         return parent::mAdd($data);
     }
 

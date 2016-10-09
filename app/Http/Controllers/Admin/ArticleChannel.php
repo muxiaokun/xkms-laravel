@@ -12,14 +12,14 @@ class ArticleChannel extends Backend
     {
         $ArticleChannelModel = D('ArticleChannel');
         //建立where
-        $whereValue                      = '';
-        $whereValue                      = request('name');
-        $whereValue && $where['name']    = array('like', '%' . $whereValue . '%');
-        $whereValue                      = request('if_show');
+        $whereValue = '';
+        $whereValue = request('name');
+        $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
+        $whereValue = request('if_show');
         $whereValue && $where['if_show'] = (1 == $whereValue) ? 1 : 0;
         if (1 != session('backend_info.id')) {
             $allowChannel = $ArticleChannelModel->mFind_allow();
-            $where['id']   = array('in', $allowChannel);
+            $where['id']  = ['in', $allowChannel];
         }
         //初始化翻页 和 列表数据
         $articleChannelList = $ArticleChannelModel->mSelect($where, true);
@@ -27,13 +27,16 @@ class ArticleChannel extends Backend
         $this->assign('article_channel_list_count', $ArticleChannelModel->mGetPageCount($where));
 
         //初始化where_info
-        $whereInfo            = array();
-        $whereInfo['name']    = array('type' => 'input', 'name' => trans('channel') . trans('name'));
-        $whereInfo['if_show'] = array('type' => 'select', 'name' => trans('yes') . trans('no') . trans('show'), 'value' => array(1 => trans('show'), 2 => trans('hidden')));
+        $whereInfo            = [];
+        $whereInfo['name']    = ['type' => 'input', 'name' => trans('channel') . trans('name')];
+        $whereInfo['if_show'] = ['type'  => 'select',
+                                 'name'  => trans('yes') . trans('no') . trans('show'),
+                                 'value' => [1 => trans('show'), 2 => trans('hidden')],
+        ];
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batchHandle         = array();
+        $batchHandle         = [];
         $batchHandle['add']  = $this->_check_privilege('add');
         $batchHandle['edit'] = $this->_check_privilege('edit');
         $batchHandle['del']  = $this->_check_privilege('del');
@@ -53,7 +56,7 @@ class ArticleChannel extends Backend
         if (IS_POST) {
             $ArticleChannelModel = D('ArticleChannel');
             $data                = $this->makeData();
-            $resultAdd          = $ArticleChannelModel->mAdd($data);
+            $resultAdd           = $ArticleChannelModel->mAdd($data);
             if ($resultAdd) {
                 $this->success(trans('channel') . trans('add') . trans('success'), route('index'));
                 return;
@@ -73,7 +76,7 @@ class ArticleChannel extends Backend
     {
         $ArticleChannelModel = D('ArticleChannel');
         if (IS_AJAX) {
-            $id        = request('get.id');
+            $id       = request('get.id');
             $editInfo = $ArticleChannelModel->mFind($id);
             $this->ajaxReturn($this->_add_edit_category_common($editInfo));
             return;
@@ -85,7 +88,8 @@ class ArticleChannel extends Backend
         }
 
         if (1 != session('backend_info.id')
-            && !mInArray($id, $ArticleChannelModel->mFind_allow())) {
+            && !mInArray($id, $ArticleChannelModel->mFind_allow())
+        ) {
             $this->error(trans('none') . trans('privilege') . trans('edit') . trans('channel'), route('index'));
         }
 
@@ -93,7 +97,8 @@ class ArticleChannel extends Backend
         if (IS_POST) {
             $data = $this->makeData();
             if (1 != session('backend_info.id')
-                && !mInArray($id, $maAllowArr)) {
+                && !mInArray($id, $maAllowArr)
+            ) {
                 unset($data['manage_id']);
                 unset($data['manage_group_id']);
                 unset($data['access_group_id']);
@@ -103,7 +108,7 @@ class ArticleChannel extends Backend
                 $this->success(trans('channel') . trans('edit') . trans('success'), route('index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? route('index') : U('edit', array('id' => $id));
+                $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
                 $this->error(trans('channel') . trans('edit') . trans('error'), $errorGoLink);
             }
         }
@@ -114,19 +119,19 @@ class ArticleChannel extends Backend
             $AdminModel = D('Admin');
             foreach ($editInfo['manage_id'] as &$manageId) {
                 $adminName = $AdminModel->mFindColumn($manageId, 'admin_name');
-                $manageId  = array('value' => $manageId, 'html' => $adminName);
+                $manageId  = ['value' => $manageId, 'html' => $adminName];
             }
             $editInfo['manage_id'] = json_encode($editInfo['manage_id']);
-            $AdminGroupModel        = D('AdminGroup');
+            $AdminGroupModel       = D('AdminGroup');
             foreach ($editInfo['manage_group_id'] as &$manageGroupId) {
                 $adminGroupName = $AdminGroupModel->mFindColumn($manageGroupId, 'name');
-                $manageGroupId  = array('value' => $manageGroupId, 'html' => $adminGroupName);
+                $manageGroupId  = ['value' => $manageGroupId, 'html' => $adminGroupName];
             }
             $editInfo['manage_group_id'] = json_encode($editInfo['manage_group_id']);
-            $MemberGroupModel             = D('MemberGroup');
+            $MemberGroupModel            = D('MemberGroup');
             foreach ($editInfo['access_group_id'] as &$accessGroupId) {
                 $adminGroupName = $MemberGroupModel->mFindColumn($accessGroupId, 'name');
-                $accessGroupId  = array('value' => $accessGroupId, 'html' => $adminGroupName);
+                $accessGroupId  = ['value' => $accessGroupId, 'html' => $adminGroupName];
             }
             $editInfo['access_group_id'] = json_encode($editInfo['access_group_id']);
         }
@@ -155,7 +160,7 @@ class ArticleChannel extends Backend
 
         //解除文章和被删除频道的关系
         $ArticleModel = D('Article');
-        $resultClean = $ArticleModel->mClean($id, 'channel_id');
+        $resultClean  = $ArticleModel->mClean($id, 'channel_id');
         if (!$resultClean) {
             $this->error(trans('article') . trans('clear') . trans('channel') . trans('error'), route('index'));
         }
@@ -172,34 +177,34 @@ class ArticleChannel extends Backend
     //异步数据获取
     protected function getData($field, $data)
     {
-        $where  = array();
-        $result = array('status' => true, 'info' => array());
+        $where  = [];
+        $result = ['status' => true, 'info' => []];
         switch ($field) {
             case 'manage_id':
-                isset($data['inserted']) && $where['id']        = array('not in', $data['inserted']);
-                $AdminModel                                     = D('Admin');
-                isset($data['keyword']) && $where['admin_name'] = array('like', '%' . $data['keyword'] . '%');
-                $adminUserList                                = $AdminModel->mSelect($where);
+                isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
+                $AdminModel = D('Admin');
+                isset($data['keyword']) && $where['admin_name'] = ['like', '%' . $data['keyword'] . '%'];
+                $adminUserList = $AdminModel->mSelect($where);
                 foreach ($adminUserList as $adminUser) {
-                    $result['info'][] = array('value' => $adminUser['id'], 'html' => $adminUser['admin_name']);
+                    $result['info'][] = ['value' => $adminUser['id'], 'html' => $adminUser['admin_name']];
                 }
                 break;
             case 'manage_group_id':
-                isset($data['inserted']) && $where['id']  = array('not in', $data['inserted']);
-                $AdminGroupModel                          = D('AdminGroup');
-                isset($data['keyword']) && $where['name'] = array('like', '%' . $data['keyword'] . '%');
-                $adminGroupList                         = $AdminGroupModel->mSelect($where);
+                isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
+                $AdminGroupModel = D('AdminGroup');
+                isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
+                $adminGroupList = $AdminGroupModel->mSelect($where);
                 foreach ($adminGroupList as $adminGroup) {
-                    $result['info'][] = array('value' => $adminGroup['id'], 'html' => $adminGroup['name']);
+                    $result['info'][] = ['value' => $adminGroup['id'], 'html' => $adminGroup['name']];
                 }
                 break;
             case 'access_group_id':
-                isset($data['inserted']) && $where['id']  = array('not in', $data['inserted']);
-                $MemberGroupModel                         = D('MemberGroup');
-                isset($data['keyword']) && $where['name'] = array('like', '%' . $data['keyword'] . '%');
-                $memberGroupList                        = $MemberGroupModel->mSelect($where);
+                isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
+                $MemberGroupModel = D('MemberGroup');
+                isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
+                $memberGroupList = $MemberGroupModel->mSelect($where);
                 foreach ($memberGroupList as $memberGroup) {
-                    $result['info'][] = array('value' => $memberGroup['id'], 'html' => $memberGroup['name']);
+                    $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
                 }
                 break;
         }
@@ -214,8 +219,8 @@ class ArticleChannel extends Backend
         $keywords    = request('keywords');
         $description = request('description');
         $other       = request('other');
-        $manageId   = request('manage_id');
-        $addId      = session('backend_info.id');
+        $manageId    = request('manage_id');
+        $addId       = session('backend_info.id');
         if (('add' == ACTION_NAME || null !== $manageId)
             && !in_array($addId, $manageId)
         ) {
@@ -224,34 +229,34 @@ class ArticleChannel extends Backend
 
         $manageGroupId       = request('manage_group_id');
         $accessGroupId       = request('access_group_id');
-        $ifShow               = request('if_show');
-        $template              = request('template');
-        $categoryList         = request('category_list', array());
-        $sLimit               = request('s_limit');
-        $templateList         = request('template_list');
+        $ifShow              = request('if_show');
+        $template            = request('template');
+        $categoryList        = request('category_list', []);
+        $sLimit              = request('s_limit');
+        $templateList        = request('template_list');
         $listTemplateList    = request('list_template_list');
         $articleTemplateList = request('article_template_list');
-        $extInfo              = array();
+        $extInfo             = [];
         foreach ($categoryList as $id) {
-            $extInfo[$id] = array(
+            $extInfo[$id] = [
                 's_limit'          => $sLimit[$id],
                 'template'         => $templateList[$id],
                 'list_template'    => $listTemplateList[$id],
                 'article_template' => $articleTemplateList[$id],
-            );
+            ];
         }
 
-        $data                                                                           = array();
-        ('add' == ACTION_NAME || null !== $name) && $data['name']                       = $name;
-        ('add' == ACTION_NAME || null !== $keywords) && $data['keywords']               = $keywords;
-        ('add' == ACTION_NAME || null !== $description) && $data['description']         = $description;
-        ('add' == ACTION_NAME || null !== $other) && $data['other']                     = $other;
-        ('add' == ACTION_NAME || null !== $manageId) && $data['manage_id']             = $manageId;
+        $data = [];
+        ('add' == ACTION_NAME || null !== $name) && $data['name'] = $name;
+        ('add' == ACTION_NAME || null !== $keywords) && $data['keywords'] = $keywords;
+        ('add' == ACTION_NAME || null !== $description) && $data['description'] = $description;
+        ('add' == ACTION_NAME || null !== $other) && $data['other'] = $other;
+        ('add' == ACTION_NAME || null !== $manageId) && $data['manage_id'] = $manageId;
         ('add' == ACTION_NAME || null !== $manageGroupId) && $data['manage_group_id'] = $manageGroupId;
         ('add' == ACTION_NAME || null !== $accessGroupId) && $data['access_group_id'] = $accessGroupId;
-        ('add' == ACTION_NAME || null !== $ifShow) && $data['if_show']                 = $ifShow;
-        ('add' == ACTION_NAME || null !== $template) && $data['template']               = $template;
-        ('add' == ACTION_NAME || null !== $extInfo) && $data['ext_info']               = $extInfo;
+        ('add' == ACTION_NAME || null !== $ifShow) && $data['if_show'] = $ifShow;
+        ('add' == ACTION_NAME || null !== $template) && $data['template'] = $template;
+        ('add' == ACTION_NAME || null !== $extInfo) && $data['ext_info'] = $extInfo;
         return $data;
     }
 
@@ -262,7 +267,8 @@ class ArticleChannel extends Backend
 
         $ArticleChannelModel = D('ArticleChannel');
         $id                  = request('id');
-        $managePrivilgeg    = in_array($id, $ArticleChannelModel->mFind_allow('ma')) || 1 == session('backend_info.id');
+        $managePrivilgeg     = in_array($id,
+                $ArticleChannelModel->mFind_allow('ma')) || 1 == session('backend_info.id');
         $this->assign('manage_privilege', $managePrivilgeg);
 
         $ArticleCategoryModel = D('ArticleCategory');
@@ -275,14 +281,14 @@ class ArticleChannel extends Backend
     //构造频道公共ajax
     private function _add_edit_category_common($channelInfo = false)
     {
-        $ArticleCategoryModel           = D('ArticleCategory');
-        $where['parent_id']             = 0;
-        $whereValue                        = request('parent_id');
+        $ArticleCategoryModel = D('ArticleCategory');
+        $where['parent_id']   = 0;
+        $whereValue           = request('parent_id');
         $whereValue && $where['parent_id'] = $whereValue;
 
         $articleCategoryList = $ArticleCategoryModel->mSelect($where, $ArticleCategoryModel->where($where)->count());
         foreach ($articleCategoryList as &$articleCategory) {
-            $articleCategory['has_child'] = $ArticleCategoryModel->where(array('parent_id' => $articleCategory['id']))->count();
+            $articleCategory['has_child'] = $ArticleCategoryModel->where(['parent_id' => $articleCategory['id']])->count();
             if ($channelInfo && isset($channelInfo['ext_info'][$articleCategory['id']])) {
                 $articleCategory['checked']          = true;
                 $articleCategory['s_limit']          = $channelInfo['ext_info'][$articleCategory['id']]['s_limit'];

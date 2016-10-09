@@ -11,14 +11,16 @@ class Common extends Model
      * 列出数据
      * @access public
      * @param array $where 查询条件
-     * @param int $page 翻页数量
+     * @param int   $page  翻页数量
      * @return array 返回数据数组
      */
     public function mSelect($where = null, $page = false)
     {
         $this->mGetPage($page);
         $data = $this->where($where)->select();
-        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
+        foreach ($data as &$dataRow) {
+            $this->mDecodeData($dataRow);
+        }
         return $data;
     }
 
@@ -48,8 +50,8 @@ class Common extends Model
             return false;
         }
 
-        is_array($id) && $id = array('in', $id);
-        return $this->where(array('id' => $id))->delete();
+        is_array($id) && $id = ['in', $id];
+        return $this->where(['id' => $id])->delete();
     }
 
     /**
@@ -64,9 +66,9 @@ class Common extends Model
             return false;
         }
 
-        is_array($id) && $id = array('in', $id);
+        is_array($id) && $id = ['in', $id];
         $this->mEncodeData($data);
-        return $this->where(array('id' => $id))->data($data)->save();
+        return $this->where(['id' => $id])->data($data)->save();
     }
 
     /**
@@ -80,7 +82,7 @@ class Common extends Model
             return false;
         }
 
-        $data = $this->where(array('id' => $id))->find();
+        $data = $this->where(['id' => $id])->find();
         $this->mDecodeData($data);
         return $data;
     }
@@ -101,13 +103,13 @@ class Common extends Model
         if (!$columnName) {
             $columnName = $this->fields[1];
         }
-        $column = $this->field('id')->where(array($columnName => $value))->find();
+        $column = $this->field('id')->where([$columnName => $value])->find();
         return $column['id'];
     }
 
     /**
      * 查找数据
-     * @param int $id
+     * @param int    $id
      * @param string $columnName
      * @return string
      */
@@ -117,14 +119,14 @@ class Common extends Model
             return false;
         }
 
-        $column = $this->field($columnName)->where(array('id' => $id))->find();
+        $column = $this->field($columnName)->where(['id' => $id])->find();
         $this->mDecodeData($column);
         return $column[$columnName];
     }
 
     /**
      * 清除数据
-     * @param mixed $id
+     * @param mixed  $id
      * @param string $columnName
      * @param string $data
      * @return boolean
@@ -140,13 +142,13 @@ class Common extends Model
             $columnName = $this->fields[1];
         }
 
-        is_array($id) && $id = array('in', $id);
-        $this->where(array($columnName => $id));
+        is_array($id) && $id = ['in', $id];
+        $this->where([$columnName => $id]);
         if (0 == $this->count()) {
             return true;
         }
-        $this->where(array($columnName => $id));
-        return (false === $data) ? $this->delete() : $this->save(array($columnName => $data));
+        $this->where([$columnName => $id]);
+        return (false === $data) ? $this->delete() : $this->save([$columnName => $data]);
     }
 
     /**
@@ -158,7 +160,7 @@ class Common extends Model
     public function mGetPageCount($where)
     {
         $this->mParseWhere($where);
-        $pageCount   = $this->where($where)->count();
+        $pageCount  = $this->where($where)->count();
         $sysMaxPage = C('SYS_MAX_PAGE') * C('SYS_MAX_ROW');
         return ($pageCount < $sysMaxPage) ? $pageCount : $sysMaxPage;
     }
@@ -174,7 +176,7 @@ class Common extends Model
         $where = $this->options['where'];
         $this->limit($this->count());
         $selectResult = $this->field($column)->where($where)->select();
-        $reArr        = array();
+        $reArr        = [];
         foreach ($selectResult as $row) {
             $reArr[] = $row[$column];
         }
@@ -193,15 +195,15 @@ class Common extends Model
 
         $maxNum = (true === $maxNum) ? C('SYS_MAX_ROW') : $maxNum;
         //p 是 Think\Page中的p的配置
-        $p       = I('p');
-        $p       = ($p < C('SYS_MAX_PAGE')) ? $p : C('SYS_MAX_PAGE');
+        $p      = I('p');
+        $p      = ($p < C('SYS_MAX_PAGE')) ? $p : C('SYS_MAX_PAGE');
         $maxNum = ($p) ? $p . "," . $maxNum : "1," . $maxNum;
         $this->page($maxNum);
     }
 
     /**
      * 构造查询时用的like数组
-     * @param array $whereArr
+     * @param array  $whereArr
      * @param string $logic AND or OR
      * @return boolean
      */
@@ -216,9 +218,10 @@ class Common extends Model
         foreach ($where as &$mid) {
             $mid = '%|' . $mid . '|%';
         }
-        $result = array(
-            'like', $where,
-        );
+        $result = [
+            'like',
+            $where,
+        ];
         'OR' != $logic && array_push($result, $logic);
         return $result;
     }
@@ -230,14 +233,72 @@ class Common extends Model
      */
     protected function _make_rand($length = 4)
     {
-        $randArray = array(
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
-            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
-            'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-            'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-        );
-        $rand = '';
+        $randArray = [
+            '0',
+            '1',
+            '2',
+            '3',
+            '4',
+            '5',
+            '6',
+            '7',
+            '8',
+            '9',
+            '0',
+            'a',
+            'b',
+            'c',
+            'd',
+            'e',
+            'f',
+            'g',
+            'h',
+            'i',
+            'j',
+            'k',
+            'l',
+            'm',
+            'n',
+            'o',
+            'p',
+            'q',
+            'r',
+            's',
+            't',
+            'u',
+            'v',
+            'w',
+            'x',
+            'y',
+            'z',
+            'A',
+            'B',
+            'C',
+            'D',
+            'E',
+            'F',
+            'G',
+            'H',
+            'I',
+            'J',
+            'K',
+            'L',
+            'M',
+            'N',
+            'O',
+            'P',
+            'Q',
+            'R',
+            'S',
+            'T',
+            'U',
+            'V',
+            'W',
+            'X',
+            'Y',
+            'Z',
+        ];
+        $rand      = '';
         for ($i = 0; $i < $length; $i++) {
             $rand .= $randArray[rand(0, count($randArray) - 1)];
         }
@@ -247,15 +308,15 @@ class Common extends Model
     /**
      * 建立缩进树状数据(自动去除查询数量限制)
      * @param array $config
-     * @param int $parentId
-     * @param int $level
+     * @param int   $parentId
+     * @param int   $level
      * @return array
      */
     protected function mMakeTree($config, $parentId = 0, $level = 0)
     {
         $listWhere = $config['list_where'];
         if (!is_array($listWhere)) {
-            $listWhere = array();
+            $listWhere = [];
         }
 
         $listWhere[$config['parent_id']] = $parentId;
@@ -263,8 +324,10 @@ class Common extends Model
         $parentList                      = $this->limit($countRow)->$config['list_fn']($listWhere);
         //占位符
         $retractStr = '&nbsp;';
-        for ($i = 0; $i < $level; $i++) {$retractStr .= $retractStr;}
-        $parentTree = array();
+        for ($i = 0; $i < $level; $i++) {
+            $retractStr .= $retractStr;
+        }
+        $parentTree = [];
         $level++;
         foreach ($parentList as $parentKey => $parent) {
             if (0 != $parentId) {
@@ -305,14 +368,18 @@ class Common extends Model
      * @param type &$data
      */
     protected function mParseWhere(&$where)
-    {}
+    {
+    }
 
     /**
      * 格式化数据接口
      * @param type &$data
      */
     protected function mEncodeData(&$data)
-    {}
+    {
+    }
+
     protected function mDecodeData(&$data)
-    {}
+    {
+    }
 }

@@ -11,21 +11,23 @@ class ArticleCategory extends Common
         $this->mGetPage($page);
         !isset($this->options['order']) && $this->order('sort');
         $data = $this->where($where)->select();
-        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
+        foreach ($data as &$dataRow) {
+            $this->mDecodeData($dataRow);
+        }
         return $data;
     }
 
     //获得缩进的分类树
     public function mSelect_tree($where = null, $parentId = 0, $level = 0)
     {
-        $config = array(
+        $config = [
             'list_fn'     => 'mSelect',
             'list_where'  => $where,
             'tree_fn'     => 'mSelect_tree',
             'id'          => 'id',
             'parent_id'   => 'parent_id',
             'retract_col' => 'name',
-        );
+        ];
         return $this->field('id,name')->mMakeTree($config, $parentId, $level);
     }
 
@@ -35,22 +37,22 @@ class ArticleCategory extends Common
             return false;
         }
 
-        is_array($id) && $id = array('in', $id);
+        is_array($id) && $id = ['in', $id];
         //如果被删除的分类有子级，将子级的parent_id=0
-        $this->where(array('parent_id' => $id))->data(array('parent_id' => 0))->save();
-        return $this->where(array('id' => $id))->delete();
+        $this->where(['parent_id' => $id])->data(['parent_id' => 0])->save();
+        return $this->where(['id' => $id])->delete();
     }
 
     //返回子级所有分类id 数组集合
     //$pushMe 是否包含传入id
     public function mFind_child_id($id, $pushMe = true)
     {
-        $where             = array('parent_id' => $id);
-        $articleCategory  = $this->field('id')->mSelect($where);
-        $categoryChildId = array();
+        $where           = ['parent_id' => $id];
+        $articleCategory = $this->field('id')->mSelect($where);
+        $categoryChildId = [];
         foreach ($articleCategory as $category) {
             $categoryChildId[] = $category['id'];
-            if (0 < $this->where(array('parent_id' => $category['id']))->count()) {
+            if (0 < $this->where(['parent_id' => $category['id']])->count()) {
                 $articleCategoryChild = $this->mFind_child_id($category['id'], false);
                 foreach ($articleCategoryChild as $child) {
                     $categoryChildId[] = $child;
@@ -105,7 +107,7 @@ class ArticleCategory extends Common
     //返回有权管理的频道
     public function mFind_allow($type = true)
     {
-        $where = array();
+        $where = [];
         //ma = manage admin 编辑属主 属组
         if (session('backend_info.id') && (true === $type || 'ma' == $type)) {
             $where['manage_id'] = session('backend_info.id');
@@ -116,7 +118,7 @@ class ArticleCategory extends Common
             $where['manage_group_id'] = session('backend_info.group_id');
         }
 
-        $mFindAllow = array(0);
+        $mFindAllow = [0];
         if (empty($where['manage_id']) && empty($where['manage_group_id'])) {
             return $mFindAllow;
         }
@@ -134,15 +136,15 @@ class ArticleCategory extends Common
             return;
         }
 
-        isset($where['manage_id']) && $where['manage_id']             = $this->mMakeLikeArray($where['manage_id']);
+        isset($where['manage_id']) && $where['manage_id'] = $this->mMakeLikeArray($where['manage_id']);
         isset($where['manage_group_id']) && $where['manage_group_id'] = $this->mMakeLikeArray($where['manage_group_id']);
 
         if ($where['manage_id'] && $where['manage_group_id']) {
-            $where['_complex'] = array(
+            $where['_complex'] = [
                 '_logic'          => 'or',
                 'manage_id'       => $where['manage_id'],
                 'manage_group_id' => $where['manage_group_id'],
-            );
+            ];
             unset($where['manage_id']);
             unset($where['manage_group_id']);
         }
@@ -155,20 +157,23 @@ class ArticleCategory extends Common
             unset($data['extend']);
             unset($data['attribute']);
         }
-        isset($data['manage_id']) && $data['manage_id']             = '|' . implode('|', $data['manage_id']) . '|';
-        isset($data['manage_group_id']) && $data['manage_group_id'] = '|' . implode('|', $data['manage_group_id']) . '|';
+        isset($data['manage_id']) && $data['manage_id'] = '|' . implode('|', $data['manage_id']) . '|';
+        isset($data['manage_group_id']) && $data['manage_group_id'] = '|' . implode('|',
+                $data['manage_group_id']) . '|';
         isset($data['access_group_id']) && $data['access_group_id'] = serialize($data['access_group_id']);
-        isset($data['content']) && $data['content']                 = $this->mEncodeContent($data['content']);
-        isset($data['extend']) && $data['extend']                   = serialize($data['extend']);
-        isset($data['attribute']) && $data['attribute']             = serialize($data['attribute']);
+        isset($data['content']) && $data['content'] = $this->mEncodeContent($data['content']);
+        isset($data['extend']) && $data['extend'] = serialize($data['extend']);
+        isset($data['attribute']) && $data['attribute'] = serialize($data['attribute']);
     }
 
     protected function mDecodeData(&$data)
     {
-        isset($data['manage_id']) && $data['manage_id']             = explode('|', substr($data['manage_id'], 1, strlen($data['manage_id']) - 2));
-        isset($data['manage_group_id']) && $data['manage_group_id'] = explode('|', substr($data['manage_group_id'], 1, strlen($data['manage_group_id']) - 2));
+        isset($data['manage_id']) && $data['manage_id'] = explode('|',
+            substr($data['manage_id'], 1, strlen($data['manage_id']) - 2));
+        isset($data['manage_group_id']) && $data['manage_group_id'] = explode('|',
+            substr($data['manage_group_id'], 1, strlen($data['manage_group_id']) - 2));
         isset($data['access_group_id']) && $data['access_group_id'] = unserialize($data['access_group_id']);
-        isset($data['extend']) && $data['extend']                   = unserialize($data['extend']);
-        isset($data['attribute']) && $data['attribute']             = unserialize($data['attribute']);
+        isset($data['extend']) && $data['extend'] = unserialize($data['extend']);
+        isset($data['attribute']) && $data['attribute'] = unserialize($data['attribute']);
     }
 }

@@ -22,8 +22,8 @@ class QuestsAnswer extends Common
             return false;
         }
 
-        $answer    = ($answer) ? 'answer like "' . $answer . '"' : '1 = 1';
-        $countNum = $this->where(array('quests_id' => $questsId, $answer))->count();
+        $answer   = ($answer) ? 'answer like "' . $answer . '"' : '1 = 1';
+        $countNum = $this->where(['quests_id' => $questsId, $answer])->count();
         return $countNum;
     }
 }

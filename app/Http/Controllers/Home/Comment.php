@@ -10,8 +10,8 @@ class Comment extends Frontend
     //异步获取数据接口
     protected function getData($field, $data)
     {
-        $where  = array();
-        $result = array('status' => true, 'info' => array());
+        $where  = [];
+        $result = ['status' => true, 'info' => []];
         if (!config('COMMENT_SWITCH')) {
             exit();
         }
@@ -21,31 +21,31 @@ class Comment extends Frontend
                 $CommentModel = D('Comment');
                 $data         = $this->makeData();
                 if (!config('COMMENT_ANONY') && 0 == $data['send_id']) {
-                    $result = array('status' => false, 'info' => trans('comment_error2'));
+                    $result = ['status' => false, 'info' => trans('comment_error2')];
                     break;
                 }
                 if (!in_array($data['controller'], config('COMMENT_ALLOW')) || !$data['item']) {
-                    $result = array('status' => false, 'info' => trans('comment_error3'));
+                    $result = ['status' => false, 'info' => trans('comment_error3')];
                     break;
                 }
                 if (20 > strlen($data['content'])) {
-                    $result = array('status' => false, 'info' => trans('comment_error5'));
+                    $result = ['status' => false, 'info' => trans('comment_error5')];
                     break;
                 }
-                $where = array(
+                $where        = [
                     'send_id'    => $data['send_id'],
                     'controller' => $data['controller'],
                     'item'       => $data['item'],
-                    'add_ip'     => array('exp', '= inet_aton("' . $_SERVER['REMOTE_ADDR'] . '")'),
-                    'add_time'   => array('gt', time() - config('COMMENT_INTERVAL')),
-                );
+                    'add_ip'     => ['exp', '= inet_aton("' . $_SERVER['REMOTE_ADDR'] . '")'],
+                    'add_time'   => ['gt', time() - config('COMMENT_INTERVAL')],
+                ];
                 $countComment = $CommentModel->where($where)->count();
                 if (0 < $countComment) {
-                    $result = array('status' => false, 'info' => trans('comment_error4'));
+                    $result = ['status' => false, 'info' => trans('comment_error4')];
                     break;
                 }
 
-                $addResult     = $CommentModel->mAdd($data);
+                $addResult      = $CommentModel->mAdd($data);
                 $result['info'] = ($addResult) ? trans('send') . trans('success') : trans('send') . trans('error');
                 break;
             case 'get_data':
@@ -53,16 +53,16 @@ class Comment extends Frontend
                     break;
                 }
 
-                $where = array(
+                $where        = [
                     'controller' => $data['controller'],
                     'item'       => $data['item'],
-                    'audit_id'   => array('gt', 0),
-                );
+                    'audit_id'   => ['gt', 0],
+                ];
                 $MemberModel  = D('Member');
                 $CommentModel = D('Comment');
-                $commentList = $CommentModel->mSelect($where, true);
+                $commentList  = $CommentModel->mSelect($where, true);
                 foreach ($commentList as &$comment) {
-                    $memberName            = $MemberModel->mFindColumn($comment['member_id'], 'member_name');
+                    $memberName             = $MemberModel->mFindColumn($comment['member_id'], 'member_name');
                     $comment['member_name'] = ($memberName) ? $memberName : trans('anonymous');
                 }
                 $this->assign('comment_list', $commentList);
@@ -80,7 +80,7 @@ class Comment extends Frontend
         $memberId = session('frontend_info.id');
         $memberId = ($memberId) ? $memberId : 0;
 
-        $data                                     = request('data');
+        $data = request('data');
         (null !== $memberId) && $data['send_id'] = $memberId;
 
         return $data;

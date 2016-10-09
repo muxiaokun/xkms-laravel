@@ -10,14 +10,14 @@ class Quests extends FrontendMember
     //列表
     public function index()
     {
-        $QuestsModel  = D('Quests');
+        $QuestsModel = D('Quests');
         $currentTime = time();
-        $where        = array(
-            'start_time' => array('lt', $currentTime),
-            'end_time'   => array('gt', $currentTime),
+        $where       = [
+            'start_time' => ['lt', $currentTime],
+            'end_time'   => ['gt', $currentTime],
             '(current_portion < max_portion OR max_portion = 0)',
-        );
-        $questsList = $QuestsModel->mSelect($where, true);
+        ];
+        $questsList  = $QuestsModel->mSelect($where, true);
         $this->assign('quests_list', $questsList);
         $this->assign('quests_list_count', $QuestsModel->mGetPageCount($where));
 
@@ -35,7 +35,7 @@ class Quests extends FrontendMember
         }
 
         $QuestsModel = D('Quests');
-        $questsInfo = $QuestsModel->mFind($id);
+        $questsInfo  = $QuestsModel->mFind($id);
         //检测是否能够提交
         $currentTime = time();
         if ($questsInfo['start_time'] < $currentTime && $questsInfo['end_time'] < $currentTime) {
@@ -55,11 +55,11 @@ class Quests extends FrontendMember
         }
         //存入数据
         if (IS_POST) {
-            $data                                        = array();
+            $data = [];
             session('frontend.id') && $data['member_id'] = session('frontend.id');
-            $data['quests_id']                           = $id;
-            $data['answer']                              = '|';
-            $questsAnswer                               = request('quests');
+            $data['quests_id'] = $id;
+            $data['answer']    = '|';
+            $questsAnswer      = request('quests');
             foreach ($questsQuestList as $questId => $quest) {
                 if ($quest['answer_type'] == 'checkbox') {
                     foreach ($questsAnswer[$questId] as $value) {
@@ -70,9 +70,9 @@ class Quests extends FrontendMember
                 }
             }
             $QuestsAnswerModel = D('QuestsAnswer');
-            $resultAdd        = $QuestsAnswerModel->mAdd($data);
+            $resultAdd         = $QuestsAnswerModel->mAdd($data);
             if ($resultAdd) {
-                $QuestsModel->where(array('id' => $questsInfo['id']))->setInc('current_portion');
+                $QuestsModel->where(['id' => $questsInfo['id']])->setInc('current_portion');
                 $this->success(trans('answer') . trans('add') . trans('success'), route('Quests/index'));
             } else {
                 $this->error(trans('answer') . trans('add') . trans('error'), route('index'));

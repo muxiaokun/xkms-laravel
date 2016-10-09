@@ -8,11 +8,12 @@ use App\Http\Controllers\Backend;
 class Template extends Backend
 {
     //$tplInfoFile 与 Common/Common/function.php M_scan_template一致
-    private $tplInfoFile = 'theme_info';
+    private $tplInfoFile  = 'theme_info';
     private $configFile   = '';
     private $defaultTheme = '';
     private $viewPath     = '';
-    private $viewFiles    = array();
+    private $viewFiles    = [];
+
     public function _initialize()
     {
         parent::_initialize();
@@ -49,9 +50,9 @@ class Template extends Backend
             }
 
             $config['DEFAULT_THEME'] = $defaultTheme;
-            $configStr              = var_export($config, true);
-            $CoreCopyright          = config('CORE_COPYRIGHT');
-            $putConfig              = <<<EOF
+            $configStr               = var_export($config, true);
+            $CoreCopyright           = config('CORE_COPYRIGHT');
+            $putConfig               = <<<EOF
 <?php
 {$CoreCopyright}
 // Home 配置
@@ -82,7 +83,7 @@ EOF;
         $this->assign('theme_info_list', $this->view_files);
 
         //初始化batch_handle
-        $batchHandle         = array();
+        $batchHandle         = [];
         $batchHandle['add']  = $this->_check_privilege('add');
         $batchHandle['edit'] = $this->_check_privilege('edit');
         $batchHandle['del']  = $this->_check_privilege('del');
@@ -115,7 +116,7 @@ EOF;
                 $this->error(trans('file') . trans('name') . trans('repeat'), route('index'));
             }
 
-            $content     = request('content', '', false);
+            $content    = request('content', '', false);
             $resultEdit = file_put_contents($filePath, $content);
             if (false !== $resultEdit) {
                 $this->_refresh_view_files();
@@ -141,7 +142,7 @@ EOF;
         $fileName = $this->view_files[$id]['file_name'];
         $filePath = $this->view_path . $fileName;
         if (IS_POST) {
-            $content     = request('content', '', false);
+            $content    = request('content', '', false);
             $resultEdit = file_put_contents($filePath, $content);
             if ($resultEdit) {
                 $this->success(trans('theme') . trans('template') . trans('edit') . trans('success'), route('index'));
@@ -183,13 +184,13 @@ EOF;
     //获取模板主题
     private function _get_theme_list()
     {
-        $themeList = array();
+        $themeList = [];
         if (config('DEFAULT_THEME')) {
             $themePath = str_ireplace(config('DEFAULT_THEME') . '/', '', $this->view_path);
         }
 
         $scanInfo   = scandir($themePath);
-        $denyChange = array('.', '..', 'index.html');
+        $denyChange = ['.', '..', 'index.html'];
         foreach ($scanInfo as $info) {
             if (in_array($info, $denyChange)) {
                 continue;
@@ -206,7 +207,7 @@ EOF;
     private function _refresh_view_files()
     {
         //清空缓存
-        $this->view_files = array();
+        $this->view_files = [];
         //获取最新的文件信息
         $this->_get_view_files($this->view_path);
         //保存缓存
@@ -227,7 +228,7 @@ EOF;
         //只扫描两级目录不进行递归 跳过 'index.html'
         $scanInfo = scandir($path);
 
-        $denyChange = array('.', '..', 'theme_info.php');
+        $denyChange = ['.', '..', 'theme_info.php'];
         if (2 == $level) {
             array_push($denyChange, 'index.html');
         }
@@ -241,11 +242,11 @@ EOF;
             if (is_dir($newPath)) {
                 $this->_get_view_files($newPath . '/', $level - 1);
             } elseif (is_file($newPath)) {
-                $relativeViewPath          = str_ireplace($this->view_path, '', $newPath);
+                $relativeViewPath           = str_ireplace($this->view_path, '', $newPath);
                 $fileMd5                    = md5($relativeViewPath);
-                $this->view_files[$fileMd5] = array(
+                $this->view_files[$fileMd5] = [
                     'file_name' => $relativeViewPath,
-                );
+                ];
                 if ($themeInfo && $themeInfo[$fileMd5]) {
                     $this->view_files[$fileMd5]['name'] = $themeInfo[$fileMd5]['name'];
                     $this->view_files[$fileMd5]['info'] = $themeInfo[$fileMd5]['info'];

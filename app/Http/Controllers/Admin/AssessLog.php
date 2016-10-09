@@ -15,30 +15,30 @@ class AssessLog extends Backend
             $this->error(trans('assess') . trans('id') . trans('error'), route('Assess/index'));
         }
 
-        $AssessModel                  = D('Assess');
+        $AssessModel                 = D('Assess');
         $assessInfo                  = $AssessModel->mFind($id);
         $assessInfo['all_grade']     = 0;
         $assessInfo['re_grade_name'] = '';
-        $reGradeId                  = request('re_grade_id');
+        $reGradeId                   = request('re_grade_id');
 
         switch ($assessInfo['target']) {
             case 'member':
-                $MemberModel   = D('Member');
+                $MemberModel = D('Member');
                 $reGradeName = $MemberModel->mFindColumn($reGradeId, 'member_name');
                 break;
             case 'member_group':
                 $MemberGroupModel = D('MemberGroup');
-                $reGradeName    = $MemberGroupModel->mFindColumn($reGradeId, 'name');
+                $reGradeName      = $MemberGroupModel->mFindColumn($reGradeId, 'name');
                 break;
         }
         if ($reGradeName) {
             $AssessLogModel       = D('AssessLog');
-            $where                = array('assess_id' => $id);
+            $where                = ['assess_id' => $id];
             $where['re_grade_id'] = $reGradeId;
-            $countRow            = $AssessLogModel->mGetPageCount($where);
-            $assessLogInfos     = $AssessLogModel->limit($countRow)->mSelect($where);
+            $countRow             = $AssessLogModel->mGetPageCount($where);
+            $assessLogInfos       = $AssessLogModel->limit($countRow)->mSelect($where);
             //算出各项评分
-            $resultInfo             = array();
+            $resultInfo             = [];
             $assessInfo['ext_info'] = json_decode($assessInfo['ext_info'], true);
             foreach ($assessInfo['ext_info'] as $key => $value) {
                 $resultInfo[$key]['p'] = $value['p'];
@@ -58,7 +58,7 @@ class AssessLog extends Backend
         $this->assign('assess_info', $assessInfo);
 
         //初始化batch_handle
-        $batchHandle        = array();
+        $batchHandle        = [];
         $batchHandle['del'] = $this->_check_privilege('del');
         $this->assign('batch_handle', $batchHandle);
 
@@ -71,41 +71,44 @@ class AssessLog extends Backend
     {
         $id = request('get.id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('edit', array('id' => $id)));
+            $this->error(trans('id') . trans('error'), route('edit', ['id' => $id]));
         }
 
         $AssessLogModel = D('AssessLog');
-        $resultDel     = $AssessLogModel->mDel($id);
+        $resultDel      = $AssessLogModel->mDel($id);
         if ($resultDel) {
             $this->success(trans('assess') . trans('del') . trans('success'), route('Assess/index'));
             return;
         } else {
-            $this->error(trans('assess') . trans('del') . trans('error'), route('edit', array('id' => $id)));
+            $this->error(trans('assess') . trans('del') . trans('error'), route('edit', ['id' => $id]));
         }
     }
 
     //异步获取数据接口
     protected function getData($field, $data)
     {
-        $where  = array();
-        $result = array('status' => true, 'info' => array());
+        $where  = [];
+        $result = ['status' => true, 'info' => []];
         switch ($field) {
             case 'member':
-                $MemberModel                                = D('Member');
-                isset($data['keyword']) && $data['keyword'] = $where['member_name'] = array('like', '%' . $data['keyword'] . '%');
-                $memberUserList                           = $MemberModel->mSelect($where);
+                $MemberModel = D('Member');
+                isset($data['keyword']) && $data['keyword'] = $where['member_name'] = [
+                    'like',
+                    '%' . $data['keyword'] . '%',
+                ];
+                $memberUserList = $MemberModel->mSelect($where);
                 //取出已经评价的
                 $AssessLogMode = D('AssessLog');
                 foreach ($memberUserList as $memberUser) {
-                    $result['info'][] = array('value' => $memberUser['id'], 'html' => $memberUser['member_name']);
+                    $result['info'][] = ['value' => $memberUser['id'], 'html' => $memberUser['member_name']];
                 }
                 break;
             case 'member_group':
-                $MemberGroupModel                           = D('MemberGroup');
-                isset($data['keyword']) && $data['keyword'] = $where['name'] = array('like', '%' . $data['keyword'] . '%');
-                $memberGroupList                          = $MemberGroupModel->mSelect($where);
+                $MemberGroupModel = D('MemberGroup');
+                isset($data['keyword']) && $data['keyword'] = $where['name'] = ['like', '%' . $data['keyword'] . '%'];
+                $memberGroupList = $MemberGroupModel->mSelect($where);
                 foreach ($memberGroupList as $memberGroup) {
-                    $result['info'][] = array('value' => $memberGroup['id'], 'html' => $memberGroup['name']);
+                    $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
                 }
                 break;
         }

@@ -16,6 +16,7 @@ class Wechat extends Frontend
         $this->Wechat = new \Common\Lib\Wechat();
         parent::_initialize();
     }
+
     public function index()
     {
         $signature      = request('get.signature');
@@ -35,14 +36,14 @@ class Wechat extends Frontend
         //验证成功之后如果有数据提交
         if ($GLOBALS["HTTP_RAW_POST_DATA"]) {
             $xmlStr  = $GLOBALS["HTTP_RAW_POST_DATA"];
-            $nodeCfg = array(
+            $nodeCfg = [
                 'ToUserName',
                 'FromUserName',
                 'CreateTime',
                 'MsgType',
                 'Content',
                 'MsgId',
-            );
+            ];
             $msgInfo = $this->Wechat->msg_decode($xmlStr, $nodeCfg);
             switch ($msgInfo['MsgType']) {
                 case 'text':
@@ -59,18 +60,18 @@ class Wechat extends Frontend
             return;
         }
 
-        $data = array(
+        $data    = [
             'ToUserName'   => $msgInfo['FromUserName'],
             'FromUserName' => $msgInfo['ToUserName'],
             'CreateTime'   => time(),
             'MsgType'      => 'text',
-        );
+        ];
         $content = '';
         switch ($msgInfo['Content']) {
             case '登录':
                 $ApiLink    = 'http://' . $_SERVER['SERVER_NAME'] . route(config('DEFAULT_MODULE') . '/Wechat/member_bind');
                 $Oauth2Link = $this->Wechat->Oauth2_enlink($ApiLink);
-                $content     = $Oauth2Link;
+                $content    = $Oauth2Link;
                 break;
             case '时间':
                 $content = trans('server') . trans('time') . ':' . date(config('SYS_DATE_DETAIL'));
@@ -88,9 +89,9 @@ class Wechat extends Frontend
         if (IS_POST) {
             $memberName = request('user');
             $memberPwd  = request('pwd');
-            $msg         = $this->doLogin($memberName, $memberPwd);
+            $msg        = $this->doLogin($memberName, $memberPwd);
             if ($this->isLogin()) {
-                $WechatModel              = D('Wechat');
+                $WechatModel             = D('Wechat');
                 $wechatInfo              = session('wechat_info');
                 $wechatInfo['member_id'] = session('frontend_info.id');
                 $WechatModel->bind_wechat($wechatInfo);
@@ -98,10 +99,10 @@ class Wechat extends Frontend
             }
             $this->_member_bind_msg($msg);
         } else {
-            $code         = request($this->Wechat->Oauth2_code);
+            $code        = request($this->Wechat->Oauth2_code);
             $accessToken = $this->Wechat->Oauth2_access_token($code);
             $userInfo    = $this->Wechat->Oauth2_user($accessToken['access_token'], $accessToken['openid']);
-            $data         = array(
+            $data        = [
                 'openid'     => $userInfo['openid'],
                 'nickname'   => $userInfo['nickname'],
                 'sex'        => $userInfo['sex'],
@@ -111,15 +112,15 @@ class Wechat extends Frontend
                 'city'       => $userInfo['city'],
                 'headimgurl' => $userInfo['headimgurl'],
                 'bind_time'  => time(),
-            );
+            ];
             //绑定模式逻辑节点
             //已经绑定 直接登陆
             //未绑定 登录绑定
             $WechatModel = D('Wechat');
-            $wechatId   = $WechatModel->mFindId($userInfo['openid']);
+            $wechatId    = $WechatModel->mFindId($userInfo['openid']);
             if ($wechatId) {
                 $memberId = $WechatModel->mFindColumn($wechatId, 'member_id');
-                $msg       = $this->doLogin(null, null, false, $memberId);
+                $msg      = $this->doLogin(null, null, false, $memberId);
                 $this->_member_bind_msg($msg);
             } else {
                 session('wechat_info', $data);
@@ -138,7 +139,8 @@ class Wechat extends Frontend
                 $this->error(trans('verify_code') . trans('error'), route(ACTION_NAME));
                 break;
             case 'lock_user_error':
-                $this->error(trans('admin') . trans('by') . trans('lock') . trans('please') . config('SYS_FRONTEND_LOCK_TIME') . trans('second') . trans('again') . trans('login'), route(ACTION_NAME));
+                $this->error(trans('admin') . trans('by') . trans('lock') . trans('please') . config('SYS_FRONTEND_LOCK_TIME') . trans('second') . trans('again') . trans('login'),
+                    route(ACTION_NAME));
                 break;
             default:
                 $this->success(trans('login') . trans('success'), route('Member/index'));

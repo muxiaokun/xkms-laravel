@@ -7,7 +7,7 @@ namespace App\Http\Controllers;
 
 class CommonManageUploadController
 {
-    protected $config = array(
+    protected $config = [
 
 //        Upload Class base configure
         //        'mimes'         =>  array(), //允许上传的文件MiMe类型
@@ -24,11 +24,11 @@ class CommonManageUploadController
         //        'callback'      =>  false, //检测文件是否存在回调，如果存在返回文件信息数组
         //        'driver'        =>  '', // 文件上传驱动
         //        'driverConfig'  =>  array(), // 上传驱动配置
-    );
+    ];
 
     public function UploadFile()
     {
-        $UploadUtil    = new \Think\Upload($this->config);
+        $UploadUtil  = new \Think\Upload($this->config);
         $getPathExts = $this->get_path_exts();
         if (!$getPathExts) {
             return;
@@ -46,18 +46,19 @@ class CommonManageUploadController
             $fileUrl = $UploadUtil->rootPath . $fileInfo['savepath'] . $fileInfo['savename'];
             // 上传文件的信息写入数据库
             $ManageUploadModel = D('ManageUpload');
-            $data              = array(
+            $data              = [
                 'name'   => substr($fileInfo['name'], 0, strrpos($fileInfo['name'], '.')),
                 'path'   => $fileUrl,
                 'mime'   => $fileInfo['type'],
                 'size'   => $fileInfo['size'],
                 'suffix' => $fileInfo['ext'],
-            );
+            ];
             $ManageUploadModel->mAdd($data);
             // 上传成功 返回文件信息 伪静态目录结构__ROOT__ . '/' .
             $this->kind_json(__ROOT__ . '/' . $fileUrl, false);
         }
     }
+
     //kindeditor文件管理器接口
     public function ManageFile()
     {
@@ -67,7 +68,7 @@ class CommonManageUploadController
         }
 
         $UploadUtil = new \Think\Upload($this->config);
-        $rootPath  = $UploadUtil->rootPath . $getPathExts['path'];
+        $rootPath   = $UploadUtil->rootPath . $getPathExts['path'];
         //目录名
         $dirName = $getPathExts['dir_name'];
         if ($dirName !== '') {
@@ -80,13 +81,13 @@ class CommonManageUploadController
         //根据path参数，设置各路径和URL
         $getPath = request('get.path');
         if (!$getPath) {
-            $currentPath     = $rootPath;
-            $currentUrl      = $rootUrl;
+            $currentPath    = $rootPath;
+            $currentUrl     = $rootUrl;
             $currentDirPath = '';
             $moveupDirPath  = '';
         } else {
-            $currentPath     = $rootPath . '/' . $getPath;
-            $currentUrl      = $rootUrl . $getPath;
+            $currentPath    = $rootPath . '/' . $getPath;
+            $currentUrl     = $rootUrl . $getPath;
             $currentDirPath = $getPath;
             $moveupDirPath  = preg_replace('/(.*?)[^\/]+\/$/', '$1', $currentDirPath);
         }
@@ -109,9 +110,9 @@ class CommonManageUploadController
         }
 
         //图片扩展名
-        $extArr = array('gif', 'jpg', 'jpeg', 'png', 'bmp');
+        $extArr = ['gif', 'jpg', 'jpeg', 'png', 'bmp'];
         //遍历目录取得文件信息
-        $fileList = array();
+        $fileList = [];
         if ($handle = opendir($currentPath)) {
             $i = 0;
             while (false !== ($filename = readdir($handle))) {
@@ -146,26 +147,32 @@ class CommonManageUploadController
             $order = request('get.order', null, 'strtolower');
             if ($a['is_dir'] && !$b['is_dir']) {
                 return -1;
-            } else if (!$a['is_dir'] && $b['is_dir']) {
-                return 1;
             } else {
-                if ($order == 'size') {
-                    if ($a['filesize'] > $b['filesize']) {
-                        return 1;
-                    } else if ($a['filesize'] < $b['filesize']) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
-                } else if ($order == 'type') {
-                    return strcmp($a['filetype'], $b['filetype']);
+                if (!$a['is_dir'] && $b['is_dir']) {
+                    return 1;
                 } else {
-                    return strcmp($a['filename'], $b['filename']);
+                    if ($order == 'size') {
+                        if ($a['filesize'] > $b['filesize']) {
+                            return 1;
+                        } else {
+                            if ($a['filesize'] < $b['filesize']) {
+                                return -1;
+                            } else {
+                                return 0;
+                            }
+                        }
+                    } else {
+                        if ($order == 'type') {
+                            return strcmp($a['filetype'], $b['filetype']);
+                        } else {
+                            return strcmp($a['filename'], $b['filename']);
+                        }
+                    }
                 }
             }
         });
 
-        $result = array();
+        $result = [];
         //相对于根目录的上一级目录
         $result['moveup_dir_path'] = $moveupDirPath;
         //相对于根目录的当前目录
@@ -186,22 +193,22 @@ class CommonManageUploadController
     {
         header('Content-type: text/html; charset=UTF-8');
         if ($isError) {
-            echo json_encode(array('error' => 1, 'message' => $msg));
+            echo json_encode(['error' => 1, 'message' => $msg]);
         } else {
-            echo json_encode(array('error' => 0, 'url' => $msg));
+            echo json_encode(['error' => 0, 'url' => $msg]);
         }
         return;
     }
 
     private function get_path_exts()
     {
-        $allowArr = array(
-            'image' => array('gif', 'jpg', 'jpeg', 'png', 'bmp'),
-            'flash' => array('swf', 'flv'),
-            'media' => array('swf', 'flv', 'mp3', 'wav', 'wma', 'wmv', 'mid', 'avi', 'mpg', 'asf', 'rm', 'rmvb'),
-            'file'  => array('doc', 'docx', 'xls', 'xlsx', 'ppt', 'htm', 'html', 'txt', 'zip', 'rar', 'gz', 'bz2'),
-        );
-        $dirName = request('get.dir') ? request('get.dir') : '';
+        $allowArr = [
+            'image' => ['gif', 'jpg', 'jpeg', 'png', 'bmp'],
+            'flash' => ['swf', 'flv'],
+            'media' => ['swf', 'flv', 'mp3', 'wav', 'wma', 'wmv', 'mid', 'avi', 'mpg', 'asf', 'rm', 'rmvb'],
+            'file'  => ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'htm', 'html', 'txt', 'zip', 'rar', 'gz', 'bz2'],
+        ];
+        $dirName  = request('get.dir') ? request('get.dir') : '';
         if (empty($allowArr[$dirName]) && '' != $dirName) {
             $this->kind_json("Invalid Directory name.");
             return false;
@@ -218,6 +225,6 @@ class CommonManageUploadController
                 $path = 'other/';
         }
 
-        return array('path' => $path, 'exts' => $allowArr[$dirName], 'dir_name' => $dirName);
+        return ['path' => $path, 'exts' => $allowArr[$dirName], 'dir_name' => $dirName];
     }
 }

@@ -355,7 +355,7 @@ EOF;
         //不显示的数据库
         $notListDatabase = ['information_schema', 'mysql', 'performance_schema'];
         $databaseList    = DB::select('show databases');
-        $reCompareInfo = [];
+        $reCompareInfo   = [];
         foreach (DB::select('show databases') as $db_key => $row) {
             if (in_array($row->Database, $notListDatabase)) {
                 continue;

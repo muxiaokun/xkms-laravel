@@ -10,7 +10,9 @@ class Recruit extends Common
         $this->mGetPage($page);
         !isset($this->options['order']) && $this->order('id desc');
         $data = $this->where($where)->select();
-        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
+        foreach ($data as &$dataRow) {
+            $this->mDecodeData($dataRow);
+        }
         return $data;
     }
 
@@ -18,7 +20,7 @@ class Recruit extends Common
     {
         isset($data['explains']) && $data['explains'] = $this->mEncodeContent($data['explains']);
         if (isset($data['ext_info']) && is_array($data['ext_info'])) {
-            $newExtInfo = array();
+            $newExtInfo = [];
             foreach ($data['ext_info'] as $key => $value) {
                 $newExtInfo[] = $key . ':' . $value;
             }
@@ -30,9 +32,9 @@ class Recruit extends Common
     {
         if (isset($data['ext_info']) && $data['ext_info']) {
             $data['ext_info'] = explode('|', substr($data['ext_info'], 1, strlen($data['ext_info']) - 2));
-            $newExtInfo     = array();
+            $newExtInfo       = [];
             foreach ($data['ext_info'] as $valueStr) {
-                list($key, $value)  = explode(':', $valueStr);
+                list($key, $value) = explode(':', $valueStr);
                 $newExtInfo[$key] = $value;
             }
             $data['ext_info'] = $newExtInfo;

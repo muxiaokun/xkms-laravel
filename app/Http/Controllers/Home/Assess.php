@@ -13,12 +13,12 @@ class Assess extends FrontendMember
         $AssessModel = D('Assess');
 
         $currentTime = time();
-        $where        = array(
-            'group_level' => array('in', session('frontend_info.group_id')),
+        $where       = [
+            'group_level' => ['in', session('frontend_info.group_id')],
             'is_enable'   => 1,
-            'start_time'  => array('lt', $currentTime),
-            'end_time'    => array('gt', $currentTime),
-        );
+            'start_time'  => ['lt', $currentTime],
+            'end_time'    => ['gt', $currentTime],
+        ];
 
         //初始化翻页 和 列表数据
         $assessList = $AssessModel->mSelect($where, true);
@@ -48,7 +48,7 @@ class Assess extends FrontendMember
             $this->error(trans('id') . trans('error'), route('index'));
         }
 
-        $AssessModel  = D('Assess');
+        $AssessModel = D('Assess');
         $assessInfo  = $AssessModel->mFind($id);
         $currentTime = time();
         if (
@@ -64,7 +64,7 @@ class Assess extends FrontendMember
             $data = $this->makeData();
             //提交时检测类型下可以被评分的组和组员
             $AssessLogMode = D('AssessLog');
-            $resultAdd    = $AssessLogMode->mAdd($data);
+            $resultAdd     = $AssessLogMode->mAdd($data);
             if ($resultAdd) {
                 $this->success(trans('grade') . trans('success'), route('index'));
                 return;
@@ -91,7 +91,7 @@ class Assess extends FrontendMember
     //异步验证接口
     protected function doValidateForm($field, $data)
     {
-        $result = array('status' => true, 'info' => '');
+        $result = ['status' => true, 'info' => ''];
         switch ($field) {
             case 're_grade_id':
                 //不能为空
@@ -111,23 +111,26 @@ class Assess extends FrontendMember
     //异步获取数据接口
     protected function getData($field, $data)
     {
-        $where  = array();
-        $result = array('status' => true, 'info' => array());
+        $where  = [];
+        $result = ['status' => true, 'info' => []];
         switch ($field) {
             case 'member':
-                $MemberModel                                = D('Member');
-                isset($data['keyword']) && $data['keyword'] = $where['member_name'] = array('like', '%' . $data['keyword'] . '%');
-                $memberUserList                           = $MemberModel->mSelect($where);
+                $MemberModel = D('Member');
+                isset($data['keyword']) && $data['keyword'] = $where['member_name'] = [
+                    'like',
+                    '%' . $data['keyword'] . '%',
+                ];
+                $memberUserList = $MemberModel->mSelect($where);
                 foreach ($memberUserList as $memberUser) {
-                    $result['info'][] = array('value' => $memberUser['id'], 'html' => $memberUser['member_name']);
+                    $result['info'][] = ['value' => $memberUser['id'], 'html' => $memberUser['member_name']];
                 }
                 break;
             case 'member_group':
-                $MemberGroupModel                           = D('MemberGroup');
-                isset($data['keyword']) && $data['keyword'] = $where['name'] = array('like', '%' . $data['keyword'] . '%');
-                $memberGroupList                          = $MemberGroupModel->mSelect($where);
+                $MemberGroupModel = D('MemberGroup');
+                isset($data['keyword']) && $data['keyword'] = $where['name'] = ['like', '%' . $data['keyword'] . '%'];
+                $memberGroupList = $MemberGroupModel->mSelect($where);
                 foreach ($memberGroupList as $memberGroup) {
-                    $result['info'][] = array('value' => $memberGroup['id'], 'html' => $memberGroup['name']);
+                    $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
                 }
                 break;
         }
@@ -137,26 +140,26 @@ class Assess extends FrontendMember
     //建立数据
     private function makeData()
     {
-        $assessId   = request('get.id');
-        $gradeId    = session('frontend_info.id');
+        $assessId  = request('get.id');
+        $gradeId   = session('frontend_info.id');
         $reGradeId = request('re_grade_id');
-        $score       = request('score');
+        $score     = request('score');
 
         //检测初始化参数是否合法
-        $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', array('id' => $id));
+        $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', ['id' => $id]);
         if ('add' == ACTION_NAME || null !== $reGradeId) {
-            $result = $this->doValidateForm('re_grade_id', array('re_grade_id' => $reGradeId));
+            $result = $this->doValidateForm('re_grade_id', ['re_grade_id' => $reGradeId]);
             if (!$result['status']) {
                 $this->error($result['info'], $errorGoLink);
             }
 
         }
 
-        $data                                                                   = array();
-        ('add' == ACTION_NAME || null !== $assessId) && $data['assess_id']     = $assessId;
-        ('add' == ACTION_NAME || null !== $gradeId) && $data['grade_id']       = $gradeId;
+        $data = [];
+        ('add' == ACTION_NAME || null !== $assessId) && $data['assess_id'] = $assessId;
+        ('add' == ACTION_NAME || null !== $gradeId) && $data['grade_id'] = $gradeId;
         ('add' == ACTION_NAME || null !== $reGradeId) && $data['re_grade_id'] = $reGradeId;
-        ('add' == ACTION_NAME || null !== $score) && $data['score']             = $score;
+        ('add' == ACTION_NAME || null !== $score) && $data['score'] = $score;
         return $data;
     }
 }

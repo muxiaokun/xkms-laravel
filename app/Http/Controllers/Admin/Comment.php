@@ -13,44 +13,45 @@ class Comment extends Backend
         $AdminModel   = D('Admin');
         $MemberModel  = D('Member');
         $CommentModel = D('Comment');
-        $where        = array();
+        $where        = [];
 
         //建立where
-        $whereValue                       = '';
-        $whereValue                       = request('audit_id');
-        $whereValue && $where['audit_id'] = array(
+        $whereValue = '';
+        $whereValue = request('audit_id');
+        $whereValue && $where['audit_id'] = [
             'in',
-            $AdminModel->where(array('admin_name' => array('like', '%' . $whereValue . '%')))->mColumn2Array('id'),
-        );
-        $whereValue                      = request('send_id');
-        $whereValue && $where['send_id'] = array(
+            $AdminModel->where(['admin_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+        ];
+        $whereValue = request('send_id');
+        $whereValue && $where['send_id'] = [
             'in',
-            $MemberModel->where(array('member_name' => array('like', '%' . $whereValue . '%')))->mColumn2Array('id'),
-        );
-        $whereValue                         = request('controller');
+            $MemberModel->where(['member_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+        ];
+        $whereValue = request('controller');
         $whereValue && $where['controller'] = $whereValue;
-        $whereValue                         = request('item');
-        $whereValue && $where['item']       = $whereValue;
+        $whereValue = request('item');
+        $whereValue && $where['item'] = $whereValue;
 
         $commentList = $CommentModel->order('add_time desc')->mSelect($where, true);
         foreach ($commentList as &$comment) {
-            $comment['audit_name']  = ($comment['audit_id']) ? $AdminModel->mFindColumn($comment['audit_id'], 'admin_name') : trans('none') . trans('audit');
-            $memberName            = $MemberModel->mFindColumn($comment['member_id'], 'member_name');
+            $comment['audit_name']  = ($comment['audit_id']) ? $AdminModel->mFindColumn($comment['audit_id'],
+                'admin_name') : trans('none') . trans('audit');
+            $memberName             = $MemberModel->mFindColumn($comment['member_id'], 'member_name');
             $comment['member_name'] = ($memberName) ? $memberName : trans('anonymous');
         }
         $this->assign('comment_list', $commentList);
         $this->assign('comment_list_count', $CommentModel->mGetPageCount($where));
 
         //初始化where_info
-        $whereInfo               = array();
-        $whereInfo['audit_id']   = array('type' => 'input', 'name' => trans('audit') . trans('admin') . trans('name'));
-        $whereInfo['send_id']    = array('type' => 'input', 'name' => trans('send') . trans('member') . trans('name'));
-        $whereInfo['controller'] = array('type' => 'input', 'name' => trans('controller'));
-        $whereInfo['item']       = array('type' => 'input', 'name' => trans('id'));
+        $whereInfo               = [];
+        $whereInfo['audit_id']   = ['type' => 'input', 'name' => trans('audit') . trans('admin') . trans('name')];
+        $whereInfo['send_id']    = ['type' => 'input', 'name' => trans('send') . trans('member') . trans('name')];
+        $whereInfo['controller'] = ['type' => 'input', 'name' => trans('controller')];
+        $whereInfo['item']       = ['type' => 'input', 'name' => trans('id')];
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
-        $batchHandle         = array();
+        $batchHandle         = [];
         $batchHandle['add']  = $this->_check_privilege('add');
         $batchHandle['edit'] = $this->_check_privilege('edit');
         $batchHandle['del']  = $this->_check_privilege('del');
@@ -65,12 +66,12 @@ class Comment extends Backend
     {
         if (IS_POST) {
             //表单提交的名称
-            $col = array(
+            $col            = [
                 'COMMENT_SWITCH',
                 'COMMENT_ALLOW',
                 'COMMENT_ANONY',
                 'COMMENT_INTERVAL',
-            );
+            ];
             $_POST['allow'] = explode(',', request('allow'));
             $this->_put_config($col, 'system');
             return;
@@ -89,8 +90,8 @@ class Comment extends Backend
         }
 
         $CommentModel = D('Comment');
-        $data         = array('audit_id' => session('backend_info.id'));
-        $resultEdit  = $CommentModel->mEdit($id, $data);
+        $data         = ['audit_id' => session('backend_info.id')];
+        $resultEdit   = $CommentModel->mEdit($id, $data);
         if ($resultEdit) {
             $this->success(trans('comment') . trans('audit') . trans('success'), route('index'));
             return;
@@ -108,7 +109,7 @@ class Comment extends Backend
         }
 
         $CommentModel = D('Comment');
-        $resultDel   = $CommentModel->mDel($id);
+        $resultDel    = $CommentModel->mDel($id);
         if ($resultDel) {
             $this->success(trans('comment') . trans('del') . trans('success'), route('index'));
             return;

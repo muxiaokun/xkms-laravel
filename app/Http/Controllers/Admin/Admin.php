@@ -28,8 +28,12 @@ class Admin extends Backend
         $whereValue = request('admin_name');
         $whereValue && $where['admin_name'] = ['like', '%' . $whereValue . '%'];
         $whereValue = request('group_id');
-        $whereValue && $where['group_id'] = $AdminGroupModel->where(['name' => ['like',
-            '%' . $whereValue . '%']])->mColumn2Array('id');
+        $whereValue && $where['group_id'] = $AdminGroupModel->where([
+            'name' => [
+                'like',
+                '%' . $whereValue . '%',
+            ],
+        ])->mColumn2Array('id');
         $whereValue = mMktimeRange('last_time');
         $whereValue && $where['last_time'] = $whereValue;
         $whereValue = request('is_enable');
@@ -54,9 +58,11 @@ class Admin extends Backend
         $whereInfo['admin_name'] = ['type' => 'input', 'name' => trans('admin') . trans('name')];
         $whereInfo['group_id']   = ['type' => 'input', 'name' => trans('group') . trans('name')];
         $whereInfo['last_time']  = ['type' => 'time', 'name' => trans('login') . trans('time')];
-        $whereInfo['is_enable']  = ['type'  => 'select',
-                                    'name'  => trans('yes') . trans('no') . trans('enable'),
-                                    'value' => [1 => trans('enable'), 2 => trans('disable')]];
+        $whereInfo['is_enable']  = [
+            'type'  => 'select',
+            'name'  => trans('yes') . trans('no') . trans('enable'),
+            'value' => [1 => trans('enable'), 2 => trans('disable')],
+        ];
         $this->assign('where_info', $whereInfo);
 
         //初始化batch_handle
@@ -304,8 +310,10 @@ class Admin extends Backend
 
         }
         if ('add' == ACTION_NAME || null !== $password) {
-            $result = $this->doValidateForm('password_again', ['password'       => $password,
-                                                               'password_again' => $passwordAgain]);
+            $result = $this->doValidateForm('password_again', [
+                'password'       => $password,
+                'password_again' => $passwordAgain,
+            ]);
             if (!$result['status']) {
                 $this->error($result['info'], $errorGoLink);
             }

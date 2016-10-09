@@ -26,7 +26,7 @@ class AdminLog extends Common
 
         if (!$msg) {
             $denyLogRequest = C('SYS_DENY_LOG_REQUEST');
-            $request          = I('request.');
+            $request        = I('request.');
             foreach ($request as $key => $value) {
                 if (in_array($key, $denyLogRequest)) {
                     unset($request[$key]);
@@ -37,7 +37,7 @@ class AdminLog extends Common
             }
             $msg = json_encode($request);
         }
-        $data = array(
+        $data = [
             'admin_id'        => $adminId,
             'add_time'        => time(),
             'module_name'     => MODULE_NAME,
@@ -45,7 +45,7 @@ class AdminLog extends Common
             'action_name'     => ACTION_NAME,
             'model_name'      => $modelName,
             'request'         => $msg,
-        );
+        ];
         return $this->data($data)->add();
     }
 

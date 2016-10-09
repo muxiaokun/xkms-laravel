@@ -10,7 +10,9 @@ class RecruitLog extends Common
         $this->mGetPage($page);
         !isset($this->options['order']) && $this->order('add_time desc');
         $data = $this->where($where)->select();
-        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
+        foreach ($data as &$dataRow) {
+            $this->mDecodeData($dataRow);
+        }
         return $data;
     }
 

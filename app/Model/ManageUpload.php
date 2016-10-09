@@ -11,7 +11,9 @@ class ManageUpload extends Common
         $this->mGetPage($page);
         !isset($this->options['order']) && $this->order('id desc');
         $data = $this->where($where)->select();
-        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
+        foreach ($data as &$dataRow) {
+            $this->mDecodeData($dataRow);
+        }
         return $data;
     }
 
@@ -21,9 +23,9 @@ class ManageUpload extends Common
             return false;
         }
 
-        $userId           = ('Admin' == MODULE_NAME) ? session('backend_info.id') : session('frontend_info.id');
+        $userId            = ('Admin' == MODULE_NAME) ? session('backend_info.id') : session('frontend_info.id');
         $data['user_id']   = $userId;
-        $userType         = ('Admin' == MODULE_NAME) ? 1 : 2;
+        $userType          = ('Admin' == MODULE_NAME) ? 1 : 2;
         $data['user_type'] = $userType;
         $data['add_time']  = time();
         return $this->add($data);
@@ -35,14 +37,14 @@ class ManageUpload extends Common
             return false;
         }
 
-        !is_array($id) && $id = array($id);
+        !is_array($id) && $id = [$id];
         foreach ($id as $i) {
             $delFileResult = $this->_mDel_file($i);
             if (false === $delFileResult) {
                 return false;
             }
 
-            $delResult = $this->where(array('id' => $i))->delete();
+            $delResult = $this->where(['id' => $i])->delete();
             if (!$delResult) {
                 return false;
             }
@@ -70,14 +72,14 @@ class ManageUpload extends Common
 
         //文件解除属主
         $ownerStr   = '|' . CONTROLLER_NAME . ':' . $item . '|';
-        $ownerWhere = array(
-            'bind_info' => array('like', '%' . $ownerStr . '%'),
-        );
-        $ownerList = $this->field('id,bind_info')->where($ownerWhere)->select();
+        $ownerWhere = [
+            'bind_info' => ['like', '%' . $ownerStr . '%'],
+        ];
+        $ownerList  = $this->field('id,bind_info')->where($ownerWhere)->select();
         foreach ($ownerList as $file) {
             $bindInfo = str_replace($ownerStr, '', $file['bind_info']);
             //此处的更新有可能没有影响任何数据返回0
-            $this->where(array('id' => $file['id']))->data(array('bind_info' => $bindInfo))->save();
+            $this->where(['id' => $file['id']])->data(['bind_info' => $bindInfo])->save();
         }
 
         //判断是否有文件需要绑定
@@ -86,12 +88,12 @@ class ManageUpload extends Common
         }
 
         //文件绑定属主
-        $fileWhere = array(
-            'path' => array('in', $paths),
-        );
-        $fileList = $this->field('id,bind_info')->where($fileWhere)->select();
+        $fileWhere = [
+            'path' => ['in', $paths],
+        ];
+        $fileList  = $this->field('id,bind_info')->where($fileWhere)->select();
         foreach ($fileList as $file) {
-            $editResult = $this->where(array('id' => $file['id']))->data(array('bind_info' => $file['bind_info'] . $ownerStr))->save();
+            $editResult = $this->where(['id' => $file['id']])->data(['bind_info' => $file['bind_info'] . $ownerStr])->save();
             if (!$editResult) {
                 return false;
             }
@@ -106,9 +108,9 @@ class ManageUpload extends Common
             return false;
         }
 
-        $where = array('id' => $id);
+        $where = ['id' => $id];
         if ($isPath) {
-            $where = array('path' => $id);
+            $where = ['path' => $id];
         }
 
         $manageUpload = $this->where($where)->find();

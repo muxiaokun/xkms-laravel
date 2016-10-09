@@ -11,19 +11,19 @@ class Recruit extends Frontend
     public function index()
     {
         $RecruitModel = D('Recruit');
-        $currentTime = time();
-        $logCount    = 0;
-        $where        = array(
-            'start_time' => array('lt', $currentTime),
-            'end_time'   => array('gt', $currentTime),
+        $currentTime  = time();
+        $logCount     = 0;
+        $where        = [
+            'start_time' => ['lt', $currentTime],
+            'end_time'   => ['gt', $currentTime],
             '(current_portion < max_portion OR max_portion = 0)',
-        );
-        $keyword = request('keyword');
+        ];
+        $keyword      = request('keyword');
         if ($keyword) {
             $keyword             = '%' . $keyword . '%';
-            $complex             = array('_logic' => 'or');
-            $complex['title']    = array('like', $keyword);
-            $complex['explains'] = array('like', $keyword);
+            $complex             = ['_logic' => 'or'];
+            $complex['title']    = ['like', $keyword];
+            $complex['explains'] = ['like', $keyword];
             $where['_complex']   = $complex;
         }
 
@@ -45,18 +45,19 @@ class Recruit extends Frontend
         }
 
         $RecruitModel = D('Recruit');
-        $recruitInfo = $RecruitModel->mFind($id);
+        $recruitInfo  = $RecruitModel->mFind($id);
         //检测是否能够提交
         $currentTime = time();
         if ($recruitInfo['start_time'] < $currentTime && $recruitInfo['end_time'] < $currentTime) {
             $this->error(trans('start') . trans('end') . trans('time') . trans('error'), route('Recruit/index'));
         }
         if (0 != $recruitInfo['max_portion'] && $recruitInfo['current_portion'] >= $recruitInfo['max_portion']) {
-            $this->error(trans('re_recruit') . trans('number') . trans('gt') . trans('recruit') . trans('number'), route('Quests/index'));
+            $this->error(trans('re_recruit') . trans('number') . trans('gt') . trans('recruit') . trans('number'),
+                route('Quests/index'));
         }
         //存入数据
         if (IS_POST) {
-            $data                = array();
+            $data                = [];
             $data['r_id']        = $id;
             $data['name']        = request('name');
             $data['birthday']    = mMktime(request('birthday'));
@@ -65,10 +66,10 @@ class Recruit extends Frontend
             $data['ext_info']    = request('ext_info');
             $data['file_path']   = request('file_path');
             $RecruitLogModel     = D('RecruitLog');
-            $resultAdd          = $RecruitLogModel->mAdd($data);
+            $resultAdd           = $RecruitLogModel->mAdd($data);
             if ($resultAdd) {
                 $RecruitModel = D('Recruit');
-                $RecruitModel->where(array('id' => $recruitInfo['id']))->setInc('current_portion');
+                $RecruitModel->where(['id' => $recruitInfo['id']])->setInc('current_portion');
                 $this->success(trans('resume') . trans('submit') . trans('success'), route('Recruit/index'));
             } else {
                 $this->error(trans('resume') . trans('submit') . trans('error'), route('index'));
@@ -82,9 +83,9 @@ class Recruit extends Frontend
         if ($cacheValue && true !== config('app.debug')) {
             $recruitInfo['explains'] = $cacheValue;
         } else {
-            $recruitInfo['explains']                                = mContent2ckplayer($recruitInfo['explains'], $recruitInfo['thumb']);
+            $recruitInfo['explains'] = mContent2ckplayer($recruitInfo['explains'], $recruitInfo['thumb']);
             config('SYS_ARTICLE_SYNC_IMAGE') && $recruitInfo['explains'] = mSyncImg($recruitInfo['explains']);
-            $cacheValue                                             = $recruitInfo['explains'];
+            $cacheValue = $recruitInfo['explains'];
             S($cacheName, $cacheValue, config('SYS_TD_CACHE'));
         }
 
@@ -105,7 +106,7 @@ class Recruit extends Frontend
         }
 
         $RecruitModel = D('Recruit');
-        $recruitInfo = $RecruitModel->mFind($id);
+        $recruitInfo  = $RecruitModel->mFind($id);
         $this->assign('recruit_info', $recruitInfo);
         $this->assign('title', trans('look') . trans('recruit'));
         $this->display();

@@ -12,7 +12,9 @@ class AdminGroup extends Common
         $this->mGetPage($page);
         !isset($this->options['order']) && $this->order('id desc');
         $data = $this->where($where)->select();
-        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
+        foreach ($data as &$dataRow) {
+            $this->mDecodeData($dataRow);
+        }
         return $data;
     }
 
@@ -31,10 +33,12 @@ class AdminGroup extends Common
             return false;
         }
 
-        is_array($id) && $id = array('in', $id);
-        $data                = $this->field('privilege')->where(array('id' => $id, 'is_enable' => 1))->select();
-        foreach ($data as &$dataRow) {$this->mDecodeData($dataRow);}
-        $privilege = array();
+        is_array($id) && $id = ['in', $id];
+        $data = $this->field('privilege')->where(['id' => $id, 'is_enable' => 1])->select();
+        foreach ($data as &$dataRow) {
+            $this->mDecodeData($dataRow);
+        }
+        $privilege = [];
         foreach ($data as $group) {
             $privilege = array_merge($privilege, $group['privilege']);
         }
@@ -44,11 +48,11 @@ class AdminGroup extends Common
     //返回有权管理的组
     public function mFind_allow()
     {
-        $where = array(
+        $where       = [
             'manage_id' => session('backend_info.id'),
-        );
+        ];
         $manageGroup = $this->field('id')->mSelect($where);
-        $mFindAllow = array();
+        $mFindAllow  = [];
         foreach ($manageGroup as $group) {
             $mFindAllow[] = $group['id'];
         }
@@ -72,16 +76,17 @@ class AdminGroup extends Common
         if (isset($data['id']) && (1 == $data['id'] || (is_array($data['id']) && in_array(1, $data['id'])))) {
             unset($data['privilege']);
         }
-        isset($data['manage_id']) && $data['manage_id']       = '|' . implode('|', array_unique($data['manage_id'])) . '|';
-        isset($data['privilege']) && $data['privilege']       = implode('|', $data['privilege']);
+        isset($data['manage_id']) && $data['manage_id'] = '|' . implode('|', array_unique($data['manage_id'])) . '|';
+        isset($data['privilege']) && $data['privilege'] = implode('|', $data['privilege']);
         isset($data['ext_template']) && $data['ext_template'] = serialize($data['ext_template']);
     }
 
     //检查和去除格式化数据
     protected function mDecodeData(&$data)
     {
-        isset($data['manage_id']) && $data['manage_id']       = explode('|', substr($data['manage_id'], 1, strlen($data['manage_id']) - 2));
-        isset($data['privilege']) && $data['privilege']       = explode('|', $data['privilege']);
+        isset($data['manage_id']) && $data['manage_id'] = explode('|',
+            substr($data['manage_id'], 1, strlen($data['manage_id']) - 2));
+        isset($data['privilege']) && $data['privilege'] = explode('|', $data['privilege']);
         isset($data['ext_template']) && $data['ext_template'] = unserialize($data['ext_template']);
     }
 }

@@ -1,16 +1,16 @@
-
-    <section class="container mt10">
-        <div class="panel panel-default">
-            <div class="panel-heading">{{ $title }}</div>
-            <div class="panel-body">
-            <form method="post" class="form-horizontal"  role="form">
+<section class="container mt10">
+    <div class="panel panel-default">
+        <div class="panel-heading">{{ $title }}</div>
+        <div class="panel-body">
+            <form method="post" class="form-horizontal" role="form">
                 <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">@lang('common.send')@lang('common.to')</label>
                             <div class="col-sm-7">
-                                <input type="text" value="{{ $edit_info['member_name'] }}" class="form-control" disabled="disabled">
+                                <input type="text" value="{{ $edit_info['member_name'] }}" class="form-control"
+                                       disabled="disabled">
                             </div>
                         </div>
                     </div>
@@ -92,11 +92,11 @@
                         <button type="submit" class="btn btn-info">@lang('common.send')</button>
                         <input class="btn btn-default" type="reset" value="@lang('common.reset')">
                         <a href="{{ route('index') }}" class="btn btn-default">
-                                @lang('common.goback')
+                            @lang('common.goback')
                         </a>
                     </div>
                 </div>
             </form>
-            </div>
         </div>
-    </section>
+    </div>
+</section>

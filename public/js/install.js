@@ -117,9 +117,9 @@ M_check_mysql.prototype.check = function(){
                     break;
                 case 2:
                     var btn_str = Array('<a class="btn btn-info ml50" href="' + _self.next_link + '" >',
-                        $Think.lang.create_database_and_next + '</a>'
+                        data.info.msg + '</a>'
                         ).join('');
-                    show_install_message('#show_box',data.info.msg + btn_str,'info');
+                    show_install_message('#show_box', btn_str, 'info');
                     break;
                 case 3:
                     show_install_message('#show_box',data.info.msg,'success');

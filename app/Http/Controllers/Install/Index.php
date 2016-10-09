@@ -291,26 +291,48 @@ class Index extends Frontend
             //第二部 验证数据库
             case 'check_mysql';
                 $currentDate = date(config('system.sys_date_detail')) . " ";
-                $errorMsg    = false;
+
                 //检测是否能连接到数据库服务器
+                $errorMsg = false;
                 try {
                     config([
-                        'database.connections.install_mysql.driver'   => 'mysql',
-                        'database.connections.install_mysql.host'     => $data['db_host'],
-                        'database.connections.install_mysql.port'     => $data['db_port'],
-                        'database.connections.install_mysql.database' => $data['db_database'],
-                        'database.connections.install_mysql.username' => $data['db_username'],
-                        'database.connections.install_mysql.password' => $data['db_password'],
-                        'database.connections.install_mysql.prefix'   => $data['db_prefix'],
+                        'database.connections.install_mysql' => [
+                            'driver'    => 'mysql',
+                            'charset'   => 'utf8',
+                            'collation' => 'utf8_unicode_ci',
+                            'strict'    => true,
+                            'engine'    => null,
+                            'host'      => $data['db_host'],
+                            'port'      => $data['db_port'],
+                            'database'  => '',//$data['db_database'],
+                            'username'  => $data['db_username'],
+                            'password'  => $data['db_password'],
+                            'prefix'    => $data['db_prefix'],
+
+                        ],
                     ]);
                     DB::connection('install_mysql')->reconnect();
-
                 } catch (\PDOException $e) {
                     $errorMsg = $e->getMessage();
                 }
 
                 if ($errorMsg) {
                     return ['status' => false, 'info' => ['msg' => $currentDate . $errorMsg, 'type' => 1]];
+                }
+
+                //数据库名不能为空
+                if (!$data['db_database']) {
+                    $msg = trans('common.please') . trans('common.input') . trans('common.database') . trans('common.name');
+                    return ['status' => false, 'info' => ['msg' => $msg, 'type' => 1]];
+                }
+
+                //检测指定的数据库是否存在
+                $exitis_databases = $this->_getDatabases();
+                if (in_array($data['db_database'], $exitis_databases)) {
+                    return [
+                        'status' => false,
+                        'info'   => ['msg' => trans('install.exists_database_and_next'), 'type' => 2],
+                    ];
                 }
 
                 //只要能链接数据库就 保存配置
@@ -322,13 +344,12 @@ class Index extends Frontend
                     'DB_PASSWORD' => $data['db_password'],
                     'DB_PREFIX'   => $data['db_prefix'],
                 ];
-
                 mPutenv($new_config);
 
                 $result = [
                     'status' => true,
                     'info'   => [
-                        'msg'  => $currentDate . trans('save_config_success') . trans('three_second_next_setp'),
+                        'msg'  => $currentDate . trans('install.save_config_success') . trans('install.three_second_next_setp'),
                         'type' => 3,
                     ],
                 ];
@@ -343,6 +364,8 @@ class Index extends Frontend
         $notListDatabase = ['information_schema', 'mysql', 'performance_schema'];
         $reCompareInfo   = [];
         try {
+            //获取现有数据库不选择数据库
+            config(['database.connections.mysql.database' => '']);
             foreach (DB::select('show databases') as $db_key => $row) {
                 if (in_array($row->Database, $notListDatabase)) {
                     continue;
@@ -350,7 +373,8 @@ class Index extends Frontend
                 $reCompareInfo[] = $row->Database;
             }
         } catch (\PDOException $e) {
-
+            //允许连接失败没有任何提示
+            //die('_getDatabases error:' . $e->getMessage());
         }
         return $reCompareInfo;
     }

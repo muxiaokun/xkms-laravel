@@ -401,5 +401,5 @@ Route::group([
     Route::get('setp2', ['as' => 'setp2', 'uses' => 'Index@setp2']);
     Route::get('setp3', ['as' => 'setp3', 'uses' => 'Index@setp3']);
     Route::get('setp4', ['as' => 'setp4', 'uses' => 'Index@setp4']);
-    Route::any('ajax_api', ['as' => 'ajax_api', 'uses' => 'Index@ajax_api']);
+    Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Index@ajax_api']);
 });

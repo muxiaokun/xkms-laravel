@@ -1,6 +1,6 @@
 <?php
 // 全局
-return array(
+return [
     ''                      => '',
     'system'                => '系统',
     'account'               => '账号',
@@ -56,7 +56,7 @@ return array(
     'text'                  => '文本',
     'radio'                 => '单选',
     'checkbox'              => '多选',
-    'select'                => '列表单选',
+    'select_one'            => '列表单选',
     'textarea'              => '文本域',
     'colon'                 => '：',
     'dash'                  => '——',
@@ -333,8 +333,8 @@ return array(
     'name_format_error'     => '不能包含空格或特殊字符(%s)',
     'pass_len_error'        => '密码长度至少6位',
     'password_again_error'  => '两次输入密码不一致',
-    'app_name'  => 'XK管理系统',
+    'app_name'              => 'XK管理系统',
     //print_f区域
     'pfsetp'                => '第 {$setp} 步，共 {$count} 步',
     'pfcopyright'           => ':app_name copyright and power by XKMS ',
-);
+];

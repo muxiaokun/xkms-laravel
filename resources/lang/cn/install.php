@@ -19,6 +19,7 @@ return array(
     'setp3'                    => '系统已初始化完毕……',
     'setp4_1'                  => '进入网站首页',
     'setp4_2'                  => '进入网站后台',
+    'exists_database_and_next' => '数据库存在将覆盖表确认继续',
     'create_database_and_next' => '自动创建数据库并且继续',
     'auto_create'              => '将自动创建',
     'save_config_success'      => '保存配置成功',

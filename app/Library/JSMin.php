@@ -57,19 +57,19 @@ namespace App\Library;
  */
 class JSMin
 {
-    const ORD_LF            = 10;
-    const ORD_SPACE         = 32;
-    const ACTION_KEEP_A     = 1;
-    const ACTION_DELETE_A   = 2;
+    const ORD_LF = 10;
+    const ORD_SPACE = 32;
+    const ACTION_KEEP_A = 1;
+    const ACTION_DELETE_A = 2;
     const ACTION_DELETE_A_B = 3;
 
-    protected $a           = "\n";
-    protected $b           = '';
-    protected $input       = '';
-    protected $inputIndex  = 0;
+    protected $a = "\n";
+    protected $b = '';
+    protected $input = '';
+    protected $inputIndex = 0;
     protected $inputLength = 0;
-    protected $lookAhead   = null;
-    protected $output      = '';
+    protected $lookAhead = null;
+    protected $output = '';
     protected $lastByteOut = '';
     protected $keptComment = '';
 
@@ -82,17 +82,16 @@ class JSMin
      */
     public function minify($js)
     {
-        $this->input       = str_replace("\r\n", "\n", $js);
-        $this->inputLength = strlen($this->input);
+        $this->a           = "\n";
+        $this->b           = '';
+        $this->input       = $js;
+        $this->inputIndex  = 0;
+        $this->inputLength = 0;
+        $this->lookAhead   = null;
+        $this->output      = '';
+        $this->lastByteOut = '';
+        $this->keptComment = '';
         return $this->min();
-    }
-
-    /**
-     * @param string $input
-     */
-    public function __construct($input)
-    {
-        $this->input = $input;
     }
 
     /**
@@ -107,7 +106,7 @@ class JSMin
         }
 
         $mbIntEnc = null;
-        if (function_exists('mb_strlen') && ((int) ini_get('mbstring.func_overload') & 2)) {
+        if (function_exists('mb_strlen') && ((int)ini_get('mbstring.func_overload') & 2)) {
             $mbIntEnc = mb_internal_encoding();
             mb_internal_encoding('8bit');
         }
@@ -126,7 +125,8 @@ class JSMin
             $command = self::ACTION_KEEP_A; // default
             if ($this->a === ' ') {
                 if (($this->lastByteOut === '+' || $this->lastByteOut === '-')
-                    && ($this->b === $this->lastByteOut)) {
+                    && ($this->b === $this->lastByteOut)
+                ) {
                     // Don't delete this space. If we do, the addition/subtraction
                     // could be parsed as a post-increment
                 } elseif (!$this->isAlphaNum($this->b)) {
@@ -140,13 +140,15 @@ class JSMin
                     // otherwise mb_strpos will give WARNING
                 } elseif ($this->b === null
                     || (false === strpos('{[(+-!~', $this->b)
-                        && !$this->isAlphaNum($this->b))) {
+                        && !$this->isAlphaNum($this->b))
+                ) {
                     $command = self::ACTION_DELETE_A;
                 }
             } elseif (!$this->isAlphaNum($this->a)) {
                 if ($this->b === ' '
                     || ($this->b === "\n"
-                        && (false === strpos('}])+-"\'', $this->a)))) {
+                        && (false === strpos('}])+-"\'', $this->a)))
+                ) {
                     $command = self::ACTION_DELETE_A_B;
                 }
             }
@@ -173,7 +175,8 @@ class JSMin
         // make sure we don't compress "a + ++b" to "a+++b", etc.
         if ($command === self::ACTION_DELETE_A_B
             && $this->b === ' '
-            && ($this->a === '+' || $this->a === '-')) {
+            && ($this->a === '+' || $this->a === '-')
+        ) {
             // Note: we're at an addition/substraction operator; the inputIndex
             // will certainly be a valid index
             if ($this->input[$this->inputIndex] === $this->a) {
@@ -199,7 +202,7 @@ class JSMin
                 $this->a = $this->b;
                 if ($this->a === "'" || $this->a === '"') { // string literal
                     $str = $this->a; // in case needed for exception
-                    for (;;) {
+                    for (; ;) {
                         $this->output .= $this->a;
                         $this->lastByteOut = $this->a;
 
@@ -229,11 +232,11 @@ class JSMin
                 if ($this->b === '/' && $this->isRegexpLiteral()) {
                     $this->output .= $this->a . $this->b;
                     $pattern = '/'; // keep entire pattern in case we need to report it in the exception
-                    for (;;) {
+                    for (; ;) {
                         $this->a = $this->get();
                         $pattern .= $this->a;
                         if ($this->a === '[') {
-                            for (;;) {
+                            for (; ;) {
                                 $this->output .= $this->a;
                                 $this->a = $this->get();
                                 $pattern .= $this->a;
@@ -269,7 +272,7 @@ class JSMin
                     }
                     $this->b = $this->next();
                 }
-                // end case ACTION_DELETE_A_B
+            // end case ACTION_DELETE_A_B
         }
     }
 
@@ -404,7 +407,7 @@ class JSMin
     {
         $this->get();
         $comment = '';
-        for (;;) {
+        for (; ;) {
             $get = $this->get();
             if ($get === '*') {
                 if ($this->peek() === '/') { // end of comment reached
@@ -416,9 +419,11 @@ class JSMin
                             $this->keptComment = "\n";
                         }
                         $this->keptComment .= "/*!" . substr($comment, 1) . "*/\n";
-                    } else if (preg_match('/^@(?:cc_on|if|elif|else|end)\\b/', $comment)) {
-                        // IE conditional
-                        $this->keptComment .= "/*{$comment}*/";
+                    } else {
+                        if (preg_match('/^@(?:cc_on|if|elif|else|end)\\b/', $comment)) {
+                            // IE conditional
+                            $this->keptComment .= "/*{$comment}*/";
+                        }
                     }
                     return;
                 }

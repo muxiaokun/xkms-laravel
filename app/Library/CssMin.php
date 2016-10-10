@@ -440,7 +440,7 @@ class CssWhitesmithsFormatter extends aCssFormatter
         $level = 0;
         for ($i = 0, $l = count($this->tokens); $i < $l; $i++) {
             $token  = $this->tokens[$i];
-            $class  = str_replace('Common\Lib\\', '', get_class($token));
+            $class  = str_replace('App\Library\\', '', get_class($token));
             $indent = str_repeat($this->indent, $level);
             if ($class === "CssCommentToken") {
                 $lines = array_map("trim", explode("\n", $token->Comment));
@@ -636,7 +636,7 @@ class CssVariablesMinifierFilter extends aCssMinifierFilter
         $remove            = array();
         for ($i = 0, $l = count($tokens); $i < $l; $i++) {
             // @variables at-rule block found
-            if (str_replace('Common\Lib\\', '', get_class($tokens[$i])) === "CssAtVariablesStartToken") {
+            if (str_replace('App\Library\\', '', get_class($tokens[$i])) === "CssAtVariablesStartToken") {
                 $remove[]   = $i;
                 $mediaTypes = (count($tokens[$i]->MediaTypes) == 0 ? $defaultMediaTypes : $tokens[$i]->MediaTypes);
                 foreach ($mediaTypes as $mediaType) {
@@ -647,14 +647,14 @@ class CssVariablesMinifierFilter extends aCssMinifierFilter
                 // Read the variable declaration tokens
                 for ($i = $i; $i < $l; $i++) {
                     // Found a variable declaration => read the variable values
-                    if (str_replace('Common\Lib\\', '', get_class($tokens[$i])) === "CssAtVariablesDeclarationToken") {
+                    if (str_replace('App\Library\\', '', get_class($tokens[$i])) === "CssAtVariablesDeclarationToken") {
                         foreach ($mediaTypes as $mediaType) {
                             $variables[$mediaType][$tokens[$i]->Property] = $tokens[$i]->Value;
                         }
                         $remove[] = $i;
                     }
                     // Found the variables end token => break;
-                    elseif (str_replace('Common\Lib\\', '', get_class($tokens[$i])) === "CssAtVariablesEndToken") {
+                    elseif (str_replace('App\Library\\', '', get_class($tokens[$i])) === "CssAtVariablesEndToken") {
                         $remove[] = $i;
                         break;
                     }
@@ -872,11 +872,15 @@ class CssSortRulesetPropertiesMinifierFilter extends aCssMinifierFilter
         $r = 0;
         for ($i = 0, $l = count($tokens); $i < $l; $i++) {
             // Only look for ruleset start rules
-            if (str_replace('Common\Lib\\', '', get_class($tokens[$i])) !== "CssRulesetStartToken") {continue;}
+            if (str_replace('App\Library\\', '', get_class($tokens[$i])) !== "CssRulesetStartToken") {
+                continue;
+            }
             // Look for the corresponding ruleset end
             $endIndex = false;
             for ($ii = $i + 1; $ii < $l; $ii++) {
-                if (str_replace('Common\Lib\\', '', get_class($tokens[$ii])) !== "CssRulesetEndToken") {continue;}
+                if (str_replace('App\Library\\', '', get_class($tokens[$ii])) !== "CssRulesetEndToken") {
+                    continue;
+                }
                 $endIndex = $ii;
                 break;
             }
@@ -887,7 +891,9 @@ class CssSortRulesetPropertiesMinifierFilter extends aCssMinifierFilter
             if ($endIndex - $startIndex <= 2) {continue;}
             // Ensure that everything between the start and end is a declaration token, for safety
             for ($ii = $startIndex + 1; $ii < $endIndex; $ii++) {
-                if (str_replace('Common\Lib\\', '', get_class($tokens[$ii])) !== "CssRulesetDeclarationToken") {continue (2);}
+                if (str_replace('App\Library\\', '', get_class($tokens[$ii])) !== "CssRulesetDeclarationToken") {
+                    continue (2);
+                }
             }
             $declarations = array_slice($tokens, $startIndex + 1, $endIndex - $startIndex - 1);
             // Check whether a sort is required
@@ -1154,8 +1160,8 @@ class CssRemoveLastDelarationSemiColonMinifierFilter extends aCssMinifierFilter
     public function apply(array &$tokens)
     {
         for ($i = 0, $l = count($tokens); $i < $l; $i++) {
-            $current = str_replace('Common\Lib\\', '', get_class($tokens[$i]));
-            $next    = isset($tokens[$i + 1]) ? str_replace('Common\Lib\\', '', get_class($tokens[$i + 1])) : false;
+            $current = str_replace('App\Library\\', '', get_class($tokens[$i]));
+            $next    = isset($tokens[$i + 1]) ? str_replace('App\Library\\', '', get_class($tokens[$i + 1])) : false;
             if (($current === "CssRulesetDeclarationToken" && $next === "CssRulesetEndToken") ||
                 ($current === "CssAtFontFaceDeclarationToken" && $next === "CssAtFontFaceEndToken") ||
                 ($current === "CssAtPageDeclarationToken" && $next === "CssAtPageEndToken")) {
@@ -1189,8 +1195,8 @@ class CssRemoveEmptyRulesetsMinifierFilter extends aCssMinifierFilter
     {
         $r = 0;
         for ($i = 0, $l = count($tokens); $i < $l; $i++) {
-            $current = str_replace('Common\Lib\\', '', get_class($tokens[$i]));
-            $next    = isset($tokens[$i + 1]) ? str_replace('Common\Lib\\', '', get_class($tokens[$i + 1])) : false;
+            $current = str_replace('App\Library\\', '', get_class($tokens[$i]));
+            $next    = isset($tokens[$i + 1]) ? str_replace('App\Library\\', '', get_class($tokens[$i + 1])) : false;
             if (($current === "CssRulesetStartToken" && $next === "CssRulesetEndToken") ||
                 ($current === "CssAtKeyframesRulesetStartToken" && $next === "CssAtKeyframesRulesetEndToken" && !array_intersect(array("from", "0%", "to", "100%"), array_map("strtolower", $tokens[$i]->Selectors)))
             ) {
@@ -1227,8 +1233,8 @@ class CssRemoveEmptyAtBlocksMinifierFilter extends aCssMinifierFilter
     {
         $r = 0;
         for ($i = 0, $l = count($tokens); $i < $l; $i++) {
-            $current = str_replace('Common\Lib\\', '', get_class($tokens[$i]));
-            $next    = isset($tokens[$i + 1]) ? str_replace('Common\Lib\\', '', get_class($tokens[$i + 1])) : false;
+            $current = str_replace('App\Library\\', '', get_class($tokens[$i]));
+            $next    = isset($tokens[$i + 1]) ? str_replace('App\Library\\', '', get_class($tokens[$i + 1])) : false;
             if (($current === "CssAtFontFaceStartToken" && $next === "CssAtFontFaceEndToken") ||
                 ($current === "CssAtKeyframesStartToken" && $next === "CssAtKeyframesEndToken") ||
                 ($current === "CssAtPageStartToken" && $next === "CssAtPageEndToken") ||
@@ -1265,7 +1271,7 @@ class CssRemoveCommentsMinifierFilter extends aCssMinifierFilter
     {
         $r = 0;
         for ($i = 0, $l = count($tokens); $i < $l; $i++) {
-            if (str_replace('Common\Lib\\', '', get_class($tokens[$i])) === "CssCommentToken") {
+            if (str_replace('App\Library\\', '', get_class($tokens[$i])) === "CssCommentToken") {
                 $tokens[$i] = null;
                 $r++;
             }
@@ -1363,7 +1369,7 @@ class CssParser
         // Create plugin instances
         foreach ($plugins as $name => $config) {
             if ($config !== false) {
-                $class  = "Common\Lib\Css" . $name . "ParserPlugin";
+                $class  = "App\Library\Css" . $name . "ParserPlugin";
                 $config = is_array($config) ? $config : array();
                 if (class_exists($class)) {
                     $this->plugins[] = new $class($this, $config);
@@ -1465,7 +1471,7 @@ class CssParser
         if (is_null($index)) {
             $index = array();
             for ($i = 0, $l = count($this->plugins); $i < $l; $i++) {
-                $index[str_replace('Common\Lib\\', '', get_class($this->plugins[$i]))] = $i;
+                $index[str_replace('App\Library\\', '', get_class($this->plugins[$i]))] = $i;
             }
         }
         return isset($index[$class]) ? $this->plugins[$index[$class]] : false;
@@ -1696,7 +1702,7 @@ class CssOtbsFormatter extends aCssFormatter
         $level = 0;
         for ($i = 0, $l = count($this->tokens); $i < $l; $i++) {
             $token  = $this->tokens[$i];
-            $class  = str_replace('Common\Lib\\', '', get_class($token));
+            $class  = str_replace('App\Library\\', '', get_class($token));
             $indent = str_repeat($this->indent, $level);
             if ($class === "CssCommentToken") {
                 $lines = array_map("trim", explode("\n", $token->Comment));
@@ -1842,7 +1848,7 @@ class CssMinifier
         // Filters
         foreach ($filters as $name => $config) {
             if ($config !== false) {
-                $class  = "Common\Lib\Css" . $name . "MinifierFilter";
+                $class  = "App\Library\Css" . $name . "MinifierFilter";
                 $config = is_array($config) ? $config : array();
                 if (class_exists($class)) {
                     $this->filters[] = new $class($this, $config);
@@ -1854,7 +1860,7 @@ class CssMinifier
         // Plugins
         foreach ($plugins as $name => $config) {
             if ($config !== false) {
-                $class  = "Common\Lib\Css" . $name . "MinifierPlugin";
+                $class  = "App\Library\Css" . $name . "MinifierPlugin";
                 $config = is_array($config) ? $config : array();
                 if (class_exists($class)) {
                     $this->plugins[] = new $class($this, $config);
@@ -1889,7 +1895,7 @@ class CssMinifier
         if (is_null($index)) {
             $index = array();
             for ($i = 0, $l = count($this->plugins); $i < $l; $i++) {
-                $index[str_replace('Common\Lib\\', '', get_class($this->plugins[$i]))] = $i;
+                $index[str_replace('App\Library\\', '', get_class($this->plugins[$i]))] = $i;
             }
         }
         return isset($index[$class]) ? $this->plugins[$index[$class]] : false;
@@ -1940,7 +1946,7 @@ class CssMinifier
          * Apply plugins
          */
         for ($i = 0; $i < $tokenCount; $i++) {
-            $triggerToken = "|" . str_replace('Common\Lib\\', '', get_class($tokens[$i])) . "|";
+            $triggerToken = "|" . str_replace('App\Library\\', '', get_class($tokens[$i])) . "|";
             if (strpos($globalTriggerTokens, $triggerToken) !== false) {
                 for ($ii = 0; $ii < $pluginCount; $ii++) {
                     if (strpos($pluginTriggerTokens[$ii], $triggerToken) !== false || $pluginTriggerTokens[$ii] === false) {
@@ -2169,7 +2175,7 @@ class CssImportImportsMinifierFilter extends aCssMinifierFilter
             return 0;
         }
         for ($i = 0, $l = count($tokens); $i < $l; $i++) {
-            if (str_replace('Common\Lib\\', '', get_class($tokens[$i])) === "CssAtImportToken") {
+            if (str_replace('App\Library\\', '', get_class($tokens[$i])) === "CssAtImportToken") {
                 $import = $this->configuration["BasePath"] . "/" . $tokens[$i]->Import;
                 // Import file was not found/is not a file
                 if (!is_file($import)) {
@@ -2190,7 +2196,7 @@ class CssImportImportsMinifierFilter extends aCssMinifierFilter
                          * Filter or set media types of @import at-rule or remove the @import at-rule if no media type is matching the parent @import at-rule
                          */
                         for ($ii = 0, $ll = count($import); $ii < $ll; $ii++) {
-                            if (str_replace('Common\Lib\\', '', get_class($import[$ii])) === "CssAtImportToken") {
+                            if (str_replace('App\Library\\', '', get_class($import[$ii])) === "CssAtImportToken") {
                                 // @import at-rule defines no media type or only the "all" media type; set the media types to the one defined in the parent @import at-rule
                                 if (count($import[$ii]->MediaTypes) == 0 || (count($import[$ii]->MediaTypes) == 1 && $import[$ii]->MediaTypes[0] == "all")) {
                                     $import[$ii]->MediaTypes = $tokens[$i]->MediaTypes;
@@ -2214,7 +2220,7 @@ class CssImportImportsMinifierFilter extends aCssMinifierFilter
                          * Remove media types of @media at-rule block not defined in the @import at-rule
                          */
                         for ($ii = 0, $ll = count($import); $ii < $ll; $ii++) {
-                            if (str_replace('Common\Lib\\', '', get_class($import[$ii])) === "CssAtMediaStartToken") {
+                            if (str_replace('App\Library\\', '', get_class($import[$ii])) === "CssAtMediaStartToken") {
                                 foreach ($import[$ii]->MediaTypes as $index => $mediaType) {
                                     if (!in_array($mediaType, $tokens[$i]->MediaTypes)) {
                                         unset($import[$ii]->MediaTypes[$index]);
@@ -2227,14 +2233,18 @@ class CssImportImportsMinifierFilter extends aCssMinifierFilter
                          * If no media types left of the @media at-rule block remove the complete block
                          */
                         for ($ii = 0, $ll = count($import); $ii < $ll; $ii++) {
-                            if (str_replace('Common\Lib\\', '', get_class($import[$ii])) === "CssAtMediaStartToken") {
+                            if (str_replace('App\Library\\', '', get_class($import[$ii])) === "CssAtMediaStartToken") {
                                 if (count($import[$ii]->MediaTypes) === 0) {
                                     for ($iii = $ii; $iii < $ll; $iii++) {
-                                        if (str_replace('Common\Lib\\', '', get_class($import[$iii])) === "CssAtMediaEndToken") {
+                                        if (str_replace('App\Library\\', '',
+                                                get_class($import[$iii])) === "CssAtMediaEndToken"
+                                        ) {
                                             break;
                                         }
                                     }
-                                    if (str_replace('Common\Lib\\', '', get_class($import[$iii])) === "CssAtMediaEndToken") {
+                                    if (str_replace('App\Library\\', '',
+                                            get_class($import[$iii])) === "CssAtMediaEndToken"
+                                    ) {
                                         array_splice($import, $ii, $iii - $ii + 1, array());
                                         $ll = count($import);
                                     }
@@ -2246,13 +2256,20 @@ class CssImportImportsMinifierFilter extends aCssMinifierFilter
                          * at-rule remove the CssAtMediaStartToken and CssAtMediaEndToken token
                          */
                         for ($ii = 0, $ll = count($import); $ii < $ll; $ii++) {
-                            if (str_replace('Common\Lib\\', '', get_class($import[$ii])) === "CssAtMediaStartToken" && count(array_diff($tokens[$i]->MediaTypes, $import[$ii]->MediaTypes)) === 0) {
+                            if (str_replace('App\Library\\', '',
+                                    get_class($import[$ii])) === "CssAtMediaStartToken" && count(array_diff($tokens[$i]->MediaTypes,
+                                    $import[$ii]->MediaTypes)) === 0
+                            ) {
                                 for ($iii = $ii; $iii < $ll; $iii++) {
-                                    if (str_replace('Common\Lib\\', '', get_class($import[$iii])) == "CssAtMediaEndToken") {
+                                    if (str_replace('App\Library\\', '',
+                                            get_class($import[$iii])) == "CssAtMediaEndToken"
+                                    ) {
                                         break;
                                     }
                                 }
-                                if (str_replace('Common\Lib\\', '', get_class($import[$iii])) == "CssAtMediaEndToken") {
+                                if (str_replace('App\Library\\', '',
+                                        get_class($import[$iii])) == "CssAtMediaEndToken"
+                                ) {
                                     unset($import[$ii]);
                                     unset($import[$iii]);
                                     $import = array_values($import);
@@ -2264,7 +2281,7 @@ class CssImportImportsMinifierFilter extends aCssMinifierFilter
                          * Extract CssAtImportToken and CssAtCharsetToken tokens
                          */
                         for ($ii = 0, $ll = count($import); $ii < $ll; $ii++) {
-                            $class = str_replace('Common\Lib\\', '', get_class($import[$ii]));
+                            $class = str_replace('App\Library\\', '', get_class($import[$ii]));
                             if ($class === "CssAtImportToken" || $class === "CssAtCharsetToken") {
                                 $blocks = array_merge($blocks, array_splice($import, $ii, 1, array()));
                                 $ll     = count($import);
@@ -2274,15 +2291,15 @@ class CssImportImportsMinifierFilter extends aCssMinifierFilter
                          * Extract the @font-face, @media and @page at-rule block
                          */
                         for ($ii = 0, $ll = count($import); $ii < $ll; $ii++) {
-                            $class = str_replace('Common\Lib\\', '', get_class($import[$ii]));
+                            $class = str_replace('App\Library\\', '', get_class($import[$ii]));
                             if ($class === "CssAtFontFaceStartToken" || $class === "CssAtMediaStartToken" || $class === "CssAtPageStartToken" || $class === "CssAtVariablesStartToken") {
                                 for ($iii = $ii; $iii < $ll; $iii++) {
-                                    $class = str_replace('Common\Lib\\', '', get_class($import[$iii]));
+                                    $class = str_replace('App\Library\\', '', get_class($import[$iii]));
                                     if ($class === "CssAtFontFaceEndToken" || $class === "CssAtMediaEndToken" || $class === "CssAtPageEndToken" || $class === "CssAtVariablesEndToken") {
                                         break;
                                     }
                                 }
-                                $class = str_replace('Common\Lib\\', '', get_class($import[$iii]));
+                                $class = str_replace('App\Library\\', '', get_class($import[$iii]));
                                 if (isset($import[$iii]) && ($class === "CssAtFontFaceEndToken" || $class === "CssAtMediaEndToken" || $class === "CssAtPageEndToken" || $class === "CssAtVariablesEndToken")) {
                                     $blocks = array_merge($blocks, array_splice($import, $ii, $iii - $ii + 1, array()));
                                     $ll     = count($import);
@@ -2978,7 +2995,7 @@ class CssConvertLevel3PropertiesMinifierFilter extends aCssMinifierFilter
         $r               = 0;
         $transformations = &$this->transformations;
         for ($i = 0, $l = count($tokens); $i < $l; $i++) {
-            if (str_replace('Common\Lib\\', '', get_class($tokens[$i])) === "CssRulesetDeclarationToken") {
+            if (str_replace('App\Library\\', '', get_class($tokens[$i])) === "CssRulesetDeclarationToken") {
                 $tProperty = $tokens[$i]->Property;
                 if (isset($transformations[$tProperty])) {
                     $result = array();
@@ -3093,13 +3110,13 @@ class CssConvertLevel3AtKeyframesMinifierFilter extends aCssMinifierFilter
         $r               = 0;
         $transformations = array("-moz-keyframes", "-webkit-keyframes");
         for ($i = 0, $l = count($tokens); $i < $l; $i++) {
-            if (str_replace('Common\Lib\\', '', get_class($tokens[$i])) === "CssAtKeyframesStartToken") {
+            if (str_replace('App\Library\\', '', get_class($tokens[$i])) === "CssAtKeyframesStartToken") {
                 for ($ii = $i; $ii < $l; $ii++) {
-                    if (str_replace('Common\Lib\\', '', get_class($tokens[$ii])) === "CssAtKeyframesEndToken") {
+                    if (str_replace('App\Library\\', '', get_class($tokens[$ii])) === "CssAtKeyframesEndToken") {
                         break;
                     }
                 }
-                if (str_replace('Common\Lib\\', '', get_class($tokens[$ii])) === "CssAtKeyframesEndToken") {
+                if (str_replace('App\Library\\', '', get_class($tokens[$ii])) === "CssAtKeyframesEndToken") {
                     $add    = array();
                     $source = array();
                     for ($iii = $i; $iii <= $ii; $iii++) {

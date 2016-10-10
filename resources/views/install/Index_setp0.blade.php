@@ -3,10 +3,12 @@
     @push('scripts')
     <script type="text/javascript">
         $(function () {
+            var win = $(window);
             var doc = $(document);
+
             doc.on('scroll', function (event, a1, a2) {
-                var progress = doc.scrollTop() / doc.height() * {{ config('install.setp_progress.0') }};
                 if (parent && parent.move_progress) {
+                    var progress = doc.scrollTop() / (doc.height() - win.height()) * {{ config('install.setp_progress.0') }};
                     parent.move_progress(progress,{{ config('install.setp_progress.1') }});
                 }
             });

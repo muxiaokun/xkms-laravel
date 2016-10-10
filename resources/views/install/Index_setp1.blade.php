@@ -4,7 +4,7 @@
     <script type="text/javascript">
         $(function () {
             if (parent && parent.move_progress) {
-                parent.move_progress({{ config('install.setp_progress.1') }});
+                parent.move_progress({{ config('install.setp_progress.0') }});
             }
         });
     </script>

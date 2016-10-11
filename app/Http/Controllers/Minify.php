@@ -5,94 +5,128 @@ class Minify extends Controller
 {
     public function run($type)
     {
-        $content    = '';
-        $lang_files = '';
-        $files      = request('files');
-        if (!$files) {
-            return '';
-        }
 
         switch ($type) {
             case 'css':
-                $Min          = new \App\Library\CssMin();
-                $content_type = 'text/css;charset=utf-8';
+                $Min         = new \App\Library\CssMin();
+                $contentType = 'text/css;charset=utf-8';
                 break;
             case 'js':
-                $Min          = new \App\Library\JSMin('');
-                $content_type = 'application/x-javascript;charset=utf-8';
-                //js类型引入语言包
-                $lang_files = request('lang');
-                $lang_arr   = [];
-                foreach (explode(',', $lang_files) as $lang) {
-                    $lang_arr[$lang] = trans($lang);
-                }
-                if ($lang_arr) {
-                    $content .= 'var lang = ' . json_encode($lang_arr) . ';';
-                }
+                $Min         = new \App\Library\JSMin('');
+                $contentType = 'application/x-javascript;charset=utf-8';
                 break;
             default:
                 return '';
         }
 
-        $cache_time          = config('system.minify_cache_time');
-        $resource_cache_name = md5('Minify_' . $type . '|' . $files . '|' . $lang_files);
-        $resource_cache      = cache($resource_cache_name);
-        $current_time        = \Carbon\Carbon::now()->getTimestamp();
-        $last_change_time    = $resource_cache['time'] ? $resource_cache['time'] : $current_time;
+        $content = '';
+        $files   = request('files');
+        if (!$files) {
+            return '';
+        }
+        $lang = request('lang');
 
-        $request          = request();
-        $page_was_updated = ($request->hasHeader('If-Modified-Since') and strtotime($request->header('If-Modified-Since')) == $last_change_time);
-        $etag_match       = ($request->hasHeader('If-None-Match') and $request->header('If-None-Match') == $resource_cache_name);
+
+        $filesystem = new \Illuminate\Filesystem\Filesystem();
+
+        $cacheTime         = config('system.minify_cache_time');
+        $resourceCacheName = md5('Minify_' . $type . '|' . $files . '|' . $lang);
+        $resourceCache     = cache($resourceCacheName);
+        $currentTime       = \Carbon\Carbon::now()->getTimestamp();
+        $lastModifiedTime  = $resourceCache['lastModified'] ? $resourceCache['lastModified'] : $currentTime;
+
+        $request        = request();
+        $pageWasUpdated = ($request->hasHeader('If-Modified-Since') && strtotime($request->header('If-Modified-Since')) == $lastModifiedTime);
+        $etagMatch      = ($request->hasHeader('If-None-Match') && $request->header('If-None-Match') == $resourceCacheName);
+
+        //test file change
+        $filesModified = [];
+        foreach (explode(',', $files) as $file) {
+            //防止使用父级目录
+            if (false !== strrpos($file, '..')) {
+                return '';
+            }
+            //检测文件修改时间
+            $filePath              = public_path($type . '/' . $file . '.' . $type);
+            $cacheLastModified     = $this->getCacheTimeName($filePath);
+            $cacheLastModifiedTime = cache($cacheLastModified);
+            $fileLastModified      = $filesystem->lastModified($filePath);
+            if ($cacheLastModifiedTime && $cacheLastModifiedTime !== $fileLastModified) {
+                $cacheName       = $this->getCacheName($filePath);
+                $filesModified[] = $cacheName;
+            }
+        }
 
         //debug remove test cache
-        if (config('app.debug') and $etag_match and !$resource_cache) {
-            $page_was_updated = $etag_match = false;
-        }
-        if (config('app.debug')) {
-
+        if (config('app.debug') && $etagMatch && !$resourceCache && $filesModified) {
+            $pageWasUpdated = $etagMatch = false;
         }
 
-        if ($page_was_updated or $etag_match) {
+        if (($pageWasUpdated || $etagMatch) && !$filesModified) {
             return response('', 304)
-                ->header('ETag', $resource_cache_name)
+                ->header('ETag', $resourceCacheName)
                 ->header('Connection', 'close');
         } else {
-            if ($resource_cache) {
-                $content = $resource_cache['content'];
-            } else {
+            if (!$resourceCache || $filesModified) {
 
-                $filesystem = new \Illuminate\Filesystem\Filesystem();
+                //js类型引入语言包
+                $content .= $this->getJSLang($lang);
+
                 foreach (explode(',', $files) as $file) {
-                    //防止使用父级目录
-                    if (false !== strrpos($file, '..')) {
-                        continue;
-                    }
-
-                    //压缩文件
-                    $file_path = public_path($type . '/' . $file . '.' . $type);
+                    //压缩和缓存文件
+                    $filePath  = public_path($type . '/' . $file . '.' . $type);
+                    $cacheName = $this->getCacheName($filePath);
                     if (false === strrpos($file, '.min')) {
-                        $cache_name    = md5('Minify_' . $file_path);
-                        $cache_content = cache($cache_name);
-                        if (!$cache_content) {
-                            $file_content  = $filesystem->get($file_path);
-                            $cache_content = $Min->minify($file_content);
-                            cache([$cache_name => $cache_content], $cache_time / 60);
+                        $cacheContent = cache($cacheName);
+                        if (!$cacheContent || in_array($cacheName, $filesModified)) {
+                            $fileContent   = $filesystem->get($filePath);
+                            $minifyContent = $Min->minify($fileContent);
+                            $cacheContent  = $minifyContent;
+                            cache([$cacheName => $cacheContent], $cacheTime / 60);
                         }
                     } else {
-                        $cache_content = $filesystem->get($file_path);
+                        $fileContent  = $filesystem->get($filePath);
+                        $cacheContent = $fileContent;
                     }
-                    $content .= $cache_content;
-                }
-                cache([$resource_cache_name => ['content' => $content, 'time' => $last_change_time]], $cache_time / 60);
 
+                    //缓存文件修改时间
+                    $fileLastModified  = $filesystem->lastModified($filePath);
+                    $cacheLastModified = $this->getCacheTimeName($filePath);
+                    cache([$cacheLastModified => $fileLastModified], $cacheTime / 60);
+
+                    $content .= $cacheContent;
+                }
+                cache([$resourceCacheName => ['content' => $content, 'lastModified' => $lastModifiedTime]],
+                    $cacheTime / 60);
+            } else {
+                $content = $resourceCache['content'];
             }
             return response($content, 200)
-                ->header('Content-Type', $content_type)
+                ->header('Content-Type', $contentType)
                 ->header('Content-Length', strlen($content))
-                ->header('ETag', $resource_cache_name)
-                ->header('Cache-Control', ' max-age=' . $cache_time)
-                ->header('Expires', gmdate("D, d M Y H:i:s", time() + $cache_time) . " GMT")
-                ->header('Last-Modified', gmdate('D, d M Y H:i:s', $last_change_time) . ' GMT');
+                ->header('ETag', $resourceCacheName)
+                ->header('Cache-Control', ' max-age=' . $cacheTime)
+                ->header('Expires', gmdate("D, d M Y H:i:s", time() + $cacheTime) . " GMT")
+                ->header('Last-Modified', gmdate('D, d M Y H:i:s', $lastModifiedTime) . ' GMT');
         }
+    }
+
+    protected function getJSLang($lang)
+    {
+        $langArr = [];
+        foreach (explode(',', $lang) as $lang_file) {
+            $langArr[$lang_file] = trans($lang_file);
+        }
+        return $langArr ? 'var lang = ' . json_encode($langArr) . ';' : '';
+    }
+
+    protected function getCacheName($filePath)
+    {
+        return md5('Minify_' . $filePath);
+    }
+
+    protected function getCacheTimeName($filePath)
+    {
+        return md5('MinifyLastModified_' . $filePath);
     }
 }

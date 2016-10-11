@@ -7,9 +7,9 @@
                     <div class="form-group">
                         <label class="control-label col-sm-4">{{ $data['msg_name'] }}@lang('common.colon')</label>
                         <div class="col-sm-4">
-                            @if ('text' eq $data['msg_type'])
+                            @if ('text' == $data['msg_type'])
                                 <input type="text" name="send_info[{{ $data['msg_name'] }}]" class="form-control"/>
-                            @elseif ('radio' eq $data['msg_type'])
+                            @elseif ('radio' == $data['msg_type'])
                                 @foreach ($data['msg_option'] as $msg_option_data)
                                     <label class="control-label checkbox checkbox-inline">
                                         <input type="radio" name="send_info[{{ $data['msg_name'] }}]"
@@ -17,7 +17,7 @@
                                         {{ $msg_option_data }}
                                     </label>
                                 @endforeach
-                            @elseif ('checkbox' eq $data['msg_type'])
+                            @elseif ('checkbox' == $data['msg_type'])
                                 @foreach ($data['msg_option'] as $msg_option_data)
                                     <label class="control-label checkbox checkbox-inline">
                                         <input type="checkbox" name="send_info[{{ $data['msg_name'] }}][]"
@@ -25,7 +25,7 @@
                                         {{ $msg_option_data }}
                                     </label>
                                 @endforeach
-                            @elseif ('textarea' eq $data['msg_type'])
+                            @elseif ('textarea' == $data['msg_type'])
                                 <textarea name="send_info[{{ $data['msg_name'] }}]" rows="5" class="form-control"
                                           style="resize: none;"></textarea>
                             @endif

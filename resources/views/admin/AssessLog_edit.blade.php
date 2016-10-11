@@ -14,9 +14,9 @@
             <form method="post" class="form-horizontal" role="form">
                 <div class="form-group col-sm-12">
                     <label class="col-sm-2 control-label">
-                        @if ('member' eq $assess_info['target'])
+                        @if ('member' == $assess_info['target'])
                             @lang('common.by')@lang('common.grade')@lang('common.member')
-                        @elseif ('member_group' eq $assess_info['target'])
+                        @elseif ('member_group' == $assess_info['target'])
                             @lang('common.by')@lang('common.grade')@lang('common.member')@lang('common.group')
                         @endif
                     </label>
@@ -29,9 +29,9 @@
                                     'edit_obj': $('#re_grade_id'),
                                     'post_name': 're_grade_id',
                                     'ajax_url': '{{ route('ajax_api') }}',
-                                    'field': @if ('member' eq $assess_info['target'])
+                                    'field': @if ('member' == $assess_info['target'])
                                             'member'
-                                    @elseif ('member_group' eq $assess_info['target'])
+                                    @elseif ('member_group' == $assess_info['target'])
                                     'member_group'
                                     @endif
                                 };
@@ -64,9 +64,9 @@
                     @else
                         <tr>
                             <td>@lang('common.please')@lang('common.selection')
-                                @if ('member' eq $assess_info['target'])
+                                @if ('member' == $assess_info['target'])
                                     @lang('common.member')
-                                @elseif ('member_group' eq $assess_info['target'])
+                                @elseif ('member_group' == $assess_info['target'])
                                     @lang('common.member_group')
                                 @endif
                             </td>

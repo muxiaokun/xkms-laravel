@@ -74,7 +74,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     @foreach ($nav_menu as $data)
-                        @if (0 lt $key)
+                        @if (0 < $key)
                             <li class="@if ($data['nav_active']">active@endif)
                             @if ($data['nav_child'])
                                     <a  data-toggle=" dropdown" href="#"><b>{{ $data['nav_text'] }}</b><span
@@ -100,15 +100,15 @@
                     <div class="form-group">
                         <select name="type" class="form-control">
                             <option value="title"
-                                    @if ($request['type'] eq 'type')selected="selected"@endif >@lang('common.search')@lang('common.type')</option>
+                                    @if ($request['type'] == 'type')selected="selected"@endif >@lang('common.search')@lang('common.type')</option>
                             <option value="description"
-                                    @if ($request['type'] eq 'description')selected="selected"@endif>@lang('common.description')</option>
+                                    @if ($request['type'] == 'description')selected="selected"@endif>@lang('common.description')</option>
                             <option value="content"
-                                    @if ($request['type'] eq 'content')selected="selected"@endif>@lang('common.content')</option>
+                                    @if ($request['type'] == 'content')selected="selected"@endif>@lang('common.content')</option>
                             @if (isset($category_position['extend']))
                                 @foreach ($category_position['extend'] as $extend)
                                     <option value="extend[{{ $extend }}]"
-                                            @if ($request['type'] eq 'extend['.$extend.']')selected="selected"@endif>
+                                            @if ($request['type'] == 'extend['.$extend.']')selected="selected"@endif>
                                         L({{ $extend }})
                                     </option>
                                 @endforeach

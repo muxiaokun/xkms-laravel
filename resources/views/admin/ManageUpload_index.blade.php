@@ -29,8 +29,8 @@
                         <td>
                             {{ $manage_upload['user_name'] }}
                             [
-                            @if (1 eq $manage_upload['user_type'])@lang('common.backend')
-                            @elseif (2 eq $manage_upload['user_type'])@lang('common.frontend')
+                            @if (1 == $manage_upload['user_type'])@lang('common.backend')
+                            @elseif (2 == $manage_upload['user_type'])@lang('common.frontend')
                             @endif
                             ]
                         </td>

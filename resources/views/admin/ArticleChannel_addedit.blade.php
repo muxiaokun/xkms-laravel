@@ -73,7 +73,7 @@ $('input[name="s_limit[{{ $article_category['id'] }}]"]').val('{{ $edit_info['ex
                                     <option value="">@lang('common.use')@lang('common.default')</option>
                                     @foreach ($channel_template_list as $template)
                                         <option value="{{ $template['value'] }}"
-                                                @if ($template['value'] eq $edit_info['template'])selected="selected"@endif >{{ $template['name'] }}</option>
+                                                @if ($template['value'] == $edit_info['template'])selected="selected"@endif >{{ $template['name'] }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -196,7 +196,7 @@ $('input[name="s_limit[{{ $article_category['id'] }}]"]').val('{{ $edit_info['ex
                                     parent_id="{{ $article_category['parent_id'] }}"
                                     has_child="{{ $article_category['has_child'] }}">
                                     <td>
-                                        <span class="glyphicon @if (0 lt $article_category['has_child'])glyphicon-plus@elseglyphicon-minus@endif mlr10"
+                                        <span class="glyphicon @if (0 < $article_category['has_child'])glyphicon-plus@elseglyphicon-minus@endif mlr10"
                                               onclick="M_cate_tree(this,article_channel_cb);"></span>
                                         <input type="checkbox" name="category_list[]"
                                                value="{{ $article_category['id'] }}"
@@ -204,11 +204,11 @@ $('input[name="s_limit[{{ $article_category['id'] }}]"]').val('{{ $edit_info['ex
                                                @endif onClick="M_cate_checkbox(this)"/>
                                         {{ $article_category['name'] }}(ID:{{ $article_category['id'] }})
                                     </td>
-                                    <td @if (0 eq $cate_key)id="s_limit"@endif >
+                                    <td @if (0 == $cate_key)id="s_limit"@endif >
                                         <input type="text" name="s_limit[{{ $article_category['id'] }}]"
                                                style="width:100%;" onKeyup="M_in_int(this);"/>
                                     </td>
-                                    <td @if (0 eq $cate_key)id="template_list"@endif >
+                                    <td @if (0 == $cate_key)id="template_list"@endif >
                                         <select name="template_list[{{ $article_category['id'] }}]">
                                             <option value="">@lang('common.use')@lang('common.default')</option>
                                             @foreach ($template_list as $template)
@@ -216,7 +216,7 @@ $('input[name="s_limit[{{ $article_category['id'] }}]"]').val('{{ $edit_info['ex
                                             @endforeach
                                         </select>
                                     </td>
-                                    <td @if (0 eq $cate_key)id="list_template_list"@endif >
+                                    <td @if (0 == $cate_key)id="list_template_list"@endif >
                                         <select name="list_template_list[{{ $article_category['id'] }}]">
                                             <option value="">@lang('common.use')@lang('common.default')</option>
                                             @foreach ($list_template_list as $template)
@@ -224,7 +224,7 @@ $('input[name="s_limit[{{ $article_category['id'] }}]"]').val('{{ $edit_info['ex
                                             @endforeach
                                         </select>
                                     </td>
-                                    <td @if (0 eq $cate_key)id="article_template_list"@endif >
+                                    <td @if (0 == $cate_key)id="article_template_list"@endif >
                                         <select name="article_template_list[{{ $article_category['id'] }}]">
                                             <option value="">@lang('common.use')@lang('common.default')</option>
                                             @foreach ($article_template_list as $template)
@@ -239,9 +239,9 @@ $('input[name="s_limit[{{ $article_category['id'] }}]"]').val('{{ $edit_info['ex
                 </div>
                 <div class="form-group col-sm-12 text-center">
                     <button type="submit" class="btn btn-info">
-                        @if ($Think.const.ACTION_NAME eq 'add')
+                        @if ($Think.const.ACTION_NAME == 'add')
                             @lang('common.add')
-                        @elseif ($Think.const.ACTION_NAME eq 'edit')
+                        @elseif ($Think.const.ACTION_NAME == 'edit')
                             @lang('common.edit')
                         @endif
                     </button>

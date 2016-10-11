@@ -22,7 +22,7 @@
                 @foreach ($admin_list as $admin)
                     <tr>
                         <td>
-                            @if ($admin['id'] neq 1)
+                            @if ($admin['id'] != 1)
                                 <input name="id[]" type="checkbox" value="{{ $admin['id'] }}"/>
                             @else
                                 &nbsp;&nbsp;&nbsp;
@@ -36,7 +36,7 @@
                             {{ $admin['group_name'] }}
                         </td>
                         <td>
-                            @if (0 lt $admin['add_time'])
+                            @if (0 < $admin['add_time'])
                                 {{ $admin['add_time']|M_date=C('SYS_DATE_DETAIL') }}
                             @else
                                 @lang('common.system')@lang('common.add')

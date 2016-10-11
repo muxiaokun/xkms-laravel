@@ -165,9 +165,9 @@
                 <div class="row mt10">
                     <div class="col-sm-12 text-center">
                         <button type="submit" class="btn btn-info">
-                            @if ($Think.const.ACTION_NAME eq 'add')
+                            @if ($Think.const.ACTION_NAME == 'add')
                                 @lang('common.add')
-                            @elseif ($Think.const.ACTION_NAME eq 'edit')
+                            @elseif ($Think.const.ACTION_NAME == 'edit')
                                 @lang('common.edit')
                             @endif
                         </button>

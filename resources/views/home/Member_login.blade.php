@@ -14,12 +14,12 @@
         <div class="col-sm-6">
             <ul id="login_tab" class="nav nav-tabs" role="tablist">
                 <li
-                @if (register neq I('t')">class="active"@endif ><a href="#login" role="tab" data-toggle="tab)@lang('common.login')@lang('common.account')</a></li>
+                @if (register != I('t')">class="active"@endif ><a href="#login" role="tab" data-toggle="tab)@lang('common.login')@lang('common.account')</a></li>
                 <li
-                @if (register eq I('t')">class="active"@endif ><a href="#register" role="tab" data-toggle="tab)@lang('common.register')@lang('common.account')</a></li>
+                @if (register == I('t')">class="active"@endif ><a href="#register" role="tab" data-toggle="tab)@lang('common.register')@lang('common.account')</a></li>
             </ul>
             <div class="tab-content">
-                <div class="tab-pane @if (register neq I('t')">active@endif mt20 h350" id="login)
+                <div class="tab-pane @if (register != I('t')">active@endif mt20 h350" id="login)
                         <script type=" text
                 /javascript" src="{{ asset('js/M_valid.js') }}"></script>
                 <
@@ -66,7 +66,7 @@
                     <input type="submit" class="btn btn-info col-sm-offset-5" value="@lang('common.login')">
                 </form>
             </div>
-            <div class="tab-pane @if (register eq I('t')">active@endif mt20 h350" id="register)
+            <div class="tab-pane @if (register == I('t')">active@endif mt20 h350" id="register)
                     <script>
                         $(function(){
                             var config = {

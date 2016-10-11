@@ -36,7 +36,7 @@
                                         /@lang('common.extend')</option>
                                     @foreach ($category_list as $category)
                                         <option value="{{ $category['id'] }}"
-                                                @if ($category['id'] eq $edit_info['parent_id'])selected="selected"@endif >{{ $category['name'] }}</option>
+                                                @if ($category['id'] == $edit_info['parent_id'])selected="selected"@endif >{{ $category['name'] }}</option>
                                     @endforeach
                                 </select>
                                 <script type="text/javascript">
@@ -86,7 +86,7 @@
                                     <option value="">@lang('common.use')@lang('common.default')</option>
                                     @foreach ($template_list as $template)
                                         <option value="{{ $template['value'] }}"
-                                                @if ($template['value'] eq $edit_info['template'])selected="selected"@endif >{{ $template['name'] }}</option>
+                                                @if ($template['value'] == $edit_info['template'])selected="selected"@endif >{{ $template['name'] }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -98,7 +98,7 @@
                                     <option value="">@lang('common.use')@lang('common.default')</option>
                                     @foreach ($article_template_list as $template)
                                         <option value="{{ $template['value'] }}"
-                                                @if ($template['value'] eq $edit_info['article_template'])selected="selected"@endif >{{ $template['name'] }}</option>
+                                                @if ($template['value'] == $edit_info['article_template'])selected="selected"@endif >{{ $template['name'] }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -110,7 +110,7 @@
                                     <option value="">@lang('common.use')@lang('common.default')</option>
                                     @foreach ($list_template_list as $template)
                                         <option value="{{ $template['value'] }}"
-                                                @if ($template['value'] eq $edit_info['list_template'])selected="selected"@endif >{{ $template['name'] }}</option>
+                                                @if ($template['value'] == $edit_info['list_template'])selected="selected"@endif >{{ $template['name'] }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -299,9 +299,9 @@
                 <div class="row mt10">
                     <div class="col-sm-12 text-center">
                         <button type="submit" class="btn btn-info">
-                            @if ($Think.const.ACTION_NAME eq 'add')
+                            @if ($Think.const.ACTION_NAME == 'add')
                                 @lang('common.add')
-                            @elseif ($Think.const.ACTION_NAME eq 'edit')
+                            @elseif ($Think.const.ACTION_NAME == 'edit')
                                 @lang('common.edit')
                             @endif
                         </button>

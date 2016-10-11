@@ -19,7 +19,7 @@
                 @foreach ($admin_group_list as $admin_group)
                     <tr>
                         <td>
-                            @if ($admin_group['id'] neq 1)
+                            @if ($admin_group['id'] != 1)
                                 <input name="id[]" type="checkbox" value="{{ $admin_group['id'] }}"/>
                             @else
                                 &nbsp;&nbsp;&nbsp;

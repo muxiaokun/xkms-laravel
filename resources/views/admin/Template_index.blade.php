@@ -12,7 +12,7 @@
                                     <option value="{{ route('index',array('default_theme'=>'empty')) }}">@lang('common.please')@lang('common.selection')@lang('common.or')@lang('common.empty')</option>
                                     @foreach ($theme_list as $theme)
                                         <option value="{{ route('index',array('default_theme'=>$theme)) }}"
-                                                @if ($default_theme eq $theme)selected="selected"@endif >{{ $theme }}</option>
+                                                @if ($default_theme == $theme)selected="selected"@endif >{{ $theme }}</option>
                                     @endforeach
                                 </select>
                             </div>

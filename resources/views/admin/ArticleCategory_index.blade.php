@@ -20,7 +20,7 @@
                     <tr cate_id="{{ $article_category['id'] }}" parent_id="{{ $article_category['parent_id'] }}"
                         has_child="{{ $article_category['has_child'] }}">
                         <td>
-                            <span class="glyphicon @if (0 lt $article_category['has_child'])glyphicon-plus@elseglyphicon-minus@endif mlr10"
+                            <span class="glyphicon @if (0 < $article_category['has_child'])glyphicon-plus@elseglyphicon-minus@endif mlr10"
                                   onclick="M_cate_tree(this,article_category_cb);"></span>
                             {{ $article_category['name'] }}(ID:{{ $article_category['id'] }})
                         </td>

@@ -6,7 +6,7 @@
                     系统功能<span>Function</span>
                 </div>
                 <div class="list_images">
-                    <M:D name="Article" fn="m_select" fn_arg="cate_id between 1|is_audit gt 0" limit="8"
+                    <M:D name="Article" fn="m_select" fn_arg="cate_id between 1|is_audit > 0" limit="8"
                          item="function_article"/>
                     @foreach ($function_article as $data)
                         <div class="col-sm-3">
@@ -32,7 +32,7 @@
                     应用案例<span>Case</span>
                 </div>
                 <div class="list_images">
-                    <M:D name="Article" fn="m_select" fn_arg="cate_id eq 3|is_audit gt 0" limit="8"
+                    <M:D name="Article" fn="m_select" fn_arg="cate_id == 3|is_audit > 0" limit="8"
                          item="case_article"/>
                     @foreach ($case_article as $data)
                         <div class="col-sm-3">

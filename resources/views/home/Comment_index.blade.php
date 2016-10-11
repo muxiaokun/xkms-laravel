@@ -49,7 +49,7 @@
                     <for start="1" end="6">
                         <label class="mr100">
                             <input type="radio" name="comment_level" value="{{ $i }}"
-                                   @if ($i eq 5)checked="checked"@endif />{{ $i }}
+                                   @if ($i == 5)checked="checked"@endif />{{ $i }}
                         </label>
                     </for>
                 </div>

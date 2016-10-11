@@ -84,9 +84,9 @@
                             <div class="col-sm-6">
                                 <select class="form-control input-sm w260" name="target">
                                     <option value="member"
-                                            @if ('member' eq $edit_info['target'])selected="selected"@endif >@lang('common.member')</option>
+                                            @if ('member' == $edit_info['target'])selected="selected"@endif >@lang('common.member')</option>
                                     <option value="member_group"
-                                            @if ('member_group' eq  $edit_info['target'])selected="selected"@endif >@lang('common.member')@lang('common.group')</option>
+                                            @if ('member_group' ==  $edit_info['target'])selected="selected"@endif >@lang('common.member')@lang('common.group')</option>
                                 </select>
                             </div>
                         </div>
@@ -106,9 +106,9 @@
                 <div class="row">
                     <div class="col-sm-12 text-center">
                         <button type="submit" class="btn btn-info">
-                            @if ($Think.const.ACTION_NAME eq 'add')
+                            @if ($Think.const.ACTION_NAME == 'add')
                                 @lang('common.add')
-                            @elseif ($Think.const.ACTION_NAME eq 'edit')
+                            @elseif ($Think.const.ACTION_NAME == 'edit')
                                 @lang('common.edit')
                             @endif
                         </button>

@@ -54,7 +54,7 @@
                                     <option value="">@lang('common.default')@lang('common.dont')@lang('common.pertain')@lang('common.channel')</option>
                                     @foreach ($channel_list as $channel)
                                         <option value="{{ $channel['id'] }}"
-                                                @if ($channel['id'] eq $edit_info['channel_id'])selected="selected"@endif >{{ $channel['name'] }}</option>
+                                                @if ($channel['id'] == $edit_info['channel_id'])selected="selected"@endif >{{ $channel['name'] }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -68,7 +68,7 @@
                                     <option value="">@lang('common.default')@lang('common.dont')@lang('common.pertain')@lang('common.category')</option>
                                     @foreach ($category_list as $category)
                                         <option value="{{ $category['id'] }}"
-                                                @if ($category['id'] eq $edit_info['cate_id'] or $category['id'] eq I('cate_id'))selected="selected"
+                                                @if ($category['id'] == $edit_info['cate_id'] or $category['id'] == I('cate_id'))selected="selected"
                                                 mtype="def_data"@endif >{{ $category['name'] }}</option>
                                     @endforeach
                                 </select>
@@ -312,7 +312,7 @@
                                         @if ($edit_info['album'])
                                         $(function () {
                                             @foreach ($edit_info['album'] as $data)
-                                                 @if ('null' neq $data)M_article_uploadsbutton({{ $data }});@endif
+                                                 @if ('null' != $data)M_article_uploadsbutton({{ $data }});@endif
                                             @endforeach
                                         });
                                     @endif
@@ -352,9 +352,9 @@
                 <div class="row mt10">
                     <div class="col-sm-12 text-center">
                         <button type="submit" class="btn btn-info">
-                            @if ($Think.const.ACTION_NAME eq 'add')
+                            @if ($Think.const.ACTION_NAME == 'add')
                                 @lang('common.add')
-                            @elseif ($Think.const.ACTION_NAME eq 'edit')
+                            @elseif ($Think.const.ACTION_NAME == 'edit')
                                 @lang('common.edit')
                             @endif
                         </button>

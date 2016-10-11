@@ -20,9 +20,9 @@
         <div class="col-sm-12">
             <div class="form-group col-sm-12">
                 <label class="col-sm-2 control-label">
-                    @if ('member' eq $assess_info['target'])
+                    @if ('member' == $assess_info['target'])
                         @lang('common.by')@lang('common.grade')@lang('common.member')
-                    @elseif ('member_group' eq $assess_info['target'])
+                    @elseif ('member_group' == $assess_info['target'])
                         @lang('common.by')@lang('common.grade')@lang('common.member')@lang('common.group')
                     @endif
                     {{ $assess_info['start_time']|M_date=C('SYS_DATE_DETAIL') }}
@@ -37,9 +37,9 @@
                                 'edit_obj': $('#re_grade_id'),
                                 'post_name': 're_grade_id',
                                 'ajax_url': '{:M_U('ajax_api')}',
-                                'field': @if ('member' eq $assess_info['target'])
+                                'field': @if ('member' == $assess_info['target'])
                                         'member'
-                                @elseif ('member_group' eq $assess_info['target'])
+                                @elseif ('member_group' == $assess_info['target'])
                                 'member_group'
                                 @endif
                             };

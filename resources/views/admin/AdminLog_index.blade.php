@@ -15,7 +15,7 @@
                     <th>@lang('common.model')@lang('common.name')</th>
                     <th>@lang('common.request')</th>
                     <th class="nowrap">
-                        @if (session('backend_info.id') neq 1)
+                        @if (session('backend_info.id') != 1)
                             @lang('common.handle')
                         @else
                             <a class="btn btn-xs btn-danger"
@@ -48,7 +48,7 @@
                             {{ $admin_log['model_name'] }}
                         </td>
                         <td>
-                            @if (2 lt strlen($admin_log['request']))
+                            @if (2 < strlen($admin_log['request']))
                                 <a id="M_alert_log_{{ $admin_log['id'] }}" class="btn btn-xs btn-primary"
                                    href="javascript:void(0);">@lang('common.look')</a>
                                 <script>

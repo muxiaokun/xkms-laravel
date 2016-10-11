@@ -23,7 +23,7 @@
                                     <option value="">@lang('common.use')@lang('common.default')</option>
                                     @foreach ($template_list as $template)
                                         <option value="{{ $template['value'] }}"
-                                                @if ($template['value'] eq $edit_info['template'])selected="selected"@endif >{{ $template['name'] }}</option>
+                                                @if ($template['value'] == $edit_info['template'])selected="selected"@endif >{{ $template['name'] }}</option>
                                     @endforeach
                                 </select>
                             </div>

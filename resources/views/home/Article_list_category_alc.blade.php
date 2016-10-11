@@ -10,7 +10,7 @@
             @foreach ($t=M_attribute_arr($category_info['attribute']) as $attrs)
                 <div class="col-sm-12 btn-group btn-group-sm mb10" role="group" aria-label="...">
                     @foreach ($attrs as $attr)
-                        <a class="btn btn-default @if ($attr['checked']">btn-info@endif" href="{{ $attr['link'] }})
+                        <a class="btn btn-default @if ($attr['checked'])btn-info@endif" href="{{ $attr['link'] }}">
                         {{ $attr['name'] }}
                                 </a>
                                 @endforeach

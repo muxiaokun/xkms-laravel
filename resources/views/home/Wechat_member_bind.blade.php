@@ -5,7 +5,7 @@
         </div>
         <div class="col-sm-6">
             <div class="tab-content">
-                <div class="tab-pane @if (register neq I('t')">active@endif mt20 h350" id="login)
+                <div class="tab-pane @if (register != I('t')">active@endif mt20 h350" id="login)
                         <form class=" form-horizontal
                 " role="form" method="post"">
                 <div class="form-group">

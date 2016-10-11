@@ -28,7 +28,7 @@
                         </td>
                         <td>
                             {{ $message['receive_name'] }}&nbsp;&nbsp;[
-                            @if (0 lt $message['receive_time'])
+                            @if (0 < $message['receive_time'])
                                 {{ $message['receive_time']|M_date=C('SYS_DATE_DETAIL') }}
                             @else
                                 @lang('common.none')@lang('common.receive')
@@ -43,7 +43,7 @@
                                         'bind_obj': $('#M_alert_log_{{ $message['id'] }}'),
                                         'title': '@lang('common.message')@lang('common.content')',
                                         'message': "{{ $message['content'] }}"
-                                        @if (0 eq $message['receive_id'] AND 0 eq $message['receive_time'])
+                                        @if (0 == $message['receive_id'] AND 0 == $message['receive_time'])
                                         ,
                                         'cb_fn': M_alert_log_Message($('#M_alert_log_{{ $message['id'] }}'),{{ $message['id'] }}, '{:M_U("ajax_api")}')
                                         @endif
@@ -53,7 +53,7 @@
                             </script>
                             @if ($batch_handle['add'])
                                 &nbsp;|&nbsp;
-                                @if (0 lt $message['send_id'])
+                                @if (0 < $message['send_id'])
                                     <a class="btn btn-xs btn-primary"
                                        href="{{ route('add',array('receive_id'=>$message['send_id'])) }}">
                                         @lang('common.reply')@lang('common.message')

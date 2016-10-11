@@ -6,11 +6,11 @@
                 <input type="hidden" name="id" value="{{ $id }}"/>
                 <div class="row">
                     <div class="col-sm-12">
-                        @if ('add' eq ACTION_NAME)
+                        @if ('add' == ACTION_NAME)
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">
                                     @lang('common.template')@lang('common.file')@lang('common.name')
-                                    (@if ('/' eq C('TMPL_FILE_DEPR'))
+                                    (@if ('/' == C('TMPL_FILE_DEPR'))
                                         controller/file_name{{ config('TMPL_TEMPLATE_SUFFIX') }}
                                     @else
                                         file_name{{ config('TMPL_TEMPLATE_SUFFIX') }}

@@ -18,7 +18,7 @@
 </script>
 <section class="left_nav">
     <div id="left_nav_menu" class="accordion">
-        @if (count($left_nav) gt 0)
+        @if (count($left_nav) > 0)
             @foreach ($left_nav as $nav)
                 <h3>{{ $key }}</h3>
                 <ul class="nav text-center" role="tablist">

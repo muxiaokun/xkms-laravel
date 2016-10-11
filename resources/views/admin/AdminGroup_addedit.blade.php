@@ -17,7 +17,7 @@
             </script>
             <form id="form_valid" onSubmit="return false;" class="form-horizontal" role="form" action="" method="post">
                 <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
-                <input type="hidden" name="is_pwd" value="@if ($Think.const.ACTION_NAME eq 'add')1@else0@endif"/>
+                <input type="hidden" name="is_pwd" value="@if ($Think.const.ACTION_NAME == 'add')1@else0@endif"/>
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="form-group">
@@ -85,9 +85,9 @@
                 <div class="row mt10">
                     <div class="col-sm-12 text-center">
                         <button type="submit" class="btn btn-info">
-                            @if ($Think.const.ACTION_NAME eq 'add')
+                            @if ($Think.const.ACTION_NAME == 'add')
                                 @lang('common.add')
-                            @elseif ($Think.const.ACTION_NAME eq 'edit')
+                            @elseif ($Think.const.ACTION_NAME == 'edit')
                                 @lang('common.edit')
                             @endif
                         </button>
@@ -122,7 +122,7 @@
                                             <label class="checkbox-inline">
                                                 <input type="checkbox" name="privilege[]"
                                                        value="{{ $controller_name }}_{{ $action_name }}"
-                                                       @if ('all' eq $edit_info['privilege'] or (is_array($edit_info['privilege']) AND in_array($controller_name.'_'.$action_name,$edit_info['privilege'])))
+                                                       @if ('all' == $edit_info['privilege'] or (is_array($edit_info['privilege']) AND in_array($controller_name.'_'.$action_name,$edit_info['privilege'])))
                                                        checked="checked"
                                                         @endif
                                                 />

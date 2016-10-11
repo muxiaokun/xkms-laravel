@@ -1,14 +1,5 @@
 @extends('install.layout')
 @section('body')
-    @push('scripts')
-    <script type="text/javascript">
-        $(function () {
-            if (parent && parent.move_progress) {
-                parent.move_progress({{ config('setp_progress.4') }});
-            }
-        });
-    </script>
-    @endpush
     {{--安装第四步界面 开始--}}
     <section class="container">
         <div class="row">
@@ -31,3 +22,13 @@
     </section>
     {{--安装第四步界面 结束--}}
 @endsection
+
+@push('scripts')
+<script type="text/javascript">
+    $(function () {
+        if (parent && parent.move_progress) {
+            parent.move_progress({{ config('setp_progress.4') }});
+        }
+    });
+</script>
+@endpush

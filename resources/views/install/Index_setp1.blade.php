@@ -1,14 +1,5 @@
 @extends('install.layout')
 @section('body')
-    @push('scripts')
-    <script type="text/javascript">
-        $(function () {
-            if (parent && parent.move_progress) {
-                parent.move_progress({{ config('install.setp_progress.0') }});
-            }
-        });
-    </script>
-    @endpush
     {{--安装第一步界面 开始--}}
     <section class="container">
         <div class="row">
@@ -67,25 +58,33 @@
                    href="{{ route('Install::') }}">@lang('common.previous')@lang('common.setp')</a>
                 <a id="mysql_config_btn" class="btn btn-lg btn-primary mt20"
                    href="javascript:void(0);">@lang('install.setp1')</a>
-                <script type="text/javascript">
-                    var config = {
-                        'out_obj': '#mysql_config_btn',
-                        'edit_obj': '#mysql_config',
-                        'next_link': '{{ route('Install::setp2') }}',
-                        'ajax_url': '{{ route('Install::ajax_api') }}'
-                    }
-                    new M_check_mysql(config);
-                </script>
             </div>
             <div class="col-sm-12 text-center">
                 <div id="show_box" class="mt20"></div>
             </div>
-            <script type="text/javascript">
-                @foreach ($note as $data)
-                show_install_message("#show_box", "{{ $data }}@lang('common.extend')@lang('common.none')@lang('common.loading')", "warning")
-                @endforeach
-            </script>
         </div>
     </section>
     {{--安装第一步界面 结束--}}
 @endsection
+
+@push('scripts')
+<script type="text/javascript">
+    $(function () {
+        if (parent && parent.move_progress) {
+            parent.move_progress({{ config('install.setp_progress.0') }});
+        }
+    });
+
+    var config = {
+        'out_obj': '#mysql_config_btn',
+        'edit_obj': '#mysql_config',
+        'next_link': '{{ route('Install::setp2') }}',
+        'ajax_url': '{{ route('Install::ajax_api') }}'
+    }
+    new M_check_mysql(config);
+
+    @foreach ($note as $data)
+    show_install_message("#show_box", "{{ $data }}@lang('common.extend')@lang('common.none')@lang('common.loading')", "warning")
+    @endforeach
+</script>
+@endpush

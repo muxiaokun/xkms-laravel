@@ -394,6 +394,7 @@ Route::group([
     Route::get('t', function () {
         dump(DB::query());
     });
+    Route::get('tc', ['as' => 'index', 'uses' => 'Index@getInstallInfo']);
     Route::get('index', ['as' => 'index', 'uses' => 'Index@index']);
     Route::get('scan/{name?}', ['as' => 'scan', 'uses' => 'Index@scan']);
     Route::get('setp0', ['as' => 'setp0', 'uses' => 'Index@setp0']);

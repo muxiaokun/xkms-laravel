@@ -1,20 +1,5 @@
 @extends('install.layout')
 @section('body')
-    @push('scripts')
-    <script type="text/javascript">
-        $(function () {
-            var win = $(window);
-            var doc = $(document);
-
-            doc.on('scroll', function (event, a1, a2) {
-                if (parent && parent.move_progress) {
-                    var progress = doc.scrollTop() / (doc.height() - win.height()) * {{ config('install.setp_progress.0') }};
-                    parent.move_progress(progress,{{ config('install.setp_progress.1') }});
-                }
-            });
-        });
-    </script>
-    @endpush
     {{-- 安装初始界面 开始 --}}
     <section class="container">
         <div class="row">
@@ -37,3 +22,18 @@
     </section>
     {{-- 安装初始界面 结束 --}}
 @endsection
+
+@push('scripts')
+<script type="text/javascript">
+    $(function () {
+        var win = $(window);
+        var doc = $(document);
+        doc.on('scroll', function (event, a1, a2) {
+            if (parent && parent.move_progress) {
+                var progress = doc.scrollTop() / (doc.height() - win.height()) * {{ config('install.setp_progress.0') }};
+                parent.move_progress(progress,{{ config('install.setp_progress.1') }});
+            }
+        });
+    });
+</script>
+@endpush

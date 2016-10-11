@@ -3,6 +3,5 @@
 !.gitignore
 !xkms/
 !xkms/*
-!xkms/config/*
 !xkms/article/*
-!xkms/initdb/*
+!xkms/install_info/*

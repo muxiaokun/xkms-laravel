@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Install;
 
 use App\Http\Controllers\Frontend;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
@@ -112,11 +113,15 @@ class Index extends Frontend
     //第三页 安装数据库
     public function setp2()
     {
-        $this->assign('compare_database_info', $this->_compare_database(true));
-        $this->assign('compare_tables_info', $this->_compare_tables());
-        $this->assign('setp', trans('pfsetp', ['setp' => trans('two'), 'count' => trans('four')]));
-        $this->assign('title', trans('setp2_title'));
-        $this->display();
+        $assign = [
+            'show_height' => true,
+            'database'    => config('database.connections.mysql.database'),
+            'databases'   => $this->_getDatabases(),
+            'tables'      => $this->_getDatabases(),
+            'setp'        => trans('pfsetp', ['setp' => trans('two'), 'count' => trans('four')]),
+            'title'       => trans('install.setp2_title'),
+        ];
+        return view('install.Index_setp2', $assign);
     }
 
     //第三页 安装数据库 提示
@@ -326,15 +331,6 @@ class Index extends Frontend
                     return ['status' => false, 'info' => ['msg' => $msg, 'type' => 1]];
                 }
 
-                //检测指定的数据库是否存在
-                $exitis_databases = $this->_getDatabases();
-                if (in_array($data['db_database'], $exitis_databases)) {
-                    return [
-                        'status' => false,
-                        'info'   => ['msg' => trans('install.exists_database_and_next'), 'type' => 2],
-                    ];
-                }
-
                 //只要能链接数据库就 保存配置
                 $new_config = [
                     'DB_HOST'     => $data['db_host'],
@@ -345,6 +341,15 @@ class Index extends Frontend
                     'DB_PREFIX'   => $data['db_prefix'],
                 ];
                 mPutenv($new_config);
+
+                //检测指定的数据库是否存在
+                $exitis_databases = $this->_getDatabases();
+                if (in_array($data['db_database'], $exitis_databases)) {
+                    return [
+                        'status' => false,
+                        'info'   => ['msg' => trans('install.exists_database_and_next'), 'type' => 2],
+                    ];
+                }
 
                 $result = [
                     'status' => true,
@@ -488,6 +493,20 @@ class Index extends Frontend
             $reCompareInfo[]         = $controlInfo;
         }
         return $reCompareInfo;
+    }
+
+    public function getInstallInfo()
+    {
+        $filesystem = new Filesystem();
+        $files      = $filesystem->files(storage_path('app/xkms/install_info'));
+        $module     = [];
+        foreach ($files as $file) {
+            if (!preg_match('/(\d)([^\.]*)\.php$/i', $file, $pStr)) {
+                continue;
+            }
+            $module[] = $filesystem->getRequire($file);
+        }
+        dump($module);
     }
 
     public function scan($name = 'Home')

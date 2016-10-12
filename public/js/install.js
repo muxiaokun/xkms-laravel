@@ -1,7 +1,7 @@
 /* +----------------------------------------------------------------------
    | Core : ThinkPHP Copyright (c) 2006-2014 All rights reserved.
    +----------------------------------------------------------------------
-   | APP  : Copyright (c) 2014-ALL http://wumingmxk.xicp.net rights reserved. 
+ | APP  : Copyright (c) 2014-ALL http://wumingmxk.xicp.net rights reserved.
    +----------------------------------------------------------------------
    | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
    +----------------------------------------------------------------------
@@ -49,22 +49,25 @@ function M_check_mysql(config)
         console.log('M_check_mysql config no exists');
         return;
     }
-    
+
     var _self = M_check_mysql.prototype
     _self.edit_obj = $(config.edit_obj);
     _self.out_obj = $(config.out_obj);
     _self.next_link = config.next_link;
+    _self.setp_progress = config.setp_progress;
     _self.ajax_url = config.ajax_url;
-    
+
     if(0 == _self.out_obj.length)console.log('out_obj no exists');
     if(0 == _self.edit_obj.length)console.log('edit_obj no exists');
     if(0 == _self.next_link.length)console.log('next_link no exists');
+    if (0 == _self.setp_progress.length)console.log('setp_progress no exists');
     if(0 == _self.ajax_url.length)console.log('ajax_url no exists');
-    if(0 == _self.out_obj.length 
-    || 0 == _self.edit_obj.length 
+    if (0 == _self.out_obj.length
+        || 0 == _self.edit_obj.length
     || 0 == _self.next_link.length
+        || 0 == _self.setp_progress.length
     || 0 == _self.ajax_url.length)return;
-    
+
     _self.out_obj.on('click',function(){_self.check()});
 }
 
@@ -72,6 +75,7 @@ M_check_mysql.prototype = {
     'edit_obj':'',
     'out_obj':'',
     'next_link':'',
+    'setp_progress': '',
     'ajax_url':'',
     'running':0
 }
@@ -116,12 +120,18 @@ M_check_mysql.prototype.check = function(){
                     show_install_message('#show_box',data.info.msg,'danger');
                     break;
                 case 2:
+                    if (parent && parent.move_progress) {
+                        parent.move_progress(_self.setp_progress);
+                    }
                     var btn_str = Array('<a class="btn btn-info ml50" href="' + _self.next_link + '" >',
                         data.info.msg + '</a>'
                         ).join('');
                     show_install_message('#show_box', btn_str, 'info');
                     break;
                 case 3:
+                    if (parent && parent.move_progress) {
+                        parent.move_progress(_self.setp_progress);
+                    }
                     show_install_message('#show_box',data.info.msg,'success');
                     setTimeout('window.location.href="'+_self.next_link+'"',3000);
                     break;
@@ -134,4 +144,41 @@ M_check_mysql.prototype.check = function(){
         }
     });
     return false;
+}
+
+
+function M_post_setp3(ajax_url, goto_url, setp_progress) {
+
+    show_install_message('#show_box', lang.install.setp3_commont2, 'info');
+
+    var _self = this;
+    if (_self.running) {
+        show_install_message('#show_box', 'ajax running!', 'danger');
+        return false;
+    }
+    _self.running = 1;
+    $.ajax({
+        'url': ajax_url,
+        'type': 'POST',
+        'dataType': 'json',
+        'cache': false,
+        'success': function (data) {
+            if (!data || !data.info)return;
+            if (data.status) {
+                if (parent && parent.move_progress) {
+                    parent.move_progress(setp_progress);
+                }
+                show_install_message('#show_box', data.info, 'success');
+                setTimeout('window.location.href="' + goto_url + '"', 3000);
+            }
+            else {
+                show_install_message('#show_box', data.info, 'danger');
+            }
+            _self.running = 0;
+        },
+        'error': function () {
+            window.console.log('connect error! install.js M_post_setp3')
+            _self.running = 0;
+        }
+    });
 }

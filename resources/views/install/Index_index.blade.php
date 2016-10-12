@@ -18,7 +18,7 @@
     </iframe>
     <footer class="footer_fixed text-center">
         @lang('common.pfcopyright',['app_name'=>trans('common.app_name')])<br/>
-        @lang('common.version')@lang('common.colon') 2.0.0
+        @lang('common.version')@lang('common.colon') 3.0.0
     </footer>
 @endsection
 

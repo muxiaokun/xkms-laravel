@@ -11,7 +11,7 @@
     <link rel="stylesheet"
           href="{{ route('Minify',['type'=>'css','files'=>'common,bootstrap.min,bootstrap-theme.min,install']) }}">
     <script type="text/javascript"
-            src="{{ route('Minify',['type'=>'js','files'=>'jquery.min,bootstrap.min,install']) }}"></script>
+            src="{{ route('Minify',['type'=>'js','files'=>'jquery.min,bootstrap.min,install','lang'=>'common,install']) }}"></script>
     <!--[if lt IE 9]>
     <script type="text/javascript" src="{{ route('Minify',['type'=>'js','files'=>'supporthtml5']) }}"></script>
     <![endif]-->

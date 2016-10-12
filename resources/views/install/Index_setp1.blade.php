@@ -23,7 +23,7 @@
                             <ul class="dropdown-menu" role="menu">
                                 @foreach ($database_list as $data)
                                     <li class="text-left"><a href="#"
-                                                             onclick="$('input[name=name]').val($(this).html())">{{ $data }}</a>
+                                                             onclick="$('input[name=db_database]').val($(this).html())">{{ $data }}</a>
                                     </li>
                                 @endforeach
                             </ul>
@@ -69,16 +69,11 @@
 
 @push('scripts')
 <script type="text/javascript">
-    $(function () {
-        if (parent && parent.move_progress) {
-            parent.move_progress({{ config('install.setp_progress.0') }});
-        }
-    });
-
     var config = {
         'out_obj': '#mysql_config_btn',
         'edit_obj': '#mysql_config',
         'next_link': '{{ route('Install::setp2') }}',
+        'setp_progress': '{{ config('install.setp_progress.1') }}',
         'ajax_url': '{{ route('Install::ajax_api') }}'
     }
     new M_check_mysql(config);

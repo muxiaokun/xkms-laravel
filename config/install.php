@@ -1,7 +1,10 @@
 <?php
 // install config file
 return [
-    'setp_progress' => array(
-        20, 25, 30, 95, 100,
-    ),
+    'setp_progress' => [
+        25,
+        50,
+        75,
+        100,
+    ],
 ];

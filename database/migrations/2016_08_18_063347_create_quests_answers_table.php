@@ -12,6 +12,9 @@ class CreateQuestsAnswersTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('quests_answers')) {
+            return;
+        }
         Schema::create('quests_answers', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
@@ -29,6 +32,9 @@ class CreateQuestsAnswersTable extends Migration
      */
     public function down()
     {
+        if (!Schema::hasTable('quests_answers')) {
+            return;
+        }
         Schema::drop('quests_answers');
     }
 }

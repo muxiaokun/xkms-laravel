@@ -12,6 +12,9 @@ class CreateManageUploadsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('manage_uploads')) {
+            return;
+        }
         Schema::create('manage_uploads', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
@@ -34,6 +37,9 @@ class CreateManageUploadsTable extends Migration
      */
     public function down()
     {
+        if (!Schema::hasTable('manage_uploads')) {
+            return;
+        }
         Schema::drop('manage_uploads');
     }
 }

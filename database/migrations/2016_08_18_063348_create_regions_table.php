@@ -12,10 +12,12 @@ class CreateRegionsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('regions')) {
+            return;
+        }
         Schema::create('regions', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-
 
             $table->integer('parent_id')->unsigned()->comment('父编号');
             $table->string('region_name', 64)->comment('地域名称');
@@ -35,6 +37,9 @@ class CreateRegionsTable extends Migration
      */
     public function down()
     {
+        if (!Schema::hasTable('regions')) {
+            return;
+        }
         Schema::drop('regions');
     }
 }

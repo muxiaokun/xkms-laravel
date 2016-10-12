@@ -12,6 +12,9 @@ class CreateNavigationsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('navigations')) {
+            return;
+        }
         Schema::create('navigations', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
@@ -30,6 +33,9 @@ class CreateNavigationsTable extends Migration
      */
     public function down()
     {
+        if (!Schema::hasTable('navigations')) {
+            return;
+        }
         Schema::drop('navigations');
     }
 }

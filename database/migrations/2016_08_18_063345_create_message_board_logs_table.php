@@ -12,6 +12,9 @@ class CreateMessageBoardLogsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('message_board_logs')) {
+            return;
+        }
         Schema::create('message_board_logs', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
@@ -32,6 +35,9 @@ class CreateMessageBoardLogsTable extends Migration
      */
     public function down()
     {
+        if (!Schema::hasTable('message_board_logs')) {
+            return;
+        }
         Schema::drop('message_board_logs');
     }
 }

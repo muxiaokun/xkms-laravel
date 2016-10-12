@@ -12,6 +12,9 @@ class CreateAdminGroupsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('admin_groups')) {
+            return;
+        }
         Schema::create('admin_groups', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
@@ -31,6 +34,9 @@ class CreateAdminGroupsTable extends Migration
      */
     public function down()
     {
+        if (!Schema::hasTable('admin_groups')) {
+            return;
+        }
         Schema::drop('admin_groups');
     }
 }

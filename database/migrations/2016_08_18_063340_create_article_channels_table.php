@@ -12,6 +12,9 @@ class CreateArticleChannelsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('article_channels')) {
+            return;
+        }
         Schema::create('article_channels', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
@@ -36,6 +39,9 @@ class CreateArticleChannelsTable extends Migration
      */
     public function down()
     {
+        if (!Schema::hasTable('article_channels')) {
+            return;
+        }
         Schema::drop('article_channels');
     }
 }

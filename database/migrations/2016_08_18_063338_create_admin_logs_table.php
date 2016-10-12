@@ -12,6 +12,9 @@ class CreateAdminLogsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('admin_logs')) {
+            return;
+        }
         Schema::create('admin_logs', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
@@ -32,6 +35,9 @@ class CreateAdminLogsTable extends Migration
      */
     public function down()
     {
+        if (!Schema::hasTable('admin_logs')) {
+            return;
+        }
         Schema::drop('admin_logs');
     }
 }

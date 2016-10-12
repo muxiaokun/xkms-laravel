@@ -12,13 +12,16 @@ class CreateRecruitLogsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('recruit_logs')) {
+            return;
+        }
         Schema::create('recruit_logs', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
             $table->integer('r_id')->unsigned()->comment('招聘编号');
             $table->string('name', 64)->comment('名字');
-            $table->timestamp('birthday')->comment('生日');
+            $table->timestamp('birthday')->nullable()->comment('生日');
             $table->tinyInteger('sex')->comment('性别');
             $table->tinyInteger('certificate')->comment('结业证');
             $table->mediumText('ext_info')->nullable()->comment('扩展信息');
@@ -32,6 +35,9 @@ class CreateRecruitLogsTable extends Migration
      */
     public function down()
     {
+        if (!Schema::hasTable('recruit_logs')) {
+            return;
+        }
         Schema::drop('recruit_logs');
     }
 }

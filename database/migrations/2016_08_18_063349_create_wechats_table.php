@@ -12,6 +12,9 @@ class CreateWechatsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('wechats')) {
+            return;
+        }
         Schema::create('wechats', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
@@ -37,6 +40,9 @@ class CreateWechatsTable extends Migration
      */
     public function down()
     {
+        if (!Schema::hasTable('wechats')) {
+            return;
+        }
         Schema::drop('wechats');
     }
 }

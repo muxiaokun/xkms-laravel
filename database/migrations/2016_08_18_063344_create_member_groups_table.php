@@ -12,6 +12,9 @@ class CreateMemberGroupsTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('member_groups')) {
+            return;
+        }
         Schema::create('member_groups', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
@@ -31,6 +34,9 @@ class CreateMemberGroupsTable extends Migration
      */
     public function down()
     {
+        if (!Schema::hasTable('member_groups')) {
+            return;
+        }
         Schema::drop('member_groups');
     }
 }

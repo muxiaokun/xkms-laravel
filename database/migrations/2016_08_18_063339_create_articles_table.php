@@ -12,6 +12,9 @@ class CreateArticlesTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('articles')) {
+            return;
+        }
         Schema::create('articles', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
@@ -44,6 +47,9 @@ class CreateArticlesTable extends Migration
      */
     public function down()
     {
+        if (!Schema::hasTable('articles')) {
+            return;
+        }
         Schema::drop('articles');
     }
 }

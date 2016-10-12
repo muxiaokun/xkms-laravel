@@ -12,6 +12,9 @@ class CreateArticleCategoriesTable extends Migration
      */
     public function up()
     {
+        if (Schema::hasTable('article_categories')) {
+            return;
+        }
         Schema::create('article_categories', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
@@ -42,6 +45,9 @@ class CreateArticleCategoriesTable extends Migration
      */
     public function down()
     {
+        if (!Schema::hasTable('article_categories')) {
+            return;
+        }
         Schema::drop('article_categories');
     }
 }

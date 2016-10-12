@@ -20,7 +20,7 @@ class CreateMessageBoardsTable extends Migration
             $table->timestamps();
 
             $table->string('name', 64)->comment('名称');
-            $table->string('template', 64)->comment('模板');
+            $table->string('template', 64)->nullable()->comment('模板');
             $table->mediumText('config')->nullable()->comment('配置');
         });
     }

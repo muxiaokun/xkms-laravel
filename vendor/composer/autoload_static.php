@@ -332,6 +332,7 @@ class ComposerStaticInitd6ca115cde39e5742e0a622dbbf4bc96
         'App\\Http\\Controllers\\Home\\Region' => __DIR__ . '/../..' . '/app/Http/Controllers/Home/Region.php',
         'App\\Http\\Controllers\\Home\\Wechat' => __DIR__ . '/../..' . '/app/Http/Controllers/Home/Wechat.php',
         'App\\Http\\Controllers\\Install\\Index' => __DIR__ . '/../..' . '/app/Http/Controllers/Install/Index.php',
+        'App\\Http\\Controllers\\Minify' => __DIR__ . '/../..' . '/app/Http/Controllers/Minify.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
         'App\\Http\\Middleware\\RedirectIfAuthenticated' => __DIR__ . '/../..' . '/app/Http/Middleware/RedirectIfAuthenticated.php',

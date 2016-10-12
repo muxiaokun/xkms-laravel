@@ -59,6 +59,7 @@ return array(
     'App\\Http\\Controllers\\Home\\Region' => $baseDir . '/app/Http/Controllers/Home/Region.php',
     'App\\Http\\Controllers\\Home\\Wechat' => $baseDir . '/app/Http/Controllers/Home/Wechat.php',
     'App\\Http\\Controllers\\Install\\Index' => $baseDir . '/app/Http/Controllers/Install/Index.php',
+    'App\\Http\\Controllers\\Minify' => $baseDir . '/app/Http/Controllers/Minify.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\EncryptCookies' => $baseDir . '/app/Http/Middleware/EncryptCookies.php',
     'App\\Http\\Middleware\\RedirectIfAuthenticated' => $baseDir . '/app/Http/Middleware/RedirectIfAuthenticated.php',

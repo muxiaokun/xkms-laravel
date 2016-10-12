@@ -24,7 +24,8 @@ class Minify extends Controller
         if (!$files) {
             return '';
         }
-        $lang = request('lang');
+        $lang    = request('lang');
+        $refresh = request('refresh');
 
 
         $filesystem = new \Illuminate\Filesystem\Filesystem();
@@ -62,12 +63,12 @@ class Minify extends Controller
             $pageWasUpdated = $etagMatch = false;
         }
 
-        if (($pageWasUpdated || $etagMatch) && !$filesModified) {
+        if (($pageWasUpdated || $etagMatch) && !$filesModified && !$refresh) {
             return response('', 304)
                 ->header('ETag', $resourceCacheName)
                 ->header('Connection', 'close');
         } else {
-            if (!$resourceCache || $filesModified) {
+            if (!$resourceCache || $filesModified || $refresh) {
 
                 //js类型引入语言包
                 $content .= $this->getJSLang($lang);

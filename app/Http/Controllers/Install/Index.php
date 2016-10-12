@@ -14,28 +14,11 @@ class Index extends Frontend
 {
     public function _initialize()
     {
-        $loadedExt = get_loaded_extensions();
-        //没有加载mysql模块不能进行安装
-        if (!in_array('pdo_mysql', $loadedExt)) {
-            die('require pdo_mysql extension!!!');
-        }
-
         parent::_initialize();
-        /* 安装流程
-         * 1.链接数据库检测配置是否可用
-         * 2.检测已安装数据，是否覆盖式安装
-         */
-        //检测安装状态和系统版本
-        //install_status 0 没有安装 1安装完毕但没有显示最后一页 2安装完毕
-//        $status = F('sys_status');
-//        if (!config('app.debug') && 1 == $status['install_status'] && 'setp4' != ACTION_NAME) {
-//            $this->error(trans('install_error1'), route('Install/Index/index', ['setp' => 4]));
-//            return;
-//        }
-//        if (!config('app.debug') && 2 == $status['install_status']) {
-//            $this->error(trans('install_error2'), route('Home/Index/index'));
-//            return;
-//        }
+        if (1 == env('INSTALL_STATUS')) {
+            $message = trans('common.app_name') . trans('common.install') . trans('common.success');
+            die($this->success($message, 'Home::Index::index'));
+        }
     }
 
     //第一页 欢迎页
@@ -151,6 +134,10 @@ class Index extends Frontend
     //第四页 安装完成
     public function setp4()
     {
+        $new_config = [
+            'INSTALL_STATUS' => 1,
+        ];
+        mPutenv($new_config);
         $assign = [
             'show_height' => true,
             'progress'    => 0,

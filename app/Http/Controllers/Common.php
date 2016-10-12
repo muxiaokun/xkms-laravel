@@ -17,7 +17,6 @@ class Common extends Controller
     {
         //没有安装，跳转到安装页
         if (0 == env('INSTALL_STATUS') && !Route::is("Install::*")) {
-            //echo redirect()->route('Install::index');
             $message = trans('common.please') . trans('common.install') . trans('common.app_name');
             die($this->error($message, 'Install::index'));
 
@@ -69,7 +68,7 @@ class Common extends Controller
             return $ajax_data;
         }
         $assign = [
-            'status'   => false,
+            'status'   => $status,
             'message'  => $message,
             'back_url' => route($back_url),
             'timeout'  => intval($timeout),

@@ -7,4 +7,7 @@ return [
             'Navigation' => ['index' => '导航管理', 'add' => '添加导航', 'del' => '删除导航', 'edit' => '编辑导航'],
         ],
     ],
+    'tables'        => [
+        'navigations' => ['table_name' => '导航'],
+    ],
 ];

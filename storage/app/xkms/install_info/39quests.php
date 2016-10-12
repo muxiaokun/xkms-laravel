@@ -11,4 +11,8 @@ return [
             'Quests' => ['index' => '问卷管理', 'add' => '填写问卷'],
         ],
     ],
+    'tables'        => [
+        'quests'         => ['table_name' => '问卷'],
+        'quests_answers' => ['table_name' => '答案记录'],
+    ],
 ];

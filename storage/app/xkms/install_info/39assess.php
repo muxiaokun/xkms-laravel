@@ -11,4 +11,8 @@ return [
             'Assess' => ['index' => '考核管理', 'add' => '考核评分'],
         ],
     ],
+    'tables'        => [
+        'assesses'    => ['table_name' => '考核'],
+        'assess_logs' => ['table_name' => '考核记录'],
+    ],
 ];

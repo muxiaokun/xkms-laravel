@@ -11,4 +11,8 @@ return [
             'Recruit' => ['index' => '招聘列表', 'add' => '应聘职位', 'edit' => '查看招聘'],
         ],
     ],
+    'tables'        => [
+        'recruits'     => ['table_name' => '招聘'],
+        'recruit_logs' => ['table_name' => '应聘记录'],
+    ],
 ];

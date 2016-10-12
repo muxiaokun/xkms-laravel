@@ -7,4 +7,7 @@ return [
             'Region' => ['index' => '地域管理', 'add' => '新增地域', 'del' => '删除地域', 'edit' => '编辑地域'],
         ],
     ],
+    'tables'        => [
+        'regions' => ['table_name' => '地域管理'],
+    ],
 ];

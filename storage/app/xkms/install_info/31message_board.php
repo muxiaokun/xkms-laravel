@@ -11,4 +11,8 @@ return [
             'MessageBoard' => ['index' => '留言板'],
         ],
     ],
+    'tables'        => [
+        'message_boards'     => ['table_name' => '站内信'],
+        'message_board_logs' => ['table_name' => '站内信'],
+    ],
 ];

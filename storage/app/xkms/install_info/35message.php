@@ -10,4 +10,7 @@ return [
             'Message' => ['index' => '站内信管理', 'add' => '发送站内信', 'del' => '删除站内信'],
         ],
     ],
+    'tables'        => [
+        'messages' => ['table_name' => '站内信'],
+    ],
 ];

@@ -4,15 +4,21 @@ return [
     'control_info'  => '会员管理',
     'privilege'     => [
         'Admin' => [
-            'Member' => ['setting' => '会员配置',
-                         'index'   => '会员管理',
-                         'add'     => '添加会员',
-                         'del'     => '删除会员',
-                         'edit'    => '编辑会员'],
+            'Member'      => [
+                'setting' => '会员配置',
+                'index'   => '会员管理',
+                'add'     => '添加会员',
+                'del'     => '删除会员',
+                'edit'    => '编辑会员',
+            ],
             'MemberGroup' => ['index' => '会员组管理', 'add' => '添加会员组', 'del' => '删除会员组', 'edit' => '编辑会员组'],
         ],
         'Home'  => [
             'Member' => ['index' => '会员中心', 'edit' => '编辑会员'],
         ],
+    ],
+    'tables'        => [
+        'members'       => ['table_name' => '会员'],
+        'member_groups' => ['table_name' => '会员分组'],
     ],
 ];

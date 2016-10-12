@@ -7,4 +7,7 @@ return [
             'ManageUpload' => ['index' => '文件管理', 'del' => '删除文件', 'edit' => '清除未用'],
         ],
     ],
+    'tables'        => [
+        'manage_uploads' => ['table_name' => '管理上传'],
+    ],
 ];

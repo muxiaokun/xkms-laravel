@@ -7,4 +7,7 @@ return [
             'Comment' => ['index' => '评论管理', 'add' => '审核评论', 'del' => '删除评论', 'edit' => '回复评论'],
         ],
     ],
+    'tables'        => [
+        'comments' => ['table_name' => '评论'],
+    ],
 ];

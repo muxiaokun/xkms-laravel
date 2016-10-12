@@ -15,4 +15,6 @@ return [
             'Template' => ['index' => '模板管理', 'add' => '添加模板', 'del' => '删除模板', 'edit' => '添加模板'],
         ],
     ],
+    'tables'        => [
+    ],
 ];

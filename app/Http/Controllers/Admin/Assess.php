@@ -4,21 +4,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
+use App\Model;
 
 class Assess extends Backend
 {
     //列表
     public function index()
     {
-        $AssessModel      = D('Assess');
-        $MemberGroupModel = D('MemberGroup');
         $where            = [];
         //建立where
         $whereValue = '';
         $whereValue = request('title');
         $whereValue && $where['title'] = ['like', '%' . $whereValue . '%'];
         $whereValue = request('group_level');
-        $whereValue && $where['group_level'] = $MemberGroupModel->where([
+        $whereValue && $where['group_level'] = Model\MemberGroup::where([
             'name' => [
                 'like',
                 '%' . $whereValue . '%',
@@ -30,25 +29,25 @@ class Assess extends Backend
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $assessList = $AssessModel->mSelect($where, true);
+        $assessList = Model\Assess::mSelect($where, true);
         foreach ($assessList as &$assess) {
-            $assess['group_name'] = ($assess['group_level']) ? $MemberGroupModel->mFindColumn($assess['group_level'],
-                'name') : trans('empty');
+            $assess['group_name'] = ($assess['group_level']) ? Model\MemberGroup::mFindColumn($assess['group_level'],
+                'name') : trans('common.empty');
         }
-        $this->assign('assess_list', $assessList);
-        $this->assign('assess_list_count', $AssessModel->mGetPageCount($where));
+        $assign['assess_list']       = $assessList;
+        $assign['assess_list_count'] = Model\Assess::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo                = [];
-        $whereInfo['title']       = ['type' => 'input', 'name' => trans('title')];
-        $whereInfo['group_level'] = ['type' => 'input', 'name' => trans('assess') . trans('group')];
-        $whereInfo['start_time']  = ['type' => 'time', 'name' => trans('add') . trans('time')];
+        $whereInfo['title']       = ['type' => 'input', 'name' => trans('common.title')];
+        $whereInfo['group_level'] = ['type' => 'input', 'name' => trans('common.assess') . trans('common.group')];
+        $whereInfo['start_time']  = ['type' => 'time', 'name' => trans('common.add') . trans('common.time')];
         $whereInfo['is_enable']   = [
             'type'  => 'select',
-            'name'  => trans('yes') . trans('no') . trans('enable'),
-            'value' => [1 => trans('enable'), 2 => trans('disable')],
+            'name'  => trans('common.yes') . trans('common.no') . trans('common.enable'),
+            'value' => [1 => trans('common.enable'), 2 => trans('common.disable')],
         ];
-        $this->assign('where_info', $whereInfo);
+        $assign['where_info']     = $whereInfo;
 
         //初始化batch_handle
         $batchHandle             = [];
@@ -56,30 +55,29 @@ class Assess extends Backend
         $batchHandle['edit']     = $this->_check_privilege('edit');
         $batchHandle['log_edit'] = $this->_check_privilege('edit', 'AssessLog');
         $batchHandle['del']      = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batchHandle);
+        $assign['batch_handle']  = $batchHandle;
 
-        $this->assign('title', trans('assess') . trans('management'));
-        $this->display();
+        $assign['title'] = trans('common.assess') . trans('common.management');
+        return view('admin.', $assign);
     }
 
     //新增
     public function add()
     {
         if (IS_POST) {
-            $AssessModel = D('Assess');
-            $data        = $this->makeData();
-            $resultAdd   = $AssessModel->mAdd($data);
+            $data      = $this->makeData();
+            $resultAdd = Model\Assess::mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('assess') . trans('add') . trans('success'), route('index'));
+                $this->success(trans('common.assess') . trans('common.add') . trans('common.success'), route('index'));
 
                 return;
             } else {
-                $this->error(trans('assess') . trans('add') . trans('error'), route('add'));
+                $this->error(trans('common.assess') . trans('common.add') . trans('common.error'), route('add'));
             }
         }
 
-        $this->assign('title', trans('assess') . trans('add'));
-        $this->display('addedit');
+        $assign['title'] = trans('common.assess') . trans('common.add');
+        return view('admin.addedit', $assign);
     }
 
     //编辑
@@ -87,30 +85,28 @@ class Assess extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $AssessModel = D('Assess');
         if (IS_POST) {
             $data       = $this->makeData();
-            $resultEdit = $AssessModel->mEdit($id, $data);
+            $resultEdit = Model\Assess::mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('assess') . trans('edit') . trans('success'), route('index'));
+                $this->success(trans('common.assess') . trans('common.edit') . trans('common.success'), route('index'));
 
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('assess') . trans('edit') . trans('error'), $errorGoLink);
+                $this->error(trans('common.assess') . trans('common.edit') . trans('common.error'), $errorGoLink);
             }
         }
 
-        $editInfo               = $AssessModel->mFind($id);
-        $MemberGroupModel       = D('MemberGroup');
-        $editInfo['group_name'] = $MemberGroupModel->mFindColumn($editInfo['group_level'], 'name');
-        $this->assign('edit_info', $editInfo);
+        $editInfo               = Model\Assess::mFind($id);
+        $editInfo['group_name'] = Model\MemberGroup::mFindColumn($editInfo['group_level'], 'name');
+        $assign['edit_info']    = $editInfo;
 
-        $this->assign('title', trans('assess') . trans('edit'));
-        $this->display('addedit');
+        $assign['title'] = trans('common.assess') . trans('common.edit');
+        return view('admin.addedit', $assign);
     }
 
     //删除
@@ -118,17 +114,16 @@ class Assess extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $AssessModel = D('Assess');
-        $resultDel   = $AssessModel->mDel($id);
+        $resultDel = Model\Assess::mDel($id);
         if ($resultDel) {
-            $this->success(trans('assess') . trans('del') . trans('success'), route('index'));
+            $this->success(trans('common.assess') . trans('common.del') . trans('common.success'), route('index'));
 
             return;
         } else {
-            $this->error(trans('assess') . trans('del') . trans('error'), route('index'));
+            $this->error(trans('common.assess') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 
@@ -141,8 +136,7 @@ class Assess extends Backend
             case 'group_level':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $MemberGroupModel = D('MemberGroup');
-                $memberGroupList  = $MemberGroupModel->mSelect($where);
+                $memberGroupList = Model\MemberGroup::mSelect($where);
                 foreach ($memberGroupList as $memberGroup) {
                     $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
                 }

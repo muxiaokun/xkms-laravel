@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
+use App\Model;
 
 class Navigation extends Backend
 {
@@ -13,7 +14,6 @@ class Navigation extends Backend
     //列表
     public function index()
     {
-        $NavigationModel = D('Navigation');
         //建立where
         $whereValue = '';
         $whereValue = request('name');
@@ -23,50 +23,50 @@ class Navigation extends Backend
         $whereValue = request('is_enable');
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
         //初始化翻页 和 列表数据
-        $navigationList = $NavigationModel->mSelect($where, true);
-        $this->assign('navigation_list', $navigationList);
-        $this->assign('navigation_list_count', $NavigationModel->mGetPageCount($where));
+        $navigationList                  = Model\Navigation::mSelect($where, true);
+        $assign['navigation_list']       = $navigationList;
+        $assign['navigation_list_count'] = Model\Navigation::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo               = [];
-        $whereInfo['name']       = ['type' => 'input', 'name' => trans('navigation') . trans('name')];
-        $whereInfo['short_name'] = ['type' => 'input', 'name' => trans('short') . trans('name')];
+        $whereInfo['name']       = ['type' => 'input', 'name' => trans('common.navigation') . trans('common.name')];
+        $whereInfo['short_name'] = ['type' => 'input', 'name' => trans('common.short') . trans('common.name')];
         $whereInfo['is_enable']  = [
             'type'  => 'select',
-            'name'  => trans('yes') . trans('no') . trans('enable'),
-            'value' => [1 => trans('enable'), 2 => trans('disable')],
+            'name'  => trans('common.yes') . trans('common.no') . trans('common.enable'),
+            'value' => [1 => trans('common.enable'), 2 => trans('common.disable')],
         ];
-        $this->assign('where_info', $whereInfo);
+        $assign['where_info']    = $whereInfo;
 
         //初始化batch_handle
-        $batchHandle         = [];
-        $batchHandle['add']  = $this->_check_privilege('add');
-        $batchHandle['edit'] = $this->_check_privilege('edit');
-        $batchHandle['del']  = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batchHandle);
+        $batchHandle            = [];
+        $batchHandle['add']     = $this->_check_privilege('add');
+        $batchHandle['edit']    = $this->_check_privilege('edit');
+        $batchHandle['del']     = $this->_check_privilege('del');
+        $assign['batch_handle'] = $batchHandle;
 
-        $this->assign('title', trans('navigation') . trans('management'));
-        $this->display();
+        $assign['title'] = trans('common.navigation') . trans('common.management');
+        return view('admin.', $assign);
     }
 
     //新增
     public function add()
     {
         if (IS_POST) {
-            $NavigationModel = D('Navigation');
-            $data            = $this->makeData();
-            $resultAdd       = $NavigationModel->mAdd($data);
+            $data      = $this->makeData();
+            $resultAdd = Model\Navigation::mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('navigation') . trans('add') . trans('success'), route('index'));
+                $this->success(trans('common.navigation') . trans('common.add') . trans('common.success'),
+                    route('index'));
                 return;
             } else {
-                $this->error(trans('navigation') . trans('add') . trans('error'), route('add'));
+                $this->error(trans('common.navigation') . trans('common.add') . trans('common.error'), route('add'));
             }
         }
 
-        $this->assign('navigation_config', $this->navigation_config);
-        $this->assign('title', trans('add') . trans('navigation'));
-        $this->display('addedit');
+        $assign['navigation_config'] = $this->navigation_config;
+        $assign['title']             = trans('common.add') . trans('common.navigation');
+        return view('admin.addedit', $assign);
     }
 
     //编辑
@@ -74,29 +74,29 @@ class Navigation extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $NavigationModel = D('Navigation');
         if (IS_POST) {
             $data       = $this->makeData();
-            $resultEdit = $NavigationModel->mEdit($id, $data);
+            $resultEdit = Model\Navigation::mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('navigation') . trans('edit') . trans('success'), route('index'));
+                $this->success(trans('common.navigation') . trans('common.edit') . trans('common.success'),
+                    route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('navigation') . trans('edit') . trans('error'), $errorGoLink);
+                $this->error(trans('common.navigation') . trans('common.edit') . trans('common.error'), $errorGoLink);
             }
         }
 
-        $editInfo = $NavigationModel->mFind($id);
+        $editInfo = Model\Navigation::mFind($id);
         //$editInfo['ext_info'] = json_encode($editInfo['ext_info']);
-        $this->assign('edit_info', $editInfo);
+        $assign['edit_info'] = $editInfo;
 
-        $this->assign('navigation_config', $this->navigation_config);
-        $this->assign('title', trans('edit') . trans('navigation'));
-        $this->display('addedit');
+        $assign['navigation_config'] = $this->navigation_config;
+        $assign['title']             = trans('common.edit') . trans('common.navigation');
+        return view('admin.addedit', $assign);
     }
 
     //删除
@@ -104,16 +104,15 @@ class Navigation extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $NavigationModel = D('Navigation');
-        $resultDel       = $NavigationModel->mDel($id);
+        $resultDel = Model\Navigation::mDel($id);
         if ($resultDel) {
-            $this->success(trans('navigation') . trans('del') . trans('success'), route('index'));
+            $this->success(trans('common.navigation') . trans('common.del') . trans('common.success'), route('index'));
             return;
         } else {
-            $this->error(trans('navigation') . trans('del') . trans('error'), route('index'));
+            $this->error(trans('common.navigation') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 
@@ -124,13 +123,12 @@ class Navigation extends Backend
         switch ($field) {
             case 'short_name':
                 //检查用户名是否存在
-                $NavigationModel = D('Navigation');
-                $itlinkInfo      = $NavigationModel->mSelect([
+                $itlinkInfo = Model\Navigation::mSelect([
                     'short_name' => $data['short_name'],
                     'id'         => ['neq', $data['id']],
                 ]);
                 if (0 < count($itlinkInfo)) {
-                    $result['info'] = trans('short') . trans('name') . trans('exists');
+                    $result['info'] = trans('common.short') . trans('common.name') . trans('common.exists');
                     break;
                 }
                 break;

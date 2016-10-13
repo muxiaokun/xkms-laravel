@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
+use App\Model;
 
 class Common extends Controller
 {
@@ -28,7 +29,7 @@ class Common extends Controller
 //        }
         //POST提交必须检查表单验证
 //        if (IS_POST && !IS_AJAX && !isset($_FILES['imgFile']) && !$this->token_check()) {
-//            $this->error(trans('token') . trans('error') . '(' . trans('refresh') . trans('later') . trans('submit') . ')',
+//            $this->error(trans('common.token') . trans('common.error') . '(' . trans('common.refresh') . trans('common.later') . trans('common.submit') . ')',
 //                session('token_back_page')); //后台统一检查表单令牌
 //        }
     }
@@ -198,8 +199,7 @@ class Common extends Controller
         }
 
         //如果记录不存在 追加新生成文件的记录
-        $ManageUploadModel = D('ManageUpload');
-        $fileInfo          = $ManageUploadModel->mFind($newFile, true);
+        $fileInfo = Model\ManageUpload::mFind($newFile, true);
         if (!$fileInfo) {
             $data = [
                 'name'   => $newName,
@@ -208,7 +208,7 @@ class Common extends Controller
                 'mime'   => '',
                 'suffix' => $pathinfo['extension'],
             ];
-            $ManageUploadModel->mAdd($data);
+            Model\ManageUpload::mAdd($data);
         }
 
         return $newFile;
@@ -225,19 +225,19 @@ class Common extends Controller
         switch (request('type')) {
             case 'validform':
                 if (!in_array('doValidateForm', $currentAction)) {
-                    $this->error(trans('none') . trans('ajax') . 'validform API');
+                    $this->error(trans('common.none') . trans('common.ajax') . 'validform API');
                 }
                 $result = $this->doValidateForm(request('field'), request('data'));
                 break;
             case 'line_edit':
                 if (!$this->_check_privilege('edit') || !in_array('_line_edit', $currentAction)) {
-                    $this->error(trans('none') . trans('ajax') . trans('edit'));
+                    $this->error(trans('common.none') . trans('common.ajax') . trans('common.edit'));
                 }
                 $result = $this->_line_edit(request('field'), request('data'));
                 break;
             case 'get_data':
                 if (!in_array('getData', $currentAction)) {
-                    $this->error(trans('none') . trans('ajax') . 'get_data API');
+                    $this->error(trans('common.none') . trans('common.ajax') . 'get_data API');
                 }
                 $result = $this->getData(request('field'), request('data'));
                 break;

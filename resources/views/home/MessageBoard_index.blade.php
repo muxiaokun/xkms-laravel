@@ -36,7 +36,7 @@
                         </div>
                     </div>
                 @endforeach
-                @if (C('SYS_FRONTEND_VERIFY'))
+                @if (config('system.sys_frontend_verify'))
                     <div class="form-group">
                         <label class="control-label col-sm-4">验证码：</label>
                         <div class="col-sm-4">
@@ -64,7 +64,7 @@
                         <table class="table table-hover">
                             <tr>
                                 <td width="10%">@lang('common.send')@lang('common.time')@lang('common.colon')</td>
-                                <td width="90%">{{ $message_board_log['add_time']|M_date=C('SYS_DATE_DETAIL') }}</td>
+                                <td width="90%">{{ $message_board_log['add_time']|M_date=config('system.sys_date_detail') }}</td>
                             </tr>
                             @foreach ($message_board_log['send_info'] as $name => $value)
                                 <tr>

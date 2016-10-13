@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
+use App\Model;
 
 class Index extends Backend
 {
@@ -11,10 +12,10 @@ class Index extends Backend
     public function index()
     {
         if ($this->isLogin()) {
-            $this->display();
+            return view('admin.Index_index');
         } else {
-            $this->assign('title', trans('login') . trans('backend'));
-            $this->display('login');
+            $assign['title'] = trans('common.login') . trans('common.backend');
+            return view('admin.Index_login', $assign);
         }
     }
 
@@ -40,8 +41,8 @@ class Index extends Backend
             return;
         }
 
-        $this->assign('title', trans('website') . trans('config'));
-        $this->display();
+        $assign['title'] = trans('common.website') . trans('common.config');
+        return view('admin.Index_', $assign);
     }
 
     //系统基本设置
@@ -63,8 +64,8 @@ class Index extends Backend
             return;
         }
 
-        $this->assign('title', trans('system') . trans('config'));
-        $this->display();
+        $assign['title'] = trans('common.system') . trans('common.config');
+        return view('admin.Index_', $assign);
     }
 
     //网站数据库配置设置
@@ -123,7 +124,7 @@ class Index extends Backend
             $db         = M();
             $fileHandle = fopen($_FILES['restore_file']['tmp_name'], 'r');
             if (!$fileHandle) {
-                $this->error(trans('open') . trans('file') . trans('error'), route('databaseSet'));
+                $this->error(trans('common.open') . trans('common.file') . trans('common.error'), route('databaseSet'));
             }
 
             while (false !== ($queryStr = fgets($fileHandle, 10240))) {
@@ -133,13 +134,15 @@ class Index extends Backend
                         'CREATE\sTABLE',
                     ]) . '/i';
                 if (!preg_match($pregMatch, $queryStr)) {
-                    $this->error(trans('restore') . trans('database') . ' SQL ' . trans('error'), route('databaseSet'));
+                    $this->error(trans('common.restore') . trans('common.database') . ' SQL ' . trans('common.error'),
+                        route('databaseSet'));
                 }
 
                 $db->execute($queryStr);
             }
             fclose($fileHandle);
-            $this->success(trans('restore') . trans('database') . trans('success'), route('databaseSet'));
+            $this->success(trans('common.restore') . trans('common.database') . trans('common.success'),
+                route('databaseSet'));
             return;
         }
 
@@ -162,8 +165,8 @@ class Index extends Backend
             return;
         }
 
-        $this->assign('title', trans('database') . trans('config'));
-        $this->display();
+        $assign['title'] = trans('common.database') . trans('common.config');
+        return view('admin.Index_', $assign);
     }
 
     //修改自己的密码
@@ -171,10 +174,9 @@ class Index extends Backend
     {
         if (IS_POST) {
             $curPassword = request('cur_password');
-            $AdminModel  = D('Admin');
-            $adminInfo   = $AdminModel->authorized(session('backend_info.admin_name'), $curPassword);
+            $adminInfo   = Model\Admin::authorized(session('backend_info.admin_name'), $curPassword);
             if (!$adminInfo) {
-                $this->error(trans('current') . trans('pass') . trans('error'));
+                $this->error(trans('common.current') . trans('common.pass') . trans('common.error'));
             }
 
             $password      = request('password');
@@ -192,23 +194,25 @@ class Index extends Backend
                 $this->error($result['info'], route(ACTION_NAME));
             }
 
-            $resultEdit = $AdminModel->mEdit($adminInfo['id'], ['admin_pwd' => $password]);
+            $resultEdit = Model\Admin::mEdit($adminInfo['id'], ['admin_pwd' => $password]);
             if ($resultEdit) {
-                $this->success(trans('edit') . trans('pass') . trans('success'), route('edit_my_pass'));
+                $this->success(trans('common.edit') . trans('common.pass') . trans('common.success'),
+                    route('edit_my_pass'));
                 return;
             } else {
-                $this->error(trans('edit') . trans('pass') . trans('error'), route('edit_my_pass'));
+                $this->error(trans('common.edit') . trans('common.pass') . trans('common.error'),
+                    route('edit_my_pass'));
             }
         }
-        $this->assign('title', trans('edit') . trans('pass'));
-        $this->display();
+        $assign['title'] = trans('common.edit') . trans('common.pass');
+        return view('admin.Index_', $assign);
     }
 
     //清除缓存
     public function clean_cache()
     {
-        $messageStr = trans('cache') . trans('file') . trans('and') . trans('temp') . trans('file');
-        $lang       = trans('yes') . trans('no') . trans('confirm') . trans('clean') . $messageStr;
+        $messageStr = trans('common.cache') . trans('common.file') . trans('common.and') . trans('common.temp') . trans('common.file');
+        $lang       = trans('common.yes') . trans('common.no') . trans('common.confirm') . trans('common.clean') . $messageStr;
         if (!$this->showConfirm($lang)) {
             return;
         }
@@ -224,18 +228,17 @@ class Index extends Backend
         $cleanTempResult  = $this->cleanDir(TEMP_PATH);
         if ($cleanCacheResult && $cleanTempResult) {
             //写入日志
-            $AdminLogModel = D('AdminLog');
-            $AdminLogModel->mAdd(session('backend_info.id'));
-            $this->success($messageStr . trans('clean') . trans('success'), route('main'));
+            Model\AdminLog::mAdd(session('backend_info.id'));
+            $this->success($messageStr . trans('common.clean') . trans('common.success'), route('main'));
         } else {
-            $this->error($messageStr . trans('clean') . trans('error'), route('main'));
+            $this->error($messageStr . trans('common.clean') . trans('common.error'), route('main'));
         }
     }
 
     //清除日志
     public function clean_log()
     {
-        $lang = trans('yes') . trans('no') . trans('confirm') . trans('clean') . trans('log');
+        $lang = trans('common.yes') . trans('common.no') . trans('common.confirm') . trans('common.clean') . trans('common.log');
         if (!$this->showConfirm($lang)) {
             return;
         }
@@ -243,19 +246,18 @@ class Index extends Backend
         $cleanResult = $this->cleanDir(LOG_PATH);
         if ($cleanResult) {
             //写入日志
-            $AdminLogModel = D('AdminLog');
-            $AdminLogModel->mAdd(session('backend_info.id'));
-            $this->success(trans('clean') . trans('log') . trans('success'), route('main'));
+            Model\AdminLog::mAdd(session('backend_info.id'));
+            $this->success(trans('common.clean') . trans('common.log') . trans('common.success'), route('main'));
         } else {
-            $this->error(trans('clean') . trans('log') . trans('error'), route('main'));
+            $this->error(trans('common.clean') . trans('common.log') . trans('common.error'), route('main'));
         }
     }
 
     //管理页面TOP NAV
     public function top_nav()
     {
-        $this->assign('title', trans('nav_top') . trans('nav'));
-        $this->display();
+        $assign['title'] = trans('common.nav_top') . trans('common.nav');
+        return view('admin.Index_', $assign);
     }
 
     //管理页面LEFT NAV
@@ -292,9 +294,9 @@ class Index extends Backend
                 }
             }
         }
-        $this->assign('left_nav', $leftNav);
-        $this->assign('title', trans('nav_left') . trans('nav'));
-        $this->display();
+        $assign['left_nav'] = $leftNav;
+        $assign['title']    = trans('common.nav_left') . trans('common.nav');
+        return view('admin.Index_', $assign);
     }
 
     //管理主页面
@@ -319,9 +321,9 @@ class Index extends Backend
             'ico10' => $this->_check_privilege('clean_cache', 'Index'),
             'ico12' => $this->_check_privilege('index', 'ManageUpload'),
         ];
-        $this->assign('site_info', $siteInfo);
-        $this->assign('title', trans('info') . trans('page'));
-        $this->display();
+        $assign['site_info']         = $siteInfo;
+        $assign['title']             = trans('common.info') . trans('common.page');
+        return view('admin.Index_', $assign);
     }
 
     public function login()
@@ -334,17 +336,18 @@ class Index extends Backend
         $adminPwd  = request('pwd');
         switch ($this->doLogin($adminName, $adminPwd)) {
             case 'user_pwd_error':
-                $this->error(trans('account') . trans('or') . trans('pass') . trans('error'), route('Index/index'));
+                $this->error(trans('common.account') . trans('common.or') . trans('common.pass') . trans('common.error'),
+                    route('Index/index'));
                 break;
             case 'verify_error':
-                $this->error(trans('verify_code') . trans('error'), route('Index/index'));
+                $this->error(trans('common.verify_code') . trans('common.error'), route('Index/index'));
                 break;
             case 'lock_user_error':
-                $this->error(trans('admin') . trans('by') . trans('lock') . trans('please') . config('system.sys_backend_lock_time') . trans('second') . trans('again') . trans('login'),
+                $this->error(trans('common.admin') . trans('common.by') . trans('common.lock') . trans('common.please') . config('system.sys_backend_lock_time') . trans('common.second') . trans('common.again') . trans('common.login'),
                     route('Index/index'));
                 break;
             default:
-                $this->success(trans('login') . trans('success'), route('Index/index'));
+                $this->success(trans('common.login') . trans('common.success'), route('Index/index'));
         }
     }
 
@@ -352,7 +355,8 @@ class Index extends Backend
     public function logout()
     {
         $this->doLogout();
-        $this->success(trans('logout') . trans('account') . trans('success'), route('Index/index'));
+        $this->success(trans('common.logout') . trans('common.account') . trans('common.success'),
+            route('Index/index'));
     }
 
     //页面验证
@@ -363,24 +367,24 @@ class Index extends Backend
             case 'password':
                 //不能为空
                 if ('' == $data['password']) {
-                    $result['info'] = trans('pass') . trans('not') . trans('empty');
+                    $result['info'] = trans('common.pass') . trans('common.not') . trans('common.empty');
                     break;
                 }
                 //密码长度不能小于6
                 if (6 > strlen($data['password'])) {
-                    $result['info'] = trans('pass_len_error');
+                    $result['info'] = trans('common.pass_len_error');
                     break;
                 }
                 break;
             case 'password_again':
                 //检测再一次输入的密码是否一致
                 if ($data['password'] != $data['password_again']) {
-                    $result['info'] = trans('password_again_error');
+                    $result['info'] = trans('common.password_again_error');
                     break;
                 }
                 //不能为空
                 if ('' == $data['password_again']) {
-                    $result['info'] = trans('pass') . trans('not') . trans('empty');
+                    $result['info'] = trans('common.pass') . trans('common.not') . trans('common.empty');
                     break;
                 }
                 break;

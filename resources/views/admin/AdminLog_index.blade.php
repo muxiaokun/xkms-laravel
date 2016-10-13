@@ -33,7 +33,7 @@
                             {{ $admin_log['admin_name'] }}
                         </td>
                         <td>
-                            {{ $admin_log['add_time']|M_date=C('SYS_DATE_DETAIL') }}
+                            {{ $admin_log['add_time']|M_date=config('system.sys_date_detail') }}
                         </td>
                         <td>
                             {{ $admin_log['module_name'] }}

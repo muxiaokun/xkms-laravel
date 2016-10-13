@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Frontend;
+use App\Model;
 use Illuminate\Routing\Route;
 
 class Index extends Frontend

@@ -1,4 +1,4 @@
-@if (IS_AJAX AND C('COMMENT_SWITCH')){//下一行的div只是ajax获取元素时的外壳}
+@if (IS_AJAX AND config('system.comment_switch')){//下一行的div只是ajax获取元素时的外壳}
 <div>
     <div class="col-sm-12">
         <M:Page name="comment_list">
@@ -10,7 +10,7 @@
             @foreach ($comment_list as $data)
                 <tr>
                     <td>{{ $data['member_name'] }}@lang('common.grade')@lang('common.colon'){{ $data['level'] }}
-                        [{{ $data['add_time']|M_date=C('SYS_DATE_DETAIL') }}]
+                        [{{ $data['add_time']|M_date=config('system.sys_date_detail') }}]
                     </td>
                 </tr>
                 <tr>
@@ -20,7 +20,7 @@
         </table>
     </div>
 </div>
-@elseif ( C('COMMENT_SWITCH'))
+@elseif ( config('system.comment_switch'))
     <div class="col-sm-12">
         <hr/>
         <script type="text/javascript" src="{{ asset('js/M_comment_editor.js') }}"></script>

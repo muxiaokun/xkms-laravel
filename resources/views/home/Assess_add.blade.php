@@ -25,8 +25,8 @@
                     @elseif ('member_group' == $assess_info['target'])
                         @lang('common.by')@lang('common.grade')@lang('common.member')@lang('common.group')
                     @endif
-                    {{ $assess_info['start_time']|M_date=C('SYS_DATE_DETAIL') }}
-                    {{ $assess_info['end_time']|M_date=C('SYS_DATE_DETAIL') }}
+                    {{ $assess_info['start_time']|M_date=config('system.sys_date_detail') }}
+                    {{ $assess_info['end_time']|M_date=config('system.sys_date_detail') }}
                 </label>
                 <div class="col-sm-6" id="re_grade_id">
                     <input type="hidden" name="re_grade_id"/>

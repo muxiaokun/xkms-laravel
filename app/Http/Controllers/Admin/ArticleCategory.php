@@ -4,13 +4,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
+use App\Model;
 
 class ArticleCategory extends Backend
 {
     //列表
     public function index()
     {
-        $ArticleCategoryModel = D('ArticleCategory');
         //建立where
         $whereValue = '';
         $whereValue = request('name');
@@ -23,7 +23,7 @@ class ArticleCategory extends Backend
         $whereValue         = request('parent_id');
         $whereValue && $where['parent_id'] = $whereValue;
         if (1 != session('backend_info.id')) {
-            $allowCategory = $ArticleCategoryModel->mFind_allow();
+            $allowCategory = Model\ArticleCategory::mFind_allow();
             if (isset($where['id']) && in_array($where['id'], $allowCategory)) {
                 $where['id'] = $where['id'];
             } else {
@@ -31,13 +31,13 @@ class ArticleCategory extends Backend
             }
         }
         //初始化翻页 和 列表数据
-        $articleCategoryList = $ArticleCategoryModel->mSelect($where, $ArticleCategoryModel->where($where)->count());
+        $articleCategoryList = Model\ArticleCategory::mSelect($where, Model\ArticleCategory::where($where)->count());
         foreach ($articleCategoryList as &$articleCategory) {
             //parent_id 用完销毁不能产生歧义
             $where['parent_id']           = $articleCategory['id'];
-            $articleCategory['has_child'] = $ArticleCategoryModel->mGetPageCount($where);
+            $articleCategory['has_child'] = Model\ArticleCategory::mGetPageCount($where);
             unset($where['parent_id']);
-            $articleCategory['show']          = ($articleCategory['if_show']) ? trans('show') : trans('hidden');
+            $articleCategory['show']          = ($articleCategory['if_show']) ? trans('common.show') : trans('common.hidden');
             $articleCategory['ajax_api_link'] = route('ajax_api');
             $articleCategory['look_link']     = route('Home/Article/category', ['cate_id' => $articleCategory['id']]);
             $articleCategory['edit_link']     = route('edit', ['id' => $articleCategory['id']]);
@@ -51,49 +51,53 @@ class ArticleCategory extends Backend
             return;
         }
 
-        $this->assign('article_category_list', $articleCategoryList);
+        $assign['article_category_list'] = $articleCategoryList;
 
         //初始化where_info
         $whereInfo            = [];
-        $whereInfo['name']    = ['type' => 'input', 'name' => trans('article') . trans('category') . trans('name')];
+        $whereInfo['name']    = [
+            'type' => 'input',
+            'name' => trans('common.article') . trans('common.category') . trans('common.name'),
+        ];
         $whereInfo['if_show'] = [
             'type'  => 'select',
-            'name'  => trans('yes') . trans('no') . trans('show'),
-            'value' => [1 => trans('show'), 2 => trans('hidden')],
+            'name'  => trans('common.yes') . trans('common.no') . trans('common.show'),
+            'value' => [1 => trans('common.show'), 2 => trans('common.hidden')],
         ];
-        $this->assign('where_info', $whereInfo);
+        $assign['where_info'] = $whereInfo;
 
         //初始化batch_handle
-        $batchHandle         = [];
-        $batchHandle['add']  = $this->_check_privilege('add');
-        $batchHandle['edit'] = $this->_check_privilege('edit');
-        $batchHandle['del']  = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batchHandle);
+        $batchHandle            = [];
+        $batchHandle['add']     = $this->_check_privilege('add');
+        $batchHandle['edit']    = $this->_check_privilege('edit');
+        $batchHandle['del']     = $this->_check_privilege('del');
+        $assign['batch_handle'] = $batchHandle;
 
-        $this->assign('title', trans('article') . trans('category') . trans('management'));
-        $this->display();
+        $assign['title'] = trans('common.article') . trans('common.category') . trans('common.management');
+        return view('admin.', $assign);
     }
 
     //新增
     public function add()
     {
         if (IS_POST) {
-            $ArticleCategoryModel = D('ArticleCategory');
-            $data                 = $this->makeData();
-            $resultAdd            = $ArticleCategoryModel->mAdd($data);
+            $data      = $this->makeData();
+            $resultAdd = Model\ArticleCategory::mAdd($data);
             if ($resultAdd) {
                 $this->addEditAfterCommon($data, $id);
-                $this->success(trans('article') . trans('category') . trans('add') . trans('success'), route('index'));
+                $this->success(trans('common.article') . trans('common.category') . trans('common.add') . trans('common.success'),
+                    route('index'));
 
                 return;
             } else {
-                $this->error(trans('article') . trans('category') . trans('add') . trans('error'), route('add'));
+                $this->error(trans('common.article') . trans('common.category') . trans('common.add') . trans('common.error'),
+                    route('add'));
             }
         }
 
         $this->addEditCommon();
-        $this->assign('title', trans('add') . trans('article') . trans('category'));
-        $this->display('addedit');
+        $assign['title'] = trans('common.add') . trans('common.article') . trans('common.category');
+        return view('admin.addedit', $assign);
     }
 
     //编辑
@@ -101,19 +105,18 @@ class ArticleCategory extends Backend
     {
         $id = request('get.id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $ArticleCategoryModel = D('ArticleCategory');
 
         if (1 != session('backend_info.id')
-            && !mInArray($id, $ArticleCategoryModel->mFind_allow())
+            && !mInArray($id, Model\ArticleCategory::mFind_allow())
         ) {
-            $this->error(trans('none') . trans('privilege') . trans('edit') . trans('article') . trans('category'),
+            $this->error(trans('common.none') . trans('common.privilege') . trans('common.edit') . trans('common.article') . trans('common.category'),
                 route('index'));
         }
 
-        $maAllowArr = $ArticleCategoryModel->mFind_allow('ma');
+        $maAllowArr = Model\ArticleCategory::mFind_allow('ma');
         if (IS_POST) {
             $data = $this->makeData();
             if (1 != session('backend_info.id')
@@ -123,49 +126,47 @@ class ArticleCategory extends Backend
                 unset($data['manage_group_id']);
                 unset($data['access_group_id']);
             }
-            $resultEdit = $ArticleCategoryModel->mEdit($id, $data);
+            $resultEdit = Model\ArticleCategory::mEdit($id, $data);
             if ($resultEdit) {
                 $this->addEditAfterCommon($data, $id);
-                $this->success(trans('article') . trans('category') . trans('edit') . trans('success'), route('index'));
+                $this->success(trans('common.article') . trans('common.category') . trans('common.edit') . trans('common.success'),
+                    route('index'));
 
                 return;
             } else {
-                $this->error(trans('article') . trans('category') . trans('edit') . trans('error'),
+                $this->error(trans('common.article') . trans('common.category') . trans('common.edit') . trans('common.error'),
                     route('edit', ['id' => $id]));
             }
         }
 
         $currentConfig = config('system.sys_article_sync_image');
         config('SYS_ARTICLE_SYNC_IMAGE', false);
-        $editInfo = $ArticleCategoryModel->mFind($id);
+        $editInfo = Model\ArticleCategory::mFind($id);
         config('SYS_ARTICLE_SYNC_IMAGE', $currentConfig);
         //如果有管理权限进行进一步数据处理
         if (mInArray($id, $maAllowArr)) {
-            $AdminModel = D('Admin');
             foreach ($editInfo['manage_id'] as &$manageId) {
-                $adminName = $AdminModel->mFindColumn($manageId, 'admin_name');
+                $adminName = Model\Admin::mFindColumn($manageId, 'admin_name');
                 $manageId  = ['value' => $manageId, 'html' => $adminName];
             }
             $editInfo['manage_id'] = json_encode($editInfo['manage_id']);
-            $AdminGroupModel       = D('AdminGroup');
             foreach ($editInfo['manage_group_id'] as &$manageGroupId) {
-                $adminGroupName = $AdminGroupModel->mFindColumn($manageGroupId, 'name');
+                $adminGroupName = Model\AdminGroup::mFindColumn($manageGroupId, 'name');
                 $manageGroupId  = ['value' => $manageGroupId, 'html' => $adminGroupName];
             }
             $editInfo['manage_group_id'] = json_encode($editInfo['manage_group_id']);
-            $MemberGroupModel            = D('MemberGroup');
             foreach ($editInfo['access_group_id'] as &$accessGroupId) {
-                $adminGroupName = $MemberGroupModel->mFindColumn($accessGroupId, 'name');
+                $adminGroupName = Model\MemberGroup::mFindColumn($accessGroupId, 'name');
                 $accessGroupId  = ['value' => $accessGroupId, 'html' => $adminGroupName];
             }
             $editInfo['access_group_id'] = json_encode($editInfo['access_group_id']);
         }
 
-        $this->assign('edit_info', $editInfo);
+        $assign['edit_info'] = $editInfo;
 
         $this->addEditCommon();
-        $this->assign('title', trans('edit') . trans('article') . trans('category'));
-        $this->display('addedit');
+        $assign['title'] = trans('common.edit') . trans('common.article') . trans('common.category');
+        return view('admin.addedit', $assign);
     }
 
     //删除
@@ -173,35 +174,35 @@ class ArticleCategory extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $ArticleCategoryModel = D('ArticleCategory');
         //删除必须是 属主
-        if (!mInArray($id, $ArticleCategoryModel->mFind_allow('ma'))
+        if (!mInArray($id, Model\ArticleCategory::mFind_allow('ma'))
             && 1 != session('backend_info.id')
         ) {
-            $this->error(trans('none') . trans('privilege') . trans('del') . trans('article') . trans('category'),
+            $this->error(trans('common.none') . trans('common.privilege') . trans('common.del') . trans('common.article') . trans('common.category'),
                 route('index'));
         }
 
         //解除文章和被删除分类的关系
-        $ArticleModel = D('Article');
-        $resultClean  = $ArticleModel->mClean($id, 'cate_id');
+        $resultClean = Model\Article::mClean($id, 'cate_id');
         if (!$resultClean) {
-            $this->error(trans('article') . trans('clear') . trans('category') . trans('error'), route('index'));
+            $this->error(trans('common.article') . trans('common.clear') . trans('common.category') . trans('common.error'),
+                route('index'));
         }
 
-        $resultDel = $ArticleCategoryModel->mDel($id);
+        $resultDel = Model\ArticleCategory::mDel($id);
         if ($resultDel) {
             //释放图片绑定
-            $ManageUploadModel = D('ManageUpload');
-            $ManageUploadModel->mEdit($id);
-            $this->success(trans('article') . trans('category') . trans('del') . trans('success'), route('index'));
+            Model\ManageUpload::mEdit($id);
+            $this->success(trans('common.article') . trans('common.category') . trans('common.del') . trans('common.success'),
+                route('index'));
 
             return;
         } else {
-            $this->error(trans('article') . trans('category') . trans('del') . trans('error'), route('index'));
+            $this->error(trans('common.article') . trans('common.category') . trans('common.del') . trans('common.error'),
+                route('index'));
         }
     }
 
@@ -210,17 +211,16 @@ class ArticleCategory extends Backend
     {
         $allowField = ['sort'];
         if (!in_array($field, $allowField)) {
-            return trans('not') . trans('edit') . $field;
+            return trans('common.not') . trans('common.edit') . $field;
         }
 
-        $ArticleCategoryModel = D('ArticleCategory');
-        $resultEdit           = $ArticleCategoryModel->mEdit($data['id'], [$field => $data['value']]);
+        $resultEdit = Model\ArticleCategory::mEdit($data['id'], [$field => $data['value']]);
         if ($resultEdit) {
-            $data['value'] = $ArticleCategoryModel->mFindColumn($data['id'], $field);
+            $data['value'] = Model\ArticleCategory::mFindColumn($data['id'], $field);
 
             return ['status' => true, 'info' => $data['value']];
         } else {
-            return ['status' => false, 'info' => trans('edit') . trans('error')];
+            return ['status' => false, 'info' => trans('common.edit') . trans('common.error')];
         }
     }
 
@@ -232,27 +232,24 @@ class ArticleCategory extends Backend
         switch ($field) {
             case 'manage_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                $AdminModel = D('Admin');
                 isset($data['keyword']) && $where['admin_name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminUserList = $AdminModel->mSelect($where);
+                $adminUserList = Model\Admin::mSelect($where);
                 foreach ($adminUserList as $adminUser) {
                     $result['info'][] = ['value' => $adminUser['id'], 'html' => $adminUser['admin_name']];
                 }
                 break;
             case 'manage_group_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                $AdminGroupModel = D('AdminGroup');
                 isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminGroupList = $AdminGroupModel->mSelect($where);
+                $adminGroupList = Model\AdminGroup::mSelect($where);
                 foreach ($adminGroupList as $adminGroup) {
                     $result['info'][] = ['value' => $adminGroup['id'], 'html' => $adminGroup['name']];
                 }
                 break;
             case 'access_group_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                $MemberGroupModel = D('MemberGroup');
                 isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $memberGroupList = $MemberGroupModel->mSelect($where);
+                $memberGroupList = Model\MemberGroup::mSelect($where);
                 foreach ($memberGroupList as $memberGroup) {
                     $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
                 }
@@ -321,27 +318,26 @@ class ArticleCategory extends Backend
     //添加 编辑 之后 公共方法
     private function addEditAfterCommon(&$data, $id)
     {
-        $ManageUploadModel = D('ManageUpload');
         $bindFile          = mGetContentUpload($data['content']);
         $bindFile[]        = $data['thumb'];
-        $ManageUploadModel->mEdit($id, $bindFile);
+        Model\ManageUpload::mEdit($id, $bindFile);
     }
 
     //构造分类assign公共数据
     private function addEditCommon()
     {
-        $ArticleCategoryModel = D('ArticleCategory');
         $id                   = request('id');
         $where                = [];
         if ($id) {
             $where['id'] = ['neq', $id];
         }
 
-        $this->assign('category_list', $ArticleCategoryModel->mSelect_tree($where));
-        $managePrivilege = (1 == session('backend_info.id')) || in_array($id, $ArticleCategoryModel->mFind_allow('ma'));
-        $this->assign('manage_privilege', $managePrivilege);
-        $this->assign('template_list', mScanTemplate('category', config('DEFAULT_MODULE'), 'Article'));
-        $this->assign('list_template_list', mScanTemplate('list_category', config('DEFAULT_MODULE'), 'Article'));
-        $this->assign('article_template_list', mScanTemplate('article', config('DEFAULT_MODULE'), 'Article'));
+        $assign['category_list']         = Model\ArticleCategory::mSelect_tree($where);
+        $managePrivilege                 = (1 == session('backend_info.id')) || in_array($id,
+                Model\ArticleCategory::mFind_allow('ma'));
+        $assign['manage_privilege']      = $managePrivilege;
+        $assign['template_list']         = mScanTemplate('category', config('DEFAULT_MODULE'), 'Article');
+        $assign['list_template_list']    = mScanTemplate('list_category', config('DEFAULT_MODULE'), 'Article');
+        $assign['article_template_list'] = mScanTemplate('article', config('DEFAULT_MODULE'), 'Article');
     }
 }

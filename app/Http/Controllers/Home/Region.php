@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Frontend;
+use App\Model;
 
 class Region extends Frontend
 {
@@ -15,9 +16,8 @@ class Region extends Frontend
         switch ($field) {
             case 'parent_id':
                 $where['parent_id'] = ($data['id']) ? $data['id'] : 0;
-                $RegionModel        = D('Region');
-                $count              = $RegionModel->where($where)->count();
-                $regionUserList     = $RegionModel->field('id,region_name')->limit($count)->mSelect($where);
+                $count              = Model\Region::where($where)->count();
+                $regionUserList     = Model\Region::field('id,region_name')->limit($count)->mSelect($where);
                 $result['info']     = $regionUserList;
                 break;
         }

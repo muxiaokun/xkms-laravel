@@ -184,7 +184,7 @@
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" disabled="disabled"
                                        placeholder="@lang('common.add')@lang('common.time')" name="add_time"
-                                       value="{{ $edit_info['add_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
+                                       value="{{ $edit_info['add_time']|M_date=config('system.sys_date_detail') }}"/>
                             </div>
                         </div>
                     </div>
@@ -194,7 +194,7 @@
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" disabled="disabled"
                                        placeholder="@lang('common.update')@lang('common.time')" name="update_time"
-                                       value="{{ $edit_info['update_time']|M_date=C('SYS_DATE_DETAIL') }}"/>
+                                       value="{{ $edit_info['update_time']|M_date=config('system.sys_date_detail') }}"/>
                             </div>
                         </div>
                     </div>

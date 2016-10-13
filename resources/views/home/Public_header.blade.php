@@ -6,9 +6,9 @@
     <meta http-equiv="Content-Type" Content="text/html; charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    @if (C('SITE_KEYWORDS'))
+    @if (config('system.site_keywords'))
         <meta name="keywords" content="{{ config('website.site_keywords') }}"/>@endif
-    @if (C('SITE_KEYWORDS'))
+    @if (config('system.site_keywords'))
         <meta name="description" content="{{ config('website.site_description') }}"/>@endif
     @if (L('pfcopyright'))
         <meta name="author" content="{:L('pfcopyright',array('app_name'=>APP_NAME))}"/>@endif

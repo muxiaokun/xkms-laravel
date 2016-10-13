@@ -4,25 +4,25 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\FrontendMember;
+use App\Model;
 
 class Quests extends FrontendMember
 {
     //列表
     public function index()
     {
-        $QuestsModel = D('Quests');
-        $currentTime = time();
-        $where       = [
+        $currentTime                 = time();
+        $where                       = [
             'start_time' => ['lt', $currentTime],
             'end_time'   => ['gt', $currentTime],
             '(current_portion < max_portion OR max_portion = 0)',
         ];
-        $questsList  = $QuestsModel->mSelect($where, true);
-        $this->assign('quests_list', $questsList);
-        $this->assign('quests_list_count', $QuestsModel->mGetPageCount($where));
+        $questsList                  = Model\Quests::mSelect($where, true);
+        $assign['quests_list']       = $questsList;
+        $assign['quests_list_count'] = Model\Quests::mGetPageCount($where);
 
-        $this->assign('title', trans('quests'));
-        $this->display();
+        $assign['title'] = trans('common.quests');
+        return view('home.', $assign);
     }
 
     //添加
@@ -31,22 +31,22 @@ class Quests extends FrontendMember
         //初始化参数
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('Quests/index'));
+            $this->error(trans('common.id') . trans('common.error'), route('Quests/index'));
         }
 
-        $QuestsModel = D('Quests');
-        $questsInfo  = $QuestsModel->mFind($id);
+        $questsInfo = Model\Quests::mFind($id);
         //检测是否能够提交
         $currentTime = time();
         if ($questsInfo['start_time'] < $currentTime && $questsInfo['end_time'] < $currentTime) {
-            $this->error(trans('start') . trans('end') . trans('time') . trans('error'), route('Quests/index'));
+            $this->error(trans('common.start') . trans('common.end') . trans('common.time') . trans('common.error'),
+                route('Quests/index'));
         }
         if (0 != $questsInfo['max_portion'] && $questsInfo['current_portion'] >= $questsInfo['max_portion']) {
-            $this->error(trans('gt') . trans('max') . trans('portion'), route('Quests/index'));
+            $this->error(trans('common.gt') . trans('common.max') . trans('common.portion'), route('Quests/index'));
         }
         $accessInfo = request('access_info');
         if (isset($questsInfo['access_info']) && $questsInfo['access_info'] != $accessInfo) {
-            $this->error(trans('access') . trans('pass') . trans('error'), route('Quests/index'));
+            $this->error(trans('common.access') . trans('common.pass') . trans('common.error'), route('Quests/index'));
         }
         //初始化问题
         $questsQuestList = json_decode($questsInfo['ext_info'], true);
@@ -69,21 +69,21 @@ class Quests extends FrontendMember
                     $data['answer'] .= $questId . ':' . $questsAnswer[$questId] . '|';
                 }
             }
-            $QuestsAnswerModel = D('QuestsAnswer');
-            $resultAdd         = $QuestsAnswerModel->mAdd($data);
+            $resultAdd = Model\QuestsAnswer::mAdd($data);
             if ($resultAdd) {
-                $QuestsModel->where(['id' => $questsInfo['id']])->setInc('current_portion');
-                $this->success(trans('answer') . trans('add') . trans('success'), route('Quests/index'));
+                Model\Quests::where(['id' => $questsInfo['id']])->setInc('current_portion');
+                $this->success(trans('common.answer') . trans('common.add') . trans('common.success'),
+                    route('Quests/index'));
             } else {
-                $this->error(trans('answer') . trans('add') . trans('error'), route('index'));
+                $this->error(trans('common.answer') . trans('common.add') . trans('common.error'), route('index'));
             }
             return;
         }
 
-        $this->assign('quests_quest_list', $questsQuestList);
-        $this->assign('quests_info', $questsInfo);
-        $this->assign('title', trans('write') . trans('quests'));
-        $this->display();
+        $assign['quests_quest_list'] = $questsQuestList;
+        $assign['quests_info']       = $questsInfo;
+        $assign['title']             = trans('common.write') . trans('common.quests');
+        return view('home.', $assign);
     }
 }
 /*

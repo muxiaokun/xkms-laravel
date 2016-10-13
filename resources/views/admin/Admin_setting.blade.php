@@ -11,11 +11,11 @@
                             <div class="col-sm-7">
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_ADMIN_AUTO_LOG" value="1"
-                                           @if ('1' === C('SYS_ADMIN_AUTO_LOG'))checked="checked"@endif >@lang('common.open')
+                                           @if ('1' === config('system.sys_admin_auto_log'))checked="checked"@endif >@lang('common.open')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_ADMIN_AUTO_LOG" value="0"
-                                           @if ('0' === C('SYS_ADMIN_AUTO_LOG'))checked="checked"@endif >@lang('common.close')
+                                           @if ('0' === config('system.sys_admin_auto_log'))checked="checked"@endif >@lang('common.close')
                                 </label>
                             </div>
                         </div>
@@ -27,11 +27,11 @@
                             <div class="col-sm-7">
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_BACKEND_VERIFY" value="1"
-                                           @if ('1' === C('SYS_BACKEND_VERIFY'))checked="checked"@endif >@lang('common.open')
+                                           @if ('1' === config('system.sys_backend_verify'))checked="checked"@endif >@lang('common.open')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_BACKEND_VERIFY" value="0"
-                                           @if ('0' === C('SYS_BACKEND_VERIFY'))checked="checked"@endif >@lang('common.close')
+                                           @if ('0' === config('system.sys_backend_verify'))checked="checked"@endif >@lang('common.close')
                                 </label>
                             </div>
                         </div>

@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
+use App\Model;
 
 class AdminLog extends Backend
 {
@@ -11,8 +12,6 @@ class AdminLog extends Backend
     public function index()
     {
         //初始化页面参数
-        $AdminModel    = D('Admin');
-        $AdminLogModel = D('AdminLog');
         $where         = [];
 
         //建立where
@@ -22,33 +21,36 @@ class AdminLog extends Backend
         $whereValue = request('admin_id');
         $whereValue && $where['admin_id'] = [
             'in',
-            $AdminModel->where(['admin_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+            Model\Admin::where(['admin_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
         ];
         $whereValue = request('controller_name');
         $whereValue && $where['controller_name'] = $whereValue;
 
         //初始化翻页 和 列表数据
-        $adminLogList = $AdminLogModel->mSelect($where, true);
+        $adminLogList = Model\AdminLog::mSelect($where, true);
         foreach ($adminLogList as &$adminLog) {
-            $adminLog['admin_name'] = $AdminModel->mFindColumn($adminLog['admin_id'], 'admin_name');
+            $adminLog['admin_name'] = Model\Admin::mFindColumn($adminLog['admin_id'], 'admin_name');
         }
-        $this->assign('admin_log_list', $adminLogList);
-        $this->assign('admin_log_list_count', $AdminLogModel->mGetPageCount($where));
+        $assign['admin_log_list']       = $adminLogList;
+        $assign['admin_log_list_count'] = Model\AdminLog::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo                    = [];
-        $whereInfo['add_time']        = ['type' => 'time', 'name' => trans('add') . trans('time')];
-        $whereInfo['admin_id']        = ['type' => 'input', 'name' => trans('admin') . trans('name')];
-        $whereInfo['controller_name'] = ['type' => 'input', 'name' => trans('controller') . trans('name')];
-        $this->assign('where_info', $whereInfo);
+        $whereInfo['add_time']        = ['type' => 'time', 'name' => trans('common.add') . trans('common.time')];
+        $whereInfo['admin_id']        = ['type' => 'input', 'name' => trans('common.admin') . trans('common.name')];
+        $whereInfo['controller_name'] = [
+            'type' => 'input',
+            'name' => trans('common.controller') . trans('common.name'),
+        ];
+        $assign['where_info']         = $whereInfo;
 
         //初始化batch_handle
-        $batchHandle        = [];
-        $batchHandle['del'] = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batchHandle);
+        $batchHandle            = [];
+        $batchHandle['del']     = $this->_check_privilege('del');
+        $assign['batch_handle'] = $batchHandle;
 
-        $this->assign('title', trans('admin') . trans('log') . trans('management'));
-        $this->display();
+        $assign['title'] = trans('common.admin') . trans('common.log') . trans('common.management');
+        return view('admin.', $assign);
     }
 
     //删除
@@ -56,15 +58,14 @@ class AdminLog extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $AdminLogModel = D('AdminLog');
-        $resultDel     = $AdminLogModel->mDel($id);
+        $resultDel = Model\AdminLog::mDel($id);
         if ($resultDel) {
-            $this->success(trans('log') . trans('del') . trans('success'), route('index'));
+            $this->success(trans('common.log') . trans('common.del') . trans('common.success'), route('index'));
         } else {
-            $this->error(trans('log') . trans('del') . trans('error'), route('index'));
+            $this->error(trans('common.log') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 
@@ -75,12 +76,11 @@ class AdminLog extends Backend
             $this->error('only ROOT privilege', route('index'));
         }
 
-        $AdminLogModel = D('AdminLog');
-        $resultDel     = $AdminLogModel->mDel_all();
+        $resultDel = Model\AdminLog::mDel_all();
         if ($resultDel) {
-            $this->success(trans('log') . trans('del') . trans('success'), route('index'));
+            $this->success(trans('common.log') . trans('common.del') . trans('common.success'), route('index'));
         } else {
-            $this->error(trans('log') . trans('del') . trans('error'), route('index'));
+            $this->error(trans('common.log') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 

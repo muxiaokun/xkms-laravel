@@ -13,6 +13,7 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Frontend;
+use App\Model;
 
 class Article extends Frontend
 {
@@ -22,22 +23,19 @@ class Article extends Frontend
         $id        = request('id');
         $channelId = request('channel_id');
         if (!$id) {
-            $this->error(trans('article') . trans('id') . trans('error'), route('Index/index'));
+            $this->error(trans('common.article') . trans('common.id') . trans('common.error'), route('Index/index'));
         }
 
-        $ArticleModel = D('Article');
-        $articleInfo  = $ArticleModel->where($this->_get_article_where())->mFind($id);
+        $articleInfo = Model\Article::where($this->_get_article_where())->mFind($id);
         if (!$articleInfo) {
-            $this->error(trans('article') . trans('by') . trans('hidden'), route('Index/index'));
+            $this->error(trans('common.article') . trans('common.by') . trans('common.hidden'), route('Index/index'));
         }
 
-        $ArticleModel->where(['id' => $id])->setInc('hits');
+        Model\Article::where(['id' => $id])->setInc('hits');
 
-        $ArticleCategoryModel = D('ArticleCategory');
-        $categoryInfo         = $ArticleCategoryModel->mFind($articleInfo['cate_id']);
+        $categoryInfo = Model\ArticleCategory::mFind($articleInfo['cate_id']);
 
-        $ArticleChannelModel = D('ArticleChannel');
-        $channelInfo         = $ArticleChannelModel->mFind($articleInfo['channel_id']);
+        $channelInfo = Model\ArticleChannel::mFind($articleInfo['channel_id']);
 
         //检测权限
         $memberGroupId = session('frontend_info.group_id');
@@ -49,7 +47,7 @@ class Article extends Frontend
         is_array($channelInfo['access_group_id']) && $mFindAllows = array_merge($mFindAllows,
             $channelInfo['access_group_id']);
         if ($mFindAllows && !mInArray($memberGroupId, $mFindAllows)) {
-            $this->error(trans('none') . trans('privilege') . trans('access') . trans('comma') . trans('please') . trans('login'),
+            $this->error(trans('common.none') . trans('common.privilege') . trans('common.access') . trans('common.comma') . trans('common.please') . trans('common.login'),
                 route('Member/index'));
         }
 
@@ -65,15 +63,15 @@ class Article extends Frontend
             S($cacheName, $cacheValue, config('system.sys_td_cache'));
         }
 
-        $this->assign('article_info', $articleInfo);
-        $this->assign('category_info', $categoryInfo);
-        $this->assign('channel_info', $channelInfo);
-        $this->assign('title', $articleInfo['title']);
-        $this->assign('category_position', $this->_get_category_position($articleInfo['cate_id']));
-        $this->assign('article_position', $this->_get_article_position($articleInfo['cate_id']));
-        $pnWhere = ['cate_id' => $articleInfo['cate_id'], 'channel_id' => $articleInfo['channel_id']];
-        $this->assign('article_pn', $this->_get_article_pn($articleInfo['id'], $pnWhere));
-        $template = $this->_get_template($articleInfo['cate_id'], $channelId);
+        $assign['article_info']      = $articleInfo;
+        $assign['category_info']     = $categoryInfo;
+        $assign['channel_info']      = $channelInfo;
+        $assign['title']             = $articleInfo['title'];
+        $assign['category_position'] = $this->_get_category_position($articleInfo['cate_id']);
+        $assign['article_position']  = $this->_get_article_position($articleInfo['cate_id']);
+        $pnWhere                     = ['cate_id' => $articleInfo['cate_id'], 'channel_id' => $articleInfo['channel_id']];
+        $assign['article_pn']        = $this->_get_article_pn($articleInfo['id'], $pnWhere);
+        $template                    = $this->_get_template($articleInfo['cate_id'], $channelId);
         $this->display($template['article_template']);
     }
 
@@ -83,17 +81,15 @@ class Article extends Frontend
         $cateId    = request('cate_id');
         $channelId = request('channel_id');
         if (!$cateId) {
-            $this->error(trans('category') . trans('id') . trans('error'), route('Index/index'));
+            $this->error(trans('common.category') . trans('common.id') . trans('common.error'), route('Index/index'));
         }
 
-        $ArticleCategoryModel = D('ArticleCategory');
-        $categoryInfo         = $ArticleCategoryModel->mFind($cateId);
+        $categoryInfo = Model\ArticleCategory::mFind($cateId);
         if (!$categoryInfo) {
-            $this->error(trans('category') . trans('id') . trans('error'), route('Index/index'));
+            $this->error(trans('common.category') . trans('common.id') . trans('common.error'), route('Index/index'));
         }
 
-        $ArticleChannelModel = D('ArticleChannel');
-        $channelInfo         = $ArticleChannelModel->mFind($articleInfo['channel_id']);
+        $channelInfo = Model\ArticleChannel::mFind($articleInfo['channel_id']);
 
         //检测权限
         $memberGroupId = session('frontend_info.group_id');
@@ -103,7 +99,7 @@ class Article extends Frontend
         is_array($channelInfo['access_group_id']) && $mFindAllows = array_merge($mFindAllows,
             $channelInfo['access_group_id']);
         if ($mFindAllows && !mInArray($memberGroupId, $mFindAllows)) {
-            $this->error(trans('none') . trans('privilege') . trans('access') . trans('comma') . trans('please') . trans('login'),
+            $this->error(trans('common.none') . trans('common.privilege') . trans('common.access') . trans('common.comma') . trans('common.please') . trans('common.login'),
                 route('Member/index'));
         }
 
@@ -125,34 +121,33 @@ class Article extends Frontend
         } else {
             //如果分类是列表页
             $template = $template['list_template'];
-            $childArr = $ArticleCategoryModel->mFind_child_id($cateId);
+            $childArr = Model\ArticleCategory::mFind_child_id($cateId);
             $where    = array_merge($this->_get_article_where(), [
                 'channel_id' => 0,
                 'cate_id'    => ['in', $childArr],
             ]);
             $channelId && $where['channel_id'] = ['in', [0, $channelId]];
-            $categoryTopInfo = $ArticleCategoryModel->mFind_top($categoryInfo['id']);
+            $categoryTopInfo = Model\ArticleCategory::mFind_top($categoryInfo['id']);
             $attributeWhere  = mAttributeWhere($categoryTopInfo['attribute']);
             $attributeWhere && $where['attribute'] = $attributeWhere;
 
-            $ArticleModel = D('Article');
             $page         = true;
             if ($categoryInfo['s_limit']) {
-                $page = $categoryInfo['s_limit'];
-                $this->assign('article_list_max', $page);
+                $page                       = $categoryInfo['s_limit'];
+                $assign['article_list_max'] = $page;
             }
-            $articleLsit = $ArticleModel->mSelect($where, $page);
+            $articleLsit = Model\Article::mSelect($where, $page);
 
-            $this->assign('article_list', $articleLsit);
-            $this->assign('article_list_count', $ArticleModel->mGetPageCount($where));
+            $assign['article_list']       = $articleLsit;
+            $assign['article_list_count'] = Model\Article::mGetPageCount($where);
         }
 
-        $this->assign('category_info', $categoryInfo);
-        $this->assign('channel_info', $channelInfo);
-        $this->assign('title', $categoryInfo['name']);
-        $this->assign('category_position', $this->_get_category_position($cateId));
-        $this->assign('article_position', $this->_get_article_position($cateId));
-        $this->display($template);
+        $assign['category_info']     = $categoryInfo;
+        $assign['channel_info']      = $channelInfo;
+        $assign['title']             = $categoryInfo['name'];
+        $assign['category_position'] = $this->_get_category_position($cateId);
+        $assign['article_position']  = $this->_get_article_position($cateId);
+        return view('home.$template', $assign);
     }
 
     // 显示频道
@@ -163,8 +158,7 @@ class Article extends Frontend
             $this->redirect('Index/index');
         }
 
-        $ArticleChannelModel = D('ArticleChannel');
-        $channelInfo         = $ArticleChannelModel->mFind($channelId);
+        $channelInfo = Model\ArticleChannel::mFind($channelId);
 
         //检测权限
         $memberGroupId = session('frontend_info.group_id');
@@ -172,13 +166,13 @@ class Article extends Frontend
         is_array($channelInfo['access_group_id']) && $mFindAllows = array_merge($mFindAllows,
             $channelInfo['access_group_id']);
         if ($mFindAllows && !mInArray($memberGroupId, $mFindAllows)) {
-            $this->error(trans('none') . trans('privilege') . trans('access') . trans('comma') . trans('please') . trans('login'),
+            $this->error(trans('common.none') . trans('common.privilege') . trans('common.access') . trans('common.comma') . trans('common.please') . trans('common.login'),
                 route('Member/index'));
         }
 
-        $this->assign('channel_info', $channelInfo);
-        $this->assign('title', $channelInfo['name']);
-        $template = $this->_get_template(0, $channelId);
+        $assign['channel_info'] = $channelInfo;
+        $assign['title']        = $channelInfo['name'];
+        $template               = $this->_get_template(0, $channelId);
         $this->display($template['channel_template']);
     }
 
@@ -187,19 +181,19 @@ class Article extends Frontend
     {
         $keyword = request('keyword');
         if ('' == $keyword) {
-            $this->error(trans('please') . trans('input') . trans('keywords'), route('Index/index'));
+            $this->error(trans('common.please') . trans('common.input') . trans('common.keywords'),
+                route('Index/index'));
         }
         $keyword = '%' . $keyword . '%';
 
         $where  = $this->_get_article_where();
         $cateId = request('cate_id');
         if ($cateId) {
-            $ArticleCategoryModel = D('ArticleCategory');
-            $where['cate_id']     = ['in', $ArticleCategoryModel->mFind_child_id($cateId)];
-            $categoryPosition     = $this->_get_category_position($cateId);
-            $attributeWhere       = mAttributeWhere($categoryPosition['attribute']);
+            $where['cate_id'] = ['in', Model\ArticleCategory::mFind_child_id($cateId)];
+            $categoryPosition = $this->_get_category_position($cateId);
+            $attributeWhere   = mAttributeWhere($categoryPosition['attribute']);
             $attributeWhere && $where['attribute'] = $attributeWhere;
-            $this->assign('category_position', $this->_get_category_position($cateId));
+            $assign['category_position'] = $this->_get_category_position($cateId);
         }
         $channelId = request('cahnnel_id');
         $channelId && $where['channel_id'] = $channelId;
@@ -232,15 +226,14 @@ class Article extends Frontend
         }
         $where['_complex'] = $complex;
 
-        $ArticleModel = D('Article');
-        $articleLsit  = $ArticleModel->mSelect($where, true);
-        $this->assign('article_list', $articleLsit);
-        $this->assign('article_list_count', $ArticleModel->mGetPageCount($where));
+        $articleLsit                  = Model\Article::mSelect($where, true);
+        $assign['article_list']       = $articleLsit;
+        $assign['article_list_count'] = Model\Article::mGetPageCount($where);
 
-        $request = request();
-        $this->assign('request', $request);
-        $this->assign('title', trans('search') . trans('article'));
-        $template = $this->_get_template(0);
+        $request           = request();
+        $assign['request'] = $request;
+        $assign['title']   = trans('common.search') . trans('common.article');
+        $template          = $this->_get_template(0);
         $this->display($template['list_template']);
     }
 
@@ -257,11 +250,10 @@ class Article extends Frontend
         $template = [];
         // 如果频道编号存在 则查询频道是否有模板的配置 覆盖一般分类配置
         if ($channelId) {
-            $ArticleChannelModel = D('ArticleChannel');
-            $channelInfo         = $ArticleChannelModel->mFind($channelId);
-            $defChannelTemplate  = CONTROLLER_NAME . config('TMPL_FILE_DEPR') . 'channel';
-            $data                = $channelInfo['ext_info'];
-            $template            = [
+            $channelInfo        = Model\ArticleChannel::mFind($channelId);
+            $defChannelTemplate = CONTROLLER_NAME . config('TMPL_FILE_DEPR') . 'channel';
+            $data               = $channelInfo['ext_info'];
+            $template           = [
                 's_limit'          => $this->_get_channel_template($cateId, 's_limit', $data),
                 'template'         => $this->_get_channel_template($cateId, 'template', $data),
                 'list_template'    => $this->_get_channel_template($cateId, 'list_template', $data),
@@ -298,8 +290,7 @@ class Article extends Frontend
             return false;
         }
 
-        $ArticleCategoryModel = D('ArticleCategory');
-        $categoryInfo         = $ArticleCategoryModel->mFind($cateId);
+        $categoryInfo = Model\ArticleCategory::mFind($cateId);
         if ($categoryInfo[$col]) {
             return $categoryInfo[$col];
         }
@@ -317,8 +308,7 @@ class Article extends Frontend
             return $data[$cateId][$col];
         }
 
-        $ArticleCategoryModel = D('ArticleCategory');
-        $parentId             = $ArticleCategoryModel->mFindColumn($cateId, 'parent_id');
+        $parentId = Model\ArticleCategory::mFindColumn($cateId, 'parent_id');
         return ($cateId == $parentId) ? '' : $this->_get_channel_template($parentId, $col, $data);
     }
 
@@ -331,16 +321,15 @@ class Article extends Frontend
             return $cacheValue;
         }
 
-        $ArticleCategoryModel = D('ArticleCategory');
-        $topCateId            = $ArticleCategoryModel->mFind_top_id($cateId);
-        $categoryTopInfo      = $ArticleCategoryModel->mFind($topCateId);
+        $topCateId       = Model\ArticleCategory::mFind_top_id($cateId);
+        $categoryTopInfo = Model\ArticleCategory::mFind($topCateId);
 
         $where         = [
             'parent_id' => $topCateId,
             'if_show'   => 1,
         ];
-        $categoryCount = $ArticleCategoryModel->where($where)->count();
-        $categoryList  = $ArticleCategoryModel->mSelect($where, $categoryCount);
+        $categoryCount = Model\ArticleCategory::where($where)->count();
+        $categoryList  = Model\ArticleCategory::mSelect($where, $categoryCount);
 
         $categoryPosition                  = $categoryTopInfo;
         $categoryPosition['category_list'] = $categoryList;
@@ -359,15 +348,14 @@ class Article extends Frontend
             return $cacheValue;
         }
 
-        $ArticleCategoryModel = D('ArticleCategory');
-        $articleCategoryInfo  = $ArticleCategoryModel->mFind($cateId);
-        $path[]               = [
+        $articleCategoryInfo = Model\ArticleCategory::mFind($cateId);
+        $path[]              = [
             'name' => $articleCategoryInfo['name'],
             'link' => mroute('article_category', ['cate_id' => $articleCategoryInfo['id']]),
         ];
         if (0 == $articleCategoryInfo['parent_id']) {
             $path[] = [
-                'name' => trans('homepage'),
+                'name' => trans('common.homepage'),
                 'link' => mroute(),
             ];
             $path   = array_reverse($path);
@@ -404,18 +392,17 @@ class Article extends Frontend
         $originSort .= $originSort ? ',' . $mianSort : $mianSort;
         //p = gt asc
         //n = lt desc
-        $pCondition   = ('desc' == $mianOrder) ? 'gt' : 'lt';
-        $nCondition   = ('desc' == $mianOrder) ? 'lt' : 'gt';
-        $pOrder       = ('desc' == $mianOrder) ? $originSort . ' asc' : $originSort . ' desc';
-        $nOrder       = ('desc' == $mianOrder) ? $originSort . ' desc' : $originSort . ' asc';
-        $ArticleModel = D('Article');
-        $articleInfo  = $ArticleModel->mFind($id);
+        $pCondition  = ('desc' == $mianOrder) ? 'gt' : 'lt';
+        $nCondition  = ('desc' == $mianOrder) ? 'lt' : 'gt';
+        $pOrder      = ('desc' == $mianOrder) ? $originSort . ' asc' : $originSort . ' desc';
+        $nOrder      = ('desc' == $mianOrder) ? $originSort . ' desc' : $originSort . ' asc';
+        $articleInfo = Model\Article::mFind($id);
         //上一篇
         $where[$mianSort] = [$pCondition, $articleInfo[$mianSort]];
-        $articlePn['p']   = $ArticleModel->where($where)->order($pOrder)->limit($limit)->select();
+        $articlePn['p']   = Model\Article::where($where)->order($pOrder)->limit($limit)->select();
         //下一篇
         $where[$mianSort] = [$nCondition, $articleInfo[$mianSort]];
-        $articlePn['n']   = $ArticleModel->where($where)->order($nOrder)->limit($limit)->select();
+        $articlePn['n']   = Model\Article::where($where)->order($nOrder)->limit($limit)->select();
         return $articlePn;
     }
 

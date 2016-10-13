@@ -1,7 +1,7 @@
 @if ($where_info)
     <div class="mb10 text-right">
         <form class="form-inline" role="form" method="get">
-            @if (URL_COMMON == C('URL_MODEL'))
+            @if (URL_COMMON == config('system.url_model'))
                 <input type="hidden" name="m" value="{{ $Think['const']['MODULE_NAME'] }}"/>
                 <input type="hidden" name="c" value="{{ $Think['const']['CONTROLLER_NAME'] }}"/>
                 <input type="hidden" name="a" value="{{ $Think['const']['ACTION_NAME'] }}"/>

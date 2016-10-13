@@ -42,7 +42,7 @@
                             [{{ $wechat['language'] }}]
                         </td>
                         <td>
-                            {{ $wechat['bind_time']|M_date=C('SYS_DATE_DETAIL') }}
+                            {{ $wechat['bind_time']|M_date=config('system.sys_date_detail') }}
                         </td>
                         <td class="nowrap">
                             @if ($batch_handle['edit'])

@@ -133,7 +133,6 @@ Route::group([
         //'middleware'=>'auth',
         'prefix' => 'Admin',
     ], function () {
-        Route::get('test', ['as' => 'test', 'uses' => 'Admin@test']);
         Route::get('index', ['as' => 'index', 'uses' => 'Admin@index']);
         Route::get('add', ['as' => 'add', 'uses' => 'Admin@add']);
         Route::get('edit', ['as' => 'edit', 'uses' => 'Admin@edit']);
@@ -221,9 +220,9 @@ Route::group([
     Route::group([
         'as'     => 'Index::',
         //'middleware'=>'auth',
-        'prefix' => 'Index',
+        'prefix' => '{Index?}',
     ], function () {
-        Route::get('index', ['as' => 'index', 'uses' => 'Index@index']);
+        Route::get('{index?}', ['as' => 'index', 'uses' => 'Index@index']);
         Route::get('websiteSet', ['as' => 'websiteSet', 'uses' => 'Index@websiteSet']);
         Route::get('systemSet', ['as' => 'systemSet', 'uses' => 'Index@systemSet']);
         Route::get('databaseSet', ['as' => 'databaseSet', 'uses' => 'Index@databaseSet']);

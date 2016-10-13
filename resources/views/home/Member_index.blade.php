@@ -7,11 +7,11 @@
         </tr>
         <tr>
             <td>@lang('common.register')@lang('common.time')</td>
-            <td>{{ $Think['session']['frontend_info']['register_time']|M_date=C('SYS_DATE_DETAIL') }}</td>
+            <td>{{ $Think['session']['frontend_info']['register_time']|M_date=config('system.sys_date_detail') }}</td>
         </tr>
         <tr>
             <td>@lang('common.login')@lang('common.time')</td>
-            <td>{{ $Think['session']['frontend_info']['last_time']|M_date=C('SYS_DATE_DETAIL') }}</td>
+            <td>{{ $Think['session']['frontend_info']['last_time']|M_date=config('system.sys_date_detail') }}</td>
         </tr>
         <tr>
             <td>@lang('common.last')@lang('common.login')IP</td>

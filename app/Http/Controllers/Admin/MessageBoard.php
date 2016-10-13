@@ -4,13 +4,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
+use App\Model;
 
 class MessageBoard extends Backend
 {
     //列表
     public function index()
     {
-        $MessageBoardModel = D('MessageBoard');
         $where             = [];
 
         //建立where
@@ -18,7 +18,7 @@ class MessageBoard extends Backend
         $whereValue = request('name');
         $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
 
-        $messageBoardList = $MessageBoardModel->mSelect($where, true);
+        $messageBoardList = Model\MessageBoard::mSelect($where, true);
         foreach ($messageBoardList as &$messageBoard) {
             $option = [];
             foreach ($messageBoard['config'] as $name => $value) {
@@ -26,8 +26,8 @@ class MessageBoard extends Backend
             }
             $messageBoard['option'] = mSubstr(implode(',', $option), 40);
         }
-        $this->assign('message_board_list', $messageBoardList);
-        $this->assign('message_board_list_count', $MessageBoardModel->mGetPageCount($where));
+        $assign['message_board_list']       = $messageBoardList;
+        $assign['message_board_list_count'] = Model\MessageBoard::mGetPageCount($where);
 
         //初始化batch_handle
         $batchHandle              = [];
@@ -35,31 +35,31 @@ class MessageBoard extends Backend
         $batchHandle['add']       = $this->_check_privilege('add');
         $batchHandle['edit']      = $this->_check_privilege('edit');
         $batchHandle['del']       = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batchHandle);
+        $assign['batch_handle']   = $batchHandle;
 
-        $this->assign('title', trans('messageboard') . trans('management'));
-        $this->display();
+        $assign['title'] = trans('common.messageboard') . trans('common.management');
+        return view(');
     }
 
     //新增
     public function add()
     {
         if (IS_POST) {
-            $data              = $this->makeData();
-            $MessageBoardModel = D('MessageBoard');
-            $resultAdd         = $MessageBoardModel->mAdd($data);
+            $data              = $this->makeData(', $assign);
+        $resultAdd = Model\MessageBoard::mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('messageboard') . trans('add') . trans('success'), $rebackLink);
+                $this->success(trans('common.messageboard') . trans('common.add') . trans('common.success'),
+                    $rebackLink);
                 return;
             } else {
-                $this->error(trans('messageboard') . trans('add') . trans('error'),
+                $this->error(trans('common.messageboard') . trans('common.add') . trans('common.error'),
                     route('add', ['cate_id' => request('get.cate_id')]));
             }
         }
 
-        $this->assign('template_list', mScanTemplate('index', config('DEFAULT_MODULE'), 'MessageBoard'));
-        $this->assign('title', trans('messageboard') . trans('add'));
-        $this->display('addedit');
+$assign['template_list'] = mScanTemplate('index', config('DEFAULT_MODULE'), 'MessageBoard');
+$assign['title'] = trans('common.messageboard') . trans('common.add');
+return view('admin.addedit', $assign);
     }
 
     //编辑
@@ -67,29 +67,29 @@ class MessageBoard extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $MessageBoardModel = D('MessageBoard');
         if (IS_POST) {
             $data       = $this->makeData();
-            $resultEdit = $MessageBoardModel->mEdit($id, $data);
+            $resultEdit = Model\MessageBoard::mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('messageboard') . trans('edit') . trans('success'), route('index'));
+                $this->success(trans('common.messageboard') . trans('common.edit') . trans('common.success'),
+                    route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('messageboard') . trans('edit') . trans('error'), $errorGoLink);
+                $this->error(trans('common.messageboard') . trans('common.edit') . trans('common.error'), $errorGoLink);
             }
         }
 
-        $editInfo           = $MessageBoardModel->mFind($id);
-        $editInfo['config'] = json_encode($editInfo['config']);
-        $this->assign('edit_info', $editInfo);
+        $editInfo            = Model\MessageBoard::mFind($id);
+        $editInfo['config']  = json_encode($editInfo['config']);
+        $assign['edit_info'] = $editInfo;
 
-        $this->assign('template_list', mScanTemplate('index', config('DEFAULT_MODULE'), 'MessageBoard'));
-        $this->assign('title', trans('messageboard') . trans('edit'));
-        $this->display('addedit');
+        $assign['template_list'] = mScanTemplate('index', config('DEFAULT_MODULE'), 'MessageBoard');
+        $assign['title']         = trans('common.messageboard') . trans('common.edit');
+        return view('admin.addedit', $assign);
     }
 
     //删除
@@ -97,16 +97,16 @@ class MessageBoard extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $MessageBoardModel = D('MessageBoard');
-        $resultDel         = $MessageBoardModel->mDel($id);
+        $resultDel = Model\MessageBoard::mDel($id);
         if ($resultDel) {
-            $this->success(trans('messageboard') . trans('del') . trans('success'), route('index'));
+            $this->success(trans('common.messageboard') . trans('common.del') . trans('common.success'),
+                route('index'));
             return;
         } else {
-            $this->error(trans('messageboard') . trans('del') . trans('error'), route('index'));
+            $this->error(trans('common.messageboard') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 

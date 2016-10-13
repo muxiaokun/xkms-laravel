@@ -10,7 +10,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">
                                     @lang('common.template')@lang('common.file')@lang('common.name')
-                                    (@if ('/' == C('TMPL_FILE_DEPR'))
+                                    (@if ('/' == config('system.tmpl_file_depr'))
                                         controller/file_name{{ config('TMPL_TEMPLATE_SUFFIX') }}
                                     @else
                                         file_name{{ config('TMPL_TEMPLATE_SUFFIX') }}

@@ -4,15 +4,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
+use App\Model;
 
 class Comment extends Backend
 {
     //列表
     public function index()
     {
-        $AdminModel   = D('Admin');
-        $MemberModel  = D('Member');
-        $CommentModel = D('Comment');
         $where        = [];
 
         //建立where
@@ -20,45 +18,51 @@ class Comment extends Backend
         $whereValue = request('audit_id');
         $whereValue && $where['audit_id'] = [
             'in',
-            $AdminModel->where(['admin_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+            Model\Admin::where(['admin_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
         ];
         $whereValue = request('send_id');
         $whereValue && $where['send_id'] = [
             'in',
-            $MemberModel->where(['member_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+            Model\Member::where(['member_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
         ];
         $whereValue = request('controller');
         $whereValue && $where['controller'] = $whereValue;
         $whereValue = request('item');
         $whereValue && $where['item'] = $whereValue;
 
-        $commentList = $CommentModel->order('add_time desc')->mSelect($where, true);
+        $commentList = Model\Comment::order('add_time desc')->mSelect($where, true);
         foreach ($commentList as &$comment) {
-            $comment['audit_name']  = ($comment['audit_id']) ? $AdminModel->mFindColumn($comment['audit_id'],
-                'admin_name') : trans('none') . trans('audit');
-            $memberName             = $MemberModel->mFindColumn($comment['member_id'], 'member_name');
-            $comment['member_name'] = ($memberName) ? $memberName : trans('anonymous');
+            $comment['audit_name']  = ($comment['audit_id']) ? Model\Admin::mFindColumn($comment['audit_id'],
+                'admin_name') : trans('common.none') . trans('common.audit');
+            $memberName             = Model\Member::mFindColumn($comment['member_id'], 'member_name');
+            $comment['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');
         }
-        $this->assign('comment_list', $commentList);
-        $this->assign('comment_list_count', $CommentModel->mGetPageCount($where));
+        $assign['comment_list']       = $commentList;
+        $assign['comment_list_count'] = Model\Comment::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo               = [];
-        $whereInfo['audit_id']   = ['type' => 'input', 'name' => trans('audit') . trans('admin') . trans('name')];
-        $whereInfo['send_id']    = ['type' => 'input', 'name' => trans('send') . trans('member') . trans('name')];
-        $whereInfo['controller'] = ['type' => 'input', 'name' => trans('controller')];
-        $whereInfo['item']       = ['type' => 'input', 'name' => trans('id')];
-        $this->assign('where_info', $whereInfo);
+        $whereInfo['audit_id']   = [
+            'type' => 'input',
+            'name' => trans('common.audit') . trans('common.admin') . trans('common.name'),
+        ];
+        $whereInfo['send_id']    = [
+            'type' => 'input',
+            'name' => trans('common.send') . trans('common.member') . trans('common.name'),
+        ];
+        $whereInfo['controller'] = ['type' => 'input', 'name' => trans('common.controller')];
+        $whereInfo['item']       = ['type' => 'input', 'name' => trans('common.id')];
+        $assign['where_info']    = $whereInfo;
 
         //初始化batch_handle
-        $batchHandle         = [];
-        $batchHandle['add']  = $this->_check_privilege('add');
-        $batchHandle['edit'] = $this->_check_privilege('edit');
-        $batchHandle['del']  = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batchHandle);
+        $batchHandle            = [];
+        $batchHandle['add']     = $this->_check_privilege('add');
+        $batchHandle['edit']    = $this->_check_privilege('edit');
+        $batchHandle['del']     = $this->_check_privilege('del');
+        $assign['batch_handle'] = $batchHandle;
 
-        $this->assign('title', trans('comment') . trans('management'));
-        $this->display();
+        $assign['title'] = trans('common.comment') . trans('common.management');
+        return view('admin.', $assign);
     }
 
     //审核回复
@@ -77,8 +81,8 @@ class Comment extends Backend
             return;
         }
 
-        $this->assign('title', trans('config') . trans('comment'));
-        $this->display();
+        $assign['title'] = trans('common.config') . trans('common.comment');
+        return view('admin.', $assign);
     }
 
     //审核
@@ -86,17 +90,16 @@ class Comment extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $CommentModel = D('Comment');
-        $data         = ['audit_id' => session('backend_info.id')];
-        $resultEdit   = $CommentModel->mEdit($id, $data);
+        $data       = ['audit_id' => session('backend_info.id')];
+        $resultEdit = Model\Comment::mEdit($id, $data);
         if ($resultEdit) {
-            $this->success(trans('comment') . trans('audit') . trans('success'), route('index'));
+            $this->success(trans('common.comment') . trans('common.audit') . trans('common.success'), route('index'));
             return;
         } else {
-            $this->error(trans('comment') . trans('audit') . trans('error'), route('index'));
+            $this->error(trans('common.comment') . trans('common.audit') . trans('common.error'), route('index'));
         }
     }
 
@@ -105,16 +108,15 @@ class Comment extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $CommentModel = D('Comment');
-        $resultDel    = $CommentModel->mDel($id);
+        $resultDel = Model\Comment::mDel($id);
         if ($resultDel) {
-            $this->success(trans('comment') . trans('del') . trans('success'), route('index'));
+            $this->success(trans('common.comment') . trans('common.del') . trans('common.success'), route('index'));
             return;
         } else {
-            $this->error(trans('comment') . trans('del') . trans('error'), route('index'));
+            $this->error(trans('common.comment') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 }

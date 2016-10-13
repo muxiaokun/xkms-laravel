@@ -4,13 +4,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
+use App\Model;
 
 class ArticleChannel extends Backend
 {
     //列表
     public function index()
     {
-        $ArticleChannelModel = D('ArticleChannel');
         //建立where
         $whereValue = '';
         $whereValue = request('name');
@@ -18,82 +18,81 @@ class ArticleChannel extends Backend
         $whereValue = request('if_show');
         $whereValue && $where['if_show'] = (1 == $whereValue) ? 1 : 0;
         if (1 != session('backend_info.id')) {
-            $allowChannel = $ArticleChannelModel->mFind_allow();
+            $allowChannel = Model\ArticleChannel::mFind_allow();
             $where['id']  = ['in', $allowChannel];
         }
         //初始化翻页 和 列表数据
-        $articleChannelList = $ArticleChannelModel->mSelect($where, true);
-        $this->assign('article_channel_list', $articleChannelList);
-        $this->assign('article_channel_list_count', $ArticleChannelModel->mGetPageCount($where));
+        $articleChannelList                   = Model\ArticleChannel::mSelect($where, true);
+        $assign['article_channel_list']       = $articleChannelList;
+        $assign['article_channel_list_count'] = Model\ArticleChannel::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo            = [];
-        $whereInfo['name']    = ['type' => 'input', 'name' => trans('channel') . trans('name')];
+        $whereInfo['name']    = ['type' => 'input', 'name' => trans('common.channel') . trans('common.name')];
         $whereInfo['if_show'] = ['type'  => 'select',
-                                 'name'  => trans('yes') . trans('no') . trans('show'),
-                                 'value' => [1 => trans('show'), 2 => trans('hidden')],
+                                 'name'  => trans('common.yes') . trans('common.no') . trans('common.show'),
+                                 'value' => [1 => trans('common.show'), 2 => trans('common.hidden')],
         ];
-        $this->assign('where_info', $whereInfo);
+        $assign['where_info'] = $whereInfo;
 
         //初始化batch_handle
-        $batchHandle         = [];
-        $batchHandle['add']  = $this->_check_privilege('add');
-        $batchHandle['edit'] = $this->_check_privilege('edit');
-        $batchHandle['del']  = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batchHandle);
+        $batchHandle            = [];
+        $batchHandle['add']     = $this->_check_privilege('add');
+        $batchHandle['edit']    = $this->_check_privilege('edit');
+        $batchHandle['del']     = $this->_check_privilege('del');
+        $assign['batch_handle'] = $batchHandle;
 
-        $this->assign('title', trans('channel') . trans('management'));
-        $this->display();
+        $assign['title'] = trans('common.channel') . trans('common.management');
+        return view('');
     }
 
     //新增
     public function add()
     {
         if (IS_AJAX) {
-            $this->ajaxReturn($this->_add_edit_category_common());
+            $this->ajaxReturn($this->_add_edit_category_common(), $assign);
             return;
         }
         if (IS_POST) {
-            $ArticleChannelModel = D('ArticleChannel');
-            $data                = $this->makeData();
-            $resultAdd           = $ArticleChannelModel->mAdd($data);
+            $data      = $this->makeData();
+            $resultAdd = Model\ArticleChannel::mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('channel') . trans('add') . trans('success'), route('index'));
+                $this->success(trans('common.channel') . trans('common.add') . trans('common.success'), route('index'));
                 return;
             } else {
-                $this->error(trans('channel') . trans('add') . trans('error'), route('add'));
+                $this->error(trans('common.channel') . trans('common.add') . trans('common.error'), route('add'));
             }
         }
 
         $this->addEditCommon();
 
-        $this->assign('title', trans('add') . trans('channel'));
-        $this->display('addedit');
+        $assign['title'] = trans('common.add') . trans('common.channel');
+        return view('admin.addedit', $assign);
     }
 
     //编辑
     public function edit()
     {
-        $ArticleChannelModel = D('ArticleChannel');
         if (IS_AJAX) {
             $id       = request('get.id');
-            $editInfo = $ArticleChannelModel->mFind($id);
+            $editInfo = Model\ArticleChannel::mFind($id);
             $this->ajaxReturn($this->_add_edit_category_common($editInfo));
             return;
         }
 
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         if (1 != session('backend_info.id')
-            && !mInArray($id, $ArticleChannelModel->mFind_allow())
+            && !mInArray($id, Model\ArticleChannel::mFind_allow())
         ) {
-            $this->error(trans('none') . trans('privilege') . trans('edit') . trans('channel'), route('index'));
+            $this->error(trans('common.none') . trans('common.privilege') . trans('common.edit') . trans('common.channel'),
+                route('index'));
         }
 
-        $maAllowArr = $ArticleChannelModel->mFind_allow('ma');
+        $maAllowArr = Model\ArticleChannel::mFind_allow('ma');
         if (IS_POST) {
             $data = $this->makeData();
             if (1 != session('backend_info.id')
@@ -103,43 +102,41 @@ class ArticleChannel extends Backend
                 unset($data['manage_group_id']);
                 unset($data['access_group_id']);
             }
-            $resultEdit = $ArticleChannelModel->mEdit($id, $data);
+            $resultEdit = Model\ArticleChannel::mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('channel') . trans('edit') . trans('success'), route('index'));
+                $this->success(trans('common.channel') . trans('common.edit') . trans('common.success'),
+                    route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('channel') . trans('edit') . trans('error'), $errorGoLink);
+                $this->error(trans('common.channel') . trans('common.edit') . trans('common.error'), $errorGoLink);
             }
         }
 
-        $editInfo = $ArticleChannelModel->mFind($id);
+        $editInfo = Model\ArticleChannel::mFind($id);
         //如果有管理权限进行进一步数据处理
         if (mInArray($id, $maAllowArr)) {
-            $AdminModel = D('Admin');
             foreach ($editInfo['manage_id'] as &$manageId) {
-                $adminName = $AdminModel->mFindColumn($manageId, 'admin_name');
+                $adminName = Model\Admin::mFindColumn($manageId, 'admin_name');
                 $manageId  = ['value' => $manageId, 'html' => $adminName];
             }
             $editInfo['manage_id'] = json_encode($editInfo['manage_id']);
-            $AdminGroupModel       = D('AdminGroup');
             foreach ($editInfo['manage_group_id'] as &$manageGroupId) {
-                $adminGroupName = $AdminGroupModel->mFindColumn($manageGroupId, 'name');
+                $adminGroupName = Model\AdminGroup::mFindColumn($manageGroupId, 'name');
                 $manageGroupId  = ['value' => $manageGroupId, 'html' => $adminGroupName];
             }
             $editInfo['manage_group_id'] = json_encode($editInfo['manage_group_id']);
-            $MemberGroupModel            = D('MemberGroup');
             foreach ($editInfo['access_group_id'] as &$accessGroupId) {
-                $adminGroupName = $MemberGroupModel->mFindColumn($accessGroupId, 'name');
+                $adminGroupName = Model\MemberGroup::mFindColumn($accessGroupId, 'name');
                 $accessGroupId  = ['value' => $accessGroupId, 'html' => $adminGroupName];
             }
             $editInfo['access_group_id'] = json_encode($editInfo['access_group_id']);
         }
-        $this->assign('edit_info', $editInfo);
+        $assign['edit_info'] = $editInfo;
         $this->addEditCommon($editInfo);
 
-        $this->assign('title', trans('edit') . trans('channel'));
-        $this->display('addedit');
+        $assign['title'] = trans('common.edit') . trans('common.channel');
+        return view('admin.addedit', $assign);
     }
 
     //删除
@@ -147,30 +144,30 @@ class ArticleChannel extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $ArticleChannelModel = D('ArticleChannel');
         //删除必须是 属主
         if (1 != session('backend_info.id')
-            && !mInArray($id, $ArticleChannelModel->mFind_allow('ma'))
+            && !mInArray($id, Model\ArticleChannel::mFind_allow('ma'))
         ) {
-            $this->error(trans('none') . trans('privilege') . trans('del') . trans('channel'), route('index'));
+            $this->error(trans('common.none') . trans('common.privilege') . trans('common.del') . trans('common.channel'),
+                route('index'));
         }
 
         //解除文章和被删除频道的关系
-        $ArticleModel = D('Article');
-        $resultClean  = $ArticleModel->mClean($id, 'channel_id');
+        $resultClean = Model\Article::mClean($id, 'channel_id');
         if (!$resultClean) {
-            $this->error(trans('article') . trans('clear') . trans('channel') . trans('error'), route('index'));
+            $this->error(trans('common.article') . trans('common.clear') . trans('common.channel') . trans('common.error'),
+                route('index'));
         }
 
-        $resultDel = $ArticleChannelModel->mDel($id);
+        $resultDel = Model\ArticleChannel::mDel($id);
         if ($resultDel) {
-            $this->success(trans('channel') . trans('del') . trans('success'), route('index'));
+            $this->success(trans('common.channel') . trans('common.del') . trans('common.success'), route('index'));
             return;
         } else {
-            $this->error(trans('channel') . trans('del') . trans('error'), route('index'));
+            $this->error(trans('common.channel') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 
@@ -182,27 +179,24 @@ class ArticleChannel extends Backend
         switch ($field) {
             case 'manage_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                $AdminModel = D('Admin');
                 isset($data['keyword']) && $where['admin_name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminUserList = $AdminModel->mSelect($where);
+                $adminUserList = Model\Admin::mSelect($where);
                 foreach ($adminUserList as $adminUser) {
                     $result['info'][] = ['value' => $adminUser['id'], 'html' => $adminUser['admin_name']];
                 }
                 break;
             case 'manage_group_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                $AdminGroupModel = D('AdminGroup');
                 isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminGroupList = $AdminGroupModel->mSelect($where);
+                $adminGroupList = Model\AdminGroup::mSelect($where);
                 foreach ($adminGroupList as $adminGroup) {
                     $result['info'][] = ['value' => $adminGroup['id'], 'html' => $adminGroup['name']];
                 }
                 break;
             case 'access_group_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                $MemberGroupModel = D('MemberGroup');
                 isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $memberGroupList = $MemberGroupModel->mSelect($where);
+                $memberGroupList = Model\MemberGroup::mSelect($where);
                 foreach ($memberGroupList as $memberGroup) {
                     $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
                 }
@@ -263,32 +257,29 @@ class ArticleChannel extends Backend
     //构造频道assign公共数据
     private function addEditCommon($channelInfo = false)
     {
-        $this->assign('article_category_list', $this->_add_edit_category_common($channelInfo));
+        $assign['article_category_list'] = $this->_add_edit_category_common($channelInfo);
 
-        $ArticleChannelModel = D('ArticleChannel');
         $id                  = request('id');
         $managePrivilgeg     = in_array($id,
-                $ArticleChannelModel->mFind_allow('ma')) || 1 == session('backend_info.id');
-        $this->assign('manage_privilege', $managePrivilgeg);
+                Model\ArticleChannel::mFind_allow('ma')) || 1 == session('backend_info.id');
+        $assign['manage_privilege'] = $managePrivilgeg;
 
-        $ArticleCategoryModel = D('ArticleCategory');
-        $this->assign('channel_template_list', mScanTemplate('channel', config('DEFAULT_MODULE'), 'Article'));
-        $this->assign('template_list', mScanTemplate('category', config('DEFAULT_MODULE'), 'Article'));
-        $this->assign('list_template_list', mScanTemplate('list_category', config('DEFAULT_MODULE'), 'Article'));
-        $this->assign('article_template_list', mScanTemplate('article', config('DEFAULT_MODULE'), 'Article'));
+        $assign['channel_template_list'] = mScanTemplate('channel', config('DEFAULT_MODULE'), 'Article');
+        $assign['template_list']         = mScanTemplate('category', config('DEFAULT_MODULE'), 'Article');
+        $assign['list_template_list']    = mScanTemplate('list_category', config('DEFAULT_MODULE'), 'Article');
+        $assign['article_template_list'] = mScanTemplate('article', config('DEFAULT_MODULE'), 'Article');
     }
 
     //构造频道公共ajax
     private function _add_edit_category_common($channelInfo = false)
     {
-        $ArticleCategoryModel = D('ArticleCategory');
         $where['parent_id']   = 0;
         $whereValue           = request('parent_id');
         $whereValue && $where['parent_id'] = $whereValue;
 
-        $articleCategoryList = $ArticleCategoryModel->mSelect($where, $ArticleCategoryModel->where($where)->count());
+        $articleCategoryList = Model\ArticleCategory::mSelect($where, Model\ArticleCategory::where($where)->count());
         foreach ($articleCategoryList as &$articleCategory) {
-            $articleCategory['has_child'] = $ArticleCategoryModel->where(['parent_id' => $articleCategory['id']])->count();
+            $articleCategory['has_child'] = Model\ArticleCategory::where(['parent_id' => $articleCategory['id']])->count();
             if ($channelInfo && isset($channelInfo['ext_info'][$articleCategory['id']])) {
                 $articleCategory['checked']          = true;
                 $articleCategory['s_limit']          = $channelInfo['ext_info'][$articleCategory['id']]['s_limit'];

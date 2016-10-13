@@ -4,13 +4,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
+use App\Model;
 
 class Recruit extends Backend
 {
     //列表
     public function index()
     {
-        $RecruitModel = D('Recruit');
         //建立where
         $whereValue = '';
         $whereValue = request('name');
@@ -20,16 +20,16 @@ class Recruit extends Backend
         $whereValue = mMktimeRange('end_time');
         $whereValue && $where['end_time'] = $whereValue;
         //初始化翻页 和 列表数据
-        $recruitList = $RecruitModel->mSelect($where, true);
-        $this->assign('recruit_list', $recruitList);
-        $this->assign('recruit_list_count', $RecruitModel->mGetPageCount($where));
+        $recruitList                  = Model\Recruit::mSelect($where, true);
+        $assign['recruit_list']       = $recruitList;
+        $assign['recruit_list_count'] = Model\Recruit::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo               = [];
-        $whereInfo['name']       = ['type' => 'input', 'name' => trans('recruit') . trans('name')];
-        $whereInfo['start_time'] = ['type' => 'time', 'name' => trans('start') . trans('time')];
-        $whereInfo['end_time']   = ['type' => 'time', 'name' => trans('end') . trans('time')];
-        $this->assign('where_info', $whereInfo);
+        $whereInfo['name']       = ['type' => 'input', 'name' => trans('common.recruit') . trans('common.name')];
+        $whereInfo['start_time'] = ['type' => 'time', 'name' => trans('common.start') . trans('common.time')];
+        $whereInfo['end_time']   = ['type' => 'time', 'name' => trans('common.end') . trans('common.time')];
+        $assign['where_info']    = $whereInfo;
 
         //初始化batch_handle
         $batchHandle              = [];
@@ -37,28 +37,27 @@ class Recruit extends Backend
         $batchHandle['add']       = $this->_check_privilege('add');
         $batchHandle['edit']      = $this->_check_privilege('edit');
         $batchHandle['del']       = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batchHandle);
+        $assign['batch_handle']   = $batchHandle;
 
-        $this->assign('title', trans('recruit') . trans('management'));
-        $this->display();
+        $assign['title'] = trans('common.recruit') . trans('common.management');
+        return view('admin.', $assign);
     }
 
     //新增
     public function add()
     {
         if (IS_POST) {
-            $RecruitModel = D('Recruit');
-            $data         = $this->makeData();
-            $resultAdd    = $RecruitModel->mAdd($data);
+            $data      = $this->makeData();
+            $resultAdd = Model\Recruit::mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('recruit') . trans('add') . trans('success'), route('index'));
+                $this->success(trans('common.recruit') . trans('common.add') . trans('common.success'), route('index'));
                 return;
             } else {
-                $this->error(trans('recruit') . trans('add') . trans('error'), route('add'));
+                $this->error(trans('common.recruit') . trans('common.add') . trans('common.error'), route('add'));
             }
         }
-        $this->assign('title', trans('add') . trans('recruit'));
-        $this->display('addedit');
+        $assign['title'] = trans('common.add') . trans('common.recruit');
+        return view('admin.addedit', $assign);
     }
 
     //编辑
@@ -66,27 +65,27 @@ class Recruit extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $RecruitModel = D('Recruit');
         if (IS_POST) {
             $data       = $this->makeData();
-            $resultEdit = $RecruitModel->mEdit($id, $data);
+            $resultEdit = Model\Recruit::mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('recruit') . trans('edit') . trans('success'), route('index'));
+                $this->success(trans('common.recruit') . trans('common.edit') . trans('common.success'),
+                    route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('recruit') . trans('edit') . trans('error'), $errorGoLink);
+                $this->error(trans('common.recruit') . trans('common.edit') . trans('common.error'), $errorGoLink);
             }
         }
 
-        $editInfo = $RecruitModel->mFind($id);
-        $this->assign('edit_info', $editInfo);
+        $editInfo            = Model\Recruit::mFind($id);
+        $assign['edit_info'] = $editInfo;
 
-        $this->assign('title', trans('edit') . trans('recruit'));
-        $this->display('addedit');
+        $assign['title'] = trans('common.edit') . trans('common.recruit');
+        return view('admin.addedit', $assign);
     }
 
     //删除
@@ -94,19 +93,17 @@ class Recruit extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $RecruitModel = D('Recruit');
-        $resultDel    = $RecruitModel->mDel($id);
+        $resultDel = Model\Recruit::mDel($id);
         if ($resultDel) {
-            $RecruitLogModel = D('RecruitLog');
             //TODO 需要定义数据列
-            $resultDel = $RecruitLogModel->mClean($id);
-            $this->success(trans('recruit') . trans('del') . trans('success'), route('index'));
+            $resultDel = Model\RecruitLog::mClean($id);
+            $this->success(trans('common.recruit') . trans('common.del') . trans('common.success'), route('index'));
             return;
         } else {
-            $this->error(trans('recruit') . trans('del') . trans('error'), route('index'));
+            $this->error(trans('common.recruit') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 

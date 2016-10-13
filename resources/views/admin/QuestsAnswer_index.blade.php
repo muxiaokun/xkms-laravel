@@ -23,7 +23,7 @@
                             {{ $quests_answer['member_name'] }}
                         </td>
                         <td>
-                            {{ $quests_answer['add_time']|M_date=C('SYS_DATE_DETAIL') }}
+                            {{ $quests_answer['add_time']|M_date=config('system.sys_date_detail') }}
                         </td>
                         <td class="nowrap">
                             @if ($batch_handle['add'])

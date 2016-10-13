@@ -4,14 +4,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
+use App\Model;
 
 class QuestsAnswer extends Backend
 {
     //列表
     public function index()
     {
-        $QuestsModel = D('Quests');
-        $MemberModel = D('Member');
         $where       = [];
 
         //建立where
@@ -21,36 +20,35 @@ class QuestsAnswer extends Backend
         $whereValue = request('quests_title');
         $whereValue && $where['quests_id'] = [
             'in',
-            $QuestsModel->where(['title' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+            Model\Quests::where(['title' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
         ];
         $whereValue = request('member_id');
         $whereValue && $where['member_id'] = [
             'in',
-            $MemberModel->where(['member_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+            Model\Member::where(['member_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
         ];
 
-        $QuestsAnswerModel = D('QuestsAnswer');
-        $questsAnswerList  = $QuestsAnswerModel->mSelect($where, true);
+        $questsAnswerList = Model\QuestsAnswer::mSelect($where, true);
         foreach ($questsAnswerList as &$questsAnswer) {
-            $memberName                  = $MemberModel->mFindColumn($groupId, 'name');
-            $questsAnswer['member_name'] = ($memberName) ? $memberName : trans('anonymous');
+            $memberName                  = Model\Member::mFindColumn($groupId, 'name');
+            $questsAnswer['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');
         }
-        $this->assign('quests_answer_list', $questsAnswerList);
-        $this->assign('quests_answer_list_count', $QuestsAnswerModel->mGetPageCount($where));
+        $assign['quests_answer_list']       = $questsAnswerList;
+        $assign['quests_answer_list_count'] = Model\QuestsAnswer::mGetPageCount($where);
         //初始化where_info
         $whereInfo                 = [];
-        $whereInfo['quests_title'] = ['type' => 'input', 'name' => trans('quests') . trans('name')];
-        $whereInfo['member_id']    = ['type' => 'input', 'name' => trans('member') . trans('name')];
-        $this->assign('where_info', $whereInfo);
+        $whereInfo['quests_title'] = ['type' => 'input', 'name' => trans('common.quests') . trans('common.name')];
+        $whereInfo['member_id']    = ['type' => 'input', 'name' => trans('common.member') . trans('common.name')];
+        $assign['where_info']      = $whereInfo;
 
         //初始化batch_handle
-        $batchHandle        = [];
-        $batchHandle['add'] = $this->_check_privilege('add');
-        $batchHandle['del'] = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batchHandle);
+        $batchHandle            = [];
+        $batchHandle['add']     = $this->_check_privilege('add');
+        $batchHandle['del']     = $this->_check_privilege('del');
+        $assign['batch_handle'] = $batchHandle;
 
-        $this->assign('title', trans('quests') . trans('answer') . trans('management'));
-        $this->display();
+        $assign['title'] = trans('common.quests') . trans('common.answer') . trans('common.management');
+        return view('admin.', $assign);
     }
 
     //显示问卷答案
@@ -58,13 +56,11 @@ class QuestsAnswer extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $QuestsModel       = D('Quests');
-        $QuestsAnswerModel = D('QuestsAnswer');
-        $questsAnswerInfo  = $QuestsAnswerModel->mFind($id);
-        $questsInfo        = $QuestsModel->mFind($questsAnswerInfo['quests_id']);
+        $questsAnswerInfo = Model\QuestsAnswer::mFind($id);
+        $questsInfo       = Model\Quests::mFind($questsAnswerInfo['quests_id']);
 
         //初始化问题
         $questsQuestList = json_decode($questsInfo['ext_info'], true);
@@ -77,12 +73,12 @@ class QuestsAnswer extends Backend
             '' != $key && $questsAnswerList[$key][] = $value;
         }
 
-        $this->assign('quests_quest_list', $questsQuestList);
-        $this->assign('quests_answer_list', $questsAnswerList);
-        $this->assign('quests_info', $questsInfo);
-        $this->assign('quests_answer_info', $questsAnswerInfo);
-        $this->assign('title', trans('quests') . trans('answer'));
-        $this->display();
+        $assign['quests_quest_list']  = $questsQuestList;
+        $assign['quests_answer_list'] = $questsAnswerList;
+        $assign['quests_info']        = $questsInfo;
+        $assign['quests_answer_info'] = $questsAnswerInfo;
+        $assign['title']              = trans('common.quests') . trans('common.answer');
+        return view('admin.', $assign);
     }
 
     //统计问卷答案
@@ -90,15 +86,13 @@ class QuestsAnswer extends Backend
     {
         $questsId = request('quests_id');
         if (!$questsId) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         //读取问题
-        $QuestsModel = D('Quests');
-        $questsInfo  = $QuestsModel->mFind($questsId);
+        $questsInfo = Model\Quests::mFind($questsId);
         //初始化问题
         $questsQuestList   = json_decode($questsInfo['ext_info'], true);
-        $QuestsAnswerModel = D('QuestsAnswer');
         foreach ($questsQuestList as $questId => $quest) {
             $answerName = explode('|', $questsQuestList[$questId]['answer']);
             $answer     = [];
@@ -106,31 +100,31 @@ class QuestsAnswer extends Backend
                 case 'radio':
                     foreach ($answerName as $k => $name) {
                         $answer[$k]['name']  = $name;
-                        $answer[$k]['count'] = $QuestsAnswerModel->count_quests_answer($questsId,
+                        $answer[$k]['count'] = Model\QuestsAnswer::count_quests_answer($questsId,
                             '%|' . $questId . ':' . $k . "|%");
                     }
                     break;
                 case 'checkbox':
                     foreach ($answerName as $k => $name) {
                         $answer[$k]['name']  = $name;
-                        $answer[$k]['count'] = $QuestsAnswerModel->count_quests_answer($questsId,
+                        $answer[$k]['count'] = Model\QuestsAnswer::count_quests_answer($questsId,
                             '%|' . $questId . ':' . $k . "|%");
                     }
                     break;
                 case 'text':
-                    $answer[$k]['count'] = $QuestsAnswerModel->count_quests_answer($questsId, "%|" . $questId . ":%");
+                    $answer[$k]['count'] = Model\QuestsAnswer::count_quests_answer($questsId, "%|" . $questId . ":%");
                     break;
                 case 'textarea':
-                    $answer[$k]['count'] = $QuestsAnswerModel->count_quests_answer($questsId, "%|" . $questId . ":%");
+                    $answer[$k]['count'] = Model\QuestsAnswer::count_quests_answer($questsId, "%|" . $questId . ":%");
                     break;
             }
             $questsQuestList[$questId]['answer']    = $answer;
-            $questsQuestList[$questId]['max_count'] = $QuestsAnswerModel->count_quests_answer($questsId);
+            $questsQuestList[$questId]['max_count'] = Model\QuestsAnswer::count_quests_answer($questsId);
         }
-        $this->assign('quests_quest_list', $questsQuestList);
+        $assign['quests_quest_list'] = $questsQuestList;
 
-        $this->assign('title', trans('quests') . trans('answer') . trans('statistics'));
-        $this->display();
+        $assign['title'] = trans('common.quests') . trans('common.answer') . trans('common.statistics');
+        return view('admin.', $assign);
     }
 
     //删除
@@ -138,18 +132,16 @@ class QuestsAnswer extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $QuestsAnswerModel = D('QuestsAnswer');
-        $questsAnswerInfo  = $QuestsAnswerModel->mFind($id);
-        $resultDel         = $QuestsAnswerModel->mDel($questsAnswerInfo['id']);
+        $questsAnswerInfo = Model\QuestsAnswer::mFind($id);
+        $resultDel        = Model\QuestsAnswer::mDel($questsAnswerInfo['id']);
         if ($resultDel) {
-            $QuestsModel = D('Quests');
-            $QuestsModel->where(['id' => $questsAnswerInfo['quests_id']])->setDec('current_portion');
-            $this->success(trans('del') . trans('answer') . trans('success'), route('index'));
+            Model\Quests::where(['id' => $questsAnswerInfo['quests_id']])->setDec('current_portion');
+            $this->success(trans('common.del') . trans('common.answer') . trans('common.success'), route('index'));
         } else {
-            $this->error(trans('del') . trans('answer') . trans('error'), route('index'));
+            $this->error(trans('common.del') . trans('common.answer') . trans('common.error'), route('index'));
         }
     }
 }

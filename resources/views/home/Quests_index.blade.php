@@ -17,10 +17,10 @@
                     {{ $quests['title'] }}
                 </td>
                 <td>
-                    {{ $quests['start_time']|M_date=C('SYS_DATE_DETAIL') }}
+                    {{ $quests['start_time']|M_date=config('system.sys_date_detail') }}
                 </td>
                 <td>
-                    {{ $quests['end_time']|M_date=C('SYS_DATE_DETAIL') }}
+                    {{ $quests['end_time']|M_date=config('system.sys_date_detail') }}
                 </td>
                 <td>
                     @if ($quests['access_info'])

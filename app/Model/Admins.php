@@ -3,7 +3,7 @@
 namespace App\Model;
 
 
-class Admin extends Common
+class Admins extends Common
 {
     public function mSelect($where = null, $page = false)
     {

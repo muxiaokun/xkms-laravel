@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
+use App\Model;
 
 class ManageUpload extends Backend
 {
@@ -20,20 +21,17 @@ class ManageUpload extends Backend
         $whereValue && $where['add_time'] = $whereValue;
 
         //初始化翻页 和 列表数据
-        $AdminModel        = D('Admin');
-        $MemberModel       = D('Member');
-        $ManageUploadModel = D('ManageUpload');
-        $manageUploadList  = $ManageUploadModel->mSelect($where, true);
+        $manageUploadList = Model\ManageUpload::mSelect($where, true);
         foreach ($manageUploadList as &$manageUpload) {
             switch ($manageUpload['user_type']) {
                 case 1:
-                    $manageUpload['user_name'] = $AdminModel->mFindColumn($manageUpload['user_id'], 'admin_name');
+                    $manageUpload['user_name'] = Model\Admin::mFindColumn($manageUpload['user_id'], 'admin_name');
                     break;
                 case 2:
-                    $manageUpload['user_name'] = $MemberModel->mFindColumn($manageUpload['user_id'], 'member_name');
+                    $manageUpload['user_name'] = Model\Member::mFindColumn($manageUpload['user_id'], 'member_name');
                     break;
             }
-            $bindInfo    = [trans('controller') => trans('relevance') . trans('id')];
+            $bindInfo    = [trans('common.controller') => trans('common.relevance') . trans('common.id')];
             $bindInfoArr = explode('|', $manageUpload['bind_info']);
             foreach ($bindInfoArr as $info) {
                 if ($info) {
@@ -43,24 +41,24 @@ class ManageUpload extends Backend
             }
             $manageUpload['bind_info'] = json_encode($bindInfo);
         }
-        $this->assign('manage_upload_list', $manageUploadList);
-        $this->assign('manage_upload_list_count', $ManageUploadModel->mGetPageCount($where));
+        $assign['manage_upload_list']       = $manageUploadList;
+        $assign['manage_upload_list_count'] = Model\ManageUpload::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo              = [];
-        $whereInfo['add_time']  = ['type' => 'time', 'name' => trans('add') . trans('time')];
-        $whereInfo['suffix']    = ['type' => 'input', 'name' => trans('suffix')];
-        $whereInfo['bind_info'] = ['type' => 'input', 'name' => trans('bind') . trans('controller')];
-        $this->assign('where_info', $whereInfo);
+        $whereInfo['add_time']  = ['type' => 'time', 'name' => trans('common.add') . trans('common.time')];
+        $whereInfo['suffix']    = ['type' => 'input', 'name' => trans('common.suffix')];
+        $whereInfo['bind_info'] = ['type' => 'input', 'name' => trans('common.bind') . trans('common.controller')];
+        $assign['where_info']   = $whereInfo;
 
         //初始化batch_handle
-        $batchHandle         = [];
-        $batchHandle['edit'] = $this->_check_privilege('edit');
-        $batchHandle['del']  = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batchHandle);
+        $batchHandle            = [];
+        $batchHandle['edit']    = $this->_check_privilege('edit');
+        $batchHandle['del']     = $this->_check_privilege('del');
+        $assign['batch_handle'] = $batchHandle;
 
-        $this->assign('title', trans('file') . trans('management'));
-        $this->display();
+        $assign['title'] = trans('common.file') . trans('common.management');
+        return view('admin.', $assign);
     }
 
     //删除图片
@@ -68,37 +66,36 @@ class ManageUpload extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $ManageUploadModel = D('ManageUpload');
-        $resultDel         = $ManageUploadModel->mDel($id);
+        $resultDel = Model\ManageUpload::mDel($id);
         if ($resultDel) {
-            $this->success(trans('file') . trans('del') . trans('success'), route('index'));
+            $this->success(trans('common.file') . trans('common.del') . trans('common.success'), route('index'));
             return;
         } else {
-            $this->error(trans('file') . trans('del') . trans('error'), route('index'));
+            $this->error(trans('common.file') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 
     //清除未用
     public function edit()
     {
-        $lang = trans('yes') . trans('no') . trans('confirm') . trans('clear');
+        $lang = trans('common.yes') . trans('common.no') . trans('common.confirm') . trans('common.clear');
         if (!$this->showConfirm($lang)) {
             return;
         }
 
-        $ManageUploadModel = D('ManageUpload');
-        $where['_string']  = '(bind_info is NULL OR bind_info = "")';
-        $manageUploadList  = $ManageUploadModel->mSelect($where, $ManageUploadModel->where($where)->count());
+        $where['_string'] = '(bind_info is NULL OR bind_info = "")';
+        $manageUploadList = Model\ManageUpload::mSelect($where, Model\ManageUpload::where($where)->count());
         foreach ($manageUploadList as $manageUpload) {
-            $resultDel = $ManageUploadModel->mDel($manageUpload['id']);
+            $resultDel = Model\ManageUpload::mDel($manageUpload['id']);
             if (!$resultDel) {
-                $this->error(trans('clear') . trans('file') . $manageUpload['path'] . trans('error'), route('index'));
+                $this->error(trans('common.clear') . trans('common.file') . $manageUpload['path'] . trans('common.error'),
+                    route('index'));
             }
         }
-        $this->success(trans('clear') . trans('file') . trans('success'), route('index'));
+        $this->success(trans('common.clear') . trans('common.file') . trans('common.success'), route('index'));
     }
 
     //上传接口实现

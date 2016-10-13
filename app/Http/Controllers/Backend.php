@@ -3,6 +3,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Model;
+
 class Backend extends Common
 {
     public function _initialize()
@@ -16,40 +18,38 @@ class Backend extends Common
                 session('backend_info', $backendInfo);
             } else {
                 $this->doLogout();
-                $this->error(trans('login') . trans('timeout'), route('Admin/Index/index'));
+                $this->error(trans('common.login') . trans('common.timeout'), route('Admin/Index/index'));
             }
 
             //检查管理员或者管理员组权限变动 先检查数量 提高效率
             $AdminModel            = D('Admin');
-            $adminInfo            = $AdminModel->mFind($backendInfo['id']);
-            $AdminGroupModel       = D('AdminGroup');
-            $adminGroupPrivilege = $AdminGroupModel->mFind_privilege($adminInfo['group_id']);
+            $adminInfo            = Model\Admin::mFind($backendInfo['id']);
+            $adminGroupPrivilege = Model\AdminGroup::mFind_privilege($adminInfo['group_id']);
             if (
                 $backendInfo['privilege'] !== $adminInfo['privilege'] ||
                 $backendInfo['group_privilege'] !== $adminGroupPrivilege
             ) {
                 $this->doLogout();
-                $this->error(trans('privilege') . trans('change') . trans('please') . trans('login'), route('Admin/Index/index'));
+                $this->error(trans('common.privilege') . trans('common.change') . trans('common.please') . trans('common.login'), route('Admin/Index/index'));
             }
 
             //登录后 检查权限
             if (!$this->_check_privilege()) {
-                $this->error(trans('you') . trans('none') . trans('privilege'));
+                $this->error(trans('common.you') . trans('common.none') . trans('common.privilege'));
             }
 
             //是否开启管理员日志 记录除了root 和 非POST(不记录来自ajax_api)提交数据
             if (config('system.sys_admin_auto_log') && 1 != session('backend_info.id') && IS_POST && 'ajax_api' != ACTION_NAME) {
                 $denyLog['Index'] = array('index', 'top_nav', 'left_nav', 'main', 'logout');
                 if (!in_array(ACTION_NAME, $denyLog[CONTROLLER_NAME])) {
-                    $AdminLogModel = D('AdminLog');
-                    $AdminLogModel->mAdd($backendInfo['id']);
+                    Model\AdminLog::mAdd($backendInfo['id']);
                 }
             }
         } else {
             //检测不登陆就可以访问的
             $allowAction['Index'] = array('index', 'login', 'verifyImg');
             if (!in_array(ACTION_NAME, $allowAction[CONTROLLER_NAME])) {
-                $this->error(trans('notdoLogin') . trans('backend'), route('Admin/Index/index'));
+                $this->error(trans('common.notdoLogin') . trans('common.backend'), route('Admin/Index/index'));
             }
         }*/
     }
@@ -94,29 +94,27 @@ class Backend extends Common
             return 'verify_error';
         }
 
-        $AdminModel = D('Admin');
         //检测后台尝试登陆次数
         $loginNum = config('system.sys_backend_login_num');
         $lockTime = config('system.sys_backend_lock_time');
         if (0 != $loginNum) {
-            $loginInfo = $AdminModel->mFind($AdminModel->mFindId($userName));
+            $loginInfo = Model\Admin::mFind(Model\Admin::mFindId($userName));
             if (0 != $loginInfo['lock_time'] && $loginInfo['lock_time'] > (time() - $lockTime)) {
-                $AdminModel->data(['lock_time' => time()])->where(['id' => $loginInfo['id']])->save();
+                Model\Admin::data(['lock_time' => time()])->where(['id' => $loginInfo['id']])->save();
                 return 'lock_user_error';
             }
         }
         //验证用户名密码
-        $adminInfo = $AdminModel->authorized($userName, $password);
+        $adminInfo = Model\Admin::authorized($userName, $password);
         if ($adminInfo) {
             //管理员有组的 加载分组权限
             if (0 < count($adminInfo['group_id'])) {
-                $AdminGroupModel              = D('AdminGroup');
-                $adminInfo['group_privilege'] = $AdminGroupModel->mFind_privilege($adminInfo['group_id']);
+                $adminInfo['group_privilege'] = Model\AdminGroup::mFind_privilege($adminInfo['group_id']);
             }
             //重置登录次数
             if (0 != $adminInfo['login_num']) {
                 $loginData = ['login_num' => 0, 'lock_time' => 0];
-                $AdminModel->data($loginData)->where(['id' => $loginInfo['id']])->save();
+                Model\Admin::data($loginData)->where(['id' => $loginInfo['id']])->save();
             }
             $adminInfo['login_time'] = time();
             session('backend_info', $adminInfo);
@@ -127,7 +125,7 @@ class Backend extends Common
                 $loginData              = [];
                 $loginData['login_num'] = $loginInfo['login_num'] + 1;
                 $loginData['lock_time'] = ($loginNum <= $loginData['login_num']) ? time() : 0;
-                $AdminModel->data($loginData)->where(['id' => $loginInfo['id']])->save();
+                Model\Admin::data($loginData)->where(['id' => $loginInfo['id']])->save();
             }
             return 'user_pwd_error';
         }
@@ -211,9 +209,9 @@ return {$configStr};
 EOF;
         $putResult     = file_put_contents($cfgFile, $putConfig);
         if ($putResult) {
-            $this->success(trans('save') . trans('success'), route(ACTION_NAME));
+            $this->success(trans('common.save') . trans('common.success'), route(ACTION_NAME));
         } else {
-            $this->error(trans('save') . trans('error'), route(ACTION_NAME));
+            $this->error(trans('common.save') . trans('common.error'), route(ACTION_NAME));
         }
         //此函数不做任何返回
     }

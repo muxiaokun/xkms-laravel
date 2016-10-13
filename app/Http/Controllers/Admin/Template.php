@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
+use App\Model;
 
 class Template extends Backend
 {
@@ -38,7 +39,8 @@ class Template extends Backend
         //刷新模本文件列表
         if (1 == request('refresh')) {
             $this->_refresh_view_files();
-            $this->success(trans('theme') . trans('template') . trans('refresh') . trans('success'), route('index'));
+            $this->success(trans('common.theme') . trans('common.template') . trans('common.refresh') . trans('common.success'),
+                route('index'));
             return;
         }
 
@@ -60,7 +62,7 @@ return {$configStr};
 ?>
 EOF;
             file_put_contents($this->config_file, $putConfig);
-            $this->success(trans('theme') . trans('selection') . trans('success'), route('index'));
+            $this->success(trans('common.theme') . trans('common.selection') . trans('common.success'), route('index'));
             return;
         }
 
@@ -74,23 +76,24 @@ EOF;
 
             //保存缓存
             F($this->tpl_info_file, $this->view_files, $this->view_path);
-            $this->success(trans('theme') . trans('info') . trans('save') . trans('success'), route('index'));
+            $this->success(trans('common.theme') . trans('common.info') . trans('common.save') . trans('common.success'),
+                route('index'));
             return;
         }
 
-        $this->assign('default_theme', $this->default_theme);
-        $this->assign('theme_list', $this->_get_theme_list());
-        $this->assign('theme_info_list', $this->view_files);
+        $assign['default_theme']   = $this->default_theme;
+        $assign['theme_list']      = $this->_get_theme_list();
+        $assign['theme_info_list'] = $this->view_files;
 
         //初始化batch_handle
-        $batchHandle         = [];
-        $batchHandle['add']  = $this->_check_privilege('add');
-        $batchHandle['edit'] = $this->_check_privilege('edit');
-        $batchHandle['del']  = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batchHandle);
+        $batchHandle            = [];
+        $batchHandle['add']     = $this->_check_privilege('add');
+        $batchHandle['edit']    = $this->_check_privilege('edit');
+        $batchHandle['del']     = $this->_check_privilege('del');
+        $assign['batch_handle'] = $batchHandle;
 
-        $this->assign('title', trans('theme') . trans('template') . trans('management'));
-        $this->display();
+        $assign['title'] = trans('common.theme') . trans('common.template') . trans('common.management');
+        return view('admin.', $assign);
     }
 
     //新增
@@ -104,31 +107,34 @@ EOF;
             if (preg_match('/\.\.\//', $fileName)
                 || !preg_match('/' . str_ireplace('.', '\.', config('TMPL_TEMPLATE_SUFFIX')) . '$/', $fileName)
             ) {
-                $this->error(trans('file') . trans('name') . trans('error'), route('index'));
+                $this->error(trans('common.file') . trans('common.name') . trans('common.error'), route('index'));
             }
             if (!$fileName) {
-                $this->error(trans('file') . trans('name') . trans('not') . trans('empty'), route('index'));
+                $this->error(trans('common.file') . trans('common.name') . trans('common.not') . trans('common.empty'),
+                    route('index'));
             }
 
             $filePath = $this->view_path . $fileName;
             $fileMd5  = ($filePath);
             if (is_array($this->view_files[$fileMd5])) {
-                $this->error(trans('file') . trans('name') . trans('repeat'), route('index'));
+                $this->error(trans('common.file') . trans('common.name') . trans('common.repeat'), route('index'));
             }
 
             $content    = request('content', '', false);
             $resultEdit = file_put_contents($filePath, $content);
             if (false !== $resultEdit) {
                 $this->_refresh_view_files();
-                $this->success(trans('theme') . trans('template') . trans('add') . trans('success'), route('index'));
+                $this->success(trans('common.theme') . trans('common.template') . trans('common.add') . trans('common.success'),
+                    route('index'));
                 return;
             } else {
-                $this->error(trans('theme') . trans('template') . trans('add') . trans('error'), route('index'));
+                $this->error(trans('common.theme') . trans('common.template') . trans('common.add') . trans('common.error'),
+                    route('index'));
             }
         }
 
-        $this->assign('title', trans('add') . trans('theme') . trans('template') . trans('template'));
-        $this->display('addedit');
+        $assign['title'] = trans('common.add') . trans('common.theme') . trans('common.template') . trans('common.template');
+        return view('admin.addedit', $assign);
     }
 
     //编辑
@@ -136,7 +142,7 @@ EOF;
     {
         $id = request('id');
         if (!is_array($this->view_files[$id])) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         $fileName = $this->view_files[$id]['file_name'];
@@ -145,20 +151,22 @@ EOF;
             $content    = request('content', '', false);
             $resultEdit = file_put_contents($filePath, $content);
             if ($resultEdit) {
-                $this->success(trans('theme') . trans('template') . trans('edit') . trans('success'), route('index'));
+                $this->success(trans('common.theme') . trans('common.template') . trans('common.edit') . trans('common.success'),
+                    route('index'));
                 return;
             } else {
-                $this->error(trans('theme') . trans('template') . trans('edit') . trans('error'), route('index'));
+                $this->error(trans('common.theme') . trans('common.template') . trans('common.edit') . trans('common.error'),
+                    route('index'));
             }
         }
 
         $editInfo            = $this->view_files[$id];
         $editInfo['content'] = htmlspecialchars(file_get_contents($filePath));
-        $this->assign('id', $id);
-        $this->assign('edit_info', $editInfo);
+        $assign['id']        = $id;
+        $assign['edit_info'] = $editInfo;
 
-        $this->assign('title', trans('edit') . trans('theme') . trans('template') . trans('template'));
-        $this->display('addedit');
+        $assign['title'] = trans('common.edit') . trans('common.theme') . trans('common.template') . trans('common.template');
+        return view('admin.addedit', $assign);
     }
 
     //删除
@@ -166,7 +174,7 @@ EOF;
     {
         $id = request('id');
         if (!is_array($this->view_files[$id])) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         $fileName  = $this->view_files[$id]['file_name'];
@@ -174,10 +182,12 @@ EOF;
         $resultDel = unlink($filePath);
         if ($resultDel) {
             $this->_refresh_view_files();
-            $this->success(trans('theme') . trans('template') . trans('del') . trans('success'), route('index'));
+            $this->success(trans('common.theme') . trans('common.template') . trans('common.del') . trans('common.success'),
+                route('index'));
             return;
         } else {
-            $this->error(trans('theme') . trans('template') . trans('del') . trans('error'), route('index'));
+            $this->error(trans('common.theme') . trans('common.template') . trans('common.del') . trans('common.error'),
+                route('index'));
         }
     }
 

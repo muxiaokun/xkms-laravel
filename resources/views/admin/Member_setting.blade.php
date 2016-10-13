@@ -11,11 +11,11 @@
                             <div class="col-sm-7">
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_MEMBER_ENABLE" value="1"
-                                           @if ('1' === C('SYS_MEMBER_ENABLE'))checked="checked"@endif >@lang('common.open')
+                                           @if ('1' === config('system.sys_member_enable'))checked="checked"@endif >@lang('common.open')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_MEMBER_ENABLE" value="0"
-                                           @if ('0' === C('SYS_MEMBER_ENABLE'))checked="checked"@endif >@lang('common.close')
+                                           @if ('0' === config('system.sys_member_enable'))checked="checked"@endif >@lang('common.close')
                                 </label>
                             </div>
                         </div>
@@ -29,11 +29,11 @@
                             <div class="col-sm-7">
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_MEMBER_AUTO_ENABLE" value="1"
-                                           @if ('1' === C('SYS_MEMBER_AUTO_ENABLE'))checked="checked"@endif >@lang('common.open')
+                                           @if ('1' === config('system.sys_member_auto_enable'))checked="checked"@endif >@lang('common.open')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_MEMBER_AUTO_ENABLE" value="0"
-                                           @if ('0' === C('SYS_MEMBER_AUTO_ENABLE'))checked="checked"@endif >@lang('common.close')
+                                           @if ('0' === config('system.sys_member_auto_enable'))checked="checked"@endif >@lang('common.close')
                                 </label>
                             </div>
                         </div>
@@ -45,11 +45,11 @@
                             <div class="col-sm-7">
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_FRONTEND_VERIFY" value="1"
-                                           @if ('1' === C('SYS_FRONTEND_VERIFY'))checked="checked"@endif >@lang('common.open')
+                                           @if ('1' === config('system.sys_frontend_verify'))checked="checked"@endif >@lang('common.open')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_FRONTEND_VERIFY" value="0"
-                                           @if ('0' === C('SYS_FRONTEND_VERIFY'))checked="checked"@endif >@lang('common.close')
+                                           @if ('0' === config('system.sys_frontend_verify'))checked="checked"@endif >@lang('common.close')
                                 </label>
                             </div>
                         </div>

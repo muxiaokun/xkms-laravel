@@ -4,13 +4,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
+use App\Model;
 
 class Region extends Backend
 {
     //列表
     public function index()
     {
-        $RegionModel = D('Region');
         //建立where
         $whereValue = '';
         $whereValue = request('region_name');
@@ -23,49 +23,48 @@ class Region extends Backend
         $whereValue && $where['postcode'] = ['like', '%' . $whereValue . '%'];
 
         //初始化翻页 和 列表数据
-        $regionList = $RegionModel->mSelect($where, true);
+        $regionList = Model\Region::mSelect($where, true);
         foreach ($regionList as &$region) {
-            $region['parent_name'] = $RegionModel->mFindColumn($region['parent_id'], 'region_name');
+            $region['parent_name'] = Model\Region::mFindColumn($region['parent_id'], 'region_name');
         }
 
-        $this->assign('region_list', $regionList);
-        $this->assign('region_list_count', $RegionModel->mGetPageCount($where));
+        $assign['region_list']       = $regionList;
+        $assign['region_list_count'] = Model\Region::mGetPageCount($where);
 
         //初始化where_info
-        $whereInfo['region_name'] = ['type' => 'input', 'name' => trans('region_name')];
-        $whereInfo['short_spell'] = ['type' => 'input', 'name' => trans('short_spell')];
-        $whereInfo['areacode']    = ['type' => 'input', 'name' => trans('areacode')];
-        $whereInfo['postcode']    = ['type' => 'input', 'name' => trans('postcode')];
-        $this->assign('where_info', $whereInfo);
+        $whereInfo['region_name'] = ['type' => 'input', 'name' => trans('common.region_name')];
+        $whereInfo['short_spell'] = ['type' => 'input', 'name' => trans('common.short_spell')];
+        $whereInfo['areacode']    = ['type' => 'input', 'name' => trans('common.areacode')];
+        $whereInfo['postcode']    = ['type' => 'input', 'name' => trans('common.postcode')];
+        $assign['where_info']     = $whereInfo;
 
         //初始化batch_handle
-        $batchHandle         = [];
-        $batchHandle['add']  = $this->_check_privilege('add');
-        $batchHandle['edit'] = $this->_check_privilege('edit');
-        $batchHandle['del']  = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batchHandle);
+        $batchHandle            = [];
+        $batchHandle['add']     = $this->_check_privilege('add');
+        $batchHandle['edit']    = $this->_check_privilege('edit');
+        $batchHandle['del']     = $this->_check_privilege('del');
+        $assign['batch_handle'] = $batchHandle;
 
-        $this->assign('title', trans('region') . trans('management'));
-        $this->display();
+        $assign['title'] = trans('common.region') . trans('common.management');
+        return view('admin.', $assign);
     }
 
     //新增
     public function add()
     {
         if (IS_POST) {
-            $RegionModel = D('Region');
-            $data        = $this->makeData();
-            $resultAdd   = $RegionModel->mAdd($data);
+            $data      = $this->makeData();
+            $resultAdd = Model\Region::mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('region') . trans('add') . trans('success'), route('index'));
+                $this->success(trans('common.region') . trans('common.add') . trans('common.success'), route('index'));
                 return;
             } else {
-                $this->error(trans('region') . trans('add') . trans('error'), route('add'));
+                $this->error(trans('common.region') . trans('common.add') . trans('common.error'), route('add'));
             }
         }
 
-        $this->assign('title', trans('region') . trans('add'));
-        $this->display('addedit');
+        $assign['title'] = trans('common.region') . trans('common.add');
+        return view('admin.addedit', $assign);
     }
 
     //编辑
@@ -73,27 +72,26 @@ class Region extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $RegionModel = D('Region');
         if (IS_POST) {
             $data       = $this->makeData();
-            $resultEdit = $RegionModel->mEdit($id, $data);
+            $resultEdit = Model\Region::mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('region') . trans('edit') . trans('success'), route('index'));
+                $this->success(trans('common.region') . trans('common.edit') . trans('common.success'), route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('region') . trans('edit') . trans('error'), $errorGoLink);
+                $this->error(trans('common.region') . trans('common.edit') . trans('common.error'), $errorGoLink);
             }
         }
 
-        $editInfo                = $RegionModel->mFind($id);
-        $editInfo['parent_name'] = $RegionModel->mFindColumn($editInfo['parent_id'], 'region_name');
-        $this->assign('edit_info', $editInfo);
-        $this->assign('title', trans('region') . trans('edit'));
-        $this->display('addedit');
+        $editInfo                = Model\Region::mFind($id);
+        $editInfo['parent_name'] = Model\Region::mFindColumn($editInfo['parent_id'], 'region_name');
+        $assign['edit_info']     = $editInfo;
+        $assign['title']         = trans('common.region') . trans('common.edit');
+        return view('admin.addedit', $assign);
     }
 
     //删除
@@ -101,16 +99,15 @@ class Region extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $RegionModel = D('Region');
-        $resultDel   = $RegionModel->mDel($id);
+        $resultDel = Model\Region::mDel($id);
         if ($resultDel) {
-            $this->success(trans('region') . trans('del') . trans('success'), route('index'));
+            $this->success(trans('common.region') . trans('common.del') . trans('common.success'), route('index'));
             return;
         } else {
-            $this->error(trans('region') . trans('del') . trans('error'), route('index'));
+            $this->error(trans('common.region') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 

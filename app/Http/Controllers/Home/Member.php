@@ -4,16 +4,17 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\FrontendMember;
+use App\Model;
 
 class Member extends FrontendMember
 {
     public function index()
     {
         if (!$this->isLogin()) {
-            $this->display('login');
+            return view('home.login', $assign);
             return;
         }
-        $this->display();
+        return view('home.', $assign);
     }
 
     //登录
@@ -27,17 +28,18 @@ class Member extends FrontendMember
         $memberPwd  = request('pwd');
         switch ($this->doLogin($memberName, $memberPwd)) {
             case 'user_pwd_error':
-                $this->error(trans('account') . trans('or') . trans('pass') . trans('error'), route('Member/index'));
+                $this->error(trans('common.account') . trans('common.or') . trans('common.pass') . trans('common.error'),
+                    route('Member/index'));
                 break;
             case 'verify_error':
-                $this->error(trans('verify_code') . trans('error'), route('Member/index'));
+                $this->error(trans('common.verify_code') . trans('common.error'), route('Member/index'));
                 break;
             case 'lock_user_error':
-                $this->error(trans('admin') . trans('by') . trans('lock') . trans('please') . config('system.sys_frontend_lock_time') . trans('second') . trans('again') . trans('login'),
+                $this->error(trans('common.admin') . trans('common.by') . trans('common.lock') . trans('common.please') . config('system.sys_frontend_lock_time') . trans('common.second') . trans('common.again') . trans('common.login'),
                     route('index'));
                 break;
             default:
-                $this->success(trans('login') . trans('success'), route('index'));
+                $this->success(trans('common.login') . trans('common.success'), route('index'));
         }
     }
 
@@ -46,7 +48,7 @@ class Member extends FrontendMember
     {
         if (IS_POST) {
             if (!$this->verifyCheck(request('verify'), 'register') && config('system.sys_frontend_verify')) {
-                $this->error(trans('verify_code') . trans('error'), route('index', ['t' => 'register']));
+                $this->error(trans('common.verify_code') . trans('common.error'), route('index', ['t' => 'register']));
             }
             $memberName     = request('re_member_name');
             $memberPwd      = request('password');
@@ -77,20 +79,21 @@ class Member extends FrontendMember
             }
 
             //是否自动启用
-            $isEnable    = config('system.sys_member_auto_enable') ? 1 : 0;
-            $data        = [
+            $isEnable  = config('system.sys_member_auto_enable') ? 1 : 0;
+            $data      = [
                 'member_name' => $memberName,
                 'member_pwd'  => $memberPwd,
                 'is_enable'   => $isEnable,
             ];
-            $MemberModel = D('Member');
-            $addResult   = $MemberModel->mAdd($data);
+            $addResult = Model\Member::mAdd($data);
             if ($addResult) {
                 $this->doLogin($memberName, $memberPwd, false);
-                $this->success(trans('member') . trans('register') . trans('success'), route('index'));
+                $this->success(trans('common.member') . trans('common.register') . trans('common.success'),
+                    route('index'));
                 return;
             } else {
-                $this->error(trans('member') . trans('register') . trans('error'), route('index', ['t' => 'register']));
+                $this->error(trans('common.member') . trans('common.register') . trans('common.error'),
+                    route('index', ['t' => 'register']));
             }
         }
     }
@@ -99,7 +102,8 @@ class Member extends FrontendMember
     public function logout()
     {
         $this->doLogout();
-        $this->success(trans('logout') . trans('account') . trans('success'), route('Index/index'));
+        $this->success(trans('common.logout') . trans('common.account') . trans('common.success'),
+            route('Index/index'));
     }
 
     //表单数据验证
@@ -110,45 +114,44 @@ class Member extends FrontendMember
             case 'user':
                 //不能为空
                 if ('' == $data['user']) {
-                    $result['info'] = trans('member') . trans('name') . trans('not') . trans('empty');
+                    $result['info'] = trans('common.member') . trans('common.name') . trans('common.not') . trans('common.empty');
                     break;
                 }
                 //检查用户名是否存在
-                $MemberModel = D('Member');
-                $memberInfo  = $MemberModel->mSelect(['member_name' => $data['user']]);
+                $memberInfo = Model\Member::mSelect(['member_name' => $data['user']]);
                 if (0 >= count($memberInfo)) {
-                    $result['info'] = trans('member') . trans('name') . trans('dont') . trans('exists');
+                    $result['info'] = trans('common.member') . trans('common.name') . trans('common.dont') . trans('common.exists');
                     break;
                 }
                 break;
             case 'password':
                 //不能为空
                 if ('' == $data['password']) {
-                    $result['info'] = trans('pass') . trans('not') . trans('empty');
+                    $result['info'] = trans('common.pass') . trans('common.not') . trans('common.empty');
                     break;
                 }
                 //密码长度不能小于6
                 if (6 > strlen($data['password'])) {
-                    $result['info'] = trans('pass_len_error');
+                    $result['info'] = trans('common.pass_len_error');
                     break;
                 }
                 break;
             case 'password_again':
                 //检测再一次输入的密码是否一致
                 if ($data['password'] != $data['password_again']) {
-                    $result['info'] = trans('password_again_error');
+                    $result['info'] = trans('common.password_again_error');
                     break;
                 }
                 //不能为空
                 if ('' == $data['password_again']) {
-                    $result['info'] = trans('pass') . trans('not') . trans('empty');
+                    $result['info'] = trans('common.pass') . trans('common.not') . trans('common.empty');
                     break;
                 }
                 break;
             case 're_member_name':
                 //不能为空
                 if ('' == $data['re_member_name']) {
-                    $result['info'] = trans('member') . trans('name') . trans('not') . trans('empty');
+                    $result['info'] = trans('common.member') . trans('common.name') . trans('common.not') . trans('common.empty');
                     break;
                 }
                 //检查用户名规则
@@ -159,14 +162,13 @@ class Member extends FrontendMember
                 preg_match('/^[\x80-\xff|a-z|A-Z|0-9]+([^\x80-\xff|^a-z|^A-Z|^0-9]).*$/', $data['re_member_name'],
                     $matches);
                 if ('' != $matches[1]) {
-                    $result['info'] = trans('name_format_error') . $matches[1];
+                    $result['info'] = trans('common.name_format_error') . $matches[1];
                     break;
                 }
                 //检查用户名是否存在
-                $MemberModel = D('Member');
-                $memberInfo  = $MemberModel->mSelect(['member_name' => $data['re_member_name']]);
+                $memberInfo = Model\Member::mSelect(['member_name' => $data['re_member_name']]);
                 if (0 < count($memberInfo)) {
-                    $result['info'] = trans('member') . trans('name') . trans('exists');
+                    $result['info'] = trans('common.member') . trans('common.name') . trans('common.exists');
                     break;
                 }
                 break;

@@ -41,7 +41,7 @@
                             {{ $article['cate_name'] }}
                         </td>
                         <td>
-                            {{ $article['add_time']|M_date=C('SYS_DATE_DETAIL') }}
+                            {{ $article['add_time']|M_date=config('system.sys_date_detail') }}
                         </td>
                         <td>
                             @if ($article['if_show'])@lang('common.yes')@else@lang('common.no')@endif

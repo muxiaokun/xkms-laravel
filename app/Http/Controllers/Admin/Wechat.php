@@ -4,14 +4,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
+use App\Model;
 
 class Wechat extends Backend
 {
     //列表 系统已绑定微信账号
     public function index()
     {
-        $WechatModel = D('Wechat');
-        $MemberModel = D('Member');
         $where       = [];
         $whereValue  = request('member_name');
         $whereValue && $where['member_name'] = $whereValue;
@@ -19,28 +18,28 @@ class Wechat extends Backend
         $whereValue && $where['bind_time'] = $whereValue;
 
         //初始化翻页 和 列表数据
-        $wechatList = $WechatModel->mSelect($where, true);
+        $wechatList = Model\Wechat::mSelect($where, true);
         foreach ($wechatList as &$wechat) {
-            $wechat['member_name'] = $MemberModel->mFindColumn($wechat['member_id'], 'member_name');
+            $wechat['member_name'] = Model\Member::mFindColumn($wechat['member_id'], 'member_name');
         }
-        $this->assign('wechat_list', $wechatList);
-        $this->assign('wechat_list_count', $WechatModel->mGetPageCount($where));
+        $assign['wechat_list']       = $wechatList;
+        $assign['wechat_list_count'] = Model\Wechat::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo                = [];
-        $whereInfo['member_name'] = ['type' => 'input', 'name' => trans('member') . trans('name')];
-        $whereInfo['bind_time']   = ['type' => 'time', 'name' => trans('bind') . trans('time')];
-        $this->assign('where_info', $whereInfo);
+        $whereInfo['member_name'] = ['type' => 'input', 'name' => trans('common.member') . trans('common.name')];
+        $whereInfo['bind_time']   = ['type' => 'time', 'name' => trans('common.bind') . trans('common.time')];
+        $assign['where_info']     = $whereInfo;
 
         //初始化batch_handle
-        $batchHandle         = [];
-        $batchHandle['add']  = $this->_check_privilege('add');
-        $batchHandle['edit'] = $this->_check_privilege('edit');
-        $batchHandle['del']  = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batchHandle);
+        $batchHandle            = [];
+        $batchHandle['add']     = $this->_check_privilege('add');
+        $batchHandle['edit']    = $this->_check_privilege('edit');
+        $batchHandle['del']     = $this->_check_privilege('del');
+        $assign['batch_handle'] = $batchHandle;
 
-        $this->assign('title', trans('wechat') . trans('management'));
-        $this->display();
+        $assign['title'] = trans('common.wechat') . trans('common.management');
+        return view('admin.', $assign);
     }
 
     //配置
@@ -61,14 +60,14 @@ class Wechat extends Backend
         }
 
         //认证连接
-        $Wechat  = new \Common\Lib\Wechat();
-        $ApiLink = 'http://' . $_SERVER['SERVER_NAME'] . route(config('DEFAULT_MODULE') . '/Wechat/member_bind');
-        $this->assign('Api_link', $ApiLink);
-        $Oauth2Link = $Wechat->Oauth2_enlink($ApiLink);
-        $this->assign('Oauth2_link', $Oauth2Link);
+        $Wechat                = new \Common\Lib\Wechat();
+        $ApiLink               = 'http://' . $_SERVER['SERVER_NAME'] . route(config('DEFAULT_MODULE') . '/Wechat/member_bind');
+        $assign['Api_link']    = $ApiLink;
+        $Oauth2Link            = $Wechat->Oauth2_enlink($ApiLink);
+        $assign['Oauth2_link'] = $Oauth2Link;
 
-        $this->assign('title', trans('config') . trans('wechat'));
-        $this->display();
+        $assign['title'] = trans('common.config') . trans('common.wechat');
+        return view('admin.', $assign);
     }
 
     //对单一微信发送信息
@@ -76,21 +75,19 @@ class Wechat extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         if (!config('app.debug')) {
             $templateIdShort = config('system.wechat_template_id');
             if (!$templateIdShort) {
-                $this->error('WECHAT_TEMPLATE_ID' . trans('empty'), route('config'));
+                $this->error('WECHAT_TEMPLATE_ID' . trans('common.empty'), route('config'));
             }
 
         }
-        $WechatModel             = D('Wechat');
-        $editInfo                = $WechatModel->mFind($id);
-        $MemberModel             = D('Member');
-        $editInfo['member_name'] = $MemberModel->mFindColumn($editInfo['member_id'], 'member_name');
-        $this->assign('edit_info', $editInfo);
+        $editInfo                = Model\Wechat::mFind($id);
+        $editInfo['member_name'] = Model\Member::mFindColumn($editInfo['member_id'], 'member_name');
+        $assign['edit_info']     = $editInfo;
         if (IS_POST) {
             $errorGoLink = route('edit', ['id' => $id]);
             $Wechat      = new \Common\Lib\Wechat();
@@ -98,7 +95,7 @@ class Wechat extends Backend
             if (!config('app.debug')) {
                 $templateId = $Wechat->get_template($templateIdShort);
                 if (0 != $templateId['errcode']) {
-                    $this->error('template_id' . trans('error'), $errorGoLink);
+                    $this->error('template_id' . trans('common.error'), $errorGoLink);
                 }
 
                 $templateId = $templateId['template_id'];
@@ -114,16 +111,17 @@ class Wechat extends Backend
             $data['data'] = $this->makeData();
             $putTemplate  = $Wechat->put_template($data);
             if (0 === $putTemplate['errcode']) {
-                $this->success(trans('wechat') . trans('send') . trans('success'), route('Wechat/index'));
+                $this->success(trans('common.wechat') . trans('common.send') . trans('common.success'),
+                    route('Wechat/index'));
                 return;
             } else {
-                $this->error(trans('wechat') . trans('send') . trans('error') . trans('error' . $putTemplate['errcode']),
+                $this->error(trans('common.wechat') . trans('common.send') . trans('common.error') . trans('error' . $putTemplate['errcode']),
                     $errorGoLink);
             }
         }
 
-        $this->assign('title', trans('send') . trans('wechat'));
-        $this->display();
+        $assign['title'] = trans('common.send') . trans('common.wechat');
+        return view('admin.', $assign);
     }
 
     //解除绑定
@@ -131,16 +129,16 @@ class Wechat extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('Wechat/index'));
+            $this->error(trans('common.id') . trans('common.error'), route('Wechat/index'));
         }
 
-        $WechatModel = D('Wechat');
-        $resultDel   = $WechatModel->mDel($id);
+        $resultDel = Model\Wechat::mDel($id);
         if ($resultDel) {
-            $this->success(trans('wechat') . trans('bind') . trans('del') . trans('success'), route('Wechat/index'));
+            $this->success(trans('common.wechat') . trans('common.bind') . trans('common.del') . trans('common.success'),
+                route('Wechat/index'));
             return;
         } else {
-            $this->error(trans('wechat') . trans('bind') . trans('del') . trans('error'),
+            $this->error(trans('common.wechat') . trans('common.bind') . trans('common.del') . trans('common.error'),
                 route('Wechat/edit', ['id' => $id]));
         }
     }

@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Frontend;
+use App\Model;
 
 class Comment extends Frontend
 {
@@ -18,18 +19,17 @@ class Comment extends Frontend
 
         switch ($field) {
             case 'put_data':
-                $CommentModel = D('Comment');
                 $data         = $this->makeData();
                 if (!config('system.comment_anony') && 0 == $data['send_id']) {
-                    $result = ['status' => false, 'info' => trans('comment_error2')];
+                    $result = ['status' => false, 'info' => trans('common.comment_error2')];
                     break;
                 }
                 if (!in_array($data['controller'], config('system.comment_allow')) || !$data['item']) {
-                    $result = ['status' => false, 'info' => trans('comment_error3')];
+                    $result = ['status' => false, 'info' => trans('common.comment_error3')];
                     break;
                 }
                 if (20 > strlen($data['content'])) {
-                    $result = ['status' => false, 'info' => trans('comment_error5')];
+                    $result = ['status' => false, 'info' => trans('common.comment_error5')];
                     break;
                 }
                 $where        = [
@@ -39,35 +39,33 @@ class Comment extends Frontend
                     'add_ip'     => ['exp', '= inet_aton("' . $_SERVER['REMOTE_ADDR'] . '")'],
                     'add_time'   => ['gt', time() - config('system.comment_interval')],
                 ];
-                $countComment = $CommentModel->where($where)->count();
+                $countComment = Model\Comment::where($where)->count();
                 if (0 < $countComment) {
-                    $result = ['status' => false, 'info' => trans('comment_error4')];
+                    $result = ['status' => false, 'info' => trans('common.comment_error4')];
                     break;
                 }
 
-                $addResult      = $CommentModel->mAdd($data);
-                $result['info'] = ($addResult) ? trans('send') . trans('success') : trans('send') . trans('error');
+                $addResult      = Model\Comment::mAdd($data);
+                $result['info'] = ($addResult) ? trans('common.send') . trans('common.success') : trans('common.send') . trans('common.error');
                 break;
             case 'get_data':
                 if (!$data['controller'] || !$data['item']) {
                     break;
                 }
 
-                $where        = [
+                $where       = [
                     'controller' => $data['controller'],
                     'item'       => $data['item'],
                     'audit_id'   => ['gt', 0],
                 ];
-                $MemberModel  = D('Member');
-                $CommentModel = D('Comment');
-                $commentList  = $CommentModel->mSelect($where, true);
+                $commentList = Model\Comment::mSelect($where, true);
                 foreach ($commentList as &$comment) {
-                    $memberName             = $MemberModel->mFindColumn($comment['member_id'], 'member_name');
-                    $comment['member_name'] = ($memberName) ? $memberName : trans('anonymous');
+                    $memberName             = Model\Member::mFindColumn($comment['member_id'], 'member_name');
+                    $comment['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');
                 }
-                $this->assign('comment_list', $commentList);
-                $this->assign('comment_list_count', $CommentModel->mGetPageCount($where));
-                $this->display('index');
+                $assign['comment_list']       = $commentList;
+                $assign['comment_list_count'] = Model\Comment::mGetPageCount($where);
+                return view('home.index', $assign);
                 exit();
                 break;
         }

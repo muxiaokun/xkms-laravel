@@ -38,7 +38,7 @@
                             {{ $manage_upload['name'] }}
                         </td>
                         <td>
-                            {{ $manage_upload['add_time']|M_date=C('SYS_DATE_DETAIL') }}
+                            {{ $manage_upload['add_time']|M_date=config('system.sys_date_detail') }}
                         </td>
                         <td>
                             {{ $manage_upload['size'] }}

@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Install;
 
 use App\Http\Controllers\Frontend;
+use App\Model;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
@@ -103,7 +104,7 @@ class Index extends Frontend
             'database'     => config('database.connections.mysql.database'),
             'databases'    => $this->_getDatabases(),
             'install_info' => $this->_getInstallInfo(),
-            'setp'         => trans('pfsetp', ['setp' => trans('two'), 'count' => trans('four')]),
+            'setp'         => trans('common.pfsetp', ['setp' => trans('two'), 'count' => trans('common.four')]),
             'title'        => trans('install.setp2_title'),
         ];
         return view('install.Index_setp2', $assign);
@@ -141,8 +142,8 @@ class Index extends Frontend
         $assign = [
             'show_height' => true,
             'progress'    => 0,
-            'setp'        => trans('pfsetp', ['setp' => trans('four'), 'count' => trans('four')]),
-            'title'       => trans('setp4_title'),
+            'setp'        => trans('common.pfsetp', ['setp' => trans('four'), 'count' => trans('common.four')]),
+            'title'       => trans('common.setp4_title'),
         ];
         return view('install.Index_setp4', $assign);
     }

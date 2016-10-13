@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
+use App\Model;
 
 class Quests extends Backend
 {
@@ -21,17 +22,16 @@ class Quests extends Backend
         $whereValue = mMktimeRange('end_time');
         $whereValue && $where['end_time'] = $whereValue;
 
-        $QuestsModel = D('Quests');
-        $questsList  = $QuestsModel->mSelect($where, true);
-        $this->assign('quests_list', $questsList);
-        $this->assign('quests_list_count', $QuestsModel->mGetPageCount($where));
+        $questsList                  = Model\Quests::mSelect($where, true);
+        $assign['quests_list']       = $questsList;
+        $assign['quests_list_count'] = Model\Quests::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo               = [];
-        $whereInfo['title']      = ['type' => 'input', 'name' => trans('title')];
-        $whereInfo['start_time'] = ['type' => 'time', 'name' => trans('start') . trans('time')];
-        $whereInfo['end_time']   = ['type' => 'time', 'name' => trans('end') . trans('time')];
-        $this->assign('where_info', $whereInfo);
+        $whereInfo['title']      = ['type' => 'input', 'name' => trans('common.title')];
+        $whereInfo['start_time'] = ['type' => 'time', 'name' => trans('common.start') . trans('common.time')];
+        $whereInfo['end_time']   = ['type' => 'time', 'name' => trans('common.end') . trans('common.time')];
+        $assign['where_info']    = $whereInfo;
 
         //初始化batch_handle
         $batchHandle                 = [];
@@ -40,28 +40,28 @@ class Quests extends Backend
         $batchHandle['answer_edit']  = $this->_check_privilege('edit', 'QuestsAnswer');
         $batchHandle['edit']         = $this->_check_privilege('edit');
         $batchHandle['del']          = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batchHandle);
+        $assign['batch_handle']      = $batchHandle;
 
-        $this->assign('title', trans('quests') . trans('management'));
-        $this->display();
+        $assign['title'] = trans('common.quests') . trans('common.management');
+        return view('admin.', $assign);
     }
 
     //新增
     public function add()
     {
         if (IS_POST) {
-            $QuestsModel = D('Quests');
-            $data        = $this->makeData();
-            $resultAdd   = $QuestsModel->mAdd($data);
+            $data      = $this->makeData();
+            $resultAdd = Model\Quests::mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('quests') . trans('add') . trans('success'), route('Quests/index'));
+                $this->success(trans('common.quests') . trans('common.add') . trans('common.success'),
+                    route('Quests/index'));
                 return;
             } else {
-                $this->error(trans('quests') . trans('add') . trans('error'), route('Quests/add'));
+                $this->error(trans('common.quests') . trans('common.add') . trans('common.error'), route('Quests/add'));
             }
         }
-        $this->assign('title', trans('add') . trans('quests'));
-        $this->display('addedit');
+        $assign['title'] = trans('common.add') . trans('common.quests');
+        return view('admin.addedit', $assign);
     }
 
     //编辑
@@ -69,26 +69,26 @@ class Quests extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $QuestsModel = D('Quests');
         if (IS_POST) {
             $data       = $this->makeData();
-            $resultEdit = $QuestsModel->mEdit($id, $data);
+            $resultEdit = Model\Quests::mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('quests') . trans('edit') . trans('success'), route('Quests/index'));
+                $this->success(trans('common.quests') . trans('common.edit') . trans('common.success'),
+                    route('Quests/index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('quests') . trans('edit') . trans('error'), $errorGoLink);
+                $this->error(trans('common.quests') . trans('common.edit') . trans('common.error'), $errorGoLink);
             }
         }
-        $editInfo = $QuestsModel->mFind($id);
-        $this->assign('edit_info', $editInfo);
+        $editInfo            = Model\Quests::mFind($id);
+        $assign['edit_info'] = $editInfo;
 
-        $this->assign('title', trans('edit') . trans('quests'));
-        $this->display('addedit');
+        $assign['title'] = trans('common.edit') . trans('common.quests');
+        return view('admin.addedit', $assign);
     }
 
     //删除
@@ -96,34 +96,36 @@ class Quests extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('Quests/index'));
+            $this->error(trans('common.id') . trans('common.error'), route('Quests/index'));
         }
 
         $clear       = request('clear');
-        $QuestsModel = D('Quests');
         if (!$clear) {
-            $resultDel = $QuestsModel->mDel($id);
+            $resultDel = Model\Quests::mDel($id);
         }
 
         if ($resultDel || $clear) {
             //删除问卷会删除该问卷下的所有答案
-            $QuestsAnswerModel = D('QuestsAnswer');
             //TODO 需要定义数据列
-            $resultClear = $QuestsAnswerModel->mClean($id);
+            $resultClear = Model\QuestsAnswer::mClean($id);
             if ($clear) {
                 if ($resultClear) {
-                    $QuestsModel->where(['id' => $id])->data(['current_portion' => 0])->save();
-                    $this->success(trans('quests') . trans('clear') . trans('success'), route('Quests/index'));
+                    Model\Quests::where(['id' => $id])->data(['current_portion' => 0])->save();
+                    $this->success(trans('common.quests') . trans('common.clear') . trans('common.success'),
+                        route('Quests/index'));
                     return;
                 } else {
-                    $this->error(trans('quests') . trans('clear') . trans('error'), route('Quests/index'));
+                    $this->error(trans('common.quests') . trans('common.clear') . trans('common.error'),
+                        route('Quests/index'));
 
                 }
             }
-            $this->success(trans('quests') . trans('del') . trans('success'), route('Quests/index'));
+            $this->success(trans('common.quests') . trans('common.del') . trans('common.success'),
+                route('Quests/index'));
             return;
         } else {
-            $this->error(trans('quests') . trans('del') . trans('error'), route('Quests/edit', ['id' => $id]));
+            $this->error(trans('common.quests') . trans('common.del') . trans('common.error'),
+                route('Quests/edit', ['id' => $id]));
         }
     }
 

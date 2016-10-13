@@ -1,5 +1,5 @@
 <?php
-if (C('LAYOUT_ON')) {
+if (config('system.layout_on')) {
     echo '{__NOLAYOUT__}';
 }
 ?>

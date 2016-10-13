@@ -10,11 +10,11 @@
                             <div class="col-sm-7">
                                 <label class="radio-inline">
                                     <input type="radio" name="COMMENT_SWITCH" value="1"
-                                           @if ('1' === C('COMMENT_SWITCH'))checked="checked"@endif >@lang('common.enable')
+                                           @if ('1' === config('system.comment_switch'))checked="checked"@endif >@lang('common.enable')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="COMMENT_SWITCH" value="0"
-                                           @if ('0' === C('COMMENT_SWITCH'))checked="checked"@endif >@lang('common.disable')
+                                           @if ('0' === config('system.comment_switch'))checked="checked"@endif >@lang('common.disable')
                                 </label>
                             </div>
                         </div>
@@ -37,11 +37,11 @@
                             <div class="col-sm-7">
                                 <label class="radio-inline">
                                     <input type="radio" name="COMMENT_ANONY" value="1"
-                                           @if ('1' === C('COMMENT_ANONY'))checked="checked"@endif >@lang('common.enable')
+                                           @if ('1' === config('system.comment_anony'))checked="checked"@endif >@lang('common.enable')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="COMMENT_ANONY" value="0"
-                                           @if ('0' === C('COMMENT_ANONY'))checked="checked"@endif >@lang('common.disable')
+                                           @if ('0' === config('system.comment_anony'))checked="checked"@endif >@lang('common.disable')
                                 </label>
                             </div>
                         </div>

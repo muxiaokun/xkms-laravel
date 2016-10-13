@@ -3,6 +3,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Model;
+
 class Frontend extends Common
 {
     public function _initialize()
@@ -10,7 +12,7 @@ class Frontend extends Common
         parent::_initialize();
 //        if ($this->isLogin()) {
 //            //登录后Home公共变量赋值区域
-//            $this->assign('login_info', session('frontend_info'));
+//            $assign['login_info'] =  session('frontend_info');
 //        }
         //当前位置
 //        if (!IS_AJAX && !$_FILES && !in_array(ACTION_NAME, array('ajax_api', 'del'))) {
@@ -52,14 +54,14 @@ class Frontend extends Common
         }
         $rePosition   = [
             [
-                'name' => trans('homepage'),
+                'name' => trans('common.homepage'),
                 'link' => route(config('DEFAULT_MODULE') . '/' . C('DEFAULT_CONTROLLER') . '/' . C('DEFAULT_ACTION')),
             ],
         ];
         $positionName = $allController[CONTROLLER_NAME][ACTION_NAME];
         if ($positionName) {
             //给title赋默认值
-            $this->assign('title', $positionName);
+            $assign['title'] = $positionName;
             if (ACTION_NAME != 'index' && $allControl[CONTROLLER_NAME]['index']) {
                 $rePosition[] = [
                     'name' => $allControl[CONTROLLER_NAME]['index'],
@@ -71,7 +73,7 @@ class Frontend extends Common
                 'link' => false,
             ];
             //给控制器类型的面包屑导航赋默认值
-            $this->assign('position', $rePosition);
+            $assign['position'] = $rePosition;
         }
     }
 
@@ -97,29 +99,27 @@ class Frontend extends Common
             return 'verify_error';
         }
 
-        $MemberModel = D('Member');
         //检测前台尝试登陆次数
         $loginNum = config('system.sys_frontend_login_num');
         $lockTime = config('system.sys_frontend_lock_time');
         if (0 != $loginNum) {
-            $loginInfo = $MemberModel->mFind($MemberModel->mFindId($userName));
+            $loginInfo = Model\Member::mFind(Model\Member::mFindId($userName));
             if (0 != $loginInfo['lock_time'] && $loginInfo['lock_time'] > (time() - $lockTime)) {
-                $MemberModel->data(['lock_time' => time()])->where(['id' => $loginInfo['id']])->save();
+                Model\Member::data(['lock_time' => time()])->where(['id' => $loginInfo['id']])->save();
                 return 'lock_user_error';
             }
         }
         //验证用户名密码
-        $memberInfo = $MemberModel->authorized($userName, $password, $memberId);
+        $memberInfo = Model\Member::authorized($userName, $password, $memberId);
         if ($memberInfo) {
             //会员有组的 验证组是否启用
             if (0 < count($memberInfo['group_id'])) {
-                $MemberGroupModel              = D('MemberGroup');
-                $memberInfo['group_privilege'] = $MemberGroupModel->mFind_privilege($memberInfo['group_id']);
+                $memberInfo['group_privilege'] = Model\MemberGroup::mFind_privilege($memberInfo['group_id']);
             }
             //重置登录次数
             if (0 != $memberInfo['login_num']) {
                 $loginData = ['login_num' => 0, 'lock_time' => 0];
-                $MemberModel->data($loginData)->where(['id' => $loginInfo['id']])->save();
+                Model\Member::data($loginData)->where(['id' => $loginInfo['id']])->save();
             }
             $memberInfo['login_time'] = time();
             session('frontend_info', $memberInfo);
@@ -130,7 +130,7 @@ class Frontend extends Common
                 $loginData              = [];
                 $loginData['login_num'] = $loginInfo['login_num'] + 1;
                 $loginData['lock_time'] = ($loginNum <= $loginData['login_num']) ? time() : 0;
-                $MemberModel->data($loginData)->where(['id' => $loginInfo['id']])->save();
+                Model\Member::data($loginData)->where(['id' => $loginInfo['id']])->save();
             }
             return 'user_pwd_error';
         }

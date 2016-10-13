@@ -31,10 +31,10 @@
                             {{ $assess['group_name'] }}
                         </td>
                         <td>
-                            {{ $assess['start_time']|M_date=C('SYS_DATE_DETAIL') }}
+                            {{ $assess['start_time']|M_date=config('system.sys_date_detail') }}
                         </td>
                         <td>
-                            {{ $assess['end_time']|M_date=C('SYS_DATE_DETAIL') }}
+                            {{ $assess['end_time']|M_date=config('system.sys_date_detail') }}
                         </td>
                         <td>
                             @if ($assess['is_enable'])@lang('common.enable')@else@lang('common.disable')@endif

@@ -31,10 +31,10 @@
                             {{ $quests['current_portion'] }}/{{ $quests['max_portion'] }}
                         </td>
                         <td>
-                            {{ $quests['start_time']|M_date=C('SYS_DATE_DETAIL') }}
+                            {{ $quests['start_time']|M_date=config('system.sys_date_detail') }}
                         </td>
                         <td>
-                            {{ $quests['end_time']|M_date=C('SYS_DATE_DETAIL') }}
+                            {{ $quests['end_time']|M_date=config('system.sys_date_detail') }}
                         </td>
                         <td>
                             {{ $quests['access_info'] }}

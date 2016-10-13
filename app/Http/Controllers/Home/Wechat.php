@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Frontend;
+use App\Model;
 
 class Wechat extends Frontend
 {
@@ -74,7 +75,7 @@ class Wechat extends Frontend
                 $content    = $Oauth2Link;
                 break;
             case '时间':
-                $content = trans('server') . trans('time') . ':' . date(config('system.sys_date_detail'));
+                $content = trans('common.server') . trans('common.time') . ':' . date(config('system.sys_date_detail'));
                 break;
             default:
                 $content = '您发送的内容是：' . $msgInfo['Content'];
@@ -91,10 +92,9 @@ class Wechat extends Frontend
             $memberPwd  = request('pwd');
             $msg        = $this->doLogin($memberName, $memberPwd);
             if ($this->isLogin()) {
-                $WechatModel             = D('Wechat');
                 $wechatInfo              = session('wechat_info');
                 $wechatInfo['member_id'] = session('frontend_info.id');
-                $WechatModel->bind_wechat($wechatInfo);
+                Model\Wechat::bind_wechat($wechatInfo);
                 session('wechat_info', null);
             }
             $this->_member_bind_msg($msg);
@@ -116,15 +116,14 @@ class Wechat extends Frontend
             //绑定模式逻辑节点
             //已经绑定 直接登陆
             //未绑定 登录绑定
-            $WechatModel = D('Wechat');
-            $wechatId    = $WechatModel->mFindId($userInfo['openid']);
+            $wechatId = Model\Wechat::mFindId($userInfo['openid']);
             if ($wechatId) {
-                $memberId = $WechatModel->mFindColumn($wechatId, 'member_id');
+                $memberId = Model\Wechat::mFindColumn($wechatId, 'member_id');
                 $msg      = $this->doLogin(null, null, false, $memberId);
                 $this->_member_bind_msg($msg);
             } else {
                 session('wechat_info', $data);
-                $this->display();
+                return view('home.', $assign);
             }
         }
     }
@@ -133,17 +132,18 @@ class Wechat extends Frontend
     {
         switch ($msg) {
             case 'user_pwd_error':
-                $this->error(trans('account') . trans('or') . trans('pass') . trans('error'), route(ACTION_NAME));
+                $this->error(trans('common.account') . trans('common.or') . trans('common.pass') . trans('common.error'),
+                    route(ACTION_NAME));
                 break;
             case 'verify_error':
-                $this->error(trans('verify_code') . trans('error'), route(ACTION_NAME));
+                $this->error(trans('common.verify_code') . trans('common.error'), route(ACTION_NAME));
                 break;
             case 'lock_user_error':
-                $this->error(trans('admin') . trans('by') . trans('lock') . trans('please') . config('system.sys_frontend_lock_time') . trans('second') . trans('again') . trans('login'),
+                $this->error(trans('common.admin') . trans('common.by') . trans('common.lock') . trans('common.please') . config('system.sys_frontend_lock_time') . trans('common.second') . trans('common.again') . trans('common.login'),
                     route(ACTION_NAME));
                 break;
             default:
-                $this->success(trans('login') . trans('success'), route('Member/index'));
+                $this->success(trans('common.login') . trans('common.success'), route('Member/index'));
         }
     }
 

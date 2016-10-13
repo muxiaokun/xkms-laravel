@@ -11,11 +11,11 @@
                             <div class="col-sm-7">
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_ARTICLE_SYNC_IMAGE" value="1"
-                                           @if ('1' === C('SYS_ARTICLE_SYNC_IMAGE'))checked="checked"@endif >@lang('common.enable')
+                                           @if ('1' === config('system.sys_article_sync_image'))checked="checked"@endif >@lang('common.enable')
                                 </label>
                                 <label class="radio-inline">
                                     <input type="radio" name="SYS_ARTICLE_SYNC_IMAGE" value="0"
-                                           @if ('0' === C('SYS_ARTICLE_SYNC_IMAGE'))checked="checked"@endif >@lang('common.disable')
+                                           @if ('0' === config('system.sys_article_sync_image'))checked="checked"@endif >@lang('common.disable')
                                 </label>
                             </div>
                         </div>

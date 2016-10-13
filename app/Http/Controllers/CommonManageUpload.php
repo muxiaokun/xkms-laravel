@@ -5,6 +5,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Model;
+
 class CommonManageUploadController
 {
     protected $config = [
@@ -45,7 +47,6 @@ class CommonManageUploadController
         } else {
             $fileUrl = $UploadUtil->rootPath . $fileInfo['savepath'] . $fileInfo['savename'];
             // 上传文件的信息写入数据库
-            $ManageUploadModel = D('ManageUpload');
             $data              = [
                 'name'   => substr($fileInfo['name'], 0, strrpos($fileInfo['name'], '.')),
                 'path'   => $fileUrl,
@@ -53,7 +54,7 @@ class CommonManageUploadController
                 'size'   => $fileInfo['size'],
                 'suffix' => $fileInfo['ext'],
             ];
-            $ManageUploadModel->mAdd($data);
+            Model\ManageUpload::mAdd($data);
             // 上传成功 返回文件信息 伪静态目录结构__ROOT__ . '/' .
             $this->kind_json(__ROOT__ . '/' . $fileUrl, false);
         }

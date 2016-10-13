@@ -37,13 +37,13 @@
                         </td>
                         <td>
                             @if (0 < $admin['add_time'])
-                                {{ $admin['add_time']|M_date=C('SYS_DATE_DETAIL') }}
+                                {{ $admin['add_time']|M_date=config('system.sys_date_detail') }}
                             @else
                                 @lang('common.system')@lang('common.add')
                             @endif
                         </td>
                         <td>
-                            {{ $admin['last_time']|M_date=C('SYS_DATE_DETAIL') }}
+                            {{ $admin['last_time']|M_date=config('system.sys_date_detail') }}
                         </td>
                         <td>
                             {{ $admin['aip'] }}

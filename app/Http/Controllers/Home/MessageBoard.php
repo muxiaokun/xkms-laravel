@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Frontend;
+use App\Model;
 
 class MessageBoard extends Frontend
 {
@@ -11,33 +12,31 @@ class MessageBoard extends Frontend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'));
+            $this->error(trans('common.id') . trans('common.error'));
         }
 
-        $MessageBoardModel = D('MessageBoard');
-        $messageBoardInfo  = $MessageBoardModel->mFind($id);
+        $messageBoardInfo = Model\MessageBoard::mFind($id);
         if (!$messageBoardInfo) {
-            $this->error(trans('messageboard') . trans('dont') . trans('exists'));
+            $this->error(trans('common.messageboard') . trans('common.dont') . trans('common.exists'));
         }
 
-        $this->assign('message_board_info', $messageBoardInfo);
+        $assign['message_board_info'] = $messageBoardInfo;
 
-        $MessageBoardLogModel = D('MessageBoardLog');
-        $where                = [];
-        $where['audit_id']    = ['gt', 0];
-        $messageBoardLogList  = $MessageBoardLogModel->order('add_time desc')->mSelect($where, true);
+        $where               = [];
+        $where['audit_id']   = ['gt', 0];
+        $messageBoardLogList = Model\MessageBoardLog::order('add_time desc')->mSelect($where, true);
         foreach ($messageBoardLogList as &$messageBoardLog) {
-            $messageBoardLog['reply_info'] = ($messageBoardLog['reply_info']) ? $messageBoardLog['reply_info'] : trans('admin') . trans('reply') . trans('empty');
+            $messageBoardLog['reply_info'] = ($messageBoardLog['reply_info']) ? $messageBoardLog['reply_info'] : trans('common.admin') . trans('common.reply') . trans('common.empty');
             $messageBoardLog['send_info']  = json_decode($messageBoardLog['send_info'], true);
         }
-        $this->assign('message_board_log_list', $messageBoardLogList);
-        $this->assign('message_board_log_list_count', $MessageBoardLogModel->mGetPageCount($where));
+        $assign['message_board_log_list']       = $messageBoardLogList;
+        $assign['message_board_log_list_count'] = Model\MessageBoardLog::mGetPageCount($where);
 
         $defTemplate = CONTROLLER_NAME . config('TMPL_FILE_DEPR') . ACTION_NAME;
         $template    = ($messageBoardInfo['template']) ? $defTemplate . '_' . $messageBoardInfo['template'] : $defTemplate;
 
-        $this->assign('title', trans('messageboard'));
-        $this->display($template);
+        $assign['title'] = trans('common.messageboard');
+        return view('home.$template', $assign);
     }
 
     //添加
@@ -46,31 +45,29 @@ class MessageBoard extends Frontend
         if (IS_POST) {
             $id = request('id');
             if (!$id) {
-                $this->error(trans('id') . trans('error'));
+                $this->error(trans('common.id') . trans('common.error'));
             }
 
-            $MessageBoardModel = D('MessageBoard');
-            $messageBoardInfo  = $MessageBoardModel->mFind($id);
+            $messageBoardInfo = Model\MessageBoard::mFind($id);
             if (!$messageBoardInfo) {
-                $this->error(trans('id') . trans('error'));
+                $this->error(trans('common.id') . trans('common.error'));
             }
 
             if (!$this->verifyCheck(request('verify')) && config('system.sys_frontend_verify')) {
-                $this->error(trans('verify_code') . trans('error'), route('index', ['id' => $id]));
+                $this->error(trans('common.verify_code') . trans('common.error'), route('index', ['id' => $id]));
             }
             $submitTime   = 300;
-            $MessageBoard = D('MessageBoardLog');
             if ($MessageBoard->check_dont_submit($submitTime)) {
-                $this->error($submitTime . trans('second') . trans('later') . trans('again') . trans('send'),
+                $this->error($submitTime . trans('common.second') . trans('common.later') . trans('common.again') . trans('common.send'),
                     route('index', ['id' => $id]));
             }
             $data      = $this->makeData();
             $resultAdd = $MessageBoard->mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('send') . trans('success'), route('index', ['id' => $id]));
+                $this->success(trans('common.send') . trans('common.success'), route('index', ['id' => $id]));
                 return;
             } else {
-                $this->error(trans('send') . trans('error'), route('index', ['id' => $id]));
+                $this->error(trans('common.send') . trans('common.error'), route('index', ['id' => $id]));
             }
         }
     }
@@ -88,23 +85,22 @@ class MessageBoard extends Frontend
 
         }
         //检测数据
-        $MessageBoardModel = D('MessageBoard');
-        $messageBoardInfo  = $MessageBoardModel->mFind($id);
-        $config            = $messageBoardInfo['config'];
+        $messageBoardInfo = Model\MessageBoard::mFind($id);
+        $config           = $messageBoardInfo['config'];
         foreach ($sendInfo as $name => $value) {
             //合法
             if (!is_array($config[$name])) {
-                $this->error(trans('submit') . trans('error'), route('index', ['id' => $id]));
+                $this->error(trans('common.submit') . trans('common.error'), route('index', ['id' => $id]));
             }
 
             //必选
             if (isset($config[$name]['msg_required']) && '' == $value) {
-                $this->error($name . trans('required'), route('index', ['id' => $id]));
+                $this->error($name . trans('common.required'), route('index', ['id' => $id]));
             }
 
             //长度
             if (0 < $config[$name]['msg_length'] && $config[$name]['msg_length'] < strlen($value)) {
-                $this->error($name . trans('max') . trans('length') . $config[$name]['msg_length'],
+                $this->error($name . trans('common.max') . trans('common.length') . $config[$name]['msg_length'],
                     route('index', ['id' => $id]));
             }
         }

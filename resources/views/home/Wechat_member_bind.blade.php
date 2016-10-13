@@ -20,7 +20,7 @@
                         <input type="password" class="form-control" placeholder="@lang('common.pwd')" name="pwd"/>
                     </div>
                 </div>
-                @if (C('SYS_FRONTEND_VERIFY'))
+                @if (config('system.sys_frontend_verify'))
                     {{--验证码 开始--}}
                     <div class="form-group">
                         <label class="col-sm-3 control-label">@lang('common.verify_code')</label>

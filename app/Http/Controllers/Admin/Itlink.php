@@ -4,13 +4,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
+use App\Model;
 
 class Itlink extends Backend
 {
     //列表
     public function index()
     {
-        $ItlinkModel = D('Itlink');
         //建立where
         $whereValue = '';
         $whereValue = request('name');
@@ -23,54 +23,53 @@ class Itlink extends Backend
         $whereValue && $where['is_statistics'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $itlinkList = $ItlinkModel->mSelect($where, true);
-        $this->assign('itlink_list', $itlinkList);
-        $this->assign('itlink_list_count', $ItlinkModel->mGetPageCount($where));
+        $itlinkList                  = Model\Itlink::mSelect($where, true);
+        $assign['itlink_list']       = $itlinkList;
+        $assign['itlink_list_count'] = Model\Itlink::mGetPageCount($where);
 
         //初始化where_info
-        $whereInfo['name']          = ['type' => 'input', 'name' => trans('itlink') . trans('name')];
-        $whereInfo['short_name']    = ['type' => 'input', 'name' => trans('short') . trans('name')];
+        $whereInfo['name']          = ['type' => 'input', 'name' => trans('common.itlink') . trans('common.name')];
+        $whereInfo['short_name']    = ['type' => 'input', 'name' => trans('common.short') . trans('common.name')];
         $whereInfo['is_enable']     = [
             'type'  => 'select',
-            'name'  => trans('yes') . trans('no') . trans('enable'),
-            'value' => [1 => trans('yes'), 2 => trans('no')],
+            'name'  => trans('common.yes') . trans('common.no') . trans('common.enable'),
+            'value' => [1 => trans('common.yes'), 2 => trans('common.no')],
         ];
         $whereInfo['is_statistics'] = [
             'type'  => 'select',
-            'name'  => trans('yes') . trans('no') . trans('statistics'),
-            'value' => [1 => trans('yes'), 2 => trans('no')],
+            'name'  => trans('common.yes') . trans('common.no') . trans('common.statistics'),
+            'value' => [1 => trans('common.yes'), 2 => trans('common.no')],
         ];
-        $this->assign('where_info', $whereInfo);
+        $assign['where_info']       = $whereInfo;
 
         //初始化batch_handle
-        $batchHandle         = [];
-        $batchHandle['add']  = $this->_check_privilege('add');
-        $batchHandle['edit'] = $this->_check_privilege('edit');
-        $batchHandle['del']  = $this->_check_privilege('del');
-        $this->assign('batch_handle', $batchHandle);
+        $batchHandle            = [];
+        $batchHandle['add']     = $this->_check_privilege('add');
+        $batchHandle['edit']    = $this->_check_privilege('edit');
+        $batchHandle['del']     = $this->_check_privilege('del');
+        $assign['batch_handle'] = $batchHandle;
 
-        $this->assign('title', trans('itlink') . trans('management'));
-        $this->display();
+        $assign['title'] = trans('common.itlink') . trans('common.management');
+        return view('admin.', $assign);
     }
 
     //新增
     public function add()
     {
         if (IS_POST) {
-            $ItlinkModel = D('Itlink');
-            $data        = $this->makeData();
-            $resultAdd   = $ItlinkModel->mAdd($data);
+            $data      = $this->makeData();
+            $resultAdd = Model\Itlink::mAdd($data);
             if ($resultAdd) {
                 $this->addEditAfterCommon($data, $id);
-                $this->success(trans('itlink') . trans('add') . trans('success'), route('index'));
+                $this->success(trans('common.itlink') . trans('common.add') . trans('common.success'), route('index'));
                 return;
             } else {
-                $this->error(trans('itlink') . trans('add') . trans('error'), route('add'));
+                $this->error(trans('common.itlink') . trans('common.add') . trans('common.error'), route('add'));
             }
         }
 
-        $this->assign('title', trans('itlink') . trans('add'));
-        $this->display('addedit');
+        $assign['title'] = trans('common.itlink') . trans('common.add');
+        return view('admin.addedit', $assign);
     }
 
     //编辑
@@ -78,27 +77,26 @@ class Itlink extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $ItlinkModel = D('Itlink');
         if (IS_POST) {
             $data       = $this->makeData();
-            $resultEdit = $ItlinkModel->mEdit($id, $data);
+            $resultEdit = Model\Itlink::mEdit($id, $data);
             if ($resultEdit) {
                 $this->addEditAfterCommon($data, $id);
-                $this->success(trans('itlink') . trans('edit') . trans('success'), route('index'));
+                $this->success(trans('common.itlink') . trans('common.edit') . trans('common.success'), route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('itlink') . trans('edit') . trans('error'), $errorGoLink);
+                $this->error(trans('common.itlink') . trans('common.edit') . trans('common.error'), $errorGoLink);
             }
         }
 
-        $editInfo = $ItlinkModel->mFind($id);
-        $this->assign('edit_info', $editInfo);
-        $this->assign('title', trans('itlink') . trans('edit'));
-        $this->display('addedit');
+        $editInfo            = Model\Itlink::mFind($id);
+        $assign['edit_info'] = $editInfo;
+        $assign['title']     = trans('common.itlink') . trans('common.edit');
+        return view('admin.addedit', $assign);
     }
 
     //删除
@@ -106,18 +104,16 @@ class Itlink extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $ItlinkModel = D('Itlink');
-        $resultDel   = $ItlinkModel->mDel($id);
+        $resultDel = Model\Itlink::mDel($id);
         if ($resultDel) {
-            $ManageUploadModel = D('ManageUpload');
-            $ManageUploadModel->mEdit($id);
-            $this->success(trans('itlink') . trans('del') . trans('success'), route('index'));
+            Model\ManageUpload::mEdit($id);
+            $this->success(trans('common.itlink') . trans('common.del') . trans('common.success'), route('index'));
             return;
         } else {
-            $this->error(trans('itlink') . trans('del') . trans('error'), route('index'));
+            $this->error(trans('common.itlink') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 
@@ -128,13 +124,12 @@ class Itlink extends Backend
         switch ($field) {
             case 'short_name':
                 //检查用户名是否存在
-                $ItlinkModel = D('Itlink');
-                $itlinkInfo  = $ItlinkModel->mSelect([
+                $itlinkInfo = Model\Itlink::mSelect([
                     'short_name' => $data['short_name'],
                     'id'         => ['neq', $data['id']],
                 ]);
                 if (0 < count($itlinkInfo)) {
-                    $result['info'] = trans('short') . trans('name') . trans('exists');
+                    $result['info'] = trans('common.short') . trans('common.name') . trans('common.exists');
                     break;
                 }
                 break;
@@ -208,11 +203,10 @@ class Itlink extends Backend
             return;
         }
 
-        $ManageUploadModel = D('ManageUpload');
         $bindFile          = [];
         foreach ($data as $item) {
             $bindFile[] = $item['link_image'];
         }
-        $ManageUploadModel->mEdit($id, $bindFile);
+        Model\ManageUpload::mEdit($id, $bindFile);
     }
 }

@@ -4,13 +4,13 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\FrontendMember;
+use App\Model;
 
 class Assess extends FrontendMember
 {
     //列表
     public function index()
     {
-        $AssessModel = D('Assess');
 
         $currentTime = time();
         $where       = [
@@ -21,22 +21,22 @@ class Assess extends FrontendMember
         ];
 
         //初始化翻页 和 列表数据
-        $assessList = $AssessModel->mSelect($where, true);
+        $assessList = Model\Assess::mSelect($where, true);
         foreach ($assessList as &$assess) {
             switch ($assess['target']) {
                 case 'member':
-                    $assess['target_name'] = trans('member');
+                    $assess['target_name'] = trans('common.member');
                     break;
                 case 'member_group':
-                    $assess['target_name'] = trans('member') . trans('group');
+                    $assess['target_name'] = trans('common.member') . trans('common.group');
                     break;
             }
         }
-        $this->assign('assess_list', $assessList);
-        $this->assign('assess_list_conut', $AssessModel->mGetPageCount($where));
+        $assign['assess_list']       = $assessList;
+        $assign['assess_list_conut'] = Model\Assess::mGetPageCount($where);
 
-        $this->assign('title', trans('assess'));
-        $this->display();
+        $assign['title'] = trans('common.assess');
+        return view('home.', $assign);
     }
 
     //添加
@@ -45,11 +45,10 @@ class Assess extends FrontendMember
         //初始化和权限检测
         $id = request('get.id');
         if (!$id) {
-            $this->error(trans('id') . trans('error'), route('index'));
+            $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $AssessModel = D('Assess');
-        $assessInfo  = $AssessModel->mFind($id);
+        $assessInfo  = Model\Assess::mFind($id);
         $currentTime = time();
         if (
             1 != $assessInfo['is_enable'] ||
@@ -57,35 +56,35 @@ class Assess extends FrontendMember
             $currentTime < $assessInfo['start_time'] &&
             $currentTime > $assessInfo['end_time']
         ) {
-            $this->error(trans('you') . trans('none') . trans('privilege') . trans('assess'), route('index'));
+            $this->error(trans('common.you') . trans('common.none') . trans('common.privilege') . trans('common.assess'),
+                route('index'));
         }
 
         if (IS_POST) {
             $data = $this->makeData();
             //提交时检测类型下可以被评分的组和组员
-            $AssessLogMode = D('AssessLog');
             $resultAdd     = $AssessLogMode->mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('grade') . trans('success'), route('index'));
+                $this->success(trans('common.grade') . trans('common.success'), route('index'));
                 return;
             } else {
-                $this->error(trans('grade') . trans('error'), route('add'));
+                $this->error(trans('common.grade') . trans('common.error'), route('add'));
             }
         }
 
         //初始化考核需要的数据
         switch ($assessInfo['target']) {
             case 'member':
-                $this->assign('member_list', true);
+                $assign['member_list'] = true;
                 break;
             case 'member_group':
-                $this->assign('member_group_list', true);
+                $assign['member_group_list'] = true;
                 break;
         }
 
         $assessInfo['ext_info'] = json_decode($assessInfo['ext_info'], true);
-        $this->assign('assess_info', $assessInfo);
-        $this->display();
+        $assign['assess_info']  = $assessInfo;
+        return view('home.', $assign);
     }
 
     //异步验证接口
@@ -96,7 +95,7 @@ class Assess extends FrontendMember
             case 're_grade_id':
                 //不能为空
                 if ('' == $data['re_grade_id']) {
-                    $result['info'] = trans('quest_error1');
+                    $result['info'] = trans('common.quest_error1');
                 }
                 break;
         }
@@ -115,20 +114,18 @@ class Assess extends FrontendMember
         $result = ['status' => true, 'info' => []];
         switch ($field) {
             case 'member':
-                $MemberModel = D('Member');
                 isset($data['keyword']) && $data['keyword'] = $where['member_name'] = [
                     'like',
                     '%' . $data['keyword'] . '%',
                 ];
-                $memberUserList = $MemberModel->mSelect($where);
+                $memberUserList = Model\Member::mSelect($where);
                 foreach ($memberUserList as $memberUser) {
                     $result['info'][] = ['value' => $memberUser['id'], 'html' => $memberUser['member_name']];
                 }
                 break;
             case 'member_group':
-                $MemberGroupModel = D('MemberGroup');
                 isset($data['keyword']) && $data['keyword'] = $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $memberGroupList = $MemberGroupModel->mSelect($where);
+                $memberGroupList = Model\MemberGroup::mSelect($where);
                 foreach ($memberGroupList as $memberGroup) {
                     $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
                 }

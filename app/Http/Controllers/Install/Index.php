@@ -120,7 +120,7 @@ class Index extends Frontend
         }
         config(['database.connections.mysql.database' => $database]);
         try {
-            $exitCode = Artisan::call('migrate:refresh', ['--seed' => '', '--force' => '']);
+            $exitCode = Artisan::call('migrate:refresh', ['--seed' => true, '--force' => true]);
         } catch (\Exception $e) {
             $exitCode = $e->getMessage();
         }

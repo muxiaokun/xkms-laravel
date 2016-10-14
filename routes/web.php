@@ -390,10 +390,6 @@ Route::group([
     'namespace' => 'Install',
     'prefix'    => 'Install',
 ], function () {
-    Route::get('t', function () {
-        dump(DB::query());
-    });
-    Route::get('tc', ['as' => 'index', 'uses' => 'Index@getInstallInfo']);
     Route::get('index', ['as' => 'index', 'uses' => 'Index@index']);
     Route::get('scan/{name?}', ['as' => 'scan', 'uses' => 'Index@scan']);
     Route::get('setp0', ['as' => 'setp0', 'uses' => 'Index@setp0']);
@@ -405,3 +401,10 @@ Route::group([
 });
 
 Route::get('Minify/{type}', 'Minify@run')->name('Minify');
+Route::get('VerificationCode/{type?}', 'VerificationCode@run')->name('VerificationCode');
+
+//test error
+Route::get('t', function () {
+
+});
+Route::get('tc', ['as' => 'index', 'uses' => 'Index@getInstallInfo']);

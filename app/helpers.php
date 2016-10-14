@@ -24,6 +24,18 @@ function mPutenv($key, $item = '')
     return $filesystem->put($env_path, $env_contents) ? true : false;
 }
 
+
+function mRandStr($length = 4)
+{
+    $rand_range = '0123456789abcdecfghijklmnopqrstuvwxyzABCDECFGHIJKLMNOPQRSTUVWXYZ';
+    $rand      = '';
+    for ($i = 0; $i < $length; $i++) {
+        $rand .= $rand_range[rand(0, strlen($rand_range) - 1)];
+    }
+    return $rand;
+}
+
+
 //构造本系统的URL连接 $type如果为空返回根目录
 //切割字符串
 //提取 Org\Util\String::msubstr

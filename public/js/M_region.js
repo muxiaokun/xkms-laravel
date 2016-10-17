@@ -69,7 +69,7 @@ M_region.prototype.initialize_select = function()
         //新建地址回调函数
         if(!data || 1 > data.length)return;
         var select_obj = $('<select name="' + _self.post_name + '[]"></select>');
-        select_obj.append('<option>' + $Think.lang.please + $Think.lang.selection + '</option>');
+        select_obj.append('<option>' + lang.please + lang.selection + '</option>');
         $.each(data,function(k,v){
             var option_obj = $('<option></option>');
             option_obj.attr('select_id',v.id);

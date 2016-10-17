@@ -79,8 +79,8 @@ M_quest_editor.prototype.initialize_data = function(data)
         var a_obj = $(_self.a_obj);
         var question_title = Array(
                 post_data.question + '&nbsp;',
-                '['+ $Think.lang.answer + $Think.lang.type + ':' + post_data.answer_type + ']',
-                '['+ $Think.lang.yes + $Think.lang.no + $Think.lang.required + ':' + post_data.required + ']'
+            '[' + lang.answer + lang.type + ':' + post_data.answer_type + ']',
+            '[' + lang.yes + lang.no + lang.required + ':' + post_data.required + ']'
             ).join('');
         a_obj.find('[mtype="question_name"]').html(question_title);
         a_obj.on('click',function(){_self.select_question(this)});
@@ -103,7 +103,7 @@ M_quest_editor.prototype.add_question = function()
     
     //初始化 a_obj 问题
     var a_obj = $(_self.a_obj);
-    a_obj.find('[mtype="question"]').html($Think.lang.click+$Think.lang.edit);
+    a_obj.find('[mtype="question"]').html(lang.click + lang.edit);
     a_obj.find('[mtype=question_data]').attr('name',_self.post_name + '[]');
     a_obj.on('click',function(){_self.select_question(this)});
     a_obj.find('[mtype="close"]').on('click',function(){_self.remove_question(this)});
@@ -145,8 +145,8 @@ M_quest_editor.prototype.save_question = function(obj)
     var post_data_str = JSON.stringify(post_data);
     var question_title = Array(
             post_data.question + '&nbsp;',
-            '['+ $Think.lang.answer + $Think.lang.type + ':' + post_data.answer_type + ']',
-            '['+ $Think.lang.yes + $Think.lang.no + $Think.lang.required + ':' + post_data.required + ']'
+        '[' + lang.answer + lang.type + ':' + post_data.answer_type + ']',
+        '[' + lang.yes + lang.no + lang.required + ':' + post_data.required + ']'
         ).join('');
     obj.find('[mtype=question_name]').html(question_title);
     //提交时的数组结构

@@ -46,7 +46,7 @@ M_navigation_editor.prototype =
     'level_obj': Array(
         '<div class="col-sm-3">',
         '<button type="button" class="btn btn-default mb5 disabled" style="width:100%">',
-        $Think.lang.add + $Think.lang.navigation + '</button></div>'
+        lang.add + lang.navigation + '</button></div>'
         ).join(''),
     'sortable_obj': Array(
         '<div class="list-group"></div>'
@@ -151,7 +151,7 @@ M_navigation_editor.prototype.add_nav = function(obj,pid)
     var a_obj = $(_self.a_obj);
     var a_obj_id = _self.get_id();
     a_obj.attr('mid',a_obj_id);
-    a_obj.find('[mtype="name"]').html($Think.lang.click+$Think.lang.edit);
+    a_obj.find('[mtype="name"]').html(lang.click + lang.edit);
     a_obj.find('[mtype=nav_data]').attr('name',_self.post_name + '[' + pid + '][]');
     a_obj.on('click',function(){_self.select_nav(this)});
     a_obj.find('[mtype="close"]').on('click',function(){_self.remove_nav(this)});

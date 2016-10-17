@@ -94,25 +94,16 @@ function M_change_verify(obj,input_obj)
     (verify_src[7] || verify_src[4]) && (str = '?');
     (verify_src[8] || verify_src[7]) && (new_src = verify_src[6] + str + rand_int);
     (verify_src[5] || verify_src[4]) && (new_src = verify_src[2] + str + rand_int);
-    if($Think && $Think.sys_sync_image)
-    {
-        img_obj.data('is_sync',true);
-        var sync_img = new Image();
-        sync_img.onload = function()
-        {
-            img_obj.fadeOut(500,'',function(){
-                img_obj.attr('src',new_src).fadeIn(500);
-                img_obj.data('is_sync',false);
-            });
-        };
-        sync_img.src = new_src;
-    }
-    else
+    img_obj.data('is_sync', true);
+    var sync_img = new Image();
+    sync_img.onload = function ()
     {
         img_obj.fadeOut(500,'',function(){
             img_obj.attr('src',new_src).fadeIn(500);
+            img_obj.data('is_sync', false);
         });
-    }
+    };
+    sync_img.src = new_src;
 }
 
 function M_confirm(str,go_link,go_back)
@@ -120,7 +111,7 @@ function M_confirm(str,go_link,go_back)
     var obj = $('#alert_confirm');
     if(!obj.length)
     {
-        obj = $('<div id="alert_confirm" title="'+$Think.lang.system+$Think.lang.info+'" >' + str + '</div>');
+        obj = $('<div id="alert_confirm" title="' + lang.system + lang.info + '" >' + str + '</div>');
     }
     else
     {
@@ -132,11 +123,11 @@ function M_confirm(str,go_link,go_back)
         return;
     }
     var buttons_fn = {};
-    buttons_fn[$Think.lang.confirm] = function() {
+    buttons_fn[lang.confirm] = function () {
         window.location.href = go_link;
         $( this ).dialog( "close" );
     }
-    buttons_fn[$Think.lang.cancel] = function() {
+    buttons_fn[lang.cancel] = function () {
         if(true == go_back)
         {
             history.go(-1);
@@ -233,15 +224,15 @@ function M_ZeroClipboard(obj_id)
         var obj = $('#'+obj_id);
         var clip = new ZeroClipboard(obj,{cacheBust: true});
         var dialog_div = $('<div style="text-align:center;"></div>')
-        dialog_div.attr('title',$Think.lang.copy+$Think.lang.info);
+        dialog_div.attr('title', lang.copy + lang.info);
         var buttons_fn = {};
-        buttons_fn[$Think.lang.close] = function() {
+        buttons_fn[lang.close] = function () {
             $(this).dialog( "close" );
         }
         clip.on("ready", function() {
             //clip.setData("text/plain", obj.attr('copy_content'));
             this.on("aftercopy", function(event) {
-                dialog_div.html($Think.lang.copy+$Think.lang.success);
+                dialog_div.html(lang.copy + lang.success);
                 dialog_div.dialog({
                     resizable: false,
                     buttons: buttons_fn
@@ -249,7 +240,7 @@ function M_ZeroClipboard(obj_id)
             });
         });
         clip.on("error", function(event) {
-            dialog_div.html($Think.lang.copy+$Think.lang.error);
+            dialog_div.html(lang.copy + lang.error);
             dialog_div.dialog({
                 resizable: false,
                 buttons:buttons_fn
@@ -309,7 +300,7 @@ function M_line_edit(obj)
                     _self.html(data.info);
                 }
             });
-            _self.html($Think.lang.loading + '...');
+            _self.html(lang.loading + '...');
         });
     }
 }

@@ -40,18 +40,18 @@ M_attribute_editor.prototype =
     'editor_name_obj':$(Array(
             '<div class="col-sm-6 text-center">',
             '<button type="button" class="btn btn-sm btn-default">',
-            $Think.lang.add,
-            $Think.lang.attribute,
-            $Think.lang.name,
+        lang.add,
+        lang.attribute,
+        lang.name,
             '</button>',
             '</div>'
         ).join('')),
     'editor_value_obj':$(Array(
             '<div class="col-sm-6 text-center">',
             '<button type="button" class="btn btn-sm btn-default">',
-            $Think.lang.add,
-            $Think.lang.attribute,
-            $Think.lang.value,
+        lang.add,
+        lang.attribute,
+        lang.value,
             '</button>',
             '</div>'
         ).join('')),
@@ -60,7 +60,7 @@ M_attribute_editor.prototype =
             '<label class="col-sm-4 control-label"></label>',
             '<div class="col-sm-6">',
             '<select class="form-control">',
-            '<option value="">' + $Think.lang.none + $Think.lang.attribute + '</option></select>',
+        '<option value="">' + lang.none + lang.attribute + '</option></select>',
             '</div></div></div>'
         ).join(''),
     'editor_input_obj':'<div class="col-sm-12 mtb5"><input class="col-sm-10" type="text" /><span class="glyphicon glyphicon-remove close"></span></div>',
@@ -150,11 +150,11 @@ M_attribute_editor.prototype.init_name_input = function(name,values)
         if(input_name_val != '')
         {
             editor_value_button_html = Array(
-                $Think.lang.add,
+                lang.add,
                 '[',
                 input_name_val,
                 ']',
-                $Think.lang.value
+                lang.value
             ).join('');
             //检测重复的值 开始
             var input_repaet = 0;
@@ -165,9 +165,9 @@ M_attribute_editor.prototype.init_name_input = function(name,values)
             {
                 editor_value_obj_button.css({'color':'red'});
                 editor_value_button_html = Array(
-                    $Think.lang.attribute,
-                    $Think.lang.name,
-                    $Think.lang.repeat
+                    lang.attribute,
+                    lang.name,
+                    lang.repeat
                 ).join('');
                 editor_value_obj_button.prop('disabled',true);
             }
@@ -182,10 +182,10 @@ M_attribute_editor.prototype.init_name_input = function(name,values)
         {
             editor_value_obj_button.css({'color':'red'});
             editor_value_button_html = Array(
-                $Think.lang.attribute,
-                $Think.lang.name,
-                $Think.lang.not,
-                $Think.lang.empty
+                lang.attribute,
+                lang.name,
+                lang.not,
+                lang.empty
             ).join('');
             editor_value_obj_button.prop('disabled',true);
         }

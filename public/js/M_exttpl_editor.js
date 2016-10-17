@@ -56,7 +56,7 @@ M_exttpl_editor.prototype =
     'ajax_url':'',
     'add_type_edit_obj':Array(
         '<input mtype="in_val" class="form-control input-sm w200 fl"/>',
-        '<button mtype="in_add" type="button" class="btn btn-default input-sm" >'+  $Think.lang.add + '</button>'
+        '<button mtype="in_add" type="button" class="btn btn-default input-sm" >' + lang.add + '</button>'
     ).join(''),
     'add_type_obj':Array(
         '<li class="list-group-item input-sm mb5" style="padding: 5px 10px;">',
@@ -155,11 +155,11 @@ M_exttpl_editor.prototype.add_exttpl_obj = function(in_val)
     var old_val = _self.out_obj.find('input[value=' + in_val + ']').val();
     if(old_val == in_val)
     {
-        _self.edit_obj.find('[mtype=in_val]').val($Think.lang.exists + ':' + in_val).prop('disabled',true);
-        _self.edit_obj.find('[mtype=in_add]').html($Think.lang.confirm);
+        _self.edit_obj.find('[mtype=in_val]').val(lang.exists + ':' + in_val).prop('disabled', true);
+        _self.edit_obj.find('[mtype=in_add]').html(lang.confirm);
         _self.edit_obj.find('[mtype=in_add]').off('click').on('click',function(){
             _self.edit_obj.find('[mtype=in_val]').val('').prop('disabled',false);
-            _self.edit_obj.find('[mtype=in_add]').html($Think.lang.add);
+            _self.edit_obj.find('[mtype=in_add]').html(lang.add);
             _self.edit_obj.find('[mtype="in_add"]').off('click').on('click',function(){_self.add_exttpl()});
         });
         return;
@@ -251,11 +251,11 @@ M_exttpl_editor.prototype.add_edit_exttpl_obj = function(in_name,in_val)
     var old_val = _self.out_obj.find('input[name="' + _self.post_name + '[' + in_name + ']' + '"]');
     if(0 < old_val.length)
     {
-        _self.edit_obj.find('[mtype=in_val]').val($Think.lang.exists + ':' + in_name).prop('disabled',true);
-        _self.edit_obj.find('[mtype=in_add]').html($Think.lang.confirm);
+        _self.edit_obj.find('[mtype=in_val]').val(lang.exists + ':' + in_name).prop('disabled', true);
+        _self.edit_obj.find('[mtype=in_add]').html(lang.confirm);
         _self.edit_obj.find('[mtype=in_add]').off('click').on('click',function(){
             _self.edit_obj.find('[mtype=in_val]').val('').prop('disabled',false);
-            _self.edit_obj.find('[mtype=in_add]').html($Think.lang.add + $Think.lang.extend + $Think.lang.info);
+            _self.edit_obj.find('[mtype=in_add]').html(lang.add + lang.extend + lang.info);
             _self.edit_obj.find('[mtype="in_add"]').off('click').on('click',function(){_self.add_edit_exttpl()});
         });
         return;

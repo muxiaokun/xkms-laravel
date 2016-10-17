@@ -31,7 +31,7 @@ function M_alert_log(config)
     if(typeof(_self.message) == 'object')
     {
         msg_str = '<table class="table table-hover">';
-        for(name in _self.message)
+        for (var name in _self.message)
         {
             msg_str += "<tr><td>" + name + "</td><td>" + _self.message[name] + "</td></tr>";
         }
@@ -55,7 +55,7 @@ function M_alert_log(config)
             obj.html(msg_str);
         }
         var buttons_fn = {};
-        buttons_fn[$Think.lang.close] = function() {
+        buttons_fn[lang.close] = function () {
             $( this ).dialog( "close" );
         }
         obj.dialog({

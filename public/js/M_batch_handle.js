@@ -40,7 +40,7 @@ M_batch_handle.prototype =
         '<form method="post" onSubmit="return false"><div class="col-sm-6">',
         '<select class="form-control"></select></div>',
         '<button type="submit" class="btn btn-default col-sm-2">',
-        $Think.lang.submit + '</button>',
+        lang.submit + '</button>',
         '</form>'
         ).join(''),
     'option_obj':'<option></option>',
@@ -59,7 +59,7 @@ M_batch_handle.prototype.initialize = function()
     var select_obj = form_obj.find('select');
     var option_obj = $(_self.option_obj);
     option_obj.val(-1);
-    option_obj.html($Think.lang.selection + $Think.lang.batch + $Think.lang.handle);
+    option_obj.html(lang.selection + lang.batch + lang.handle);
     select_obj.append(option_obj);
     $.each(_self.type_data,function(k,v){
         option_obj = $(_self.option_obj);
@@ -73,16 +73,6 @@ M_batch_handle.prototype.initialize = function()
     //绑定提交事件
     form_obj.on('submit',function(){return _self.form_submit()});
     form_obj.attr('onSubmit','');
-    
-    //将系统 包含必须要验证的hash
-    var token = $Think.token;
-    if(token && token.name && token.value)
-    {
-        var hidden_input_obj = $(_self.hidden_input_obj);
-        hidden_input_obj.attr('name',token.name);
-        hidden_input_obj.val(token.value);
-        form_obj.append(hidden_input_obj);
-    }
 }
 
 
@@ -95,7 +85,7 @@ M_batch_handle.prototype.form_submit = function()
     var select_obj =  _self.out_obj.find('select');
     if(-1 == select_obj.val())
     {
-        _self.dialog($Think.lang.please + $Think.lang.selection + $Think.lang.handle);
+        _self.dialog(lang.please + lang.selection + lang.handle);
         return false;
     }
     var option_obj = _self.out_obj.find('option[value="' + select_obj.val() + '"]');
@@ -119,7 +109,7 @@ M_batch_handle.prototype.form_submit = function()
     var post_fields = $('input[name="' + _self.post_field + '"][type=checkbox][value]:checked');
     if(0 == post_fields.length)
     {
-        _self.dialog($Think.lang.please + $Think.lang.selection + $Think.lang.id);
+        _self.dialog(lang.please + lang.selection + lang.id);
         return false;
     }
     else
@@ -141,10 +131,10 @@ M_batch_handle.prototype.form_submit = function()
 M_batch_handle.prototype.dialog = function(msg)
 {
     var dialog_div = $('<div style="text-align:center;"></div>')
-    dialog_div.attr('title',$Think.lang.system + $Think.lang.info);
+    dialog_div.attr('title', lang.system + lang.info);
     dialog_div.html(msg);
     var buttons_fn = {};
-    buttons_fn[$Think.lang.close] = function() {
+    buttons_fn[lang.close] = function () {
         $(this).dialog( "close" );
     }
     dialog_div.dialog({

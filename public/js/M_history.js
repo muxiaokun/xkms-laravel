@@ -46,7 +46,7 @@ M_history.prototype.initialize = function()
     if(_self.type == 'cookie' && !$.cookie)_self.type = '';
     _self.menu_obj = $('<ul class="nav text-center" role="tablist"></ul>');
     _self.out_obj.prepend(_self.menu_obj);
-    _self.out_obj.prepend('<h3>' + $Think.lang.history + $Think.lang.handle + '</h3>');
+    _self.out_obj.prepend('<h3>' + lang.history + lang.handle + '</h3>');
     _self.out_obj.find('a').each(function(k,v){
         var a_obj = $(v);
         a_obj.on('click',function(){_self.a_click(a_obj)});

@@ -129,15 +129,15 @@ Route::group([
     'prefix'    => 'Admin',
 ], function () {
     Route::group([
-        'as'     => 'Admin::',
+        'as'     => 'Admins::',
         //'middleware'=>'auth',
-        'prefix' => 'Admin',
+        'prefix' => 'Admins',
     ], function () {
-        Route::get('index', ['as' => 'index', 'uses' => 'Admin@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Admin@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'Admin@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'Admin@del']);
-        Route::get('setting', ['as' => 'setting', 'uses' => 'Admin@setting']);
+        Route::get('index', ['as' => 'index', 'uses' => 'Admins@index']);
+        Route::get('add', ['as' => 'add', 'uses' => 'Admins@add']);
+        Route::get('edit', ['as' => 'edit', 'uses' => 'Admins@edit']);
+        Route::get('del', ['as' => 'del', 'uses' => 'Admins@del']);
+        Route::get('setting', ['as' => 'setting', 'uses' => 'Admins@setting']);
     });
     Route::group([
         'as'     => 'AdminGroup::',
@@ -220,20 +220,20 @@ Route::group([
     Route::group([
         'as'     => 'Index::',
         //'middleware'=>'auth',
-        'prefix' => '{Index?}',
+        'prefix' => 'Index',
     ], function () {
-        Route::get('{index?}', ['as' => 'index', 'uses' => 'Index@index']);
+        Route::get('index', ['as' => 'index', 'uses' => 'Index@index']);
         Route::get('websiteSet', ['as' => 'websiteSet', 'uses' => 'Index@websiteSet']);
         Route::get('systemSet', ['as' => 'systemSet', 'uses' => 'Index@systemSet']);
         Route::get('databaseSet', ['as' => 'databaseSet', 'uses' => 'Index@databaseSet']);
         Route::get('edit', ['as' => 'edit', 'uses' => 'Index@edit']);
         Route::get('clean', ['as' => 'clean', 'uses' => 'Index@clean']);
-        Route::get('clean', ['as' => 'clean', 'uses' => 'Index@clean']);
-        Route::get('top', ['as' => 'top', 'uses' => 'Index@top']);
-        Route::get('left', ['as' => 'left', 'uses' => 'Index@left']);
+        Route::get('topNav', ['as' => 'topNav', 'uses' => 'Index@topNav']);
+        Route::get('leftNav', ['as' => 'leftNav', 'uses' => 'Index@leftNav']);
         Route::get('main', ['as' => 'main', 'uses' => 'Index@main']);
-        Route::get('login', ['as' => 'login', 'uses' => 'Index@login']);
+        Route::post('login', ['as' => 'login', 'uses' => 'Index@login']);
         Route::get('logout', ['as' => 'logout', 'uses' => 'Index@logout']);
+        Route::get('editMyPass', ['as' => 'editMyPass', 'uses' => 'Index@editMyPass']);
     });
     Route::group([
         'as'     => 'Itlink::',

@@ -5,24 +5,24 @@ namespace App\Model;
 
 class Comment extends Common
 {
-    public function mSelect($where = null, $page = false)
+    public static function mSelect($where = null, $page = false)
     {
-        $this->mGetPage($page);
-        !isset($this->options['order']) && $this->order('add_time desc');
-        $data = $this->field('*,inet_ntoa(add_ip) as aip')->where($where)->select();
+        self::mGetPage($page);
+        !isset(self::options['order']) && self::order('add_time desc');
+        $data = self::field('*,inet_ntoa(add_ip) as aip')->where($where)->select();
         foreach ($data as &$dataRow) {
-            $this->mDecodeData($dataRow);
+            self::mDecodeData($dataRow);
         }
         return $data;
     }
 
-    public function mAdd($data)
+    public static function mAdd($data)
     {
         if (!$data) {
             return false;
         }
 
-        $data['add_time'] = time();
+        $data['add_time'] = Carbon::now();
         $data['add_ip']   = ['exp', 'inet_aton("' . $_SERVER['REMOTE_ADDR'] . '")'];
         return parent::mAdd($data);
     }

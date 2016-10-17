@@ -5,24 +5,24 @@ namespace App\Model;
 
 class Message extends Common
 {
-    public function mSelect($where = null, $page = false)
+    public static function mSelect($where = null, $page = false)
     {
-        $this->mGetPage($page);
-        !isset($this->options['order']) && $this->order('send_time desc');
-        $data = $this->where($where)->select();
+        self::mGetPage($page);
+        !isset(self::options['order']) && self::order('send_time desc');
+        $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
-            $this->mDecodeData($dataRow);
+            self::mDecodeData($dataRow);
         }
         return $data;
     }
 
-    public function mAdd($data)
+    public static function mAdd($data)
     {
         if (!$data) {
             return false;
         }
 
-        $data['send_time'] = time();
+        $data['send_time'] = Carbon::now();
         return parent::mAdd($data);
     }
 }

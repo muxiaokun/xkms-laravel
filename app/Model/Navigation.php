@@ -5,26 +5,26 @@ namespace App\Model;
 
 class Navigation extends Common
 {
-    public function mSelect($where = null, $page = false)
+    public static function mSelect($where = null, $page = false)
     {
-        $this->mGetPage($page);
-        !isset($this->options['order']) && $this->order('id desc');
-        $data = $this->where($where)->page($page)->select();
+        self::mGetPage($page);
+        !isset(self::options['order']) && self::order('id desc');
+        $data = self::where($where)->page($page)->select();
         foreach ($data as &$dataRow) {
-            $this->mDecodeData($dataRow);
+            self::mDecodeData($dataRow);
         }
         return $data;
     }
 
-    public function mFind_data($shortName)
+    public static function mFind_data($shortName)
     {
         if (!$shortName) {
             return [];
         }
 
-        $navigation = $this->where(['is_enable' => 1, 'short_name' => $shortName])->find();
-        $this->mDecodeData($navigation);
-        $navigationData = $this->_decode_navigation_data($navigation['ext_info']);
+        $navigation = self::where(['is_enable' => 1, 'short_name' => $shortName])->first();
+        self::mDecodeData($navigation);
+        $navigationData = self::_decode_navigation_data($navigation['ext_info']);
         return ($navigationData) ? $navigationData : [];
     }
 
@@ -38,7 +38,7 @@ class Navigation extends Common
                 $nav['nav_active'] = true;
             }
             if ($nav && $nav['nav_child']) {
-                $nav['nav_child'] = $this->_decode_navigation_data($nav['nav_child']);
+                $nav['nav_child'] = self::_decode_navigation_data($nav['nav_child']);
                 foreach ($nav['nav_child'] as $navChild) {
                     if ($navChild['nav_active']) {
                         $nav['nav_active'] = true;
@@ -50,12 +50,12 @@ class Navigation extends Common
         return $navigationData;
     }
 
-    protected function mEncodeData(&$data)
+    protected static function mEncodeData(&$data)
     {
         isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
     }
 
-    protected function mDecodeData(&$data)
+    protected static function mDecodeData(&$data)
     {
         isset($data['ext_info']) && $data['ext_info'] = unserialize($data['ext_info']);
     }

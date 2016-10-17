@@ -6,15 +6,15 @@ namespace App\Model;
 class AdminLog extends Common
 {
     //查询日志
-    public function mSelect($where = null, $page = false)
+    public static function mSelect($where = null, $page = false)
     {
-        $this->mGetPage($page);
-        !isset($this->options['order']) && $this->order('add_time desc');
-        return $this->where($where)->select();
+        self::mGetPage($page);
+        null !== self::options['order'] && self::order('add_time desc');
+        return self::where($where)->select();
     }
 
     //添加日志 管理员编号 信息为空为传参 操作的模型
-    public function mAdd($adminId, $modelName = false, $msg = false)
+    public static function mAdd($adminId, $modelName = false, $msg = false)
     {
         if (!$adminId) {
             return false;
@@ -39,19 +39,19 @@ class AdminLog extends Common
         }
         $data = [
             'admin_id'        => $adminId,
-            'add_time'        => time(),
+            'add_time'        => Carbon::now(),
             'module_name'     => MODULE_NAME,
             'controller_name' => CONTROLLER_NAME, //升级之后需要修改
             'action_name'     => ACTION_NAME,
             'model_name'      => $modelName,
             'request'         => $msg,
         ];
-        return $this->data($data)->add();
+        return self::data($data)->add();
     }
 
     //删除全部日志
-    public function mDel_all()
+    public static function mDel_all()
     {
-        return $this->where('1 = 1')->delete();
+        return self::where('1 = 1')->delete();
     }
 }

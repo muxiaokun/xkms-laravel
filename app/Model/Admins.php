@@ -3,31 +3,33 @@
 namespace App\Model;
 
 
+use Carbon\Carbon;
+
 class Admins extends Common
 {
-    public function mSelect($where = null, $page = false)
+    public static function mSelect($where = null, $page = false)
     {
-        $this->mParseWhere($where);
-        $this->mGetPage($page);
-        !isset($this->options['order']) && $this->order('id desc');
-        $data = $this->field('*,inet_ntoa(login_ip) as aip')->where($where)->select();
+        self::mParseWhere($where);
+        self::mGetPage($page);
+        null !== self::options['order'] && self::order('id desc');
+        $data = self::field('*,inet_ntoa(login_ip) as aip')->where($where)->select();
         foreach ($data as &$dataRow) {
-            $this->mDecodeData($dataRow);
+            self::mDecodeData($dataRow);
         }
         return $data;
     }
 
-    public function mAdd($data)
+    public static function mAdd($data)
     {
         if (!$data) {
             return false;
         }
 
-        $data['add_time'] = time();
+        $data['add_time'] = Carbon::now();
         return parent::mAdd($data);
     }
 
-    public function mDel($id)
+    public static function mDel($id)
     {
         //不能删除root用户
         if (!$id || 1 == $id || (is_array($id) && in_array(1, $id))) {
@@ -36,13 +38,13 @@ class Admins extends Common
         return parent::mDel($id);
     }
 
-    public function mFind($id)
+    public static function mFind($id)
     {
-        $this->field('*,inet_ntoa(login_ip) as aip');
+        self::select('*,inet_ntoa(login_ip) as aip');
         return parent::mFind($id);
     }
 
-    public function authorized($user, $pwd)
+    public static function authorized($user, $pwd)
     {
         if (!$user) {
             return false;
@@ -52,36 +54,36 @@ class Admins extends Common
             'admin_name' => $user,
             'is_enable'  => '1',
         ];
-        $adminInfo = $this->where($where)->find();
+        $adminInfo = self::where($where)->first();
         if ($adminInfo['admin_pwd'] == md5($pwd . $adminInfo['admin_rand'])) {
             $data = [
-                'last_time' => time(),
-                'login_ip'  => ['exp', 'inet_aton("' . $_SERVER['REMOTE_ADDR'] . '")'],
+                'last_time' => Carbon::now(),
+                'login_ip'  => 'inet_aton("' . $_SERVER['REMOTE_ADDR'] . '")',
             ];
-            $this->where(['id' => $adminInfo['id']])->data($data)->save();
-            $adminInfo = $this->mFind($adminInfo['id']);
+            self::where('id', '=', $adminInfo['id'])->update($data);
+            $adminInfo = self::mFind($adminInfo['id']);
             return $adminInfo;
         } else {
             return false;
         }
     }
 
-    protected function mParseWhere(&$where)
+    protected static function mParseWhere(&$where)
     {
         if (is_null($where)) {
             return;
         }
 
-        isset($where['group_id']) && $where['group_id'] = $this->mMakeLikeArray($where['group_id']);
+        isset($where['group_id']) && $where['group_id'] = self::mMakeLikeArray($where['group_id']);
     }
 
-    protected function mEncodeData(&$data)
+    protected static function mEncodeData(&$data)
     {
         if (isset($data['id']) && (1 == $data['id'] || (is_array($data['id']) && in_array(1, $data['id'])))) {
             unset($data['privilege']);
         }
         if ($data['admin_pwd']) {
-            $randStr            = $this->_make_rand();
+            $randStr            = self::_make_rand();
             $data['admin_pwd']  = md5($data['admin_pwd'] . $randStr);
             $data['admin_rand'] = $randStr;
         } else {
@@ -94,7 +96,7 @@ class Admins extends Common
         isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
     }
 
-    protected function mDecodeData(&$data)
+    protected static function mDecodeData(&$data)
     {
         unset($data['admin_pwd']);
         unset($data['admin_rand']);

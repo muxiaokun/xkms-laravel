@@ -5,28 +5,28 @@ namespace App\Model;
 
 class Wechat extends Common
 {
-    public function mSelect($where = null, $page = false)
+    public static function mSelect($where = null, $page = false)
     {
-        $this->mGetPage($page);
-        !isset($this->options['order']) && $this->order('id desc');
-        $data = $this->where($where)->select();
+        self::mGetPage($page);
+        !isset(self::options['order']) && self::order('id desc');
+        $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
-            $this->mDecodeData($dataRow);
+            self::mDecodeData($dataRow);
         }
         return $data;
     }
 
-    public function bind_wechat($data)
+    public static function bind_wechat($data)
     {
         if (!$data) {
             return false;
         }
 
-        $wechatId = $this->mFindId($data['open_id']);
+        $wechatId = self::mFindId($data['open_id']);
         if ($wechatId) {
-            return $this->mEdit($data['open_id'], $data);
+            return self::mEdit($data['open_id'], $data);
         } else {
-            return $this->mAdd($data);
+            return self::mAdd($data);
         }
     }
 }

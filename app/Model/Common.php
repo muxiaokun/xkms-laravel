@@ -14,12 +14,12 @@ class Common extends Model
      * @param int   $page  翻页数量
      * @return array 返回数据数组
      */
-    public function mSelect($where = null, $page = false)
+    public static function mSelect($where = null, $page = false)
     {
-        $this->mGetPage($page);
-        $data = $this->where($where)->select();
+        self::mGetPage($page);
+        $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
-            $this->mDecodeData($dataRow);
+            self::mDecodeData($dataRow);
         }
         return $data;
     }
@@ -29,14 +29,14 @@ class Common extends Model
      * @param array $data
      * @return boolean
      */
-    public function mAdd($data)
+    public static function mAdd($data)
     {
         if (!$data) {
             return false;
         }
 
-        $this->mEncodeData($data);
-        return $this->add($data);
+        self::mEncodeData($data);
+        return self::add($data);
     }
 
     /**
@@ -44,14 +44,14 @@ class Common extends Model
      * @param mixed $id
      * @return boolean
      */
-    public function mDel($id)
+    public static function mDel($id)
     {
         if (!$id) {
             return false;
         }
 
         is_array($id) && $id = ['in', $id];
-        return $this->where(['id' => $id])->delete();
+        return self::where(['id' => $id])->delete();
     }
 
     /**
@@ -60,15 +60,15 @@ class Common extends Model
      * @param array $data
      * @return boolean
      */
-    public function mEdit($id, $data)
+    public static function mEdit($id, $data)
     {
         if (!$id || !$data) {
             return false;
         }
 
         is_array($id) && $id = ['in', $id];
-        $this->mEncodeData($data);
-        return $this->where(['id' => $id])->data($data)->save();
+        self::mEncodeData($data);
+        return self::where(['id' => $id])->data($data)->save();
     }
 
     /**
@@ -76,14 +76,14 @@ class Common extends Model
      * @param mixed $id
      * @return array
      */
-    public function mFind($id)
+    public static function mFind($id)
     {
         if (!$id) {
             return false;
         }
 
-        $data = $this->where(['id' => $id])->find();
-        $this->mDecodeData($data);
+        $data = self::where(['id' => $id])->first();
+        self::mDecodeData($data);
         return $data;
     }
 
@@ -93,18 +93,14 @@ class Common extends Model
      * @param string $columnName
      * @return string
      */
-    public function mFindId($value, $columnName = '')
+    public static function mFindId($value, $columnName)
     {
-        if (!$value) {
+        if (!$value || !$columnName) {
             return false;
         }
 
-        //默认查询id的列为第二列
-        if (!$columnName) {
-            $columnName = $this->fields[1];
-        }
-        $column = $this->field('id')->where([$columnName => $value])->find();
-        return $column['id'];
+        $column = self::where($columnName, '=', $value)->first();
+        return $column->id;
     }
 
     /**
@@ -113,14 +109,14 @@ class Common extends Model
      * @param string $columnName
      * @return string
      */
-    public function mFindColumn($id, $columnName)
+    public static function mFindColumn($id, $columnName)
     {
         if (!$id || !$columnName) {
             return false;
         }
 
-        $column = $this->field($columnName)->where(['id' => $id])->find();
-        $this->mDecodeData($column);
+        $column = self::field($columnName)->where(['id' => $id])->first();
+        self::mDecodeData($column);
         return $column[$columnName];
     }
 
@@ -131,7 +127,7 @@ class Common extends Model
      * @param string $data
      * @return boolean
      */
-    public function mClean($id, $columnName = '', $data = false)
+    public static function mClean($id, $columnName = '', $data = false)
     {
         if (!$id) {
             return false;
@@ -139,16 +135,16 @@ class Common extends Model
 
         //默认清除id的列为第二列
         if (!$columnName) {
-            $columnName = $this->fields[1];
+            $columnName = self::fields[1];
         }
 
         is_array($id) && $id = ['in', $id];
-        $this->where([$columnName => $id]);
-        if (0 == $this->count()) {
+        self::where([$columnName => $id]);
+        if (0 == self::count()) {
             return true;
         }
-        $this->where([$columnName => $id]);
-        return (false === $data) ? $this->delete() : $this->save([$columnName => $data]);
+        self::where([$columnName => $id]);
+        return (false === $data) ? self::delete() : self::save([$columnName => $data]);
     }
 
     /**
@@ -157,10 +153,10 @@ class Common extends Model
      * @param array $where 查询条件
      * @return int 最大页数
      */
-    public function mGetPageCount($where)
+    public static function mGetPageCount($where)
     {
-        $this->mParseWhere($where);
-        $pageCount  = $this->where($where)->count();
+        self::mParseWhere($where);
+        $pageCount  = self::where($where)->count();
         $sysMaxPage = C('SYS_MAX_PAGE') * C('SYS_MAX_ROW');
         return ($pageCount < $sysMaxPage) ? $pageCount : $sysMaxPage;
     }
@@ -171,11 +167,11 @@ class Common extends Model
      * @param string $column 列名称
      * @return array 指定列数组合集
      */
-    public function mColumn2Array($column)
+    public static function mColumn2Array($column)
     {
-        $where = $this->options['where'];
-        $this->limit($this->count());
-        $selectResult = $this->field($column)->where($where)->select();
+        $where = self::options['where'];
+        self::limit(self::count());
+        $selectResult = self::field($column)->where($where)->select();
         $reArr        = [];
         foreach ($selectResult as $row) {
             $reArr[] = $row[$column];
@@ -187,7 +183,7 @@ class Common extends Model
      * 设置翻页中数据数量
      * @param int $maxNum
      */
-    protected function mGetPage($maxNum)
+    protected static function mGetPage($maxNum)
     {
         if (!$maxNum) {
             return;
@@ -198,7 +194,7 @@ class Common extends Model
         $p      = I('p');
         $p      = ($p < C('SYS_MAX_PAGE')) ? $p : C('SYS_MAX_PAGE');
         $maxNum = ($p) ? $p . "," . $maxNum : "1," . $maxNum;
-        $this->page($maxNum);
+        self::page($maxNum);
     }
 
     /**
@@ -207,7 +203,7 @@ class Common extends Model
      * @param string $logic AND or OR
      * @return boolean
      */
-    protected function mMakeLikeArray($where, $logic = 'OR')
+    protected static function mMakeLikeArray($where, $logic = 'OR')
     {
         //将$where转换成数组
         is_string($where) && $where = explode('|', $where);
@@ -231,76 +227,12 @@ class Common extends Model
      * @param type $length 长度
      * @return string
      */
-    protected function _make_rand($length = 4)
+    protected static function _make_rand($length = 4)
     {
-        $randArray = [
-            '0',
-            '1',
-            '2',
-            '3',
-            '4',
-            '5',
-            '6',
-            '7',
-            '8',
-            '9',
-            '0',
-            'a',
-            'b',
-            'c',
-            'd',
-            'e',
-            'f',
-            'g',
-            'h',
-            'i',
-            'j',
-            'k',
-            'l',
-            'm',
-            'n',
-            'o',
-            'p',
-            'q',
-            'r',
-            's',
-            't',
-            'u',
-            'v',
-            'w',
-            'x',
-            'y',
-            'z',
-            'A',
-            'B',
-            'C',
-            'D',
-            'E',
-            'F',
-            'G',
-            'H',
-            'I',
-            'J',
-            'K',
-            'L',
-            'M',
-            'N',
-            'O',
-            'P',
-            'Q',
-            'R',
-            'S',
-            'T',
-            'U',
-            'V',
-            'W',
-            'X',
-            'Y',
-            'Z',
-        ];
-        $rand      = '';
+        $rand_range = '0123456789abcdecfghijklmnopqrstuvwxyzABCDECFGHIJKLMNOPQRSTUVWXYZ';
+        $rand       = '';
         for ($i = 0; $i < $length; $i++) {
-            $rand .= $randArray[rand(0, count($randArray) - 1)];
+            $rand .= $rand_range[rand(0, strlen($rand_range) - 1)];
         }
         return $rand;
     }
@@ -312,7 +244,7 @@ class Common extends Model
      * @param int   $level
      * @return array
      */
-    protected function mMakeTree($config, $parentId = 0, $level = 0)
+    protected static function mMakeTree($config, $parentId = 0, $level = 0)
     {
         $listWhere = $config['list_where'];
         if (!is_array($listWhere)) {
@@ -320,8 +252,8 @@ class Common extends Model
         }
 
         $listWhere[$config['parent_id']] = $parentId;
-        $countRow                        = $this->where($listWhere)->count();
-        $parentList                      = $this->limit($countRow)->$config['list_fn']($listWhere);
+        $countRow                        = self::where($listWhere)->count();
+        $parentList                      = self::limit($countRow)->$config['list_fn']($listWhere);
         //占位符
         $retractStr = '&nbsp;';
         for ($i = 0; $i < $level; $i++) {
@@ -336,8 +268,8 @@ class Common extends Model
             }
             $parentTree[] = $parent;
             //这里的limit解除系统限制的数量
-            $countRow  = $this->where($listWhere)->count();
-            $childList = $this->limit($countRow)->$config['tree_fn']($listWhere, $parent[$config['id']], $level);
+            $countRow  = self::where($listWhere)->count();
+            $childList = self::limit($countRow)->$config['tree_fn']($listWhere, $parent[$config['id']], $level);
             foreach ($childList as $child) {
                 $parentTree[] = $child;
             }
@@ -351,7 +283,7 @@ class Common extends Model
      * @param string $content
      * @return string
      */
-    protected function mEncodeContent($content)
+    protected static function mEncodeContent($content)
     {
         //删除相对路径前的../
         $content = htmlspecialchars_decode($content);
@@ -367,7 +299,7 @@ class Common extends Model
      * 格式化查询条件接口
      * @param type &$data
      */
-    protected function mParseWhere(&$where)
+    protected static function mParseWhere(&$where)
     {
     }
 
@@ -375,11 +307,11 @@ class Common extends Model
      * 格式化数据接口
      * @param type &$data
      */
-    protected function mEncodeData(&$data)
+    protected static function mEncodeData(&$data)
     {
     }
 
-    protected function mDecodeData(&$data)
+    protected static function mDecodeData(&$data)
     {
     }
 }

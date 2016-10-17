@@ -8,29 +8,29 @@ class Article extends Common
 {
     use SoftDeletes;
 
-    public function mSelect($where = null, $page = false)
+    public static function mSelect($where = null, $page = false)
     {
-        $this->mParseWhere($where);
-        $this->mGetPage($page);
-        !isset($this->options['order']) && $this->order('is_stick desc,sort asc,update_time desc');
-        $data = $this->where($where)->select();
+        self::mParseWhere($where);
+        self::mGetPage($page);
+        !isset(self::options['order']) && self::order('is_stick desc,sort asc,update_time desc');
+        $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
-            $this->mDecodeData($dataRow);
+            self::mDecodeData($dataRow);
         }
         return $data;
     }
 
-    public function mAdd($data)
+    public static function mAdd($data)
     {
         if (!$data) {
             return false;
         }
 
-        !isset($data['add_time']) && $data['add_time'] = time();
+        !isset($data['add_time']) && $data['add_time'] = Carbon::now();
         return parent::mAdd($data);
     }
 
-    protected function mParseWhere(&$where)
+    protected static function mParseWhere(&$where)
     {
         if (is_null($where)) {
             return;
@@ -39,7 +39,7 @@ class Article extends Common
         if (isset($where['attribute'])) {
             $attribute = [];
             foreach ($where['attribute'] as $attr) {
-                $attr && $attribute[] = $this->mMakeLikeArray($attr);
+                $attr && $attribute[] = self::mMakeLikeArray($attr);
             }
             $where['attribute'] = $attribute;
             if (!$where['attribute']) {
@@ -48,11 +48,11 @@ class Article extends Common
         }
     }
 
-    protected function mEncodeData(&$data)
+    protected static function mEncodeData(&$data)
     {
-        !isset($data['update_time']) && $data['update_time'] = time();
+        !isset($data['update_time']) && $data['update_time'] = Carbon::now();
         isset($data['access_group_id']) && $data['access_group_id'] = serialize($data['access_group_id']);
-        isset($data['content']) && $data['content'] = $this->mEncodeContent($data['content']);
+        isset($data['content']) && $data['content'] = self::mEncodeContent($data['content']);
         if (isset($data['extend']) && is_array($data['extend'])) {
             $newExtend = [];
             foreach ($data['extend'] as $key => $value) {
@@ -70,7 +70,7 @@ class Article extends Common
         isset($data['album']) && $data['album'] = serialize($data['album']);
     }
 
-    protected function mDecodeData(&$data)
+    protected static function mDecodeData(&$data)
     {
         isset($data['access_group_id']) && $data['access_group_id'] = unserialize($data['access_group_id']);
         if (isset($data['extend']) && $data['extend']) {

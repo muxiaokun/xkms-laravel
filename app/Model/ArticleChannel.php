@@ -5,20 +5,20 @@ namespace App\Model;
 
 class ArticleChannel extends Common
 {
-    public function mSelect($where = null, $page = false)
+    public static function mSelect($where = null, $page = false)
     {
-        $this->mParseWhere($where);
-        $this->mGetPage($page);
-        !isset($this->options['order']) && $this->order('id desc');
-        $data = $this->where($where)->select();
+        self::mParseWhere($where);
+        self::mGetPage($page);
+        !isset(self::options['order']) && self::order('id desc');
+        $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
-            $this->mDecodeData($dataRow);
+            self::mDecodeData($dataRow);
         }
         return $data;
     }
 
     //返回有权管理的频道
-    public function mFind_allow($type = true)
+    public static function mFind_allow($type = true)
     {
         $where = [];
         //ma = manage admin 编辑属主 属组
@@ -36,21 +36,21 @@ class ArticleChannel extends Common
             return $mFindAllow;
         }
 
-        $articleChannel = $this->field('id')->mSelect($where);
+        $articleChannel = self::field('id')->mSelect($where);
         foreach ($articleChannel as $channel) {
             $mFindAllow[] = $channel['id'];
         }
         return $mFindAllow;
     }
 
-    protected function mParseWhere(&$where)
+    protected static function mParseWhere(&$where)
     {
         if (is_null($where)) {
             return;
         }
 
-        isset($where['manage_id']) && $where['manage_id'] = $this->mMakeLikeArray($where['manage_id']);
-        isset($where['manage_group_id']) && $where['manage_group_id'] = $this->mMakeLikeArray($where['manage_group_id']);
+        isset($where['manage_id']) && $where['manage_id'] = self::mMakeLikeArray($where['manage_id']);
+        isset($where['manage_group_id']) && $where['manage_group_id'] = self::mMakeLikeArray($where['manage_group_id']);
 
         if ($where['manage_id'] && $where['manage_group_id']) {
             $where['_complex'] = [
@@ -63,7 +63,7 @@ class ArticleChannel extends Common
         }
     }
 
-    protected function mEncodeData(&$data)
+    protected static function mEncodeData(&$data)
     {
         isset($data['manage_id']) && $data['manage_id'] = '|' . implode('|', $data['manage_id']) . '|';
         isset($data['manage_group_id']) && $data['manage_group_id'] = '|' . implode('|',
@@ -72,7 +72,7 @@ class ArticleChannel extends Common
         isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
     }
 
-    protected function mDecodeData(&$data)
+    protected static function mDecodeData(&$data)
     {
         isset($data['manage_id']) && $data['manage_id'] = explode('|',
             substr($data['manage_id'], 1, strlen($data['manage_id']) - 2));

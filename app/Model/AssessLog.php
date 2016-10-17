@@ -5,18 +5,18 @@ namespace App\Model;
 
 class AssessLog extends Common
 {
-    public function mSelect($where = null, $page = false)
+    public static function mSelect($where = null, $page = false)
     {
-        $this->mGetPage($page);
-        !isset($this->options['order']) && $this->order('add_time desc');
-        $data = $this->where($where)->select();
+        self::mGetPage($page);
+        !isset(self::options['order']) && self::order('add_time desc');
+        $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
-            $this->mDecodeData($dataRow);
+            self::mDecodeData($dataRow);
         }
         return $data;
     }
 
-    public function mAdd($data)
+    public static function mAdd($data)
     {
         if (!$data) {
             return false;
@@ -27,25 +27,25 @@ class AssessLog extends Common
                            'grade_id'    => $data['grade_id'],
                            're_grade_id' => $data['re_grade_id'],
             ];
-            $assessInfo = $this->where($where)->find();
+            $assessInfo = self::where($where)->first();
         }
-        $this->mEncodeData($data);
-        $data['add_time'] = time();
+        self::mEncodeData($data);
+        $data['add_time'] = Carbon::now();
         //是否已经评价 决定编辑还是添加
         if ($assessInfo) {
-            $result = $this->where($where)->data($data)->save();
+            $result = self::where($where)->data($data)->save();
         } else {
-            $result = $this->add($data);
+            $result = self::add($data);
         }
         return $result;
     }
 
-    protected function mEncodeData(&$data)
+    protected static function mEncodeData(&$data)
     {
         isset($data['score']) && $data['score'] = serialize($data['score']);
     }
 
-    protected function mDecodeData(&$data)
+    protected static function mDecodeData(&$data)
     {
         isset($data['score']) && $data['score'] = unserialize($data['score']);
     }

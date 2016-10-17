@@ -5,20 +5,20 @@ namespace App\Model;
 
 class Recruit extends Common
 {
-    public function mSelect($where = null, $page = false)
+    public static function mSelect($where = null, $page = false)
     {
-        $this->mGetPage($page);
-        !isset($this->options['order']) && $this->order('id desc');
-        $data = $this->where($where)->select();
+        self::mGetPage($page);
+        null !== self::options['order'] && self::order('id desc');
+        $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
-            $this->mDecodeData($dataRow);
+            self::mDecodeData($dataRow);
         }
         return $data;
     }
 
-    protected function mEncodeData(&$data)
+    protected static function mEncodeData(&$data)
     {
-        isset($data['explains']) && $data['explains'] = $this->mEncodeContent($data['explains']);
+        isset($data['explains']) && $data['explains'] = self::mEncodeContent($data['explains']);
         if (isset($data['ext_info']) && is_array($data['ext_info'])) {
             $newExtInfo = [];
             foreach ($data['ext_info'] as $key => $value) {
@@ -28,7 +28,7 @@ class Recruit extends Common
         }
     }
 
-    protected function mDecodeData(&$data)
+    protected static function mDecodeData(&$data)
     {
         if (isset($data['ext_info']) && $data['ext_info']) {
             $data['ext_info'] = explode('|', substr($data['ext_info'], 1, strlen($data['ext_info']) - 2));

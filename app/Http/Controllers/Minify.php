@@ -1,6 +1,10 @@
 <?php
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Library\CssMin;
+use App\Library\JSMin;
+
 class Minify extends Controller
 {
     public function run($type)
@@ -8,11 +12,11 @@ class Minify extends Controller
 
         switch ($type) {
             case 'css':
-                $Min         = new \App\Library\CssMin();
+                $Min         = new CssMin();
                 $contentType = 'text/css;charset=utf-8';
                 break;
             case 'js':
-                $Min         = new \App\Library\JSMin('');
+                $Min         = new JSMin();
                 $contentType = 'application/x-javascript;charset=utf-8';
                 break;
             default:
@@ -33,7 +37,7 @@ class Minify extends Controller
         $cacheTime         = config('system.minify_cache_time');
         $resourceCacheName = md5('Minify_' . $type . '|' . $files . '|' . $lang);
         $resourceCache     = cache($resourceCacheName);
-        $currentTime       = \Carbon\Carbon::now()->getTimestamp();
+        $currentTime       = Carbon::now()->getTimestamp();
         $lastModifiedTime  = $resourceCache['lastModified'] ? $resourceCache['lastModified'] : $currentTime;
 
         $request        = request();
@@ -63,12 +67,10 @@ class Minify extends Controller
             $pageWasUpdated = $etagMatch = false;
         }
 
-        if (($pageWasUpdated || $etagMatch) && !$filesModified && !$refresh) {
-            return response('', 304)
-                ->header('ETag', $resourceCacheName)
-                ->header('Connection', 'close');
+        if ($pageWasUpdated && $etagMatch && !$filesModified && !$refresh) {
+            return response('', 304);
         } else {
-            if (!$resourceCache || $filesModified || $refresh) {
+            if (!$resourceCache['lastModified'] || $filesModified || $refresh) {
 
                 //js类型引入语言包
                 if ('js' == $type) {
@@ -105,6 +107,10 @@ class Minify extends Controller
 
                     $content .= $cacheContent;
                 }
+                //强制刷新缓存
+                if ($refresh) {
+                    $lastModifiedTime = 0;
+                }
                 cache([$resourceCacheName => ['content' => $content, 'lastModified' => $lastModifiedTime]],
                     $cacheTime / 60);
             } else {
@@ -115,7 +121,7 @@ class Minify extends Controller
                 ->header('Content-Length', strlen($content))
                 ->header('ETag', $resourceCacheName)
                 ->header('Cache-Control', ' max-age=' . $cacheTime)
-                ->header('Expires', gmdate("D, d M Y H:i:s", strtotime(\Carbon\Carbon::now()) + $cacheTime) . " GMT")
+                ->header('Expires', gmdate("D, d M Y H:i:s", $currentTime + $cacheTime) . " GMT")
                 ->header('Last-Modified', gmdate('D, d M Y H:i:s', $lastModifiedTime) . ' GMT');
         }
     }

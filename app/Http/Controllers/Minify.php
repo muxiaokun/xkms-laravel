@@ -85,18 +85,12 @@ class Minify extends Controller
                         if (!$cacheContent || in_array($cacheName, $filesModified) || $refresh) {
                             $fileContent   = $filesystem->get($filePath);
                             $minifyContent = $Min->minify($fileContent);
-                            $cacheContent  = preg_replace_callback('/(url\()([\'"])(?!data:image)([^\'"]*?)\2(\))/i',
-                                function ($match) use ($type, $file) {
-                                    return $match[1] . $match[2] . asset($type . '/' . $match[3]) . $match[2] . $match[4];
-                                }, $minifyContent);
+                            $cacheContent  = $this->getReplace($type, $file, $minifyContent);
                             cache([$cacheName => $cacheContent], $cacheTime / 60);
                         }
                     } else {
                         $fileContent  = $filesystem->get($filePath);
-                        $cacheContent = preg_replace_callback('/(url\()([\'"])(?!data:image)([^\'"]*?)\2(\))/i',
-                            function ($match) use ($type, $file) {
-                                return $match[1] . $match[2] . asset($type . '/' . $match[3]) . $match[2] . $match[4];
-                            }, $fileContent);
+                        $cacheContent = $this->getReplace($type, $file, $fileContent);
                     }
 
                     //缓存文件修改时间
@@ -124,6 +118,23 @@ class Minify extends Controller
                 ->header('Expires', gmdate("D, d M Y H:i:s", $currentTime + $cacheTime) . " GMT")
                 ->header('Last-Modified', gmdate('D, d M Y H:i:s', $lastModifiedTime) . ' GMT');
         }
+    }
+
+    protected function getReplace($type, $file, $content)
+    {
+        switch ($type) {
+            case 'js':
+                //预留js替换
+                break;
+            case 'css':
+                //css url替换
+                $content = preg_replace_callback('/(url\()([\'"])(?!data:image)([^\'"]*?)\2(\))/i',
+                    function ($match) use ($type, $file) {
+                        return $match[1] . $match[2] . asset($type . '/' . $match[3]) . $match[2] . $match[4];
+                    }, $content);
+                break;
+        }
+        return $content;
     }
 
     protected function getJSLang($lang)

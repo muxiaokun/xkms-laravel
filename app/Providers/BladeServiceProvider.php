@@ -47,13 +47,8 @@ class BladeServiceProvider extends ServiceProvider
 
             return $parseStr;
         });
-        Blade::directive('_Img', function () {
-            $parseStr = '<img';
-            foreach ($tag as $key => $value) {
-                $parseStr .= ' ' . $key . '="' . $value . '"';
-            }
-            $parseStr .= ' />';
-            return M_sync_img($parseStr);
+        Blade::directive('syncImg', function ($expression) {
+            return mSyncImg($expression);
         });
         Blade::directive('_Flash', function () {
             if (!isset($tag['src'])) {

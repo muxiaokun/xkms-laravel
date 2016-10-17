@@ -94,7 +94,7 @@ class AdminGroup extends Backend
         //获取分组默认信息
         $editInfo = Model\AdminGroup::mFind($id);
         foreach ($editInfo['manage_id'] as $manageKey => $manageId) {
-            $adminName                         = Model\Admin::mFindColumn($manageId, 'admin_name');
+            $adminName                         = Model\Admins::mFindColumn($manageId, 'admin_name');
             $editInfo['manage_id'][$manageKey] = ['value' => $manageId, 'html' => $adminName];
         }
         $editInfo['manage_id'] = json_encode($editInfo['manage_id']);
@@ -124,7 +124,7 @@ class AdminGroup extends Backend
         $resultDel = Model\AdminGroup::mDel($id);
         if ($resultDel) {
             //删除成功后 删除管理员与组的关系
-            Model\Admin::mClean($id, 'group_id');
+            Model\Admins::mClean($id, 'group_id');
             $this->success(trans('common.management') . trans('common.group') . trans('common.del') . trans('common.success'),
                 route('index'));
             return;
@@ -199,7 +199,7 @@ class AdminGroup extends Backend
             case 'manage_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['admin_name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminUserList = Model\Admin::mSelect($where);
+                $adminUserList = Model\Admins::mSelect($where);
                 foreach ($adminUserList as $adminUser) {
                     $result['info'][] = ['value' => $adminUser['id'], 'html' => $adminUser['admin_name']];
                 }

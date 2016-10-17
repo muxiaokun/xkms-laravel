@@ -25,7 +25,7 @@ class ManageUpload extends Backend
         foreach ($manageUploadList as &$manageUpload) {
             switch ($manageUpload['user_type']) {
                 case 1:
-                    $manageUpload['user_name'] = Model\Admin::mFindColumn($manageUpload['user_id'], 'admin_name');
+                    $manageUpload['user_name'] = Model\Admins::mFindColumn($manageUpload['user_id'], 'admin_name');
                     break;
                 case 2:
                     $manageUpload['user_name'] = Model\Member::mFindColumn($manageUpload['user_id'], 'member_name');

@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 use App\Model;
+use Carbon\Carbon;
 
 class Backend extends Common
 {
@@ -13,8 +14,8 @@ class Backend extends Common
         if ($this->isLogin()) {
             $backendInfo = session('backend_info');
             //自动登出时间
-            if (time() - config('system.sys_backend_timeout') < $backendInfo['login_time']) {
-                $backendInfo['login_time'] = time();
+            if (Carbon::now() - config('system.sys_backend_timeout') < $backendInfo['login_time']) {
+                $backendInfo['login_time'] = Carbon::now();
                 session('backend_info', $backendInfo);
             } else {
                 $this->doLogout();
@@ -23,7 +24,7 @@ class Backend extends Common
 
             //检查管理员或者管理员组权限变动 先检查数量 提高效率
             $AdminModel            = D('Admin');
-            $adminInfo            = Model\Admin::mFind($backendInfo['id']);
+            $adminInfo            = Model\Admins::mFind($backendInfo['id']);
             $adminGroupPrivilege = Model\AdminGroup::mFind_privilege($adminInfo['group_id']);
             if (
                 $backendInfo['privilege'] !== $adminInfo['privilege'] ||
@@ -95,37 +96,40 @@ class Backend extends Common
         }
 
         //检测后台尝试登陆次数
-        $loginNum = config('system.sys_backend_login_num');
-        $lockTime = config('system.sys_backend_lock_time');
+        $loginNum  = config('system.sys_backend_login_num');
+        $lockTime  = config('system.sys_backend_lock_time');
+        $loginInfo = Model\Admins::mFind(Model\Admins::mFindId($userName, 'admin_name'));
         if (0 != $loginNum) {
-            $loginInfo = Model\Admin::mFind(Model\Admin::mFindId($userName));
-            if (0 != $loginInfo['lock_time'] && $loginInfo['lock_time'] > (time() - $lockTime)) {
-                Model\Admin::data(['lock_time' => time()])->where(['id' => $loginInfo['id']])->save();
+            if ($loginInfo->lock_time && strtotime($loginInfo->lock_time) > (strtotime(Carbon::now()) - $lockTime)) {
+                $loginInfo->lock_time = Carbon::now();
+                $loginInfo->save();
                 return 'lock_user_error';
             }
         }
         //验证用户名密码
-        $adminInfo = Model\Admin::authorized($userName, $password);
+        $adminInfo = Model\Admins::authorized($userName, $password);
         if ($adminInfo) {
             //管理员有组的 加载分组权限
             if (0 < count($adminInfo['group_id'])) {
-                $adminInfo['group_privilege'] = Model\AdminGroup::mFind_privilege($adminInfo['group_id']);
+                $adminInfo['group_privilege'] = Model\AdminGroups::mFind_privilege($adminInfo['group_id']);
             }
             //重置登录次数
             if (0 != $adminInfo['login_num']) {
-                $loginData = ['login_num' => 0, 'lock_time' => 0];
-                Model\Admin::data($loginData)->where(['id' => $loginInfo['id']])->save();
+                $loginData              = [];
+                $loginData['login_num'] = $loginInfo->login_num + 1;
+                $loginData['lock_time'] = ($loginNum <= $loginData['login_num']) ? Carbon::now() : null;
+                Model\Admins::where('id', '=', $loginInfo->id)->update($loginData);
             }
-            $adminInfo['login_time'] = time();
-            session('backend_info', $adminInfo);
+            $adminInfo['login_time'] = Carbon::now();
+            session(['backend_info' => $adminInfo]);
             return 'login_success';
         } else {
             //检测后台尝试登陆次数
             if (0 != $loginNum) {
                 $loginData              = [];
-                $loginData['login_num'] = $loginInfo['login_num'] + 1;
-                $loginData['lock_time'] = ($loginNum <= $loginData['login_num']) ? time() : 0;
-                Model\Admin::data($loginData)->where(['id' => $loginInfo['id']])->save();
+                $loginData['login_num'] = $loginInfo->login_num + 1;
+                $loginData['lock_time'] = ($loginNum <= $loginData['login_num']) ? Carbon::now() : null;
+                Model\Admins::where('id', '=', $loginInfo->id)->update($loginData);
             }
             return 'user_pwd_error';
         }

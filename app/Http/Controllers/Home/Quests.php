@@ -11,7 +11,7 @@ class Quests extends FrontendMember
     //列表
     public function index()
     {
-        $currentTime                 = time();
+        $currentTime                 = Carbon::now();
         $where                       = [
             'start_time' => ['lt', $currentTime],
             'end_time'   => ['gt', $currentTime],
@@ -36,7 +36,7 @@ class Quests extends FrontendMember
 
         $questsInfo = Model\Quests::mFind($id);
         //检测是否能够提交
-        $currentTime = time();
+        $currentTime = Carbon::now();
         if ($questsInfo['start_time'] < $currentTime && $questsInfo['end_time'] < $currentTime) {
             $this->error(trans('common.start') . trans('common.end') . trans('common.time') . trans('common.error'),
                 route('Quests/index'));

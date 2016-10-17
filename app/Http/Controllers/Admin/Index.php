@@ -12,7 +12,8 @@ class Index extends Backend
     public function index()
     {
         if ($this->isLogin()) {
-            return view('admin.Index_index');
+            $assign['title'] = trans('common.backend');
+            return view('admin.Index_index', $assign);
         } else {
             $assign['title'] = trans('common.login') . trans('common.backend');
             return view('admin.Index_login', $assign);
@@ -170,11 +171,11 @@ class Index extends Backend
     }
 
     //修改自己的密码
-    public function edit_my_pass()
+    public function editMyPass()
     {
         if (IS_POST) {
             $curPassword = request('cur_password');
-            $adminInfo   = Model\Admin::authorized(session('backend_info.admin_name'), $curPassword);
+            $adminInfo   = Model\Admins::authorized(session('backend_info.admin_name'), $curPassword);
             if (!$adminInfo) {
                 $this->error(trans('common.current') . trans('common.pass') . trans('common.error'));
             }
@@ -194,7 +195,7 @@ class Index extends Backend
                 $this->error($result['info'], route(ACTION_NAME));
             }
 
-            $resultEdit = Model\Admin::mEdit($adminInfo['id'], ['admin_pwd' => $password]);
+            $resultEdit = Model\Admins::mEdit($adminInfo['id'], ['admin_pwd' => $password]);
             if ($resultEdit) {
                 $this->success(trans('common.edit') . trans('common.pass') . trans('common.success'),
                     route('edit_my_pass'));
@@ -254,14 +255,14 @@ class Index extends Backend
     }
 
     //管理页面TOP NAV
-    public function top_nav()
+    public function topNav()
     {
         $assign['title'] = trans('common.nav_top') . trans('common.nav');
-        return view('admin.Index_', $assign);
+        return view('admin.Index_topNav', $assign);
     }
 
     //管理页面LEFT NAV
-    public function left_nav()
+    public function leftNav()
     {
         //if(没有在权限中找到列表 就显示默认的列表)
         $adminPriv      = session('backend_info.privilege');
@@ -296,7 +297,7 @@ class Index extends Backend
         }
         $assign['left_nav'] = $leftNav;
         $assign['title']    = trans('common.nav_left') . trans('common.nav');
-        return view('admin.Index_', $assign);
+        return view('admin.Index_leftNav', $assign);
     }
 
     //管理主页面
@@ -328,26 +329,22 @@ class Index extends Backend
 
     public function login()
     {
-        if (!IS_POST && !IS_AJAX) {
-            return;
-        }
-
         $adminName = request('user');
         $adminPwd  = request('pwd');
         switch ($this->doLogin($adminName, $adminPwd)) {
             case 'user_pwd_error':
-                $this->error(trans('common.account') . trans('common.or') . trans('common.pass') . trans('common.error'),
-                    route('Index/index'));
+                return $this->error(trans('common.account') . trans('common.or') . trans('common.pass') . trans('common.error'),
+                    'Admin::Index::index');
                 break;
             case 'verify_error':
-                $this->error(trans('common.verify_code') . trans('common.error'), route('Index/index'));
+                return $this->error(trans('common.verify_code') . trans('common.error'), 'Admin::Index::index');
                 break;
             case 'lock_user_error':
-                $this->error(trans('common.admin') . trans('common.by') . trans('common.lock') . trans('common.please') . config('system.sys_backend_lock_time') . trans('common.second') . trans('common.again') . trans('common.login'),
-                    route('Index/index'));
+                return $this->error(trans('common.admin') . trans('common.by') . trans('common.lock') . trans('common.please') . config('system.sys_backend_lock_time') . trans('common.second') . trans('common.again') . trans('common.login'),
+                    'Admin::Index::index');
                 break;
             default:
-                $this->success(trans('common.login') . trans('common.success'), route('Index/index'));
+                return $this->success(trans('common.login') . trans('common.success'), 'Admin::Index::index');
         }
     }
 
@@ -356,7 +353,7 @@ class Index extends Backend
     {
         $this->doLogout();
         $this->success(trans('common.logout') . trans('common.account') . trans('common.success'),
-            route('Index/index'));
+            'Admin::Index::index');
     }
 
     //页面验证

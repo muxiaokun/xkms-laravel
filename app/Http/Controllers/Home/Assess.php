@@ -12,7 +12,7 @@ class Assess extends FrontendMember
     public function index()
     {
 
-        $currentTime = time();
+        $currentTime = Carbon::now();
         $where       = [
             'group_level' => ['in', session('frontend_info.group_id')],
             'is_enable'   => 1,
@@ -49,7 +49,7 @@ class Assess extends FrontendMember
         }
 
         $assessInfo  = Model\Assess::mFind($id);
-        $currentTime = time();
+        $currentTime = Carbon::now();
         if (
             1 != $assessInfo['is_enable'] ||
             !in_array($assessInfo['group_level'], session('frontend_info.group_id')) ||

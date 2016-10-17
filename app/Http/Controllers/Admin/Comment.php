@@ -18,7 +18,7 @@ class Comment extends Backend
         $whereValue = request('audit_id');
         $whereValue && $where['audit_id'] = [
             'in',
-            Model\Admin::where(['admin_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+            Model\Admins::where(['admin_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
         ];
         $whereValue = request('send_id');
         $whereValue && $where['send_id'] = [
@@ -32,7 +32,7 @@ class Comment extends Backend
 
         $commentList = Model\Comment::order('add_time desc')->mSelect($where, true);
         foreach ($commentList as &$comment) {
-            $comment['audit_name']  = ($comment['audit_id']) ? Model\Admin::mFindColumn($comment['audit_id'],
+            $comment['audit_name']  = ($comment['audit_id']) ? Model\Admins::mFindColumn($comment['audit_id'],
                 'admin_name') : trans('common.none') . trans('common.audit');
             $memberName             = Model\Member::mFindColumn($comment['member_id'], 'member_name');
             $comment['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');

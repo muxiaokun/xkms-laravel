@@ -21,7 +21,7 @@ class AdminLog extends Backend
         $whereValue = request('admin_id');
         $whereValue && $where['admin_id'] = [
             'in',
-            Model\Admin::where(['admin_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+            Model\Admins::where(['admin_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
         ];
         $whereValue = request('controller_name');
         $whereValue && $where['controller_name'] = $whereValue;
@@ -29,7 +29,7 @@ class AdminLog extends Backend
         //初始化翻页 和 列表数据
         $adminLogList = Model\AdminLog::mSelect($where, true);
         foreach ($adminLogList as &$adminLog) {
-            $adminLog['admin_name'] = Model\Admin::mFindColumn($adminLog['admin_id'], 'admin_name');
+            $adminLog['admin_name'] = Model\Admins::mFindColumn($adminLog['admin_id'], 'admin_name');
         }
         $assign['admin_log_list']       = $adminLogList;
         $assign['admin_log_list_count'] = Model\AdminLog::mGetPageCount($where);

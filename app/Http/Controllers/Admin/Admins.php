@@ -34,7 +34,7 @@ class Admin extends Backend
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $adminList = Model\Admin::mSelect($where, true);
+        $adminList = Model\Admins::mSelect($where, true);
         foreach ($adminList as &$admin) {
             foreach ($admin['group_id'] as $groupId) {
                 $groupName = Model\AdminGroup::mFindColumn($groupId, 'name');
@@ -45,7 +45,7 @@ class Admin extends Backend
             !isset($admin['add_time']) && $admin['add_time'] = trans('common.system') . trans('common.add');
         }
         $assign['admin_list']       = $adminList;
-        $assign['admin_list_count'] = Model\Admin::mGetPageCount($where);
+        $assign['admin_list_count'] = Model\Admins::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo               = [];
@@ -75,7 +75,7 @@ class Admin extends Backend
     {
         if (IS_POST) {
             $data      = $this->makeData();
-            $resultAdd = Model\Admin::mAdd($data);
+            $resultAdd = Model\Admins::mAdd($data);
             if ($resultAdd) {
                 $this->success(trans('common.admin') . trans('common.add') . trans('common.success'), route('index'));
 
@@ -99,7 +99,7 @@ class Admin extends Backend
 
         if (IS_POST) {
             $data       = $this->makeData();
-            $resultEdit = Model\Admin::mEdit($id, $data);
+            $resultEdit = Model\Admins::mEdit($id, $data);
             if ($resultEdit) {
                 $this->success(trans('common.admin') . trans('common.edit') . trans('common.success'), route('index'));
 
@@ -110,7 +110,7 @@ class Admin extends Backend
             }
         }
 
-        $editInfo = Model\Admin::mFind($id);
+        $editInfo = Model\Admins::mFind($id);
         foreach ($editInfo['group_id'] as &$groupId) {
             $adminGroupName = Model\AdminGroup::mFindColumn($groupId, 'name');
             $groupId        = ['value' => $groupId, 'html' => $adminGroupName];
@@ -131,7 +131,7 @@ class Admin extends Backend
             $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $resultDel = Model\Admin::mDel($id);
+        $resultDel = Model\Admins::mDel($id);
         if ($resultDel) {
             $this->success(trans('common.admin') . trans('common.del') . trans('common.success'), route('index'));
 
@@ -184,7 +184,7 @@ class Admin extends Backend
                     break;
                 }
                 //检查用户名是否存在
-                $adminInfo = Model\Admin::mSelect(['admin_name' => $data['admin_name'], 'id' => ['neq', $data['id']]]);
+                $adminInfo = Model\Admins::mSelect(['admin_name' => $data['admin_name'], 'id' => ['neq', $data['id']]]);
                 if (0 < count($adminInfo)) {
                     $result['info'] = trans('admin') . trans('common.name') . trans('common.exists');
                     break;

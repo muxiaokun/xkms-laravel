@@ -21,14 +21,14 @@ class MessageBoardLog extends Backend
         $whereValue = request('audit_id');
         $whereValue && $where['audit_id'] = [
             'in',
-            Model\Admin::where(['admin_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+            Model\Admins::where(['admin_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
         ];
         $whereValue = mMktimeRange('add_time');
         $whereValue && $where['add_time'] = $whereValue;
 
         $messageBoardLogList = Model\MessageBoardLog::order('add_time desc')->mSelect($where, true);
         foreach ($messageBoardLogList as &$messageBoardLog) {
-            $messageBoardLog['admin_name']  = ($messageBoardLog['audit_id']) ? Model\Admin::mFindColumn($messageBoardLog['audit_id'],
+            $messageBoardLog['admin_name']  = ($messageBoardLog['audit_id']) ? Model\Admins::mFindColumn($messageBoardLog['audit_id'],
                 'admin_name') : trans('common.none') . trans('common.audit');
             $memberName                     = Model\Member::mFindColumn($messageBoardLog['send_id'], 'member_name');
             $messageBoardLog['member_name'] = ($memberName) ? $memberName : trans('common.empty');
@@ -80,7 +80,7 @@ class MessageBoardLog extends Backend
 
 
         $editInfo                = Model\MessageBoardLog::mFind($id);
-        $editInfo['admin_name']  = ($editInfo['audit_id']) ? Model\Admin::mFindColumn($editInfo['audit_id'],
+        $editInfo['admin_name']  = ($editInfo['audit_id']) ? Model\Admins::mFindColumn($editInfo['audit_id'],
             'admin_name') : trans('common.none') . trans('common.audit');
         $memberName              = Model\Member::mFindColumn($editInfo['send_id'], 'member_name');
         $editInfo['member_name'] = ($memberName) ? $memberName : trans('common.empty');

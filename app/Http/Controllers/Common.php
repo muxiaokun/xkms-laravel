@@ -158,15 +158,9 @@ class Common extends Controller
     }
 
     //检查验证码是否正确
-    protected function verifyCheck($code, $t = '')
+    protected function verifyCheck($code, $name = '')
     {
-        $Verify = new \Think\Verify();
-        $id     = MODULE_NAME . CONTROLLER_NAME;
-        if ($t) {
-            $id .= $t;
-        }
-
-        return $Verify->check($code, $id);
+        return VerificationCode::verify($code, $name);
     }
 
     //生成中文拼音首字母缩写
@@ -315,7 +309,7 @@ class Common extends Controller
         }
 
         //防止缓存
-        $currentTime = time();
+        $currentTime = Carbon::now();
         $htmlStr     = <<< EOF
 <script type='text/javascript'>
     //{$currentTime}

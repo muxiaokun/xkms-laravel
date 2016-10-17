@@ -64,7 +64,7 @@ class Wechat extends Frontend
         $data    = [
             'ToUserName'   => $msgInfo['FromUserName'],
             'FromUserName' => $msgInfo['ToUserName'],
-            'CreateTime'   => time(),
+            'CreateTime'   => Carbon::now(),
             'MsgType'      => 'text',
         ];
         $content = '';
@@ -111,7 +111,7 @@ class Wechat extends Frontend
                 'province'   => $userInfo['province'],
                 'city'       => $userInfo['city'],
                 'headimgurl' => $userInfo['headimgurl'],
-                'bind_time'  => time(),
+                'bind_time'  => Carbon::now(),
             ];
             //绑定模式逻辑节点
             //已经绑定 直接登陆

@@ -121,7 +121,7 @@ class Message extends FrontendMember
                 }
                 break;
             case 'read_message':
-                $currentTime = time();
+                $currentTime = Carbon::now();
                 $memberId    = session('frontend_info.id');
                 $where       = ['receive_id' => $memberId];
                 $resultEdit  = Model\Message::where($where)->mEdit($data['id'], ['receive_time' => $currentTime]);

@@ -104,8 +104,8 @@ class Frontend extends Common
         $lockTime = config('system.sys_frontend_lock_time');
         if (0 != $loginNum) {
             $loginInfo = Model\Member::mFind(Model\Member::mFindId($userName));
-            if (0 != $loginInfo['lock_time'] && $loginInfo['lock_time'] > (time() - $lockTime)) {
-                Model\Member::data(['lock_time' => time()])->where(['id' => $loginInfo['id']])->save();
+            if (0 != $loginInfo['lock_time'] && $loginInfo['lock_time'] > (Carbon::now() - $lockTime)) {
+                Model\Member::data(['lock_time' => Carbon::now()])->where(['id' => $loginInfo['id']])->save();
                 return 'lock_user_error';
             }
         }
@@ -121,7 +121,7 @@ class Frontend extends Common
                 $loginData = ['login_num' => 0, 'lock_time' => 0];
                 Model\Member::data($loginData)->where(['id' => $loginInfo['id']])->save();
             }
-            $memberInfo['login_time'] = time();
+            $memberInfo['login_time'] = Carbon::now();
             session('frontend_info', $memberInfo);
             return 'login_success';
         } else {
@@ -129,7 +129,7 @@ class Frontend extends Common
             if (0 != $loginNum) {
                 $loginData              = [];
                 $loginData['login_num'] = $loginInfo['login_num'] + 1;
-                $loginData['lock_time'] = ($loginNum <= $loginData['login_num']) ? time() : 0;
+                $loginData['lock_time'] = ($loginNum <= $loginData['login_num']) ? Carbon::now() : 0;
                 Model\Member::data($loginData)->where(['id' => $loginInfo['id']])->save();
             }
             return 'user_pwd_error';

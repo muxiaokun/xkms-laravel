@@ -412,7 +412,7 @@ class Article extends Frontend
         //1.文章是否被隐藏
         //2.文章是否到了发布时间
         //3.文章是否被审核
-        $currentTime = time();
+        $currentTime = Carbon::now();
         return [
             'add_time' => ['lt', $currentTime],
             'if_show'  => 1,

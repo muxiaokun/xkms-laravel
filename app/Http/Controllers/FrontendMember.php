@@ -18,8 +18,8 @@ class FrontendMember extends Frontend
         if ($this->isLogin()) {
             $frontendInfo = session('frontend_info');
             //自动登出时间
-            if (time() - config('system.sys_frontend_timeout') < $frontendInfo['login_time']) {
-                $frontendInfo['login_time'] = time();
+            if (Carbon::now() - config('system.sys_frontend_timeout') < $frontendInfo['login_time']) {
+                $frontendInfo['login_time'] = Carbon::now();
                 session('frontend_info', $frontendInfo);
             } else {
                 $this->doLogout();

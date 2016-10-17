@@ -146,7 +146,7 @@ class ArticleCategory extends Backend
         //如果有管理权限进行进一步数据处理
         if (mInArray($id, $maAllowArr)) {
             foreach ($editInfo['manage_id'] as &$manageId) {
-                $adminName = Model\Admin::mFindColumn($manageId, 'admin_name');
+                $adminName = Model\Admins::mFindColumn($manageId, 'admin_name');
                 $manageId  = ['value' => $manageId, 'html' => $adminName];
             }
             $editInfo['manage_id'] = json_encode($editInfo['manage_id']);
@@ -233,7 +233,7 @@ class ArticleCategory extends Backend
             case 'manage_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['admin_name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminUserList = Model\Admin::mSelect($where);
+                $adminUserList = Model\Admins::mSelect($where);
                 foreach ($adminUserList as $adminUser) {
                     $result['info'][] = ['value' => $adminUser['id'], 'html' => $adminUser['admin_name']];
                 }

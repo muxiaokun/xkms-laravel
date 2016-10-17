@@ -11,14 +11,14 @@ class Recruit extends Frontend
     //列表
     public function index()
     {
-        $currentTime  = time();
-        $logCount     = 0;
-        $where        = [
+        $currentTime                  = Carbon::now();
+        $logCount                     = 0;
+        $where                        = [
             'start_time' => ['lt', $currentTime],
             'end_time'   => ['gt', $currentTime],
             '(current_portion < max_portion OR max_portion = 0)',
         ];
-        $keyword      = request('keyword');
+        $keyword                      = request('keyword');
         if ($keyword) {
             $keyword             = '%' . $keyword . '%';
             $complex             = ['_logic' => 'or'];
@@ -46,7 +46,7 @@ class Recruit extends Frontend
 
         $recruitInfo = Model\Recruit::mFind($id);
         //检测是否能够提交
-        $currentTime = time();
+        $currentTime = Carbon::now();
         if ($recruitInfo['start_time'] < $currentTime && $recruitInfo['end_time'] < $currentTime) {
             $this->error(trans('common.start') . trans('common.end') . trans('common.time') . trans('common.error'),
                 route('Recruit/index'));

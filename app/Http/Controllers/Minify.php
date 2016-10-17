@@ -71,8 +71,9 @@ class Minify extends Controller
             if (!$resourceCache || $filesModified || $refresh) {
 
                 //js类型引入语言包
-                $content .= $this->getJSLang($lang);
-
+                if ('js' == $type) {
+                    $content .= $this->getJSLang($lang);
+                }
                 foreach (explode(',', $files) as $file) {
                     //压缩和缓存文件
                     $filePath  = public_path($type . '/' . $file . '.' . $type);

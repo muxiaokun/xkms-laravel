@@ -28,7 +28,7 @@ function mPutenv($key, $item = '')
 function mRandStr($length = 4)
 {
     $rand_range = '0123456789abcdecfghijklmnopqrstuvwxyzABCDECFGHIJKLMNOPQRSTUVWXYZ';
-    $rand      = '';
+    $rand       = '';
     for ($i = 0; $i < $length; $i++) {
         $rand .= $rand_range[rand(0, strlen($rand_range) - 1)];
     }
@@ -115,25 +115,17 @@ function mMktimeRange($inputName)
 
 function mExists($url, $isThumb = false)
 {
-    if (!$url || !is_file($url)) {
-        $systemDefault = "Public/css/bimages/default.png";
-        switch (MODULE_NAME) {
-            case 'Home':
-                $url = C('SYS_DEFAULT_IMAGE', null, $systemDefault);
-                break;
-            default:
-                $url = $systemDefault;
-        }
+    if (!$url || !is_file(public_path($url))) {
+        $url = config('system.sys_default_image', $systemDefault);
     } elseif ($isThumb) {
-        $pathinfo = pathinfo($url);
+        $pathinfo = pathinfo(public_path($url));
         $newName  = $pathinfo['filename'] . '_thumb.' . $pathinfo['extension'];
         $newFile  = $pathinfo['dirname'] . '/' . $newName;
         if (is_file($newFile)) {
             return $newFile;
         }
-
     }
-    return $url;
+    return asset($url);
 }
 
 // 获得字符串中的本站资源链接
@@ -146,10 +138,10 @@ function mGetContentUpload($str)
 //将内容中的IMG标签替换成异步IMG标签
 function mSyncImg($content)
 {
-    $pattern = '/(<img.*?)\ssrc=([\'|\"])(.*?)\2(.*?\/?>)/i';
+    $pattern = '/(<img.*?)\ssrc=([\'|\"])(.*?)\2(.*?\/?>)/is';
     $content = preg_replace_callback($pattern, function ($match) {
         $newElement  = base64_encode($match[1] . $match[4]);
-        $replacement = '<img src="' . mExists(C('SYS_SYNC_IMAGE')) . '" ';
+        $replacement = '<img src="' . mExists(config('system.sys_sync_image')) . '" ';
         $replacement .= 'M_Img="' . $newElement . '" ';
         $replacement .= 'M_img_src=' . $match[2] . $match[3] . $match[2] . ' />';
         return $replacement;

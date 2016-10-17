@@ -80,21 +80,28 @@ class Minify extends Controller
                     $cacheName = $this->getCacheName($filePath);
                     if (false === strrpos($file, '.min')) {
                         $cacheContent = cache($cacheName);
-                        if (!$cacheContent || in_array($cacheName, $filesModified)) {
+                        if (!$cacheContent || in_array($cacheName, $filesModified) || $refresh) {
                             $fileContent   = $filesystem->get($filePath);
                             $minifyContent = $Min->minify($fileContent);
-                            $cacheContent  = $minifyContent;
+                            $cacheContent  = preg_replace_callback('/(url\()([\'"])(?!data:image)([^\'"]*?)\2(\))/i',
+                                function ($match) use ($type, $file) {
+                                    return $match[1] . $match[2] . asset($type . '/' . $match[3]) . $match[2] . $match[4];
+                                }, $minifyContent);
                             cache([$cacheName => $cacheContent], $cacheTime / 60);
                         }
                     } else {
                         $fileContent  = $filesystem->get($filePath);
-                        $cacheContent = $fileContent;
+                        $cacheContent = preg_replace_callback('/(url\()([\'"])(?!data:image)([^\'"]*?)\2(\))/i',
+                            function ($match) use ($type, $file) {
+                                return $match[1] . $match[2] . asset($type . '/' . $match[3]) . $match[2] . $match[4];
+                            }, $fileContent);
                     }
 
                     //缓存文件修改时间
                     $fileLastModified  = $filesystem->lastModified($filePath);
                     $cacheLastModified = $this->getCacheTimeName($filePath);
                     cache([$cacheLastModified => $fileLastModified], $cacheTime / 60);
+
 
                     $content .= $cacheContent;
                 }
@@ -108,7 +115,7 @@ class Minify extends Controller
                 ->header('Content-Length', strlen($content))
                 ->header('ETag', $resourceCacheName)
                 ->header('Cache-Control', ' max-age=' . $cacheTime)
-                ->header('Expires', gmdate("D, d M Y H:i:s", time() + $cacheTime) . " GMT")
+                ->header('Expires', gmdate("D, d M Y H:i:s", strtotime(\Carbon\Carbon::now()) + $cacheTime) . " GMT")
                 ->header('Last-Modified', gmdate('D, d M Y H:i:s', $lastModifiedTime) . ' GMT');
         }
     }

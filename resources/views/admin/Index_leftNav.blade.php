@@ -39,16 +39,10 @@
                 </li>
             </ul>
         @endif
-        <h3>技术支持</h3>
+        <h3>@lang('common.technical')@lang('common.support')</h3>
         <ul class="nav text-center" role="tablist">
             <li role="presentation">
-                <a class="fs12" href="javascript:void(0);">电话：0991-5819279</a>
-            </li>
-            <li role="presentation">
-                <a class="fs12" href="javascript:void(0);">电话：0991-5819271</a>
-            </li>
-            <li role="presentation">
-                <a class="fs12" href="http://www.xjhywh.cn" target="_blank">官网：www.xjhywh.cn</a>
+                <a class="fs12" href="javascript:void(0);">E-mail:test20121212@qq.com</a>
             </li>
         </ul>
     </div>

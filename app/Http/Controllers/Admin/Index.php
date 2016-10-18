@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
 use App\Model;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\DB;
 
 class Index extends Backend
 {
@@ -267,36 +269,27 @@ class Index extends Backend
         //if(没有在权限中找到列表 就显示默认的列表)
         $adminPriv      = session('backend_info.privilege');
         $adminGroupPriv = session('backend_info.group_privilege');
-        $privilege      = F('privilege');
-        $leftNav        = [];
-        //跳过系统基本操作 增删改 异步接口,
-        $denyLink = ['add', 'del', 'edit', 'ajax_port'];
-        foreach ($privilege['Admin'] as $control => $controlGroup) {
-            foreach ($controlGroup as $controlName => $action) {
-                foreach ($action as $actionName => $actionValue) {
-                    if (
-                        //跳过系统基本操作
-                        in_array($actionName, $denyLink) ||
-                        //跳过没有权限的功能
-                        (
-                            !in_array('all', $adminPriv) &&
-                            !in_array($controlName . '_' . $actionName, $adminPriv) &&
-                            !in_array('all', $adminGroupPriv) &&
-                            !in_array($controlName . '_' . $actionName, $adminGroupPriv)
-                        )
-                    ) {
-                        continue;
-                    }
-
-                    $leftNav[$control][] = [
-                        'link' => route('Admin/' . $controlName . '/' . $actionName),
-                        'name' => $actionValue,
-                    ];
+        $filesystem     = new Filesystem();
+        $installMenu    = $filesystem->getRequire(storage_path('app/install_menu'))['Admin'];
+        foreach ($installMenu as $groupName => $actions) {
+            foreach ($actions as $actionName => $actionDescription) {
+                if (
+                    //跳过系统基本操作
+                    preg_match('/.*::(add|edit|del)$/', $actionName) ||
+                    //跳过没有权限的功能
+                    (
+                        !in_array('all', $adminPriv) &&
+                        !in_array($actionName, $adminPriv) &&
+                        !in_array('all', $adminGroupPriv) &&
+                        !in_array($actionName, $adminGroupPriv)
+                    )
+                ) {
+                    unset($installMenu[$groupName][$actionName]);
                 }
             }
         }
-        $assign['left_nav'] = $leftNav;
-        $assign['title']    = trans('common.nav_left') . trans('common.nav');
+        $assign['installMenu'] = $installMenu;
+        $assign['title']       = trans('common.nav_left') . trans('common.nav');
         return view('admin.Index_leftNav', $assign);
     }
 
@@ -308,23 +301,21 @@ class Index extends Backend
         $siteInfo['php_version']     = PHP_VERSION;
         $siteInfo['server_ip']       = $_SERVER['SERVER_ADDR'];
         $siteInfo['max_upload_size'] = ini_get('post_max_size');
-        $siteInfo['sys_encode']      = config('DEFAULT_CHARSET');
-        $siteInfo['sys_timezone']    = config('DEFAULT_TIMEZONE');
-        $siteInfo['mysql_version']   = mysql_get_server_info(M()->db()->connect());
-        $siteInfo['mysql_encode']    = config('DB_CHARSET');
+        $siteInfo['sys_timezone']    = config('app.timezone');
+        $siteInfo['mysql_version']   = DB::select('select version() as version')[0]->version;
         $siteInfo['ico']             = [
-            'ico1'  => $this->_check_privilege('add', 'Article'),
-            'ico2'  => $this->_check_privilege('add', 'ArticleCategory'),
-            'ico6'  => $this->_check_privilege('add', 'Member'),
-            'ico7'  => $this->_check_privilege('add', 'MemberGroup'),
-            'ico8'  => $this->_check_privilege('index', 'ManageUpload'),
-            'ico9'  => $this->_check_privilege('clean_log', 'Index'),
-            'ico10' => $this->_check_privilege('clean_cache', 'Index'),
-            'ico12' => $this->_check_privilege('index', 'ManageUpload'),
+            'ico1'  => $this->_check_privilege('Admin::Article::add'),
+            'ico2'  => $this->_check_privilege('Admin::ArticleCategory::add'),
+            'ico6'  => $this->_check_privilege('Admin::Member::add'),
+            'ico7'  => $this->_check_privilege('Admin::MemberGroup::add'),
+            'ico8'  => $this->_check_privilege('Admin::ManageUpload::index'),
+            'ico9'  => $this->_check_privilege('Admin::Index::clean_log'),
+            'ico10' => $this->_check_privilege('Admin::Index::clean_cache'),
+            'ico12' => $this->_check_privilege('Admin::ManageUpload::index'),
         ];
         $assign['site_info']         = $siteInfo;
         $assign['title']             = trans('common.info') . trans('common.page');
-        return view('admin.Index_', $assign);
+        return view('admin.Index_main', $assign);
     }
 
     public function login()

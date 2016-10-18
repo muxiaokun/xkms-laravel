@@ -481,7 +481,7 @@ function mIptoadd($ip, $type = 0)
         return '';
     }
 
-    $IpLocation = new \Org\Net\IpLocation('../../../../Public/UTFWry.dat');
+    $IpLocation = new \App\Library\IpLocation();
     $ipInfo     = $IpLocation->getlocation($ip);
     $reStr      = '';
     switch ($type) {

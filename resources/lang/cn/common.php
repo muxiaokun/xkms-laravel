@@ -319,6 +319,7 @@ return [
     'stock'                 => '库存',
     'messageboard'          => '留言板',
     'history'               => '历史',
+    'news'                  => '新闻',
     'individual'            => '个',
     'piece'                 => '篇',
     'temp'                  => '临时',

@@ -4,12 +4,10 @@
 namespace App\Http\Controllers\Install;
 
 use App\Http\Controllers\Frontend;
-use App\Model;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-use League\Flysystem\Exception;
 
 class Index extends Frontend
 {
@@ -126,6 +124,20 @@ class Index extends Frontend
             $exitCode = $e->getMessage();
         }
         if (0 === $exitCode) {
+            $install_info = $this->_getInstallInfo();
+            $install_menu = [];
+            foreach ($install_info as $controller_group) {
+                foreach ($controller_group['privilege'] as $group_name => $controller) {
+                    foreach ($controller as $controller_name => $actions) {
+                        foreach ($actions as $action_name => $action_description) {
+                            $install_menu[$group_name]
+                            [$controller_group['control_group']]
+                            [$group_name . '::' . $controller_name . '::' . $action_name] = $action_description;
+                        }
+                    }
+                }
+            }
+            Storage::put('install_menu', '<?php return ' . var_export($install_menu, true) . ';');
             return $this->success(trans('install.setp3_commont1') . trans('common.success') . trans('install.three_second_next_setp'));
         } else {
             return $this->error(trans('install.setp3_commont1') . trans('common.error') . ':' . $exitCode);
@@ -275,13 +287,13 @@ class Index extends Frontend
         $exists_tables = $this->_getTables();
         $prefix        = config('database.connections.mysql.prefix');
         foreach ($files as $file) {
-            //preg $1=sort $2=category
+            //preg $1=sort $2=control_category
             if (!preg_match('/(\d)([^\.]*)\.php$/i', $file, $pStr)) {
                 continue;
             }
             $controlInfo = $filesystem->getRequire($file);
             //用于菜单归类
-            $controlInfo['category'] = $pStr[1];
+            $controlInfo['control_category'] = $pStr[1];
 
             foreach ($controlInfo['tables'] as $table_name => &$table) {
                 $table['if_exists'] = in_array($prefix . $table_name, $exists_tables) ? true : false;

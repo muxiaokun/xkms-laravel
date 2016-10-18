@@ -10,7 +10,7 @@ class MemberGroup extends Common
     {
         self::mParseWhere($where);
         self::mGetPage($page);
-        !isset(self::options['order']) && self::order('id desc');
+        null !== self::option['order'] && self::order('id desc');
         $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
             self::mDecodeData($dataRow);

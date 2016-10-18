@@ -9,7 +9,7 @@ class Member extends Common
     {
         self::mParseWhere($where);
         self::mGetPage($page);
-        !isset(self::options['order']) && self::order('id desc');
+        null !== self::option['order'] && self::order('id desc');
         $data = self::field('*,inet_ntoa(login_ip) as aip')->where($where)->select();
         foreach ($data as &$dataRow) {
             self::mDecodeData($dataRow);
@@ -53,7 +53,7 @@ class Member extends Common
         if ($memberInfo['member_pwd'] == md5($pwd . $memberInfo['member_rand']) || $memberId) {
             $data = [
                 'last_time' => Carbon::now(),
-                'login_ip'  => ['exp', 'inet_aton("' . $_SERVER['REMOTE_ADDR'] . '")'],
+                'login_ip'  => request()->getClientIp(),
             ];
             self::where(['id' => $memberInfo['id']])->data($data)->save();
             $memberInfo = self::mFind($memberInfo['id']);

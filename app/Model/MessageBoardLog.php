@@ -8,7 +8,7 @@ class MessageBoardLog extends Common
     public static function mSelect($where = null, $page = false)
     {
         self::mGetPage($page);
-        !isset(self::options['order']) && self::order('add_time desc');
+        null !== self::option['order'] && self::order('add_time desc');
         $data = self::field('*,inet_ntoa(add_ip) as aip')->where($where)->select();
         foreach ($data as &$dataRow) {
             self::mDecodeData($dataRow);
@@ -23,7 +23,7 @@ class MessageBoardLog extends Common
         }
 
         $data['add_time'] = Carbon::now();
-        $data['add_ip']   = ['exp', 'inet_aton("' . $_SERVER['REMOTE_ADDR'] . '")'];
+        $data['add_ip']   = request()->getClientIp();
         return parent::mAdd($data);
     }
 
@@ -36,7 +36,7 @@ class MessageBoardLog extends Common
     public static function check_dont_submit($second)
     {
         $second = Carbon::now() - $second;
-        $where  = $second . ' < add_time AND add_ip = inet_aton("' . $_SERVER['REMOTE_ADDR'] . '")';
+        $where  = $second . ' < add_time AND add_ip = "' . request()->getClientIp() . '"';
         return (self::where($where)->count()) ? true : false;
     }
 

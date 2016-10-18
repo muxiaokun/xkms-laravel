@@ -9,7 +9,7 @@ class ArticleCategory extends Common
     {
         self::mParseWhere($where);
         self::mGetPage($page);
-        !isset(self::options['order']) && self::order('sort');
+        null !== self::option['order'] && self::order('sort');
         $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
             self::mDecodeData($dataRow);

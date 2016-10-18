@@ -12,7 +12,7 @@ class Article extends Common
     {
         self::mParseWhere($where);
         self::mGetPage($page);
-        !isset(self::options['order']) && self::order('is_stick desc,sort asc,update_time desc');
+        null !== self::option['order'] && self::order('is_stick desc,sort asc,update_time desc');
         $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
             self::mDecodeData($dataRow);

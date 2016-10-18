@@ -8,7 +8,7 @@ class Message extends Common
     public static function mSelect($where = null, $page = false)
     {
         self::mGetPage($page);
-        !isset(self::options['order']) && self::order('send_time desc');
+        null !== self::option['order'] && self::order('send_time desc');
         $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
             self::mDecodeData($dataRow);

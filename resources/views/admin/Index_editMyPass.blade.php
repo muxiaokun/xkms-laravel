@@ -11,7 +11,7 @@
                             'password': Array('password'),
                             'password_again': Array('password', 'password_again')
                         },
-                        'ajax_url': "{{ route('ajax_api') }}",
+                        'ajax_url': "{{ route('Admin::Index::ajax_api') }}",
                     };
                     new M_valid(config);
                 });
@@ -22,7 +22,7 @@
                     <div class="col-sm-3">
                         <input type="password" class="form-control"
                                placeholder="@lang('common.current')@lang('common.pass')" name="cur_password"
-                               value="{{ $edit_info['admin_name'] }}"/>
+                               value=""/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -38,9 +38,6 @@
                         <input type="password" class="form-control"
                                placeholder="@lang('common.again')@lang('common.input')@lang('common.pass')"
                                name="password_again"/>
-                        @if ($edit_info)
-                            <span class="help-block">@lang('common.not_input_pass')</span>
-                        @endif
                     </div>
                 </div>
                 <div class="form-group">

@@ -115,6 +115,7 @@ class Index extends Frontend
         $database  = config('database.connections.mysql.database');
         $databases = $this->_getDatabases();
         if (!in_array($database, $databases)) {
+            DB::setDatabaseName('');
             DB::select('CREATE DATABASE ' . $database);
         }
         config(['database.connections.mysql.database' => $database]);

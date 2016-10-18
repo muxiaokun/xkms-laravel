@@ -10,7 +10,7 @@
                     </div>
                 @else
                     <div class="text-center alert alert-warning">
-                        @lang('common.database'){{ $database }}@lang('common.dont')@lang('common.exists')@lang('common.auto_create')
+                        @lang('common.database'){{ $database }}@lang('common.dont')@lang('common.exists')@lang('install.auto_create')
                     </div>
                 @endif
             </div>

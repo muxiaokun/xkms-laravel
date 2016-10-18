@@ -41,18 +41,18 @@ class Recruit extends Frontend
         //初始化参数
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('Recruit/index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Recruit/index'));
         }
 
         $recruitInfo = Model\Recruit::mFind($id);
         //检测是否能够提交
         $currentTime = Carbon::now();
         if ($recruitInfo['start_time'] < $currentTime && $recruitInfo['end_time'] < $currentTime) {
-            $this->error(trans('common.start') . trans('common.end') . trans('common.time') . trans('common.error'),
+            return $this->error(trans('common.start') . trans('common.end') . trans('common.time') . trans('common.error'),
                 route('Recruit/index'));
         }
         if (0 != $recruitInfo['max_portion'] && $recruitInfo['current_portion'] >= $recruitInfo['max_portion']) {
-            $this->error(trans('common.re_recruit') . trans('common.number') . trans('common.gt') . trans('common.recruit') . trans('common.number'),
+            return $this->error(trans('common.re_recruit') . trans('common.number') . trans('common.gt') . trans('common.recruit') . trans('common.number'),
                 route('Quests/index'));
         }
         //存入数据
@@ -68,10 +68,11 @@ class Recruit extends Frontend
             $resultAdd           = Model\RecruitLog::mAdd($data);
             if ($resultAdd) {
                 Model\Recruit::where(['id' => $recruitInfo['id']])->setInc('current_portion');
-                $this->success(trans('common.resume') . trans('common.submit') . trans('common.success'),
+                return $this->success(trans('common.resume') . trans('common.submit') . trans('common.success'),
                     route('Recruit/index'));
             } else {
-                $this->error(trans('common.resume') . trans('common.submit') . trans('common.error'), route('index'));
+                return $this->error(trans('common.resume') . trans('common.submit') . trans('common.error'),
+                    route('index'));
             }
             return;
         }
@@ -101,7 +102,7 @@ class Recruit extends Frontend
         //初始化参数
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('Recruit/index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Recruit/index'));
         }
 
         $recruitInfo            = Model\Recruit::mFind($id);

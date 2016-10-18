@@ -77,11 +77,12 @@ class Admin extends Backend
             $data      = $this->makeData();
             $resultAdd = Model\Admins::mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('common.admin') . trans('common.add') . trans('common.success'), route('index'));
+                return $this->success(trans('common.admin') . trans('common.add') . trans('common.success'),
+                    route('index'));
 
                 return;
             } else {
-                $this->error(trans('common.admin') . trans('common.add') . trans('common.error'), route('add'));
+                return $this->error(trans('common.admin') . trans('common.add') . trans('common.error'), route('add'));
             }
         }
         $this->addEditCommon();
@@ -94,19 +95,20 @@ class Admin extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         if ('POST' == request()->getMethod()) {
             $data       = $this->makeData();
             $resultEdit = Model\Admins::mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('common.admin') . trans('common.edit') . trans('common.success'), route('index'));
+                return $this->success(trans('common.admin') . trans('common.edit') . trans('common.success'),
+                    route('index'));
 
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('common.admin') . trans('common.edit') . trans('common.error'), $errorGoLink);
+                return $this->error(trans('common.admin') . trans('common.edit') . trans('common.error'), $errorGoLink);
             }
         }
 
@@ -128,16 +130,17 @@ class Admin extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         $resultDel = Model\Admins::mDel($id);
         if ($resultDel) {
-            $this->success(trans('common.admin') . trans('common.del') . trans('common.success'), route('index'));
+            return $this->success(trans('common.admin') . trans('common.del') . trans('common.success'),
+                route('index'));
 
             return;
         } else {
-            $this->error(trans('common.admin') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.admin') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 
@@ -285,7 +288,7 @@ class Admin extends Backend
         if ('add' == ACTION_NAME || null !== $adminName) {
             $result = $this->doValidateForm('admin_name', ['id' => $id, 'admin_name' => $adminName]);
             if (!$result['status']) {
-                $this->error($result['info'], $errorGoLink);
+                return $this->error($result['info'], $errorGoLink);
             }
 
         }
@@ -293,7 +296,7 @@ class Admin extends Backend
             $isPwd  = ('add' == ACTION_NAME) ? true : false;
             $result = $this->doValidateForm('password', ['password' => $password, 'is_pwd' => $isPwd]);
             if (!$result['status']) {
-                $this->error($result['info'], $errorGoLink);
+                return $this->error($result['info'], $errorGoLink);
             }
 
         }
@@ -303,14 +306,14 @@ class Admin extends Backend
                 'password_again' => $passwordAgain,
             ]);
             if (!$result['status']) {
-                $this->error($result['info'], $errorGoLink);
+                return $this->error($result['info'], $errorGoLink);
             }
 
         }
         if ('add' == ACTION_NAME || null !== $privilege) {
             $result = $this->doValidateForm('privilege', $privilege);
             if (!$result['status']) {
-                $this->error($result['info'], $errorGoLink);
+                return $this->error($result['info'], $errorGoLink);
             }
 
         }
@@ -319,7 +322,7 @@ class Admin extends Backend
         if (1 != session('backend_info.id')) {
             $mFindAllow = Model\AdminGroup::mFind_allow();
             if (!mInArray($groupId, $mFindAllow)) {
-                $this->error(trans('common.you') . trans('common.none') . trans('common.privilege'));
+                return $this->error(trans('common.you') . trans('common.none') . trans('common.privilege'));
             }
 
         }

@@ -56,11 +56,12 @@ class Navigation extends Backend
             $data      = $this->makeData();
             $resultAdd = Model\Navigation::mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('common.navigation') . trans('common.add') . trans('common.success'),
+                return $this->success(trans('common.navigation') . trans('common.add') . trans('common.success'),
                     route('index'));
                 return;
             } else {
-                $this->error(trans('common.navigation') . trans('common.add') . trans('common.error'), route('add'));
+                return $this->error(trans('common.navigation') . trans('common.add') . trans('common.error'),
+                    route('add'));
             }
         }
 
@@ -74,19 +75,20 @@ class Navigation extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         if ('POST' == request()->getMethod()) {
             $data       = $this->makeData();
             $resultEdit = Model\Navigation::mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('common.navigation') . trans('common.edit') . trans('common.success'),
+                return $this->success(trans('common.navigation') . trans('common.edit') . trans('common.success'),
                     route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('common.navigation') . trans('common.edit') . trans('common.error'), $errorGoLink);
+                return $this->error(trans('common.navigation') . trans('common.edit') . trans('common.error'),
+                    $errorGoLink);
             }
         }
 
@@ -104,15 +106,17 @@ class Navigation extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         $resultDel = Model\Navigation::mDel($id);
         if ($resultDel) {
-            $this->success(trans('common.navigation') . trans('common.del') . trans('common.success'), route('index'));
+            return $this->success(trans('common.navigation') . trans('common.del') . trans('common.success'),
+                route('index'));
             return;
         } else {
-            $this->error(trans('common.navigation') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.navigation') . trans('common.del') . trans('common.error'),
+                route('index'));
         }
     }
 
@@ -156,7 +160,7 @@ class Navigation extends Backend
         if ('add' == ACTION_NAME || null !== $shortName) {
             $result = $this->doValidateForm('short_name', ['id' => $id, 'short_name' => $shortName]);
             if (!$result['status']) {
-                $this->error($result['info'], $errorGoLink);
+                return $this->error($result['info'], $errorGoLink);
             }
 
         }

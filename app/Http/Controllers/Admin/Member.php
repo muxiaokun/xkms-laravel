@@ -63,10 +63,11 @@ class Member extends Backend
             $data      = $this->makeData();
             $resultAdd = Model\Member::mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('common.member') . trans('common.add') . trans('common.success'), route('index'));
+                return $this->success(trans('common.member') . trans('common.add') . trans('common.success'),
+                    route('index'));
                 return;
             } else {
-                $this->error(trans('common.member') . trans('common.add') . trans('common.error'), route('add'));
+                return $this->error(trans('common.member') . trans('common.add') . trans('common.error'), route('add'));
             }
         }
         $this->addEditCommon();
@@ -79,18 +80,20 @@ class Member extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         if ('POST' == request()->getMethod()) {
             $data       = $this->makeData(false);
             $resultEdit = Model\Member::mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('common.member') . trans('common.edit') . trans('common.success'), route('index'));
+                return $this->success(trans('common.member') . trans('common.edit') . trans('common.success'),
+                    route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('common.member') . trans('common.edit') . trans('common.error'), $errorGoLink);
+                return $this->error(trans('common.member') . trans('common.edit') . trans('common.error'),
+                    $errorGoLink);
             }
         }
 
@@ -112,20 +115,21 @@ class Member extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         //不能删除root用户
         if ($id == 1) {
-            $this->error(trans('common.id') . trans('common.not') . trans('common.del'), route('index'));
+            return $this->error(trans('common.id') . trans('common.not') . trans('common.del'), route('index'));
         }
 
         $resultDel = Model\Member::mDel($id);
         if ($resultDel) {
-            $this->success(trans('common.member') . trans('common.del') . trans('common.success'), route('index'));
+            return $this->success(trans('common.member') . trans('common.del') . trans('common.success'),
+                route('index'));
             return;
         } else {
-            $this->error(trans('common.member') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.member') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 
@@ -270,34 +274,34 @@ class Member extends Backend
         if ('add' == ACTION_NAME || null !== $memberName) {
             $result = $this->doValidateForm('member_name', ['id' => $id, 'member_name' => $memberName]);
             if (!$result['status']) {
-                $this->error($result['info'], $errorGoLink);
+                return $this->error($result['info'], $errorGoLink);
             }
 
         }
         if ('add' == ACTION_NAME || null !== $password) {
             $result = $this->doValidateForm('password', ['password' => $password, 'is_pwd' => $isPwd]);
             if (!$result['status']) {
-                $this->error($result['info'], $errorGoLink);
+                return $this->error($result['info'], $errorGoLink);
             }
 
             $result = $this->doValidateForm('password_again',
                 ['password' => $password, 'password_again' => $passwordAgain]);
             if (!$result['status']) {
-                $this->error($result['info'], $errorGoLink);
+                return $this->error($result['info'], $errorGoLink);
             }
 
         }
         if ('add' == ACTION_NAME || null !== $email) {
             $result = $this->doValidateForm('email', ['email' => $email]);
             if (!$result['status']) {
-                $this->error($result['info'], $errorGoLink);
+                return $this->error($result['info'], $errorGoLink);
             }
 
         }
         if ('add' == ACTION_NAME || null !== $phone) {
             $result = $this->doValidateForm('phone', ['phone' => $phone]);
             if (!$result['status']) {
-                $this->error($result['info'], $errorGoLink);
+                return $this->error($result['info'], $errorGoLink);
             }
 
         }

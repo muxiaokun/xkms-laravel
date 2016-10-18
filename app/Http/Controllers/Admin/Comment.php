@@ -90,16 +90,18 @@ class Comment extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         $data       = ['audit_id' => session('backend_info.id')];
         $resultEdit = Model\Comment::mEdit($id, $data);
         if ($resultEdit) {
-            $this->success(trans('common.comment') . trans('common.audit') . trans('common.success'), route('index'));
+            return $this->success(trans('common.comment') . trans('common.audit') . trans('common.success'),
+                route('index'));
             return;
         } else {
-            $this->error(trans('common.comment') . trans('common.audit') . trans('common.error'), route('index'));
+            return $this->error(trans('common.comment') . trans('common.audit') . trans('common.error'),
+                route('index'));
         }
     }
 
@@ -108,15 +110,16 @@ class Comment extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         $resultDel = Model\Comment::mDel($id);
         if ($resultDel) {
-            $this->success(trans('common.comment') . trans('common.del') . trans('common.success'), route('index'));
+            return $this->success(trans('common.comment') . trans('common.del') . trans('common.success'),
+                route('index'));
             return;
         } else {
-            $this->error(trans('common.comment') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.comment') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 }

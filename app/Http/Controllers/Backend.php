@@ -19,7 +19,7 @@ class Backend extends Common
                 session('backend_info', $backendInfo);
             } else {
                 $this->doLogout();
-                $this->error(trans('common.login') . trans('common.timeout'), route('Admin/Index/index'));
+               return $this->error(trans('common.login') . trans('common.timeout'), route('Admin/Index/index'));
             }
 
             //检查管理员或者管理员组权限变动 先检查数量 提高效率
@@ -31,12 +31,12 @@ class Backend extends Common
                 $backendInfo['group_privilege'] !== $adminGroupPrivilege
             ) {
                 $this->doLogout();
-                $this->error(trans('common.privilege') . trans('common.change') . trans('common.please') . trans('common.login'), route('Admin/Index/index'));
+               return $this->error(trans('common.privilege') . trans('common.change') . trans('common.please') . trans('common.login'), route('Admin/Index/index'));
             }
 
             //登录后 检查权限
             if (!$this->_check_privilege()) {
-                $this->error(trans('common.you') . trans('common.none') . trans('common.privilege'));
+               return $this->error(trans('common.you') . trans('common.none') . trans('common.privilege'));
             }
 
             //是否开启管理员日志 记录除了root 和 非POST(不记录来自ajax_api)提交数据
@@ -50,7 +50,7 @@ class Backend extends Common
             //检测不登陆就可以访问的
             $allowAction['Index'] = array('index', 'login', 'verifyImg');
             if (!in_array(ACTION_NAME, $allowAction[CONTROLLER_NAME])) {
-                $this->error(trans('common.notdoLogin') . trans('common.backend'), route('Admin/Index/index'));
+               return $this->error(trans('common.notdoLogin') . trans('common.backend'), route('Admin/Index/index'));
             }
         }*/
     }
@@ -218,9 +218,9 @@ return {$configStr};
 EOF;
         $putResult     = file_put_contents($cfgFile, $putConfig);
         if ($putResult) {
-            $this->success(trans('common.save') . trans('common.success'), route(ACTION_NAME));
+            return $this->success(trans('common.save') . trans('common.success'), route(ACTION_NAME));
         } else {
-            $this->error(trans('common.save') . trans('common.error'), route(ACTION_NAME));
+            return $this->error(trans('common.save') . trans('common.error'), route(ACTION_NAME));
         }
         //此函数不做任何返回
     }

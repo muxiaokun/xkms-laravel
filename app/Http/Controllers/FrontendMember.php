@@ -12,7 +12,8 @@ class FrontendMember extends Frontend
         parent::_initialize();
         //是否启用了会员类的控制器
         if (!config('system.sys_member_enable')) {
-            $this->error(trans('common.member') . trans('common.none') . trans('common.enable'), route('Index/index'));
+            return $this->error(trans('common.member') . trans('common.none') . trans('common.enable'),
+                route('Index/index'));
         }
 
         if ($this->isLogin()) {
@@ -23,7 +24,7 @@ class FrontendMember extends Frontend
                 session('frontend_info', $frontendInfo);
             } else {
                 $this->doLogout();
-                $this->error(trans('common.login') . trans('common.timeout'), route('Member/Index/index'));
+                return $this->error(trans('common.login') . trans('common.timeout'), route('Member/Index/index'));
             }
 
             //检查管理员或者管理员组权限变动 先检查数量 提高效率
@@ -31,13 +32,13 @@ class FrontendMember extends Frontend
             $memberGroupPrivilege = Model\MemberGroup::mFind_privilege($memberInfo['group_id']);
             if ($frontendInfo['group_privilege'] !== $memberGroupPrivilege) {
                 $this->doLogout();
-                $this->error(trans('common.privilege') . trans('common.change') . trans('common.please') . trans('common.login'),
+                return $this->error(trans('common.privilege') . trans('common.change') . trans('common.please') . trans('common.login'),
                     route('Member/index'));
             }
 
             //登录后 检查权限
             if (!$this->_check_privilege()) {
-                $this->error(trans('common.you') . trans('common.none') . trans('common.privilege'));
+                return $this->error(trans('common.you') . trans('common.none') . trans('common.privilege'));
             }
 
             //建立会员中心左侧菜单
@@ -46,7 +47,7 @@ class FrontendMember extends Frontend
             //检测不登陆就可以访问的
             $allowAction['Member'] = ['index', 'login', 'verifyImg', 'ajax_api', 'register'];
             if (!in_array(ACTION_NAME, $allowAction[CONTROLLER_NAME])) {
-                $this->error(trans('common.notdoLogin') . trans('common.frontend'), route('Member/index'));
+                return $this->error(trans('common.notdoLogin') . trans('common.frontend'), route('Member/index'));
             }
         }
     }

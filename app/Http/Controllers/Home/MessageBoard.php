@@ -12,12 +12,12 @@ class MessageBoard extends Frontend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'));
+            return $this->error(trans('common.id') . trans('common.error'));
         }
 
         $messageBoardInfo = Model\MessageBoard::mFind($id);
         if (!$messageBoardInfo) {
-            $this->error(trans('common.messageboard') . trans('common.dont') . trans('common.exists'));
+            return $this->error(trans('common.messageboard') . trans('common.dont') . trans('common.exists'));
         }
 
         $assign['message_board_info'] = $messageBoardInfo;
@@ -45,29 +45,29 @@ class MessageBoard extends Frontend
         if ('POST' == request()->getMethod()) {
             $id = request('id');
             if (!$id) {
-                $this->error(trans('common.id') . trans('common.error'));
+                return $this->error(trans('common.id') . trans('common.error'));
             }
 
             $messageBoardInfo = Model\MessageBoard::mFind($id);
             if (!$messageBoardInfo) {
-                $this->error(trans('common.id') . trans('common.error'));
+                return $this->error(trans('common.id') . trans('common.error'));
             }
 
             if (!$this->verifyCheck(request('verify')) && config('system.sys_frontend_verify')) {
-                $this->error(trans('common.verify_code') . trans('common.error'), route('index', ['id' => $id]));
+                return $this->error(trans('common.verify_code') . trans('common.error'), route('index', ['id' => $id]));
             }
             $submitTime   = 300;
             if ($MessageBoard->check_dont_submit($submitTime)) {
-                $this->error($submitTime . trans('common.second') . trans('common.later') . trans('common.again') . trans('common.send'),
+                return $this->error($submitTime . trans('common.second') . trans('common.later') . trans('common.again') . trans('common.send'),
                     route('index', ['id' => $id]));
             }
             $data      = $this->makeData();
             $resultAdd = $MessageBoard->mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('common.send') . trans('common.success'), route('index', ['id' => $id]));
+                return $this->success(trans('common.send') . trans('common.success'), route('index', ['id' => $id]));
                 return;
             } else {
-                $this->error(trans('common.send') . trans('common.error'), route('index', ['id' => $id]));
+                return $this->error(trans('common.send') . trans('common.error'), route('index', ['id' => $id]));
             }
         }
     }
@@ -90,17 +90,17 @@ class MessageBoard extends Frontend
         foreach ($sendInfo as $name => $value) {
             //合法
             if (!is_array($config[$name])) {
-                $this->error(trans('common.submit') . trans('common.error'), route('index', ['id' => $id]));
+                return $this->error(trans('common.submit') . trans('common.error'), route('index', ['id' => $id]));
             }
 
             //必选
             if (isset($config[$name]['msg_required']) && '' == $value) {
-                $this->error($name . trans('common.required'), route('index', ['id' => $id]));
+                return $this->error($name . trans('common.required'), route('index', ['id' => $id]));
             }
 
             //长度
             if (0 < $config[$name]['msg_length'] && $config[$name]['msg_length'] < strlen($value)) {
-                $this->error($name . trans('common.max') . trans('common.length') . $config[$name]['msg_length'],
+                return $this->error($name . trans('common.max') . trans('common.length') . $config[$name]['msg_length'],
                     route('index', ['id' => $id]));
             }
         }

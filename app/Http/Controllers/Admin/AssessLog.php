@@ -13,7 +13,8 @@ class AssessLog extends Backend
     {
         $id = request('get.id');
         if (!$id) {
-            $this->error(trans('common.assess') . trans('common.id') . trans('common.error'), route('Assess/index'));
+            return $this->error(trans('common.assess') . trans('common.id') . trans('common.error'),
+                route('Assess/index'));
         }
 
         $assessInfo                  = Model\Assess::mFind($id);
@@ -68,16 +69,16 @@ class AssessLog extends Backend
     {
         $id = request('get.id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('edit', ['id' => $id]));
+            return $this->error(trans('common.id') . trans('common.error'), route('edit', ['id' => $id]));
         }
 
         $resultDel = Model\AssessLog::mDel($id);
         if ($resultDel) {
-            $this->success(trans('common.assess') . trans('common.del') . trans('common.success'),
+            return $this->success(trans('common.assess') . trans('common.del') . trans('common.success'),
                 route('Assess/index'));
             return;
         } else {
-            $this->error(trans('common.assess') . trans('common.del') . trans('common.error'),
+            return $this->error(trans('common.assess') . trans('common.del') . trans('common.error'),
                 route('edit', ['id' => $id]));
         }
     }

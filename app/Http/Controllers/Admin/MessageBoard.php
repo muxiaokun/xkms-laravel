@@ -11,7 +11,7 @@ class MessageBoard extends Backend
     //列表
     public function index()
     {
-        $where             = [];
+        $where = [];
 
         //建立where
         $whereValue = '';
@@ -38,28 +38,28 @@ class MessageBoard extends Backend
         $assign['batch_handle']   = $batchHandle;
 
         $assign['title'] = trans('common.messageboard') . trans('common.management');
-        return view(');
+        return view('', $assign);
     }
 
     //新增
     public function add()
     {
         if ('POST' == request()->getMethod()) {
-            $data              = $this->makeData(', $assign);
-        $resultAdd = Model\MessageBoard::mAdd($data);
+            $data      = $this->makeData();
+            $resultAdd = Model\MessageBoard::mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('common.messageboard') . trans('common.add') . trans('common.success'),
+                return $this->success(trans('common.messageboard') . trans('common.add') . trans('common.success'),
                     $rebackLink);
                 return;
             } else {
-                $this->error(trans('common.messageboard') . trans('common.add') . trans('common.error'),
+                return $this->error(trans('common.messageboard') . trans('common.add') . trans('common.error'),
                     route('add', ['cate_id' => request('get.cate_id')]));
             }
         }
 
-$assign['template_list'] = mScanTemplate('index', config('DEFAULT_MODULE'), 'MessageBoard');
-$assign['title'] = trans('common.messageboard') . trans('common.add');
-return view('admin.addedit', $assign);
+        $assign['template_list'] = mScanTemplate('index', config('DEFAULT_MODULE'), 'MessageBoard');
+        $assign['title']         = trans('common.messageboard') . trans('common.add');
+        return view('admin.addedit', $assign);
     }
 
     //编辑
@@ -67,19 +67,20 @@ return view('admin.addedit', $assign);
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         if ('POST' == request()->getMethod()) {
             $data       = $this->makeData();
             $resultEdit = Model\MessageBoard::mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('common.messageboard') . trans('common.edit') . trans('common.success'),
+                return $this->success(trans('common.messageboard') . trans('common.edit') . trans('common.success'),
                     route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('common.messageboard') . trans('common.edit') . trans('common.error'), $errorGoLink);
+                return $this->error(trans('common.messageboard') . trans('common.edit') . trans('common.error'),
+                    $errorGoLink);
             }
         }
 
@@ -97,16 +98,17 @@ return view('admin.addedit', $assign);
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         $resultDel = Model\MessageBoard::mDel($id);
         if ($resultDel) {
-            $this->success(trans('common.messageboard') . trans('common.del') . trans('common.success'),
+            return $this->success(trans('common.messageboard') . trans('common.del') . trans('common.success'),
                 route('index'));
             return;
         } else {
-            $this->error(trans('common.messageboard') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.messageboard') . trans('common.del') . trans('common.error'),
+                route('index'));
         }
     }
 

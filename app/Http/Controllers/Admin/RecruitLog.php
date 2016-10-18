@@ -51,15 +51,17 @@ class RecruitLog extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         $resultDel = Model\RecruitLog::mDel($id);
         if ($resultDel) {
-            $this->success(trans('common.recruit_log') . trans('common.del') . trans('common.success'), route('index'));
+            return $this->success(trans('common.recruit_log') . trans('common.del') . trans('common.success'),
+                route('index'));
             return;
         } else {
-            $this->error(trans('common.recruit_log') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.recruit_log') . trans('common.del') . trans('common.error'),
+                route('index'));
         }
     }
 

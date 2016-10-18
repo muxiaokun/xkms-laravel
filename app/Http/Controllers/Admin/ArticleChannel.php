@@ -57,10 +57,12 @@ class ArticleChannel extends Backend
             $data      = $this->makeData();
             $resultAdd = Model\ArticleChannel::mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('common.channel') . trans('common.add') . trans('common.success'), route('index'));
+                return $this->success(trans('common.channel') . trans('common.add') . trans('common.success'),
+                    route('index'));
                 return;
             } else {
-                $this->error(trans('common.channel') . trans('common.add') . trans('common.error'), route('add'));
+                return $this->error(trans('common.channel') . trans('common.add') . trans('common.error'),
+                    route('add'));
             }
         }
 
@@ -82,13 +84,13 @@ class ArticleChannel extends Backend
 
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         if (1 != session('backend_info.id')
             && !mInArray($id, Model\ArticleChannel::mFind_allow())
         ) {
-            $this->error(trans('common.none') . trans('common.privilege') . trans('common.edit') . trans('common.channel'),
+            return $this->error(trans('common.none') . trans('common.privilege') . trans('common.edit') . trans('common.channel'),
                 route('index'));
         }
 
@@ -104,12 +106,13 @@ class ArticleChannel extends Backend
             }
             $resultEdit = Model\ArticleChannel::mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('common.channel') . trans('common.edit') . trans('common.success'),
+                return $this->success(trans('common.channel') . trans('common.edit') . trans('common.success'),
                     route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('common.channel') . trans('common.edit') . trans('common.error'), $errorGoLink);
+                return $this->error(trans('common.channel') . trans('common.edit') . trans('common.error'),
+                    $errorGoLink);
             }
         }
 
@@ -144,30 +147,31 @@ class ArticleChannel extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         //删除必须是 属主
         if (1 != session('backend_info.id')
             && !mInArray($id, Model\ArticleChannel::mFind_allow('ma'))
         ) {
-            $this->error(trans('common.none') . trans('common.privilege') . trans('common.del') . trans('common.channel'),
+            return $this->error(trans('common.none') . trans('common.privilege') . trans('common.del') . trans('common.channel'),
                 route('index'));
         }
 
         //解除文章和被删除频道的关系
         $resultClean = Model\Article::mClean($id, 'channel_id');
         if (!$resultClean) {
-            $this->error(trans('common.article') . trans('common.clear') . trans('common.channel') . trans('common.error'),
+            return $this->error(trans('common.article') . trans('common.clear') . trans('common.channel') . trans('common.error'),
                 route('index'));
         }
 
         $resultDel = Model\ArticleChannel::mDel($id);
         if ($resultDel) {
-            $this->success(trans('common.channel') . trans('common.del') . trans('common.success'), route('index'));
+            return $this->success(trans('common.channel') . trans('common.del') . trans('common.success'),
+                route('index'));
             return;
         } else {
-            $this->error(trans('common.channel') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.channel') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 

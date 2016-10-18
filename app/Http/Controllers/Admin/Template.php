@@ -39,7 +39,7 @@ class Template extends Backend
         //刷新模本文件列表
         if (1 == request('refresh')) {
             $this->_refresh_view_files();
-            $this->success(trans('common.theme') . trans('common.template') . trans('common.refresh') . trans('common.success'),
+            return $this->success(trans('common.theme') . trans('common.template') . trans('common.refresh') . trans('common.success'),
                 route('index'));
             return;
         }
@@ -62,7 +62,8 @@ return {$configStr};
 ?>
 EOF;
             file_put_contents($this->config_file, $putConfig);
-            $this->success(trans('common.theme') . trans('common.selection') . trans('common.success'), route('index'));
+            return $this->success(trans('common.theme') . trans('common.selection') . trans('common.success'),
+                route('index'));
             return;
         }
 
@@ -76,7 +77,7 @@ EOF;
 
             //保存缓存
             F($this->tpl_info_file, $this->view_files, $this->view_path);
-            $this->success(trans('common.theme') . trans('common.info') . trans('common.save') . trans('common.success'),
+            return $this->success(trans('common.theme') . trans('common.info') . trans('common.save') . trans('common.success'),
                 route('index'));
             return;
         }
@@ -107,28 +108,30 @@ EOF;
             if (preg_match('/\.\.\//', $fileName)
                 || !preg_match('/' . str_ireplace('.', '\.', config('TMPL_TEMPLATE_SUFFIX')) . '$/', $fileName)
             ) {
-                $this->error(trans('common.file') . trans('common.name') . trans('common.error'), route('index'));
+                return $this->error(trans('common.file') . trans('common.name') . trans('common.error'),
+                    route('index'));
             }
             if (!$fileName) {
-                $this->error(trans('common.file') . trans('common.name') . trans('common.not') . trans('common.empty'),
+                return $this->error(trans('common.file') . trans('common.name') . trans('common.not') . trans('common.empty'),
                     route('index'));
             }
 
             $filePath = $this->view_path . $fileName;
             $fileMd5  = ($filePath);
             if (is_array($this->view_files[$fileMd5])) {
-                $this->error(trans('common.file') . trans('common.name') . trans('common.repeat'), route('index'));
+                return $this->error(trans('common.file') . trans('common.name') . trans('common.repeat'),
+                    route('index'));
             }
 
             $content    = request('content', '', false);
             $resultEdit = file_put_contents($filePath, $content);
             if (false !== $resultEdit) {
                 $this->_refresh_view_files();
-                $this->success(trans('common.theme') . trans('common.template') . trans('common.add') . trans('common.success'),
+                return $this->success(trans('common.theme') . trans('common.template') . trans('common.add') . trans('common.success'),
                     route('index'));
                 return;
             } else {
-                $this->error(trans('common.theme') . trans('common.template') . trans('common.add') . trans('common.error'),
+                return $this->error(trans('common.theme') . trans('common.template') . trans('common.add') . trans('common.error'),
                     route('index'));
             }
         }
@@ -142,7 +145,7 @@ EOF;
     {
         $id = request('id');
         if (!is_array($this->view_files[$id])) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         $fileName = $this->view_files[$id]['file_name'];
@@ -151,11 +154,11 @@ EOF;
             $content    = request('content', '', false);
             $resultEdit = file_put_contents($filePath, $content);
             if ($resultEdit) {
-                $this->success(trans('common.theme') . trans('common.template') . trans('common.edit') . trans('common.success'),
+                return $this->success(trans('common.theme') . trans('common.template') . trans('common.edit') . trans('common.success'),
                     route('index'));
                 return;
             } else {
-                $this->error(trans('common.theme') . trans('common.template') . trans('common.edit') . trans('common.error'),
+                return $this->error(trans('common.theme') . trans('common.template') . trans('common.edit') . trans('common.error'),
                     route('index'));
             }
         }
@@ -174,7 +177,7 @@ EOF;
     {
         $id = request('id');
         if (!is_array($this->view_files[$id])) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         $fileName  = $this->view_files[$id]['file_name'];
@@ -182,11 +185,11 @@ EOF;
         $resultDel = unlink($filePath);
         if ($resultDel) {
             $this->_refresh_view_files();
-            $this->success(trans('common.theme') . trans('common.template') . trans('common.del') . trans('common.success'),
+            return $this->success(trans('common.theme') . trans('common.template') . trans('common.del') . trans('common.success'),
                 route('index'));
             return;
         } else {
-            $this->error(trans('common.theme') . trans('common.template') . trans('common.del') . trans('common.error'),
+            return $this->error(trans('common.theme') . trans('common.template') . trans('common.del') . trans('common.error'),
                 route('index'));
         }
     }

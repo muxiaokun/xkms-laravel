@@ -29,7 +29,7 @@ class Common extends Controller
 //        }
         //POST提交必须检查表单验证
 //        if ('POST' == request()->getMethod() && !request()->ajax() && !isset($_FILES['imgFile']) && !$this->token_check()) {
-//            $this->error(trans('common.token') . trans('common.error') . '(' . trans('common.refresh') . trans('common.later') . trans('common.submit') . ')',
+//           return $this->error(trans('common.token') . trans('common.error') . '(' . trans('common.refresh') . trans('common.later') . trans('common.submit') . ')',
 //                session('token_back_page')); //后台统一检查表单令牌
 //        }
     }
@@ -219,19 +219,19 @@ class Common extends Controller
         switch (request('type')) {
             case 'validform':
                 if (!in_array('doValidateForm', $currentAction)) {
-                    $this->error(trans('common.none') . trans('common.ajax') . 'validform API');
+                    return $this->error(trans('common.none') . trans('common.ajax') . 'validform API');
                 }
                 $result = $this->doValidateForm(request('field'), request('data'));
                 break;
             case 'line_edit':
                 if (!$this->_check_privilege('edit') || !in_array('_line_edit', $currentAction)) {
-                    $this->error(trans('common.none') . trans('common.ajax') . trans('common.edit'));
+                    return $this->error(trans('common.none') . trans('common.ajax') . trans('common.edit'));
                 }
                 $result = $this->_line_edit(request('field'), request('data'));
                 break;
             case 'get_data':
                 if (!in_array('getData', $currentAction)) {
-                    $this->error(trans('common.none') . trans('common.ajax') . 'get_data API');
+                    return $this->error(trans('common.none') . trans('common.ajax') . 'get_data API');
                 }
                 $result = $this->getData(request('field'), request('data'));
                 break;

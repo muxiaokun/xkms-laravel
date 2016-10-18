@@ -58,11 +58,13 @@ class Message extends Backend
         if ('POST' == request()->getMethod()) {
             $content = request('content');
             if (null == $content) {
-                $this->error(trans('common.content') . trans('common.not') . trans('common.empty'), route('index'));
+                return $this->error(trans('common.content') . trans('common.not') . trans('common.empty'),
+                    route('index'));
             }
 
             if (null == $receiveId) {
-                $this->error(trans('common.receive') . trans('common.member') . trans('common.error'), route('index'));
+                return $this->error(trans('common.receive') . trans('common.member') . trans('common.error'),
+                    route('index'));
             }
 
             $data      = [
@@ -72,10 +74,10 @@ class Message extends Backend
             ];
             $resultAdd = Model\Message::mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('common.send') . trans('common.success'), route('index'));
+                return $this->success(trans('common.send') . trans('common.success'), route('index'));
                 return;
             } else {
-                $this->error(trans('common.send') . trans('common.error'), route('index'));
+                return $this->error(trans('common.send') . trans('common.error'), route('index'));
             }
         }
 
@@ -92,15 +94,16 @@ class Message extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         $resultDel = Model\Message::mDel($id);
         if ($resultDel) {
-            $this->success(trans('common.message') . trans('common.del') . trans('common.success'), route('index'));
+            return $this->success(trans('common.message') . trans('common.del') . trans('common.success'),
+                route('index'));
             return;
         } else {
-            $this->error(trans('common.message') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.message') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 

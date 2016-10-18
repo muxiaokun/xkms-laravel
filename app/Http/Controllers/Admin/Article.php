@@ -125,10 +125,11 @@ class Article extends Backend
             $rebackLink = request('get.cate_id') ? route('ArticleCategory/index') : U('index');
             if ($resultAdd) {
                 $data['new_thumb'] = $thumbFile;
-                $this->success(trans('common.article') . trans('common.add') . trans('common.success'), $rebackLink);
+                return $this->success(trans('common.article') . trans('common.add') . trans('common.success'),
+                    $rebackLink);
                 return;
             } else {
-                $this->error(trans('common.article') . trans('common.add') . trans('common.error'),
+                return $this->error(trans('common.article') . trans('common.add') . trans('common.error'),
                     route('add', ['cate_id' => request('get.cate_id')]));
             }
         }
@@ -143,7 +144,7 @@ class Article extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         if ('POST' == request()->getMethod()) {
@@ -154,12 +155,13 @@ class Article extends Backend
             if ($resultEdit) {
                 $data['new_thumb'] = $thumbFile;
                 $this->addEditAfterCommon($data, $id);
-                $this->success(trans('common.article') . trans('common.edit') . trans('common.success'),
+                return $this->success(trans('common.article') . trans('common.edit') . trans('common.success'),
                     route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('common.article') . trans('common.edit') . trans('common.error'), $errorGoLink);
+                return $this->error(trans('common.article') . trans('common.edit') . trans('common.error'),
+                    $errorGoLink);
             }
         }
         $currentConfig = config('system.sys_article_sync_image');
@@ -194,16 +196,17 @@ class Article extends Backend
         $this->_check_aed();
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         $resultDel = Model\Article::mDel($id);
         if ($resultDel) {
             Model\ManageUpload::mEdit($id);
-            $this->success(trans('common.article') . trans('common.del') . trans('common.success'), route('index'));
+            return $this->success(trans('common.article') . trans('common.del') . trans('common.success'),
+                route('index'));
             return;
         } else {
-            $this->error(trans('common.article') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.article') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 
@@ -374,7 +377,7 @@ class Article extends Backend
         if (!in_array($data['channel_id'], Model\ArticleChannel::mFind_allow())
             && !in_array($data['cate_id'], Model\ArticleCategory::mFind_allow())
         ) {
-            $this->error(trans('common.none') . trans('common.privilege') . trans('common.handle') . trans('common.article'),
+            return $this->error(trans('common.none') . trans('common.privilege') . trans('common.handle') . trans('common.article'),
                 route('index'));
         }
 

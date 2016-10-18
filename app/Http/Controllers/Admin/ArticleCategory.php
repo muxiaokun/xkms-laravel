@@ -85,12 +85,12 @@ class ArticleCategory extends Backend
             $resultAdd = Model\ArticleCategory::mAdd($data);
             if ($resultAdd) {
                 $this->addEditAfterCommon($data, $id);
-                $this->success(trans('common.article') . trans('common.category') . trans('common.add') . trans('common.success'),
+                return $this->success(trans('common.article') . trans('common.category') . trans('common.add') . trans('common.success'),
                     route('index'));
 
                 return;
             } else {
-                $this->error(trans('common.article') . trans('common.category') . trans('common.add') . trans('common.error'),
+                return $this->error(trans('common.article') . trans('common.category') . trans('common.add') . trans('common.error'),
                     route('add'));
             }
         }
@@ -105,14 +105,14 @@ class ArticleCategory extends Backend
     {
         $id = request('get.id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
 
         if (1 != session('backend_info.id')
             && !mInArray($id, Model\ArticleCategory::mFind_allow())
         ) {
-            $this->error(trans('common.none') . trans('common.privilege') . trans('common.edit') . trans('common.article') . trans('common.category'),
+            return $this->error(trans('common.none') . trans('common.privilege') . trans('common.edit') . trans('common.article') . trans('common.category'),
                 route('index'));
         }
 
@@ -129,12 +129,12 @@ class ArticleCategory extends Backend
             $resultEdit = Model\ArticleCategory::mEdit($id, $data);
             if ($resultEdit) {
                 $this->addEditAfterCommon($data, $id);
-                $this->success(trans('common.article') . trans('common.category') . trans('common.edit') . trans('common.success'),
+                return $this->success(trans('common.article') . trans('common.category') . trans('common.edit') . trans('common.success'),
                     route('index'));
 
                 return;
             } else {
-                $this->error(trans('common.article') . trans('common.category') . trans('common.edit') . trans('common.error'),
+                return $this->error(trans('common.article') . trans('common.category') . trans('common.edit') . trans('common.error'),
                     route('edit', ['id' => $id]));
             }
         }
@@ -174,21 +174,21 @@ class ArticleCategory extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         //删除必须是 属主
         if (!mInArray($id, Model\ArticleCategory::mFind_allow('ma'))
             && 1 != session('backend_info.id')
         ) {
-            $this->error(trans('common.none') . trans('common.privilege') . trans('common.del') . trans('common.article') . trans('common.category'),
+            return $this->error(trans('common.none') . trans('common.privilege') . trans('common.del') . trans('common.article') . trans('common.category'),
                 route('index'));
         }
 
         //解除文章和被删除分类的关系
         $resultClean = Model\Article::mClean($id, 'cate_id');
         if (!$resultClean) {
-            $this->error(trans('common.article') . trans('common.clear') . trans('common.category') . trans('common.error'),
+            return $this->error(trans('common.article') . trans('common.clear') . trans('common.category') . trans('common.error'),
                 route('index'));
         }
 
@@ -196,12 +196,12 @@ class ArticleCategory extends Backend
         if ($resultDel) {
             //释放图片绑定
             Model\ManageUpload::mEdit($id);
-            $this->success(trans('common.article') . trans('common.category') . trans('common.del') . trans('common.success'),
+            return $this->success(trans('common.article') . trans('common.category') . trans('common.del') . trans('common.success'),
                 route('index'));
 
             return;
         } else {
-            $this->error(trans('common.article') . trans('common.category') . trans('common.del') . trans('common.error'),
+            return $this->error(trans('common.article') . trans('common.category') . trans('common.del') . trans('common.error'),
                 route('index'));
         }
     }

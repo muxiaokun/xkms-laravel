@@ -127,7 +127,8 @@ class Index extends Backend
             $db         = M();
             $fileHandle = fopen($_FILES['restore_file']['tmp_name'], 'r');
             if (!$fileHandle) {
-                $this->error(trans('common.open') . trans('common.file') . trans('common.error'), route('databaseSet'));
+                return $this->error(trans('common.open') . trans('common.file') . trans('common.error'),
+                    route('databaseSet'));
             }
 
             while (false !== ($queryStr = fgets($fileHandle, 10240))) {
@@ -137,14 +138,14 @@ class Index extends Backend
                         'CREATE\sTABLE',
                     ]) . '/i';
                 if (!preg_match($pregMatch, $queryStr)) {
-                    $this->error(trans('common.restore') . trans('common.database') . ' SQL ' . trans('common.error'),
+                    return $this->error(trans('common.restore') . trans('common.database') . ' SQL ' . trans('common.error'),
                         route('databaseSet'));
                 }
 
                 $db->execute($queryStr);
             }
             fclose($fileHandle);
-            $this->success(trans('common.restore') . trans('common.database') . trans('common.success'),
+            return $this->success(trans('common.restore') . trans('common.database') . trans('common.success'),
                 route('databaseSet'));
             return;
         }
@@ -232,9 +233,9 @@ class Index extends Backend
         if ($cleanCacheResult && $cleanTempResult) {
             //写入日志
             Model\AdminLog::mAdd(session('backend_info.id'));
-            $this->success($messageStr . trans('common.clean') . trans('common.success'), route('main'));
+            return $this->success($messageStr . trans('common.clean') . trans('common.success'), route('main'));
         } else {
-            $this->error($messageStr . trans('common.clean') . trans('common.error'), route('main'));
+            return $this->error($messageStr . trans('common.clean') . trans('common.error'), route('main'));
         }
     }
 
@@ -250,9 +251,9 @@ class Index extends Backend
         if ($cleanResult) {
             //写入日志
             Model\AdminLog::mAdd(session('backend_info.id'));
-            $this->success(trans('common.clean') . trans('common.log') . trans('common.success'), route('main'));
+            return $this->success(trans('common.clean') . trans('common.log') . trans('common.success'), route('main'));
         } else {
-            $this->error(trans('common.clean') . trans('common.log') . trans('common.error'), route('main'));
+            return $this->error(trans('common.clean') . trans('common.log') . trans('common.error'), route('main'));
         }
     }
 

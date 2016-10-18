@@ -31,22 +31,24 @@ class Quests extends FrontendMember
         //初始化参数
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('Quests/index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Quests/index'));
         }
 
         $questsInfo = Model\Quests::mFind($id);
         //检测是否能够提交
         $currentTime = Carbon::now();
         if ($questsInfo['start_time'] < $currentTime && $questsInfo['end_time'] < $currentTime) {
-            $this->error(trans('common.start') . trans('common.end') . trans('common.time') . trans('common.error'),
+            return $this->error(trans('common.start') . trans('common.end') . trans('common.time') . trans('common.error'),
                 route('Quests/index'));
         }
         if (0 != $questsInfo['max_portion'] && $questsInfo['current_portion'] >= $questsInfo['max_portion']) {
-            $this->error(trans('common.gt') . trans('common.max') . trans('common.portion'), route('Quests/index'));
+            return $this->error(trans('common.gt') . trans('common.max') . trans('common.portion'),
+                route('Quests/index'));
         }
         $accessInfo = request('access_info');
         if (isset($questsInfo['access_info']) && $questsInfo['access_info'] != $accessInfo) {
-            $this->error(trans('common.access') . trans('common.pass') . trans('common.error'), route('Quests/index'));
+            return $this->error(trans('common.access') . trans('common.pass') . trans('common.error'),
+                route('Quests/index'));
         }
         //初始化问题
         $questsQuestList = json_decode($questsInfo['ext_info'], true);
@@ -72,10 +74,11 @@ class Quests extends FrontendMember
             $resultAdd = Model\QuestsAnswer::mAdd($data);
             if ($resultAdd) {
                 Model\Quests::where(['id' => $questsInfo['id']])->setInc('current_portion');
-                $this->success(trans('common.answer') . trans('common.add') . trans('common.success'),
+                return $this->success(trans('common.answer') . trans('common.add') . trans('common.success'),
                     route('Quests/index'));
             } else {
-                $this->error(trans('common.answer') . trans('common.add') . trans('common.error'), route('index'));
+                return $this->error(trans('common.answer') . trans('common.add') . trans('common.error'),
+                    route('index'));
             }
             return;
         }

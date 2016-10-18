@@ -75,13 +75,13 @@ class Wechat extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         if (!config('app.debug')) {
             $templateIdShort = config('system.wechat_template_id');
             if (!$templateIdShort) {
-                $this->error('WECHAT_TEMPLATE_ID' . trans('common.empty'), route('config'));
+                return $this->error('WECHAT_TEMPLATE_ID' . trans('common.empty'), route('config'));
             }
 
         }
@@ -95,7 +95,7 @@ class Wechat extends Backend
             if (!config('app.debug')) {
                 $templateId = $Wechat->get_template($templateIdShort);
                 if (0 != $templateId['errcode']) {
-                    $this->error('template_id' . trans('common.error'), $errorGoLink);
+                    return $this->error('template_id' . trans('common.error'), $errorGoLink);
                 }
 
                 $templateId = $templateId['template_id'];
@@ -111,11 +111,11 @@ class Wechat extends Backend
             $data['data'] = $this->makeData();
             $putTemplate  = $Wechat->put_template($data);
             if (0 === $putTemplate['errcode']) {
-                $this->success(trans('common.wechat') . trans('common.send') . trans('common.success'),
+                return $this->success(trans('common.wechat') . trans('common.send') . trans('common.success'),
                     route('Wechat/index'));
                 return;
             } else {
-                $this->error(trans('common.wechat') . trans('common.send') . trans('common.error') . trans('error' . $putTemplate['errcode']),
+                return $this->error(trans('common.wechat') . trans('common.send') . trans('common.error') . trans('error' . $putTemplate['errcode']),
                     $errorGoLink);
             }
         }
@@ -129,16 +129,16 @@ class Wechat extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('Wechat/index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Wechat/index'));
         }
 
         $resultDel = Model\Wechat::mDel($id);
         if ($resultDel) {
-            $this->success(trans('common.wechat') . trans('common.bind') . trans('common.del') . trans('common.success'),
+            return $this->success(trans('common.wechat') . trans('common.bind') . trans('common.del') . trans('common.success'),
                 route('Wechat/index'));
             return;
         } else {
-            $this->error(trans('common.wechat') . trans('common.bind') . trans('common.del') . trans('common.error'),
+            return $this->error(trans('common.wechat') . trans('common.bind') . trans('common.del') . trans('common.error'),
                 route('Wechat/edit', ['id' => $id]));
         }
     }

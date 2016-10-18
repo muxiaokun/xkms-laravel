@@ -53,11 +53,12 @@ class Quests extends Backend
             $data      = $this->makeData();
             $resultAdd = Model\Quests::mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('common.quests') . trans('common.add') . trans('common.success'),
+                return $this->success(trans('common.quests') . trans('common.add') . trans('common.success'),
                     route('Quests/index'));
                 return;
             } else {
-                $this->error(trans('common.quests') . trans('common.add') . trans('common.error'), route('Quests/add'));
+                return $this->error(trans('common.quests') . trans('common.add') . trans('common.error'),
+                    route('Quests/add'));
             }
         }
         $assign['title'] = trans('common.add') . trans('common.quests');
@@ -69,19 +70,20 @@ class Quests extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         if ('POST' == request()->getMethod()) {
             $data       = $this->makeData();
             $resultEdit = Model\Quests::mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('common.quests') . trans('common.edit') . trans('common.success'),
+                return $this->success(trans('common.quests') . trans('common.edit') . trans('common.success'),
                     route('Quests/index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('common.quests') . trans('common.edit') . trans('common.error'), $errorGoLink);
+                return $this->error(trans('common.quests') . trans('common.edit') . trans('common.error'),
+                    $errorGoLink);
             }
         }
         $editInfo            = Model\Quests::mFind($id);
@@ -96,7 +98,7 @@ class Quests extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('Quests/index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Quests/index'));
         }
 
         $clear       = request('clear');
@@ -111,20 +113,20 @@ class Quests extends Backend
             if ($clear) {
                 if ($resultClear) {
                     Model\Quests::where(['id' => $id])->data(['current_portion' => 0])->save();
-                    $this->success(trans('common.quests') . trans('common.clear') . trans('common.success'),
+                    return $this->success(trans('common.quests') . trans('common.clear') . trans('common.success'),
                         route('Quests/index'));
                     return;
                 } else {
-                    $this->error(trans('common.quests') . trans('common.clear') . trans('common.error'),
+                    return $this->error(trans('common.quests') . trans('common.clear') . trans('common.error'),
                         route('Quests/index'));
 
                 }
             }
-            $this->success(trans('common.quests') . trans('common.del') . trans('common.success'),
+            return $this->success(trans('common.quests') . trans('common.del') . trans('common.success'),
                 route('Quests/index'));
             return;
         } else {
-            $this->error(trans('common.quests') . trans('common.del') . trans('common.error'),
+            return $this->error(trans('common.quests') . trans('common.del') . trans('common.error'),
                 route('Quests/edit', ['id' => $id]));
         }
     }

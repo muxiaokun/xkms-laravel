@@ -61,10 +61,11 @@ class Itlink extends Backend
             $resultAdd = Model\Itlink::mAdd($data);
             if ($resultAdd) {
                 $this->addEditAfterCommon($data, $id);
-                $this->success(trans('common.itlink') . trans('common.add') . trans('common.success'), route('index'));
+                return $this->success(trans('common.itlink') . trans('common.add') . trans('common.success'),
+                    route('index'));
                 return;
             } else {
-                $this->error(trans('common.itlink') . trans('common.add') . trans('common.error'), route('add'));
+                return $this->error(trans('common.itlink') . trans('common.add') . trans('common.error'), route('add'));
             }
         }
 
@@ -77,7 +78,7 @@ class Itlink extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         if ('POST' == request()->getMethod()) {
@@ -85,11 +86,13 @@ class Itlink extends Backend
             $resultEdit = Model\Itlink::mEdit($id, $data);
             if ($resultEdit) {
                 $this->addEditAfterCommon($data, $id);
-                $this->success(trans('common.itlink') . trans('common.edit') . trans('common.success'), route('index'));
+                return $this->success(trans('common.itlink') . trans('common.edit') . trans('common.success'),
+                    route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('common.itlink') . trans('common.edit') . trans('common.error'), $errorGoLink);
+                return $this->error(trans('common.itlink') . trans('common.edit') . trans('common.error'),
+                    $errorGoLink);
             }
         }
 
@@ -104,16 +107,17 @@ class Itlink extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         $resultDel = Model\Itlink::mDel($id);
         if ($resultDel) {
             Model\ManageUpload::mEdit($id);
-            $this->success(trans('common.itlink') . trans('common.del') . trans('common.success'), route('index'));
+            return $this->success(trans('common.itlink') . trans('common.del') . trans('common.success'),
+                route('index'));
             return;
         } else {
-            $this->error(trans('common.itlink') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.itlink') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 
@@ -175,7 +179,7 @@ class Itlink extends Backend
         if ('add' == ACTION_NAME || null !== $shortName) {
             $result = $this->doValidateForm('short_name', ['id' => $id, 'short_name' => $shortName]);
             if (!$result['status']) {
-                $this->error($result['info'], $errorGoLink);
+                return $this->error($result['info'], $errorGoLink);
             }
 
         }

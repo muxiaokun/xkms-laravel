@@ -12,7 +12,8 @@ class Itlink extends Frontend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.itlink') . trans('common.id') . trans('common.error'), route('Index/index'));
+            return $this->error(trans('common.itlink') . trans('common.id') . trans('common.error'),
+                route('Index/index'));
         }
 
         $link       = request('link');

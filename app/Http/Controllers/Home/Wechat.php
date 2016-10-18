@@ -132,18 +132,18 @@ class Wechat extends Frontend
     {
         switch ($msg) {
             case 'user_pwd_error':
-                $this->error(trans('common.account') . trans('common.or') . trans('common.pass') . trans('common.error'),
+                return $this->error(trans('common.account') . trans('common.or') . trans('common.pass') . trans('common.error'),
                     route(ACTION_NAME));
                 break;
             case 'verify_error':
-                $this->error(trans('common.verify_code') . trans('common.error'), route(ACTION_NAME));
+                return $this->error(trans('common.verify_code') . trans('common.error'), route(ACTION_NAME));
                 break;
             case 'lock_user_error':
-                $this->error(trans('common.admin') . trans('common.by') . trans('common.lock') . trans('common.please') . config('system.sys_frontend_lock_time') . trans('common.second') . trans('common.again') . trans('common.login'),
+                return $this->error(trans('common.admin') . trans('common.by') . trans('common.lock') . trans('common.please') . config('system.sys_frontend_lock_time') . trans('common.second') . trans('common.again') . trans('common.login'),
                     route(ACTION_NAME));
                 break;
             default:
-                $this->success(trans('common.login') . trans('common.success'), route('Member/index'));
+                return $this->success(trans('common.login') . trans('common.success'), route('Member/index'));
         }
     }
 

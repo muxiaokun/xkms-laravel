@@ -60,7 +60,7 @@ class MessageBoardLog extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         if ('POST' == request()->getMethod()) {
@@ -70,11 +70,11 @@ class MessageBoardLog extends Backend
             ];
             $resultEdit = Model\MessageBoardLog::mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('common.audit') . trans('common.success'), route('index'));
+                return $this->success(trans('common.audit') . trans('common.success'), route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('common.audit') . trans('common.error'), $errorGoLink);
+                return $this->error(trans('common.audit') . trans('common.error'), $errorGoLink);
             }
         }
 
@@ -96,16 +96,16 @@ class MessageBoardLog extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         $resultDel = Model\MessageBoardLog::mDel($id);
         if ($resultDel) {
-            $this->success(trans('common.messageboard') . trans('common.log') . trans('common.del') . trans('common.success'),
+            return $this->success(trans('common.messageboard') . trans('common.log') . trans('common.del') . trans('common.success'),
                 route('index'));
             return;
         } else {
-            $this->error(trans('common.messageboard') . trans('common.log') . trans('common.del') . trans('common.error'),
+            return $this->error(trans('common.messageboard') . trans('common.log') . trans('common.del') . trans('common.error'),
                 route('index'));
         }
     }

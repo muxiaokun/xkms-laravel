@@ -56,10 +56,11 @@ class Region extends Backend
             $data      = $this->makeData();
             $resultAdd = Model\Region::mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('common.region') . trans('common.add') . trans('common.success'), route('index'));
+                return $this->success(trans('common.region') . trans('common.add') . trans('common.success'),
+                    route('index'));
                 return;
             } else {
-                $this->error(trans('common.region') . trans('common.add') . trans('common.error'), route('add'));
+                return $this->error(trans('common.region') . trans('common.add') . trans('common.error'), route('add'));
             }
         }
 
@@ -72,18 +73,20 @@ class Region extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         if ('POST' == request()->getMethod()) {
             $data       = $this->makeData();
             $resultEdit = Model\Region::mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('common.region') . trans('common.edit') . trans('common.success'), route('index'));
+                return $this->success(trans('common.region') . trans('common.edit') . trans('common.success'),
+                    route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('common.region') . trans('common.edit') . trans('common.error'), $errorGoLink);
+                return $this->error(trans('common.region') . trans('common.edit') . trans('common.error'),
+                    $errorGoLink);
             }
         }
 
@@ -99,15 +102,16 @@ class Region extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         $resultDel = Model\Region::mDel($id);
         if ($resultDel) {
-            $this->success(trans('common.region') . trans('common.del') . trans('common.success'), route('index'));
+            return $this->success(trans('common.region') . trans('common.del') . trans('common.success'),
+                route('index'));
             return;
         } else {
-            $this->error(trans('common.region') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.region') . trans('common.del') . trans('common.error'), route('index'));
         }
     }
 

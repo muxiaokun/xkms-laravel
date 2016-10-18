@@ -45,7 +45,7 @@ class Assess extends FrontendMember
         //初始化和权限检测
         $id = request('get.id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         $assessInfo  = Model\Assess::mFind($id);
@@ -56,7 +56,7 @@ class Assess extends FrontendMember
             $currentTime < $assessInfo['start_time'] &&
             $currentTime > $assessInfo['end_time']
         ) {
-            $this->error(trans('common.you') . trans('common.none') . trans('common.privilege') . trans('common.assess'),
+            return $this->error(trans('common.you') . trans('common.none') . trans('common.privilege') . trans('common.assess'),
                 route('index'));
         }
 
@@ -65,10 +65,10 @@ class Assess extends FrontendMember
             //提交时检测类型下可以被评分的组和组员
             $resultAdd     = $AssessLogMode->mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('common.grade') . trans('common.success'), route('index'));
+                return $this->success(trans('common.grade') . trans('common.success'), route('index'));
                 return;
             } else {
-                $this->error(trans('common.grade') . trans('common.error'), route('add'));
+                return $this->error(trans('common.grade') . trans('common.error'), route('add'));
             }
         }
 
@@ -147,7 +147,7 @@ class Assess extends FrontendMember
         if ('add' == ACTION_NAME || null !== $reGradeId) {
             $result = $this->doValidateForm('re_grade_id', ['re_grade_id' => $reGradeId]);
             if (!$result['status']) {
-                $this->error($result['info'], $errorGoLink);
+                return $this->error($result['info'], $errorGoLink);
             }
 
         }

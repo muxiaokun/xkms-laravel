@@ -52,11 +52,11 @@ class MemberGroup extends Backend
             $data      = $this->makeData();
             $resultAdd = Model\MemberGroup::mAdd($data);
             if ($resultAdd) {
-                $this->success(trans('common.member') . trans('common.group') . trans('common.add') . trans('common.success'),
+                return $this->success(trans('common.member') . trans('common.group') . trans('common.add') . trans('common.success'),
                     route('index'));
                 return;
             } else {
-                $this->error(trans('common.member') . trans('common.group') . trans('common.add') . trans('common.error'),
+                return $this->error(trans('common.member') . trans('common.group') . trans('common.add') . trans('common.error'),
                     route('add'));
             }
         }
@@ -71,19 +71,19 @@ class MemberGroup extends Backend
     {
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         if ('POST' == request()->getMethod()) {
             $data       = $this->makeData();
             $resultEdit = Model\MemberGroup::mEdit($id, $data);
             if ($resultEdit) {
-                $this->success(trans('common.member') . trans('common.group') . trans('common.edit') . trans('common.success'),
+                return $this->success(trans('common.member') . trans('common.group') . trans('common.edit') . trans('common.success'),
                     route('index'));
                 return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
-                $this->error(trans('common.member') . trans('common.group') . trans('common.edit') . trans('common.error'),
+                return $this->error(trans('common.member') . trans('common.group') . trans('common.edit') . trans('common.error'),
                     $errorGoLink);
             }
         }
@@ -107,18 +107,18 @@ class MemberGroup extends Backend
 
         $id = request('id');
         if (!$id) {
-            $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
         $resultDel = Model\MemberGroup::mDel($id);
         if ($resultDel) {
             //删除成功后 删除管理员与组的关系
             Model\Member::mClean($id, 'group_id');
-            $this->success(trans('common.member') . trans('common.group') . trans('common.del') . trans('common.success'),
+            return $this->success(trans('common.member') . trans('common.group') . trans('common.del') . trans('common.success'),
                 route('index'));
             return;
         } else {
-            $this->error(trans('common.member') . trans('common.group') . trans('common.del') . trans('common.error'),
+            return $this->error(trans('common.member') . trans('common.group') . trans('common.del') . trans('common.error'),
                 route('index'));
         }
     }
@@ -213,14 +213,14 @@ class MemberGroup extends Backend
         if ('add' == ACTION_NAME || null !== $name) {
             $result = $this->doValidateForm('name', ['id' => $id, 'name' => $name]);
             if (!$result['status']) {
-                $this->error($result['info'], $errorGoLink);
+                return $this->error($result['info'], $errorGoLink);
             }
 
         }
         if ('add' == ACTION_NAME || null !== $privilege) {
             $result = $this->doValidateForm('privilege', $privilege);
             if (!$result['status']) {
-                $this->error($result['info'], $errorGoLink);
+                return $this->error($result['info'], $errorGoLink);
             }
 
         }

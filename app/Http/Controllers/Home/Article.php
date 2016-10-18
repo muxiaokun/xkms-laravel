@@ -23,12 +23,14 @@ class Article extends Frontend
         $id        = request('id');
         $channelId = request('channel_id');
         if (!$id) {
-            $this->error(trans('common.article') . trans('common.id') . trans('common.error'), route('Index/index'));
+            return $this->error(trans('common.article') . trans('common.id') . trans('common.error'),
+                route('Index/index'));
         }
 
         $articleInfo = Model\Article::where($this->_get_article_where())->mFind($id);
         if (!$articleInfo) {
-            $this->error(trans('common.article') . trans('common.by') . trans('common.hidden'), route('Index/index'));
+            return $this->error(trans('common.article') . trans('common.by') . trans('common.hidden'),
+                route('Index/index'));
         }
 
         Model\Article::where(['id' => $id])->setInc('hits');
@@ -47,7 +49,7 @@ class Article extends Frontend
         is_array($channelInfo['access_group_id']) && $mFindAllows = array_merge($mFindAllows,
             $channelInfo['access_group_id']);
         if ($mFindAllows && !mInArray($memberGroupId, $mFindAllows)) {
-            $this->error(trans('common.none') . trans('common.privilege') . trans('common.access') . trans('common.comma') . trans('common.please') . trans('common.login'),
+            return $this->error(trans('common.none') . trans('common.privilege') . trans('common.access') . trans('common.comma') . trans('common.please') . trans('common.login'),
                 route('Member/index'));
         }
 
@@ -81,12 +83,14 @@ class Article extends Frontend
         $cateId    = request('cate_id');
         $channelId = request('channel_id');
         if (!$cateId) {
-            $this->error(trans('common.category') . trans('common.id') . trans('common.error'), route('Index/index'));
+            return $this->error(trans('common.category') . trans('common.id') . trans('common.error'),
+                route('Index/index'));
         }
 
         $categoryInfo = Model\ArticleCategory::mFind($cateId);
         if (!$categoryInfo) {
-            $this->error(trans('common.category') . trans('common.id') . trans('common.error'), route('Index/index'));
+            return $this->error(trans('common.category') . trans('common.id') . trans('common.error'),
+                route('Index/index'));
         }
 
         $channelInfo = Model\ArticleChannel::mFind($articleInfo['channel_id']);
@@ -99,7 +103,7 @@ class Article extends Frontend
         is_array($channelInfo['access_group_id']) && $mFindAllows = array_merge($mFindAllows,
             $channelInfo['access_group_id']);
         if ($mFindAllows && !mInArray($memberGroupId, $mFindAllows)) {
-            $this->error(trans('common.none') . trans('common.privilege') . trans('common.access') . trans('common.comma') . trans('common.please') . trans('common.login'),
+            return $this->error(trans('common.none') . trans('common.privilege') . trans('common.access') . trans('common.comma') . trans('common.please') . trans('common.login'),
                 route('Member/index'));
         }
 
@@ -166,7 +170,7 @@ class Article extends Frontend
         is_array($channelInfo['access_group_id']) && $mFindAllows = array_merge($mFindAllows,
             $channelInfo['access_group_id']);
         if ($mFindAllows && !mInArray($memberGroupId, $mFindAllows)) {
-            $this->error(trans('common.none') . trans('common.privilege') . trans('common.access') . trans('common.comma') . trans('common.please') . trans('common.login'),
+            return $this->error(trans('common.none') . trans('common.privilege') . trans('common.access') . trans('common.comma') . trans('common.please') . trans('common.login'),
                 route('Member/index'));
         }
 
@@ -181,7 +185,7 @@ class Article extends Frontend
     {
         $keyword = request('keyword');
         if ('' == $keyword) {
-            $this->error(trans('common.please') . trans('common.input') . trans('common.keywords'),
+            return $this->error(trans('common.please') . trans('common.input') . trans('common.keywords'),
                 route('Index/index'));
         }
         $keyword = '%' . $keyword . '%';

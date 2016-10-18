@@ -157,21 +157,28 @@ class Backend extends Common
     }
 
     //检测权限
-    public function _check_privilege($actionName = ACTION_NAME, $controllerName = CONTROLLER_NAME)
+    public function _check_privilege($routeName)
     {
         //登录后 检查是否有权限可以操作 1.不是默认框架控制器 2.拥有管理员管理组全部权限 3.拥有权限 4.ajax_api接口 4.不需要权限就能访问的
-        $allowAction['Index']        = ['index', 'top_nav', 'left_nav', 'main', 'logout'];
-        $allowAction['ManageUpload'] = ['UploadFile', 'ManageFile'];
-        $backendInfo                 = session('backend_info');
-        $adminPriv                   = $backendInfo['privilege'];
-        $adminGroupPriv              = ($backendInfo['group_privilege']) ? $backendInfo['group_privilege'] : [];
+        $allowRoute     = [
+            'Admin::Index::index',
+            'Admin::Index::topNav',
+            'Admin::Index::leftNav',
+            'Admin::Index::main',
+            'Admin::Index::logout',
+            'Admin::ManageUpload::UploadFile',
+            'Admin::ManageUpload::ManageFile',
+        ];
+        $backendInfo    = session('backend_info');
+        $adminPriv      = $backendInfo['privilege'];
+        $adminGroupPriv = ($backendInfo['group_privilege']) ? $backendInfo['group_privilege'] : [];
         if (
-            'ajax_api' != $actionName &&
-            !in_array($actionName, $allowAction[$controllerName]) &&
+            'ajax_api' != $routeName &&
+            !in_array($routeName, $allowRoute) &&
             !in_array('all', $adminPriv) &&
-            !in_array($controllerName . '_' . $actionName, $adminPriv) &&
+            !in_array($routeName, $adminPriv) &&
             !in_array('all', $adminGroupPriv) &&
-            !in_array($controllerName . '_' . $actionName, $adminGroupPriv)
+            !in_array($routeName, $adminGroupPriv)
         ) {
             return false;
         }

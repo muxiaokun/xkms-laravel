@@ -296,7 +296,7 @@ class Common extends Controller
     }
 
     //检查权限默认方法
-    public function _check_privilege()
+    public function _check_privilege($routeName)
     {
         return true;
     }

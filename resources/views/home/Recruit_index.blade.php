@@ -27,9 +27,9 @@
                         {{ $recruit['current_portion'] }}/{{ $recruit['max_portion'] }}
                     </td>
                     <td>
-                        {{ $recruit['start_time']|M_date=config('system.sys_date_detail') }}
+                        {{ mDate($recruit['start_time']) }}
                         @lang('common.to')
-                        {{ $recruit['end_time']|M_date=config('system.sys_date_detail') }}
+                        {{ mDate($recruit['end_time']) }}
                     </td>
                     <td>
                         {{ $recruit['explains']|strip_tags|M_substr=30 }}

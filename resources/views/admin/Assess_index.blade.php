@@ -31,10 +31,10 @@
                             {{ $assess['group_name'] }}
                         </td>
                         <td>
-                            {{ $assess['start_time']|M_date=config('system.sys_date_detail') }}
+                            {{ mDate($assess['start_time']) }}
                         </td>
                         <td>
-                            {{ $assess['end_time']|M_date=config('system.sys_date_detail') }}
+                            {{ mDate($assess['end_time']) }}
                         </td>
                         <td>
                             @if ($assess['is_enable'])@lang('common.enable')@else@lang('common.disable')@endif
@@ -42,7 +42,7 @@
                         <td class="nowrap">
                             @if ($batch_handle['log_edit'])
                                 <a class="btn btn-xs btn-primary"
-                                   href="{{ route('AssessLog/edit',array('id'=>$assess['id'])) }}">
+                                   href="{{ route('Admin::AssessLog::edit',array('id'=>$assess['id'])) }}">
                                     @lang('common.statistics')
                                 </a>
                             @endif

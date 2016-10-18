@@ -31,10 +31,10 @@
                             {{ $quests['current_portion'] }}/{{ $quests['max_portion'] }}
                         </td>
                         <td>
-                            {{ $quests['start_time']|M_date=config('system.sys_date_detail') }}
+                            {{ mDate($quests['start_time']) }}
                         </td>
                         <td>
-                            {{ $quests['end_time']|M_date=config('system.sys_date_detail') }}
+                            {{ mDate($quests['end_time']) }}
                         </td>
                         <td>
                             {{ $quests['access_info'] }}
@@ -42,14 +42,14 @@
                         <td class="nowrap">
                             @if ($batch_handle['answer_index'])
                                 <a class="btn btn-xs btn-primary"
-                                   href="{{ route('QuestsAnswer/index',array('quests_id'=>$quests['id'])) }}">
+                                   href="{{ route('Admin::QuestsAnswer::index',array('quests_id'=>$quests['id'])) }}">
                                     @lang('common.answer')@lang('common.list')
                                 </a>
                             @endif
                             @if ($batch_handle['answer_index'] AND $batch_handle['answer_edit'])&nbsp;|&nbsp;@endif
                             @if ($batch_handle['answer_edit'])
                                 <a class="btn btn-xs btn-primary"
-                                   href="{{ route('QuestsAnswer/edit',array('quests_id'=>$quests['id'])) }}">
+                                   href="{{ route('Admin::QuestsAnswer::edit',array('quests_id'=>$quests['id'])) }}">
                                     @lang('common.statistics')@lang('common.quests')
                                 </a>
                             @endif

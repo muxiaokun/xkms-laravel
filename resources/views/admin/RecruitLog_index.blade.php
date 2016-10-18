@@ -28,10 +28,10 @@
                             {{ $recruit_log['name'] }}
                         </td>
                         <td>
-                            {{ $recruit_log['add_time']|M_date=config('system.sys_date_detail') }}
+                            {{ mDate($recruit_log['created_at']) }}
                         </td>
                         <td>
-                            {{ $recruit_log['birthday']|M_date=config('system.sys_date') }}
+                            {{ mDate($recruit_log['birthday']) }}
                         </td>
                         <td>
                             {{ $recruit_log['sex'] }}

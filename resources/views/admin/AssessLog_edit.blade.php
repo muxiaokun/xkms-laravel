@@ -78,7 +78,7 @@
                         <button type="submit" class="btn btn-info">
                             @lang('common.select')
                         </button>
-                        <a href="{{ route('Assess/index') }}" class="btn btn-default">
+                        <a href="{{ route('Admin::Assess::index') }}" class="btn btn-default">
                             @lang('common.goback')
                         </a>
                     </div>

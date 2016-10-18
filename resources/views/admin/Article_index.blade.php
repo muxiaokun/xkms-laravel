@@ -41,7 +41,7 @@
                             {{ $article['cate_name'] }}
                         </td>
                         <td>
-                            {{ $article['add_time']|M_date=config('system.sys_date_detail') }}
+                            {{ mDate($article['created_at']) }}
                         </td>
                         <td>
                             @if ($article['if_show'])@lang('common.yes')@else@lang('common.no')@endif
@@ -54,7 +54,7 @@
                         </td>
                         <td class="nowrap">
                             <a class="btn btn-xs btn-primary" target="_blank"
-                               href="{{ route('Home/Article/article',array('id'=>$article['id'])) }}">
+                               href="{{ route('Home::Article::article',array('id'=>$article['id'])) }}">
                                 @lang('common.look')
                             </a>
                             @if ($batch_handle['edit'])

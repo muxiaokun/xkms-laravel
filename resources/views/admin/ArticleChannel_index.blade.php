@@ -33,7 +33,7 @@
                         </td>
                         <td class="nowrap">
                             <a class="btn btn-xs btn-primary" target="_blank"
-                               href="{{ route('Home/Article/channel',array('channel_id'=>$article_channel['id'])) }}">
+                               href="{{ route('Home::Article::channel',array('channel_id'=>$article_channel['id'])) }}">
                                 @lang('common.look')
                             </a>
                             @if ($batch_handle['edit'])

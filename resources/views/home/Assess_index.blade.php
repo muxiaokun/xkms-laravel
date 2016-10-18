@@ -21,10 +21,10 @@
                     {{ $assess['target_name'] }}
                 </td>
                 <td>
-                    {{ $assess['start_time']|M_date=config('system.sys_date_detail') }}
+                    {{ mDate($assess['start_time']) }}
                 </td>
                 <td>
-                    {{ $assess['end_time']|M_date=config('system.sys_date_detail') }}
+                    {{ mDate($assess['end_time']) }}
                 </td>
                 <td>
                     <a href="{:M_U('Assess/add',array('id'=>$assess[id]))}">

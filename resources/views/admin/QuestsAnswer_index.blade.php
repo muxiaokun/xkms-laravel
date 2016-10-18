@@ -2,7 +2,8 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             {{ $title }}
-            <a class="fr fs10" href="{{ route('Quests/index',array('id'=>I('id'))) }}">@lang('common.goback')</a>
+            <a class="fr fs10"
+               href="{{ route('Admin::Quests::index',array('id'=>I('id'))) }}">@lang('common.goback')</a>
         </div>
         <div class="panel-body">
             @include('Public:where_info')
@@ -23,12 +24,12 @@
                             {{ $quests_answer['member_name'] }}
                         </td>
                         <td>
-                            {{ $quests_answer['add_time']|M_date=config('system.sys_date_detail') }}
+                            {{ mDate($quests_answer['created_at']) }}
                         </td>
                         <td class="nowrap">
                             @if ($batch_handle['add'])
                                 <a class="btn btn-xs btn-primary"
-                                   href="{{ route('QuestsAnswer/add',array('id'=>$quests_answer['id'])) }}">
+                                   href="{{ route('Admin::QuestsAnswer::add',array('id'=>$quests_answer['id'])) }}">
                                     @lang('common.look')
                                 </a>
                             @endif

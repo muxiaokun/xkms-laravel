@@ -36,14 +36,14 @@
                             {{ $admin['group_name'] }}
                         </td>
                         <td>
-                            @if (0 < $admin['add_time'])
-                                {{ $admin['add_time']|M_date=config('system.sys_date_detail') }}
+                            @if (0 < $admin['created_at'])
+                                {{ mDate($admin['created_at']) }}
                             @else
                                 @lang('common.system')@lang('common.add')
                             @endif
                         </td>
                         <td>
-                            {{ $admin['last_time']|M_date=config('system.sys_date_detail') }}
+                            {{ mDate($admin['last_time']) }}
                         </td>
                         <td>
                             {{ $admin['aip'] }}

@@ -1,5 +1,7 @@
-@include('Public:header')
-<script type="text/javascript" src="{{ asset('js/M_history.js') }}"></script>
+@include('admin.Public_header')
+<body>
+<script type="text/javascript"
+        src="{{ route('Minify',['type'=>'js','files'=>'M_history','lang'=>'common']) }}"></script>
 <script>
     $(function () {
         if (M_history) {
@@ -18,13 +20,13 @@
 </script>
 <section class="left_nav">
     <div id="left_nav_menu" class="accordion">
-        @if (count($left_nav) > 0)
-            @foreach ($left_nav as $nav)
-                <h3>{{ $key }}</h3>
+        @if (count($installMenu) > 0)
+            @foreach ($installMenu as $group_name => $actions)
+                <h3>{{ $group_name }}</h3>
                 <ul class="nav text-center" role="tablist">
-                    @foreach ($nav as $key => $nav_link)
+                    @foreach ($actions as $link => $name)
                         <li role="presentation">
-                            <a class="fs12" href="{{ $nav_link['link'] }}" target="main">{{ $nav_link['name'] }}</a>
+                            <a class="fs12" href="{{ route($link) }}" target="main">{{ $name }}</a>
                         </li>
                     @endforeach
                 </ul>

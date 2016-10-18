@@ -421,16 +421,17 @@ function mAttributeWhere($attribute, $attr)
     return $where;
 }
 
-function mDate($timestamp, $format, $toZh = false)
+function mDate($date, $format, $toZh = false)
 {
-    if (!$timestamp) {
+    if (!$date) {
         return '';
     }
 
-    !$format && $format = C('SYS_DATE_DETAIL');
-    $date = date($format, $timestamp);
+    $carbon = \Carbon\Carbon::parse($date);
+    !$format && $format = config('system.sys_date_detail');
+    $date_str = $carbon->format($format);
     if ($toZh) {
-        $date = str_replace([
+        $date_str = str_replace([
             'Monday',
             'Tuesday',
             'Wednesday',
@@ -451,28 +452,28 @@ function mDate($timestamp, $format, $toZh = false)
             'November',
             'December',
         ], [
-            L('week') . L('one'),
-            L('week') . L('two'),
-            L('week') . L('three'),
-            L('week') . L('four'),
-            L('week') . L('five'),
-            L('week') . L('six'),
-            L('week') . L('day'),
-            L('one') . L('month'),
-            L('two') . L('month'),
-            L('three') . L('month'),
-            L('four') . L('month'),
-            L('five') . L('month'),
-            L('six') . L('month'),
-            L('seven') . L('month'),
-            L('eight') . L('month'),
-            L('nine') . L('month'),
-            L('ten') . L('month'),
-            L('ten') . L('one') . L('month'),
-            L('ten') . L('two') . L('month'),
-        ], $date);
+            trans('common.week') . trans('common.one'),
+            trans('common.week') . trans('common.two'),
+            trans('common.week') . trans('common.three'),
+            trans('common.week') . trans('common.four'),
+            trans('common.week') . trans('common.five'),
+            trans('common.week') . trans('common.six'),
+            trans('common.week') . trans('common.day'),
+            trans('common.one') . trans('common.month'),
+            trans('common.two') . trans('common.month'),
+            trans('common.three') . trans('common.month'),
+            trans('common.four') . trans('common.month'),
+            trans('common.five') . trans('common.month'),
+            trans('common.six') . trans('common.month'),
+            trans('common.seven') . trans('common.month'),
+            trans('common.eight') . trans('common.month'),
+            trans('common.nine') . trans('common.month'),
+            trans('common.ten') . trans('common.month'),
+            trans('common.ten') . trans('common.one') . trans('common.month'),
+            trans('common.ten') . trans('common.two') . trans('common.month'),
+        ], $date_str);
     }
-    return $date;
+    return $date_str;
 }
 
 function mIptoadd($ip, $type = 0)
@@ -541,11 +542,11 @@ function mPage($config)
     $Page           = new \Think\Page($countRow, $maxRow, $parameter);
     $Page->rollPage = $roll;
     $Page->setConfig('header',
-        '<span class="rows">' . L('inall') . ' %TOTAL_ROW% ' . L('inall') . L('item') . '</span>');
-    $Page->setConfig('prev', L('previous') . L('page'));
-    $Page->setConfig('next', L('next') . L('page'));
-    $Page->setConfig('first', L('first') . L('page') . '...');
-    $Page->setConfig('last', '...' . L('last') . L('one') . L('page'));
+        '<span class="rows">' . trans('common.inall') . ' %TOTAL_ROW% ' . trans('common.inall') . trans('common.item') . '</span>');
+    $Page->setConfig('prev', trans('common.previous') . trans('common.page'));
+    $Page->setConfig('next', trans('common.next') . trans('common.page'));
+    $Page->setConfig('first', trans('common.first') . trans('common.page') . '...');
+    $Page->setConfig('last', '...' . trans('common.last') . trans('common.one') . trans('common.page'));
     $Page->setConfig('theme', '%HEADER% %FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END%');
 
     unset($parameter['p']);
@@ -640,7 +641,7 @@ function mSendmail($to, $title = '', $content = '', $chart = 'utf-8', $attachmen
     $PHPMailer->Host = "smtp.qq.com"; //设置邮件服务器的地址
     //$PHPMailer->Port = 465; //设置邮件服务器的端口，默认为25
     $PHPMailer->From     = $from; //设置发件人的邮箱地址
-    $PHPMailer->FromName = L('system'); //设置发件人的姓名
+    $PHPMailer->FromName = trans('common.system'); //设置发件人的姓名
     $PHPMailer->SMTPAuth = true; //设置SMTP是否需要密码验证，true表示需要
     $PHPMailer->Username = $from; //设置发送邮件的邮箱
     $PHPMailer->Password = "test20121212"; //设置邮箱的密码

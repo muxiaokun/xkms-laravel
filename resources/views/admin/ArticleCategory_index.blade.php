@@ -33,7 +33,7 @@
                         </td>
                         <td class="nowrap">
                             <a class="btn btn-xs btn-primary" target="_blank"
-                               href="{{ route('Home/Article/category',array('cate_id'=>$article_category['id'])) }}">
+                               href="{{ route('Home::Article::category',array('cate_id'=>$article_category['id'])) }}">
                                 @lang('common.look')
                             </a>
                             @if ($batch_handle['edit'])
@@ -52,7 +52,7 @@
                             @endif
                             &nbsp;|&nbsp;
                             <a class="btn btn-xs btn-primary"
-                               href="{{ route('Article/add',array('cate_id'=>$article_category['id'])) }}">
+                               href="{{ route('Admin::Article::add',array('cate_id'=>$article_category['id'])) }}">
                                 @lang('common.add')@lang('common.article')
                             </a>
                         </td>

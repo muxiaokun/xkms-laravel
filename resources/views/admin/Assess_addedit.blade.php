@@ -46,7 +46,7 @@
                             <div class="col-sm-6 ">
                                 <input type="text" class="form-control"
                                        placeholder="@lang('common.start')@lang('common.time')" name="start_time"
-                                       value="{{ $edit_info['start_time']|M_date=config('system.sys_date_detail') }}"/>
+                                       value="{{ mDate($edit_info['start_time']) }}"/>
                             </div>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                             <div class="col-sm-6">
                                 <input type="text" class="form-control"
                                        placeholder="@lang('common.end')@lang('common.time')" name="end_time"
-                                       value="{{ $edit_info['end_time']|M_date=config('system.sys_date_detail') }}"/>
+                                       value="{{ mDate($edit_info['end_time']) }}"/>
                             </div>
                         </div>
                     </div>

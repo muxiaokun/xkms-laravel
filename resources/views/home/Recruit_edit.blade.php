@@ -7,9 +7,9 @@
         {{ $recruit_info['current_portion'] }}/{{ $recruit_info['max_portion'] }}
         &nbsp;&nbsp;&nbsp;&nbsp;
         @lang('common.time')@lang('common.colon')
-        {{ $recruit_info['start_time']|M_date=config('system.sys_date_detail') }}
+        {{ mDate($recruit_info['start_time']) }}
         @lang('common.to')
-        {{ $recruit_info['end_time']|M_date=config('system.sys_date_detail') }}
+        {{ mDate($recruit_info['end_time']) }}
     </div>
     <div class="col-sm-12 text-center mtb5">
         @foreach ($recruit_info['ext_info'] as $data)

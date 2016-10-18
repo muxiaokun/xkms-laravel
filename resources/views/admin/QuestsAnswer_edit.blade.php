@@ -2,7 +2,8 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             {{ $title }}<a href="javascript:window.print()">打印</a>
-            <a class="fr fs10" href="{{ route('Quests/index',array('id'=>I('id'))) }}">@lang('common.goback')</a>
+            <a class="fr fs10"
+               href="{{ route('Admin::Quests::index',array('id'=>I('id'))) }}">@lang('common.goback')</a>
         </div>
         <div class="panel-body">
             @foreach ($quests_quest_list as $quest)

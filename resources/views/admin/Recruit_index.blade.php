@@ -34,15 +34,15 @@
                             {{ $recruit['current_portion'] }}/{{ $recruit['max_portion'] }}
                         </td>
                         <td>
-                            {{ $recruit['start_time']|M_date=config('system.sys_date_detail') }}
+                            {{ mDate($recruit['start_time']) }}
                         </td>
                         <td>
-                            {{ $recruit['end_time']|M_date=config('system.sys_date_detail') }}
+                            {{ mDate($recruit['end_time']) }}
                         </td>
                         <td class="nowrap">
                             @if ($batch_handle['log_index'])
                                 <a class="btn btn-xs btn-primary"
-                                   href="{{ route('RecruitLog/index',array('r_id'=>$recruit['id'])) }}">
+                                   href="{{ route('Admin::RecruitLog::index',array('r_id'=>$recruit['id'])) }}">
                                     @lang('common.look')@lang('common.re_recruit')
                                 </a>
                             @endif

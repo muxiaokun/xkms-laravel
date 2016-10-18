@@ -35,7 +35,7 @@
                         <button type="submit" class="btn btn-info">
                             @lang('common.save')
                         </button>
-                        <a href="{{ route('Index/main') }}" class="btn btn-default">
+                        <a href="{{ route('Admin::Index::main') }}" class="btn btn-default">
                             @lang('common.goback')
                         </a>
                     </div>

@@ -25,7 +25,7 @@
                             {{ $message_board_log['member_name'] }}
                         </td>
                         <td>
-                            {{ $message_board_log['add_time']|M_date=config('system.sys_date_detail') }}
+                            {{ mDate($message_board_log['created_at']) }}
                         </td>
                         <td>
                             {{ $message_board_log['aip'] }}

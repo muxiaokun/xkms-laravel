@@ -30,7 +30,7 @@
                             {{ $comment['member_name'] }}
                         </td>
                         <td>
-                            {{ $comment['add_time']|M_date=config('system.sys_date_detail') }}
+                            {{ mDate($comment['created_at']) }}
                         </td>
                         <td>
                             {{ $comment['audit_name'] }}

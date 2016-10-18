@@ -4,12 +4,12 @@
         <h2>{{ $article_info['title'] }}</h2>
     </div>
     <div class="col-sm-12 text-center">
-        @if ($article_info['add_time'])
-            @lang('common.add')@lang('common.time')@lang('common.colon'){{ $article_info['add_time']|M_date="Y-m-d" }}
+        @if ($article_info['created_at'])
+            @lang('common.add')@lang('common.time')@lang('common.colon'){{ mDate($article_info['created_at'],"Y-m-d") }}
             &nbsp;&nbsp;
         @endif
-        @if ($article_info['update_time'])
-            @lang('common.edit')@lang('common.time')@lang('common.colon'){{ $article_info['update_time']|M_date="Y-m-d" }}
+        @if ($article_info['updated_at'])
+            @lang('common.edit')@lang('common.time')@lang('common.colon'){{ mDate($article_info['updated_at'],"Y-m-d") }}
             &nbsp;&nbsp;
         @endif
         @if ($article_info['hits'])

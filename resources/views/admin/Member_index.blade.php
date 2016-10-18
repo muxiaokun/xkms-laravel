@@ -32,10 +32,10 @@
                             {{ $member['group_name'] }}
                         </td>
                         <td>
-                            {{ $member['register_time']|M_date=config('system.sys_date_detail') }}
+                            {{ mDate($member['register_time']) }}
                         </td>
                         <td>
-                            {{ $member['last_time']|M_date=config('system.sys_date_detail') }}
+                            {{ mDate($member['last_time']) }}
                         </td>
                         <td>
                             {{ $member['aip'] }}

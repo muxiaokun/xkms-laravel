@@ -17,12 +17,12 @@
                 </td>
                 <td>
                     {{ $message['send_name'] }}
-                    &nbsp;&nbsp;[{{ $message['send_time']|M_date=config('system.sys_date_detail') }}]
+                    &nbsp;&nbsp;[{{ mDate($message['send_time']) }}]
                 </td>
                 <td>
                     {{ $message['receive_name'] }}&nbsp;&nbsp;[
                     @if (0 < $message['receive_time'])
-                        {{ $message['receive_time']|M_date=config('system.sys_date_detail') }}
+                        {{ mDate($message['receive_time']) }}
                     @else
                         @lang('common.none')@lang('common.receive')
                     @endif]

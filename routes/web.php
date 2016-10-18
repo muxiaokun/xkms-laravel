@@ -234,7 +234,8 @@ Route::group([
         Route::get('main', ['as' => 'main', 'uses' => 'Index@main']);
         Route::post('login', ['as' => 'login', 'uses' => 'Index@login']);
         Route::get('logout', ['as' => 'logout', 'uses' => 'Index@logout']);
-        Route::get('editMyPass', ['as' => 'editMyPass', 'uses' => 'Index@editMyPass']);
+        Route::match(['get', 'post'], 'editMyPass', ['as' => 'editMyPass', 'uses' => 'Index@editMyPass']);
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Index@ajax_api']);
     });
     Route::group([
         'as'     => 'Itlink::',

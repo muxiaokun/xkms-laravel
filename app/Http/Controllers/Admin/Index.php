@@ -179,7 +179,8 @@ class Index extends Backend
             $curPassword = request('cur_password');
             $adminInfo   = Model\Admins::authorized(session('backend_info.admin_name'), $curPassword);
             if (!$adminInfo) {
-                $this->error(trans('common.current') . trans('common.pass') . trans('common.error'));
+                return $this->error(trans('common.current') . trans('common.pass') . trans('common.error'),
+                    'Admin::Index::editMyPass');
             }
 
             $password      = request('password');
@@ -188,23 +189,22 @@ class Index extends Backend
             //只有一个分支的提交 不进行判断必须检测
             $result = $this->doValidateForm('password', ['password' => $password]);
             if (!$result['status']) {
-                $this->error($result['info'], route(ACTION_NAME));
+                return $this->error($result['info'], 'Admin::Index::editMyPass');
             }
 
             $result = $this->doValidateForm('password_again',
                 ['password' => $password, 'password_again' => $passwordAgain]);
             if (!$result['status']) {
-                $this->error($result['info'], route(ACTION_NAME));
+                return $this->error($result['info'], 'Admin::Index::editMyPass');
             }
 
             $resultEdit = Model\Admins::mEdit($adminInfo['id'], ['admin_pwd' => $password]);
             if ($resultEdit) {
-                $this->success(trans('common.edit') . trans('common.pass') . trans('common.success'),
-                    route('edit_my_pass'));
-                return;
+                return $this->success(trans('common.edit') . trans('common.pass') . trans('common.success'),
+                    'Admin::Index::editMyPass');
             } else {
-                $this->error(trans('common.edit') . trans('common.pass') . trans('common.error'),
-                    route('edit_my_pass'));
+                return $this->error(trans('common.edit') . trans('common.pass') . trans('common.error'),
+                    'Admin::Index::editMyPass');
             }
         }
         $assign['title'] = trans('common.edit') . trans('common.pass');

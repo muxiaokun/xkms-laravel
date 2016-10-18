@@ -32,7 +32,7 @@
                         {{ mDate($recruit['end_time']) }}
                     </td>
                     <td>
-                        {{ $recruit['explains']|strip_tags|M_substr=30 }}
+                        {{ mSubstr($recruit['explains']|strip_tags,30)}}
                     </td>
                     <td>
                         <a class="btn btn-primary btn-xs" href="{:M_U('Recruit/edit',array('id'=>$recruit['id']))}">

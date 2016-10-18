@@ -25,9 +25,9 @@
                             </a>
                         </div>
                         <a href="{:M_U('article',$data['id'])}">
-                            <h3>{{ $data['title']|M_substr=15 }}</h3>
+                            <h3>{{ mSubstr($data['title'],15)}}</h3>
                         </a>
-                        <span>{{ $data['description']|M_substr=100 }}</span>
+                        <span>{{ mSubstr($data['description'],100)}}</span>
                         <script type="text/javascript">
                             $(function () {
                                 var api_gallery = Array();

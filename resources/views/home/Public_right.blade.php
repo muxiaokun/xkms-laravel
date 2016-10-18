@@ -7,7 +7,7 @@
         @foreach ($news_article as $data)
             <li class="title">
                 <a href="{:M_U('article',$data['id'])}">
-                    {{ mDate($data['created_at'],"m-d") }}&nbsp;&nbsp;{{ $data['title']|M_substr=15 }}
+                    {{ mSubstr(mDate($data['created_at'],"m-d") }}&nbsp;&nbsp;{{ $data['title'],15)}}
                 </a>
             </li>
         @endforeach
@@ -22,7 +22,7 @@
         @foreach ($manual_article as $data)
             <li class="title">
                 <a href="{:M_U('article',$data['id'])}">
-                    {{ mDate($data['created_at'],"m-d") }}&nbsp;&nbsp;{{ $data['title']|M_substr=15 }}
+                    {{ mSubstr(mDate($data['created_at'],"m-d") }}&nbsp;&nbsp;{{ $data['title'],15)}}
                 </a>
             </li>
         @endforeach

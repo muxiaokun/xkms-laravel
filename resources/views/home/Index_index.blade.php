@@ -16,10 +16,10 @@
                                 </a>
                                 <div class="caption">
                                     <a href="{:M_U('article',$data['id'])}">
-                                        <h4>{{ $data['title']|M_substr=6 }}</h4>
+                                        <h4>{{ mSubstr($data['title'],6)}}</h4>
                                     </a>
                                     <a href="{:M_U('article',$data['id'])}">
-                                        <p>{{ $data['description']|M_substr=20 }}</p>
+                                        <p>{{ mSubstr($data['description'],20)}}</p>
                                     </a>
                                 </div>
                             </div>
@@ -42,10 +42,10 @@
                                 </a>
                                 <div class="caption">
                                     <a href="{:M_U('article',$data['id'])}">
-                                        <h4>{{ $data['title']|M_substr=6 }}</h4>
+                                        <h4>{{ mSubstr($data['title'],6)}}</h4>
                                     </a>
                                     <a href="{:M_U('article',$data['id'])}">
-                                        <p>{{ $data['description']|M_substr=20 }}</p>
+                                        <p>{{ mSubstr($data['description'],20)}}</p>
                                     </a>
                                 </div>
                             </div>

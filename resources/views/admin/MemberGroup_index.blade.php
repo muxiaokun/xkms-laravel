@@ -30,7 +30,7 @@
                             {{ $member_group['name'] }}
                         </td>
                         <td>
-                            {{ $member_group['explains']|M_substr=10 }}
+                            {{ mSubstr($member_group['explains'],10)}}
                         </td>
                         <td>
                             @if ($member_group['is_enable'])@lang('common.enable')@else@lang('common.disable')@endif

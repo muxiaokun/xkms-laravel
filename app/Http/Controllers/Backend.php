@@ -99,12 +99,10 @@ class Backend extends Common
         $loginNum  = config('system.sys_backend_login_num');
         $lockTime  = config('system.sys_backend_lock_time');
         $loginInfo = Model\Admins::mFind(Model\Admins::mFindId($userName, 'admin_name'));
-        if (0 != $loginNum) {
-            if ($loginInfo->lock_time && strtotime($loginInfo->lock_time) > (strtotime(Carbon::now()) - $lockTime)) {
-                $loginInfo->lock_time = Carbon::now();
-                $loginInfo->save();
-                return 'lock_user_error';
-            }
+        if ($loginNum && $loginInfo->lock_time && strtotime($loginInfo->lock_time) > Carbon::now()->getTimestamp() - $lockTime) {
+            $loginInfo->lock_time = Carbon::now();
+            $loginInfo->save();
+            return 'lock_user_error';
         }
         //验证用户名密码
         $adminInfo = Model\Admins::authorized($userName, $password);
@@ -116,8 +114,8 @@ class Backend extends Common
             //重置登录次数
             if (0 != $adminInfo['login_num']) {
                 $loginData              = [];
-                $loginData['login_num'] = $loginInfo->login_num + 1;
-                $loginData['lock_time'] = ($loginNum <= $loginData['login_num']) ? Carbon::now() : null;
+                $loginData['login_num'] = 0;
+                $loginData['lock_time'] = null;
                 Model\Admins::where('id', '=', $loginInfo->id)->update($loginData);
             }
             $adminInfo['login_time'] = Carbon::now();
@@ -125,7 +123,7 @@ class Backend extends Common
             return 'login_success';
         } else {
             //检测后台尝试登陆次数
-            if (0 != $loginNum) {
+            if ($loginNum) {
                 $loginData              = [];
                 $loginData['login_num'] = $loginInfo->login_num + 1;
                 $loginData['lock_time'] = ($loginNum <= $loginData['login_num']) ? Carbon::now() : null;
@@ -138,7 +136,7 @@ class Backend extends Common
     //登出功能
     protected function doLogout()
     {
-        session('backend_info', null);
+        session(['backend_info' => null]);
     }
 
     //子类调用的是否登录的接口

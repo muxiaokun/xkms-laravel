@@ -352,7 +352,7 @@ class Index extends Backend
     public function logout()
     {
         $this->doLogout();
-        $this->success(trans('common.logout') . trans('common.account') . trans('common.success'),
+        return $this->success(trans('common.logout') . trans('common.account') . trans('common.success'),
             'Admin::Index::index');
     }
 

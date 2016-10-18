@@ -36,7 +36,7 @@ class Comment extends Frontend
                     'send_id'    => $data['send_id'],
                     'controller' => $data['controller'],
                     'item'       => $data['item'],
-                    'add_ip'     => ['exp', '= inet_aton("' . $_SERVER['REMOTE_ADDR'] . '")'],
+                    'add_ip'     => request()->getClientIp(),
                     'add_time'   => ['gt', Carbon::now() - config('system.comment_interval')],
                 ];
                 $countComment = Model\Comment::where($where)->count();

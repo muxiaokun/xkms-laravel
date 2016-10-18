@@ -23,7 +23,7 @@ class MessageBoardLog extends Common
         }
 
         $data['add_time'] = Carbon::now();
-        $data['add_ip']   = request()->getClientIp();
+        $data['add_ip']   = request()->ip();
         return parent::mAdd($data);
     }
 
@@ -36,7 +36,7 @@ class MessageBoardLog extends Common
     public static function check_dont_submit($second)
     {
         $second = Carbon::now() - $second;
-        $where  = $second . ' < add_time AND add_ip = "' . request()->getClientIp() . '"';
+        $where  = $second . ' < add_time AND add_ip = "' . request()->ip() . '"';
         return (self::where($where)->count()) ? true : false;
     }
 

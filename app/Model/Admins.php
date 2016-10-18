@@ -58,7 +58,7 @@ class Admins extends Common
         if ($adminInfo['admin_pwd'] == md5($pwd . $adminInfo['admin_rand'])) {
             $data = [
                 'last_time' => Carbon::now(),
-                'login_ip'  => request()->getClientIp(),
+                'login_ip'  => request()->ip(),
             ];
             self::where('id', '=', $adminInfo['id'])->update($data);
             $adminInfo = self::mFind($adminInfo['id']);

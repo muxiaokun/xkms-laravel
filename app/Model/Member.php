@@ -53,7 +53,7 @@ class Member extends Common
         if ($memberInfo['member_pwd'] == md5($pwd . $memberInfo['member_rand']) || $memberId) {
             $data = [
                 'last_time' => Carbon::now(),
-                'login_ip'  => request()->getClientIp(),
+                'login_ip'  => request()->ip(),
             ];
             self::where(['id' => $memberInfo['id']])->data($data)->save();
             $memberInfo = self::mFind($memberInfo['id']);

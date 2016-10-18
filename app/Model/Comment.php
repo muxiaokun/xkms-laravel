@@ -23,7 +23,7 @@ class Comment extends Common
         }
 
         $data['add_time'] = Carbon::now();
-        $data['add_ip']   = request()->getClientIp();
+        $data['add_ip']   = request()->ip();
         return parent::mAdd($data);
     }
 }

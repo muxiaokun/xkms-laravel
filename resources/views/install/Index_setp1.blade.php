@@ -55,7 +55,7 @@
             </div>
             <div class="col-sm-12 text-center">
                 <a class="btn btn-lg btn-primary mt20 mr80"
-                   href="{{ route('Install::') }}">@lang('common.previous')@lang('common.setp')</a>
+                   href="{{ route('Install::setp0') }}">@lang('common.previous')@lang('common.setp')</a>
                 <a id="mysql_config_btn" class="btn btn-lg btn-primary mt20"
                    href="javascript:void(0);">@lang('install.setp1')</a>
             </div>

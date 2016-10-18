@@ -19,7 +19,7 @@ class Common extends Model
         self::mGetPage($page);
         $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
-            (new static)->mDecodeData($dataRow);
+            (new self)->mDecodeData($dataRow);
         }
         return $data;
     }
@@ -35,7 +35,7 @@ class Common extends Model
             return false;
         }
 
-        self::mEncodeData($data);
+        (new self)->mEncodeData($data);
         return self::add($data);
     }
 
@@ -67,7 +67,7 @@ class Common extends Model
         }
 
         is_array($id) && $id = ['in', $id];
-        self::mEncodeData($data);
+        (new self)->mEncodeData($data);
         return self::where(['id' => $id])->data($data)->save();
     }
 
@@ -83,7 +83,7 @@ class Common extends Model
         }
 
         $data = self::where(['id' => $id])->first();
-        (new static)->mDecodeData($data);
+        (new self)->mDecodeData($data);
         return $data;
     }
 
@@ -116,7 +116,7 @@ class Common extends Model
         }
 
         $column = self::field($columnName)->where(['id' => $id])->first();
-        self::mDecodeData($column);
+        (new self)->mDecodeData($column);
         return $column[$columnName];
     }
 

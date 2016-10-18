@@ -11,7 +11,7 @@ class AssessLog extends Common
         null !== self::option['order'] && self::order('add_time desc');
         $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
-            self::mDecodeData($dataRow);
+            (new self)->mDecodeData($dataRow);
         }
         return $data;
     }
@@ -29,7 +29,7 @@ class AssessLog extends Common
             ];
             $assessInfo = self::where($where)->first();
         }
-        self::mEncodeData($data);
+        (new self)->mEncodeData($data);
         $data['add_time'] = Carbon::now();
         //是否已经评价 决定编辑还是添加
         if ($assessInfo) {

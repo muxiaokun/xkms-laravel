@@ -14,7 +14,7 @@ class Admins extends Common
         null !== self::options['order'] && self::order('id desc');
         $data = self::field('*,inet_ntoa(login_ip) as aip')->where($where)->select();
         foreach ($data as &$dataRow) {
-            self::mDecodeData($dataRow);
+            (new self)->mDecodeData($dataRow);
         }
         return $data;
     }

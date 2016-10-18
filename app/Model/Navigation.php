@@ -11,7 +11,7 @@ class Navigation extends Common
         null !== self::option['order'] && self::order('id desc');
         $data = self::where($where)->page($page)->select();
         foreach ($data as &$dataRow) {
-            self::mDecodeData($dataRow);
+            (new self)->mDecodeData($dataRow);
         }
         return $data;
     }
@@ -23,7 +23,7 @@ class Navigation extends Common
         }
 
         $navigation = self::where(['is_enable' => 1, 'short_name' => $shortName])->first();
-        self::mDecodeData($navigation);
+        (new self)->mDecodeData($navigation);
         $navigationData = self::_decode_navigation_data($navigation['ext_info']);
         return ($navigationData) ? $navigationData : [];
     }

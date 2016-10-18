@@ -11,7 +11,7 @@ class RecruitLog extends Common
         null !== self::options['order'] && self::order('add_time desc');
         $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
-            self::mDecodeData($dataRow);
+            (new self)->mDecodeData($dataRow);
         }
         return $data;
     }

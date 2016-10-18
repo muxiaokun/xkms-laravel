@@ -13,7 +13,7 @@ class MemberGroup extends Common
         null !== self::option['order'] && self::order('id desc');
         $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
-            self::mDecodeData($dataRow);
+            (new self)->mDecodeData($dataRow);
         }
         return $data;
     }
@@ -36,7 +36,7 @@ class MemberGroup extends Common
         is_array($id) && $id = ['in', $id];
         $data = self::field('is_enable,privilege')->where(['id' => $id])->select();
         foreach ($data as &$dataRow) {
-            self::mDecodeData($dataRow);
+            (new self)->mDecodeData($dataRow);
         }
         $privilege = [];
         foreach ($data as $group) {

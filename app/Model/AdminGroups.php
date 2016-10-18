@@ -8,7 +8,7 @@ class AdminGroups extends Common
     //获得全部或者部分管理组列表
     public static function mSelect($where = null, $page = false)
     {
-        self::mParseWhere($where);
+        (new self)->mParseWhere($where);
         self::mGetPage($page);
         null !== self::options['order'] && self::order('id desc');
         $data = self::where($where)->select();
@@ -61,7 +61,7 @@ class AdminGroups extends Common
         return $mFindAllow;
     }
 
-    protected static function mParseWhere(&$where)
+    protected function mParseWhere(&$where)
     {
         if (is_null($where)) {
             return;
@@ -71,7 +71,7 @@ class AdminGroups extends Common
     }
 
     //检查和格式化数据
-    protected static function mEncodeData(&$data)
+    protected function mEncodeData(&$data)
     {
         if (isset($data['id']) && (1 == $data['id'] || (is_array($data['id']) && in_array(1, $data['id'])))) {
             unset($data['privilege']);
@@ -82,7 +82,7 @@ class AdminGroups extends Common
     }
 
     //检查和去除格式化数据
-    protected static function mDecodeData(&$data)
+    protected function mDecodeData(&$data)
     {
         isset($data['manage_id']) && $data['manage_id'] = explode('|',
             substr($data['manage_id'], 1, strlen($data['manage_id']) - 2));

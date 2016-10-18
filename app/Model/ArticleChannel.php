@@ -7,7 +7,7 @@ class ArticleChannel extends Common
 {
     public static function mSelect($where = null, $page = false)
     {
-        self::mParseWhere($where);
+        (new self)->mParseWhere($where);
         self::mGetPage($page);
         null !== self::option['order'] && self::order('id desc');
         $data = self::where($where)->select();
@@ -43,7 +43,7 @@ class ArticleChannel extends Common
         return $mFindAllow;
     }
 
-    protected static function mParseWhere(&$where)
+    protected function mParseWhere(&$where)
     {
         if (is_null($where)) {
             return;
@@ -63,7 +63,7 @@ class ArticleChannel extends Common
         }
     }
 
-    protected static function mEncodeData(&$data)
+    protected function mEncodeData(&$data)
     {
         isset($data['manage_id']) && $data['manage_id'] = '|' . implode('|', $data['manage_id']) . '|';
         isset($data['manage_group_id']) && $data['manage_group_id'] = '|' . implode('|',
@@ -72,7 +72,7 @@ class ArticleChannel extends Common
         isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
     }
 
-    protected static function mDecodeData(&$data)
+    protected function mDecodeData(&$data)
     {
         isset($data['manage_id']) && $data['manage_id'] = explode('|',
             substr($data['manage_id'], 1, strlen($data['manage_id']) - 2));

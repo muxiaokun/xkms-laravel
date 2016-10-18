@@ -10,7 +10,7 @@ class Article extends Common
 
     public static function mSelect($where = null, $page = false)
     {
-        self::mParseWhere($where);
+        (new self)->mParseWhere($where);
         self::mGetPage($page);
         null !== self::option['order'] && self::order('is_stick desc,sort asc,update_time desc');
         $data = self::where($where)->select();
@@ -30,7 +30,7 @@ class Article extends Common
         return parent::mAdd($data);
     }
 
-    protected static function mParseWhere(&$where)
+    protected function mParseWhere(&$where)
     {
         if (is_null($where)) {
             return;
@@ -48,7 +48,7 @@ class Article extends Common
         }
     }
 
-    protected static function mEncodeData(&$data)
+    protected function mEncodeData(&$data)
     {
         !isset($data['update_time']) && $data['update_time'] = Carbon::now();
         isset($data['access_group_id']) && $data['access_group_id'] = serialize($data['access_group_id']);
@@ -70,7 +70,7 @@ class Article extends Common
         isset($data['album']) && $data['album'] = serialize($data['album']);
     }
 
-    protected static function mDecodeData(&$data)
+    protected function mDecodeData(&$data)
     {
         isset($data['access_group_id']) && $data['access_group_id'] = unserialize($data['access_group_id']);
         if (isset($data['extend']) && $data['extend']) {

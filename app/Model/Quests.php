@@ -16,12 +16,12 @@ class Quests extends Common
         return $data;
     }
 
-    protected static function mEncodeData(&$data)
+    protected function mEncodeData(&$data)
     {
         isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
     }
 
-    protected static function mDecodeData(&$data)
+    protected function mDecodeData(&$data)
     {
         isset($data['ext_info']) && $data['ext_info'] = unserialize($data['ext_info']);
     }

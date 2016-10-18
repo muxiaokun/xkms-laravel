@@ -16,7 +16,7 @@ class Recruit extends Common
         return $data;
     }
 
-    protected static function mEncodeData(&$data)
+    protected function mEncodeData(&$data)
     {
         isset($data['explains']) && $data['explains'] = self::mEncodeContent($data['explains']);
         if (isset($data['ext_info']) && is_array($data['ext_info'])) {
@@ -28,7 +28,7 @@ class Recruit extends Common
         }
     }
 
-    protected static function mDecodeData(&$data)
+    protected function mDecodeData(&$data)
     {
         if (isset($data['ext_info']) && $data['ext_info']) {
             $data['ext_info'] = explode('|', substr($data['ext_info'], 1, strlen($data['ext_info']) - 2));

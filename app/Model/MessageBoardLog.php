@@ -40,12 +40,12 @@ class MessageBoardLog extends Common
         return (self::where($where)->count()) ? true : false;
     }
 
-    protected static function mEncodeData(&$data)
+    protected function mEncodeData(&$data)
     {
         isset($data['send_info']) && $data['send_info'] = serialize($data['send_info']);
     }
 
-    protected static function mDecodeData(&$data)
+    protected function mDecodeData(&$data)
     {
         isset($data['send_info']) && $data['send_info'] = unserialize($data['send_info']);
     }

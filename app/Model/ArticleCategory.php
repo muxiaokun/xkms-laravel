@@ -7,7 +7,7 @@ class ArticleCategory extends Common
 {
     public static function mSelect($where = null, $page = false)
     {
-        self::mParseWhere($where);
+        (new self)->mParseWhere($where);
         self::mGetPage($page);
         null !== self::option['order'] && self::order('sort');
         $data = self::where($where)->select();
@@ -130,7 +130,7 @@ class ArticleCategory extends Common
         return $mFindAllow;
     }
 
-    protected static function mParseWhere(&$where)
+    protected function mParseWhere(&$where)
     {
         if (is_null($where)) {
             return;
@@ -150,7 +150,7 @@ class ArticleCategory extends Common
         }
     }
 
-    protected static function mEncodeData(&$data)
+    protected function mEncodeData(&$data)
     {
         //只有顶级可以设置扩展模板和属性
         if (isset($data['parent_id']) && 0 < $data['parent_id']) {
@@ -166,7 +166,7 @@ class ArticleCategory extends Common
         isset($data['attribute']) && $data['attribute'] = serialize($data['attribute']);
     }
 
-    protected static function mDecodeData(&$data)
+    protected function mDecodeData(&$data)
     {
         isset($data['manage_id']) && $data['manage_id'] = explode('|',
             substr($data['manage_id'], 1, strlen($data['manage_id']) - 2));

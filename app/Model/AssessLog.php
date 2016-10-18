@@ -40,12 +40,12 @@ class AssessLog extends Common
         return $result;
     }
 
-    protected static function mEncodeData(&$data)
+    protected function mEncodeData(&$data)
     {
         isset($data['score']) && $data['score'] = serialize($data['score']);
     }
 
-    protected static function mDecodeData(&$data)
+    protected function mDecodeData(&$data)
     {
         isset($data['score']) && $data['score'] = unserialize($data['score']);
     }

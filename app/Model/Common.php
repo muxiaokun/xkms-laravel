@@ -19,7 +19,7 @@ class Common extends Model
         self::mGetPage($page);
         $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
-            self::mDecodeData($dataRow);
+            (new static)->mDecodeData($dataRow);
         }
         return $data;
     }
@@ -83,7 +83,7 @@ class Common extends Model
         }
 
         $data = self::where(['id' => $id])->first();
-        self::mDecodeData($data);
+        (new static)->mDecodeData($data);
         return $data;
     }
 
@@ -155,7 +155,7 @@ class Common extends Model
      */
     public static function mGetPageCount($where)
     {
-        self::mParseWhere($where);
+        (new self)->mParseWhere($where);
         $pageCount  = self::where($where)->count();
         $sysMaxPage = C('SYS_MAX_PAGE') * C('SYS_MAX_ROW');
         return ($pageCount < $sysMaxPage) ? $pageCount : $sysMaxPage;
@@ -299,7 +299,7 @@ class Common extends Model
      * 格式化查询条件接口
      * @param type &$data
      */
-    protected static function mParseWhere(&$where)
+    protected function mParseWhere(&$where)
     {
     }
 
@@ -307,11 +307,11 @@ class Common extends Model
      * 格式化数据接口
      * @param type &$data
      */
-    protected static function mEncodeData(&$data)
+    protected function mEncodeData(&$data)
     {
     }
 
-    protected static function mDecodeData(&$data)
+    protected function mDecodeData(&$data)
     {
     }
 }

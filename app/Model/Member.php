@@ -7,7 +7,7 @@ class Member extends Common
 {
     public static function mSelect($where = null, $page = false)
     {
-        self::mParseWhere($where);
+        (new self)->mParseWhere($where);
         self::mGetPage($page);
         null !== self::option['order'] && self::order('id desc');
         $data = self::field('*,inet_ntoa(login_ip) as aip')->where($where)->select();
@@ -63,7 +63,7 @@ class Member extends Common
         }
     }
 
-    protected static function mParseWhere(&$where)
+    protected function mParseWhere(&$where)
     {
         if (is_null($where)) {
             return;
@@ -72,7 +72,7 @@ class Member extends Common
         isset($where['group_id']) && $where['group_id'] = self::mMakeLikeArray($where['group_id']);
     }
 
-    protected static function mEncodeData(&$data)
+    protected function mEncodeData(&$data)
     {
         if ($data['member_pwd']) {
             $randStr             = self::_make_rand();
@@ -89,7 +89,7 @@ class Member extends Common
         isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
     }
 
-    protected static function mDecodeData(&$data)
+    protected function mDecodeData(&$data)
     {
         unset($data['member_pwd']);
         unset($data['member_rand']);

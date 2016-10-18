@@ -16,13 +16,13 @@ class Assess extends Common
         return $data;
     }
 
-    protected static function mEncodeData(&$data)
+    protected function mEncodeData(&$data)
     {
         isset($data['cfg_info']) && $data['cfg_info'] = serialize($data['cfg_info']);
         isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
     }
 
-    protected static function mDecodeData(&$data)
+    protected function mDecodeData(&$data)
     {
         isset($data['cfg_info']) && $data['cfg_info'] = unserialize($data['cfg_info']);
         isset($data['ext_info']) && $data['ext_info'] = unserialize($data['ext_info']);

@@ -117,7 +117,7 @@ class ManageUpload extends Common
         return $manageUpload;
     }
 
-    protected static function mDecodeData(&$data)
+    protected function mDecodeData(&$data)
     {
         $data['size'] = self::format_size($data['size']);
     }

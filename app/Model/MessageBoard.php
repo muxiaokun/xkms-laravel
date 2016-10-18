@@ -25,12 +25,12 @@ class MessageBoard extends Common
         return parent::mDel($id);
     }
 
-    protected static function mEncodeData(&$data)
+    protected function mEncodeData(&$data)
     {
         isset($data['config']) && $data['config'] = serialize($data['config']);
     }
 
-    protected static function mDecodeData(&$data)
+    protected function mDecodeData(&$data)
     {
         isset($data['config']) && $data['config'] = unserialize($data['config']);
     }

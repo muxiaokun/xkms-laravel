@@ -68,7 +68,7 @@ class Common extends Model
 
         is_array($id) && $id = ['in', $id];
         (new self)->mEncodeData($data);
-        return self::where(['id' => $id])->data($data)->save();
+        return self::where(['id' => $id])->update($data);
     }
 
     /**

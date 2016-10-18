@@ -56,7 +56,7 @@ class Recruit extends Frontend
                 route('Quests/index'));
         }
         //存入数据
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $data                = [];
             $data['r_id']        = $id;
             $data['name']        = request('name');

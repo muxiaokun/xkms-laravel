@@ -67,7 +67,7 @@ EOF;
         }
 
         //修改模板文件信息
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             foreach ($this->view_files as $fileMd5 => $info) {
                 $postInfo                           = request($fileMd5);
                 $this->view_files[$fileMd5]['name'] = $postInfo['name'];
@@ -99,7 +99,7 @@ EOF;
     //新增
     public function add()
     {
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             //添加时不可以创建新的目录 必须使用系统设置的后缀
             $fileName = trim(request('file_name'));
             //处理2级目录
@@ -147,7 +147,7 @@ EOF;
 
         $fileName = $this->view_files[$id]['file_name'];
         $filePath = $this->view_path . $fileName;
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $content    = request('content', '', false);
             $resultEdit = file_put_contents($filePath, $content);
             if ($resultEdit) {

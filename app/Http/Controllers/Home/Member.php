@@ -20,7 +20,7 @@ class Member extends FrontendMember
     //登录
     public function login()
     {
-        if (!IS_POST && !IS_AJAX) {
+        if (!'POST' == request()->getMethod() && !request()->ajax()) {
             return;
         }
 
@@ -46,7 +46,7 @@ class Member extends FrontendMember
     //注册
     public function register()
     {
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             if (!$this->verifyCheck(request('verify'), 'register') && config('system.sys_frontend_verify')) {
                 $this->error(trans('common.verify_code') . trans('common.error'), route('index', ['t' => 'register']));
             }

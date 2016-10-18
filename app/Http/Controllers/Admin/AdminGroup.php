@@ -52,7 +52,7 @@ class AdminGroup extends Backend
     //新增
     public function add()
     {
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $data      = $this->makeData();
             $resultAdd = Model\AdminGroup::mAdd($data);
             if ($resultAdd) {
@@ -78,7 +78,7 @@ class AdminGroup extends Backend
             $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $data       = $this->makeData();
             $resultEdit = Model\AdminGroup::mEdit($id, $data);
             if ($resultEdit) {

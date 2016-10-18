@@ -24,11 +24,11 @@ class Common extends Controller
         }
         //权限检测
         //保存表单验证错误之前的GET
-//        if (config('TOKEN_ON') && IS_GET && !IS_AJAX) {
+//        if (config('TOKEN_ON') && IS_GET && !request()->ajax()) {
 //            session('token_back_page', __SELF__);
 //        }
         //POST提交必须检查表单验证
-//        if (IS_POST && !IS_AJAX && !isset($_FILES['imgFile']) && !$this->token_check()) {
+//        if ('POST' == request()->getMethod() && !request()->ajax() && !isset($_FILES['imgFile']) && !$this->token_check()) {
 //            $this->error(trans('common.token') . trans('common.error') . '(' . trans('common.refresh') . trans('common.later') . trans('common.submit') . ')',
 //                session('token_back_page')); //后台统一检查表单令牌
 //        }

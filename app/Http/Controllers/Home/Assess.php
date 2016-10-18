@@ -60,7 +60,7 @@ class Assess extends FrontendMember
                 route('index'));
         }
 
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $data = $this->makeData();
             //提交时检测类型下可以被评分的组和组员
             $resultAdd     = $AssessLogMode->mAdd($data);

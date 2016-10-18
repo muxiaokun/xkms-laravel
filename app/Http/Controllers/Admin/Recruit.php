@@ -46,7 +46,7 @@ class Recruit extends Backend
     //新增
     public function add()
     {
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $data      = $this->makeData();
             $resultAdd = Model\Recruit::mAdd($data);
             if ($resultAdd) {
@@ -68,7 +68,7 @@ class Recruit extends Backend
             $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $data       = $this->makeData();
             $resultEdit = Model\Recruit::mEdit($id, $data);
             if ($resultEdit) {

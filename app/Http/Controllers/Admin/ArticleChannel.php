@@ -49,11 +49,11 @@ class ArticleChannel extends Backend
     //新增
     public function add()
     {
-        if (IS_AJAX) {
+        if (request()->ajax()) {
             $this->ajaxReturn($this->_add_edit_category_common(), $assign);
             return;
         }
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $data      = $this->makeData();
             $resultAdd = Model\ArticleChannel::mAdd($data);
             if ($resultAdd) {
@@ -73,7 +73,7 @@ class ArticleChannel extends Backend
     //编辑
     public function edit()
     {
-        if (IS_AJAX) {
+        if (request()->ajax()) {
             $id       = request('get.id');
             $editInfo = Model\ArticleChannel::mFind($id);
             $this->ajaxReturn($this->_add_edit_category_common($editInfo));
@@ -93,7 +93,7 @@ class ArticleChannel extends Backend
         }
 
         $maAllowArr = Model\ArticleChannel::mFind_allow('ma');
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $data = $this->makeData();
             if (1 != session('backend_info.id')
                 && !mInArray($id, $maAllowArr)

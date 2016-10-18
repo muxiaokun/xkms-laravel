@@ -42,7 +42,7 @@ class MessageBoard extends Frontend
     //添加
     public function add()
     {
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $id = request('id');
             if (!$id) {
                 $this->error(trans('common.id') . trans('common.error'));

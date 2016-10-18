@@ -49,7 +49,7 @@ class Quests extends Backend
     //新增
     public function add()
     {
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $data      = $this->makeData();
             $resultAdd = Model\Quests::mAdd($data);
             if ($resultAdd) {
@@ -72,7 +72,7 @@ class Quests extends Backend
             $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $data       = $this->makeData();
             $resultEdit = Model\Quests::mEdit($id, $data);
             if ($resultEdit) {

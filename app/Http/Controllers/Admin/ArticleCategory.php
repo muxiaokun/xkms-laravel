@@ -45,7 +45,7 @@ class ArticleCategory extends Backend
             $articleCategory['add_link']      = route('Article/add', ['cate_id' => $articleCategory['id']]);
         }
 
-        if (IS_AJAX) {
+        if (request()->ajax()) {
             $this->ajaxReturn($articleCategoryList);
 
             return;
@@ -80,7 +80,7 @@ class ArticleCategory extends Backend
     //新增
     public function add()
     {
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $data      = $this->makeData();
             $resultAdd = Model\ArticleCategory::mAdd($data);
             if ($resultAdd) {
@@ -117,7 +117,7 @@ class ArticleCategory extends Backend
         }
 
         $maAllowArr = Model\ArticleCategory::mFind_allow('ma');
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $data = $this->makeData();
             if (1 != session('backend_info.id')
                 && !mInArray($id, $maAllowArr)

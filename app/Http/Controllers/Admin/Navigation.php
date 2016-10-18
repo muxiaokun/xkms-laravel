@@ -52,7 +52,7 @@ class Navigation extends Backend
     //新增
     public function add()
     {
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $data      = $this->makeData();
             $resultAdd = Model\Navigation::mAdd($data);
             if ($resultAdd) {
@@ -77,7 +77,7 @@ class Navigation extends Backend
             $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $data       = $this->makeData();
             $resultEdit = Model\Navigation::mEdit($id, $data);
             if ($resultEdit) {

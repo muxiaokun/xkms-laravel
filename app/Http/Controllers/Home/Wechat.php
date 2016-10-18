@@ -87,7 +87,7 @@ class Wechat extends Frontend
     //网页授权获取用户基本信息 开发者中心页配置授权回调域名
     public function member_bind()
     {
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $memberName = request('user');
             $memberPwd  = request('pwd');
             $msg        = $this->doLogin($memberName, $memberPwd);

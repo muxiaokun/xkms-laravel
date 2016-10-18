@@ -44,7 +44,7 @@ class MessageBoard extends Backend
     //新增
     public function add()
     {
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $data              = $this->makeData(', $assign);
         $resultAdd = Model\MessageBoard::mAdd($data);
             if ($resultAdd) {
@@ -70,7 +70,7 @@ return view('admin.addedit', $assign);
             $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $data       = $this->makeData();
             $resultEdit = Model\MessageBoard::mEdit($id, $data);
             if ($resultEdit) {

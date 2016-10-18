@@ -64,7 +64,7 @@ class Assess extends Backend
     //新增
     public function add()
     {
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $data      = $this->makeData();
             $resultAdd = Model\Assess::mAdd($data);
             if ($resultAdd) {
@@ -88,7 +88,7 @@ class Assess extends Backend
             $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        if (IS_POST) {
+        if ('POST' == request()->getMethod()) {
             $data       = $this->makeData();
             $resultEdit = Model\Assess::mEdit($id, $data);
             if ($resultEdit) {

@@ -15,7 +15,7 @@ class Frontend extends Common
 //            $assign['login_info'] =  session('frontend_info');
 //        }
         //当前位置
-//        if (!IS_AJAX && !$_FILES && !in_array(ACTION_NAME, array('ajax_api', 'del'))) {
+//        if (!request()->ajax() && !$_FILES && !in_array(ACTION_NAME, array('ajax_api', 'del'))) {
 //            $this->_get_position();
 //        }
     }

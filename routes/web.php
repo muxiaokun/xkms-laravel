@@ -129,9 +129,9 @@ Route::group([
     'prefix'    => 'Admin',
 ], function () {
     Route::group([
-        'as'     => 'Admins::',
+        'as'     => 'Admin::',
         //'middleware'=>'auth',
-        'prefix' => 'Admins',
+        'prefix' => 'Admin',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Admins@index']);
         Route::get('add', ['as' => 'add', 'uses' => 'Admins@add']);
@@ -227,7 +227,8 @@ Route::group([
         Route::get('systemSet', ['as' => 'systemSet', 'uses' => 'Index@systemSet']);
         Route::get('databaseSet', ['as' => 'databaseSet', 'uses' => 'Index@databaseSet']);
         Route::get('edit', ['as' => 'edit', 'uses' => 'Index@edit']);
-        Route::get('clean', ['as' => 'clean', 'uses' => 'Index@clean']);
+        Route::get('cleanCache', ['as' => 'cleanCache', 'uses' => 'Index@cleanCache']);
+        Route::get('cleanLog', ['as' => 'cleanLog', 'uses' => 'Index@cleanLog']);
         Route::get('topNav', ['as' => 'topNav', 'uses' => 'Index@topNav']);
         Route::get('leftNav', ['as' => 'leftNav', 'uses' => 'Index@leftNav']);
         Route::get('main', ['as' => 'main', 'uses' => 'Index@main']);

@@ -1,4 +1,4 @@
-@extends('Member:base')
+@extends('home.Member_layout')
 @section('content')
     <table class="table table-condensed table-hover">
         <tr>

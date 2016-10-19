@@ -55,7 +55,7 @@
             </div>
         </div>
         <div class="col-sm-4">
-            @include('Public:right')
+            @include('home.Public_right')
         </div>
     </div>
 </section>

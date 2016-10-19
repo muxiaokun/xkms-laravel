@@ -1,4 +1,4 @@
-@extends('Member:base')
+@extends('home.Member_layout')
 @section('content')
     <form class="form-horizontal" role="form" action="" method="post">
         <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>

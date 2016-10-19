@@ -1,4 +1,4 @@
-@extends('Article:base')
+@extends('home.Article_layout')
 @section('content')
     <link rel="stylesheet" href="{{ asset('prettyPhoto/prettyPhoto.css') }}"/>
     <script type="text/javascript" src="{{ asset('prettyPhoto/jquery.prettyPhoto.js') }}"></script>

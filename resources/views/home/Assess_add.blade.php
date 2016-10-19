@@ -1,4 +1,4 @@
-@extends('Member:base')
+@extends('home.Member_layout')
 @section('content')
     <script type="text/javascript" src="{{ asset('js/M_valid.js') }}"></script>
     <script>

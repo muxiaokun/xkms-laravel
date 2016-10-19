@@ -1,4 +1,4 @@
-@extends('Member:base')
+@extends('home.Member_layout')
 @section('content')
     <script type="text/javascript" src="{{ asset('js/M_alert_log.js') }}"></script>
     <table class="table table-condensed table-hover">

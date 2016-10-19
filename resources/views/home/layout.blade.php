@@ -1,3 +1,3 @@
-@include('Public:header')
+@include('home.public_header')
 {__CONTENT__}
-@include('Public:footer')
+@include('home.public_footer')

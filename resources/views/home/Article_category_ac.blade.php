@@ -1,4 +1,4 @@
-@extends('Article:base')
+@extends('home.Article_layout')
 @section('content')
     <div class="col-sm-12 text-center">
         <h2>{{ $category_info['name'] }}</h2>

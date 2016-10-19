@@ -1,12 +1,12 @@
-@include('Public:header')
+@include('home.public_header')
 <section class="container">
     <div class="row">
         <div class="col-sm-8">
             @section('content')@endsection
         </div>
         <div class="col-sm-4">
-            @include('Public:right')
+            @include('home.Public_right')
         </div>
     </div>
 </section>
-@include('Public:footer')
+@include('home.public_footer')

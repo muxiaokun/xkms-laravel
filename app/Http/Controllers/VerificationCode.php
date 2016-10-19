@@ -40,15 +40,22 @@ class VerificationCode extends Controller
         return $img->response('jpg', 70);
     }
 
-    public static function verify($code , $name = ''){
-        return session('VerificationCode') === $name . '|' . strtoupper($code);
+    public static function verify($code, $name = '')
+    {
+        $sessionKey = (new static)->getSessionKey($name);
+        return session($sessionKey) === strtoupper($code);
     }
 
     protected function saveCode($name, $code)
     {
-        session(['VerificationCode' => $name . '|' . strtoupper($code)]);
+        $sessionKey = $this->getSessionKey($name);
+        session([$sessionKey => strtoupper($code)]);
     }
 
+    protected function getSessionKey($name)
+    {
+        return $name ? 'VerificationCode_' . $name : 'VerificationCode';
+    }
 
     protected function randStr($length = 4)
     {

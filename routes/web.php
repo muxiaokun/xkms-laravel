@@ -402,7 +402,7 @@ Route::group([
 });
 
 Route::get('Minify/{type}', 'Minify@run')->name('Minify');
-Route::get('VerificationCode/{type?}', 'VerificationCode@run')->name('VerificationCode');
+Route::get('VerificationCode/{name?}', 'VerificationCode@run')->name('VerificationCode');
 
 //test error
 Route::get('t', function () {

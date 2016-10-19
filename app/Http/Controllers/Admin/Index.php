@@ -324,17 +324,17 @@ class Index extends Backend
         switch ($this->doLogin($adminName, $adminPwd)) {
             case 'user_pwd_error':
                 return $this->error(trans('common.account') . trans('common.or') . trans('common.pass') . trans('common.error'),
-                    'Admin::Index::index');
+                    route('Admin::Index::index'));
                 break;
             case 'verify_error':
-                return $this->error(trans('common.verify_code') . trans('common.error'), 'Admin::Index::index');
+                return $this->error(trans('common.verify_code') . trans('common.error'), route('Admin::Index::index'));
                 break;
             case 'lock_user_error':
                 return $this->error(trans('common.admin') . trans('common.by') . trans('common.lock') . trans('common.please') . config('system.sys_backend_lock_time') . trans('common.second') . trans('common.again') . trans('common.login'),
                     'Admin::Index::index');
                 break;
             default:
-                return $this->success(trans('common.login') . trans('common.success'), 'Admin::Index::index');
+                return $this->success(trans('common.login') . trans('common.success'), route('Admin::Index::index'));
         }
     }
 
@@ -343,7 +343,7 @@ class Index extends Backend
     {
         $this->doLogout();
         return $this->success(trans('common.logout') . trans('common.account') . trans('common.success'),
-            'Admin::Index::index');
+            route('Admin::Index::index'));
     }
 
     //页面验证

@@ -11,7 +11,7 @@ class Message extends Common
         null !== self::option['order'] && self::order('send_time desc');
         $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
-            (new self)->mDecodeData($dataRow);
+            (new static)->mDecodeData($dataRow);
         }
         return $data;
     }

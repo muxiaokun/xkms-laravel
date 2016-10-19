@@ -11,7 +11,7 @@ class Itlink extends Common
         null !== self::option['order'] && self::order('id desc');
         $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
-            (new self)->mDecodeData($dataRow);
+            (new static)->mDecodeData($dataRow);
         }
         return $data;
     }
@@ -35,7 +35,7 @@ class Itlink extends Common
             '_string'    => $whereString,
         ];
         $itlinkInfo = self::where($where)->first();
-        (new self)->mDecodeData($itlinkInfo);
+        (new static)->mDecodeData($itlinkInfo);
         $links = $itlinkInfo['ext_info'];
         foreach ($links as &$link) {
             if (0 < $itlinkInfo['max_hit_num']) {

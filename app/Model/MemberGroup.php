@@ -8,12 +8,12 @@ class MemberGroup extends Common
     //获得全部或者部分管理组列表
     public static function mSelect($where = null, $page = false)
     {
-        (new self)->mParseWhere($where);
+        (new static)->mParseWhere($where);
         self::mGetPage($page);
         null !== self::option['order'] && self::order('id desc');
         $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
-            (new self)->mDecodeData($dataRow);
+            (new static)->mDecodeData($dataRow);
         }
         return $data;
     }
@@ -36,7 +36,7 @@ class MemberGroup extends Common
         is_array($id) && $id = ['in', $id];
         $data = self::field('is_enable,privilege')->where(['id' => $id])->select();
         foreach ($data as &$dataRow) {
-            (new self)->mDecodeData($dataRow);
+            (new static)->mDecodeData($dataRow);
         }
         $privilege = [];
         foreach ($data as $group) {

@@ -19,7 +19,7 @@ class Common extends Model
         self::mGetPage($page);
         $data = self::where($where)->select();
         foreach ($data as &$dataRow) {
-            (new self)->mDecodeData($dataRow);
+            (new static)->mDecodeData($dataRow);
         }
         return $data;
     }
@@ -35,7 +35,7 @@ class Common extends Model
             return false;
         }
 
-        (new self)->mEncodeData($data);
+        (new static)->mEncodeData($data);
         return self::add($data);
     }
 
@@ -67,7 +67,7 @@ class Common extends Model
         }
 
         is_array($id) && $id = ['in', $id];
-        (new self)->mEncodeData($data);
+        (new static)->mEncodeData($data);
         return self::where(['id' => $id])->update($data);
     }
 
@@ -83,7 +83,7 @@ class Common extends Model
         }
 
         $data = self::where(['id' => $id])->first();
-        (new self)->mDecodeData($data);
+        (new static)->mDecodeData($data);
         return $data;
     }
 
@@ -116,7 +116,7 @@ class Common extends Model
         }
 
         $column = self::field($columnName)->where(['id' => $id])->first();
-        (new self)->mDecodeData($column);
+        (new static)->mDecodeData($column);
         return $column[$columnName];
     }
 
@@ -155,7 +155,7 @@ class Common extends Model
      */
     public static function mGetPageCount($where)
     {
-        (new self)->mParseWhere($where);
+        (new static)->mParseWhere($where);
         $pageCount  = self::where($where)->count();
         $sysMaxPage = C('SYS_MAX_PAGE') * C('SYS_MAX_ROW');
         return ($pageCount < $sysMaxPage) ? $pageCount : $sysMaxPage;

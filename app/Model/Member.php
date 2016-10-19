@@ -7,12 +7,12 @@ class Member extends Common
 {
     public static function mSelect($where = null, $page = false)
     {
-        (new self)->mParseWhere($where);
+        (new static)->mParseWhere($where);
         self::mGetPage($page);
         null !== self::option['order'] && self::order('id desc');
         $data = self::field('*,inet_ntoa(login_ip) as aip')->where($where)->select();
         foreach ($data as &$dataRow) {
-            (new self)->mDecodeData($dataRow);
+            (new static)->mDecodeData($dataRow);
         }
         return $data;
     }

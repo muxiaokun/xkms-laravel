@@ -74,26 +74,26 @@ class Index extends Backend
     {
         //备份数据库
         if (request()->isMethod('GET') && '1' == request('backup')) {
-            $db               = M();
-            $tables           = $db->query('SHOW TABLES');
+            $tables           = DB::select('SHOW TABLES');
             $backStr          = '';
             $isMagicQuotesGpc = get_magic_quotes_gpc();
             foreach ($tables as $table) {
-                $tableName = $table[key($table)];
+                $keyName   = key($table);
+                $tableName = $table->$keyName;
                 $backStr .= "DROP TABLE IF EXISTS `$tableName` ;\n";
-                $createTable = $db->query('SHOW CREATE TABLE `' . $tableName . '`');
-                $createTable = array_pop($createTable[0]);
+                $createTable = DB::select('SHOW CREATE TABLE`' . $tableName . '`');
+                $objectKey   = 'Create Table';
+                $createTable = array_pop($createTable)->$objectKey;
                 $backStr .= str_replace("\n", "", $createTable) . " ;\n";
-                $columns      = $db->query('SHOW COLUMNS FROM `' . $tableName . '`');
+                $columns      = DB::select('SHOW COLUMNS FROM `' . $tableName . '`');
                 $insertColumn = '';
                 foreach ($columns as $column) {
                     if ($insertColumn) {
                         $insertColumn .= ',';
                     }
-
-                    $insertColumn .= '`' . array_shift($column) . '`';
+                    $insertColumn .= '`' . $column->Field . '`';
                 }
-                $values = $db->query('SELECT * FROM `' . $tableName . '`');
+                $values = DB::select('SELECT * FROM `' . $tableName . '`');
                 foreach ($values as $val) {
                     $insertVal = '';
                     $insertV   = '';
@@ -101,32 +101,33 @@ class Index extends Backend
                         if ($insertV) {
                             $insertV .= ',';
                         }
-
+                        if (is_int($v)) {
+                            $insertV .= $v;
+                        } elseif (is_null($v)) {
+                            $insertV .= 'NULL';
+                        } else {
                         $insertV .= ($isMagicQuotesGpc) ? "'$v'" : "'" . addslashes($v) . "'";
+                        }
                     }
                     $insertVal .= "($insertV)";
                     if ($insertVal) {
                         $insertVal = str_replace(["\n", "\r"], ["", ""], $insertVal);
-                        $backStr .= "INSERT INTO `$tableName`($insertColumn) VALUES$insertVal ;\n";
+                        $backStr .= "INSERT INTO `$tableName`($insertColumn) VALUES $insertVal;\n";
                     }
                 }
             }
-            ob_end_clean();
-            Header("Content-type: application/octet-stream");
-            Header("Accept-Ranges: bytes");
-            Header("Accept-Length: " . strlen($backStr));
-            Header("Content-Disposition: attachment; filename=" . 'backup' . date('YmdHis') . '.sql');
-            echo $backStr;
-            return;
+            return response($backStr)
+                ->header('Content-type', 'application/octet-stream')
+                ->header('Accept-Ranges', 'bytes')
+                ->header('Accept-Length', strlen($backStr))
+                ->header('Content-Disposition', 'attachment; filename=' . 'backup' . date('YmdHis') . '.sql');
         }
 
         //还原数据库
-        if (request()->isMethod('POST') && isset($_FILES['restore_file']) && 0 == $_FILES['restore_file']['error']) {
-            $db         = M();
+        if (request()->isMethod('POST') && request()->hasFile('restore_file') && request()->file('restore_file')->isValid()) {
             $fileHandle = fopen($_FILES['restore_file']['tmp_name'], 'r');
             if (!$fileHandle) {
-                return $this->error(trans('common.open') . trans('common.file') . trans('common.error'),
-                    route('databaseSet'));
+                return $this->error(trans('common.open') . trans('common.file') . trans('common.error'));
             }
 
             while (false !== ($queryStr = fgets($fileHandle, 10240))) {
@@ -136,39 +137,40 @@ class Index extends Backend
                         'CREATE\sTABLE',
                     ]) . '/i';
                 if (!preg_match($pregMatch, $queryStr)) {
-                    return $this->error(trans('common.restore') . trans('common.database') . ' SQL ' . trans('common.error'),
-                        route('databaseSet'));
+                    return $this->error(trans('common.restore') . trans('common.database') . ' SQL ' . trans('common.error'));
                 }
+                try {
+                    DB::select($queryStr);
+                } catch (\Exception $e) {
+                    return $this->error(trans('common.restore') . trans('common.database') . trans('common.error') . $e->getMessage());
 
-                $db->execute($queryStr);
+                }
             }
             fclose($fileHandle);
-            return $this->success(trans('common.restore') . trans('common.database') . trans('common.success'),
-                route('databaseSet'));
-            return;
+            return $this->success(trans('common.restore') . trans('common.database') . trans('common.success'));
         }
 
         //保存数据库配置
         if (request()->isMethod('POST')) {
-            //表单提交的名称
-            $col = [
-                'DB_HOST',
-                'DB_NAME',
-                'DB_USER',
-                //'DB_PWD',单独拿出来
-                'DB_PORT',
-                'DB_PREFIX',
+            $new_config = [
+                'DB_HOST'     => request('db_host'),
+                'DB_PORT'     => request('db_port'),
+                'DB_DATABASE' => request('db_database'),
+                'DB_USERNAME' => request('db_username'),
+                'DB_PASSWORD' => request('db_password'),
+                'DB_PREFIX'   => request('db_prefix'),
             ];
-            if (null !== request('DB_PWD')) {
-                array_push($database, 'DB_PWD');
+            $result     = mPutenv($new_config);
+            $result_msg = trans('common.save') . trans('common.database') . trans('common.config');
+            if ($result) {
+                return $this->success($result_msg . trans('common.success'));
+            } else {
+                return $this->error($result_msg . trans('common.error'));
             }
-
-            $this->_put_config($col, 'database');
-            return;
         }
 
         $assign['title'] = trans('common.database') . trans('common.config');
-        return view('admin.Index_', $assign);
+        return view('admin.Index_databaseSet', $assign);
     }
 
     //修改自己的密码

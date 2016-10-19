@@ -100,7 +100,7 @@
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">@lang('common.save')</button>
                             <input class="btn btn-default" type="reset" value="@lang('common.reset')">
-                            <a href="{{ route('main') }}" class="btn btn-default">
+                            <a href="{{ route('Admin::Index::main') }}" class="btn btn-default">
                                 @lang('common.goback')
                             </a>
                         </div>

@@ -216,8 +216,8 @@ class Index extends Backend
     public function cleanCache()
     {
         $messageStr = trans('common.cache') . trans('common.file') . trans('common.and') . trans('common.temp') . trans('common.file');
-        $lang       = trans('common.yes') . trans('common.no') . trans('common.confirm') . trans('common.clean') . $messageStr;
-        if (!$this->showConfirm($lang)) {
+        $msg        = trans('common.yes') . trans('common.no') . trans('common.confirm') . trans('common.clean') . $messageStr;
+        if (!$this->showConfirm($msg)) {
             return;
         }
 

@@ -3,8 +3,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
+use Carbon\Carbon;
 use App\Model;
 
 class Common extends Controller
@@ -34,26 +34,26 @@ class Common extends Controller
 //        }
     }
 
-    protected function success($msg = '', $back_url = '', $timeout = 5)
+    protected function success($msg = '', $backUrl = '', $timeout = 5)
     {
-        return $this->dispatch_jump($msg, $back_url, $timeout, true);
+        return $this->dispatch_jump($msg, $backUrl, $timeout, true);
     }
 
-    protected function error($msg = '', $back_url = '', $timeout = 5)
+    protected function error($msg = '', $backUrl = '', $timeout = 5)
     {
-        return $this->dispatch_jump($msg, $back_url, $timeout, false);
+        return $this->dispatch_jump($msg, $backUrl, $timeout, false);
     }
 
     /**
      * @param string $message
-     * @param string $back_url
+     * @param string $backUrl
      * @param int    $timeout
      * @param string $template
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     protected function dispatch_jump(
         $message = '',
-        $back_url = '',
+        $backUrl = '',
         $timeout = 3,
         $status = true,
         $template = 'common.dispatch_jump'
@@ -61,8 +61,8 @@ class Common extends Controller
         if ('' == $message) {
             $message = trans('common.handle') . ($status) ? trans('common.success'):trans('common.error');
         }
-        if ('' == $back_url) {
-            $back_url = route(request()->route()->getName());
+        if ('' == $backUrl) {
+            $backUrl = route(request()->route()->getName());
         }
         if (request()->ajax()) {
             $ajax_data = [
@@ -74,7 +74,7 @@ class Common extends Controller
         $assign = [
             'status'   => $status,
             'message'  => $message,
-            'back_url' => $back_url,
+            'back_url' => $backUrl,
             'timeout'  => intval($timeout),
         ];
         return view($template, $assign);
@@ -251,16 +251,11 @@ class Common extends Controller
         }
 
         //防止缓存
-        $currentTime = Carbon::now();
-        $htmlStr     = <<< EOF
-<script type='text/javascript'>
-    //{$currentTime}
-   (function(){
-       mConfirm('{$lang}?','{:route('',array('confirm'=>'yes'))}',true);
-   })();
-</script>
-EOF;
-        $this->show($htmlStr);
+        $currentTime       = Carbon::now();
+        $backUrl           = route(request()->route()->getName());
+        $assign['lang']    = $lang;
+        $assign['backUrl'] = $backUrl;
+        echo view('common.showConfirm', $assign);
         return false;
     }
 

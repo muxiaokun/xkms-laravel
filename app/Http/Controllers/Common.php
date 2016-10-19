@@ -80,29 +80,6 @@ class Common extends Controller
         return view($template, $assign);
     }
 
-    //检查表单令牌
-    private function token_check()
-    {
-        if (!config('TOKEN_ON')) {
-            return true;
-        }
-
-        $name = config('TOKEN_NAME', null, '__hash__');
-        $hash = request($name);
-        if (!isset($hash) || !isset($_SESSION[$name])) { // 令牌数据无效
-            return false;
-        }
-        // 令牌验证
-        list($key, $value) = explode('_', $hash);
-        if ($value && $_SESSION[$name][$key] === $value) { // 防止重复提交
-            unset($_SESSION[$name][$key]); // 验证完成销毁session
-            return true;
-        }
-        // 开启TOKEN重置
-        unset($_SESSION[$name][$key]);
-        return false;
-    }
-
     public function cache()
     {
         $id   = request('id');
@@ -129,37 +106,6 @@ class Common extends Controller
         return;
     }
 
-    //生成验证码
-    public function verifyImg()
-    {
-        $config = [
-            'expire'   => 300, // 验证码的有效期（秒）
-            //            'useImgBg' => '', // 是否使用背景图片 默认为false
-            //            'fontSize' => '', // 验证码字体大小（像素） 默认为25
-            'useCurve' => false, // 是否使用混淆曲线 默认为true
-            //            'useNoise' => true, // 是否添加杂点 默认为true
-            //            'imageW' => 0, // 验证码宽度 设置为0为自动计算
-            //            'imageH' => 0, // 验证码高度 设置为0为自动计算
-            'length'   => 4, // 验证码位数
-            'fontttf'  => '5.ttf', // 指定验证码字体 默认为随机获取
-            //            'useZh' => '', // 是否使用中文验证码
-            //            'bg' => '', // 验证码背景颜色 rgb数组设置，例如 array(243, 251, 254)
-            //            'seKey' => '', // 验证码的加密密钥
-            //            'codeSet' => '', // 验证码字符集合 3.2.1 新增
-            //            'zhSet' => '', // 验证码字符集合（中文） 3.2.1 新增
-            //            'reset'     =>  true,           // 验证成功后是否重置 不能重置 方式重复利用一个验证码
-        ];
-        $Verify = new \Think\Verify($config);
-        $id     = MODULE_NAME . CONTROLLER_NAME;
-        if (request()->isMethod('GET')) {
-            $id .= request('t');
-        }
-
-        //解决文件出现Byte Order Mark  BOM
-        //ob_clean();
-        $Verify->entry($id);
-    }
-
     //检查验证码是否正确
     protected function verifyCheck($code, $name = '')
     {
@@ -169,7 +115,7 @@ class Common extends Controller
     //生成中文拼音首字母缩写
     protected function _zh2py($str)
     {
-        $MZh2py = new \Common\Lib\mZh2py();
+        $MZh2py = new \App\Library\mZh2py();
         return $MZh2py->encode($str, false);
     }
 
@@ -289,13 +235,6 @@ class Common extends Controller
             }
         }
         return $privilege;
-    }
-
-    //调用 404 的默认控制器和默认方法
-    public function _empty()
-    {
-        $EmptyController = A('Common/CommonEmpty');
-        $EmptyController->_empty();
     }
 
     //检查权限默认方法

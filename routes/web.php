@@ -223,10 +223,6 @@ Route::group([
         'prefix' => 'Index',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Index@index']);
-        Route::get('websiteSet', ['as' => 'websiteSet', 'uses' => 'Index@websiteSet']);
-        Route::get('systemSet', ['as' => 'systemSet', 'uses' => 'Index@systemSet']);
-        Route::get('databaseSet', ['as' => 'databaseSet', 'uses' => 'Index@databaseSet']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'Index@edit']);
         Route::get('cleanCache', ['as' => 'cleanCache', 'uses' => 'Index@cleanCache']);
         Route::get('cleanLog', ['as' => 'cleanLog', 'uses' => 'Index@cleanLog']);
         Route::get('topNav', ['as' => 'topNav', 'uses' => 'Index@topNav']);
@@ -234,8 +230,11 @@ Route::group([
         Route::get('main', ['as' => 'main', 'uses' => 'Index@main']);
         Route::post('login', ['as' => 'login', 'uses' => 'Index@login']);
         Route::get('logout', ['as' => 'logout', 'uses' => 'Index@logout']);
-        Route::match(['get', 'post'], 'editMyPass', ['as' => 'editMyPass', 'uses' => 'Index@editMyPass']);
         Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Index@ajax_api']);
+        Route::match(['get', 'post'], 'websiteSet', ['as' => 'websiteSet', 'uses' => 'Index@websiteSet']);
+        Route::match(['get', 'post'], 'systemSet', ['as' => 'systemSet', 'uses' => 'Index@systemSet']);
+        Route::match(['get', 'post'], 'databaseSet', ['as' => 'databaseSet', 'uses' => 'Index@databaseSet']);
+        Route::match(['get', 'post'], 'editMyPass', ['as' => 'editMyPass', 'uses' => 'Index@editMyPass']);
     });
     Route::group([
         'as'     => 'Itlink::',

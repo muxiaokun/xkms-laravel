@@ -28,24 +28,23 @@ class Index extends Backend
         if ('POST' == request()->getMethod()) {
             //表单提交的名称
             $col = [
-                'SITE_TITLE',
-                'SITE_DOMAIN',
-                'SITE_KEYWORDS',
-                'SITE_DESCRIPTION',
-                'SITE_OTHER',
-                'SITE_COMPANY',
-                'SITE_PHONE',
-                'SITE_TELPHONE',
-                'SITE_ADDR',
-                'SITE_ICPNUMBER',
-                'SITE_SCRIPT',
+                'site_title',
+                'site_domain',
+                'site_keywords',
+                'site_description',
+                'site_other',
+                'site_company',
+                'site_phone',
+                'site_telphone',
+                'site_addr',
+                'site_icpnumber',
+                'site_script',
             ];
-            $this->_put_config($col, 'website');
-            return;
+            return $this->_put_config($col, 'website');
         }
 
         $assign['title'] = trans('common.website') . trans('common.config');
-        return view('admin.Index_', $assign);
+        return view('admin.Index_websiteSet', $assign);
     }
 
     //系统基本设置
@@ -54,21 +53,20 @@ class Index extends Backend
         if ('POST' == request()->getMethod()) {
             //表单提交的名称
             $col = [
-                'SYS_DATE',
-                'SYS_DATE_DETAIL',
-                'SYS_MAX_ROW',
-                'SYS_MAX_PAGE',
-                'SYS_TD_CACHE',
-                'DATA_CACHE_TIME', //修改核心系统的数据缓存时间
-                'SYS_DEFAULT_IMAGE',
-                'SYS_SYNC_IMAGE',
+                'sys_date',
+                'sys_date_detail',
+                'sys_max_row',
+                'sys_max_page',
+                'sys_td_cache',
+                'data_cache_time', //修改核心系统的数据缓存时间
+                'sys_default_image',
+                'sys_sync_image',
             ];
-            $this->_put_config($col, 'system');
-            return;
+            return $this->_put_config($col, 'system');
         }
 
         $assign['title'] = trans('common.system') . trans('common.config');
-        return view('admin.Index_', $assign);
+        return view('admin.Index_systemSet', $assign);
     }
 
     //网站数据库配置设置
@@ -213,7 +211,7 @@ class Index extends Backend
     }
 
     //清除缓存
-    public function clean_cache()
+    public function cleanCache()
     {
         $messageStr = trans('common.cache') . trans('common.file') . trans('common.and') . trans('common.temp') . trans('common.file');
         $lang       = trans('common.yes') . trans('common.no') . trans('common.confirm') . trans('common.clean') . $messageStr;
@@ -240,7 +238,7 @@ class Index extends Backend
     }
 
     //清除日志
-    public function clean_log()
+    public function cleanLog()
     {
         $lang = trans('common.yes') . trans('common.no') . trans('common.confirm') . trans('common.clean') . trans('common.log');
         if (!$this->showConfirm($lang)) {

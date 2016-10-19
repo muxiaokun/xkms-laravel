@@ -54,14 +54,17 @@ class Common extends Controller
     protected function dispatch_jump(
         $message = '',
         $back_url = '',
-        $timeout = 5,
+        $timeout = 3,
         $status = true,
         $template = 'common.dispatch_jump'
     ) {
         if ('' == $message) {
             $message = trans('common.handle') . ($status) ? trans('common.success'):trans('common.error');
         }
-        if (Request::ajax()) {
+        if ('' == $back_url) {
+            $back_url = route(request()->route()->getName());
+        }
+        if (request()->ajax()) {
             $ajax_data = [
                 'status'  => $status,
                 'info' => $message,
@@ -71,7 +74,7 @@ class Common extends Controller
         $assign = [
             'status'   => $status,
             'message'  => $message,
-            'back_url' => route($back_url),
+            'back_url' => $back_url,
             'timeout'  => intval($timeout),
         ];
         return view($template, $assign);

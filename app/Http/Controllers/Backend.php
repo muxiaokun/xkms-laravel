@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Model;
 use Carbon\Carbon;
+use Illuminate\Filesystem\Filesystem;
 
 class Backend extends Common
 {
@@ -190,16 +191,17 @@ class Backend extends Common
     protected function _put_config($col, $file)
     {
         if (!is_array($col)) {
-            return false;
+            return $this->error(trans('common.save') . trans('common.error'));
         }
 
         //流程 1.读取旧的配置 2.存入新的配置 3.输出到文件
-        if (!in_array($file, explode(',', config('LOAD_EXT_CONFIG')))) {
-            return false;
+        if (!in_array($file, ['website', 'system',])) {
+            return $this->error(trans('common.save') . trans('common.error'));
         }
 
-        $cfgFile    = CONF_PATH . $file . '.php';
-        $saveConfig = include $cfgFile;
+        $cfgFile    = config_path($file . '.php');
+        $filesystem = new Filesystem();
+        $saveConfig = $filesystem->getRequire($cfgFile);
         if (!is_array($saveConfig)) {
             $saveConfig = [];
         }
@@ -207,20 +209,18 @@ class Backend extends Common
         foreach ($col as $option) {
             $saveConfig[$option] = request($option);
         }
-        $configStr     = var_export($saveConfig, true);
-        $CoreCopyright = config('CORE_COPYRIGHT');
-        $putConfig     = <<<EOF
+        $configStr = var_export($saveConfig, true);
+        $putConfig = <<<EOF
 <?php
-{$CoreCopyright}
 // {$file} config file
 return {$configStr};
 ?>
 EOF;
-        $putResult     = file_put_contents($cfgFile, $putConfig);
+        $putResult = $filesystem->put($cfgFile, $putConfig);
         if ($putResult) {
-            return $this->success(trans('common.save') . trans('common.success'), route(ACTION_NAME));
+            return $this->success(trans('common.save') . trans('common.success'));
         } else {
-            return $this->error(trans('common.save') . trans('common.error'), route(ACTION_NAME));
+            return $this->error(trans('common.save') . trans('common.error'));
         }
         //此函数不做任何返回
     }

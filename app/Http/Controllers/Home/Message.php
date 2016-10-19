@@ -56,7 +56,7 @@ class Message extends FrontendMember
     public function add()
     {
         $receiveId    = request('receive_id');
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             $content = request('content');
             if (null == $content) {
                 return $this->error(trans('common.content') . trans('common.not') . trans('common.empty'),

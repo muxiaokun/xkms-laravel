@@ -53,7 +53,7 @@ class ArticleChannel extends Backend
             $this->ajaxReturn($this->_add_edit_category_common(), $assign);
             return;
         }
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             $data      = $this->makeData();
             $resultAdd = Model\ArticleChannel::mAdd($data);
             if ($resultAdd) {
@@ -95,7 +95,7 @@ class ArticleChannel extends Backend
         }
 
         $maAllowArr = Model\ArticleChannel::mFind_allow('ma');
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             $data = $this->makeData();
             if (1 != session('backend_info.id')
                 && !mInArray($id, $maAllowArr)

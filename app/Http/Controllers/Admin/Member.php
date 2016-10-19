@@ -59,7 +59,7 @@ class Member extends Backend
     //新增
     public function add()
     {
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             $data      = $this->makeData();
             $resultAdd = Model\Member::mAdd($data);
             if ($resultAdd) {
@@ -83,7 +83,7 @@ class Member extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             $data       = $this->makeData(false);
             $resultEdit = Model\Member::mEdit($id, $data);
             if ($resultEdit) {
@@ -136,7 +136,7 @@ class Member extends Backend
     //配置
     public function setting()
     {
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             //表单提交的名称
             $col = [
                 'SYS_MEMBER_ENABLE',

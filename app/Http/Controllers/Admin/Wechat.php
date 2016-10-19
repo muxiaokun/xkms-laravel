@@ -45,7 +45,7 @@ class Wechat extends Backend
     //配置
     public function add()
     {
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             //表单提交的名称
             $col = [
                 'WECHAT_ID',
@@ -88,7 +88,7 @@ class Wechat extends Backend
         $editInfo                = Model\Wechat::mFind($id);
         $editInfo['member_name'] = Model\Member::mFindColumn($editInfo['member_id'], 'member_name');
         $assign['edit_info']     = $editInfo;
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             $errorGoLink = route('edit', ['id' => $id]);
             $Wechat      = new \Common\Lib\Wechat();
             $accessToken = $Wechat->get_access_token();

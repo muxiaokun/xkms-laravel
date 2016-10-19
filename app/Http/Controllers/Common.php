@@ -24,11 +24,11 @@ class Common extends Controller
         }
         //权限检测
         //保存表单验证错误之前的GET
-//        if (config('TOKEN_ON') && IS_GET && !request()->ajax()) {
+//        if (config('TOKEN_ON') && request()->isMethod('GET') && !request()->ajax()) {
 //            session('token_back_page', __SELF__);
 //        }
         //POST提交必须检查表单验证
-//        if ('POST' == request()->getMethod() && !request()->ajax() && !isset($_FILES['imgFile']) && !$this->token_check()) {
+//        if (request()->isMethod('POST') && !request()->ajax() && !isset($_FILES['imgFile']) && !$this->token_check()) {
 //           return $this->error(trans('common.token') . trans('common.error') . '(' . trans('common.refresh') . trans('common.later') . trans('common.submit') . ')',
 //                session('token_back_page')); //后台统一检查表单令牌
 //        }
@@ -151,7 +151,7 @@ class Common extends Controller
         ];
         $Verify = new \Think\Verify($config);
         $id     = MODULE_NAME . CONTROLLER_NAME;
-        if (IS_GET) {
+        if (request()->isMethod('GET')) {
             $id .= request('t');
         }
 
@@ -214,7 +214,7 @@ class Common extends Controller
     //Ajax 接口
     protected function doAjaxApi()
     {
-        if (!Request::ajax()) {
+        if (!request()->ajax()) {
             return;
         }
 

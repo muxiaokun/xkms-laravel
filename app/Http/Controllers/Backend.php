@@ -41,7 +41,7 @@ class Backend extends Common
             }
 
             //是否开启管理员日志 记录除了root 和 非POST(不记录来自ajax_api)提交数据
-            if (config('system.sys_admin_auto_log') && 1 != session('backend_info.id') && 'POST' == request()->getMethod() && 'ajax_api' != ACTION_NAME) {
+            if (config('system.sys_admin_auto_log') && 1 != session('backend_info.id') && request()->isMethod('POST') && 'ajax_api' != ACTION_NAME) {
                 $denyLog['Index'] = array('index', 'top_nav', 'left_nav', 'main', 'logout');
                 if (!in_array(ACTION_NAME, $denyLog[CONTROLLER_NAME])) {
                     Model\AdminLog::mAdd($backendInfo['id']);

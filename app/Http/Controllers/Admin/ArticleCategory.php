@@ -80,7 +80,7 @@ class ArticleCategory extends Backend
     //新增
     public function add()
     {
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             $data      = $this->makeData();
             $resultAdd = Model\ArticleCategory::mAdd($data);
             if ($resultAdd) {
@@ -117,7 +117,7 @@ class ArticleCategory extends Backend
         }
 
         $maAllowArr = Model\ArticleCategory::mFind_allow('ma');
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             $data = $this->makeData();
             if (1 != session('backend_info.id')
                 && !mInArray($id, $maAllowArr)

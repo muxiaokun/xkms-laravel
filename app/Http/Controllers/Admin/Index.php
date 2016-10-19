@@ -25,7 +25,7 @@ class Index extends Backend
     //网站基本设置
     public function websiteSet()
     {
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             //表单提交的名称
             $col = [
                 'site_title',
@@ -50,7 +50,7 @@ class Index extends Backend
     //系统基本设置
     public function systemSet()
     {
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             //表单提交的名称
             $col = [
                 'sys_date',
@@ -73,7 +73,7 @@ class Index extends Backend
     public function databaseSet()
     {
         //备份数据库
-        if (IS_GET && '1' == request('backup')) {
+        if (request()->isMethod('GET') && '1' == request('backup')) {
             $db               = M();
             $tables           = $db->query('SHOW TABLES');
             $backStr          = '';
@@ -121,7 +121,7 @@ class Index extends Backend
         }
 
         //还原数据库
-        if ('POST' == request()->getMethod() && isset($_FILES['restore_file']) && 0 == $_FILES['restore_file']['error']) {
+        if (request()->isMethod('POST') && isset($_FILES['restore_file']) && 0 == $_FILES['restore_file']['error']) {
             $db         = M();
             $fileHandle = fopen($_FILES['restore_file']['tmp_name'], 'r');
             if (!$fileHandle) {
@@ -149,7 +149,7 @@ class Index extends Backend
         }
 
         //保存数据库配置
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             //表单提交的名称
             $col = [
                 'DB_HOST',
@@ -174,7 +174,7 @@ class Index extends Backend
     //修改自己的密码
     public function editMyPass()
     {
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             $curPassword = request('cur_password');
             $adminInfo   = Model\Admins::authorized(session('backend_info.admin_name'), $curPassword);
             if (!$adminInfo) {

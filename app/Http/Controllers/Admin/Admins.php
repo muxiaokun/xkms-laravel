@@ -73,7 +73,7 @@ class Admin extends Backend
     //新增
     public function add()
     {
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             $data      = $this->makeData();
             $resultAdd = Model\Admins::mAdd($data);
             if ($resultAdd) {
@@ -98,7 +98,7 @@ class Admin extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             $data       = $this->makeData();
             $resultEdit = Model\Admins::mEdit($id, $data);
             if ($resultEdit) {
@@ -147,7 +147,7 @@ class Admin extends Backend
     //配置
     public function setting()
     {
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             //表单提交的名称
             $col = [
                 'SYS_ADMIN_AUTO_LOG',

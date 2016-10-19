@@ -63,7 +63,7 @@ class MessageBoardLog extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             $data       = [
                 'audit_id'   => session('backend_info.id'),
                 'reply_info' => request('reply_info'),

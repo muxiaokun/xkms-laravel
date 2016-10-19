@@ -52,7 +52,7 @@ class Region extends Backend
     //新增
     public function add()
     {
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             $data      = $this->makeData();
             $resultAdd = Model\Region::mAdd($data);
             if ($resultAdd) {
@@ -76,7 +76,7 @@ class Region extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             $data       = $this->makeData();
             $resultEdit = Model\Region::mEdit($id, $data);
             if ($resultEdit) {

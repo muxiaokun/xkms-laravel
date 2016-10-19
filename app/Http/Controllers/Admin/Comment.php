@@ -68,7 +68,7 @@ class Comment extends Backend
     //审核回复
     public function add()
     {
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             //表单提交的名称
             $col            = [
                 'COMMENT_SWITCH',

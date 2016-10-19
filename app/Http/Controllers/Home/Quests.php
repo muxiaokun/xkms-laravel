@@ -56,7 +56,7 @@ class Quests extends FrontendMember
             $questsQuestList[$questId]['answer'] = explode('|', $questsQuestList[$questId]['answer']);
         }
         //存入数据
-        if ('POST' == request()->getMethod()) {
+        if (request()->isMethod('POST')) {
             $data = [];
             session('frontend.id') && $data['member_id'] = session('frontend.id');
             $data['quests_id'] = $id;

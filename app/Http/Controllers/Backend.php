@@ -11,7 +11,8 @@ class Backend extends Common
 {
     public function _initialize()
     {
-        /*parent::_initialize();
+        parent::_initialize();
+        /*
         if ($this->isLogin()) {
             $backendInfo = session('backend_info');
             //自动登出时间

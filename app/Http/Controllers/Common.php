@@ -19,7 +19,7 @@ class Common extends Controller
         //没有安装，跳转到安装页
         if (0 == env('INSTALL_STATUS') && !Route::is("Install::*")) {
             $message = trans('common.please') . trans('common.install') . trans('common.app_name');
-            die($this->error($message, 'Install::index'));
+            die($this->error($message, route('Install::index')));
 
         }
         //权限检测

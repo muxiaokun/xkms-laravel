@@ -111,7 +111,7 @@ function M_confirm(str,go_link,go_back)
     var obj = $('#alert_confirm');
     if(!obj.length)
     {
-        obj = $('<div id="alert_confirm" title="' + lang.system + lang.info + '" >' + str + '</div>');
+        obj = $('<div id="alert_confirm" title="' + lang.common.system + lang.common.info + '" >' + str + '</div>');
     }
     else
     {
@@ -123,11 +123,11 @@ function M_confirm(str,go_link,go_back)
         return;
     }
     var buttons_fn = {};
-    buttons_fn[lang.confirm] = function () {
+    buttons_fn[lang.common.confirm] = function () {
         window.location.href = go_link;
         $( this ).dialog( "close" );
     }
-    buttons_fn[lang.cancel] = function () {
+    buttons_fn[lang.common.cancel] = function () {
         if(true == go_back)
         {
             history.go(-1);
@@ -196,7 +196,7 @@ function M_in_decimal(obj,max_decimal)
 }
 
 //输入整数范围
-//onKeyup="M_in_int_range(this,1,100);" 
+//onKeyup="M_in_int_range(this,1,100);"
 function M_in_int_range(obj,start,end)
 {
     M_in_int(obj);
@@ -224,15 +224,15 @@ function M_ZeroClipboard(obj_id)
         var obj = $('#'+obj_id);
         var clip = new ZeroClipboard(obj,{cacheBust: true});
         var dialog_div = $('<div style="text-align:center;"></div>')
-        dialog_div.attr('title', lang.copy + lang.info);
+        dialog_div.attr('title', lang.common.copy + lang.common.info);
         var buttons_fn = {};
-        buttons_fn[lang.close] = function () {
+        buttons_fn[lang.common.close] = function () {
             $(this).dialog( "close" );
         }
         clip.on("ready", function() {
             //clip.setData("text/plain", obj.attr('copy_content'));
             this.on("aftercopy", function(event) {
-                dialog_div.html(lang.copy + lang.success);
+                dialog_div.html(lang.common.copy + lang.common.success);
                 dialog_div.dialog({
                     resizable: false,
                     buttons: buttons_fn
@@ -240,7 +240,7 @@ function M_ZeroClipboard(obj_id)
             });
         });
         clip.on("error", function(event) {
-            dialog_div.html(lang.copy + lang.error);
+            dialog_div.html(lang.common.copy + lang.common.error);
             dialog_div.dialog({
                 resizable: false,
                 buttons:buttons_fn
@@ -300,7 +300,7 @@ function M_line_edit(obj)
                     _self.html(data.info);
                 }
             });
-            _self.html(lang.loading + '...');
+            _self.html(lang.common.loading + '...');
         });
     }
 }

@@ -34,12 +34,12 @@ class Common extends Controller
 //        }
     }
 
-    protected function success($msg = '', $backUrl = '', $timeout = 5)
+    protected function success($msg = '', $backUrl = '', $timeout = 3)
     {
         return $this->dispatch_jump($msg, $backUrl, $timeout, true);
     }
 
-    protected function error($msg = '', $backUrl = '', $timeout = 5)
+    protected function error($msg = '', $backUrl = '', $timeout = 3)
     {
         return $this->dispatch_jump($msg, $backUrl, $timeout, false);
     }

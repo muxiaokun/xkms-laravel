@@ -9,9 +9,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="stylesheet"
-          href="{{ route('Minify',['type'=>'css','files'=>'jquery-ui.min,jquery-ui.theme.min,bootstrap.min,bootstrap-theme.min,common,admin']) }}">
+          href="{{ route('Minify',['type'=>'css','files'=>'jquery-ui.min,jquery-ui.theme.min,jquery-ui.structure.min,bootstrap.min,bootstrap-theme.min,common,admin']) }}">
     <script type="text/javascript"
-            src="{{ route('Minify',['type'=>'js','files'=>'jquery.min,jquery-ui.min,bootstrap.min,common','lang'=>'common,admin']) }}"></script>
+            src="{{ route('Minify',['type'=>'js','files'=>'jquery.min,jquery-ui.min,common','lang'=>'common,admin']) }}"></script>
     <!--[if lt IE 9]>
     <script type="text/javascript" src="{{ asset('js/supporthtml5.js') }}"></script>
     <![endif]-->

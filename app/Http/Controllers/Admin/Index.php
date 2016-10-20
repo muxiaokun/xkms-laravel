@@ -7,6 +7,8 @@ use App\Http\Controllers\Backend;
 use App\Model;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Artisan;
 
 class Index extends Backend
 {
@@ -106,7 +108,7 @@ class Index extends Backend
                         } elseif (is_null($v)) {
                             $insertV .= 'NULL';
                         } else {
-                        $insertV .= ($isMagicQuotesGpc) ? "'$v'" : "'" . addslashes($v) . "'";
+                            $insertV .= ($isMagicQuotesGpc) ? "'$v'" : "'" . addslashes($v) . "'";
                         }
                     }
                     $insertVal .= "($insertV)";
@@ -221,39 +223,40 @@ class Index extends Backend
             return;
         }
 
-        $runtimeFile = scandir(RUNTIME_PATH);
-        // 清除runtime 文件
-        foreach ($runtimeFile as $file) {
-            if (preg_match('/\~runtime\.php$/', $file)) {
-                unlink(RUNTIME_PATH . $file);
-            }
+        try {
+            $exitCode = Artisan::call('cache:clear');
+        } catch (\Exception $e) {
+            $exitCode = $e->getMessage();
         }
-        $cleanCacheResult = $this->cleanDir(CACHE_PATH);
-        $cleanTempResult  = $this->cleanDir(TEMP_PATH);
-        if ($cleanCacheResult && $cleanTempResult) {
+
+        if (0 === $exitCode) {
             //写入日志
-            Model\AdminLog::mAdd(session('backend_info.id'));
-            return $this->success($messageStr . trans('common.clean') . trans('common.success'), route('main'));
+            Model\AdminLogs::mAdd(session('backend_info.id'));
+            return $this->success($messageStr . trans('common.clean') . trans('common.success'),
+                route('Admin::Index::main'));
         } else {
-            return $this->error($messageStr . trans('common.clean') . trans('common.error'), route('main'));
+            return $this->error($messageStr . trans('common.clean') . trans('common.error'),
+                route('Admin::Index::main') . $exitCode);
         }
     }
 
     //清除日志
     public function cleanLog()
     {
-        $lang = trans('common.yes') . trans('common.no') . trans('common.confirm') . trans('common.clean') . trans('common.log');
-        if (!$this->showConfirm($lang)) {
+        $msg = trans('common.yes') . trans('common.no') . trans('common.confirm') . trans('common.clean') . trans('common.log');
+        if (!$this->showConfirm($msg)) {
             return;
         }
 
-        $cleanResult = $this->cleanDir(LOG_PATH);
+        $cleanResult = Storage::put(storage_path('logs/laravel.log'), '');
         if ($cleanResult) {
             //写入日志
-            Model\AdminLog::mAdd(session('backend_info.id'));
-            return $this->success(trans('common.clean') . trans('common.log') . trans('common.success'), route('main'));
+            Model\AdminLogs::mAdd(session('backend_info.id'));
+            return $this->success(trans('common.clean') . trans('common.log') . trans('common.success'),
+                route('Admin::Index::main'));
         } else {
-            return $this->error(trans('common.clean') . trans('common.log') . trans('common.error'), route('main'));
+            return $this->error(trans('common.clean') . trans('common.log') . trans('common.error'),
+                route('Admin::Index::main'));
         }
     }
 

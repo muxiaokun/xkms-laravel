@@ -252,7 +252,7 @@ class Common extends Controller
 
         //防止缓存
         $currentTime       = Carbon::now();
-        $backUrl           = route(request()->route()->getName());
+        $backUrl           = route(request()->route()->getName(), ['confirm' => 'yes']);
         $assign['lang']    = $lang;
         $assign['backUrl'] = $backUrl;
         echo view('common.showConfirm', $assign);

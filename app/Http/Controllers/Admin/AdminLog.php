@@ -27,12 +27,12 @@ class AdminLog extends Backend
         $whereValue && $where['controller_name'] = $whereValue;
 
         //初始化翻页 和 列表数据
-        $adminLogList = Model\AdminLog::mSelect($where, true);
+        $adminLogList = Model\AdminLogs::mSelect($where, true);
         foreach ($adminLogList as &$adminLog) {
             $adminLog['admin_name'] = Model\Admins::mFindColumn($adminLog['admin_id'], 'admin_name');
         }
         $assign['admin_log_list']       = $adminLogList;
-        $assign['admin_log_list_count'] = Model\AdminLog::mGetPageCount($where);
+        $assign['admin_log_list_count'] = Model\AdminLogs::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo                    = [];
@@ -61,7 +61,7 @@ class AdminLog extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('index'));
         }
 
-        $resultDel = Model\AdminLog::mDel($id);
+        $resultDel = Model\AdminLogs::mDel($id);
         if ($resultDel) {
             return $this->success(trans('common.log') . trans('common.del') . trans('common.success'), route('index'));
         } else {
@@ -76,7 +76,7 @@ class AdminLog extends Backend
             return $this->error('only ROOT privilege', route('index'));
         }
 
-        $resultDel = Model\AdminLog::mDel_all();
+        $resultDel = Model\AdminLogs::mDel_all();
         if ($resultDel) {
             return $this->success(trans('common.log') . trans('common.del') . trans('common.success'), route('index'));
         } else {

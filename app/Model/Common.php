@@ -36,7 +36,7 @@ class Common extends Model
         }
 
         (new static)->mEncodeData($data);
-        return self::add($data);
+        return self::create($data);
     }
 
     /**

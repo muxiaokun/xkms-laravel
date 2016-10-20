@@ -45,7 +45,7 @@ class Backend extends Common
             if (config('system.sys_admin_auto_log') && 1 != session('backend_info.id') && request()->isMethod('POST') && 'ajax_api' != ACTION_NAME) {
                 $denyLog['Index'] = array('index', 'top_nav', 'left_nav', 'main', 'logout');
                 if (!in_array(ACTION_NAME, $denyLog[CONTROLLER_NAME])) {
-                    Model\AdminLog::mAdd($backendInfo['id']);
+                    Model\AdminLogs::mAdd($backendInfo['id']);
                 }
             }
         } else {

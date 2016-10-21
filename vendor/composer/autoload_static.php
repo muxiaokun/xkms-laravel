@@ -452,7 +452,7 @@ class ComposerStaticInitd6ca115cde39e5742e0a622dbbf4bc96
         'App\\Library\\phpmailerException' => __DIR__ . '/../..' . '/app/Library/PHPMailer.php',
         'App\\Library\\qrstr' => __DIR__ . '/../..' . '/app/Library/QRcode.php',
         'App\\Model\\AdminGroups' => __DIR__ . '/../..' . '/app/Model/AdminGroups.php',
-        'App\\Model\\AdminLog' => __DIR__ . '/../..' . '/app/Model/AdminLog.php',
+        'App\\Model\\AdminLogs' => __DIR__ . '/../..' . '/app/Model/AdminLogs.php',
         'App\\Model\\Admins' => __DIR__ . '/../..' . '/app/Model/Admins.php',
         'App\\Model\\Article' => __DIR__ . '/../..' . '/app/Model/Article.php',
         'App\\Model\\ArticleCategory' => __DIR__ . '/../..' . '/app/Model/ArticleCategory.php',

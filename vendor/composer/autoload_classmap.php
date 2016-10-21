@@ -160,7 +160,7 @@ return array(
     'App\\Library\\phpmailerException' => $baseDir . '/app/Library/PHPMailer.php',
     'App\\Library\\qrstr' => $baseDir . '/app/Library/QRcode.php',
     'App\\Model\\AdminGroups' => $baseDir . '/app/Model/AdminGroups.php',
-    'App\\Model\\AdminLog' => $baseDir . '/app/Model/AdminLog.php',
+    'App\\Model\\AdminLogs' => $baseDir . '/app/Model/AdminLogs.php',
     'App\\Model\\Admins' => $baseDir . '/app/Model/Admins.php',
     'App\\Model\\Article' => $baseDir . '/app/Model/Article.php',
     'App\\Model\\ArticleCategory' => $baseDir . '/app/Model/ArticleCategory.php',

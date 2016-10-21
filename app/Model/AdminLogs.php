@@ -15,9 +15,6 @@ class AdminLogs extends Common
     //添加日志 管理员编号 信息为空为传参 操作的模型
     public static function mAdd($adminId, $message = false, $msg = false)
     {
-        if (is_array($adminId)) {
-            dd(1);
-        }
         if (!$adminId) {
             return false;
         }
@@ -45,7 +42,7 @@ class AdminLogs extends Common
             'message'    => $message,
             'request'    => $request_json,
         ];
-        return static::mAdd($data);
+        return parent::mAdd($data);
     }
 
     //删除全部日志

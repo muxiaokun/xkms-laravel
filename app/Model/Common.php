@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Common extends Model
 {
+    protected $guarded = [];
     /**
      * 列出数据
      * @access public
@@ -36,7 +37,7 @@ class Common extends Model
         }
 
         (new static)->mEncodeData($data);
-        return self::create($data);
+        return (new static)->create($data);
     }
 
     /**

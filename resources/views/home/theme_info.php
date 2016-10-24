@@ -1,1 +1,196 @@
-a:29:{s:32:"8fae4ea078a64b68f09ba3b2f4824a54";a:3:{s:9:"file_name";s:20:"Article_article.html";s:4:"name";s:12:"文章默认";s:4:"info";s:0:"";}s:32:"351ce6ff0378e5d7ea6e8b2e42fe24ac";a:3:{s:9:"file_name";s:23:"Article_article_aa.html";s:4:"name";s:8:"文章aa";s:4:"info";s:0:"";}s:32:"65be771351a3e2f2f2bc2e62124f6090";a:3:{s:9:"file_name";s:21:"Article_category.html";s:4:"name";s:18:"文章分类默认";s:4:"info";s:0:"";}s:32:"8df904764656b9ad75eca3b5fbb98e76";a:3:{s:9:"file_name";s:24:"Article_category_ac.html";s:4:"name";s:26:"文章分类aa（单篇）";s:4:"info";s:0:"";}s:32:"db64d3cd22cc895bd5fcac9294c6587c";a:3:{s:9:"file_name";s:20:"Article_channel.html";s:4:"name";s:18:"文章频道默认";s:4:"info";s:0:"";}s:32:"877f1aa962e6a39ed0a656176f6e6b39";a:3:{s:9:"file_name";s:23:"Article_channel_ah.html";s:4:"name";s:14:"文章频道ah";s:4:"info";s:0:"";}s:32:"c7cb8feb263c130a564f1bd73cefe7c3";a:3:{s:9:"file_name";s:26:"Article_list_category.html";s:4:"name";s:24:"文章分类列表默认";s:4:"info";s:0:"";}s:32:"70240d6e79957ac061000106fc6def3f";a:3:{s:9:"file_name";s:30:"Article_list_category_alc.html";s:4:"name";s:21:"文章分类列表alc";s:4:"info";s:0:"";}s:32:"c15bee8a916d028179d5c36d00023950";a:3:{s:9:"file_name";s:15:"Assess_add.html";s:4:"name";s:12:"考核添加";s:4:"info";s:0:"";}s:32:"f6eb24584f067943c1a796e217654f6e";a:3:{s:9:"file_name";s:17:"Assess_index.html";s:4:"name";s:12:"考核列表";s:4:"info";s:0:"";}s:32:"b4f270a4a02b0a2334bb626564353244";a:3:{s:9:"file_name";s:18:"Comment_index.html";s:4:"name";s:12:"评论列表";s:4:"info";s:0:"";}s:32:"4a9d6e30d355dd8713ff83248b6cb15d";a:3:{s:9:"file_name";s:16:"Index_index.html";s:4:"name";s:6:"首页";s:4:"info";s:0:"";}s:32:"a7e791ea9a153fae26bbcafb030ac901";a:3:{s:9:"file_name";s:15:"Index_test.html";s:4:"name";s:9:"测试页";s:4:"info";s:0:"";}s:32:"7b9010f2dfe893e61841025859cb5ea9";a:3:{s:9:"file_name";s:16:"Member_layout.html";s:4:"name";s:12:"会员框架";s:4:"info";s:0:"";}s:32:"31fa7b9b082472f675b245be7fccfbb3";a:3:{s:9:"file_name";s:17:"Member_index.html";s:4:"name";s:12:"会员首页";s:4:"info";s:0:"";}s:32:"30df390211d979677a6c361ce1ef10e0";a:3:{s:9:"file_name";s:17:"Member_login.html";s:4:"name";s:12:"会员登录";s:4:"info";s:0:"";}s:32:"be9f2bbcccbd42552afa6b6badc9ab45";a:3:{s:9:"file_name";s:23:"MessageBoard_index.html";s:4:"name";s:9:"留言板";s:4:"info";s:0:"";}s:32:"1cce2815f7d7d2bae506e2b77ddc5be3";a:3:{s:9:"file_name";s:16:"Message_add.html";s:4:"name";s:15:"站内信添加";s:4:"info";s:0:"";}s:32:"a52888e65b5adcf46a59b6e82f6a8508";a:3:{s:9:"file_name";s:18:"Message_index.html";s:4:"name";s:15:"站内信列表";s:4:"info";s:0:"";}s:32:"39d2eb132d238c8cf35e6dd6f9256940";a:3:{s:9:"file_name";s:18:"Public_footer.html";s:4:"name";s:12:"公共页尾";s:4:"info";s:0:"";}s:32:"7a2cd2d8c49a75d73c3883afcab63937";a:3:{s:9:"file_name";s:18:"Public_header.html";s:4:"name";s:12:"公共页头";s:4:"info";s:0:"";}s:32:"72dc4ec867bdeba5334a851ff063e4bf";a:3:{s:9:"file_name";s:17:"Public_right.html";s:4:"name";s:12:"公共右侧";s:4:"info";s:0:"";}s:32:"deda81b24df7a65913c310ca7458b107";a:3:{s:9:"file_name";s:15:"Quests_add.html";s:4:"name";s:12:"问卷添加";s:4:"info";s:0:"";}s:32:"0b9855748c53338b8bd864f78be90bbb";a:3:{s:9:"file_name";s:17:"Quests_index.html";s:4:"name";s:12:"问卷列表";s:4:"info";s:0:"";}s:32:"97853b62f67293172dd9e445485176b1";a:3:{s:9:"file_name";s:16:"Recruit_add.html";s:4:"name";s:12:"招聘添加";s:4:"info";s:0:"";}s:32:"4e81045221207927b4e1d91831b82aa4";a:3:{s:9:"file_name";s:18:"Recruit_index.html";s:4:"name";s:12:"招聘列表";s:4:"info";s:0:"";}s:32:"32a6e937486e5447df3716efb9abce34";a:3:{s:9:"file_name";s:23:"Wechat_member_bind.html";s:4:"name";s:12:"微信绑定";s:4:"info";s:0:"";}s:32:"af7981cdfe1104f020918a7d3e398f76";a:3:{s:9:"file_name";s:18:"dispatch_jump.html";s:4:"name";s:21:"成功或错误跳转";s:4:"info";s:0:"";}s:32:"6b699b263a1a6f0ea6fafd63db5a7f17";a:3:{s:9:"file_name";s:11:"layout.html";s:4:"name";s:12:"主题框架";s:4:"info";s:0:"";}}
+<?php
+return [
+    'f67a0bc4724de10d2e33b533c58ced58' =>
+        [
+            'file_name' => 'Article_article.blade.php',
+            'name'      => '123123',
+            'info'      => '123123',
+        ],
+    'a1c2d8798378df04ecc5d9d99e1849fb' =>
+        [
+            'file_name' => 'Article_article_aa.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    'a61545748f8b3b297bc1df849de3130f' =>
+        [
+            'file_name' => 'Article_category.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    '22fa66bfc95fc9eebd354342aecd1241' =>
+        [
+            'file_name' => 'Article_category_ac.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    'bbfb290712586ad546ff2decab2efe0d' =>
+        [
+            'file_name' => 'Article_channel.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    'c223d3bb91cb05b800bada43e6653a00' =>
+        [
+            'file_name' => 'Article_channel_ah.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    '7d912c9590bc8d63fb2b045c7603035b' =>
+        [
+            'file_name' => 'Article_layout.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    'd888cb8b46cd2990fc42d54be8ce1ee3' =>
+        [
+            'file_name' => 'Article_list_category.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    'a6db2b8e924368fc4326a99fda98ea77' =>
+        [
+            'file_name' => 'Article_list_category_alc.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    'de4939aa63b2322abe24c6850a063bdb' =>
+        [
+            'file_name' => 'Assess_add.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    '92ff038572e093494564438c8d827477' =>
+        [
+            'file_name' => 'Assess_index.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    '7da6ed1c62e4cfdcfaaf7a584bcefcbf' =>
+        [
+            'file_name' => 'Comment_index.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    '866e20359ec6793a5ffa528546f2d0b6' =>
+        [
+            'file_name' => 'Index_index.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    'bba54a7a4b00c6946d93b0bd16154cc3' =>
+        [
+            'file_name' => 'Index_test.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    '79f955acd7c8b33102b3a61a5ed2a5ae' =>
+        [
+            'file_name' => 'Member_index.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    'f5a956dadea52976efa7e8e5af86167c' =>
+        [
+            'file_name' => 'Member_layout.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    '76af671a6489b24d2302840182965f76' =>
+        [
+            'file_name' => 'Member_login.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    '6e49fd98900b26ca48acb3e636202df8' =>
+        [
+            'file_name' => 'MessageBoard_index.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    '045bc259fcb71bc19e95d0f8c8eb2478' =>
+        [
+            'file_name' => 'Message_add.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    '41d1fbff84e59bb833987c69f641ead1' =>
+        [
+            'file_name' => 'Message_index.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    '99da29f9bced800ba239de8f7b5cbd31' =>
+        [
+            'file_name' => 'Public_footer.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    '36383ca3a93f01f535ddcb842bbaa66a' =>
+        [
+            'file_name' => 'Public_header.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    '92fd26289e554d8b16102ab726ed7a32' =>
+        [
+            'file_name' => 'Public_right.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    '6c040a543add5a0702c4f6a4ec2f1ea1' =>
+        [
+            'file_name' => 'Quests_add.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    'a4f5e15a1fb2675e79a693592fdba1d3' =>
+        [
+            'file_name' => 'Quests_index.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    'e21e462e5a5b2cc4910e3b290af1007e' =>
+        [
+            'file_name' => 'Recruit_add.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    'd83e3f63efa56cdb45ac5283ff0da8db' =>
+        [
+            'file_name' => 'Recruit_edit.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    '93a3e19c284203b2b166a8f10760d82a' =>
+        [
+            'file_name' => 'Recruit_index.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    'ab74df90879792edcb677954dc1e1cc1' =>
+        [
+            'file_name' => 'Wechat_member_bind.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    '5ac1b0a9336ffe25cf1c82cde6b2cc8b' =>
+        [
+            'file_name' => 'dispatch_jump.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    '0d6eaf5f0b12c40882e0a648eecec8e5' =>
+        [
+            'file_name' => 'index.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+    'f499bfaec55ba71946371b7f4791adbb' =>
+        [
+            'file_name' => 'layout.blade.php',
+            'name'      => '',
+            'info'      => '',
+        ],
+];
+?>

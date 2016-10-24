@@ -369,9 +369,9 @@ Route::group([
         //'middleware'=>'auth',
         'prefix' => 'Template',
     ], function () {
-        Route::get('index', ['as' => 'index', 'uses' => 'Template@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Template@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'Template@edit']);
+        Route::match(['get', 'post'], 'index', ['as' => 'index', 'uses' => 'Template@index']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Template@add']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'Template@edit']);
         Route::get('del', ['as' => 'del', 'uses' => 'Template@del']);
     });
     Route::group([

@@ -5,10 +5,11 @@
             <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <form id="form_valid" class="form-horizontal" role="form" action="" method="post">
+                    {{ csrf_field() }}
                     <input type="hidden" name="id" value="{{ $id }}"/>
                     <div class="row">
                         <div class="col-sm-12">
-                            @if ('add' == ACTION_NAME)
+                            @if ('add' == Route::is('*::add'))
                                 <div class="form-group">
                                     <label class="col-sm-4 control-label">
                                         @lang('common.template')@lang('common.file')@lang('common.name')

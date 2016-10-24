@@ -24,19 +24,44 @@ function mPutenv($key, $item = '')
     return $filesystem->put($env_path, $env_contents) ? true : false;
 }
 
-
-function mRandStr($length = 4)
+/**
+ * @param       $path
+ * @param array $arr
+ * @param bool  $useOld
+ * @return bool|int
+ */
+function mPutArr($path, $arr = [], $useOld = true)
 {
-    $rand_range = '0123456789abcdecfghijklmnopqrstuvwxyzABCDECFGHIJKLMNOPQRSTUVWXYZ';
-    $rand       = '';
-    for ($i = 0; $i < $length; $i++) {
-        $rand .= $rand_range[rand(0, strlen($rand_range) - 1)];
+    if (!$path || !$arr) {
+        return false;
     }
-    return $rand;
+    $filesystem = new \Illuminate\Filesystem\Filesystem();
+    if ($useOld && $oldArr = mGetArr($path)) {
+        $arr = array_merge($oldArr, $arr);
+    }
+    $arrStr    = var_export($arr, true);
+    $putConfig = <<<EOF
+<?php
+return {$arrStr};
+?>
+EOF;
+    return $filesystem->put($path, $putConfig);
 }
 
+/**
+ * @param $path
+ * @return bool|mixed
+ */
+function mGetArr($path)
+{
+    $filesystem = new \Illuminate\Filesystem\Filesystem();
+    if (!$path || !$filesystem->isFile($path)) {
+        return false;
+    }
+    $arr = $filesystem->getRequire($path);
+    return is_array($arr) ? $arr : [];
+}
 
-//构造本系统的URL连接 $type如果为空返回根目录
 //切割字符串
 //提取 Org\Util\String::msubstr
 function mSubstr($str, $len, $suffix = true, $start = 0)

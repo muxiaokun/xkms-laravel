@@ -124,7 +124,11 @@ class Minify extends Controller
     {
         switch ($type) {
             case 'js':
-                //预留js替换
+                //js 变量替换
+                $content = preg_replace_callback('/asset\((.*?)\)/',
+                    function ($match) use ($type, $file) {
+                        return asset($type . '/' . $match[1]);
+                    }, $content);
                 break;
             case 'css':
                 //css url替换

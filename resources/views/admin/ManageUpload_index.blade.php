@@ -5,7 +5,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
-                @include('admin.public_whereInfo')
+                @include('admin.Public_whereInfo')
                 <table class="table table-condensed table-hover">
                     <tr>
                         <th><input type="checkbox" onClick="M_allselect_par(this,'table')"/>&nbsp;@lang('common.id')
@@ -19,7 +19,7 @@
                         <td class="nowrap">
                             @if ($batch_handle['edit'])
                                 <a class="btn btn-xs btn-success"
-                                   href="{{ route('edit') }}">@lang('common.clear')@lang('common.none')@lang('common.bind')</a>
+                                   href="{{ route('Admin::ManageUpload::edit') }}">@lang('common.clear')@lang('common.none')@lang('common.bind')</a>
                             @endif
                         </td>
                     </tr>
@@ -77,7 +77,7 @@
                                 </a>
                                 @if ($batch_handle['del'])
                                     <a class="btn btn-xs btn-danger" href="javascript:void(0);"
-                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $manage_upload['name'] }}?','{{ route('del',array('id'=>$manage_upload['id'])) }}')">
+                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $manage_upload['name'] }}?','{{ route('Admin::ManageUpload::del',array('id'=>$manage_upload['id'])) }}')">
                                         @lang('common.del')
                                     </a>
                                 @endif
@@ -99,7 +99,7 @@
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
                                         'name': $Think.lang.del,
-                                        'post_link': '{{ route('del') }}'
+                                        'post_link': '{{ route('Admin::ManageUpload::del') }}'
                                     });
                                     @endif
                                             new M_batch_handle(config);

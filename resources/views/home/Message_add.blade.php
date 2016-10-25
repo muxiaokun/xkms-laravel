@@ -17,7 +17,7 @@
                             <script type="text/javascript">
                                 $(function () {
                                     var config = {
-                                        @if (I('receive_id'))'def_data': I('receive_id'), @endif
+                                        @if (request('receive_id'))'def_data': request('receive_id'), @endif
                                         'edit_obj': $('#receive_member_list'),
                                         'post_name': 'receive_id',
                                         'ajax_url': '{:M_U('ajax_api')}',

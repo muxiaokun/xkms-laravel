@@ -6,7 +6,7 @@
                 {{ $title }}
                 @if ($batch_handle['del'])
                     <a class="fr fs10" href="javascript:void();"
-                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del')@lang('common.all')@lang('common.record')?','{{ route('del',array('id'=>I('id'))) }}')">
+                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del')@lang('common.all')@lang('common.record')?','{{ route('del',array('id'=>request('id'))) }}')">
                         @lang('common.del')@lang('common.all')@lang('common.record')
                     </a>
                 @endif

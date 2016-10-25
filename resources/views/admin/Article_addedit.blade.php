@@ -72,7 +72,7 @@
                                         <option value="">@lang('common.default')@lang('common.dont')@lang('common.pertain')@lang('common.category')</option>
                                         @foreach ($category_list as $category)
                                             <option value="{{ $category['id'] }}"
-                                                    @if ($category['id'] == $edit_info['cate_id'] or $category['id'] == I('cate_id'))selected="selected"
+                                                    @if ($category['id'] == $edit_info['cate_id'] or $category['id'] == request('cate_id'))selected="selected"
                                                     mtype="def_data"@endif >{{ $category['name'] }}</option>
                                         @endforeach
                                     </select>

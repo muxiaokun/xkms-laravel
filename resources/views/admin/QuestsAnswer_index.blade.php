@@ -5,7 +5,7 @@
             <div class="panel-heading">
                 {{ $title }}
                 <a class="fr fs10"
-                   href="{{ route('Admin::Quests::index',array('id'=>I('id'))) }}">@lang('common.goback')</a>
+                   href="{{ route('Admin::Quests::index',array('id'=>request('id'))) }}">@lang('common.goback')</a>
             </div>
             <div class="panel-body">
                 @include('admin.public_whereInfo')

@@ -1,6 +1,6 @@
 <section class="container">
     <form method="post" class="form-horizontal" role="form">
-        <input type="hidden" name="id" value="{:I('id')}"/>
+        <input type="hidden" name="id" value="{{ request('id') }}"/>
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">

@@ -2,7 +2,7 @@
     <div class="col-sm-12 text-right mb10">
         <form class="form-inline" role="form" method="get">
             @lang('common.recruit')@lang('common.keywords')
-            <input type="text" name="keyword" class="form-control w100 mlr10" value="{:I('keyword')}"
+            <input type="text" name="keyword" class="form-control w100 mlr10" value="{{ request('keyword') }}"
                    onClick="$(this).val('')"/>
             <button class="btn btn-default" type="submit">
                 @lang('common.search')@lang('common.recruit')

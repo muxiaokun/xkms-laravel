@@ -18,7 +18,7 @@ class Template extends Backend
         parent::_initialize();
         //初始化模板目录
         $this->viewPath = resource_path('views/home/');
-        //config('system.default_theme') && $this->viewPath .= config('system.default_theme') . '/';
+        config('system.default_theme') && $this->viewPath .= config('system.default_theme') . '/';
         //初始化模本文件列表
         $this->viewFiles = mGetArr($this->viewPath . $this->tplInfoFile);
         if (!$this->viewFiles) {
@@ -173,14 +173,15 @@ class Template extends Backend
     //获取模板主题
     private function _get_theme_list()
     {
-        $scanInfo   = scandir($this->viewPath);
+        $themePath  = resource_path('views/home/');
+        $scanInfo   = scandir($themePath);
         $denyChange = ['.', '..', 'index.html'];
         $themeList  = [];
         foreach ($scanInfo as $info) {
             if (in_array($info, $denyChange)) {
                 continue;
             }
-            if (is_dir($this->viewPath . $info)) {
+            if (is_dir($themePath . $info)) {
                 $themeList[] = $info;
             }
         }

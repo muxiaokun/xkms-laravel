@@ -8,11 +8,11 @@ class ManageUpload extends Common
     //获得全部或者部分管理组列表
     public static function mSelect($where = null, $page = false)
     {
-        self::mGetPage($page);
-        null !== self::option['order'] && self::order('id desc');
-        $data = self::where($where)->select();
+        $instance = static::getInstance();
+        $instance->mGetPage($page);
+        $data = $instance->where($where)->get();
         foreach ($data as &$dataRow) {
-            (new static)->mDecodeData($dataRow);
+            $instance->mDecodeData($dataRow);
         }
         return $data;
     }

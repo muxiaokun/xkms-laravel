@@ -7,7 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Common extends Model
 {
-    protected $guarded = [];
+    protected static $instance;
+    protected        $guarded = [];
+
+    public static function getInstance()
+    {
+        if (!static::$instance) {
+            static::$instance = new static();
+        }
+        return static::$instance;
+    }
+
     /**
      * 列出数据
      * @access public
@@ -158,7 +168,7 @@ class Common extends Model
     {
         (new static)->mParseWhere($where);
         $pageCount  = self::where($where)->count();
-        $sysMaxPage = C('SYS_MAX_PAGE') * C('SYS_MAX_ROW');
+        $sysMaxPage = config('system.sys_max_page') * config('system.sys_max_row');
         return ($pageCount < $sysMaxPage) ? $pageCount : $sysMaxPage;
     }
 
@@ -184,18 +194,18 @@ class Common extends Model
      * 设置翻页中数据数量
      * @param int $maxNum
      */
-    protected static function mGetPage($maxNum)
+    protected function mGetPage($maxNum)
     {
         if (!$maxNum) {
             return;
         }
 
-        $maxNum = (true === $maxNum) ? C('SYS_MAX_ROW') : $maxNum;
+        $maxNum = (true === $maxNum) ? config('system.sys_max_row') : $maxNum;
         //p 是 Think\Page中的p的配置
-        $p      = I('p');
-        $p      = ($p < C('SYS_MAX_PAGE')) ? $p : C('SYS_MAX_PAGE');
+        $p      = request('p');
+        $p      = ($p < config('system.sys_max_page')) ? $p : config('system.sys_max_page');
         $maxNum = ($p) ? $p . "," . $maxNum : "1," . $maxNum;
-        self::page($maxNum);
+        static::paginate($maxNum);
     }
 
     /**
@@ -204,7 +214,7 @@ class Common extends Model
      * @param string $logic AND or OR
      * @return boolean
      */
-    protected static function mMakeLikeArray($where, $logic = 'OR')
+    protected function mMakeLikeArray($where, $logic = 'OR')
     {
         //将$where转换成数组
         is_string($where) && $where = explode('|', $where);
@@ -228,7 +238,7 @@ class Common extends Model
      * @param type $length 长度
      * @return string
      */
-    protected static function _make_rand($length = 4)
+    protected function _make_rand($length = 4)
     {
         $rand_range = '0123456789abcdecfghijklmnopqrstuvwxyzABCDECFGHIJKLMNOPQRSTUVWXYZ';
         $rand       = '';
@@ -245,7 +255,7 @@ class Common extends Model
      * @param int   $level
      * @return array
      */
-    protected static function mMakeTree($config, $parentId = 0, $level = 0)
+    protected function mMakeTree($config, $parentId = 0, $level = 0)
     {
         $listWhere = $config['list_where'];
         if (!is_array($listWhere)) {
@@ -284,11 +294,11 @@ class Common extends Model
      * @param string $content
      * @return string
      */
-    protected static function mEncodeContent($content)
+    protected function mEncodeContent($content)
     {
         //删除相对路径前的../
         $content = htmlspecialchars_decode($content);
-        if (URL_REWRITE != C('URL_MODEL')) {
+        if (URL_REWRITE != config('system.url_model')) {
             return $content;
         }
 

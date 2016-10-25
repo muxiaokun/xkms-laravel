@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
+use App\Http\Controllers\CommonManageUpload;
 use App\Model;
 
 class ManageUpload extends Backend
@@ -11,6 +12,7 @@ class ManageUpload extends Backend
     //列表
     public function index()
     {
+        $where = [];
         //建立where
         $whereValue = '';
         $whereValue = request('suffix');
@@ -58,7 +60,7 @@ class ManageUpload extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.file') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.ManageUpload_index', $assign);
     }
 
     //删除图片
@@ -101,14 +103,14 @@ class ManageUpload extends Backend
     //上传接口实现
     public function UploadFile()
     {
-        $CommonManageUploadController = new \Common\Controller\CommonManageUploadController();
-        return $CommonManageUploadController->UploadFile();
+        $CommonManageUpload = new CommonManageUpload();
+        return $CommonManageUpload->UploadFile();
     }
 
     //文件管理接口实现
     public function ManageFile()
     {
-        $CommonManageUploadController = new \Common\Controller\CommonManageUploadController();
-        return $CommonManageUploadController->ManageFile();
+        $CommonManageUpload = new CommonManageUpload();
+        return $CommonManageUpload->ManageFile();
     }
 }

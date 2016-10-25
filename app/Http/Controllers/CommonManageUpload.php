@@ -7,7 +7,7 @@ namespace App\Http\Controllers;
 
 use App\Model;
 
-class CommonManageUploadController
+class CommonManageUpload
 {
     protected $config = [
 

@@ -55,7 +55,7 @@ function M_alert_log(config)
             obj.html(msg_str);
         }
         var buttons_fn = {};
-        buttons_fn[lang.close] = function () {
+        buttons_fn[lang.common.close] = function () {
             $( this ).dialog( "close" );
         }
         obj.dialog({

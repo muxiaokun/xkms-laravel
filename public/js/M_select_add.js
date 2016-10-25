@@ -63,19 +63,19 @@ M_select_add.prototype = {
     //选择select
     'select_obj':Array(
         '<select class="form-control input-sm w200 fl" mtype="select">',
-        '<option value="0">' + lang.none + lang.selection + '</option>',
+        '<option value="0">' + lang.common.none + lang.common.selection + '</option>',
         '</select>'
     ).join(''),
     //搜索input
     'search_input_obj':Array(
         '<input class="form-control input-sm w200 fl" placeholder="',
-        lang.please + lang.input + '"  mtype="keyword" />'
+        lang.common.please + lang.common.input + '"  mtype="keyword" />'
     ).join(''),
     //搜索按钮
     'search_obj':Array(
         '<button class="btn btn-default input-sm fl" type="button" mtype="search_btn">',
-        lang.dont + lang.exists + lang.comma,
-        lang.please + lang.search + '</button>'
+        lang.common.dont + lang.common.exists + lang.common.comma,
+        lang.common.please + lang.common.search + '</button>'
     ).join('')
 }
 
@@ -98,7 +98,7 @@ M_select_add.prototype.initialize_search = function()
             input_hidden.val(_self.def_data.value);
         }
     }
-    search_obj.html(lang.search);
+    search_obj.html(lang.common.search);
     search_obj.on('click',function(){_self.search_get(this)});
     _self.edit_obj.append(search_obj);
     search_obj.before(search_input_obj);

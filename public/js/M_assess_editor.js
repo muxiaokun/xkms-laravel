@@ -43,7 +43,7 @@ M_assess_editor.prototype =
     'post_name':'ext_info',
     'tr_obj':Array(
         '<tr><td mtd="p">&nbsp;</td><td mtd="f"></td><td mtd="mg"></td>',
-        '<td class="text-center" mtype="close"><a class="btn btn-default btn-sm">' + lang.del + '</a></td>',
+        '<td class="text-center" mtype="close"><a class="btn btn-default btn-sm">' + lang.common.del + '</a></td>',
         '<input mtype="assess_data" type="hidden"></tr>'
         ).join('')
 }

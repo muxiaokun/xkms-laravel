@@ -51,7 +51,7 @@ M_messageboard_editor.prototype.initialize = function()
     
     //init add_button
     var add_button_btn = $('<a class="btn btn-xs btn-success" href="javascript:void(0);">' +
-        lang.add + lang.option + '</a>');
+        lang.common.add + lang.common.option + '</a>');
     add_button_btn.on('click',function(){_self.add_msg()});
     _self.btn_obj.append(add_button_btn);
     

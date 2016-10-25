@@ -116,11 +116,11 @@ function article_category_cb(v,cate_level,offset)
             '<tr '+attribute+'><td>'+button+v.name+'(ID:'+v.id+')</td>',
             '<td onClick="M_line_edit(this);" field_id="'+v.id+'" field="sort" link="'+v.ajax_api_link+'">'+v.sort+'</td>',
             '<td>'+v.show+'</td>',
-        '<td><a class="btn btn-xs btn-primary" target="_blank" href="' + v.look_link + '"> ' + lang.look + ' </a> &nbsp;|&nbsp; ',
-        '<a class="btn btn-xs btn-primary" href="' + v.edit_link + '"> ' + lang.edit + ' </a> &nbsp;|&nbsp; ',
+        '<td><a class="btn btn-xs btn-primary" target="_blank" href="' + v.look_link + '"> ' + lang.common.look + ' </a> &nbsp;|&nbsp; ',
+        '<a class="btn btn-xs btn-primary" href="' + v.edit_link + '"> ' + lang.common.edit + ' </a> &nbsp;|&nbsp; ',
             '<a href="javascript:void(0);" class="btn btn-xs btn-danger" ',
-        'onClick="return M_confirm(\'' + lang.confirm + lang.del + '?\',\'' + v.del_link + '\')">' + lang.del,
-        '</a> &nbsp;|&nbsp; <a class="btn btn-xs btn-primary" href="' + v.add_link + '">' + lang.add + lang.article + '</td></tr>'
+        'onClick="return M_confirm(\'' + lang.common.confirm + lang.common.del + '?\',\'' + v.del_link + '\')">' + lang.common.del,
+        '</a> &nbsp;|&nbsp; <a class="btn btn-xs btn-primary" href="' + v.add_link + '">' + lang.common.add + lang.common.article + '</td></tr>'
     ).join('');
     return html;
 }

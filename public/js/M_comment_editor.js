@@ -66,7 +66,7 @@ M_comment_editor.prototype.put_data = function(form_obj)
     print_info_obj.html('');
     var content =  content_obj.val();
     content_obj.prop('disabled',true);
-    content_obj.val(lang.send + lang.comment + '...');
+    content_obj.val(lang.common.send + lang.common.comment + '...');
     
     var data = {
         'type':'get_data',

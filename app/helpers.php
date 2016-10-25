@@ -446,7 +446,7 @@ function mAttributeWhere($attribute, $attr)
     return $where;
 }
 
-function mDate($date, $format, $toZh = false)
+function mDate($date, $format = '', $toZh = false)
 {
     if (!$date) {
         return '';

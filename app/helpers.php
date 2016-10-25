@@ -89,7 +89,7 @@ function mMktime($date, $isDetail = false)
         return $date;
     }
 
-    $dateFormat  = ($isDetail) ? C('SYS_DATE_DETAIL') : C('SYS_DATE');
+    $dateFormat  = ($isDetail) ? config('system.sys_date_detail') : config('system.sys_date');
     $matchFormat = $dateFormat;
     $strSearch   = ['-', '[', ']', '(', ')', '^', '$'];
     $strReplace  = ['\-', '\[', '\]', '\(', '\)', '\^', '\$'];
@@ -125,13 +125,13 @@ function mMktime($date, $isDetail = false)
 function mMktimeRange($inputName)
 {
     $timeRange = [];
-    $gtTime    = mMktime(I($inputName . '_start'));
-    $ltTime    = mMktime(I($inputName . '_end')) + 86400;
-    if (I($inputName . '_start') && 0 < $gtTime) {
+    $gtTime    = mMktime(request($inputName . '_start'));
+    $ltTime    = mMktime(request($inputName . '_end')) + 86400;
+    if (request($inputName . '_start') && 0 < $gtTime) {
         $timeRange[] = ['gt', $gtTime];
     }
 
-    if (I($inputName . '_end') && 0 < $ltTime) {
+    if (request($inputName . '_end') && 0 < $ltTime) {
         $timeRange[] = ['lt', $ltTime];
     }
 
@@ -298,15 +298,15 @@ function mInArray($target, $source)
 
 function mAttributeArr($attribute, $cateId = 0)
 {
-    $attrStrs = I('attr');
+    $attrStrs = request('attr');
     //清空非合法属性格式
     if ($attrStrs && !preg_match('/^((\d+)(_(\d+))+-?)+$/', $attrStrs)) {
         $attrStrs = '';
     }
-    $request = I();
+    $request = request();
     $cateId && $request['cate_id'] = $cateId;
-    if (C('TOKEN_ON')) {
-        unset($request[C('TOKEN_NAME', null, '__hash__')]);
+    if (config('system.token_on')) {
+        unset($request[config('system.token_name', null, '__hash__')]);
     }
 
     $cacheName  = 'M_attribute_arr' . serialize($attribute) . $attrStrs . serialize($request);
@@ -395,14 +395,14 @@ function mAttributeArr($attribute, $cateId = 0)
     }
 
     $cacheValue = $attributeList;
-    S($cacheName, $cacheValue, C('SYS_TD_CACHE'));
+    S($cacheName, $cacheValue, config('system.sys_td_cache'));
 
     return $attributeList;
 }
 
 function mAttributeWhere($attribute, $attr)
 {
-    $attrStrs = I('attr', $attr);
+    $attrStrs = request('attr', $attr);
     //清空非合法属性格式
     if ($attrStrs && !preg_match('/^((\d+)(_(\d+))+-?)+$/', $attrStrs)) {
         $attrStrs = '';
@@ -441,7 +441,7 @@ function mAttributeWhere($attribute, $attr)
     }
 
     $cacheValue = $where;
-    S($cacheName, $cacheValue, C('SYS_TD_CACHE'));
+    S($cacheName, $cacheValue, config('system.sys_td_cache'));
 
     return $where;
 }
@@ -553,15 +553,15 @@ function mQrcode($data, $level = 'H', $size = 10, $margin = 0)
 // 构造Page html 必须放在公共函数中 配合ViewFilterBehavior
 function mPage($config)
 {
-    $maxRow   = ($config['max_row']) ? $config['max_row'] : C('SYS_MAX_ROW');
+    $maxRow   = ($config['max_row']) ? $config['max_row'] : config('system.sys_max_row');
     $countRow = ($config['count_row']) ? $config['count_row'] : 0;
     $roll     = ($config['roll']) ? $config['roll'] : 5;
     if ($maxRow >= $countRow) {
         return '';
     }
-    $parameter = I('', '', 'urlencode');
-    if (C('TOKEN_ON')) {
-        unset($parameter[C('TOKEN_NAME')]);
+    $parameter = request('', '', 'urlencode');
+    if (config('system.token_on')) {
+        unset($parameter[config('system.token_name')]);
     }
 
     $Page           = new \Think\Page($countRow, $maxRow, $parameter);
@@ -607,11 +607,11 @@ EOF;
 //扫描模板
 function mScanTemplate($name, $module, $controller)
 {
-    $dir = APP_PATH . $module . '/' . C('DEFAULT_V_LAYER') . '/';
-    C('DEFAULT_THEME') && $dir .= C('DEFAULT_THEME') . '/';
+    $dir = APP_PATH . $module . '/' . config('system.default_v_layer') . '/';
+    config('system.DEFAULT_THEME') && $dir .= config('system.default_theme') . '/';
     $themeInfo = F('theme_info', '', $dir);
 
-    if ('/' == C('TMPL_FILE_DEPR')) {
+    if ('/' == config('system.tmpl_file_depr')) {
         $dir .= $controller . '/';
         $preg = '/^' . $name . '_(\w*)/';
     } else {

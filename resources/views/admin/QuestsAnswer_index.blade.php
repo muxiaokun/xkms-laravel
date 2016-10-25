@@ -8,7 +8,7 @@
                    href="{{ route('Admin::Quests::index',array('id'=>request('id'))) }}">@lang('common.goback')</a>
             </div>
             <div class="panel-body">
-                @include('admin.public_whereInfo')
+                @include('admin.Public_whereInfo')
                 <table class="table table-condensed table-hover">
                     <tr>
                         <th><input type="checkbox" onClick="M_allselect_par(this,'table')"/>&nbsp;@lang('common.id')

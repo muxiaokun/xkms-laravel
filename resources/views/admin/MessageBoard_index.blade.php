@@ -4,7 +4,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
-                @include('admin.public_whereInfo')
+                @include('admin.Public_whereInfo')
                 <table class="table table-condensed table-hover">
                     <tr>
                         <th><input type="checkbox" onClick="M_allselect_par(this,'table')"/>&nbsp;@lang('common.id')

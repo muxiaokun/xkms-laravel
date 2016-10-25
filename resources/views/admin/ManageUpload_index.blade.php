@@ -58,7 +58,7 @@
                                             var config = {
                                                 'bind_obj': $('#M_alert_log_{{ $manage_upload['id'] }}'),
                                                 'title': '@lang('common.file')@lang('common.bind')@lang('common.info')',
-                                                'message':{{ $manage_upload['bind_info'] }}
+                                                'message':{!! $manage_upload['bind_info'] !!}
                                             }
                                             new M_alert_log(config);
                                         });

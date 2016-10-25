@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>{{ $title }} @lang('common.dash') @lang('common.app_name')</title>
-    <link href="__ROOT__/Public/css/bimages/favicon.ico" type="image/ico" rel="shortcut icon"/>
+    <link href="{{ asset('css/bimages/favicon.ico') }}" type="image/ico" rel="shortcut icon"/>
     <meta http-equiv="Content-Type" Content="text/html;charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1"/>

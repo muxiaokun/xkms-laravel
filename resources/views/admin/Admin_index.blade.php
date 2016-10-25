@@ -85,19 +85,19 @@
                                     };
                                     @if ($batch_handle['edit'])
                                         config.type_data.push({
-                                        'name': $Think.lang.enable,
+                                        'name': lang.commonenable,
                                         'post_link': '{{ route('edit') }}',
                                         'post_data': {'is_enable': '1'}
                                     });
                                     config.type_data.push({
-                                        'name': $Think.lang.disable,
+                                        'name': lang.commondisable,
                                         'post_link': '{{ route('edit') }}',
                                         'post_data': {'is_enable': '0'}
                                     });
                                     @endif
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
-                                        'name': $Think.lang.del,
+                                        'name': lang.commondel,
                                         'post_link': '{{ route('del') }}'
                                     });
                                     @endif

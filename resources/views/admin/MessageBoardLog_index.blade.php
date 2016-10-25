@@ -64,19 +64,19 @@
                                     };
                                     @if ($batch_handle['edit'])
                                         config.type_data.push({
-                                        'name': $Think.lang.audit,
+                                        'name': lang.commonaudit,
                                         'post_link': '{{ route('edit') }}',
                                         'post_data': {'is_audit': '1'}
                                     });
                                     config.type_data.push({
-                                        'name': $Think.lang.cancel + $Think.lang.audit,
+                                        'name': lang.commoncancel + lang.commonaudit,
                                         'post_link': '{{ route('edit') }}',
                                         'post_data': {'is_audit': '0'}
                                     });
                                     @endif
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
-                                        'name': $Think.lang.del,
+                                        'name': lang.commondel,
                                         'post_link': '{{ route('del') }}'
                                     });
                                     @endif

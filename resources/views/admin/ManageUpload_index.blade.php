@@ -98,7 +98,7 @@
                                     };
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
-                                        'name': $Think.lang.del,
+                                        'name': lang.commondel,
                                         'post_link': '{{ route('Admin::ManageUpload::del') }}'
                                     });
                                     @endif

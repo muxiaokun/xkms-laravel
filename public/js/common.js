@@ -221,6 +221,7 @@ function M_ZeroClipboard(obj_id)
         return;
     }
     $(function(){
+        ZeroClipboard.config({swfPath: 'asset(ZeroClipboard.swf)'});
         var obj = $('#'+obj_id);
         var clip = new ZeroClipboard(obj,{cacheBust: true});
         var dialog_div = $('<div style="text-align:center;"></div>')
@@ -240,7 +241,7 @@ function M_ZeroClipboard(obj_id)
             });
         });
         clip.on("error", function(event) {
-            dialog_div.html(lang.common.copy + lang.common.error);
+            dialog_div.html(lang.common.copy + lang.common.initialize + lang.common.error);
             dialog_div.dialog({
                 resizable: false,
                 buttons:buttons_fn

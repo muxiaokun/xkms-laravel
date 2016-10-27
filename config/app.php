@@ -166,6 +166,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Ixudra\Curl\CurlServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
         //
 
@@ -226,6 +227,7 @@ return [
         'Validator'    => Illuminate\Support\Facades\Validator::class,
         'View'         => Illuminate\Support\Facades\View::class,
 
+        'Curl'          => Ixudra\Curl\Facades\Curl::class,
         'Image' => Intervention\Image\Facades\Image::class,
     ],
 

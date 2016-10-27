@@ -334,7 +334,7 @@ class ComposerStaticInitd6ca115cde39e5742e0a622dbbf4bc96
         'App\\Http\\Controllers\\Backend' => __DIR__ . '/../..' . '/app/Http/Controllers/Backend.php',
         'App\\Http\\Controllers\\Common' => __DIR__ . '/../..' . '/app/Http/Controllers/Common.php',
         'App\\Http\\Controllers\\CommonEmpty' => __DIR__ . '/../..' . '/app/Http/Controllers/CommonEmpty.php',
-        'App\\Http\\Controllers\\CommonManageUploadController' => __DIR__ . '/../..' . '/app/Http/Controllers/CommonManageUpload.php',
+        'App\\Http\\Controllers\\CommonManageUpload' => __DIR__ . '/../..' . '/app/Http/Controllers/CommonManageUpload.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\Frontend' => __DIR__ . '/../..' . '/app/Http/Controllers/Frontend.php',
         'App\\Http\\Controllers\\FrontendMember' => __DIR__ . '/../..' . '/app/Http/Controllers/FrontendMember.php',

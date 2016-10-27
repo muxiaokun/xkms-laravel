@@ -42,7 +42,7 @@ return array(
     'App\\Http\\Controllers\\Backend' => $baseDir . '/app/Http/Controllers/Backend.php',
     'App\\Http\\Controllers\\Common' => $baseDir . '/app/Http/Controllers/Common.php',
     'App\\Http\\Controllers\\CommonEmpty' => $baseDir . '/app/Http/Controllers/CommonEmpty.php',
-    'App\\Http\\Controllers\\CommonManageUploadController' => $baseDir . '/app/Http/Controllers/CommonManageUpload.php',
+    'App\\Http\\Controllers\\CommonManageUpload' => $baseDir . '/app/Http/Controllers/CommonManageUpload.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Controllers\\Frontend' => $baseDir . '/app/Http/Controllers/Frontend.php',
     'App\\Http\\Controllers\\FrontendMember' => $baseDir . '/app/Http/Controllers/FrontendMember.php',

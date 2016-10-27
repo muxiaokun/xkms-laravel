@@ -2,8 +2,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use App\Library\CssMin;
-use App\Library\JSMin;
+use GrahamCampbell\HTMLMin\Facades\HTMLMin;
 
 class Minify extends Controller
 {
@@ -12,11 +11,11 @@ class Minify extends Controller
 
         switch ($type) {
             case 'css':
-                $Min         = new CssMin();
+                $Minifier    = HTMLMin::getCssMinifier();
                 $contentType = 'text/css;charset=utf-8';
                 break;
             case 'js':
-                $Min         = new JSMin();
+                $Minifier    = HTMLMin::getJsMinifier();
                 $contentType = 'application/x-javascript;charset=utf-8';
                 break;
             default:
@@ -84,7 +83,7 @@ class Minify extends Controller
                         $cacheContent = cache($cacheName);
                         if (!$cacheContent || in_array($cacheName, $filesModified) || $refresh) {
                             $fileContent   = $filesystem->get($filePath);
-                            $minifyContent = $Min->minify($fileContent);
+                            $minifyContent = $Minifier->render($fileContent);
                             $cacheContent  = $this->getReplace($type, $file, $minifyContent);
                             cache([$cacheName => $cacheContent], $cacheTime / 60);
                         }

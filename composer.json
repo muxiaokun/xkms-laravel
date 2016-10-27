@@ -8,6 +8,7 @@
         "php": ">=5.6.4",
         "laravel/framework": "5.3.*",
         "ixudra/curl": "6.*",
+        "graham-campbell/htmlmin": "^4.0",
         "intervention/image": "^2.3"
     },
     "require-dev": {

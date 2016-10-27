@@ -1,6 +1,4 @@
 <?php
-namespace App\Library;
-
 /**
  * JSMin.php - modified PHP implementation of Douglas Crockford's JSMin.
  *
@@ -80,18 +78,18 @@ class JSMin
      *
      * @return string
      */
-    public function minify($js)
+    public static function minify($js)
     {
-        $this->a           = "\n";
-        $this->b           = '';
-        $this->input       = $js;
-        $this->inputIndex  = 0;
-        $this->inputLength = 0;
-        $this->lookAhead   = null;
-        $this->output      = '';
-        $this->lastByteOut = '';
-        $this->keptComment = '';
-        return $this->min();
+        $jsmin = new JSMin($js);
+        return $jsmin->min();
+    }
+
+    /**
+     * @param string $input
+     */
+    public function __construct($input)
+    {
+        $this->input = $input;
     }
 
     /**
@@ -110,11 +108,6 @@ class JSMin
             $mbIntEnc = mb_internal_encoding();
             mb_internal_encoding('8bit');
         }
-
-        if (isset($this->input[0]) && $this->input[0] === "\xef") {
-            $this->input = substr($this->input, 3);
-        }
-
         $this->input       = str_replace("\r\n", "\n", $this->input);
         $this->inputLength = strlen($this->input);
 
@@ -168,7 +161,7 @@ class JSMin
      * ACTION_DELETE_A_B = Get the next B.
      *
      * @param int $command
-     * @throws UnterminatedRegExpException|UnterminatedStringException
+     * @throws JSMin_UnterminatedRegExpException|JSMin_UnterminatedStringException
      */
     protected function action($command)
     {
@@ -212,7 +205,7 @@ class JSMin
                         }
                         if ($this->isEOF($this->a)) {
                             $byte = $this->inputIndex - 1;
-                            throw new UnterminatedStringException(
+                            throw new JSMin_UnterminatedStringException(
                                 "JSMin: Unterminated String at byte {$byte}: {$str}");
                         }
                         $str .= $this->a;
@@ -249,7 +242,7 @@ class JSMin
                                     $pattern .= $this->a;
                                 }
                                 if ($this->isEOF($this->a)) {
-                                    throw new UnterminatedRegExpException(
+                                    throw new JSMin_UnterminatedRegExpException(
                                         "JSMin: Unterminated set in RegExp at byte "
                                         . $this->inputIndex . ": {$pattern}");
                                 }
@@ -264,7 +257,7 @@ class JSMin
                             $pattern .= $this->a;
                         } elseif ($this->isEOF($this->a)) {
                             $byte = $this->inputIndex - 1;
-                            throw new UnterminatedRegExpException(
+                            throw new JSMin_UnterminatedRegExpException(
                                 "JSMin: Unterminated RegExp at byte {$byte}: {$pattern}");
                         }
                         $this->output .= $this->a;
@@ -282,39 +275,37 @@ class JSMin
     protected function isRegexpLiteral()
     {
         if (false !== strpos("(,=:[!&|?+-~*{;", $this->a)) {
-            // we can't divide after these tokens
+            // we obviously aren't dividing
             return true;
         }
 
-        // check if first non-ws token is "/" (see starts-regex.js)
-        $length = strlen($this->output);
-        if ($this->a === ' ' || $this->a === "\n") {
-            if ($length < 2) { // weird edge case
-                return true;
+        // we have to check for a preceding keyword, and we don't need to pattern
+        // match over the whole output.
+        $recentOutput = substr($this->output, -10);
+
+        // check if return/typeof directly precede a pattern without a space
+        foreach (['return', 'typeof'] as $keyword) {
+            if ($this->a !== substr($keyword, -1)) {
+                // certainly wasn't keyword
+                continue;
+            }
+            if (preg_match("~(^|[\\s\\S])" . substr($keyword, 0, -1) . "$~", $recentOutput, $m)) {
+                if ($m[1] === '' || !$this->isAlphaNum($m[1])) {
+                    return true;
+                }
             }
         }
 
-        // if the "/" follows a keyword, it must be a regexp, otherwise it's best to assume division
-
-        $subject = $this->output . trim($this->a);
-        if (!preg_match('/(?:case|else|in|return|typeof)$/', $subject, $m)) {
-            // not a keyword
-            return false;
-        }
-
-        // can't be sure it's a keyword yet (see not-regexp.js)
-        $charBeforeKeyword = substr($subject, 0 - strlen($m[0]) - 1, 1);
-        if ($this->isAlphaNum($charBeforeKeyword)) {
-            // this is really an identifier ending in a keyword, e.g. "xreturn"
-            return false;
-        }
-
-        // it's a regexp. Remove unneeded whitespace after keyword
+		// check all keywords
         if ($this->a === ' ' || $this->a === "\n") {
-            $this->a = '';
+            if (preg_match('~(^|[\\s\\S])(?:case|else|in|return|typeof)$~', $recentOutput, $m)) {
+                if ($m[1] === '' || !$this->isAlphaNum($m[1])) {
+                    return true;
+                }
+            }
         }
 
-        return true;
+        return false;
     }
 
     /**
@@ -401,7 +392,7 @@ class JSMin
     /**
      * Consume a multiple line comment from input (possibly retaining it)
      *
-     * @throws UnterminatedCommentException
+     * @throws JSMin_UnterminatedCommentException
      */
     protected function consumeMultipleLineComment()
     {
@@ -419,16 +410,14 @@ class JSMin
                             $this->keptComment = "\n";
                         }
                         $this->keptComment .= "/*!" . substr($comment, 1) . "*/\n";
-                    } else {
-                        if (preg_match('/^@(?:cc_on|if|elif|else|end)\\b/', $comment)) {
-                            // IE conditional
-                            $this->keptComment .= "/*{$comment}*/";
-                        }
+                    } else if (preg_match('/^@(?:cc_on|if|elif|else|end)\\b/', $comment)) {
+                        // IE conditional
+                        $this->keptComment .= "/*{$comment}*/";
                     }
                     return;
                 }
             } elseif ($get === null) {
-                throw new UnterminatedCommentException(
+                throw new JSMin_UnterminatedCommentException(
                     "JSMin: Unterminated comment at byte {$this->inputIndex}: /*{$comment}");
             }
             $comment .= $get;
@@ -457,4 +446,16 @@ class JSMin
         }
         return $get;
     }
+}
+
+class JSMin_UnterminatedStringException extends Exception
+{
+}
+
+class JSMin_UnterminatedCommentException extends Exception
+{
+}
+
+class JSMin_UnterminatedRegExpException extends Exception
+{
 }

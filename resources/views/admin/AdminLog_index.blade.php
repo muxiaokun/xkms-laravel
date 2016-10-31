@@ -12,17 +12,14 @@
                         </th>
                         <th>@lang('common.admin')@lang('common.name')</th>
                         <th>@lang('common.add')@lang('common.time')</th>
-                        <th>@lang('common.module')@lang('common.name')</th>
-                        <th>@lang('common.controller')@lang('common.name')</th>
-                        <th>@lang('common.action')@lang('common.name')</th>
-                        <th>@lang('common.model')@lang('common.name')</th>
+                        <th>@lang('common.route')@lang('common.name')</th>
                         <th>@lang('common.request')</th>
                         <th class="nowrap">
                             @if (session('backend_info.id') != 1)
                                 @lang('common.handle')
                             @else
                                 <a class="btn btn-xs btn-danger"
-                                   href="{{ route('del_all') }}">@lang('common.del')@lang('common.all')</a>
+                                   href="{{ route('Admin::AdminLog::del_all') }}">@lang('common.del')@lang('common.all')</a>
                             @endif
                         </th>
                     </tr>
@@ -39,16 +36,7 @@
                                 {{ mDate($admin_log['created_at']) }}
                             </td>
                             <td>
-                                {{ $admin_log['module_name'] }}
-                            </td>
-                            <td>
-                                {{ $admin_log['controller_name'] }}
-                            </td>
-                            <td>
-                                {{ $admin_log['action_name'] }}
-                            </td>
-                            <td>
-                                {{ $admin_log['model_name'] }}
+                                {{ $admin_log['route_name'] }}
                             </td>
                             <td>
                                 @if (2 < strlen($admin_log['request']))
@@ -69,7 +57,7 @@
                             <td class="nowrap">
                                 @if ($batch_handle['del'])
                                     <a class="btn btn-xs btn-danger" href="javascript:void(0);"
-                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del')?','{{ route("del",array("id"=>$admin_log['id'])) }}')">
+                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del')?','{{ route("Admin::AdminLog::del",array("id"=>$admin_log['id'])) }}')">
                                         @lang('common.del')
                                     </a>
                                 @endif
@@ -91,7 +79,7 @@
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
                                         'name': lang.commondel,
-                                        'post_link': '{{ route('del') }}'
+                                        'post_link': '{{ route('Admin::AdminLog::del') }}'
                                     });
                                     @endif
                                             new M_batch_handle(config);
@@ -100,6 +88,7 @@
                         @endif
                     </div>
                     <div class="col-sm-8 text-right">
+                        {{ $admin_log_list->links('admin.pagination') }}
                         <M:Page name="admin_log_list">
                             <config></config>
                         </M:Page>

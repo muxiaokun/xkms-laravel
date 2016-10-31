@@ -155,8 +155,8 @@ Route::group([
         'prefix' => 'AdminLog',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'AdminLog@index']);
-        Route::get('del', ['as' => 'del', 'uses' => 'AdminLog@del']);
-        Route::get('del', ['as' => 'del', 'uses' => 'AdminLog@del']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'AdminLog@del']);
+        Route::get('del_all', ['as' => 'del_all', 'uses' => 'AdminLog@del_all']);
     });
     Route::group([
         'as'     => 'Article::',

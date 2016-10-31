@@ -12,7 +12,7 @@ class AdminLog extends Backend
     public function index()
     {
         //初始化页面参数
-        $where         = [];
+        $where = [];
 
         //建立where
         $whereValue = '';
@@ -23,8 +23,8 @@ class AdminLog extends Backend
             'in',
             Model\Admins::where(['admin_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
         ];
-        $whereValue = request('controller_name');
-        $whereValue && $where['controller_name'] = $whereValue;
+        $whereValue = request('route_name');
+        $whereValue && $where['route_name'] = $whereValue;
 
         //初始化翻页 和 列表数据
         $adminLogList = Model\AdminLogs::mSelect($where, true);
@@ -35,14 +35,14 @@ class AdminLog extends Backend
         $assign['admin_log_list_count'] = Model\AdminLogs::mGetPageCount($where);
 
         //初始化where_info
-        $whereInfo                    = [];
-        $whereInfo['add_time']        = ['type' => 'time', 'name' => trans('common.add') . trans('common.time')];
-        $whereInfo['admin_id']        = ['type' => 'input', 'name' => trans('common.admin') . trans('common.name')];
-        $whereInfo['controller_name'] = [
+        $whereInfo               = [];
+        $whereInfo['add_time']   = ['type' => 'time', 'name' => trans('common.add') . trans('common.time')];
+        $whereInfo['admin_id']   = ['type' => 'input', 'name' => trans('common.admin') . trans('common.name')];
+        $whereInfo['route_name'] = [
             'type' => 'input',
-            'name' => trans('common.controller') . trans('common.name'),
+            'name' => trans('common.route') . trans('common.name'),
         ];
-        $assign['where_info']         = $whereInfo;
+        $assign['where_info']    = $whereInfo;
 
         //初始化batch_handle
         $batchHandle            = [];
@@ -50,7 +50,7 @@ class AdminLog extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.admin') . trans('common.log') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.AdminLog_index', $assign);
     }
 
     //删除

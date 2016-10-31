@@ -9,7 +9,7 @@ class MessageBoardLog extends Common
     {
         self::mGetPage($page);
         null !== self::option['order'] && self::order('add_time desc');
-        $data = self::field('*,inet_ntoa(add_ip) as aip')->where($where)->select();
+        $data = self::select('*,inet_ntoa(add_ip) as aip')->where($where)->select();
         foreach ($data as &$dataRow) {
             (new static)->mDecodeData($dataRow);
         }
@@ -29,7 +29,7 @@ class MessageBoardLog extends Common
 
     public static function mFind($id)
     {
-        self::field('*,inet_ntoa(add_ip) as aip');
+        self::select('*,inet_ntoa(add_ip) as aip');
         return parent::mFind($id);
     }
 

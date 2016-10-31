@@ -126,7 +126,7 @@ class Common extends Model
             return false;
         }
 
-        $column = self::field($columnName)->where(['id' => $id])->first();
+        $column = self::select($columnName)->where(['id' => $id])->first();
         (new static)->mDecodeData($column);
         return $column[$columnName];
     }
@@ -146,7 +146,7 @@ class Common extends Model
 
         //默认清除id的列为第二列
         if (!$columnName) {
-            $columnName = self::fields[1];
+            $columnName = self::selects[1];
         }
 
         is_array($id) && $id = ['in', $id];
@@ -182,7 +182,7 @@ class Common extends Model
     {
         $where = self::options['where'];
         self::limit(self::count());
-        $selectResult = self::field($column)->where($where)->select();
+        $selectResult = self::select($column)->where($where)->select();
         $reArr        = [];
         foreach ($selectResult as $row) {
             $reArr[] = $row[$column];
@@ -199,13 +199,8 @@ class Common extends Model
         if (!$maxNum) {
             return;
         }
-
         $maxNum = (true === $maxNum) ? config('system.sys_max_row') : $maxNum;
-        //p 是 Think\Page中的p的配置
-        $p      = request('p');
-        $p      = ($p < config('system.sys_max_page')) ? $p : config('system.sys_max_page');
-        $maxNum = ($p) ? $p . "," . $maxNum : "1," . $maxNum;
-        static::paginate($maxNum);
+        return static::getInstance()->paginate($maxNum);
     }
 
     /**

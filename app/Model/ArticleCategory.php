@@ -28,7 +28,7 @@ class ArticleCategory extends Common
             'parent_id'   => 'parent_id',
             'retract_col' => 'name',
         ];
-        return self::field('id,name')->mMakeTree($config, $parentId, $level);
+        return self::select('id,name')->mMakeTree($config, $parentId, $level);
     }
 
     public static function mDel($id)
@@ -48,7 +48,7 @@ class ArticleCategory extends Common
     public static function mFind_child_id($id, $pushMe = true)
     {
         $where           = ['parent_id' => $id];
-        $articleCategory = self::field('id')->mSelect($where);
+        $articleCategory = self::select('id')->mSelect($where);
         $categoryChildId = [];
         foreach ($articleCategory as $category) {
             $categoryChildId[] = $category['id'];
@@ -85,7 +85,7 @@ class ArticleCategory extends Common
             return false;
         }
 
-        $categoryInfo = self::field('id,parent_id')->mFind($id);
+        $categoryInfo = self::select('id,parent_id')->mFind($id);
         if (0 != $categoryInfo['parent_id']) {
             return self::mFind_top_id($categoryInfo['parent_id']);
         }
@@ -123,7 +123,7 @@ class ArticleCategory extends Common
             return $mFindAllow;
         }
 
-        $articleCategory = self::field('id')->mSelect($where);
+        $articleCategory = self::select('id')->mSelect($where);
         foreach ($articleCategory as $category) {
             $mFindAllow[] = $category['id'];
         }

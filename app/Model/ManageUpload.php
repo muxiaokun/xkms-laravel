@@ -75,7 +75,7 @@ class ManageUpload extends Common
         $ownerWhere = [
             'bind_info' => ['like', '%' . $ownerStr . '%'],
         ];
-        $ownerList  = self::field('id,bind_info')->where($ownerWhere)->select();
+        $ownerList  = self::select('id,bind_info')->where($ownerWhere)->select();
         foreach ($ownerList as $file) {
             $bindInfo = str_replace($ownerStr, '', $file['bind_info']);
             //此处的更新有可能没有影响任何数据返回0
@@ -91,7 +91,7 @@ class ManageUpload extends Common
         $fileWhere = [
             'path' => ['in', $paths],
         ];
-        $fileList  = self::field('id,bind_info')->where($fileWhere)->select();
+        $fileList  = self::select('id,bind_info')->where($fileWhere)->select();
         foreach ($fileList as $file) {
             $editResult = self::where(['id' => $file['id']])->data(['bind_info' => $file['bind_info'] . $ownerStr])->save();
             if (!$editResult) {

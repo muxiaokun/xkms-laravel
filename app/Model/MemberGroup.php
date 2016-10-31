@@ -34,7 +34,7 @@ class MemberGroup extends Common
         }
 
         is_array($id) && $id = ['in', $id];
-        $data = self::field('is_enable,privilege')->where(['id' => $id])->select();
+        $data = self::select('is_enable,privilege')->where(['id' => $id])->select();
         foreach ($data as &$dataRow) {
             (new static)->mDecodeData($dataRow);
         }

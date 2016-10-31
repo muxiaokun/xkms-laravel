@@ -36,7 +36,7 @@ class ArticleChannel extends Common
             return $mFindAllow;
         }
 
-        $articleChannel = self::field('id')->mSelect($where);
+        $articleChannel = self::select('id')->mSelect($where);
         foreach ($articleChannel as $channel) {
             $mFindAllow[] = $channel['id'];
         }

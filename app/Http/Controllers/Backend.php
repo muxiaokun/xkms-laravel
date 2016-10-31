@@ -172,7 +172,7 @@ class Backend extends Common
             'Admin::ManageUpload::ManageFile',
         ];
         $backendInfo    = session('backend_info');
-        $adminPriv      = $backendInfo['privilege'];
+        $adminPriv      = $backendInfo['privilege'] ? $backendInfo['privilege'] : [];
         $adminGroupPriv = ($backendInfo['group_privilege']) ? $backendInfo['group_privilege'] : [];
         if (
             'ajax_api' != $routeName &&

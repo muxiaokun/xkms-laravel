@@ -47,7 +47,7 @@ class Common extends Controller
     /**
      * @param string $message
      * @param string $backUrl
-     * @param int    $timeout
+     * @param int $timeout
      * @param string $template
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -59,15 +59,15 @@ class Common extends Controller
         $template = 'common.dispatch_jump'
     ) {
         if ('' == $message) {
-            $message = trans('common.handle') . ($status) ? trans('common.success'):trans('common.error');
+            $message = trans('common.handle') . ($status) ? trans('common.success') : trans('common.error');
         }
         if ('' == $backUrl) {
             $backUrl = route(request()->route()->getName());
         }
         if (request()->ajax()) {
             $ajax_data = [
-                'status'  => $status,
-                'info' => $message,
+                'status' => $status,
+                'info'   => $message,
             ];
             return $ajax_data;
         }

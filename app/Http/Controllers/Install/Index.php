@@ -14,9 +14,9 @@ class Index extends Frontend
     public function _initialize()
     {
         parent::_initialize();
-        if (1 == env('INSTALL_STATUS')) {
+        if (1 == env('INSTALL_STATUS') && !env('APP_DEBUG')) {
             $message = trans('common.app_name') . trans('common.install') . trans('common.success');
-            die($this->success($message, 'Home::Index::index'));
+            die($this->success($message, route('Home::Index::index')));
         }
     }
 

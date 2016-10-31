@@ -159,9 +159,11 @@ class Index extends Backend
                 'DB_PORT'     => request('db_port'),
                 'DB_DATABASE' => request('db_database'),
                 'DB_USERNAME' => request('db_username'),
-                'DB_PASSWORD' => request('db_password'),
                 'DB_PREFIX'   => request('db_prefix'),
             ];
+            if (request('edit_password')) {
+                $new_config['DB_PASSWORD'] = request('db_password');
+            }
             $result     = mPutenv($new_config);
             $result_msg = trans('common.save') . trans('common.database') . trans('common.config');
             if ($result) {
@@ -183,7 +185,7 @@ class Index extends Backend
             $adminInfo   = Model\Admins::authorized(session('backend_info.admin_name'), $curPassword);
             if (!$adminInfo) {
                 return $this->error(trans('common.current') . trans('common.pass') . trans('common.error'),
-                    'Admin::Index::editMyPass');
+                    route('Admin::Index::editMyPass'));
             }
 
             $password      = request('password');
@@ -192,22 +194,22 @@ class Index extends Backend
             //只有一个分支的提交 不进行判断必须检测
             $result = $this->doValidateForm('password', ['password' => $password]);
             if (!$result['status']) {
-                return $this->error($result['info'], 'Admin::Index::editMyPass');
+                return $this->error($result['info'], route('Admin::Index::editMyPass'));
             }
 
             $result = $this->doValidateForm('password_again',
                 ['password' => $password, 'password_again' => $passwordAgain]);
             if (!$result['status']) {
-                return $this->error($result['info'], 'Admin::Index::editMyPass');
+                return $this->error($result['info'], route('Admin::Index::editMyPass'));
             }
 
             $resultEdit = Model\Admins::mEdit($adminInfo['id'], ['admin_pwd' => $password]);
             if ($resultEdit) {
                 return $this->success(trans('common.edit') . trans('common.pass') . trans('common.success'),
-                    'Admin::Index::editMyPass');
+                    route('Admin::Index::editMyPass'));
             } else {
                 return $this->error(trans('common.edit') . trans('common.pass') . trans('common.error'),
-                    'Admin::Index::editMyPass');
+                    route('Admin::Index::editMyPass'));
             }
         }
         $assign['title'] = trans('common.edit') . trans('common.pass');

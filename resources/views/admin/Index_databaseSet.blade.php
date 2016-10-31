@@ -39,13 +39,14 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">@lang('common.pass')</label>
-                                <div class="col-sm-5">
+                                <div class="col-sm-4">
                                     <input type="password" name="db_password" class="form-control">
                                 </div>
-                                @if (0 < strlen(env('DB_PASSWORD')))
-                                    <div class="col-sm-4"
-                                         style="color:green;">@lang('common.exists')@lang('common.pass')</div>
-                                @endif
+                                <div class="col-sm-4 checkbox">
+                                    <label>
+                                        <input type="checkbox" name="edit_password" value="1">@lang('common.edit')@lang('common.pass')
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>

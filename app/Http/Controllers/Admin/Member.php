@@ -20,9 +20,9 @@ class Member extends Backend
         $whereValue = request('group_id');
         $whereValue && $where['group_id'] = Model\MemberGroup::mFindId(['like', '%' . $whereValue . '%']);
         $whereValue = mMktimeRange('register_time');
-        $whereValue && $where['register_time'] = $whereValue;
+        $whereValue && $where[] = ['register_time', $whereValue];
         $whereValue = mMktimeRange('last_time');
-        $whereValue && $where['last_time'] = $whereValue;
+        $whereValue && $where[] = ['last_time', $whereValue];
 
         $memberList = Model\Member::mSelect($where, true);
         foreach ($memberList as &$member) {

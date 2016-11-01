@@ -14,11 +14,11 @@ class RecruitLog extends Backend
         //建立where
         $whereValue = '';
         $whereValue = request('r_id');
-        $whereValue && $where['r_id'] = $whereValue;
+        $whereValue && $where[] = ['r_id', $whereValue];
         $whereValue = request('name');
         $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
         $whereValue = mMktimeRange('birthday');
-        $whereValue && $where['birthday'] = $whereValue;
+        $whereValue && $where[] = ['birthday', $whereValue];
         //初始化翻页 和 列表数据
         $recruitLogList         = Model\RecruitLog::mSelect($where, true);
         $recruitSexData         = trans('common.recruit_sex_data');

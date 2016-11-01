@@ -18,9 +18,9 @@ class Quests extends Backend
         $whereValue = request('title');
         $whereValue && $where['title'] = ['like', '%' . $whereValue . '%'];
         $whereValue = mMktimeRange('start_time');
-        $whereValue && $where['start_time'] = $whereValue;
+        $whereValue && $where[] = ['start_time', $whereValue];
         $whereValue = mMktimeRange('end_time');
-        $whereValue && $where['end_time'] = $whereValue;
+        $whereValue && $where[] = ['end_time', $whereValue];
 
         $questsList                  = Model\Quests::mSelect($where, true);
         $assign['quests_list']       = $questsList;

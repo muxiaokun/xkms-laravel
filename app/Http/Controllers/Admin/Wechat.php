@@ -13,9 +13,9 @@ class Wechat extends Backend
     {
         $where       = [];
         $whereValue  = request('member_name');
-        $whereValue && $where['member_name'] = $whereValue;
+        $whereValue && $where[] = ['member_name', $whereValue];
         $whereValue = mMktimeRange('bind_time');
-        $whereValue && $where['bind_time'] = $whereValue;
+        $whereValue && $where[] = ['bind_time', $whereValue];
 
         //初始化翻页 和 列表数据
         $wechatList = Model\Wechat::mSelect($where, true);

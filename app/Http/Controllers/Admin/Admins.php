@@ -22,14 +22,12 @@ class Admin extends Backend
         $whereValue = request('admin_name');
         $whereValue && $where['admin_name'] = ['like', '%' . $whereValue . '%'];
         $whereValue = request('group_id');
-        $whereValue && $where['group_id'] = Model\AdminGroup::where([
-            'name' => [
-                'like',
-                '%' . $whereValue . '%',
-            ],
-        ])->mColumn2Array('id');
+        $whereValue && $where[] = [
+            'group_id',
+            Model\MemberGroup::where(['name', 'like', '%' . $whereValue . '%'])->mColumn2Array('id'),
+        ];
         $whereValue = mMktimeRange('last_time');
-        $whereValue && $where['last_time'] = $whereValue;
+        $whereValue && $where[] = ['last_time', $whereValue];
         $whereValue = request('is_enable');
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 

@@ -16,12 +16,12 @@ class ArticleCategory extends Backend
         $whereValue = request('name');
         $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
         $whereValue = request('channel_id');
-        $whereValue && $where['channel_id'] = $whereValue;
+        $whereValue && $where[] = ['channel_id', $whereValue];
         $whereValue = request('if_show');
         $whereValue && $where['if_show'] = (1 == $whereValue) ? 1 : 0;
         $where['parent_id'] = 0;
         $whereValue         = request('parent_id');
-        $whereValue && $where['parent_id'] = $whereValue;
+        $whereValue && $where[] = ['parent_id', $whereValue];
         if (1 != session('backend_info.id')) {
             $allowCategory = Model\ArticleCategory::mFind_allow();
             if (isset($where['id']) && in_array($where['id'], $allowCategory)) {

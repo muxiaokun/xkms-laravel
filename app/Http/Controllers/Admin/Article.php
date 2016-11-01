@@ -18,9 +18,9 @@ class Article extends Backend
         $whereValue = request('cate_id');
         $whereValue && $where['cate_id'] = ['in', Model\ArticleCategory::mFind_child_id($whereValue)];
         $whereValue = request('channel_id');
-        $whereValue && $where['channel_id'] = $whereValue;
+        $whereValue && $where[] = ['channel_id', $whereValue];
         $whereValue = mMktimeRange('add_time');
-        $whereValue && $where['add_time'] = $whereValue;
+        $whereValue && $where[] = ['add_time', $whereValue];
         $whereValue = request('is_audit');
         $whereValue && $where['is_audit'] = (1 == $whereValue) ? ['gt', 0] : 0;
         $whereValue = request('if_show');

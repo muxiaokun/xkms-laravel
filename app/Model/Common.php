@@ -169,11 +169,9 @@ class Common extends Model
      * @param string $column 列名称
      * @return array 指定列数组合集
      */
-    public static function mColumn2Array($column)
+    public function scopeMColumn2Array($query, $column)
     {
-        $where = static::options['where'];
-        static::limit(static::count());
-        $selectResult = static::select($column)->where($where)->select();
+        $selectResult = $query->select($column)->get();
         $reArr        = [];
         foreach ($selectResult as $row) {
             $reArr[] = $row[$column];

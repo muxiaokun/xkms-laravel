@@ -16,9 +16,9 @@ class Recruit extends Backend
         $whereValue = request('name');
         $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
         $whereValue = mMktimeRange('start_time');
-        $whereValue && $where['start_time'] = $whereValue;
+        $whereValue && $where[] = ['start_time', $whereValue];
         $whereValue = mMktimeRange('end_time');
-        $whereValue && $where['end_time'] = $whereValue;
+        $whereValue && $where[] = ['end_time', $whereValue];
         //初始化翻页 和 列表数据
         $recruitList                  = Model\Recruit::mSelect($where, true);
         $assign['recruit_list']       = $recruitList;

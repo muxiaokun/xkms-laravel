@@ -16,19 +16,21 @@ class Comment extends Backend
         //建立where
         $whereValue = '';
         $whereValue = request('audit_id');
-        $whereValue && $where['audit_id'] = [
+        $whereValue && $where[] = [
+            'audit_id',
             'in',
             Model\Admins::where(['admin_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
         ];
         $whereValue = request('send_id');
-        $whereValue && $where['send_id'] = [
+        $whereValue && $where[] = [
+            'send_id',
             'in',
             Model\Member::where(['member_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
         ];
         $whereValue = request('controller');
-        $whereValue && $where['controller'] = $whereValue;
+        $whereValue && $where[] = ['controller', $whereValue];
         $whereValue = request('item');
-        $whereValue && $where['item'] = $whereValue;
+        $whereValue && $where[] = ['item', $whereValue];
 
         $commentList = Model\Comment::order('add_time desc')->mSelect($where, true);
         foreach ($commentList as &$comment) {

@@ -17,14 +17,15 @@ class AdminLog extends Backend
         //建立where
         $whereValue = '';
         $whereValue = mMktimeRange('add_time');
-        $whereValue && $where['add_time'] = $whereValue;
+        $whereValue && $where[] = ['add_time', $whereValue];
         $whereValue = request('admin_id');
-        $whereValue && $where['admin_id'] = [
+        $whereValue && $where[] = [
+            'admin_id',
             'in',
-            Model\Admins::where(['admin_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+            Model\Admins::where([['admin_name', 'like', '%' . $whereValue . '%']])->mColumn2Array('id'),
         ];
         $whereValue = request('route_name');
-        $whereValue && $where['route_name'] = $whereValue;
+        $whereValue && $where[] = ['route_name', $whereValue];
 
         //初始化翻页 和 列表数据
         $adminLogList = Model\AdminLogs::mSelect($where, true);

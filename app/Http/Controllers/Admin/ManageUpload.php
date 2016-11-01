@@ -16,11 +16,11 @@ class ManageUpload extends Backend
         //建立where
         $whereValue = '';
         $whereValue = request('suffix');
-        $whereValue && $where['suffix'] = $whereValue;
+        $whereValue && $where[] = ['suffix', $whereValue];
         $whereValue = request('bind_info');
         $whereValue && $where['bind_info'] = ['like', '%|' . $whereValue . ':%'];
         $whereValue = mMktimeRange('add_time');
-        $whereValue && $where['add_time'] = $whereValue;
+        $whereValue && $where[] = ['add_time', $whereValue];
 
         //初始化翻页 和 列表数据
         $manageUploadList = Model\ManageUpload::mSelect($where, true);

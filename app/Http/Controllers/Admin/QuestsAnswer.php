@@ -11,19 +11,21 @@ class QuestsAnswer extends Backend
     //列表
     public function index()
     {
-        $where       = [];
+        $where = [];
 
         //建立where
         $whereValue = '';
         $whereValue = request('quests_id');
-        $whereValue && $where['quests_id'] = $whereValue;
+        $whereValue && $where[] = ['quests_id', $whereValue];
         $whereValue = request('quests_title');
-        $whereValue && $where['quests_id'] = [
+        $whereValue && $where[] = [
+            'quests_id',
             'in',
             Model\Quests::where(['title' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
         ];
         $whereValue = request('member_id');
-        $whereValue && $where['member_id'] = [
+        $whereValue && $where[] = [
+            'member_id',
             'in',
             Model\Member::where(['member_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
         ];
@@ -92,7 +94,7 @@ class QuestsAnswer extends Backend
         //读取问题
         $questsInfo = Model\Quests::mFind($questsId);
         //初始化问题
-        $questsQuestList   = json_decode($questsInfo['ext_info'], true);
+        $questsQuestList = json_decode($questsInfo['ext_info'], true);
         foreach ($questsQuestList as $questId => $quest) {
             $answerName = explode('|', $questsQuestList[$questId]['answer']);
             $answer     = [];

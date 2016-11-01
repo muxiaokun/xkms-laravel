@@ -19,12 +19,13 @@ class MessageBoardLog extends Backend
         //建立where
         $whereValue = '';
         $whereValue = request('audit_id');
-        $whereValue && $where['audit_id'] = [
+        $whereValue && $where[] = [
+            'audit_id',
             'in',
             Model\Admins::where(['admin_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
         ];
         $whereValue = mMktimeRange('add_time');
-        $whereValue && $where['add_time'] = $whereValue;
+        $whereValue && $where[] = ['add_time', $whereValue];
 
         $messageBoardLogList = Model\MessageBoardLog::order('add_time desc')->mSelect($where, true);
         foreach ($messageBoardLogList as &$messageBoardLog) {

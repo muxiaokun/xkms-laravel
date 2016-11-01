@@ -279,7 +279,7 @@ class ArticleChannel extends Backend
     {
         $where['parent_id']   = 0;
         $whereValue           = request('parent_id');
-        $whereValue && $where['parent_id'] = $whereValue;
+        $whereValue && $where[] = ['parent_id', $whereValue];
 
         $articleCategoryList = Model\ArticleCategory::mSelect($where, Model\ArticleCategory::where($where)->count());
         foreach ($articleCategoryList as &$articleCategory) {

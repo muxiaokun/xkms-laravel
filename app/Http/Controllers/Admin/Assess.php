@@ -11,20 +11,18 @@ class Assess extends Backend
     //列表
     public function index()
     {
-        $where            = [];
+        $where = [];
         //建立where
         $whereValue = '';
         $whereValue = request('title');
         $whereValue && $where['title'] = ['like', '%' . $whereValue . '%'];
         $whereValue = request('group_level');
-        $whereValue && $where['group_level'] = Model\MemberGroup::where([
-            'name' => [
-                'like',
-                '%' . $whereValue . '%',
-            ],
-        ])->mColumn2Array('id');
+        $whereValue && $where[] = [
+            'group_level',
+            Model\MemberGroup::where(['name', 'like', '%' . $whereValue . '%'])->mColumn2Array('id'),
+        ];
         $whereValue = mMktimeRange('start_time');
-        $whereValue && $where['start_time'] = $whereValue;
+        $whereValue && $where[] = ['start_time', $whereValue];
         $whereValue = request('is_enable');
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 

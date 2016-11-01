@@ -20,12 +20,13 @@ class Message extends FrontendMember
         //建立where
         $whereValue = '';
         $whereValue = request('receive_id');
-        $whereValue && $where['receive_id'] = [
+        $whereValue && $where[] = [
+            'receive_id',
             'in',
             Model\Member::where(['member_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
         ];
         $whereValue = mMktimeRange('send_time');
-        $whereValue && $where['send_time'] = $whereValue;
+        $whereValue && $where[] = ['send_time', $whereValue];
 
         $messageList = Model\Message::order('receive_time asc,send_time desc')->mSelect($where, true);
         foreach ($messageList as &$message) {

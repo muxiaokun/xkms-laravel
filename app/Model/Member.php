@@ -8,9 +8,9 @@ class Member extends Common
     public static function mSelect($where = null, $page = false)
     {
         (new static)->mParseWhere($where);
-        self::mGetPage($page);
-        null !== self::option['order'] && self::order('id desc');
-        $data = self::select('*,inet_ntoa(login_ip) as aip')->where($where)->select();
+        static::mGetPage($page);
+        null !== static::option['order'] && static::order('id desc');
+        $data = static::select('*,inet_ntoa(login_ip) as aip')->where($where)->select();
         foreach ($data as &$dataRow) {
             (new static)->mDecodeData($dataRow);
         }
@@ -29,7 +29,7 @@ class Member extends Common
 
     public static function mFind($id)
     {
-        self::select('*,inet_ntoa(login_ip) as aip');
+        static::select('*,inet_ntoa(login_ip) as aip');
         return parent::mFind($id);
     }
 
@@ -49,14 +49,14 @@ class Member extends Common
                 'is_enable'   => '1',
             ];
         }
-        $memberInfo = self::where($where)->first();
+        $memberInfo = static::where($where)->first();
         if ($memberInfo['member_pwd'] == md5($pwd . $memberInfo['member_rand']) || $memberId) {
             $data = [
                 'last_time' => Carbon::now(),
                 'login_ip'  => request()->ip(),
             ];
-            self::where(['id' => $memberInfo['id']])->data($data)->save();
-            $memberInfo = self::mFind($memberInfo['id']);
+            static::where(['id' => $memberInfo['id']])->data($data)->save();
+            $memberInfo = static::mFind($memberInfo['id']);
             return $memberInfo;
         } else {
             return false;
@@ -69,13 +69,13 @@ class Member extends Common
             return;
         }
 
-        isset($where['group_id']) && $where['group_id'] = self::mMakeLikeArray($where['group_id']);
+        isset($where['group_id']) && $where['group_id'] = static::mMakeLikeArray($where['group_id']);
     }
 
     protected function mEncodeData(&$data)
     {
         if ($data['member_pwd']) {
-            $randStr             = self::_make_rand();
+            $randStr             = static::_make_rand();
             $data['member_pwd']  = md5($data['member_pwd'] . $randStr);
             $data['member_rand'] = $randStr;
         } else {

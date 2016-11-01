@@ -11,9 +11,9 @@ class Article extends Common
     public static function mSelect($where = null, $page = false)
     {
         (new static)->mParseWhere($where);
-        self::mGetPage($page);
-        null !== self::option['order'] && self::order('is_stick desc,sort asc,update_time desc');
-        $data = self::where($where)->select();
+        static::mGetPage($page);
+        null !== static::option['order'] && static::order('is_stick desc,sort asc,update_time desc');
+        $data = static::where($where)->select();
         foreach ($data as &$dataRow) {
             (new static)->mDecodeData($dataRow);
         }
@@ -39,7 +39,7 @@ class Article extends Common
         if (isset($where['attribute'])) {
             $attribute = [];
             foreach ($where['attribute'] as $attr) {
-                $attr && $attribute[] = self::mMakeLikeArray($attr);
+                $attr && $attribute[] = static::mMakeLikeArray($attr);
             }
             $where['attribute'] = $attribute;
             if (!$where['attribute']) {
@@ -52,7 +52,7 @@ class Article extends Common
     {
         !isset($data['update_time']) && $data['update_time'] = Carbon::now();
         isset($data['access_group_id']) && $data['access_group_id'] = serialize($data['access_group_id']);
-        isset($data['content']) && $data['content'] = self::mEncodeContent($data['content']);
+        isset($data['content']) && $data['content'] = static::mEncodeContent($data['content']);
         if (isset($data['extend']) && is_array($data['extend'])) {
             $newExtend = [];
             foreach ($data['extend'] as $key => $value) {

@@ -8,9 +8,9 @@ class ArticleCategory extends Common
     public static function mSelect($where = null, $page = false)
     {
         (new static)->mParseWhere($where);
-        self::mGetPage($page);
-        null !== self::option['order'] && self::order('sort');
-        $data = self::where($where)->select();
+        static::mGetPage($page);
+        null !== static::option['order'] && static::order('sort');
+        $data = static::where($where)->select();
         foreach ($data as &$dataRow) {
             (new static)->mDecodeData($dataRow);
         }
@@ -28,7 +28,7 @@ class ArticleCategory extends Common
             'parent_id'   => 'parent_id',
             'retract_col' => 'name',
         ];
-        return self::select('id,name')->mMakeTree($config, $parentId, $level);
+        return static::select('id,name')->mMakeTree($config, $parentId, $level);
     }
 
     public static function mDel($id)
@@ -39,8 +39,8 @@ class ArticleCategory extends Common
 
         is_array($id) && $id = ['in', $id];
         //如果被删除的分类有子级，将子级的parent_id=0
-        self::where(['parent_id' => $id])->data(['parent_id' => 0])->save();
-        return self::where(['id' => $id])->delete();
+        static::where(['parent_id' => $id])->data(['parent_id' => 0])->save();
+        return static::where(['id' => $id])->delete();
     }
 
     //返回子级所有分类id 数组集合
@@ -48,12 +48,12 @@ class ArticleCategory extends Common
     public static function mFind_child_id($id, $pushMe = true)
     {
         $where           = ['parent_id' => $id];
-        $articleCategory = self::select('id')->mSelect($where);
+        $articleCategory = static::select('id')->mSelect($where);
         $categoryChildId = [];
         foreach ($articleCategory as $category) {
             $categoryChildId[] = $category['id'];
-            if (0 < self::where(['parent_id' => $category['id']])->count()) {
-                $articleCategoryChild = self::mFind_child_id($category['id'], false);
+            if (0 < static::where(['parent_id' => $category['id']])->count()) {
+                $articleCategoryChild = static::mFind_child_id($category['id'], false);
                 foreach ($articleCategoryChild as $child) {
                     $categoryChildId[] = $child;
                 }
@@ -74,8 +74,8 @@ class ArticleCategory extends Common
             return false;
         }
 
-        $articleCategoryTopId = self::mFind_top_id($id);
-        return self::mFind($articleCategoryTopId);
+        $articleCategoryTopId = static::mFind_top_id($id);
+        return static::mFind($articleCategoryTopId);
     }
 
     // 寻找分类的顶级分类ID
@@ -85,9 +85,9 @@ class ArticleCategory extends Common
             return false;
         }
 
-        $categoryInfo = self::select('id,parent_id')->mFind($id);
+        $categoryInfo = static::select('id,parent_id')->mFind($id);
         if (0 != $categoryInfo['parent_id']) {
-            return self::mFind_top_id($categoryInfo['parent_id']);
+            return static::mFind_top_id($categoryInfo['parent_id']);
         }
 
         return $categoryInfo['id'];
@@ -100,8 +100,8 @@ class ArticleCategory extends Common
             return false;
         }
 
-        $articleCategoryTopId = self::mFind_top_id($id);
-        return self::mFindColumn($articleCategoryTopId, $columnName);
+        $articleCategoryTopId = static::mFind_top_id($id);
+        return static::mFindColumn($articleCategoryTopId, $columnName);
     }
 
     //返回有权管理的频道
@@ -123,7 +123,7 @@ class ArticleCategory extends Common
             return $mFindAllow;
         }
 
-        $articleCategory = self::select('id')->mSelect($where);
+        $articleCategory = static::select('id')->mSelect($where);
         foreach ($articleCategory as $category) {
             $mFindAllow[] = $category['id'];
         }
@@ -136,8 +136,8 @@ class ArticleCategory extends Common
             return;
         }
 
-        isset($where['manage_id']) && $where['manage_id'] = self::mMakeLikeArray($where['manage_id']);
-        isset($where['manage_group_id']) && $where['manage_group_id'] = self::mMakeLikeArray($where['manage_group_id']);
+        isset($where['manage_id']) && $where['manage_id'] = static::mMakeLikeArray($where['manage_id']);
+        isset($where['manage_group_id']) && $where['manage_group_id'] = static::mMakeLikeArray($where['manage_group_id']);
 
         if ($where['manage_id'] && $where['manage_group_id']) {
             $where['_complex'] = [
@@ -161,7 +161,7 @@ class ArticleCategory extends Common
         isset($data['manage_group_id']) && $data['manage_group_id'] = '|' . implode('|',
                 $data['manage_group_id']) . '|';
         isset($data['access_group_id']) && $data['access_group_id'] = serialize($data['access_group_id']);
-        isset($data['content']) && $data['content'] = self::mEncodeContent($data['content']);
+        isset($data['content']) && $data['content'] = static::mEncodeContent($data['content']);
         isset($data['extend']) && $data['extend'] = serialize($data['extend']);
         isset($data['attribute']) && $data['attribute'] = serialize($data['attribute']);
     }

@@ -7,9 +7,9 @@ class Navigation extends Common
 {
     public static function mSelect($where = null, $page = false)
     {
-        self::mGetPage($page);
-        null !== self::option['order'] && self::order('id desc');
-        $data = self::where($where)->page($page)->select();
+        static::mGetPage($page);
+        null !== static::option['order'] && static::order('id desc');
+        $data = static::where($where)->page($page)->select();
         foreach ($data as &$dataRow) {
             (new static)->mDecodeData($dataRow);
         }
@@ -22,9 +22,9 @@ class Navigation extends Common
             return [];
         }
 
-        $navigation = self::where(['is_enable' => 1, 'short_name' => $shortName])->first();
+        $navigation = static::where(['is_enable' => 1, 'short_name' => $shortName])->first();
         (new static)->mDecodeData($navigation);
-        $navigationData = self::_decode_navigation_data($navigation['ext_info']);
+        $navigationData = static::_decode_navigation_data($navigation['ext_info']);
         return ($navigationData) ? $navigationData : [];
     }
 
@@ -38,7 +38,7 @@ class Navigation extends Common
                 $nav['nav_active'] = true;
             }
             if ($nav && $nav['nav_child']) {
-                $nav['nav_child'] = self::_decode_navigation_data($nav['nav_child']);
+                $nav['nav_child'] = static::_decode_navigation_data($nav['nav_child']);
                 foreach ($nav['nav_child'] as $navChild) {
                     if ($navChild['nav_active']) {
                         $nav['nav_active'] = true;

@@ -7,16 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Common extends Model
 {
-    protected static $instance;
     protected        $guarded = [];
-
-    public static function getInstance()
-    {
-        if (!static::$instance) {
-            static::$instance = new static();
-        }
-        return static::$instance;
-    }
 
     /**
      * 列出数据
@@ -27,8 +18,8 @@ class Common extends Model
      */
     public static function mSelect($where = null, $page = false)
     {
-        self::mGetPage($page);
-        $data = self::where($where)->select();
+        static::mGetPage($page);
+        $data = static::where($where)->select();
         foreach ($data as &$dataRow) {
             (new static)->mDecodeData($dataRow);
         }
@@ -62,7 +53,7 @@ class Common extends Model
         }
 
         is_array($id) && $id = ['in', $id];
-        return self::where(['id' => $id])->delete();
+        return static::where(['id' => $id])->delete();
     }
 
     /**
@@ -79,7 +70,7 @@ class Common extends Model
 
         is_array($id) && $id = ['in', $id];
         (new static)->mEncodeData($data);
-        return self::where(['id' => $id])->update($data);
+        return static::where(['id' => $id])->update($data);
     }
 
     /**
@@ -93,7 +84,7 @@ class Common extends Model
             return false;
         }
 
-        $data = self::where(['id' => $id])->first();
+        $data = static::where(['id' => $id])->first();
         (new static)->mDecodeData($data);
         return $data;
     }
@@ -110,7 +101,7 @@ class Common extends Model
             return false;
         }
 
-        $column = self::where($columnName, '=', $value)->first();
+        $column = static::where($columnName, '=', $value)->first();
         return $column->id;
     }
 
@@ -126,7 +117,7 @@ class Common extends Model
             return false;
         }
 
-        $column = self::select($columnName)->where(['id' => $id])->first();
+        $column = static::select($columnName)->where(['id' => $id])->first();
         (new static)->mDecodeData($column);
         return $column[$columnName];
     }
@@ -146,16 +137,16 @@ class Common extends Model
 
         //默认清除id的列为第二列
         if (!$columnName) {
-            $columnName = self::selects[1];
+            $columnName = static::selects[1];
         }
 
         is_array($id) && $id = ['in', $id];
-        self::where([$columnName => $id]);
-        if (0 == self::count()) {
+        static::where([$columnName => $id]);
+        if (0 == static::count()) {
             return true;
         }
-        self::where([$columnName => $id]);
-        return (false === $data) ? self::delete() : self::save([$columnName => $data]);
+        static::where([$columnName => $id]);
+        return (false === $data) ? static::delete() : static::save([$columnName => $data]);
     }
 
     /**
@@ -167,7 +158,7 @@ class Common extends Model
     public static function mGetPageCount($where)
     {
         (new static)->mParseWhere($where);
-        $pageCount  = self::where($where)->count();
+        $pageCount  = static::where($where)->count();
         $sysMaxPage = config('system.sys_max_page') * config('system.sys_max_row');
         return ($pageCount < $sysMaxPage) ? $pageCount : $sysMaxPage;
     }
@@ -180,9 +171,9 @@ class Common extends Model
      */
     public static function mColumn2Array($column)
     {
-        $where = self::options['where'];
-        self::limit(self::count());
-        $selectResult = self::select($column)->where($where)->select();
+        $where = static::options['where'];
+        static::limit(static::count());
+        $selectResult = static::select($column)->where($where)->select();
         $reArr        = [];
         foreach ($selectResult as $row) {
             $reArr[] = $row[$column];
@@ -194,13 +185,13 @@ class Common extends Model
      * 设置翻页中数据数量
      * @param int $maxNum
      */
-    protected function mGetPage($maxNum)
+    protected static function mGetPage($maxNum)
     {
         if (!$maxNum) {
             return;
         }
         $maxNum = (true === $maxNum) ? config('system.sys_max_row') : $maxNum;
-        return static::getInstance()->paginate($maxNum);
+        return static::paginate($maxNum);
     }
 
     /**
@@ -258,8 +249,8 @@ class Common extends Model
         }
 
         $listWhere[$config['parent_id']] = $parentId;
-        $countRow                        = self::where($listWhere)->count();
-        $parentList                      = self::limit($countRow)->$config['list_fn']($listWhere);
+        $countRow                        = static::where($listWhere)->count();
+        $parentList                      = static::limit($countRow)->$config['list_fn']($listWhere);
         //占位符
         $retractStr = '&nbsp;';
         for ($i = 0; $i < $level; $i++) {
@@ -274,8 +265,8 @@ class Common extends Model
             }
             $parentTree[] = $parent;
             //这里的limit解除系统限制的数量
-            $countRow  = self::where($listWhere)->count();
-            $childList = self::limit($countRow)->$config['tree_fn']($listWhere, $parent[$config['id']], $level);
+            $countRow  = static::where($listWhere)->count();
+            $childList = static::limit($countRow)->$config['tree_fn']($listWhere, $parent[$config['id']], $level);
             foreach ($childList as $child) {
                 $parentTree[] = $child;
             }

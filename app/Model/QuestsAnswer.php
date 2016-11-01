@@ -23,7 +23,7 @@ class QuestsAnswer extends Common
         }
 
         $answer   = ($answer) ? 'answer like "' . $answer . '"' : '1 = 1';
-        $countNum = self::where(['quests_id' => $questsId, $answer])->count();
+        $countNum = static::where(['quests_id' => $questsId, $answer])->count();
         return $countNum;
     }
 }

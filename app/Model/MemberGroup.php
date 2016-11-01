@@ -9,9 +9,9 @@ class MemberGroup extends Common
     public static function mSelect($where = null, $page = false)
     {
         (new static)->mParseWhere($where);
-        self::mGetPage($page);
-        null !== self::option['order'] && self::order('id desc');
-        $data = self::where($where)->select();
+        static::mGetPage($page);
+        null !== static::option['order'] && static::order('id desc');
+        $data = static::where($where)->select();
         foreach ($data as &$dataRow) {
             (new static)->mDecodeData($dataRow);
         }
@@ -34,7 +34,7 @@ class MemberGroup extends Common
         }
 
         is_array($id) && $id = ['in', $id];
-        $data = self::select('is_enable,privilege')->where(['id' => $id])->select();
+        $data = static::select('is_enable,privilege')->where(['id' => $id])->select();
         foreach ($data as &$dataRow) {
             (new static)->mDecodeData($dataRow);
         }
@@ -51,7 +51,7 @@ class MemberGroup extends Common
             return;
         }
 
-        isset($where['manage_id']) && $where['manage_id'] = self::mMakeLikeArray($where['manage_id']);
+        isset($where['manage_id']) && $where['manage_id'] = static::mMakeLikeArray($where['manage_id']);
 
     }
 

@@ -9,9 +9,9 @@ class AdminGroups extends Common
     public static function mSelect($where = null, $page = false)
     {
         (new static)->mParseWhere($where);
-        self::mGetPage($page);
-        null !== self::options['order'] && self::order('id desc');
-        $data = self::where($where)->select();
+        static::mGetPage($page);
+        null !== static::options['order'] && static::order('id desc');
+        $data = static::where($where)->select();
         foreach ($data as &$dataRow) {
             (new static)->mDecodeData($dataRow);
         }
@@ -34,7 +34,7 @@ class AdminGroups extends Common
         }
 
         is_array($id) && $id = ['in', $id];
-        $data = self::where(['id' => $id, 'is_enable' => 1])->select(['privilege']);
+        $data = static::where(['id' => $id, 'is_enable' => 1])->select(['privilege']);
         foreach ($data as &$dataRow) {
             (new static)->mDecodeData($dataRow);
         }
@@ -51,7 +51,7 @@ class AdminGroups extends Common
         $where       = [
             'manage_id' => session('backend_info.id'),
         ];
-        $manageGroup = self::select('id')->mSelect($where);
+        $manageGroup = static::select('id')->mSelect($where);
         $mFindAllow  = [];
         foreach ($manageGroup as $group) {
             $mFindAllow[] = $group['id'];
@@ -67,7 +67,7 @@ class AdminGroups extends Common
             return;
         }
 
-        isset($where['manage_id']) && $where['manage_id'] = self::mMakeLikeArray($where['manage_id']);
+        isset($where['manage_id']) && $where['manage_id'] = static::mMakeLikeArray($where['manage_id']);
     }
 
     //检查和格式化数据

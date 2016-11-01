@@ -7,9 +7,9 @@ class RecruitLog extends Common
 {
     public static function mSelect($where = null, $page = false)
     {
-        self::mGetPage($page);
-        null !== self::options['order'] && self::order('add_time desc');
-        $data = self::where($where)->select();
+        static::mGetPage($page);
+        null !== static::options['order'] && static::order('add_time desc');
+        $data = static::where($where)->select();
         foreach ($data as &$dataRow) {
             (new static)->mDecodeData($dataRow);
         }

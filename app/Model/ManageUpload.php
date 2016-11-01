@@ -28,7 +28,7 @@ class ManageUpload extends Common
         $userType          = ('Admin' == MODULE_NAME) ? 1 : 2;
         $data['user_type'] = $userType;
         $data['add_time']  = Carbon::now();
-        return self::add($data);
+        return static::add($data);
     }
 
     public static function mDel($id)
@@ -39,12 +39,12 @@ class ManageUpload extends Common
 
         !is_array($id) && $id = [$id];
         foreach ($id as $i) {
-            $delFileResult = self::_mDel_file($i);
+            $delFileResult = static::_mDel_file($i);
             if (false === $delFileResult) {
                 return false;
             }
 
-            $delResult = self::where(['id' => $i])->delete();
+            $delResult = static::where(['id' => $i])->delete();
             if (!$delResult) {
                 return false;
             }
@@ -62,7 +62,7 @@ class ManageUpload extends Common
 
         if (is_array($item)) {
             foreach ($item as $i) {
-                $editResult = self::mEdit($i);
+                $editResult = static::mEdit($i);
                 if (!$editResult) {
                     return false;
                 }
@@ -75,11 +75,11 @@ class ManageUpload extends Common
         $ownerWhere = [
             'bind_info' => ['like', '%' . $ownerStr . '%'],
         ];
-        $ownerList  = self::select('id,bind_info')->where($ownerWhere)->select();
+        $ownerList  = static::select('id,bind_info')->where($ownerWhere)->select();
         foreach ($ownerList as $file) {
             $bindInfo = str_replace($ownerStr, '', $file['bind_info']);
             //此处的更新有可能没有影响任何数据返回0
-            self::where(['id' => $file['id']])->data(['bind_info' => $bindInfo])->save();
+            static::where(['id' => $file['id']])->data(['bind_info' => $bindInfo])->save();
         }
 
         //判断是否有文件需要绑定
@@ -91,9 +91,9 @@ class ManageUpload extends Common
         $fileWhere = [
             'path' => ['in', $paths],
         ];
-        $fileList  = self::select('id,bind_info')->where($fileWhere)->select();
+        $fileList  = static::select('id,bind_info')->where($fileWhere)->select();
         foreach ($fileList as $file) {
-            $editResult = self::where(['id' => $file['id']])->data(['bind_info' => $file['bind_info'] . $ownerStr])->save();
+            $editResult = static::where(['id' => $file['id']])->data(['bind_info' => $file['bind_info'] . $ownerStr])->save();
             if (!$editResult) {
                 return false;
             }
@@ -113,18 +113,18 @@ class ManageUpload extends Common
             $where = ['path' => $id];
         }
 
-        $manageUpload = self::where($where)->first();
+        $manageUpload = static::where($where)->first();
         return $manageUpload;
     }
 
     protected function mDecodeData(&$data)
     {
-        $data['size'] = self::format_size($data['size']);
+        $data['size'] = static::format_size($data['size']);
     }
 
     private function _mDel_file($id)
     {
-        $filePath = self::mFindColumn($id, 'path');
+        $filePath = static::mFindColumn($id, 'path');
         return (is_file($filePath)) ? @unlink($filePath) : true;
     }
 

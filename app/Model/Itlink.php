@@ -7,9 +7,9 @@ class Itlink extends Common
 {
     public static function mSelect($where = null, $page = false)
     {
-        self::mGetPage($page);
-        null !== self::option['order'] && self::order('id desc');
-        $data = self::where($where)->select();
+        static::mGetPage($page);
+        null !== static::option['order'] && static::order('id desc');
+        $data = static::where($where)->select();
         foreach ($data as &$dataRow) {
             (new static)->mDecodeData($dataRow);
         }
@@ -34,7 +34,7 @@ class Itlink extends Common
             'is_enable'  => 1,
             '_string'    => $whereString,
         ];
-        $itlinkInfo = self::where($where)->first();
+        $itlinkInfo = static::where($where)->first();
         (new static)->mDecodeData($itlinkInfo);
         $links = $itlinkInfo['ext_info'];
         foreach ($links as &$link) {
@@ -46,7 +46,7 @@ class Itlink extends Common
             }
         }
         //只有限制了显示次数才进行计数
-        $itlinkInfo['max_show_num'] > 0 && self::where(['id' => $itlinkInfo['id']])->setInc('show_num');
+        $itlinkInfo['max_show_num'] > 0 && static::where(['id' => $itlinkInfo['id']])->setInc('show_num');
         return is_array($links) ? $links : [];
     }
 

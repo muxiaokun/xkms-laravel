@@ -7,10 +7,9 @@ class AdminLogs extends Common
     //查询日志
     public static function mSelect($where = null, $page = false)
     {
-        $instance = static::getInstance();
-        $instance->where($where);
-        //null !== self::options['order'] && self::order('add_time desc');
-        return $instance->mGetPage(5);
+        static::where($where);
+        //null !== static::options['order'] && static::order('add_time desc');
+        return static::mGetPage(5);
     }
 
     //添加日志 管理员编号 信息为空为传参 操作的模型
@@ -49,6 +48,6 @@ class AdminLogs extends Common
     //删除全部日志
     public static function mDel_all()
     {
-        return self::where('1 = 1')->delete();
+        return static::where('1 = 1')->delete();
     }
 }

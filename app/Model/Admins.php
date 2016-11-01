@@ -10,9 +10,9 @@ class Admins extends Common
     public static function mSelect($where = null, $page = false)
     {
         (new static)->mParseWhere($where);
-        self::mGetPage($page);
-        null !== self::options['order'] && self::order('id desc');
-        $data = self::select('*,inet_ntoa(login_ip) as aip')->where($where)->select();
+        static::mGetPage($page);
+        null !== static::options['order'] && static::order('id desc');
+        $data = static::select('*,inet_ntoa(login_ip) as aip')->where($where)->select();
         foreach ($data as &$dataRow) {
             (new static)->mDecodeData($dataRow);
         }
@@ -40,7 +40,7 @@ class Admins extends Common
 
     public static function mFind($id)
     {
-        self::select('*,inet_ntoa(login_ip) as aip');
+        static::select('*,inet_ntoa(login_ip) as aip');
         return parent::mFind($id);
     }
 
@@ -54,14 +54,14 @@ class Admins extends Common
             'admin_name' => $user,
             'is_enable'  => '1',
         ];
-        $adminInfo = self::where($where)->first();
+        $adminInfo = static::where($where)->first();
         if ($adminInfo['admin_pwd'] == md5($pwd . $adminInfo['admin_rand'])) {
             $data = [
                 'last_time' => Carbon::now(),
                 'login_ip'  => request()->ip(),
             ];
-            self::where('id', '=', $adminInfo['id'])->update($data);
-            $adminInfo = self::mFind($adminInfo['id']);
+            static::where('id', '=', $adminInfo['id'])->update($data);
+            $adminInfo = static::mFind($adminInfo['id']);
             return $adminInfo;
         } else {
             return false;
@@ -74,7 +74,7 @@ class Admins extends Common
             return;
         }
 
-        isset($where['group_id']) && $where['group_id'] = self::mMakeLikeArray($where['group_id']);
+        isset($where['group_id']) && $where['group_id'] = static::mMakeLikeArray($where['group_id']);
     }
 
     protected function mEncodeData(&$data)
@@ -83,7 +83,7 @@ class Admins extends Common
             unset($data['privilege']);
         }
         if ($data['admin_pwd']) {
-            $randStr            = self::_make_rand();
+            $randStr            = static::_make_rand();
             $data['admin_pwd']  = md5($data['admin_pwd'] . $randStr);
             $data['admin_rand'] = $randStr;
         } else {

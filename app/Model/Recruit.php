@@ -7,9 +7,9 @@ class Recruit extends Common
 {
     public static function mSelect($where = null, $page = false)
     {
-        self::mGetPage($page);
-        null !== self::options['order'] && self::order('id desc');
-        $data = self::where($where)->select();
+        static::mGetPage($page);
+        null !== static::options['order'] && static::order('id desc');
+        $data = static::where($where)->select();
         foreach ($data as &$dataRow) {
             (new static)->mDecodeData($dataRow);
         }
@@ -18,7 +18,7 @@ class Recruit extends Common
 
     protected function mEncodeData(&$data)
     {
-        isset($data['explains']) && $data['explains'] = self::mEncodeContent($data['explains']);
+        isset($data['explains']) && $data['explains'] = static::mEncodeContent($data['explains']);
         if (isset($data['ext_info']) && is_array($data['ext_info'])) {
             $newExtInfo = [];
             foreach ($data['ext_info'] as $key => $value) {

@@ -19,7 +19,6 @@ class AdminLog extends Backend
         $whereValue = mMktimeRange('add_time');
         $whereValue && $where[] = ['add_time', $whereValue];
         $whereValue = request('admin_id');
-        $ids        = Model\Admins::where([['admin_name', 'like', '%' . $whereValue . '%']])->mColumn2Array('id');
         $whereValue && $where[] = [
             'admin_id',
             'In',
@@ -27,7 +26,6 @@ class AdminLog extends Backend
         ];
         $whereValue = request('route_name');
         $whereValue && $where[] = ['route_name', $whereValue];
-
         //初始化翻页 和 列表数据
         $adminLogList = Model\AdminLogs::mList($where, true);
         foreach ($adminLogList as &$adminLog) {

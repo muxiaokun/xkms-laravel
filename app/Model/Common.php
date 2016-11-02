@@ -3,9 +3,8 @@
 
 namespace App\Model;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use League\Flysystem\Exception;
-use Mockery\Expectation;
 
 class Common extends Model
 {
@@ -191,7 +190,7 @@ class Common extends Model
         foreach ($selectResult as $row) {
             $reArr[] = $row[$column];
         }
-        return $reArr;
+        return new Collection($reArr);
     }
 
     /**

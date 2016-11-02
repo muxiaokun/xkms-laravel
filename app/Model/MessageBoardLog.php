@@ -5,18 +5,18 @@ namespace App\Model;
 
 class MessageBoardLog extends Common
 {
-    public static function mSelect($where = null, $page = false)
+    public function scopeMList($query, $where = null, $page = false)
     {
-        static::mGetPage($page);
-        null !== static::option['order'] && static::order('add_time desc');
-        $data = static::select('*,inet_ntoa(add_ip) as aip')->where($where)->select();
+        $query->mGetPage($page);
+        null !== $query->option['order'] && $query->order('add_time desc');
+        $data = $query->select('*,inet_ntoa(add_ip) as aip')->where($where)->select();
         foreach ($data as &$dataRow) {
-            (new static)->mDecodeData($dataRow);
+            $query->mDecodeData($dataRow);
         }
         return $data;
     }
 
-    public static function mAdd($data)
+    public function scopeMAdd($query, $data)
     {
         if (!$data) {
             return false;
@@ -24,29 +24,31 @@ class MessageBoardLog extends Common
 
         $data['add_time'] = Carbon::now();
         $data['add_ip']   = request()->ip();
-        return parent::mAdd($data);
+        return $query->mAdd($data);
     }
 
-    public static function mFind($id)
+    public function scopeMFind($query, $id)
     {
-        static::select('*,inet_ntoa(add_ip) as aip');
-        return parent::mFind($id);
+        $query->select('*,inet_ntoa(add_ip) as aip');
+        return $query->mFind($id);
     }
 
-    public static function check_dont_submit($second)
+    public function check_dont_submit($query, $second)
     {
         $second = Carbon::now() - $second;
         $where  = $second . ' < add_time AND add_ip = "' . request()->ip() . '"';
-        return (static::where($where)->count()) ? true : false;
+        return ($query->where($where)->count()) ? true : false;
     }
 
-    protected function mEncodeData(&$data)
+    public function scopeMEncodeData($query, $data)
     {
         isset($data['send_info']) && $data['send_info'] = serialize($data['send_info']);
+        return $data;
     }
 
-    protected function mDecodeData(&$data)
+    public function scopeMDecodeData($query, $data)
     {
         isset($data['send_info']) && $data['send_info'] = unserialize($data['send_info']);
+        return $data;
     }
 }

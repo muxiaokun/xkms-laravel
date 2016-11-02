@@ -25,7 +25,7 @@ class AdminGroup extends Backend
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $adminGroupList                   = Model\AdminGroup::mSelect($where, true);
+        $adminGroupList                   = Model\AdminGroup::mList($where, true);
         $assign['admin_group_list']       = $adminGroupList;
         $assign['admin_group_list_count'] = Model\AdminGroup::mGetPageCount($where);
 
@@ -156,7 +156,7 @@ class AdminGroup extends Backend
                     break;
                 }
                 //检查管理组名是否存在
-                $adminInfo = Model\AdminGroup::mSelect(['name' => $data['name'], 'id' => ['neq', $data['id']]]);
+                $adminInfo = Model\AdminGroup::mList(['name' => $data['name'], 'id' => ['neq', $data['id']]]);
                 if (0 < count($adminInfo)) {
                     $result['info'] = trans('admin') . trans('common.group') . trans('common.name') . trans('common.exists');
                     break;
@@ -199,7 +199,7 @@ class AdminGroup extends Backend
             case 'manage_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['admin_name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminUserList = Model\Admins::mSelect($where);
+                $adminUserList = Model\Admins::mList($where);
                 foreach ($adminUserList as $adminUser) {
                     $result['info'][] = ['value' => $adminUser['id'], 'html' => $adminUser['admin_name']];
                 }

@@ -52,7 +52,7 @@ class Article extends Backend
             }
         }
         //初始化翻页 和 列表数据
-        $articleList = Model\Article::mSelect($where, true);
+        $articleList = Model\Article::mList($where, true);
         foreach ($articleList as &$article) {
             $article['channel_name'] = ($article['channel_id']) ? Model\ArticleCategory::mFindColumn($article['channel_id'],
                 'name') : trans('common.empty');
@@ -63,9 +63,9 @@ class Article extends Backend
         $assign['article_list_count'] = Model\Article::mGetPageCount($where);
 
         //初始化where_info
-        $channelList        = Model\ArticleChannel::mSelect($channelWhere,
+        $channelList        = Model\ArticleChannel::mList($channelWhere,
             Model\ArticleChannel::where($channelWhere)->count());
-        $categoryList       = Model\ArticleCategory::mSelect_tree($categoryWhere);
+        $categoryList       = Model\ArticleCategory::mList_tree($categoryWhere);
         $searchChannelList  = [];
         $searchCategoryList = [];
         foreach ($channelList as $channel) {
@@ -254,7 +254,7 @@ class Article extends Backend
         switch ($field) {
             case 'access_group_id':
                 isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $memberGroupList = Model\MemberGroup::mSelect($where);
+                $memberGroupList = Model\MemberGroup::mList($where);
                 foreach ($memberGroupList as $memberGroup) {
                     $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
                 }
@@ -356,9 +356,9 @@ class Article extends Backend
             $channelWhere['id']  = ['in', Model\ArticleChannel::mFind_allow()];
             $categoryWhere['id'] = ['in', Model\ArticleCategory::mFind_allow()];
         }
-        $channelList             = Model\ArticleChannel::mSelect($channelWhere,
+        $channelList             = Model\ArticleChannel::mList($channelWhere,
             Model\ArticleChannel::where($channelWhere)->count());
-        $categoryList            = Model\ArticleCategory::mSelect_tree($categoryWhere);
+        $categoryList            = Model\ArticleCategory::mList_tree($categoryWhere);
         $assign['channel_list']  = $channelList;
         $assign['category_list'] = $categoryList;
     }

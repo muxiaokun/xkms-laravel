@@ -140,7 +140,7 @@ class Article extends Frontend
                 $page                       = $categoryInfo['s_limit'];
                 $assign['article_list_max'] = $page;
             }
-            $articleLsit = Model\Article::mSelect($where, $page);
+            $articleLsit = Model\Article::mList($where, $page);
 
             $assign['article_list']       = $articleLsit;
             $assign['article_list_count'] = Model\Article::mGetPageCount($where);
@@ -230,7 +230,7 @@ class Article extends Frontend
         }
         $where['_complex'] = $complex;
 
-        $articleLsit                  = Model\Article::mSelect($where, true);
+        $articleLsit                  = Model\Article::mList($where, true);
         $assign['article_list']       = $articleLsit;
         $assign['article_list_count'] = Model\Article::mGetPageCount($where);
 
@@ -333,7 +333,7 @@ class Article extends Frontend
             'if_show'   => 1,
         ];
         $categoryCount = Model\ArticleCategory::where($where)->count();
-        $categoryList  = Model\ArticleCategory::mSelect($where, $categoryCount);
+        $categoryList  = Model\ArticleCategory::mList($where, $categoryCount);
 
         $categoryPosition                  = $categoryTopInfo;
         $categoryPosition['category_list'] = $categoryList;

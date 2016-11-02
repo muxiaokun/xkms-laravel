@@ -27,7 +27,7 @@ class Recruit extends Frontend
             $where['_complex']   = $complex;
         }
 
-        $recruitList                  = Model\Recruit::mSelect($where);
+        $recruitList                  = Model\Recruit::mList($where);
         $assign['recruit_list']       = $recruitList;
         $assign['recruit_list_count'] = Model\Recruit::mGetPageCount($where);
 

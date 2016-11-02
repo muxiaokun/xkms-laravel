@@ -8,29 +8,29 @@ class Article extends Common
 {
     use SoftDeletes;
 
-    public static function mSelect($where = null, $page = false)
+    public function scopeMList($query, $where = null, $page = false)
     {
-        (new static)->mParseWhere($where);
-        static::mGetPage($page);
-        null !== static::option['order'] && static::order('is_stick desc,sort asc,update_time desc');
-        $data = static::where($where)->select();
+        $query->mParseWhere($where);
+        $query->mGetPage($page);
+        null !== $query->option['order'] && $query->order('is_stick desc,sort asc,update_time desc');
+        $data = $query->where($where)->select();
         foreach ($data as &$dataRow) {
-            (new static)->mDecodeData($dataRow);
+            $query->mDecodeData($dataRow);
         }
         return $data;
     }
 
-    public static function mAdd($data)
+    public function scopeMAdd($query, $data)
     {
         if (!$data) {
             return false;
         }
 
         !isset($data['add_time']) && $data['add_time'] = Carbon::now();
-        return parent::mAdd($data);
+        return $query->mAdd($data);
     }
 
-    protected function mParseWhere(&$where)
+    public function scopeMParseWhere($query, $where)
     {
         if (is_null($where)) {
             return;
@@ -39,7 +39,7 @@ class Article extends Common
         if (isset($where['attribute'])) {
             $attribute = [];
             foreach ($where['attribute'] as $attr) {
-                $attr && $attribute[] = static::mMakeLikeArray($attr);
+                $attr && $attribute[] = $query->mMakeLikeArray($attr);
             }
             $where['attribute'] = $attribute;
             if (!$where['attribute']) {
@@ -48,11 +48,11 @@ class Article extends Common
         }
     }
 
-    protected function mEncodeData(&$data)
+    public function scopeMEncodeData($query, $data)
     {
         !isset($data['update_time']) && $data['update_time'] = Carbon::now();
         isset($data['access_group_id']) && $data['access_group_id'] = serialize($data['access_group_id']);
-        isset($data['content']) && $data['content'] = static::mEncodeContent($data['content']);
+        isset($data['content']) && $data['content'] = $query->mEncodeContent($data['content']);
         if (isset($data['extend']) && is_array($data['extend'])) {
             $newExtend = [];
             foreach ($data['extend'] as $key => $value) {
@@ -68,9 +68,10 @@ class Article extends Common
             $data['attribute'] = '|' . implode('|', $newAttribute) . '|';
         }
         isset($data['album']) && $data['album'] = serialize($data['album']);
+        return $data;
     }
 
-    protected function mDecodeData(&$data)
+    public function scopeMDecodeData($query, $data)
     {
         isset($data['access_group_id']) && $data['access_group_id'] = unserialize($data['access_group_id']);
         if (isset($data['extend']) && $data['extend']) {
@@ -92,5 +93,6 @@ class Article extends Common
             $data['attribute'] = $newAttribute;
         }
         isset($data['album']) && $data['album'] = unserialize($data['album']);
+        return $data;
     }
 }

@@ -27,7 +27,7 @@ class MessageBoardLog extends Backend
         $whereValue = mMktimeRange('add_time');
         $whereValue && $where[] = ['add_time', $whereValue];
 
-        $messageBoardLogList = Model\MessageBoardLog::order('add_time desc')->mSelect($where, true);
+        $messageBoardLogList = Model\MessageBoardLog::order('add_time desc')->mList($where, true);
         foreach ($messageBoardLogList as &$messageBoardLog) {
             $messageBoardLog['admin_name']  = ($messageBoardLog['audit_id']) ? Model\Admins::mFindColumn($messageBoardLog['audit_id'],
                 'admin_name') : trans('common.none') . trans('common.audit');

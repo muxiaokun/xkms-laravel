@@ -30,7 +30,7 @@ class QuestsAnswer extends Backend
             Model\Member::where(['member_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
         ];
 
-        $questsAnswerList = Model\QuestsAnswer::mSelect($where, true);
+        $questsAnswerList = Model\QuestsAnswer::mList($where, true);
         foreach ($questsAnswerList as &$questsAnswer) {
             $memberName                  = Model\Member::mFindColumn($groupId, 'name');
             $questsAnswer['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');

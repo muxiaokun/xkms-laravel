@@ -7,44 +7,44 @@ use Carbon\Carbon;
 
 class Admins extends Common
 {
-    public static function mSelect($where = null, $page = false)
+    public function scopeMList($query, $where = null, $page = false)
     {
-        (new static)->mParseWhere($where);
-        static::mGetPage($page);
-        null !== static::options['order'] && static::order('id desc');
-        $data = static::select('*,inet_ntoa(login_ip) as aip')->where($where)->select();
+        $query->mParseWhere($where);
+        $query->mGetPage($page);
+        null !== $query->options['order'] && $query->order('id desc');
+        $data = $query->select('*,inet_ntoa(login_ip) as aip')->where($where)->select();
         foreach ($data as &$dataRow) {
-            (new static)->mDecodeData($dataRow);
+            $query->mDecodeData($dataRow);
         }
         return $data;
     }
 
-    public static function mAdd($data)
+    public function scopeMAdd($query, $data)
     {
         if (!$data) {
             return false;
         }
 
         $data['add_time'] = Carbon::now();
-        return parent::mAdd($data);
+        return $query->mAdd($data);
     }
 
-    public static function mDel($id)
+    public function scopeMDel($query, $id)
     {
         //不能删除root用户
         if (!$id || 1 == $id || (is_array($id) && in_array(1, $id))) {
             return false;
         }
-        return parent::mDel($id);
+        return $query->mDel($id);
     }
 
-    public static function mFind($id)
+    public function scopeMFind($query, $id)
     {
-        static::select('*,inet_ntoa(login_ip) as aip');
-        return parent::mFind($id);
+        $query->select('*,inet_ntoa(login_ip) as aip');
+        return $query->mFind($id);
     }
 
-    public static function authorized($user, $pwd)
+    public function authorized($query, $user, $pwd)
     {
         if (!$user) {
             return false;
@@ -54,36 +54,36 @@ class Admins extends Common
             'admin_name' => $user,
             'is_enable'  => '1',
         ];
-        $adminInfo = static::where($where)->first();
+        $adminInfo = $query->where($where)->first();
         if ($adminInfo['admin_pwd'] == md5($pwd . $adminInfo['admin_rand'])) {
             $data = [
                 'last_time' => Carbon::now(),
                 'login_ip'  => request()->ip(),
             ];
-            static::where('id', '=', $adminInfo['id'])->update($data);
-            $adminInfo = static::mFind($adminInfo['id']);
+            $query->where('id', '=', $adminInfo['id'])->update($data);
+            $adminInfo = $query->mFind($adminInfo['id']);
             return $adminInfo;
         } else {
             return false;
         }
     }
 
-    protected function mParseWhere(&$where)
+    public function scopeMParseWhere($query, $where)
     {
         if (is_null($where)) {
             return;
         }
 
-        isset($where['group_id']) && $where['group_id'] = static::mMakeLikeArray($where['group_id']);
+        isset($where['group_id']) && $where['group_id'] = $query->mMakeLikeArray($where['group_id']);
     }
 
-    protected function mEncodeData(&$data)
+    public function scopeMEncodeData($query, $data)
     {
         if (isset($data['id']) && (1 == $data['id'] || (is_array($data['id']) && in_array(1, $data['id'])))) {
             unset($data['privilege']);
         }
         if ($data['admin_pwd']) {
-            $randStr            = static::_make_rand();
+            $randStr            = $query->_make_rand();
             $data['admin_pwd']  = md5($data['admin_pwd'] . $randStr);
             $data['admin_rand'] = $randStr;
         } else {
@@ -94,9 +94,10 @@ class Admins extends Common
         isset($data['group_id']) && $data['group_id'] = '|' . implode('|', $data['group_id']) . '|';
         isset($data['privilege']) && $data['privilege'] = implode('|', $data['privilege']);
         isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
+        return $data;
     }
 
-    protected function mDecodeData(&$data)
+    public function scopeMDecodeData($query, $data)
     {
         unset($data['admin_pwd']);
         unset($data['admin_rand']);
@@ -104,5 +105,6 @@ class Admins extends Common
             substr($data['group_id'], 1, strlen($data['group_id']) - 2));
         isset($data['privilege']) && $data['privilege'] = explode('|', $data['privilege']);
         isset($data['ext_info']) && $data['ext_info'] = unserialize($data['ext_info']);
+        return $data;
     }
 }

@@ -6,9 +6,9 @@ namespace App\Model;
 class ManageUpload extends Common
 {
     //获得全部或者部分管理组列表
-    public static function mSelect($where = null, $page = false)
+    public function scopeMList($query, $where = null, $page = false)
     {
-        $instance = static::getInstance();
+        $instance = $query->getInstance();
         $instance->mGetPage($page);
         $data = $instance->where($where)->get();
         foreach ($data as &$dataRow) {
@@ -17,7 +17,7 @@ class ManageUpload extends Common
         return $data;
     }
 
-    public static function mAdd($data)
+    public function scopeMAdd($query, $data)
     {
         if (!$data) {
             return false;
@@ -28,10 +28,10 @@ class ManageUpload extends Common
         $userType          = ('Admin' == MODULE_NAME) ? 1 : 2;
         $data['user_type'] = $userType;
         $data['add_time']  = Carbon::now();
-        return static::add($data);
+        return $query->add($data);
     }
 
-    public static function mDel($id)
+    public function scopeMDel($query, $id)
     {
         if (!$id) {
             return false;
@@ -39,12 +39,12 @@ class ManageUpload extends Common
 
         !is_array($id) && $id = [$id];
         foreach ($id as $i) {
-            $delFileResult = static::_mDel_file($i);
+            $delFileResult = $query->_mDel_file($i);
             if (false === $delFileResult) {
                 return false;
             }
 
-            $delResult = static::where(['id' => $i])->delete();
+            $delResult = $query->where(['id' => $i])->delete();
             if (!$delResult) {
                 return false;
             }
@@ -54,7 +54,7 @@ class ManageUpload extends Common
     }
 
     //修改文件属主关系 $paths 不进行传参 就只进行 属主文件归零
-    public static function mEdit($item, $paths = false)
+    public function scopeMEdit($query, $item, $paths = false)
     {
         if (!$item) {
             return false;
@@ -62,7 +62,7 @@ class ManageUpload extends Common
 
         if (is_array($item)) {
             foreach ($item as $i) {
-                $editResult = static::mEdit($i);
+                $editResult = $query->mEdit($i);
                 if (!$editResult) {
                     return false;
                 }
@@ -75,11 +75,11 @@ class ManageUpload extends Common
         $ownerWhere = [
             'bind_info' => ['like', '%' . $ownerStr . '%'],
         ];
-        $ownerList  = static::select('id,bind_info')->where($ownerWhere)->select();
+        $ownerList  = $query->select('id,bind_info')->where($ownerWhere)->select();
         foreach ($ownerList as $file) {
             $bindInfo = str_replace($ownerStr, '', $file['bind_info']);
             //此处的更新有可能没有影响任何数据返回0
-            static::where(['id' => $file['id']])->data(['bind_info' => $bindInfo])->save();
+            $query->where(['id' => $file['id']])->data(['bind_info' => $bindInfo])->save();
         }
 
         //判断是否有文件需要绑定
@@ -91,9 +91,9 @@ class ManageUpload extends Common
         $fileWhere = [
             'path' => ['in', $paths],
         ];
-        $fileList  = static::select('id,bind_info')->where($fileWhere)->select();
+        $fileList  = $query->select('id,bind_info')->where($fileWhere)->select();
         foreach ($fileList as $file) {
-            $editResult = static::where(['id' => $file['id']])->data(['bind_info' => $file['bind_info'] . $ownerStr])->save();
+            $editResult = $query->where(['id' => $file['id']])->data(['bind_info' => $file['bind_info'] . $ownerStr])->save();
             if (!$editResult) {
                 return false;
             }
@@ -102,7 +102,7 @@ class ManageUpload extends Common
         return true;
     }
 
-    public static function mFind($id, $isPath = false)
+    public function scopeMFind($query, $id, $isPath = false)
     {
         if (!$id) {
             return false;
@@ -113,22 +113,22 @@ class ManageUpload extends Common
             $where = ['path' => $id];
         }
 
-        $manageUpload = static::where($where)->first();
+        $manageUpload = $query->where($where)->first();
         return $manageUpload;
     }
 
-    protected function mDecodeData(&$data)
+    public function scopeMDecodeData($query, $data)
     {
-        $data['size'] = static::format_size($data['size']);
+        $data['size'] = $query->format_size($data['size']);
     }
 
-    private function _mDel_file($id)
+    private function _mDel_file($query, $id)
     {
-        $filePath = static::mFindColumn($id, 'path');
+        $filePath = $query->mFindColumn($id, 'path');
         return (is_file($filePath)) ? @unlink($filePath) : true;
     }
 
-    private function format_size($size)
+    private function format_size($query, $size)
     {
         $reStr = '';
         switch ($size) {

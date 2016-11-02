@@ -32,7 +32,7 @@ class Comment extends Backend
         $whereValue = request('item');
         $whereValue && $where[] = ['item', $whereValue];
 
-        $commentList = Model\Comment::order('add_time desc')->mSelect($where, true);
+        $commentList = Model\Comment::order('add_time desc')->mList($where, true);
         foreach ($commentList as &$comment) {
             $comment['audit_name']  = ($comment['audit_id']) ? Model\Admins::mFindColumn($comment['audit_id'],
                 'admin_name') : trans('common.none') . trans('common.audit');

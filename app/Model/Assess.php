@@ -5,26 +5,28 @@ namespace App\Model;
 
 class Assess extends Common
 {
-    public static function mSelect($where = null, $page = false)
+    public function scopeMList($query, $where = null, $page = false)
     {
-        static::mGetPage($page);
-        null !== static::option['order'] && static::order('id desc');
-        $data = static::where($where)->select();
+        $query->mGetPage($page);
+        null !== $query->option['order'] && $query->order('id desc');
+        $data = $query->where($where)->select();
         foreach ($data as &$dataRow) {
-            (new static)->mDecodeData($dataRow);
+            $query->mDecodeData($dataRow);
         }
         return $data;
     }
 
-    protected function mEncodeData(&$data)
+    public function scopeMEncodeData($query, $data)
     {
         isset($data['cfg_info']) && $data['cfg_info'] = serialize($data['cfg_info']);
         isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
+        return $data;
     }
 
-    protected function mDecodeData(&$data)
+    public function scopeMDecodeData($query, $data)
     {
         isset($data['cfg_info']) && $data['cfg_info'] = unserialize($data['cfg_info']);
         isset($data['ext_info']) && $data['ext_info'] = unserialize($data['ext_info']);
+        return $data;
     }
 }

@@ -28,7 +28,7 @@ class Message extends FrontendMember
         $whereValue = mMktimeRange('send_time');
         $whereValue && $where[] = ['send_time', $whereValue];
 
-        $messageList = Model\Message::order('receive_time asc,send_time desc')->mSelect($where, true);
+        $messageList = Model\Message::order('receive_time asc,send_time desc')->mList($where, true);
         foreach ($messageList as &$message) {
             $message['send_name']    = ($message['send_id']) ? Model\Member::mFindColumn($message['send_id'],
                 'member_name') : trans('common.system');
@@ -118,7 +118,7 @@ class Message extends FrontendMember
             case 'receive_id':
                 isset($data['keyword']) && $where['member_name'] = ['like', '%' . $data['keyword'] . '%'];
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                $memberUserList   = Model\Member::mSelect($where);
+                $memberUserList   = Model\Member::mList($where);
                 $result['info'][] = ['value' => 0, 'html' => trans('common.system')];
                 foreach ($memberUserList as $memberUser) {
                     $result['info'][] = ['value' => $memberUser['id'], 'html' => $memberUser['member_name']];

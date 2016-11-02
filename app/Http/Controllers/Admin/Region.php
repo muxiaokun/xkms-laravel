@@ -23,7 +23,7 @@ class Region extends Backend
         $whereValue && $where['postcode'] = ['like', '%' . $whereValue . '%'];
 
         //初始化翻页 和 列表数据
-        $regionList = Model\Region::mSelect($where, true);
+        $regionList = Model\Region::mList($where, true);
         foreach ($regionList as &$region) {
             $region['parent_name'] = Model\Region::mFindColumn($region['parent_id'], 'region_name');
         }

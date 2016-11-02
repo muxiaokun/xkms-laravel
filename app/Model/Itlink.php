@@ -5,18 +5,18 @@ namespace App\Model;
 
 class Itlink extends Common
 {
-    public static function mSelect($where = null, $page = false)
+    public function scopeMList($query, $where = null, $page = false)
     {
-        static::mGetPage($page);
-        null !== static::option['order'] && static::order('id desc');
-        $data = static::where($where)->select();
+        $query->mGetPage($page);
+        null !== $query->option['order'] && $query->order('id desc');
+        $data = $query->where($where)->select();
         foreach ($data as &$dataRow) {
-            (new static)->mDecodeData($dataRow);
+            $query->mDecodeData($dataRow);
         }
         return $data;
     }
 
-    public static function mFind_data($shortName)
+    public function scopeMFind_data($query, $shortName)
     {
         if (!$shortName) {
             return [];
@@ -34,8 +34,8 @@ class Itlink extends Common
             'is_enable'  => 1,
             '_string'    => $whereString,
         ];
-        $itlinkInfo = static::where($where)->first();
-        (new static)->mDecodeData($itlinkInfo);
+        $itlinkInfo = $query->where($where)->first();
+        $query->mDecodeData($itlinkInfo);
         $links = $itlinkInfo['ext_info'];
         foreach ($links as &$link) {
             if (0 < $itlinkInfo['max_hit_num']) {
@@ -46,17 +46,19 @@ class Itlink extends Common
             }
         }
         //只有限制了显示次数才进行计数
-        $itlinkInfo['max_show_num'] > 0 && static::where(['id' => $itlinkInfo['id']])->setInc('show_num');
+        $itlinkInfo['max_show_num'] > 0 && $query->where(['id' => $itlinkInfo['id']])->setInc('show_num');
         return is_array($links) ? $links : [];
     }
 
-    protected function mEncodeData(&$data)
+    public function scopeMEncodeData($query, $data)
     {
         isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
+        return $data;
     }
 
-    protected function mDecodeData(&$data)
+    public function scopeMDecodeData($query, $data)
     {
         isset($data['ext_info']) && $data['ext_info'] = unserialize($data['ext_info']);
+        return $data;
     }
 }

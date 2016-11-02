@@ -5,48 +5,51 @@ namespace App\Model;
 
 class AssessLog extends Common
 {
-    public static function mSelect($where = null, $page = false)
+    public function scopeMList($query, $where = null, $page = false)
     {
-        static::mGetPage($page);
-        null !== static::option['order'] && static::order('add_time desc');
-        $data = static::where($where)->select();
+        $query->mGetPage($page);
+        null !== $query->option['order'] && $query->order('add_time desc');
+        $data = $query->where($where)->select();
         foreach ($data as &$dataRow) {
-            (new static)->mDecodeData($dataRow);
+            $query->mDecodeData($dataRow);
         }
         return $data;
     }
 
-    public static function mAdd($data)
+    public function scopeMAdd($query, $data)
     {
         if (!$data) {
             return false;
         }
 
         if (isset($data['a_id']) && isset($data['grade_id']) && isset($data['re_grade_id'])) {
-            $where      = ['a_id'        => $data['a_id'],
-                           'grade_id'    => $data['grade_id'],
-                           're_grade_id' => $data['re_grade_id'],
+            $where      = [
+                'a_id'        => $data['a_id'],
+                'grade_id'    => $data['grade_id'],
+                're_grade_id' => $data['re_grade_id'],
             ];
-            $assessInfo = static::where($where)->first();
+            $assessInfo = $query->where($where)->first();
         }
-        (new static)->mEncodeData($data);
+        $query->mEncodeData($data);
         $data['add_time'] = Carbon::now();
         //是否已经评价 决定编辑还是添加
         if ($assessInfo) {
-            $result = static::where($where)->data($data)->save();
+            $result = $query->where($where)->data($data)->save();
         } else {
-            $result = static::add($data);
+            $result = $query->add($data);
         }
         return $result;
     }
 
-    protected function mEncodeData(&$data)
+    public function scopeMEncodeData($query, $data)
     {
         isset($data['score']) && $data['score'] = serialize($data['score']);
+        return $data;
     }
 
-    protected function mDecodeData(&$data)
+    public function scopeMDecodeData($query, $data)
     {
         isset($data['score']) && $data['score'] = unserialize($data['score']);
+        return $data;
     }
 }

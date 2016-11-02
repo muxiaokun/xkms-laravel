@@ -21,7 +21,7 @@ class MemberGroup extends Backend
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $memberGroupList                   = Model\MemberGroup::mSelect($where, true);
+        $memberGroupList                   = Model\MemberGroup::mList($where, true);
         $assign['member_group_list']       = $memberGroupList;
         $assign['member_group_list_count'] = Model\MemberGroup::mGetPageCount($where);
 
@@ -145,7 +145,7 @@ class MemberGroup extends Backend
                     break;
                 }
                 //检查管理组名是否存在
-                $memberInfo = Model\MemberGroup::mSelect(['name' => $data['name'], 'id' => ['neq', $data['id']]]);
+                $memberInfo = Model\MemberGroup::mList(['name' => $data['name'], 'id' => ['neq', $data['id']]]);
                 if (0 < count($memberInfo)) {
                     $result['info'] = trans('member') . trans('common.group') . trans('common.name') . trans('common.exists');
                     break;
@@ -188,7 +188,7 @@ class MemberGroup extends Backend
             case 'manage_id':
                 isset($data['keyword']) && $where['member_name'] = ['like', '%' . $data['keyword'] . '%'];
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                $memberUserList = Model\Member::mSelect($where);
+                $memberUserList = Model\Member::mList($where);
                 foreach ($memberUserList as $memberUser) {
                     $result['info'][] = ['value' => $memberUser['id'], 'html' => $memberUser['member_name']];
                 }

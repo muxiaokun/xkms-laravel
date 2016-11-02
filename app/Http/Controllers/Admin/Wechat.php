@@ -18,7 +18,7 @@ class Wechat extends Backend
         $whereValue && $where[] = ['bind_time', $whereValue];
 
         //初始化翻页 和 列表数据
-        $wechatList = Model\Wechat::mSelect($where, true);
+        $wechatList = Model\Wechat::mList($where, true);
         foreach ($wechatList as &$wechat) {
             $wechat['member_name'] = Model\Member::mFindColumn($wechat['member_id'], 'member_name');
         }

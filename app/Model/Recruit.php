@@ -5,20 +5,20 @@ namespace App\Model;
 
 class Recruit extends Common
 {
-    public static function mSelect($where = null, $page = false)
+    public function scopeMList($query, $where = null, $page = false)
     {
-        static::mGetPage($page);
-        null !== static::options['order'] && static::order('id desc');
-        $data = static::where($where)->select();
+        $query->mGetPage($page);
+        null !== $query->options['order'] && $query->order('id desc');
+        $data = $query->where($where)->select();
         foreach ($data as &$dataRow) {
-            (new static)->mDecodeData($dataRow);
+            $query->mDecodeData($dataRow);
         }
         return $data;
     }
 
-    protected function mEncodeData(&$data)
+    public function scopeMEncodeData($query, $data)
     {
-        isset($data['explains']) && $data['explains'] = static::mEncodeContent($data['explains']);
+        isset($data['explains']) && $data['explains'] = $query->mEncodeContent($data['explains']);
         if (isset($data['ext_info']) && is_array($data['ext_info'])) {
             $newExtInfo = [];
             foreach ($data['ext_info'] as $key => $value) {
@@ -26,9 +26,10 @@ class Recruit extends Common
             }
             $data['ext_info'] = '|' . implode('|', $newExtInfo) . '|';
         }
+        return $data;
     }
 
-    protected function mDecodeData(&$data)
+    public function scopeMDecodeData($query, $data)
     {
         if (isset($data['ext_info']) && $data['ext_info']) {
             $data['ext_info'] = explode('|', substr($data['ext_info'], 1, strlen($data['ext_info']) - 2));
@@ -39,5 +40,6 @@ class Recruit extends Common
             }
             $data['ext_info'] = $newExtInfo;
         }
+        return $data;
     }
 }

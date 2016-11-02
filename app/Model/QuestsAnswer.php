@@ -5,25 +5,25 @@ namespace App\Model;
 
 class QuestsAnswer extends Common
 {
-    public static function mAdd($data)
+    public function scopeMAdd($query, $data)
     {
         if (!$data) {
             return false;
         }
 
         !isset($data['add_time']) && $data['add_time'] = Carbon::now();
-        return parent::mAdd($data);
+        return $query->mAdd($data);
     }
 
     //统计答案
-    public static function count_quests_answer($questsId, $answer = false)
+    public function count_quests_answer($query, $questsId, $answer = false)
     {
         if (!$questsId) {
             return false;
         }
 
         $answer   = ($answer) ? 'answer like "' . $answer . '"' : '1 = 1';
-        $countNum = static::where(['quests_id' => $questsId, $answer])->count();
+        $countNum = $query->where(['quests_id' => $questsId, $answer])->count();
         return $countNum;
     }
 }

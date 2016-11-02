@@ -119,7 +119,7 @@ class Member extends FrontendMember
                     break;
                 }
                 //检查用户名是否存在
-                $memberInfo = Model\Member::mSelect(['member_name' => $data['user']]);
+                $memberInfo = Model\Member::mList(['member_name' => $data['user']]);
                 if (0 >= count($memberInfo)) {
                     $result['info'] = trans('common.member') . trans('common.name') . trans('common.dont') . trans('common.exists');
                     break;
@@ -167,7 +167,7 @@ class Member extends FrontendMember
                     break;
                 }
                 //检查用户名是否存在
-                $memberInfo = Model\Member::mSelect(['member_name' => $data['re_member_name']]);
+                $memberInfo = Model\Member::mList(['member_name' => $data['re_member_name']]);
                 if (0 < count($memberInfo)) {
                     $result['info'] = trans('common.member') . trans('common.name') . trans('common.exists');
                     break;

@@ -18,7 +18,7 @@ class MessageBoard extends Backend
         $whereValue = request('name');
         $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
 
-        $messageBoardList = Model\MessageBoard::mSelect($where, true);
+        $messageBoardList = Model\MessageBoard::mList($where, true);
         foreach ($messageBoardList as &$messageBoard) {
             $option = [];
             foreach ($messageBoard['config'] as $name => $value) {

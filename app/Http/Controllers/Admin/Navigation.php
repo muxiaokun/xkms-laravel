@@ -23,7 +23,7 @@ class Navigation extends Backend
         $whereValue = request('is_enable');
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
         //初始化翻页 和 列表数据
-        $navigationList                  = Model\Navigation::mSelect($where, true);
+        $navigationList                  = Model\Navigation::mList($where, true);
         $assign['navigation_list']       = $navigationList;
         $assign['navigation_list_count'] = Model\Navigation::mGetPageCount($where);
 
@@ -127,7 +127,7 @@ class Navigation extends Backend
         switch ($field) {
             case 'short_name':
                 //检查用户名是否存在
-                $itlinkInfo = Model\Navigation::mSelect([
+                $itlinkInfo = Model\Navigation::mList([
                     'short_name' => $data['short_name'],
                     'id'         => ['neq', $data['id']],
                 ]);

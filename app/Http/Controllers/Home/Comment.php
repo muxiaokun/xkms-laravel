@@ -58,7 +58,7 @@ class Comment extends Frontend
                     'item'       => $data['item'],
                     'audit_id'   => ['gt', 0],
                 ];
-                $commentList = Model\Comment::mSelect($where, true);
+                $commentList = Model\Comment::mList($where, true);
                 foreach ($commentList as &$comment) {
                     $memberName             = Model\Member::mFindColumn($comment['member_id'], 'member_name');
                     $comment['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');

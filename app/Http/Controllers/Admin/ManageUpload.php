@@ -23,7 +23,7 @@ class ManageUpload extends Backend
         $whereValue && $where[] = ['add_time', $whereValue];
 
         //初始化翻页 和 列表数据
-        $manageUploadList = Model\ManageUpload::mSelect($where, true);
+        $manageUploadList = Model\ManageUpload::mList($where, true);
         foreach ($manageUploadList as &$manageUpload) {
             switch ($manageUpload['user_type']) {
                 case 1:
@@ -89,7 +89,7 @@ class ManageUpload extends Backend
         }
 
         $where['_string'] = '(bind_info is NULL OR bind_info = "")';
-        $manageUploadList = Model\ManageUpload::mSelect($where, Model\ManageUpload::where($where)->count());
+        $manageUploadList = Model\ManageUpload::mList($where, Model\ManageUpload::where($where)->count());
         foreach ($manageUploadList as $manageUpload) {
             $resultDel = Model\ManageUpload::mDel($manageUpload['id']);
             if (!$resultDel) {

@@ -5,20 +5,20 @@ namespace App\Model;
 
 class ArticleCategory extends Common
 {
-    public static function mSelect($where = null, $page = false)
+    public function scopeMList($query, $where = null, $page = false)
     {
-        (new static)->mParseWhere($where);
-        static::mGetPage($page);
-        null !== static::option['order'] && static::order('sort');
-        $data = static::where($where)->select();
+        $query->mParseWhere($where);
+        $query->mGetPage($page);
+        null !== $query->option['order'] && $query->order('sort');
+        $data = $query->where($where)->select();
         foreach ($data as &$dataRow) {
-            (new static)->mDecodeData($dataRow);
+            $query->mDecodeData($dataRow);
         }
         return $data;
     }
 
     //获得缩进的分类树
-    public static function mSelect_tree($where = null, $parentId = 0, $level = 0)
+    public function scopeMList_tree($query, $where = null, $parentId = 0, $level = 0)
     {
         $config = [
             'list_fn'     => 'mSelect',
@@ -28,10 +28,10 @@ class ArticleCategory extends Common
             'parent_id'   => 'parent_id',
             'retract_col' => 'name',
         ];
-        return static::select('id,name')->mMakeTree($config, $parentId, $level);
+        return $query->select('id,name')->mMakeTree($config, $parentId, $level);
     }
 
-    public static function mDel($id)
+    public function scopeMDel($query, $id)
     {
         if (!$id) {
             return false;
@@ -39,21 +39,21 @@ class ArticleCategory extends Common
 
         is_array($id) && $id = ['in', $id];
         //如果被删除的分类有子级，将子级的parent_id=0
-        static::where(['parent_id' => $id])->data(['parent_id' => 0])->save();
-        return static::where(['id' => $id])->delete();
+        $query->where(['parent_id' => $id])->data(['parent_id' => 0])->save();
+        return $query->where(['id' => $id])->delete();
     }
 
     //返回子级所有分类id 数组集合
     //$pushMe 是否包含传入id
-    public static function mFind_child_id($id, $pushMe = true)
+    public function scopeMFind_child_id($query, $id, $pushMe = true)
     {
         $where           = ['parent_id' => $id];
-        $articleCategory = static::select('id')->mSelect($where);
+        $articleCategory = $query->select('id')->mSelect($where);
         $categoryChildId = [];
         foreach ($articleCategory as $category) {
             $categoryChildId[] = $category['id'];
-            if (0 < static::where(['parent_id' => $category['id']])->count()) {
-                $articleCategoryChild = static::mFind_child_id($category['id'], false);
+            if (0 < $query->where(['parent_id' => $category['id']])->count()) {
+                $articleCategoryChild = $query->mFind_child_id($category['id'], false);
                 foreach ($articleCategoryChild as $child) {
                     $categoryChildId[] = $child;
                 }
@@ -68,44 +68,44 @@ class ArticleCategory extends Common
     }
 
     // 寻找分类的顶级分类
-    public static function mFind_top($id)
+    public function scopeMFind_top($query, $id)
     {
         if (!$id) {
             return false;
         }
 
-        $articleCategoryTopId = static::mFind_top_id($id);
-        return static::mFind($articleCategoryTopId);
+        $articleCategoryTopId = $query->mFind_top_id($id);
+        return $query->mFind($articleCategoryTopId);
     }
 
     // 寻找分类的顶级分类ID
-    public static function mFind_top_id($id)
+    public function scopeMFind_top_id($query, $id)
     {
         if (!$id) {
             return false;
         }
 
-        $categoryInfo = static::select('id,parent_id')->mFind($id);
+        $categoryInfo = $query->select('id,parent_id')->mFind($id);
         if (0 != $categoryInfo['parent_id']) {
-            return static::mFind_top_id($categoryInfo['parent_id']);
+            return $query->mFind_top_id($categoryInfo['parent_id']);
         }
 
         return $categoryInfo['id'];
     }
 
     // 寻找分类的顶级分类列
-    public static function mFindTopColumn($id, $columnName)
+    public function scopeMFindTopColumn($query, $id, $columnName)
     {
         if (!$id) {
             return false;
         }
 
-        $articleCategoryTopId = static::mFind_top_id($id);
-        return static::mFindColumn($articleCategoryTopId, $columnName);
+        $articleCategoryTopId = $query->mFind_top_id($id);
+        return $query->mFindColumn($articleCategoryTopId, $columnName);
     }
 
     //返回有权管理的频道
-    public static function mFind_allow($type = true)
+    public function scopeMFind_allow($query, $type = true)
     {
         $where = [];
         //ma = manage admin 编辑属主 属组
@@ -123,21 +123,21 @@ class ArticleCategory extends Common
             return $mFindAllow;
         }
 
-        $articleCategory = static::select('id')->mSelect($where);
+        $articleCategory = $query->select('id')->mSelect($where);
         foreach ($articleCategory as $category) {
             $mFindAllow[] = $category['id'];
         }
         return $mFindAllow;
     }
 
-    protected function mParseWhere(&$where)
+    public function scopeMParseWhere($query, $where)
     {
         if (is_null($where)) {
             return;
         }
 
-        isset($where['manage_id']) && $where['manage_id'] = static::mMakeLikeArray($where['manage_id']);
-        isset($where['manage_group_id']) && $where['manage_group_id'] = static::mMakeLikeArray($where['manage_group_id']);
+        isset($where['manage_id']) && $where['manage_id'] = $query->mMakeLikeArray($where['manage_id']);
+        isset($where['manage_group_id']) && $where['manage_group_id'] = $query->mMakeLikeArray($where['manage_group_id']);
 
         if ($where['manage_id'] && $where['manage_group_id']) {
             $where['_complex'] = [
@@ -150,7 +150,7 @@ class ArticleCategory extends Common
         }
     }
 
-    protected function mEncodeData(&$data)
+    public function scopeMEncodeData($query, $data)
     {
         //只有顶级可以设置扩展模板和属性
         if (isset($data['parent_id']) && 0 < $data['parent_id']) {
@@ -161,12 +161,13 @@ class ArticleCategory extends Common
         isset($data['manage_group_id']) && $data['manage_group_id'] = '|' . implode('|',
                 $data['manage_group_id']) . '|';
         isset($data['access_group_id']) && $data['access_group_id'] = serialize($data['access_group_id']);
-        isset($data['content']) && $data['content'] = static::mEncodeContent($data['content']);
+        isset($data['content']) && $data['content'] = $query->mEncodeContent($data['content']);
         isset($data['extend']) && $data['extend'] = serialize($data['extend']);
         isset($data['attribute']) && $data['attribute'] = serialize($data['attribute']);
+        return $data;
     }
 
-    protected function mDecodeData(&$data)
+    public function scopeMDecodeData($query, $data)
     {
         isset($data['manage_id']) && $data['manage_id'] = explode('|',
             substr($data['manage_id'], 1, strlen($data['manage_id']) - 2));
@@ -175,5 +176,6 @@ class ArticleCategory extends Common
         isset($data['access_group_id']) && $data['access_group_id'] = unserialize($data['access_group_id']);
         isset($data['extend']) && $data['extend'] = unserialize($data['extend']);
         isset($data['attribute']) && $data['attribute'] = unserialize($data['attribute']);
+        return $data;
     }
 }

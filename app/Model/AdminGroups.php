@@ -6,37 +6,37 @@ namespace App\Model;
 class AdminGroups extends Common
 {
     //获得全部或者部分管理组列表
-    public static function mSelect($where = null, $page = false)
+    public function scopeMList($query, $where = null, $page = false)
     {
-        (new static)->mParseWhere($where);
-        static::mGetPage($page);
-        null !== static::options['order'] && static::order('id desc');
-        $data = static::where($where)->select();
+        $query->mParseWhere($where);
+        $query->mGetPage($page);
+        null !== $query->options['order'] && $query->order('id desc');
+        $data = $query->where($where)->select();
         foreach ($data as &$dataRow) {
-            (new static)->mDecodeData($dataRow);
+            $query->mDecodeData($dataRow);
         }
         return $data;
     }
 
-    public static function mDel($id)
+    public function scopeMDel($query, $id)
     {
         if (!$id || 1 == $id || (is_array($id) && in_array(1, $id))) {
             return false;
         }
-        return parent::mDel($id);
+        return $query->mDel($id);
     }
 
     //查找出组权限
-    public static function mFind_privilege($id)
+    public function scopeMFind_privilege($query, $id)
     {
         if (!$id) {
             return false;
         }
 
         is_array($id) && $id = ['in', $id];
-        $data = static::where(['id' => $id, 'is_enable' => 1])->select(['privilege']);
+        $data = $query->where(['id' => $id, 'is_enable' => 1])->select(['privilege']);
         foreach ($data as &$dataRow) {
-            (new static)->mDecodeData($dataRow);
+            $query->mDecodeData($dataRow);
         }
         $privilege = [];
         foreach ($data as $group) {
@@ -46,12 +46,12 @@ class AdminGroups extends Common
     }
 
     //返回有权管理的组
-    public static function mFind_allow()
+    public function scopeMFind_allow($query)
     {
         $where       = [
             'manage_id' => session('backend_info.id'),
         ];
-        $manageGroup = static::select('id')->mSelect($where);
+        $manageGroup = $query->select('id')->mSelect($where);
         $mFindAllow  = [];
         foreach ($manageGroup as $group) {
             $mFindAllow[] = $group['id'];
@@ -61,17 +61,17 @@ class AdminGroups extends Common
         return $mFindAllow;
     }
 
-    protected function mParseWhere(&$where)
+    public function scopeMParseWhere($query, $where)
     {
         if (is_null($where)) {
             return;
         }
 
-        isset($where['manage_id']) && $where['manage_id'] = static::mMakeLikeArray($where['manage_id']);
+        isset($where['manage_id']) && $where['manage_id'] = $query->mMakeLikeArray($where['manage_id']);
     }
 
     //检查和格式化数据
-    protected function mEncodeData(&$data)
+    public function scopeMEncodeData($query, $data)
     {
         if (isset($data['id']) && (1 == $data['id'] || (is_array($data['id']) && in_array(1, $data['id'])))) {
             unset($data['privilege']);
@@ -79,14 +79,16 @@ class AdminGroups extends Common
         isset($data['manage_id']) && $data['manage_id'] = '|' . implode('|', array_unique($data['manage_id'])) . '|';
         isset($data['privilege']) && $data['privilege'] = implode('|', $data['privilege']);
         isset($data['ext_template']) && $data['ext_template'] = serialize($data['ext_template']);
+        return $data;
     }
 
     //检查和去除格式化数据
-    protected function mDecodeData(&$data)
+    public function scopeMDecodeData($query, $data)
     {
         isset($data['manage_id']) && $data['manage_id'] = explode('|',
             substr($data['manage_id'], 1, strlen($data['manage_id']) - 2));
         isset($data['privilege']) && $data['privilege'] = explode('|', $data['privilege']);
         isset($data['ext_template']) && $data['ext_template'] = unserialize($data['ext_template']);
+        return $data;
     }
 }

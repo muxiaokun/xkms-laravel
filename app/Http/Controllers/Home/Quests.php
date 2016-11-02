@@ -17,7 +17,7 @@ class Quests extends FrontendMember
             'end_time'   => ['gt', $currentTime],
             '(current_portion < max_portion OR max_portion = 0)',
         ];
-        $questsList                  = Model\Quests::mSelect($where, true);
+        $questsList                  = Model\Quests::mList($where, true);
         $assign['quests_list']       = $questsList;
         $assign['quests_list_count'] = Model\Quests::mGetPageCount($where);
 

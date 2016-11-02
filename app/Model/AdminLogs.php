@@ -5,15 +5,15 @@ namespace App\Model;
 class AdminLogs extends Common
 {
     //查询日志
-    public static function mSelect($where = null, $page = false)
+    public function scopeMList($query, $where = null, $page = false)
     {
-        static::where($where);
-        //null !== static::options['order'] && static::order('add_time desc');
-        return static::mGetPage(5);
+        $query->mParseWhere($where);
+        //null !== $query->options['order'] && $query->order('add_time desc');
+        return $query->mGetPage($page);
     }
 
     //添加日志 管理员编号 信息为空为传参 操作的模型
-    public static function mAdd($adminId, $message = false, $msg = false)
+    public function scopeMAdd($query, $adminId, $message = false, $msg = false)
     {
         if (!$adminId) {
             return false;
@@ -42,12 +42,12 @@ class AdminLogs extends Common
             'message'    => $message,
             'request'    => $request_json,
         ];
-        return parent::mAdd($data);
+        return $query->mAdd($data);
     }
 
     //删除全部日志
-    public static function mDel_all()
+    public function scopeMDel_all($query)
     {
-        return static::where('1 = 1')->delete();
+        return $query->where('1 = 1')->delete();
     }
 }

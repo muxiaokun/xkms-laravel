@@ -5,20 +5,20 @@ namespace App\Model;
 
 class ArticleChannel extends Common
 {
-    public static function mSelect($where = null, $page = false)
+    public function scopeMList($query, $where = null, $page = false)
     {
-        (new static)->mParseWhere($where);
-        static::mGetPage($page);
-        null !== static::option['order'] && static::order('id desc');
-        $data = static::where($where)->select();
+        $query->mParseWhere($where);
+        $query->mGetPage($page);
+        null !== $query->option['order'] && $query->order('id desc');
+        $data = $query->where($where)->select();
         foreach ($data as &$dataRow) {
-            (new static)->mDecodeData($dataRow);
+            $query->mDecodeData($dataRow);
         }
         return $data;
     }
 
     //返回有权管理的频道
-    public static function mFind_allow($type = true)
+    public function scopeMFind_allow($query, $type = true)
     {
         $where = [];
         //ma = manage admin 编辑属主 属组
@@ -36,21 +36,21 @@ class ArticleChannel extends Common
             return $mFindAllow;
         }
 
-        $articleChannel = static::select('id')->mSelect($where);
+        $articleChannel = $query->select('id')->mSelect($where);
         foreach ($articleChannel as $channel) {
             $mFindAllow[] = $channel['id'];
         }
         return $mFindAllow;
     }
 
-    protected function mParseWhere(&$where)
+    public function scopeMParseWhere($query, $where)
     {
         if (is_null($where)) {
             return;
         }
 
-        isset($where['manage_id']) && $where['manage_id'] = static::mMakeLikeArray($where['manage_id']);
-        isset($where['manage_group_id']) && $where['manage_group_id'] = static::mMakeLikeArray($where['manage_group_id']);
+        isset($where['manage_id']) && $where['manage_id'] = $query->mMakeLikeArray($where['manage_id']);
+        isset($where['manage_group_id']) && $where['manage_group_id'] = $query->mMakeLikeArray($where['manage_group_id']);
 
         if ($where['manage_id'] && $where['manage_group_id']) {
             $where['_complex'] = [
@@ -63,16 +63,17 @@ class ArticleChannel extends Common
         }
     }
 
-    protected function mEncodeData(&$data)
+    public function scopeMEncodeData($query, $data)
     {
         isset($data['manage_id']) && $data['manage_id'] = '|' . implode('|', $data['manage_id']) . '|';
         isset($data['manage_group_id']) && $data['manage_group_id'] = '|' . implode('|',
                 $data['manage_group_id']) . '|';
         isset($data['access_group_id']) && $data['access_group_id'] = serialize($data['access_group_id']);
         isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
+        return $data;
     }
 
-    protected function mDecodeData(&$data)
+    public function scopeMDecodeData($query, $data)
     {
         isset($data['manage_id']) && $data['manage_id'] = explode('|',
             substr($data['manage_id'], 1, strlen($data['manage_id']) - 2));
@@ -80,5 +81,6 @@ class ArticleChannel extends Common
             substr($data['manage_group_id'], 1, strlen($data['manage_group_id']) - 2));
         isset($data['access_group_id']) && $data['access_group_id'] = unserialize($data['access_group_id']);
         isset($data['ext_info']) && $data['ext_info'] = unserialize($data['ext_info']);
+        return $data;
     }
 }

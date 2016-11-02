@@ -4,24 +4,39 @@
 namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use League\Flysystem\Exception;
+use Mockery\Expectation;
 
 class Common extends Model
 {
-    protected        $guarded = [];
+    public $guarded = [];
+
+    protected $whereClauses = [
+        'Between',
+        'NotBetween',
+        'In',
+        'NotIn',
+        'Null',
+        'NotNull',
+        'Date',
+        'Month',
+        'Day',
+        'Year',
+    ];
 
     /**
      * 列出数据
      * @access public
      * @param array $where 查询条件
-     * @param int   $page  翻页数量
+     * @param int $page 翻页数量
      * @return array 返回数据数组
      */
-    public static function mSelect($where = null, $page = false)
+    public function scopeMList($query, $where = null, $page = false)
     {
-        static::mGetPage($page);
-        $data = static::where($where)->select();
+        $query->mGetPage($page);
+        $data = $query->where($where)->select();
         foreach ($data as &$dataRow) {
-            (new static)->mDecodeData($dataRow);
+            $query->mDecodeData($dataRow);
         }
         return $data;
     }
@@ -31,14 +46,14 @@ class Common extends Model
      * @param array $data
      * @return boolean
      */
-    public static function mAdd($data)
+    public function scopeMAdd($query, $data)
     {
         if (!$data) {
             return false;
         }
 
-        (new static)->mEncodeData($data);
-        return (new static)->create($data);
+        $query->mEncodeData($data);
+        return $query->create($data);
     }
 
     /**
@@ -46,14 +61,14 @@ class Common extends Model
      * @param mixed $id
      * @return boolean
      */
-    public static function mDel($id)
+    public function scopeMDel($query, $id)
     {
         if (!$id) {
             return false;
         }
 
         is_array($id) && $id = ['in', $id];
-        return static::where(['id' => $id])->delete();
+        return $query->where(['id' => $id])->delete();
     }
 
     /**
@@ -62,15 +77,15 @@ class Common extends Model
      * @param array $data
      * @return boolean
      */
-    public static function mEdit($id, $data)
+    public function scopeMEdit($query, $id, $data)
     {
         if (!$id || !$data) {
             return false;
         }
 
         is_array($id) && $id = ['in', $id];
-        (new static)->mEncodeData($data);
-        return static::where(['id' => $id])->update($data);
+        $query->mEncodeData($data);
+        return $query->where(['id' => $id])->update($data);
     }
 
     /**
@@ -78,14 +93,14 @@ class Common extends Model
      * @param mixed $id
      * @return array
      */
-    public static function mFind($id)
+    public function scopeMFind($query, $id)
     {
         if (!$id) {
             return false;
         }
 
-        $data = static::where(['id' => $id])->first();
-        (new static)->mDecodeData($data);
+        $data = $query->where(['id' => $id])->first();
+        $query->mDecodeData($data);
         return $data;
     }
 
@@ -95,41 +110,41 @@ class Common extends Model
      * @param string $columnName
      * @return string
      */
-    public static function mFindId($value, $columnName)
+    public function scopeMFindId($query, $value, $columnName)
     {
         if (!$value || !$columnName) {
             return false;
         }
 
-        $column = static::where($columnName, '=', $value)->first();
+        $column = $query->where($columnName, '=', $value)->first();
         return $column->id;
     }
 
     /**
      * 查找数据
-     * @param int    $id
+     * @param int $id
      * @param string $columnName
      * @return string
      */
-    public static function mFindColumn($id, $columnName)
+    public function scopeMFindColumn($query, $id, $columnName)
     {
         if (!$id || !$columnName) {
             return false;
         }
 
-        $column = static::select($columnName)->where(['id' => $id])->first();
-        (new static)->mDecodeData($column);
+        $column = $query->select($columnName)->where(['id' => $id])->first();
+        $column = $query->mDecodeData($column);
         return $column[$columnName];
     }
 
     /**
      * 清除数据
-     * @param mixed  $id
+     * @param mixed $id
      * @param string $columnName
      * @param string $data
      * @return boolean
      */
-    public static function mClean($id, $columnName = '', $data = false)
+    public function scopeMClean($query, $id, $columnName = '', $data = false)
     {
         if (!$id) {
             return false;
@@ -137,16 +152,16 @@ class Common extends Model
 
         //默认清除id的列为第二列
         if (!$columnName) {
-            $columnName = static::selects[1];
+            $columnName = $query->selects[1];
         }
 
         is_array($id) && $id = ['in', $id];
-        static::where([$columnName => $id]);
-        if (0 == static::count()) {
+        $query->where([$columnName => $id]);
+        if (0 == $query->count()) {
             return true;
         }
-        static::where([$columnName => $id]);
-        return (false === $data) ? static::delete() : static::save([$columnName => $data]);
+        $query->where([$columnName => $id]);
+        return (false === $data) ? $query->delete() : $query->save([$columnName => $data]);
     }
 
     /**
@@ -155,10 +170,10 @@ class Common extends Model
      * @param array $where 查询条件
      * @return int 最大页数
      */
-    public static function mGetPageCount($where)
+    public function scopeMGetPageCount($query, $where)
     {
-        (new static)->mParseWhere($where);
-        $pageCount  = static::where($where)->count();
+        $query->mParseWhere($where);
+        $pageCount  = $query->where($where)->count();
         $sysMaxPage = config('system.sys_max_page') * config('system.sys_max_row');
         return ($pageCount < $sysMaxPage) ? $pageCount : $sysMaxPage;
     }
@@ -183,22 +198,22 @@ class Common extends Model
      * 设置翻页中数据数量
      * @param int $maxNum
      */
-    protected static function mGetPage($maxNum)
+    public function scopeMGetPage($query, $maxNum)
     {
         if (!$maxNum) {
             return;
         }
         $maxNum = (true === $maxNum) ? config('system.sys_max_row') : $maxNum;
-        return static::paginate($maxNum);
+        return $query->paginate($maxNum);
     }
 
     /**
      * 构造查询时用的like数组
-     * @param array  $whereArr
+     * @param array $whereArr
      * @param string $logic AND or OR
      * @return boolean
      */
-    protected function mMakeLikeArray($where, $logic = 'OR')
+    public function scopeMMakeLikeArray($query, $where, $logic = 'OR')
     {
         //将$where转换成数组
         is_string($where) && $where = explode('|', $where);
@@ -222,7 +237,7 @@ class Common extends Model
      * @param type $length 长度
      * @return string
      */
-    protected function _make_rand($length = 4)
+    public function _make_rand($query, $length = 4)
     {
         $rand_range = '0123456789abcdecfghijklmnopqrstuvwxyzABCDECFGHIJKLMNOPQRSTUVWXYZ';
         $rand       = '';
@@ -235,11 +250,11 @@ class Common extends Model
     /**
      * 建立缩进树状数据(自动去除查询数量限制)
      * @param array $config
-     * @param int   $parentId
-     * @param int   $level
+     * @param int $parentId
+     * @param int $level
      * @return array
      */
-    protected function mMakeTree($config, $parentId = 0, $level = 0)
+    public function scopeMMakeTree($query, $config, $parentId = 0, $level = 0)
     {
         $listWhere = $config['list_where'];
         if (!is_array($listWhere)) {
@@ -247,8 +262,8 @@ class Common extends Model
         }
 
         $listWhere[$config['parent_id']] = $parentId;
-        $countRow                        = static::where($listWhere)->count();
-        $parentList                      = static::limit($countRow)->$config['list_fn']($listWhere);
+        $countRow                        = $query->where($listWhere)->count();
+        $parentList                      = $query->limit($countRow)->$config['list_fn']($listWhere);
         //占位符
         $retractStr = '&nbsp;';
         for ($i = 0; $i < $level; $i++) {
@@ -263,8 +278,8 @@ class Common extends Model
             }
             $parentTree[] = $parent;
             //这里的limit解除系统限制的数量
-            $countRow  = static::where($listWhere)->count();
-            $childList = static::limit($countRow)->$config['tree_fn']($listWhere, $parent[$config['id']], $level);
+            $countRow  = $query->where($listWhere)->count();
+            $childList = $query->limit($countRow)->$config['tree_fn']($listWhere, $parent[$config['id']], $level);
             foreach ($childList as $child) {
                 $parentTree[] = $child;
             }
@@ -278,7 +293,7 @@ class Common extends Model
      * @param string $content
      * @return string
      */
-    protected function mEncodeContent($content)
+    public function scopeMEncodeContent($query, $content)
     {
         //删除相对路径前的../
         $content = htmlspecialchars_decode($content);
@@ -294,19 +309,33 @@ class Common extends Model
      * 格式化查询条件接口
      * @param type &$data
      */
-    protected function mParseWhere(&$where)
+    public function scopeMParseWhere($query, $wheres)
     {
+        foreach ($wheres as $where) {
+            if (3 == count($where)) {
+                if (in_array($where[1], $this->whereClauses)) {
+                    $whereClause = 'where' . $where[1];
+                    $query->$whereClause($where[0], $where[2]);
+                }
+            } elseif (2 == count($where)) {
+                $query->where($where[0], $where[1]);
+            } else {
+                throw new \Exception('parse where error!');
+            }
+        }
     }
 
     /**
      * 格式化数据接口
      * @param type &$data
      */
-    protected function mEncodeData(&$data)
+    public function scopeMEncodeData($query, $data)
     {
+        return $data;
     }
 
-    protected function mDecodeData(&$data)
+    public function scopeMDecodeData($query, $data)
     {
+        return $data;
     }
 }

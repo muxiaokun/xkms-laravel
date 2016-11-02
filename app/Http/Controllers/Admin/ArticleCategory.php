@@ -31,7 +31,7 @@ class ArticleCategory extends Backend
             }
         }
         //初始化翻页 和 列表数据
-        $articleCategoryList = Model\ArticleCategory::mSelect($where, Model\ArticleCategory::where($where)->count());
+        $articleCategoryList = Model\ArticleCategory::mList($where, Model\ArticleCategory::where($where)->count());
         foreach ($articleCategoryList as &$articleCategory) {
             //parent_id 用完销毁不能产生歧义
             $where['parent_id']           = $articleCategory['id'];
@@ -233,7 +233,7 @@ class ArticleCategory extends Backend
             case 'manage_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['admin_name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminUserList = Model\Admins::mSelect($where);
+                $adminUserList = Model\Admins::mList($where);
                 foreach ($adminUserList as $adminUser) {
                     $result['info'][] = ['value' => $adminUser['id'], 'html' => $adminUser['admin_name']];
                 }
@@ -241,7 +241,7 @@ class ArticleCategory extends Backend
             case 'manage_group_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminGroupList = Model\AdminGroup::mSelect($where);
+                $adminGroupList = Model\AdminGroup::mList($where);
                 foreach ($adminGroupList as $adminGroup) {
                     $result['info'][] = ['value' => $adminGroup['id'], 'html' => $adminGroup['name']];
                 }
@@ -249,7 +249,7 @@ class ArticleCategory extends Backend
             case 'access_group_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $memberGroupList = Model\MemberGroup::mSelect($where);
+                $memberGroupList = Model\MemberGroup::mList($where);
                 foreach ($memberGroupList as $memberGroup) {
                     $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
                 }
@@ -332,7 +332,7 @@ class ArticleCategory extends Backend
             $where['id'] = ['neq', $id];
         }
 
-        $assign['category_list']         = Model\ArticleCategory::mSelect_tree($where);
+        $assign['category_list']         = Model\ArticleCategory::mList_tree($where);
         $managePrivilege                 = (1 == session('backend_info.id')) || in_array($id,
                 Model\ArticleCategory::mFind_allow('ma'));
         $assign['manage_privilege']      = $managePrivilege;

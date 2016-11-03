@@ -4,20 +4,19 @@
 namespace App\Http\Controllers;
 
 use App\Model;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\View;
 
 class Frontend extends Common
 {
     public function _initialize()
     {
         parent::_initialize();
-//        if ($this->isLogin()) {
-//            //登录后Home公共变量赋值区域
-//            $assign['login_info'] =  session('frontend_info');
-//        }
         //当前位置
-//        if (!request()->ajax() && !$_FILES && !in_array(ACTION_NAME, array('ajax_api', 'del'))) {
-//            $this->_get_position();
-//        }
+        if (request()->isMethod('GET')) {
+            $this->_get_position();
+        }
     }
 
     //生成验证码
@@ -45,36 +44,35 @@ class Frontend extends Common
     //获取当前位置(也就是当前操作方法)
     protected function _get_position()
     {
-        $privilege = F('privilege');
-        $reData    = [];
+        $filesystem = new Filesystem();
+        $privilege  = $filesystem->getRequire(storage_path('app/install_menu'))['Home'];
         //跳过系统基本操作 删 异步接口,
-        $allController = [];
-        foreach ($privilege['Home'] as $controllerGroup) {
+        $allController = [
+            'Home::Index::index' => trans('common.homepage'),
+        ];
+        foreach ($privilege as $controllerGroup) {
             $controllerGroup && $allController = array_merge($allController, $controllerGroup);
         }
-        $rePosition   = [
+        $rePosition = [
             [
                 'name' => trans('common.homepage'),
-                'link' => route(config('DEFAULT_MODULE') . '/' . C('DEFAULT_CONTROLLER') . '/' . C('DEFAULT_ACTION')),
+                'link' => route('Home::Index::index'),
             ],
         ];
-        $positionName = $allController[CONTROLLER_NAME][ACTION_NAME];
-        if ($positionName) {
+        $assign     = [];
+        if (!Route::is('Home::Index::index') && isset($allController[Route::currentRouteName()])) {
             //给title赋默认值
+            $positionName    = $allController[Route::currentRouteName()];
             $assign['title'] = $positionName;
-            if (ACTION_NAME != 'index' && $allControl[CONTROLLER_NAME]['index']) {
-                $rePosition[] = [
-                    'name' => $allControl[CONTROLLER_NAME]['index'],
-                    'link' => route(MODULE_NAME . '/' . CONTROLLER_NAME . '/index'),
-                ];
-            }
+
             $rePosition[] = [
                 'name' => $positionName,
                 'link' => false,
             ];
             //给控制器类型的面包屑导航赋默认值
-            $assign['position'] = $rePosition;
         }
+        $assign['position'] = $rePosition;
+        View::share($assign);
     }
 
     // 加强ajax_api接口安全性
@@ -114,7 +112,7 @@ class Frontend extends Common
         if ($memberInfo) {
             //会员有组的 验证组是否启用
             if (0 < count($memberInfo['group_id'])) {
-                $memberInfo['group_privilege'] = Model\MemberGroup::mFind_privilege($memberInfo['group_id']);
+                $memberInfo['group_privilege'] = Model\MemberGroup::mFindPrivilege($memberInfo['group_id']);
             }
             //重置登录次数
             if (0 != $memberInfo['login_num']) {

@@ -4,8 +4,6 @@
 namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Frontend;
-use App\Model;
-use Illuminate\Routing\Route;
 
 class Index extends Frontend
 {
@@ -21,11 +19,11 @@ class Index extends Frontend
         redirect(mroute('article_category',1));
         }
          */
-        return '';
+        return view('home.Index_index');
     }
 
     public function test()
     {
-        return '';
+        return view('home.Index_test');
     }
 }

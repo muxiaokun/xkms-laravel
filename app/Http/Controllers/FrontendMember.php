@@ -12,42 +12,48 @@ class FrontendMember extends Frontend
         parent::_initialize();
         //是否启用了会员类的控制器
         if (!config('system.sys_member_enable')) {
-            return $this->error(trans('common.member') . trans('common.none') . trans('common.enable'),
-                route('Index/index'));
+            die($this->error(trans('common.member') . trans('common.none') . trans('common.enable'),
+                route('Home::Index::index')));
         }
 
         if ($this->isLogin()) {
             $frontendInfo = session('frontend_info');
             //自动登出时间
-            if (Carbon::now() - config('system.sys_frontend_timeout') < $frontendInfo['login_time']) {
-                $frontendInfo['login_time'] = Carbon::now();
+            if (Carbon::now()->getTimestamp() - config('system.sys_frontend_timeout') < $frontendInfo['login_time']->getTimestamp()) {
+                $frontendInfo['login_time'] = Carbon::now()->getTimestamp();
                 session('frontend_info', $frontendInfo);
             } else {
                 $this->doLogout();
-                return $this->error(trans('common.login') . trans('common.timeout'), route('Member/Index/index'));
+                die($this->error(trans('common.login') . trans('common.timeout'), route('Home::Member::index')));
             }
 
             //检查管理员或者管理员组权限变动 先检查数量 提高效率
             $memberInfo           = Model\Member::mFind($frontendInfo['id']);
-            $memberGroupPrivilege = Model\MemberGroup::mFind_privilege($memberInfo['group_id']);
-            if ($frontendInfo['group_privilege'] !== $memberGroupPrivilege) {
+            $memberGroupPrivilege = Model\MemberGroup::mFindPrivilege($memberInfo['group_id']);
+            if ($frontendInfo['group_privilege']->toArray() !== $memberGroupPrivilege->toArray()) {
                 $this->doLogout();
-                return $this->error(trans('common.privilege') . trans('common.change') . trans('common.please') . trans('common.login'),
-                    route('Member/index'));
+                die($this->error(trans('common.privilege') . trans('common.change') . trans('common.please') . trans('common.login'),
+                    route('Home::Member::index')));
             }
 
             //登录后 检查权限
             if (!$this->_check_privilege()) {
-                return $this->error(trans('common.you') . trans('common.none') . trans('common.privilege'));
+                die($this->error(trans('common.you') . trans('common.none') . trans('common.privilege')));
             }
 
             //建立会员中心左侧菜单
             $assign['left_nav'] = $this->_get_left_nav();
         } else {
             //检测不登陆就可以访问的
-            $allowAction['Member'] = ['index', 'login', 'verifyImg', 'ajax_api', 'register'];
-            if (!in_array(ACTION_NAME, $allowAction[CONTROLLER_NAME])) {
-                return $this->error(trans('common.notdoLogin') . trans('common.frontend'), route('Member/index'));
+            $allowRoute = [
+                'Home::Member::index',
+                'Home::Member::login',
+                'Home::Member::ajax_api',
+                'Home::Member::register',
+            ];
+            if (!call_user_func_array('Route::is', $allowRoute)) {
+                die($this->error(trans('common.not_login') . trans('common.frontend'), route('Home::Member::index')));
+
             }
         }
     }

@@ -11,7 +11,11 @@ class Common extends Controller
 {
     public function __construct()
     {
-        $this->_initialize();
+        $this->middleware(function ($request, \Closure $next) {
+            $response = $next($request);
+            $this->_initialize();
+            return $response;
+        });
     }
 
     public function _initialize()
@@ -20,18 +24,7 @@ class Common extends Controller
         if (0 == env('INSTALL_STATUS') && !Route::is("Install::*")) {
             $message = trans('common.please') . trans('common.install') . trans('common.app_name');
             die($this->error($message, route('Install::index')));
-
         }
-        //权限检测
-        //保存表单验证错误之前的GET
-//        if (config('TOKEN_ON') && request()->isMethod('GET') && !request()->ajax()) {
-//            session('token_back_page', __SELF__);
-//        }
-        //POST提交必须检查表单验证
-//        if (request()->isMethod('POST') && !request()->ajax() && !isset($_FILES['imgFile']) && !$this->token_check()) {
-//           return $this->error(trans('common.token') . trans('common.error') . '(' . trans('common.refresh') . trans('common.later') . trans('common.submit') . ')',
-//                session('token_back_page')); //后台统一检查表单令牌
-//        }
     }
 
     protected function success($msg = '', $backUrl = '', $timeout = 3)

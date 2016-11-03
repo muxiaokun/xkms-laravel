@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Model;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Filesystem\Filesystem;
 
 class Backend extends Common
@@ -12,49 +13,47 @@ class Backend extends Common
     public function _initialize()
     {
         parent::_initialize();
-        /*
         if ($this->isLogin()) {
             $backendInfo = session('backend_info');
             //自动登出时间
-            if (Carbon::now() - config('system.sys_backend_timeout') < $backendInfo['login_time']) {
-                $backendInfo['login_time'] = Carbon::now();
-                session('backend_info', $backendInfo);
+            if (Carbon::now()->getTimestamp() - config('system.sys_backend_timeout') < $backendInfo['login_time']->getTimestamp()) {
+                session('backend_info.login_time', Carbon::now()->getTimestamp());
             } else {
                 $this->doLogout();
-               return $this->error(trans('common.login') . trans('common.timeout'), route('Admin/Index/index'));
+                die($this->error(trans('common.login') . trans('common.timeout'), route('Admin::Index::index')));
             }
-
             //检查管理员或者管理员组权限变动 先检查数量 提高效率
-            $AdminModel            = D('Admin');
-            $adminInfo            = Model\Admins::mFind($backendInfo['id']);
-            $adminGroupPrivilege = Model\AdminGroup::mFind_privilege($adminInfo['group_id']);
+            $adminInfo           = Model\Admins::mFind($backendInfo['id']);
+            $adminGroupPrivilege = Model\AdminGroups::mFindPrivilege($adminInfo['group_id']);
             if (
                 $backendInfo['privilege'] !== $adminInfo['privilege'] ||
-                $backendInfo['group_privilege'] !== $adminGroupPrivilege
+                $backendInfo['group_privilege']->toArray() !== $adminGroupPrivilege->toArray()
             ) {
                 $this->doLogout();
-               return $this->error(trans('common.privilege') . trans('common.change') . trans('common.please') . trans('common.login'), route('Admin/Index/index'));
+                die($this->error(trans('common.privilege') . trans('common.change') . trans('common.please') . trans('common.login'),
+                    route('Admin::Index::index')));
             }
 
             //登录后 检查权限
-            if (!$this->_check_privilege()) {
-               return $this->error(trans('common.you') . trans('common.none') . trans('common.privilege'));
+            if (!$this->_check_privilege(Route::currentRouteName())) {
+                die($this->error(trans('common.you') . trans('common.none') . trans('common.privilege')));
             }
 
-            //是否开启管理员日志 记录除了root 和 非POST(不记录来自ajax_api)提交数据
-            if (config('system.sys_admin_auto_log') && 1 != session('backend_info.id') && request()->isMethod('POST') && 'ajax_api' != ACTION_NAME) {
-                $denyLog['Index'] = array('index', 'top_nav', 'left_nav', 'main', 'logout');
-                if (!in_array(ACTION_NAME, $denyLog[CONTROLLER_NAME])) {
+            //是否开启管理员日志 记录POST提交数据除了root用户
+            if (config('system.sys_admin_auto_log') && 1 != session('backend_info.id') && request()->isMethod('POST')) {
                     Model\AdminLogs::mAdd($backendInfo['id']);
-                }
             }
         } else {
             //检测不登陆就可以访问的
-            $allowAction['Index'] = array('index', 'login', 'verifyImg');
-            if (!in_array(ACTION_NAME, $allowAction[CONTROLLER_NAME])) {
-               return $this->error(trans('common.notdoLogin') . trans('common.backend'), route('Admin/Index/index'));
+            $allowRoute = [
+                'Admin::Index::index',
+                'Admin::Index::login',
+            ];
+            if (!call_user_func_array('Route::is', $allowRoute)) {
+                die($this->error(trans('common.not_login') . trans('common.backend'), route('Admin::Index::index')));
+
             }
-        }*/
+        }
     }
 
     //生成验证码
@@ -111,7 +110,7 @@ class Backend extends Common
         if ($adminInfo) {
             //管理员有组的 加载分组权限
             if (0 < count($adminInfo['group_id'])) {
-                $adminInfo['group_privilege'] = Model\AdminGroups::mFind_privilege($adminInfo['group_id']);
+                $adminInfo['group_privilege'] = Model\AdminGroups::mFindPrivilege($adminInfo['group_id']);
             }
             //重置登录次数
             if (0 != $adminInfo['login_num']) {
@@ -121,7 +120,7 @@ class Backend extends Common
                 Model\Admins::where('id', '=', $loginInfo->id)->update($loginData);
             }
             $adminInfo['login_time'] = Carbon::now();
-            session(['backend_info' => $adminInfo]);
+            session(['backend_info' => $adminInfo->toArray()]);
             return 'login_success';
         } else {
             //检测后台尝试登陆次数

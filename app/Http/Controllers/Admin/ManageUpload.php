@@ -50,7 +50,7 @@ class ManageUpload extends Backend
         $whereInfo              = [];
         $whereInfo['add_time']  = ['type' => 'time', 'name' => trans('common.add') . trans('common.time')];
         $whereInfo['suffix']    = ['type' => 'input', 'name' => trans('common.suffix')];
-        $whereInfo['bind_info'] = ['type' => 'input', 'name' => trans('common.bind') . trans('common.controller')];
+        $whereInfo['bind_info'] = ['type' => 'input', 'name' => trans('common.bind') . trans('common.info')];
         $assign['where_info']   = $whereInfo;
 
         //初始化batch_handle

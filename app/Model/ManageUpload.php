@@ -8,11 +8,10 @@ class ManageUpload extends Common
     //获得全部或者部分管理组列表
     public function scopeMList($query, $where = null, $page = false)
     {
-        $instance = $query->getInstance();
-        $instance->mGetPage($page);
-        $data = $instance->where($where)->get();
+        $query->mGetPage($page);
+        $data = $query->where($where)->get();
         foreach ($data as &$dataRow) {
-            $instance->mDecodeData($dataRow);
+            $query->mDecodeData($dataRow);
         }
         return $data;
     }

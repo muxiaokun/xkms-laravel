@@ -9,7 +9,7 @@ class Comment extends Common
     {
         $query->mGetPage($page);
         null !== $query->option['order'] && $query->order('add_time desc');
-        $data = $query->select('*,inet_ntoa(add_ip) as aip')->where($where)->select();
+        $data = $query->select(['*', 'login_ip as aip'])->where($where)->select();
         foreach ($data as &$dataRow) {
             $query->mDecodeData($dataRow);
         }

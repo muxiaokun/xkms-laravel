@@ -12,7 +12,7 @@ class Admins extends Common
         $query->mParseWhere($where);
         $query->mGetPage($page);
         null !== $query->options['order'] && $query->order('id desc');
-        $data = $query->select('*,inet_ntoa(login_ip) as aip')->where($where)->select();
+        $data = $query->select(['*', 'login_ip as aip'])->where($where)->select();
         foreach ($data as &$dataRow) {
             $query->mDecodeData($dataRow);
         }
@@ -40,11 +40,12 @@ class Admins extends Common
 
     public function scopeMFind($query, $id)
     {
-        $query->select('*,inet_ntoa(login_ip) as aip');
+        $query->select(['*', 'login_ip as aip']);
+        return parent::scopeMFind($query, $id);
         return $query->mFind($id);
     }
 
-    public function authorized($query, $user, $pwd)
+    public function scopeAuthorized($query, $user, $pwd)
     {
         if (!$user) {
             return false;

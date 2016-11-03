@@ -3,6 +3,8 @@
 namespace App\Model;
 
 
+use Illuminate\Support\Collection;
+
 class AdminGroups extends Common
 {
     //获得全部或者部分管理组列表
@@ -27,7 +29,7 @@ class AdminGroups extends Common
     }
 
     //查找出组权限
-    public function scopeMFind_privilege($query, $id)
+    public function scopeMFindPrivilege($query, $id)
     {
         if (!$id) {
             return false;
@@ -42,7 +44,7 @@ class AdminGroups extends Common
         foreach ($data as $group) {
             $privilege = array_merge($privilege, $group['privilege']);
         }
-        return $privilege;
+        return new Collection($privilege);
     }
 
     //返回有权管理的组

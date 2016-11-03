@@ -10,7 +10,7 @@ class Member extends Common
         $query->mParseWhere($where);
         $query->mGetPage($page);
         null !== $query->option['order'] && $query->order('id desc');
-        $data = $query->select('*,inet_ntoa(login_ip) as aip')->where($where)->select();
+        $data = $query->select(['*', 'login_ip as aip'])->where($where)->select();
         foreach ($data as &$dataRow) {
             $query->mDecodeData($dataRow);
         }
@@ -29,7 +29,7 @@ class Member extends Common
 
     public function scopeMFind($query, $id)
     {
-        $query->select('*,inet_ntoa(login_ip) as aip');
+        $query->select(['*', 'login_ip as aip']);
         return $query->mFind($id);
     }
 

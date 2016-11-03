@@ -27,7 +27,7 @@ class MemberGroup extends Common
     }
 
     //查找出组权限
-    public function scopeMFind_privilege($query, $id)
+    public function scopeMFindPrivilege($query, $id)
     {
         if (!$id) {
             return false;

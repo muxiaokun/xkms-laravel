@@ -30,13 +30,12 @@ class MessageBoard extends Frontend
             $messageBoardLog['send_info']  = json_decode($messageBoardLog['send_info'], true);
         }
         $assign['message_board_log_list']       = $messageBoardLogList;
-        $assign['message_board_log_list_count'] = Model\MessageBoardLog::mGetPageCount($where);
 
         $defTemplate = CONTROLLER_NAME . config('TMPL_FILE_DEPR') . ACTION_NAME;
         $template    = ($messageBoardInfo['template']) ? $defTemplate . '_' . $messageBoardInfo['template'] : $defTemplate;
 
         $assign['title'] = trans('common.messageboard');
-        return view('home.$template', $assign);
+        return view($template, $assign);
     }
 
     //添加

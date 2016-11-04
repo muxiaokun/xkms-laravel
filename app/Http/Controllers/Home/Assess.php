@@ -33,10 +33,9 @@ class Assess extends FrontendMember
             }
         }
         $assign['assess_list']       = $assessList;
-        $assign['assess_list_conut'] = Model\Assess::mGetPageCount($where);
 
         $assign['title'] = trans('common.assess');
-        return view('home.', $assign);
+        return view('home.Assess_index', $assign);
     }
 
     //添加
@@ -84,7 +83,7 @@ class Assess extends FrontendMember
 
         $assessInfo['ext_info'] = json_decode($assessInfo['ext_info'], true);
         $assign['assess_info']  = $assessInfo;
-        return view('home.', $assign);
+        return view('home.Assess_add', $assign);
     }
 
     //异步验证接口

@@ -11,6 +11,7 @@ class Wechat extends Backend
     //列表 系统已绑定微信账号
     public function index()
     {
+        //建立where
         $where       = [];
         $whereValue  = request('member_name');
         $whereValue && $where[] = ['member_name', $whereValue];
@@ -23,7 +24,6 @@ class Wechat extends Backend
             $wechat['member_name'] = Model\Member::mFindColumn($wechat['member_id'], 'member_name');
         }
         $assign['wechat_list']       = $wechatList;
-        $assign['wechat_list_count'] = Model\Wechat::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo                = [];
@@ -39,7 +39,7 @@ class Wechat extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.wechat') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.Wechat_index', $assign);
     }
 
     //配置
@@ -67,7 +67,7 @@ class Wechat extends Backend
         $assign['Oauth2_link'] = $Oauth2Link;
 
         $assign['title'] = trans('common.config') . trans('common.wechat');
-        return view('admin.', $assign);
+        return view('admin.Wechat_add', $assign);
     }
 
     //对单一微信发送信息
@@ -121,7 +121,7 @@ class Wechat extends Backend
         }
 
         $assign['title'] = trans('common.send') . trans('common.wechat');
-        return view('admin.', $assign);
+        return view('admin.Wechat_edit', $assign);
     }
 
     //解除绑定

@@ -12,7 +12,7 @@ class Region extends Backend
     public function index()
     {
         //建立where
-        $whereValue = '';
+        $where      = [];
         $whereValue = request('region_name');
         $whereValue && $where['region_name'] = ['like', '%' . $whereValue . '%'];
         $whereValue = request('short_spell');
@@ -29,7 +29,6 @@ class Region extends Backend
         }
 
         $assign['region_list']       = $regionList;
-        $assign['region_list_count'] = Model\Region::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo['region_name'] = ['type' => 'input', 'name' => trans('common.region_name')];
@@ -46,7 +45,7 @@ class Region extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.region') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.Region_index', $assign);
     }
 
     //新增
@@ -65,7 +64,7 @@ class Region extends Backend
         }
 
         $assign['title'] = trans('common.region') . trans('common.add');
-        return view('admin.addedit', $assign);
+        return view('admin.Region_addedit', $assign);
     }
 
     //编辑
@@ -94,7 +93,7 @@ class Region extends Backend
         $editInfo['parent_name'] = Model\Region::mFindColumn($editInfo['parent_id'], 'region_name');
         $assign['edit_info']     = $editInfo;
         $assign['title']         = trans('common.region') . trans('common.edit');
-        return view('admin.addedit', $assign);
+        return view('admin.Region_addedit', $assign);
     }
 
     //删除

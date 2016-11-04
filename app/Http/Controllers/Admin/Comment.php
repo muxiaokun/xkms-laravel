@@ -11,10 +11,8 @@ class Comment extends Backend
     //列表
     public function index()
     {
-        $where        = [];
-
         //建立where
-        $whereValue = '';
+        $where      = [];
         $whereValue = request('audit_id');
         $whereValue && $where[] = [
             'audit_id',
@@ -40,7 +38,6 @@ class Comment extends Backend
             $comment['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');
         }
         $assign['comment_list']       = $commentList;
-        $assign['comment_list_count'] = Model\Comment::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo               = [];
@@ -64,7 +61,7 @@ class Comment extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.comment') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.Comment_index', $assign);
     }
 
     //审核回复
@@ -84,7 +81,7 @@ class Comment extends Backend
         }
 
         $assign['title'] = trans('common.config') . trans('common.comment');
-        return view('admin.', $assign);
+        return view('admin.Comment_add', $assign);
     }
 
     //审核

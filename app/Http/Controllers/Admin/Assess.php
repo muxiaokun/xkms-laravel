@@ -11,9 +11,8 @@ class Assess extends Backend
     //列表
     public function index()
     {
-        $where = [];
         //建立where
-        $whereValue = '';
+        $where      = [];
         $whereValue = request('title');
         $whereValue && $where['title'] = ['like', '%' . $whereValue . '%'];
         $whereValue = request('group_level');
@@ -33,7 +32,6 @@ class Assess extends Backend
                 'name') : trans('common.empty');
         }
         $assign['assess_list']       = $assessList;
-        $assign['assess_list_count'] = Model\Assess::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo                = [];
@@ -56,7 +54,7 @@ class Assess extends Backend
         $assign['batch_handle']  = $batchHandle;
 
         $assign['title'] = trans('common.assess') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.Assess_index', $assign);
     }
 
     //新增
@@ -76,7 +74,7 @@ class Assess extends Backend
         }
 
         $assign['title'] = trans('common.assess') . trans('common.add');
-        return view('admin.addedit', $assign);
+        return view('admin.Assess_addedit', $assign);
     }
 
     //编辑
@@ -107,7 +105,7 @@ class Assess extends Backend
         $assign['edit_info']    = $editInfo;
 
         $assign['title'] = trans('common.assess') . trans('common.edit');
-        return view('admin.addedit', $assign);
+        return view('admin.Assess_addedit', $assign);
     }
 
     //删除

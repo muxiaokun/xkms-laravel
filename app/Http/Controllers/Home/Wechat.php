@@ -123,7 +123,7 @@ class Wechat extends Frontend
                 $this->_member_bind_msg($msg);
             } else {
                 session('wechat_info', $data);
-                return view('home.', $assign);
+                return view('home.Wechat_member_bind');
             }
         }
     }

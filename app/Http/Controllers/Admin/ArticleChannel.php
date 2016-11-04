@@ -12,7 +12,7 @@ class ArticleChannel extends Backend
     public function index()
     {
         //建立where
-        $whereValue = '';
+        $where      = [];
         $whereValue = request('name');
         $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
         $whereValue = request('if_show');
@@ -24,7 +24,6 @@ class ArticleChannel extends Backend
         //初始化翻页 和 列表数据
         $articleChannelList                   = Model\ArticleChannel::mList($where, true);
         $assign['article_channel_list']       = $articleChannelList;
-        $assign['article_channel_list_count'] = Model\ArticleChannel::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo            = [];
@@ -43,7 +42,7 @@ class ArticleChannel extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.channel') . trans('common.management');
-        return view('');
+        return view('admin.ArticleChannel_index');
     }
 
     //新增
@@ -69,7 +68,7 @@ class ArticleChannel extends Backend
         $this->addEditCommon();
 
         $assign['title'] = trans('common.add') . trans('common.channel');
-        return view('admin.addedit', $assign);
+        return view('admin.ArticleChannel_addedit', $assign);
     }
 
     //编辑
@@ -139,7 +138,7 @@ class ArticleChannel extends Backend
         $this->addEditCommon($editInfo);
 
         $assign['title'] = trans('common.edit') . trans('common.channel');
-        return view('admin.addedit', $assign);
+        return view('admin.ArticleChannel_addedit', $assign);
     }
 
     //删除

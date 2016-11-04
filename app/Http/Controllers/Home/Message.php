@@ -36,7 +36,6 @@ class Message extends FrontendMember
                 'member_name') : trans('common.system');
         }
         $assign['message_list']       = $messageList;
-        $assign['message_list_count'] = Model\Message::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo               = [];
@@ -50,7 +49,7 @@ class Message extends FrontendMember
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.message');
-        return view('home.', $assign);
+        return view('home.Message_index', $assign);
     }
 
     //发送信息
@@ -88,7 +87,7 @@ class Message extends FrontendMember
         }
 
         $assign['title'] = trans('common.send') . trans('common.message');
-        return view('home.', $assign);
+        return view('home.Message_add', $assign);
     }
 
     //删除

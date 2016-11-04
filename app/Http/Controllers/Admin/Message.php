@@ -11,7 +11,7 @@ class Message extends Backend
     //列表
     public function index()
     {
-        $where        = [];
+        $where = [];
         //0为系统发送/接收
         $where['_complex']['_logic']     = 'OR';
         $where['_complex']['receive_id'] = $where['_complex']['send_id'] = 0;
@@ -34,7 +34,6 @@ class Message extends Backend
                 'member_name') : trans('common.system');
         }
         $assign['message_list']       = $messageList;
-        $assign['message_list_count'] = Model\Message::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo               = [];
@@ -49,7 +48,7 @@ class Message extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.message') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.Message_index', $assign);
     }
 
     //发送信息
@@ -87,7 +86,7 @@ class Message extends Backend
         }
 
         $assign['title'] = trans('common.send') . trans('common.message');
-        return view('admin.', $assign);
+        return view('admin.Message_add', $assign);
     }
 
     //删除

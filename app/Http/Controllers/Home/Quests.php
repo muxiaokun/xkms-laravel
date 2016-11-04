@@ -19,10 +19,9 @@ class Quests extends FrontendMember
         ];
         $questsList                  = Model\Quests::mList($where, true);
         $assign['quests_list']       = $questsList;
-        $assign['quests_list_count'] = Model\Quests::mGetPageCount($where);
 
         $assign['title'] = trans('common.quests');
-        return view('home.', $assign);
+        return view('home.Quests_index', $assign);
     }
 
     //添加
@@ -86,7 +85,7 @@ class Quests extends FrontendMember
         $assign['quests_quest_list'] = $questsQuestList;
         $assign['quests_info']       = $questsInfo;
         $assign['title']             = trans('common.write') . trans('common.quests');
-        return view('home.', $assign);
+        return view('home.Quests_add', $assign);
     }
 }
 /*

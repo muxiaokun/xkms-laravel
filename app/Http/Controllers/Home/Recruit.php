@@ -29,10 +29,9 @@ class Recruit extends Frontend
 
         $recruitList                  = Model\Recruit::mList($where);
         $assign['recruit_list']       = $recruitList;
-        $assign['recruit_list_count'] = Model\Recruit::mGetPageCount($where);
 
         $assign['title'] = trans('common.recruit');
-        return view('home.', $assign);
+        return view('home.Recruit_index', $assign);
     }
 
     //添加
@@ -93,7 +92,7 @@ class Recruit extends Frontend
         $startYear            = date(config('system.sys_date'), mktime(0, 0, 0, date('m'), date('d'), date('Y') - 28));
         $assign['start_year'] = $startYear;
         $assign['title']      = trans('common.write') . trans('common.recruit');
-        return view('home.', $assign);
+        return view('home.Recruit_add', $assign);
     }
 
     //查看
@@ -108,6 +107,6 @@ class Recruit extends Frontend
         $recruitInfo            = Model\Recruit::mFind($id);
         $assign['recruit_info'] = $recruitInfo;
         $assign['title']        = trans('common.look') . trans('common.recruit');
-        return view('home.', $assign);
+        return view('home.Recruit_edit', $assign);
     }
 }

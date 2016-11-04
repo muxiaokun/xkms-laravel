@@ -11,10 +11,10 @@ class Member extends FrontendMember
     public function index()
     {
         if (!$this->isLogin()) {
-            return view('home.login', $assign);
+            return view('home.Member_login', $assign);
             return;
         }
-        return view('home.', $assign);
+        return view('home.Member_index', $assign);
     }
 
     //登录

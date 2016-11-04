@@ -12,7 +12,7 @@ class Recruit extends Backend
     public function index()
     {
         //建立where
-        $whereValue = '';
+        $where      = [];
         $whereValue = request('name');
         $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
         $whereValue = mMktimeRange('start_time');
@@ -22,7 +22,6 @@ class Recruit extends Backend
         //初始化翻页 和 列表数据
         $recruitList                  = Model\Recruit::mList($where, true);
         $assign['recruit_list']       = $recruitList;
-        $assign['recruit_list_count'] = Model\Recruit::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo               = [];
@@ -40,7 +39,7 @@ class Recruit extends Backend
         $assign['batch_handle']   = $batchHandle;
 
         $assign['title'] = trans('common.recruit') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.Recruit_index', $assign);
     }
 
     //新增
@@ -59,7 +58,7 @@ class Recruit extends Backend
             }
         }
         $assign['title'] = trans('common.add') . trans('common.recruit');
-        return view('admin.addedit', $assign);
+        return view('admin.Recruit_addedit', $assign);
     }
 
     //编辑
@@ -88,7 +87,7 @@ class Recruit extends Backend
         $assign['edit_info'] = $editInfo;
 
         $assign['title'] = trans('common.edit') . trans('common.recruit');
-        return view('admin.addedit', $assign);
+        return view('admin.Recruit_addedit', $assign);
     }
 
     //删除

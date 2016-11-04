@@ -143,7 +143,6 @@ class Article extends Frontend
             $articleLsit = Model\Article::mList($where, $page);
 
             $assign['article_list']       = $articleLsit;
-            $assign['article_list_count'] = Model\Article::mGetPageCount($where);
         }
 
         $assign['category_info']     = $categoryInfo;
@@ -151,7 +150,7 @@ class Article extends Frontend
         $assign['title']             = $categoryInfo['name'];
         $assign['category_position'] = $this->_get_category_position($cateId);
         $assign['article_position']  = $this->_get_article_position($cateId);
-        return view('home.$template', $assign);
+        return view($template, $assign);
     }
 
     // 显示频道
@@ -232,7 +231,6 @@ class Article extends Frontend
 
         $articleLsit                  = Model\Article::mList($where, true);
         $assign['article_list']       = $articleLsit;
-        $assign['article_list_count'] = Model\Article::mGetPageCount($where);
 
         $request           = request();
         $assign['request'] = $request;

@@ -11,10 +11,8 @@ class Member extends Backend
     //列表
     public function index()
     {
-        $where            = [];
-
         //建立where
-        $whereValue = '';
+        $where      = [];
         $whereValue = request('member_name');
         $whereValue && $where['member_name'] = ['like', '%' . $whereValue . '%'];
         $whereValue = request('group_id');
@@ -35,7 +33,6 @@ class Member extends Backend
             !isset($member['add_time']) && $member['add_time'] = trans('common.system') . trans('common.add');
         }
         $assign['member_list']       = $memberList;
-        $assign['member_list_count'] = Model\Member::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo                  = [];
@@ -53,7 +50,7 @@ class Member extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.member') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.Member_index', $assign);
     }
 
     //新增
@@ -72,7 +69,7 @@ class Member extends Backend
         }
         $this->addEditCommon();
         $assign['title'] = trans('common.member') . trans('common.add');
-        return view('admin.addedit', $assign);
+        return view('admin.Member_addedit', $assign);
     }
 
     //编辑
@@ -107,7 +104,7 @@ class Member extends Backend
 
         $this->addEditCommon();
         $assign['title'] = trans('common.member') . trans('common.edit');
-        return view('admin.addedit', $assign);
+        return view('admin.Member_addedit', $assign);
     }
 
     //删除
@@ -151,7 +148,7 @@ class Member extends Backend
         }
 
         $assign['title'] = trans('common.member') . trans('common.config');
-        return view('admin.', $assign);
+        return view('admin.Member_setting', $assign);
     }
 
     //异步和表单数据验证

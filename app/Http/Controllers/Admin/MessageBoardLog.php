@@ -11,13 +11,10 @@ class MessageBoardLog extends Backend
     //列表
     public function index()
     {
-        $where                = [];
-        //如果$msgId不存在就返回全部留言
-        $msgId = request('msg_id');
-        $msgId && $where['msg_id'] = $msgId;
-
         //建立where
-        $whereValue = '';
+        $where      = [];
+        $whereValue = request('msg_id');
+        $whereValue && $where['msg_id'] = $whereValue;
         $whereValue = request('audit_id');
         $whereValue && $where[] = [
             'audit_id',
@@ -35,7 +32,6 @@ class MessageBoardLog extends Backend
             $messageBoardLog['member_name'] = ($memberName) ? $memberName : trans('common.empty');
         }
         $assign['message_board_log_list']       = $messageBoardLogList;
-        $assign['message_board_log_list_count'] = Model\MessageBoardLog::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo             = [];
@@ -53,7 +49,7 @@ class MessageBoardLog extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.messageboard') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.MessageBoardLog_index', $assign);
     }
 
     //审核回复
@@ -89,7 +85,7 @@ class MessageBoardLog extends Backend
         $assign['edit_info']     = $editInfo;
 
         $assign['title'] = trans('common.messageboard') . trans('common.audit');
-        return view('admin.', $assign);
+        return view('admin.MessageBoardLog_edit', $assign);
     }
 
     //删除

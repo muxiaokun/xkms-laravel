@@ -11,10 +11,8 @@ class MessageBoard extends Backend
     //列表
     public function index()
     {
-        $where = [];
-
         //建立where
-        $whereValue = '';
+        $where      = [];
         $whereValue = request('name');
         $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
 
@@ -27,7 +25,6 @@ class MessageBoard extends Backend
             $messageBoard['option'] = mSubstr(implode(',', $option), 40);
         }
         $assign['message_board_list']       = $messageBoardList;
-        $assign['message_board_list_count'] = Model\MessageBoard::mGetPageCount($where);
 
         //初始化batch_handle
         $batchHandle              = [];
@@ -38,7 +35,7 @@ class MessageBoard extends Backend
         $assign['batch_handle']   = $batchHandle;
 
         $assign['title'] = trans('common.messageboard') . trans('common.management');
-        return view('', $assign);
+        return view('admin.MessageBoard_index', $assign);
     }
 
     //新增
@@ -59,7 +56,7 @@ class MessageBoard extends Backend
 
         $assign['template_list'] = mScanTemplate('index', config('DEFAULT_MODULE'), 'MessageBoard');
         $assign['title']         = trans('common.messageboard') . trans('common.add');
-        return view('admin.addedit', $assign);
+        return view('admin.MessageBoard_addedit', $assign);
     }
 
     //编辑
@@ -90,7 +87,7 @@ class MessageBoard extends Backend
 
         $assign['template_list'] = mScanTemplate('index', config('DEFAULT_MODULE'), 'MessageBoard');
         $assign['title']         = trans('common.messageboard') . trans('common.edit');
-        return view('admin.addedit', $assign);
+        return view('admin.MessageBoard_addedit', $assign);
     }
 
     //删除

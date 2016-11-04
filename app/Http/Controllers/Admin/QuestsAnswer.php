@@ -11,10 +11,8 @@ class QuestsAnswer extends Backend
     //列表
     public function index()
     {
-        $where = [];
-
         //建立where
-        $whereValue = '';
+        $where      = [];
         $whereValue = request('quests_id');
         $whereValue && $where[] = ['quests_id', $whereValue];
         $whereValue = request('quests_title');
@@ -36,7 +34,6 @@ class QuestsAnswer extends Backend
             $questsAnswer['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');
         }
         $assign['quests_answer_list']       = $questsAnswerList;
-        $assign['quests_answer_list_count'] = Model\QuestsAnswer::mGetPageCount($where);
         //初始化where_info
         $whereInfo                 = [];
         $whereInfo['quests_title'] = ['type' => 'input', 'name' => trans('common.quests') . trans('common.name')];
@@ -50,7 +47,7 @@ class QuestsAnswer extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.quests') . trans('common.answer') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.QuestsAnswer_index', $assign);
     }
 
     //显示问卷答案
@@ -80,7 +77,7 @@ class QuestsAnswer extends Backend
         $assign['quests_info']        = $questsInfo;
         $assign['quests_answer_info'] = $questsAnswerInfo;
         $assign['title']              = trans('common.quests') . trans('common.answer');
-        return view('admin.', $assign);
+        return view('admin.QuestsAnswer_add', $assign);
     }
 
     //统计问卷答案
@@ -126,7 +123,7 @@ class QuestsAnswer extends Backend
         $assign['quests_quest_list'] = $questsQuestList;
 
         $assign['title'] = trans('common.quests') . trans('common.answer') . trans('common.statistics');
-        return view('admin.', $assign);
+        return view('admin.QuestsAnswer_edit', $assign);
     }
 
     //删除

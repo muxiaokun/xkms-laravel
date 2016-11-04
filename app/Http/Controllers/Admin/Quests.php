@@ -11,10 +11,8 @@ class Quests extends Backend
     //列表
     public function index()
     {
-        $where = [];
-
         //建立where
-        $whereValue = '';
+        $where      = [];
         $whereValue = request('title');
         $whereValue && $where['title'] = ['like', '%' . $whereValue . '%'];
         $whereValue = mMktimeRange('start_time');
@@ -24,7 +22,6 @@ class Quests extends Backend
 
         $questsList                  = Model\Quests::mList($where, true);
         $assign['quests_list']       = $questsList;
-        $assign['quests_list_count'] = Model\Quests::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo               = [];
@@ -43,7 +40,7 @@ class Quests extends Backend
         $assign['batch_handle']      = $batchHandle;
 
         $assign['title'] = trans('common.quests') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.Quests_index', $assign);
     }
 
     //新增
@@ -62,7 +59,7 @@ class Quests extends Backend
             }
         }
         $assign['title'] = trans('common.add') . trans('common.quests');
-        return view('admin.addedit', $assign);
+        return view('admin.Quests_addedit', $assign);
     }
 
     //编辑
@@ -90,7 +87,7 @@ class Quests extends Backend
         $assign['edit_info'] = $editInfo;
 
         $assign['title'] = trans('common.edit') . trans('common.quests');
-        return view('admin.addedit', $assign);
+        return view('admin.Quests_addedit', $assign);
     }
 
     //删除

@@ -15,7 +15,7 @@ class Navigation extends Backend
     public function index()
     {
         //建立where
-        $whereValue = '';
+        $where      = [];
         $whereValue = request('name');
         $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
         $whereValue = request('short_name');
@@ -25,7 +25,6 @@ class Navigation extends Backend
         //初始化翻页 和 列表数据
         $navigationList                  = Model\Navigation::mList($where, true);
         $assign['navigation_list']       = $navigationList;
-        $assign['navigation_list_count'] = Model\Navigation::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo               = [];
@@ -46,7 +45,7 @@ class Navigation extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.navigation') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.Navigation_index', $assign);
     }
 
     //新增
@@ -67,7 +66,7 @@ class Navigation extends Backend
 
         $assign['navigation_config'] = $this->navigation_config;
         $assign['title']             = trans('common.add') . trans('common.navigation');
-        return view('admin.addedit', $assign);
+        return view('admin.Navigation_addedit', $assign);
     }
 
     //编辑
@@ -98,7 +97,7 @@ class Navigation extends Backend
 
         $assign['navigation_config'] = $this->navigation_config;
         $assign['title']             = trans('common.edit') . trans('common.navigation');
-        return view('admin.addedit', $assign);
+        return view('admin.Navigation_addedit', $assign);
     }
 
     //删除

@@ -64,7 +64,6 @@ class Comment extends Frontend
                     $comment['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');
                 }
                 $assign['comment_list']       = $commentList;
-                $assign['comment_list_count'] = Model\Comment::mGetPageCount($where);
                 return view('home.index', $assign);
                 exit();
                 break;

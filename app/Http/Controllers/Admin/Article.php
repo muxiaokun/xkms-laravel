@@ -12,7 +12,7 @@ class Article extends Backend
     public function index()
     {
         //建立where
-        $whereValue = '';
+        $where      = [];
         $whereValue = request('title');
         $whereValue && $where['title'] = ['like', '%' . $whereValue . '%'];
         $whereValue = request('cate_id');
@@ -60,7 +60,6 @@ class Article extends Backend
                 'name') : trans('common.empty');
         }
         $assign['article_list']       = $articleList;
-        $assign['article_list_count'] = Model\Article::mGetPageCount($where);
 
         //初始化where_info
         $channelList        = Model\ArticleChannel::mList($channelWhere,
@@ -110,7 +109,7 @@ class Article extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.article') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.Article_index', $assign);
     }
 
     //新增
@@ -136,7 +135,7 @@ class Article extends Backend
 
         $this->addEditCommon();
         $assign['title'] = trans('common.article') . trans('common.add');
-        return view('admin.addedit', $assign);
+        return view('admin.Article_addedit', $assign);
     }
 
     //编辑
@@ -187,7 +186,7 @@ class Article extends Backend
 
         $this->addEditCommon();
         $assign['title'] = trans('common.article') . trans('common.edit');
-        return view('admin.addedit', $assign);
+        return view('admin.Article_addedit', $assign);
     }
 
     //删除
@@ -226,7 +225,7 @@ class Article extends Backend
         }
 
         $assign['title'] = trans('common.article') . trans('common.config');
-        return view('admin.', $assign);
+        return view('admin.Article_setting', $assign);
     }
 
     //异步行编辑

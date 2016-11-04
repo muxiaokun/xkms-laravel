@@ -12,7 +12,7 @@ class Itlink extends Backend
     public function index()
     {
         //建立where
-        $whereValue = '';
+        $where      = [];
         $whereValue = request('name');
         $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
         $whereValue = request('short_name');
@@ -25,7 +25,6 @@ class Itlink extends Backend
         //初始化翻页 和 列表数据
         $itlinkList                  = Model\Itlink::mList($where, true);
         $assign['itlink_list']       = $itlinkList;
-        $assign['itlink_list_count'] = Model\Itlink::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo['name']          = ['type' => 'input', 'name' => trans('common.itlink') . trans('common.name')];
@@ -50,7 +49,7 @@ class Itlink extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.itlink') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.Itlink_index', $assign);
     }
 
     //新增
@@ -70,7 +69,7 @@ class Itlink extends Backend
         }
 
         $assign['title'] = trans('common.itlink') . trans('common.add');
-        return view('admin.addedit', $assign);
+        return view('admin.Itlink_addedit', $assign);
     }
 
     //编辑
@@ -99,7 +98,7 @@ class Itlink extends Backend
         $editInfo            = Model\Itlink::mFind($id);
         $assign['edit_info'] = $editInfo;
         $assign['title']     = trans('common.itlink') . trans('common.edit');
-        return view('admin.addedit', $assign);
+        return view('admin.Itlink_addedit', $assign);
     }
 
     //删除

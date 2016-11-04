@@ -12,7 +12,7 @@ class ArticleCategory extends Backend
     public function index()
     {
         //建立where
-        $whereValue = '';
+        $where      = [];
         $whereValue = request('name');
         $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
         $whereValue = request('channel_id');
@@ -35,7 +35,6 @@ class ArticleCategory extends Backend
         foreach ($articleCategoryList as &$articleCategory) {
             //parent_id 用完销毁不能产生歧义
             $where['parent_id']           = $articleCategory['id'];
-            $articleCategory['has_child'] = Model\ArticleCategory::mGetPageCount($where);
             unset($where['parent_id']);
             $articleCategory['show']          = ($articleCategory['if_show']) ? trans('common.show') : trans('common.hidden');
             $articleCategory['ajax_api_link'] = route('ajax_api');
@@ -74,7 +73,7 @@ class ArticleCategory extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.article') . trans('common.category') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.ArticleCategory_index', $assign);
     }
 
     //新增
@@ -97,7 +96,7 @@ class ArticleCategory extends Backend
 
         $this->addEditCommon();
         $assign['title'] = trans('common.add') . trans('common.article') . trans('common.category');
-        return view('admin.addedit', $assign);
+        return view('admin.ArticleCategory_addedit', $assign);
     }
 
     //编辑
@@ -166,7 +165,7 @@ class ArticleCategory extends Backend
 
         $this->addEditCommon();
         $assign['title'] = trans('common.edit') . trans('common.article') . trans('common.category');
-        return view('admin.addedit', $assign);
+        return view('admin.ArticleCategory_addedit', $assign);
     }
 
     //删除

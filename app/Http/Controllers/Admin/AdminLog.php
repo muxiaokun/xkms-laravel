@@ -11,11 +11,8 @@ class AdminLog extends Backend
     //列表
     public function index()
     {
-        //初始化页面参数
-        $where = [];
-
         //建立where
-        $whereValue = '';
+        $where      = [];
         $whereValue = mMktimeRange('add_time');
         $whereValue && $where[] = ['add_time', $whereValue];
         $whereValue = request('admin_id');
@@ -32,7 +29,6 @@ class AdminLog extends Backend
             $adminLog['admin_name'] = Model\Admins::mFindColumn($adminLog['admin_id'], 'admin_name');
         }
         $assign['admin_log_list']       = $adminLogList;
-        $assign['admin_log_list_count'] = Model\AdminLogs::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo               = [];

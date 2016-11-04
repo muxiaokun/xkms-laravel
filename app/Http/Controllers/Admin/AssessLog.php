@@ -33,7 +33,6 @@ class AssessLog extends Backend
         if ($reGradeName) {
             $where                = ['assess_id' => $id];
             $where['re_grade_id'] = $reGradeId;
-            $countRow             = Model\AssessLog::mGetPageCount($where);
             $assessLogInfos       = Model\AssessLog::limit($countRow)->mList($where);
             //算出各项评分
             $resultInfo             = [];
@@ -61,7 +60,7 @@ class AssessLog extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.assess') . trans('common.statistics');
-        return view('admin.', $assign);
+        return view('admin.AssessLog_edit', $assign);
     }
 
     //删除

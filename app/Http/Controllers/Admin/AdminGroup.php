@@ -11,7 +11,7 @@ class AdminGroup extends Backend
     //列表
     public function index()
     {
-        $where           = [];
+        $where = [];
         if (1 != session('backend_info.id')) {
             //非root需要权限
             $mFindAllow  = Model\AdminGroups::mFindAllow();
@@ -25,16 +25,16 @@ class AdminGroup extends Backend
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $adminGroupList                   = Model\AdminGroups::mList($where, true);
-        $assign['admin_group_list']       = $adminGroupList;
-        $assign['admin_group_list_count'] = Model\AdminGroups::mGetPageCount($where);
+        $adminGroupList             = Model\AdminGroups::mList($where, true);
+        $assign['admin_group_list'] = $adminGroupList;
 
         //初始化where_info
         $whereInfo              = [];
         $whereInfo['name']      = ['type' => 'input', 'name' => trans('common.group') . trans('common.name')];
-        $whereInfo['is_enable'] = ['type'  => 'select',
-                                   'name'  => trans('common.yes') . trans('common.no') . trans('common.enable'),
-                                   'value' => [1 => trans('common.enable'), 2 => trans('common.disable')],
+        $whereInfo['is_enable'] = [
+            'type'  => 'select',
+            'name'  => trans('common.yes') . trans('common.no') . trans('common.enable'),
+            'value' => [1 => trans('common.enable'), 2 => trans('common.disable')],
         ];
         $assign['where_info']   = $whereInfo;
 
@@ -46,7 +46,7 @@ class AdminGroup extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.admin') . trans('common.group') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.AdminGroup_index', $assign);
     }
 
     //新增
@@ -67,7 +67,7 @@ class AdminGroup extends Backend
 
         $this->addEditCommon();
         $assign['title'] = trans('common.admin') . trans('common.group') . trans('common.add');
-        return view('admin.addedit', $assign);
+        return view('admin.AdminGroup_addedit', $assign);
     }
 
     //编辑
@@ -102,7 +102,7 @@ class AdminGroup extends Backend
 
         $this->addEditCommon();
         $assign['title'] = trans('common.admin') . trans('common.group') . trans('common.edit');
-        return view('admin.addedit', $assign);
+        return view('admin.AdminGroup_addedit', $assign);
     }
 
     //删除

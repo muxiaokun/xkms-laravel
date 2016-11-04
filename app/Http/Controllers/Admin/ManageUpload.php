@@ -12,9 +12,8 @@ class ManageUpload extends Backend
     //列表
     public function index()
     {
-        $where = [];
         //建立where
-        $whereValue = '';
+        $where      = [];
         $whereValue = request('suffix');
         $whereValue && $where[] = ['suffix', $whereValue];
         $whereValue = request('bind_info');
@@ -44,7 +43,6 @@ class ManageUpload extends Backend
             $manageUpload['bind_info'] = json_encode($bindInfo);
         }
         $assign['manage_upload_list']       = $manageUploadList;
-        $assign['manage_upload_list_count'] = Model\ManageUpload::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo              = [];

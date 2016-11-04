@@ -12,7 +12,7 @@ class RecruitLog extends Backend
     public function index()
     {
         //建立where
-        $whereValue = '';
+        $where      = [];
         $whereValue = request('r_id');
         $whereValue && $where[] = ['r_id', $whereValue];
         $whereValue = request('name');
@@ -29,7 +29,6 @@ class RecruitLog extends Backend
             $recruitLog['certificate']   = $recruitCertificateData[$recruitLog['certificate']];
         }
         $assign['recruit_log_list']       = $recruitLogList;
-        $assign['recruit_log_list_count'] = Model\RecruitLog::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo             = [];
@@ -43,7 +42,7 @@ class RecruitLog extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.recruit_log') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.RecruitLog_index', $assign);
     }
 
     //删除

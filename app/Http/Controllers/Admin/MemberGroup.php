@@ -11,10 +11,8 @@ class MemberGroup extends Backend
     //列表
     public function index()
     {
-        $where            = [];
-
         //建立where
-        $whereValue = '';
+        $where      = [];
         $whereValue = request('name');
         $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
         $whereValue = request('is_enable');
@@ -23,7 +21,6 @@ class MemberGroup extends Backend
         //初始化翻页 和 列表数据
         $memberGroupList                   = Model\MemberGroup::mList($where, true);
         $assign['member_group_list']       = $memberGroupList;
-        $assign['member_group_list_count'] = Model\MemberGroup::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo              = [];
@@ -42,7 +39,7 @@ class MemberGroup extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.member') . trans('common.group') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.MemberGroup_index', $assign);
     }
 
     //新增
@@ -63,7 +60,7 @@ class MemberGroup extends Backend
 
         $this->addEditCommon();
         $assign['title'] = trans('common.member') . trans('common.group') . trans('common.add');
-        return view('admin.addedit', $assign);
+        return view('admin.MemberGroup_addedit', $assign);
     }
 
     //编辑
@@ -98,7 +95,7 @@ class MemberGroup extends Backend
 
         $this->addEditCommon();
         $assign['title'] = trans('common.member') . trans('common.group') . trans('common.edit');
-        return view('admin.addedit', $assign);
+        return view('admin.MemberGroup_addedit', $assign);
     }
 
     //删除

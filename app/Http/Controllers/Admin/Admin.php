@@ -11,7 +11,7 @@ class Admin extends Backend
     //列表
     public function index()
     {
-        $where           = [];
+        $where = [];
         if (1 != session('backend_info.id')) {
             //非root需要权限
             $mFindAllow        = Model\AdminGroups::mFindAllow();
@@ -42,8 +42,7 @@ class Admin extends Backend
             !isset($admin['group_name']) && $admin['group_name'] = trans('common.empty');
             !isset($admin['add_time']) && $admin['add_time'] = trans('common.system') . trans('common.add');
         }
-        $assign['admin_list']       = $adminList;
-        $assign['admin_list_count'] = Model\Admins::mGetPageCount($where);
+        $assign['admin_list'] = $adminList;
 
         //初始化where_info
         $whereInfo               = [];

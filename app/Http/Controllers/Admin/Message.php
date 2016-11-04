@@ -26,7 +26,7 @@ class Message extends Backend
         $whereValue = mMktimeRange('send_time');
         $whereValue && $where[] = ['send_time', $whereValue];
 
-        $messageList = Model\Message::order('receive_time asc,send_time desc')->mList($where, true);
+        $messageList = Model\Message::orderBy('receive_time', 'asc')->orderBy('send_time', 'desc')->mList($where, true);
         foreach ($messageList as &$message) {
             $message['send_name']    = ($message['send_id']) ? Model\Member::mFindColumn($message['send_id'],
                 'member_name') : trans('common.system');

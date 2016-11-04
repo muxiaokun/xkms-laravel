@@ -23,7 +23,7 @@ class ArticleCategory extends Backend
         $whereValue         = request('parent_id');
         $whereValue && $where[] = ['parent_id', $whereValue];
         if (1 != session('backend_info.id')) {
-            $allowCategory = Model\ArticleCategory::mFind_allow();
+            $allowCategory = Model\ArticleCategory::mFindAllow();
             if (isset($where['id']) && in_array($where['id'], $allowCategory)) {
                 $where['id'] = $where['id'];
             } else {
@@ -110,13 +110,13 @@ class ArticleCategory extends Backend
 
 
         if (1 != session('backend_info.id')
-            && !mInArray($id, Model\ArticleCategory::mFind_allow())
+            && !mInArray($id, Model\ArticleCategory::mFindAllow())
         ) {
             return $this->error(trans('common.none') . trans('common.privilege') . trans('common.edit') . trans('common.article') . trans('common.category'),
                 route('index'));
         }
 
-        $maAllowArr = Model\ArticleCategory::mFind_allow('ma');
+        $maAllowArr = Model\ArticleCategory::mFindAllow('ma');
         if (request()->isMethod('POST')) {
             $data = $this->makeData();
             if (1 != session('backend_info.id')
@@ -151,7 +151,7 @@ class ArticleCategory extends Backend
             }
             $editInfo['manage_id'] = json_encode($editInfo['manage_id']);
             foreach ($editInfo['manage_group_id'] as &$manageGroupId) {
-                $adminGroupName = Model\AdminGroup::mFindColumn($manageGroupId, 'name');
+                $adminGroupName = Model\AdminGroups::mFindColumn($manageGroupId, 'name');
                 $manageGroupId  = ['value' => $manageGroupId, 'html' => $adminGroupName];
             }
             $editInfo['manage_group_id'] = json_encode($editInfo['manage_group_id']);
@@ -178,7 +178,7 @@ class ArticleCategory extends Backend
         }
 
         //删除必须是 属主
-        if (!mInArray($id, Model\ArticleCategory::mFind_allow('ma'))
+        if (!mInArray($id, Model\ArticleCategory::mFindAllow('ma'))
             && 1 != session('backend_info.id')
         ) {
             return $this->error(trans('common.none') . trans('common.privilege') . trans('common.del') . trans('common.article') . trans('common.category'),
@@ -241,7 +241,7 @@ class ArticleCategory extends Backend
             case 'manage_group_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminGroupList = Model\AdminGroup::mList($where);
+                $adminGroupList = Model\AdminGroups::mList($where);
                 foreach ($adminGroupList as $adminGroup) {
                     $result['info'][] = ['value' => $adminGroup['id'], 'html' => $adminGroup['name']];
                 }
@@ -334,7 +334,7 @@ class ArticleCategory extends Backend
 
         $assign['category_list']         = Model\ArticleCategory::mList_tree($where);
         $managePrivilege                 = (1 == session('backend_info.id')) || in_array($id,
-                Model\ArticleCategory::mFind_allow('ma'));
+                Model\ArticleCategory::mFindAllow('ma'));
         $assign['manage_privilege']      = $managePrivilege;
         $assign['template_list']         = mScanTemplate('category', config('DEFAULT_MODULE'), 'Article');
         $assign['list_template_list']    = mScanTemplate('list_category', config('DEFAULT_MODULE'), 'Article');

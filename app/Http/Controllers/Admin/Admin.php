@@ -14,7 +14,7 @@ class Admin extends Backend
         $where           = [];
         if (1 != session('backend_info.id')) {
             //非root需要权限
-            $mFindAllow        = Model\AdminGroup::mFind_allow();
+            $mFindAllow        = Model\AdminGroups::mFindAllow();
             $where['group_id'] = $mFindAllow;
         }
         //建立where
@@ -35,7 +35,7 @@ class Admin extends Backend
         $adminList = Model\Admins::mList($where, true);
         foreach ($adminList as &$admin) {
             foreach ($admin['group_id'] as $groupId) {
-                $groupName = Model\AdminGroup::mFindColumn($groupId, 'name');
+                $groupName = Model\AdminGroups::mFindColumn($groupId, 'name');
                 isset($admin['group_name']) && $admin['group_name'] .= " | ";
                 $admin['group_name'] .= $groupName;
             }
@@ -65,7 +65,7 @@ class Admin extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.admin') . trans('common.management');
-        return view('admin.', $assign);
+        return view('admin.Admin_index', $assign);
     }
 
     //新增
@@ -85,7 +85,7 @@ class Admin extends Backend
         }
         $this->addEditCommon();
         $assign['title'] = trans('common.admin') . trans('common.add');
-        return view('admin.addedit', $assign);
+        return view('admin.Admin_addedit', $assign);
     }
 
     //编辑
@@ -112,7 +112,7 @@ class Admin extends Backend
 
         $editInfo = Model\Admins::mFind($id);
         foreach ($editInfo['group_id'] as &$groupId) {
-            $adminGroupName = Model\AdminGroup::mFindColumn($groupId, 'name');
+            $adminGroupName = Model\AdminGroups::mFindColumn($groupId, 'name');
             $groupId        = ['value' => $groupId, 'html' => $adminGroupName];
         }
         $editInfo['group_id'] = json_encode($editInfo['group_id']);
@@ -120,7 +120,7 @@ class Admin extends Backend
 
         $this->addEditCommon();
         $assign['title'] = trans('common.admin') . trans('common.edit');
-        return view('admin.addedit', $assign);
+        return view('admin.Admin_addedit', $assign);
     }
 
     //删除
@@ -160,7 +160,7 @@ class Admin extends Backend
         }
 
         $assign['title'] = trans('common.admin') . trans('common.config');
-        return view('admin.', $assign);
+        return view('admin.Admin_setting', $assign);
     }
 
     //异步和表单数据验证
@@ -258,7 +258,7 @@ class Admin extends Backend
                 }
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminGroupList = Model\AdminGroup::mList($where);
+                $adminGroupList = Model\AdminGroups::mList($where);
                 foreach ($adminGroupList as $adminGroup) {
                     $result['info'][] = ['value' => $adminGroup['id'], 'html' => $adminGroup['name']];
                 }
@@ -318,7 +318,7 @@ class Admin extends Backend
 
         //最高级管理不检查该项 管理员可否被当前管理员添加编辑
         if (1 != session('backend_info.id')) {
-            $mFindAllow = Model\AdminGroup::mFind_allow();
+            $mFindAllow = Model\AdminGroups::mFindAllow();
             if (!mInArray($groupId, $mFindAllow)) {
                 return $this->error(trans('common.you') . trans('common.none') . trans('common.privilege'));
             }

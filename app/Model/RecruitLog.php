@@ -8,7 +8,7 @@ class RecruitLog extends Common
     public function scopeMList($query, $where = null, $page = false)
     {
         $query->mGetPage($page);
-        null !== $query->options['order'] && $query->order('add_time desc');
+        null !== $query->options['order'] && $query->orderBy('add_time', 'desc');
         $data = $query->where($where)->select();
         foreach ($data as &$dataRow) {
             $query->mDecodeData($dataRow);

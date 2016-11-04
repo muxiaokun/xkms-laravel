@@ -12,8 +12,8 @@ class Article extends Common
     {
         $query->mParseWhere($where);
         $query->mGetPage($page);
-        null !== $query->option['order'] && $query->order('is_stick desc,sort asc,update_time desc');
-        $data = $query->where($where)->select();
+        null !== $query->option['order'] && $query->orderBy('is_stick', 'desc')
+            ->orderBy('sort', 'asc')->orderBy('update_time', 'desc');
         foreach ($data as &$dataRow) {
             $query->mDecodeData($dataRow);
         }

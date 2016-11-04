@@ -12,7 +12,7 @@ class AdminGroups extends Common
     {
         $query->mParseWhere($where);
         $query->mGetPage($page);
-        null !== $query->options['order'] && $query->order('id desc');
+        null !== $query->options['order'] && $query->orderBy('id', 'desc');
         $data = $query->where($where)->select();
         foreach ($data as &$dataRow) {
             $query->mDecodeData($dataRow);
@@ -48,7 +48,7 @@ class AdminGroups extends Common
     }
 
     //返回有权管理的组
-    public function scopeMFind_allow($query)
+    public function scopeMFindAllow($query)
     {
         $where       = [
             'manage_id' => session('backend_info.id'),

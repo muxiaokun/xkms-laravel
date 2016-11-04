@@ -27,7 +27,7 @@ class Article extends Backend
         $whereValue && $where['if_show'] = (1 == $whereValue) ? 1 : 0;
         $channelWhere = $categoryWhere = [];
         if (1 != session('backend_info.id')) {
-            $allowChannel = Model\ArticleChannel::mFind_allow();
+            $allowChannel = Model\ArticleChannel::mFindAllow();
             is_array($allowChannel) && $channelWhere = ['id' => ['in', $allowChannel]];
             if (isset($where['channel_id']) && in_array($where['channel_id'], $allowChannel)) {
                 $where['channel_id'] = $where['channel_id'];
@@ -35,7 +35,7 @@ class Article extends Backend
                 $where['channel_id'] = ['in', $allowChannel];
             }
 
-            $allowCategory = Model\ArticleCategory::mFind_allow();
+            $allowCategory = Model\ArticleCategory::mFindAllow();
             is_array($allowCategory) && $categoryWhere = ['id' => ['in', $allowCategory]];
             if (isset($where['cate_id']) && !mInArray($where['cate_id'], $allowCategory)) {
                 $where['cate_id'] = ['in', $allowCategory];
@@ -353,8 +353,8 @@ class Article extends Backend
     {
         $channelWhere         = $categoryWhere = [];
         if (1 != session('backend_info.id')) {
-            $channelWhere['id']  = ['in', Model\ArticleChannel::mFind_allow()];
-            $categoryWhere['id'] = ['in', Model\ArticleCategory::mFind_allow()];
+            $channelWhere['id']  = ['in', Model\ArticleChannel::mFindAllow()];
+            $categoryWhere['id'] = ['in', Model\ArticleCategory::mFindAllow()];
         }
         $channelList             = Model\ArticleChannel::mList($channelWhere,
             Model\ArticleChannel::where($channelWhere)->count());
@@ -374,8 +374,8 @@ class Article extends Backend
             $id   = request('id');
             $data = Model\Article::mFind($id);
         }
-        if (!in_array($data['channel_id'], Model\ArticleChannel::mFind_allow())
-            && !in_array($data['cate_id'], Model\ArticleCategory::mFind_allow())
+        if (!in_array($data['channel_id'], Model\ArticleChannel::mFindAllow())
+            && !in_array($data['cate_id'], Model\ArticleCategory::mFindAllow())
         ) {
             return $this->error(trans('common.none') . trans('common.privilege') . trans('common.handle') . trans('common.article'),
                 route('index'));

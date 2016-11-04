@@ -14,7 +14,7 @@ class AdminGroup extends Backend
         $where           = [];
         if (1 != session('backend_info.id')) {
             //非root需要权限
-            $mFindAllow  = Model\AdminGroup::mFind_allow();
+            $mFindAllow  = Model\AdminGroups::mFindAllow();
             $where['id'] = ['in', $mFindAllow];
         }
         //建立where
@@ -25,9 +25,9 @@ class AdminGroup extends Backend
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $adminGroupList                   = Model\AdminGroup::mList($where, true);
+        $adminGroupList                   = Model\AdminGroups::mList($where, true);
         $assign['admin_group_list']       = $adminGroupList;
-        $assign['admin_group_list_count'] = Model\AdminGroup::mGetPageCount($where);
+        $assign['admin_group_list_count'] = Model\AdminGroups::mGetPageCount($where);
 
         //初始化where_info
         $whereInfo              = [];
@@ -54,7 +54,7 @@ class AdminGroup extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData();
-            $resultAdd = Model\AdminGroup::mAdd($data);
+            $resultAdd = Model\AdminGroups::mAdd($data);
             if ($resultAdd) {
                 return $this->success(trans('common.management') . trans('common.group') . trans('common.add') . trans('common.success'),
                     route('index'));
@@ -80,7 +80,7 @@ class AdminGroup extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData();
-            $resultEdit = Model\AdminGroup::mEdit($id, $data);
+            $resultEdit = Model\AdminGroups::mEdit($id, $data);
             if ($resultEdit) {
                 return $this->success(trans('common.management') . trans('common.group') . trans('common.edit') . trans('common.success'),
                     route('index'));
@@ -92,7 +92,7 @@ class AdminGroup extends Backend
             }
         }
         //获取分组默认信息
-        $editInfo = Model\AdminGroup::mFind($id);
+        $editInfo = Model\AdminGroups::mFind($id);
         foreach ($editInfo['manage_id'] as $manageKey => $manageId) {
             $adminName                         = Model\Admins::mFindColumn($manageId, 'admin_name');
             $editInfo['manage_id'][$manageKey] = ['value' => $manageId, 'html' => $adminName];
@@ -115,13 +115,13 @@ class AdminGroup extends Backend
 
         if (1 != session('backend_info.id')) {
             //非root需要权限
-            $mFindAllow = Model\AdminGroup::mFind_allow();
+            $mFindAllow = Model\AdminGroups::mFindAllow();
         }
         if ($id == 1 || (!in_array($id, $mFindAllow) && count(0 < $mFindAllow))) {
             return $this->error(trans('common.id') . trans('common.not') . trans('common.del'), route('index'));
         }
 
-        $resultDel = Model\AdminGroup::mDel($id);
+        $resultDel = Model\AdminGroups::mDel($id);
         if ($resultDel) {
             //删除成功后 删除管理员与组的关系
             Model\Admins::mClean($id, 'group_id');
@@ -156,7 +156,7 @@ class AdminGroup extends Backend
                     break;
                 }
                 //检查管理组名是否存在
-                $adminInfo = Model\AdminGroup::mList(['name' => $data['name'], 'id' => ['neq', $data['id']]]);
+                $adminInfo = Model\AdminGroups::mList(['name' => $data['name'], 'id' => ['neq', $data['id']]]);
                 if (0 < count($adminInfo)) {
                     $result['info'] = trans('admin') . trans('common.group') . trans('common.name') . trans('common.exists');
                     break;

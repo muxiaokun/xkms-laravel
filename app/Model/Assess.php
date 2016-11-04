@@ -8,7 +8,7 @@ class Assess extends Common
     public function scopeMList($query, $where = null, $page = false)
     {
         $query->mGetPage($page);
-        null !== $query->option['order'] && $query->order('id desc');
+        null !== $query->option['order'] && $query->orderBy('id', 'desc');
         $data = $query->where($where)->select();
         foreach ($data as &$dataRow) {
             $query->mDecodeData($dataRow);

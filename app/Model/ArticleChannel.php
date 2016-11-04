@@ -9,7 +9,7 @@ class ArticleChannel extends Common
     {
         $query->mParseWhere($where);
         $query->mGetPage($page);
-        null !== $query->option['order'] && $query->order('id desc');
+        null !== $query->option['order'] && $query->orderBy('id', 'desc');
         $data = $query->where($where)->select();
         foreach ($data as &$dataRow) {
             $query->mDecodeData($dataRow);

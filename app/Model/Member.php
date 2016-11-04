@@ -9,7 +9,7 @@ class Member extends Common
     {
         $query->mParseWhere($where);
         $query->mGetPage($page);
-        null !== $query->option['order'] && $query->order('id desc');
+        null !== $query->option['order'] && $query->orderBy('id', 'desc');
         $data = $query->select(['*', 'login_ip as aip'])->where($where)->select();
         foreach ($data as &$dataRow) {
             $query->mDecodeData($dataRow);

@@ -8,7 +8,7 @@ class MessageBoardLog extends Common
     public function scopeMList($query, $where = null, $page = false)
     {
         $query->mGetPage($page);
-        null !== $query->option['order'] && $query->order('add_time desc');
+        null !== $query->option['order'] && $query->orderBy('add_time', 'desc');
         $data = $query->select(['*', 'login_ip as aip'])->where($where)->select();
         foreach ($data as &$dataRow) {
             $query->mDecodeData($dataRow);

@@ -133,11 +133,11 @@ Route::group([
         //'middleware'=>'auth',
         'prefix' => 'Admin',
     ], function () {
-        Route::get('index', ['as' => 'index', 'uses' => 'Admins@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Admins@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'Admins@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'Admins@del']);
-        Route::get('setting', ['as' => 'setting', 'uses' => 'Admins@setting']);
+        Route::get('index', ['as' => 'index', 'uses' => 'Admin@index']);
+        Route::get('add', ['as' => 'add', 'uses' => 'Admin@add']);
+        Route::get('edit', ['as' => 'edit', 'uses' => 'Admin@edit']);
+        Route::get('del', ['as' => 'del', 'uses' => 'Admin@del']);
+        Route::get('setting', ['as' => 'setting', 'uses' => 'Admin@setting']);
     });
     Route::group([
         'as'     => 'AdminGroup::',

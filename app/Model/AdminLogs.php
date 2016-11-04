@@ -8,7 +8,7 @@ class AdminLogs extends Common
     public function scopeMList($query, $where = null, $page = false)
     {
         $query->mParseWhere($where);
-        //null !== $query->options['order'] && $query->order('add_time desc');
+        //null !== $query->options['order'] && $query->orderBy('add_time','desc');
         return $query->mGetPage($page);
     }
 

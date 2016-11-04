@@ -5,17 +5,6 @@ namespace App\Model;
 
 class AssessLog extends Common
 {
-    public function scopeMList($query, $where = null, $page = false)
-    {
-        $query->mGetPage($page);
-        null !== $query->option['order'] && $query->orderBy('add_time', 'desc');
-        $data = $query->where($where)->select();
-        foreach ($data as &$dataRow) {
-            $query->mDecodeData($dataRow);
-        }
-        return $data;
-    }
-
     public function scopeMAdd($query, $data)
     {
         if (!$data) {
@@ -44,12 +33,10 @@ class AssessLog extends Common
     public function scopeMEncodeData($query, $data)
     {
         isset($data['score']) && $data['score'] = serialize($data['score']);
-        return $data;
     }
 
     public function scopeMDecodeData($query, $data)
     {
         isset($data['score']) && $data['score'] = unserialize($data['score']);
-        return $data;
     }
 }

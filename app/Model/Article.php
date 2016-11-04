@@ -10,14 +10,12 @@ class Article extends Common
 
     public function scopeMList($query, $where = null, $page = false)
     {
-        $query->mParseWhere($where);
-        $query->mGetPage($page);
-        null !== $query->option['order'] && $query->orderBy('is_stick', 'desc')
-            ->orderBy('sort', 'asc')->orderBy('update_time', 'desc');
-        foreach ($data as &$dataRow) {
-            $query->mDecodeData($dataRow);
+        if (!$query->getQuery()->orders) {
+            $query->orderBy('is_stick', 'desc');
+            $query->orderBy('sort', 'asc');
+            $query->orderBy('update_at', 'desc');
         }
-        return $data;
+        return parent::scopeMList($query, $where, $page);
     }
 
     public function scopeMAdd($query, $data)
@@ -68,7 +66,6 @@ class Article extends Common
             $data['attribute'] = '|' . implode('|', $newAttribute) . '|';
         }
         isset($data['album']) && $data['album'] = serialize($data['album']);
-        return $data;
     }
 
     public function scopeMDecodeData($query, $data)
@@ -93,6 +90,5 @@ class Article extends Common
             $data['attribute'] = $newAttribute;
         }
         isset($data['album']) && $data['album'] = unserialize($data['album']);
-        return $data;
     }
 }

@@ -5,18 +5,6 @@ namespace App\Model;
 
 class ArticleChannel extends Common
 {
-    public function scopeMList($query, $where = null, $page = false)
-    {
-        $query->mParseWhere($where);
-        $query->mGetPage($page);
-        null !== $query->option['order'] && $query->orderBy('id', 'desc');
-        $data = $query->where($where)->select();
-        foreach ($data as &$dataRow) {
-            $query->mDecodeData($dataRow);
-        }
-        return $data;
-    }
-
     //返回有权管理的频道
     public function scopeMFind_allow($query, $type = true)
     {
@@ -70,7 +58,6 @@ class ArticleChannel extends Common
                 $data['manage_group_id']) . '|';
         isset($data['access_group_id']) && $data['access_group_id'] = serialize($data['access_group_id']);
         isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
-        return $data;
     }
 
     public function scopeMDecodeData($query, $data)
@@ -81,6 +68,5 @@ class ArticleChannel extends Common
             substr($data['manage_group_id'], 1, strlen($data['manage_group_id']) - 2));
         isset($data['access_group_id']) && $data['access_group_id'] = unserialize($data['access_group_id']);
         isset($data['ext_info']) && $data['ext_info'] = unserialize($data['ext_info']);
-        return $data;
     }
 }

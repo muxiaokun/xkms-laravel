@@ -7,14 +7,10 @@ class ArticleCategory extends Common
 {
     public function scopeMList($query, $where = null, $page = false)
     {
-        $query->mParseWhere($where);
-        $query->mGetPage($page);
-        null !== $query->option['order'] && $query->order('sort');
-        $data = $query->where($where)->select();
-        foreach ($data as &$dataRow) {
-            $query->mDecodeData($dataRow);
+        if (!$query->getQuery()->orders) {
+            $query->orderBy('sort', 'asc');
         }
-        return $data;
+        return parent::scopeMList($query, $where, $page);
     }
 
     //获得缩进的分类树
@@ -164,7 +160,6 @@ class ArticleCategory extends Common
         isset($data['content']) && $data['content'] = $query->mEncodeContent($data['content']);
         isset($data['extend']) && $data['extend'] = serialize($data['extend']);
         isset($data['attribute']) && $data['attribute'] = serialize($data['attribute']);
-        return $data;
     }
 
     public function scopeMDecodeData($query, $data)
@@ -176,6 +171,5 @@ class ArticleCategory extends Common
         isset($data['access_group_id']) && $data['access_group_id'] = unserialize($data['access_group_id']);
         isset($data['extend']) && $data['extend'] = unserialize($data['extend']);
         isset($data['attribute']) && $data['attribute'] = unserialize($data['attribute']);
-        return $data;
     }
 }

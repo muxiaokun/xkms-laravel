@@ -9,14 +9,8 @@ class Admins extends Common
 {
     public function scopeMList($query, $where = null, $page = false)
     {
-        $query->mParseWhere($where);
-        $query->mGetPage($page);
-        null !== $query->options['order'] && $query->orderBy('id', 'desc');
-        $data = $query->select(['*', 'login_ip as aip'])->where($where)->select();
-        foreach ($data as &$dataRow) {
-            $query->mDecodeData($dataRow);
-        }
-        return $data;
+        $query->select(['*', 'login_ip as aip']);
+        return parent::scopeMList($query, $where, $page);
     }
 
     public function scopeMAdd($query, $data)
@@ -95,7 +89,6 @@ class Admins extends Common
         isset($data['group_id']) && $data['group_id'] = '|' . implode('|', $data['group_id']) . '|';
         isset($data['privilege']) && $data['privilege'] = implode('|', $data['privilege']);
         isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
-        return $data;
     }
 
     public function scopeMDecodeData($query, $data)
@@ -106,6 +99,5 @@ class Admins extends Common
             substr($data['group_id'], 1, strlen($data['group_id']) - 2));
         isset($data['privilege']) && $data['privilege'] = explode('|', $data['privilege']);
         isset($data['ext_info']) && $data['ext_info'] = unserialize($data['ext_info']);
-        return $data;
     }
 }

@@ -5,17 +5,6 @@ namespace App\Model;
 
 class Recruit extends Common
 {
-    public function scopeMList($query, $where = null, $page = false)
-    {
-        $query->mGetPage($page);
-        null !== $query->options['order'] && $query->orderBy('id', 'desc');
-        $data = $query->where($where)->select();
-        foreach ($data as &$dataRow) {
-            $query->mDecodeData($dataRow);
-        }
-        return $data;
-    }
-
     public function scopeMEncodeData($query, $data)
     {
         isset($data['explains']) && $data['explains'] = $query->mEncodeContent($data['explains']);
@@ -26,7 +15,6 @@ class Recruit extends Common
             }
             $data['ext_info'] = '|' . implode('|', $newExtInfo) . '|';
         }
-        return $data;
     }
 
     public function scopeMDecodeData($query, $data)
@@ -40,6 +28,5 @@ class Recruit extends Common
             }
             $data['ext_info'] = $newExtInfo;
         }
-        return $data;
     }
 }

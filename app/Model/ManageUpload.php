@@ -5,17 +5,6 @@ namespace App\Model;
 
 class ManageUpload extends Common
 {
-    //获得全部或者部分管理组列表
-    public function scopeMList($query, $where = null, $page = false)
-    {
-        $query->mGetPage($page);
-        $data = $query->where($where)->get();
-        foreach ($data as &$dataRow) {
-            $query->mDecodeData($dataRow);
-        }
-        return $data;
-    }
-
     public function scopeMAdd($query, $data)
     {
         if (!$data) {

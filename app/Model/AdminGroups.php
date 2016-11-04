@@ -7,19 +7,6 @@ use Illuminate\Support\Collection;
 
 class AdminGroups extends Common
 {
-    //获得全部或者部分管理组列表
-    public function scopeMList($query, $where = null, $page = false)
-    {
-        $query->mParseWhere($where);
-        $query->mGetPage($page);
-        null !== $query->options['order'] && $query->orderBy('id', 'desc');
-        $data = $query->where($where)->select();
-        foreach ($data as &$dataRow) {
-            $query->mDecodeData($dataRow);
-        }
-        return $data;
-    }
-
     public function scopeMDel($query, $id)
     {
         if (!$id || 1 == $id || (is_array($id) && in_array(1, $id))) {
@@ -81,7 +68,6 @@ class AdminGroups extends Common
         isset($data['manage_id']) && $data['manage_id'] = '|' . implode('|', array_unique($data['manage_id'])) . '|';
         isset($data['privilege']) && $data['privilege'] = implode('|', $data['privilege']);
         isset($data['ext_template']) && $data['ext_template'] = serialize($data['ext_template']);
-        return $data;
     }
 
     //检查和去除格式化数据
@@ -91,6 +77,5 @@ class AdminGroups extends Common
             substr($data['manage_id'], 1, strlen($data['manage_id']) - 2));
         isset($data['privilege']) && $data['privilege'] = explode('|', $data['privilege']);
         isset($data['ext_template']) && $data['ext_template'] = unserialize($data['ext_template']);
-        return $data;
     }
 }

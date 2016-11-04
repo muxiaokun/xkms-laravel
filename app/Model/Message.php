@@ -7,13 +7,10 @@ class Message extends Common
 {
     public function scopeMList($query, $where = null, $page = false)
     {
-        $query->mGetPage($page);
-        null !== $query->option['order'] && $query->orderBy('send_time', 'desc');
-        $data = $query->where($where)->select();
-        foreach ($data as &$dataRow) {
-            $query->mDecodeData($dataRow);
+        if (!$query->getQuery()->orders) {
+            $query->orderBy('send_time', 'desc');
         }
-        return $data;
+        return parent::scopeMList($query, $where, $page);
     }
 
     public function scopeMAdd($query, $data)

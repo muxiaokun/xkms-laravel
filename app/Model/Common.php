@@ -32,8 +32,11 @@ class Common extends Model
      */
     public function scopeMList($query, $where = null, $page = false)
     {
-        $query->mGetPage($page);
-        $data = $query->where($where)->select();
+        $query->mParseWhere($where);
+        if (!$query->getQuery()->orders) {
+            $query->orderBy('id', 'desc');
+        }
+        $data = $query->mGetPage($page);
         foreach ($data as &$dataRow) {
             $query->mDecodeData($dataRow);
         }
@@ -132,7 +135,7 @@ class Common extends Model
         }
 
         $column = $query->select($columnName)->where(['id' => $id])->first();
-        $column = $query->mDecodeData($column);
+        $query->mDecodeData($column);
         return $column[$columnName];
     }
 
@@ -330,11 +333,9 @@ class Common extends Model
      */
     public function scopeMEncodeData($query, $data)
     {
-        return $data;
     }
 
     public function scopeMDecodeData($query, $data)
     {
-        return $data;
     }
 }

@@ -4,14 +4,6 @@ namespace App\Model;
 
 class AdminLogs extends Common
 {
-    //查询日志
-    public function scopeMList($query, $where = null, $page = false)
-    {
-        $query->mParseWhere($where);
-        //null !== $query->options['order'] && $query->orderBy('add_time','desc');
-        return $query->mGetPage($page);
-    }
-
     //添加日志 管理员编号 信息为空为传参 操作的模型
     public function scopeMAdd($query, $adminId, $message = false, $msg = false)
     {

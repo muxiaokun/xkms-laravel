@@ -126,7 +126,6 @@ class Article extends Backend
                 $data['new_thumb'] = $thumbFile;
                 return $this->success(trans('common.article') . trans('common.add') . trans('common.success'),
                     $rebackLink);
-                return;
             } else {
                 return $this->error(trans('common.article') . trans('common.add') . trans('common.error'),
                     route('Admin::Article::add', ['cate_id' => request('get.cate_id')]));
@@ -156,7 +155,6 @@ class Article extends Backend
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.article') . trans('common.edit') . trans('common.success'),
                     route('Admin::Article::index'));
-                return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('Admin::Article::index') : route('Admin::Article::edit',
                     ['id' => $id]);
@@ -204,7 +202,6 @@ class Article extends Backend
             Model\ManageUpload::mEdit($id);
             return $this->success(trans('common.article') . trans('common.del') . trans('common.success'),
                 route('Admin::Article::index'));
-            return;
         } else {
             return $this->error(trans('common.article') . trans('common.del') . trans('common.error'),
                 route('Admin::Article::index'));

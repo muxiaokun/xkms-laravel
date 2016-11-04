@@ -76,8 +76,6 @@ class Admin extends Backend
             if ($resultAdd) {
                 return $this->success(trans('common.admin') . trans('common.add') . trans('common.success'),
                     route('Admin::Admin::index'));
-
-                return;
             } else {
                 return $this->error(trans('common.admin') . trans('common.add') . trans('common.error'));
             }
@@ -134,7 +132,6 @@ class Admin extends Backend
             return $this->success(trans('common.admin') . trans('common.del') . trans('common.success'),
                 route('Admin::Admin::index'));
 
-            return;
         } else {
             return $this->error(trans('common.admin') . trans('common.del') . trans('common.error'),
                 route('Admin::Admin::index'));

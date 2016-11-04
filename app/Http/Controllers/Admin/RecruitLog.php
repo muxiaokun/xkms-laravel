@@ -57,7 +57,6 @@ class RecruitLog extends Backend
         if ($resultDel) {
             return $this->success(trans('common.recruit_log') . trans('common.del') . trans('common.success'),
                 route('Admin::RecruitLog::index'));
-            return;
         } else {
             return $this->error(trans('common.recruit_log') . trans('common.del') . trans('common.error'),
                 route('Admin::RecruitLog::index'));

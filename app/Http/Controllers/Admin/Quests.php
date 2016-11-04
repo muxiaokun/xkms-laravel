@@ -111,7 +111,6 @@ class Quests extends Backend
                     Model\Quests::where(['id' => $id])->data(['current_portion' => 0])->save();
                     return $this->success(trans('common.quests') . trans('common.clear') . trans('common.success'),
                         route('Admin::Quests::index'));
-                    return;
                 } else {
                     return $this->error(trans('common.quests') . trans('common.clear') . trans('common.error'),
                         route('Admin::Quests::index'));
@@ -120,7 +119,6 @@ class Quests extends Backend
             }
             return $this->success(trans('common.quests') . trans('common.del') . trans('common.success'),
                 route('Admin::Quests::index'));
-            return;
         } else {
             return $this->error(trans('common.quests') . trans('common.del') . trans('common.error'),
                 route('Admin::Quests::edit', ['id' => $id]));

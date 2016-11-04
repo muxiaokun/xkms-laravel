@@ -58,7 +58,6 @@ class ArticleChannel extends Backend
             if ($resultAdd) {
                 return $this->success(trans('common.channel') . trans('common.add') . trans('common.success'),
                     route('Admin::ArticleChannel::index'));
-                return;
             } else {
                 return $this->error(trans('common.channel') . trans('common.add') . trans('common.error'),
                     route('Admin::ArticleChannel::add'));
@@ -78,7 +77,6 @@ class ArticleChannel extends Backend
             $id       = request('get.id');
             $editInfo = Model\ArticleChannel::mFind($id);
             $this->ajaxReturn($this->_add_edit_category_common($editInfo));
-            return;
         }
 
         $id = request('id');
@@ -107,7 +105,6 @@ class ArticleChannel extends Backend
             if ($resultEdit) {
                 return $this->success(trans('common.channel') . trans('common.edit') . trans('common.success'),
                     route('Admin::ArticleChannel::index'));
-                return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('Admin::ArticleChannel::index') : route('Admin::ArticleChannel::edit',
                     ['id' => $id]);
@@ -169,7 +166,6 @@ class ArticleChannel extends Backend
         if ($resultDel) {
             return $this->success(trans('common.channel') . trans('common.del') . trans('common.success'),
                 route('Admin::ArticleChannel::index'));
-            return;
         } else {
             return $this->error(trans('common.channel') . trans('common.del') . trans('common.error'),
                 route('Admin::ArticleChannel::index'));

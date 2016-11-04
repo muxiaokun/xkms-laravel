@@ -76,7 +76,6 @@ class AssessLog extends Backend
         if ($resultDel) {
             return $this->success(trans('common.assess') . trans('common.del') . trans('common.success'),
                 route('Admin::AssessLog::index'));
-            return;
         } else {
             return $this->error(trans('common.assess') . trans('common.del') . trans('common.error'),
                 route('Admin::AssessLog::edit', ['id' => $id]));

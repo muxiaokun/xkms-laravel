@@ -47,7 +47,6 @@ class MessageBoard extends Backend
             if ($resultAdd) {
                 return $this->success(trans('common.messageboard') . trans('common.add') . trans('common.success'),
                     $rebackLink);
-                return;
             } else {
                 return $this->error(trans('common.messageboard') . trans('common.add') . trans('common.error'),
                     route('Admin::MessageBoard::add', ['cate_id' => request('get.cate_id')]));
@@ -73,7 +72,6 @@ class MessageBoard extends Backend
             if ($resultEdit) {
                 return $this->success(trans('common.messageboard') . trans('common.edit') . trans('common.success'),
                     route('Admin::MessageBoard::index'));
-                return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('Admin::MessageBoard::index') : route('Admin::MessageBoard::edit',
                     ['id' => $id]);
@@ -103,7 +101,6 @@ class MessageBoard extends Backend
         if ($resultDel) {
             return $this->success(trans('common.messageboard') . trans('common.del') . trans('common.success'),
                 route('Admin::MessageBoard::index'));
-            return;
         } else {
             return $this->error(trans('common.messageboard') . trans('common.del') . trans('common.error'),
                 route('Admin::MessageBoard::index'));

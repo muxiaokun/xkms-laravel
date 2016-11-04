@@ -57,7 +57,6 @@ class Navigation extends Backend
             if ($resultAdd) {
                 return $this->success(trans('common.navigation') . trans('common.add') . trans('common.success'),
                     route('Admin::Navigation::index'));
-                return;
             } else {
                 return $this->error(trans('common.navigation') . trans('common.add') . trans('common.error'),
                     route('Admin::Navigation::add'));
@@ -83,7 +82,6 @@ class Navigation extends Backend
             if ($resultEdit) {
                 return $this->success(trans('common.navigation') . trans('common.edit') . trans('common.success'),
                     route('Admin::Navigation::index'));
-                return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('Admin::Navigation::index') : route('Admin::Navigation::edit',
                     ['id' => $id]);
@@ -113,7 +111,6 @@ class Navigation extends Backend
         if ($resultDel) {
             return $this->success(trans('common.navigation') . trans('common.del') . trans('common.success'),
                 route('Admin::Navigation::index'));
-            return;
         } else {
             return $this->error(trans('common.navigation') . trans('common.del') . trans('common.error'),
                 route('Admin::Navigation::index'));

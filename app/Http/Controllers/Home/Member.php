@@ -12,7 +12,6 @@ class Member extends FrontendMember
     {
         if (!$this->isLogin()) {
             return view('home.Member_login', $assign);
-            return;
         }
         return view('home.Member_index', $assign);
     }
@@ -91,7 +90,6 @@ class Member extends FrontendMember
                 $this->doLogin($memberName, $memberPwd, false);
                 return $this->success(trans('common.member') . trans('common.register') . trans('common.success'),
                     route('Home::Member::index'));
-                return;
             } else {
                 return $this->error(trans('common.member') . trans('common.register') . trans('common.error'),
                     route('Home::Member::index', ['t' => 'register']));

@@ -65,7 +65,6 @@ class Assess extends FrontendMember
             $resultAdd     = $AssessLogMode->mAdd($data);
             if ($resultAdd) {
                 return $this->success(trans('common.grade') . trans('common.success'), route('Home::Assess::index'));
-                return;
             } else {
                 return $this->error(trans('common.grade') . trans('common.error'), route('Home::Assess::add'));
             }

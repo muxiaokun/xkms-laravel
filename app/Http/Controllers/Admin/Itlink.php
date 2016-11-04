@@ -62,7 +62,6 @@ class Itlink extends Backend
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.itlink') . trans('common.add') . trans('common.success'),
                     route('Admin::Itlink::index'));
-                return;
             } else {
                 return $this->error(trans('common.itlink') . trans('common.add') . trans('common.error'),
                     route('Admin::Itlink::add'));
@@ -88,7 +87,6 @@ class Itlink extends Backend
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.itlink') . trans('common.edit') . trans('common.success'),
                     route('Admin::Itlink::index'));
-                return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('Admin::Itlink::index') : route('Admin::Itlink::edit',
                     ['id' => $id]);
@@ -116,7 +114,6 @@ class Itlink extends Backend
             Model\ManageUpload::mEdit($id);
             return $this->success(trans('common.itlink') . trans('common.del') . trans('common.success'),
                 route('Admin::Itlink::index'));
-            return;
         } else {
             return $this->error(trans('common.itlink') . trans('common.del') . trans('common.error'),
                 route('Admin::Itlink::index'));

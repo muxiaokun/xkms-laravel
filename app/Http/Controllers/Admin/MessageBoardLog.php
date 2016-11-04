@@ -69,7 +69,6 @@ class MessageBoardLog extends Backend
             if ($resultEdit) {
                 return $this->success(trans('common.audit') . trans('common.success'),
                     route('Admin::MessageBoardLog::index'));
-                return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('Admin::MessageBoardLog::index') : route('Admin::MessageBoardLog::edit',
                     ['id' => $id]);
@@ -102,7 +101,6 @@ class MessageBoardLog extends Backend
         if ($resultDel) {
             return $this->success(trans('common.messageboard') . trans('common.log') . trans('common.del') . trans('common.success'),
                 route('Admin::MessageBoardLog::index'));
-            return;
         } else {
             return $this->error(trans('common.messageboard') . trans('common.log') . trans('common.del') . trans('common.error'),
                 route('Admin::MessageBoardLog::index'));

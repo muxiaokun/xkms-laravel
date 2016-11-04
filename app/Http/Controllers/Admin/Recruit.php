@@ -74,7 +74,6 @@ class Recruit extends Backend
             if ($resultEdit) {
                 return $this->success(trans('common.recruit') . trans('common.edit') . trans('common.success'),
                     route('Admin::Recruit::index'));
-                return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('Admin::Recruit::index') : route('Admin::Recruit::edit',
                     ['id' => $id]);
@@ -104,7 +103,6 @@ class Recruit extends Backend
             $resultDel = Model\RecruitLog::mClean($id);
             return $this->success(trans('common.recruit') . trans('common.del') . trans('common.success'),
                 route('Admin::Recruit::index'));
-            return;
         } else {
             return $this->error(trans('common.recruit') . trans('common.del') . trans('common.error'),
                 route('Admin::Recruit::index'));

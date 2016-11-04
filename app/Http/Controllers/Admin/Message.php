@@ -75,7 +75,6 @@ class Message extends Backend
             $resultAdd = Model\Message::mAdd($data);
             if ($resultAdd) {
                 return $this->success(trans('common.send') . trans('common.success'), route('Admin::Message::index'));
-                return;
             } else {
                 return $this->error(trans('common.send') . trans('common.error'), route('Admin::Message::index'));
             }
@@ -101,7 +100,6 @@ class Message extends Backend
         if ($resultDel) {
             return $this->success(trans('common.message') . trans('common.del') . trans('common.success'),
                 route('Admin::Message::index'));
-            return;
         } else {
             return $this->error(trans('common.message') . trans('common.del') . trans('common.error'),
                 route('Admin::Message::index'));

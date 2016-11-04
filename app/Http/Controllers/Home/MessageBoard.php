@@ -66,7 +66,6 @@ class MessageBoard extends Frontend
             if ($resultAdd) {
                 return $this->success(trans('common.send') . trans('common.success'),
                     route('Home::MessageBoard::index', ['id' => $id]));
-                return;
             } else {
                 return $this->error(trans('common.send') . trans('common.error'),
                     route('Home::MessageBoard::index', ['id' => $id]));

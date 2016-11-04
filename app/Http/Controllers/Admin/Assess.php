@@ -66,8 +66,6 @@ class Assess extends Backend
             if ($resultAdd) {
                 return $this->success(trans('common.assess') . trans('common.add') . trans('common.success'),
                     route('Admin::Assess::index'));
-
-                return;
             } else {
                 return $this->error(trans('common.assess') . trans('common.add') . trans('common.error'),
                     route('Admin::Assess::add'));
@@ -93,7 +91,6 @@ class Assess extends Backend
                 return $this->success(trans('common.assess') . trans('common.edit') . trans('common.success'),
                     route('Admin::Assess::index'));
 
-                return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('Admin::Assess::index') : route('Admin::Assess::edit',
                     ['id' => $id]);
@@ -123,7 +120,6 @@ class Assess extends Backend
             return $this->success(trans('common.assess') . trans('common.del') . trans('common.success'),
                 route('Admin::Assess::index'));
 
-            return;
         } else {
             return $this->error(trans('common.assess') . trans('common.del') . trans('common.error'),
                 route('Admin::Assess::index'));

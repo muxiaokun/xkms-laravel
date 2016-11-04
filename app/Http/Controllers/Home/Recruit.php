@@ -73,7 +73,6 @@ class Recruit extends Frontend
                 return $this->error(trans('common.resume') . trans('common.submit') . trans('common.error'),
                     route('Home::Recruit::index'));
             }
-            return;
         }
 
         //缓存数据 下文中的thumb可以换成招聘统一的图

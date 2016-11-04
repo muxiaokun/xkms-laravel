@@ -113,7 +113,6 @@ class Wechat extends Backend
             if (0 === $putTemplate['errcode']) {
                 return $this->success(trans('common.wechat') . trans('common.send') . trans('common.success'),
                     route('Admin::Wechat::index'));
-                return;
             } else {
                 return $this->error(trans('common.wechat') . trans('common.send') . trans('common.error') . trans('error' . $putTemplate['errcode']),
                     $errorGoLink);
@@ -136,7 +135,6 @@ class Wechat extends Backend
         if ($resultDel) {
             return $this->success(trans('common.wechat') . trans('common.bind') . trans('common.del') . trans('common.success'),
                 route('Admin::Wechat::index'));
-            return;
         } else {
             return $this->error(trans('common.wechat') . trans('common.bind') . trans('common.del') . trans('common.error'),
                 route('Admin::Wechat::edit', ['id' => $id]));

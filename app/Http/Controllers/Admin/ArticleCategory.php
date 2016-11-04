@@ -88,7 +88,6 @@ class ArticleCategory extends Backend
                 return $this->success(trans('common.article') . trans('common.category') . trans('common.add') . trans('common.success'),
                     route('Admin::ArticleCategory::index'));
 
-                return;
             } else {
                 return $this->error(trans('common.article') . trans('common.category') . trans('common.add') . trans('common.error'),
                     route('Admin::ArticleCategory::add'));
@@ -132,7 +131,6 @@ class ArticleCategory extends Backend
                 return $this->success(trans('common.article') . trans('common.category') . trans('common.edit') . trans('common.success'),
                     route('Admin::ArticleCategory::index'));
 
-                return;
             } else {
                 return $this->error(trans('common.article') . trans('common.category') . trans('common.edit') . trans('common.error'),
                     route('Admin::ArticleCategory::edit', ['id' => $id]));
@@ -199,7 +197,6 @@ class ArticleCategory extends Backend
             return $this->success(trans('common.article') . trans('common.category') . trans('common.del') . trans('common.success'),
                 route('Admin::ArticleCategory::index'));
 
-            return;
         } else {
             return $this->error(trans('common.article') . trans('common.category') . trans('common.del') . trans('common.error'),
                 route('Admin::ArticleCategory::index'));

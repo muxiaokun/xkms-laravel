@@ -76,7 +76,6 @@ class Message extends FrontendMember
             $resultAdd = Model\Message::mAdd($data);
             if ($resultAdd) {
                 return $this->success(trans('common.send') . trans('common.success'), route('Home::Message::index'));
-                return;
             } else {
                 return $this->error(trans('common.send') . trans('common.error'), route('Home::Message::index'));
             }
@@ -102,7 +101,6 @@ class Message extends FrontendMember
         if ($resultDel) {
             return $this->success(trans('common.message') . trans('common.del') . trans('common.success'),
                 route('Home::Message::index'));
-            return;
         } else {
             return $this->error(trans('common.message') . trans('common.del') . trans('common.error'),
                 route('Home::Message::index'));

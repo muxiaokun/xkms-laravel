@@ -97,7 +97,6 @@ class Comment extends Backend
         if ($resultEdit) {
             return $this->success(trans('common.comment') . trans('common.audit') . trans('common.success'),
                 route('Admin::Comment::index'));
-            return;
         } else {
             return $this->error(trans('common.comment') . trans('common.audit') . trans('common.error'),
                 route('Admin::Comment::index'));
@@ -116,7 +115,6 @@ class Comment extends Backend
         if ($resultDel) {
             return $this->success(trans('common.comment') . trans('common.del') . trans('common.success'),
                 route('Admin::Comment::index'));
-            return;
         } else {
             return $this->error(trans('common.comment') . trans('common.del') . trans('common.error'),
                 route('Admin::Comment::index'));

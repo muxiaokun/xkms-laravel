@@ -133,7 +133,6 @@ class Template extends Backend
             if ($resultEdit) {
                 return $this->success(trans('common.theme') . trans('common.template') . trans('common.edit') . trans('common.success'),
                     route('Admin::Template::index'));
-                return;
             } else {
                 return $this->error(trans('common.theme') . trans('common.template') . trans('common.edit') . trans('common.error'),
                     route('Admin::Template::index'));

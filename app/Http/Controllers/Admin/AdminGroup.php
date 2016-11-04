@@ -58,7 +58,6 @@ class AdminGroup extends Backend
             if ($resultAdd) {
                 return $this->success(trans('common.management') . trans('common.group') . trans('common.add') . trans('common.success'),
                     route('Admin::AdminGroup::index'));
-                return;
             } else {
                 return $this->error(trans('common.management') . trans('common.group') . trans('common.add') . trans('common.error'),
                     route('Admin::AdminGroup::add'));
@@ -84,7 +83,6 @@ class AdminGroup extends Backend
             if ($resultEdit) {
                 return $this->success(trans('common.management') . trans('common.group') . trans('common.edit') . trans('common.success'),
                     route('Admin::AdminGroup::index'));
-                return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('Admin::AdminGroup::index') : route('Admin::AdminGroup::edit',
                     ['id' => $id]);
@@ -129,7 +127,6 @@ class AdminGroup extends Backend
             Model\Admins::mClean($id, 'group_id');
             return $this->success(trans('common.management') . trans('common.group') . trans('common.del') . trans('common.success'),
                 route('Admin::AdminGroup::index'));
-            return;
         } else {
             return $this->error(trans('common.management') . trans('common.group') . trans('common.del') . trans('common.error'),
                 route('Admin::AdminGroup::index'));

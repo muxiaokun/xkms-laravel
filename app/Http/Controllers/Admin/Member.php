@@ -62,7 +62,6 @@ class Member extends Backend
             if ($resultAdd) {
                 return $this->success(trans('common.member') . trans('common.add') . trans('common.success'),
                     route('Admin::Member::index'));
-                return;
             } else {
                 return $this->error(trans('common.member') . trans('common.add') . trans('common.error'),
                     route('Admin::Member::add'));
@@ -87,7 +86,6 @@ class Member extends Backend
             if ($resultEdit) {
                 return $this->success(trans('common.member') . trans('common.edit') . trans('common.success'),
                     route('Admin::Member::index'));
-                return;
             } else {
                 $errorGoLink = (is_array($id)) ? route('Admin::Member::index') : route('Admin::Member::edit',
                     ['id' => $id]);
@@ -127,7 +125,6 @@ class Member extends Backend
         if ($resultDel) {
             return $this->success(trans('common.member') . trans('common.del') . trans('common.success'),
                 route('Admin::Member::index'));
-            return;
         } else {
             return $this->error(trans('common.member') . trans('common.del') . trans('common.error'),
                 route('Admin::Member::index'));

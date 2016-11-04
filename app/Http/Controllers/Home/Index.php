@@ -16,7 +16,7 @@ class Index extends Frontend
         $uachar = "/(nokia|sony|ericsson|mot|samsung|sgh|lg|philips|panasonic|alcatel|lenovo|cldc|midp|mobile)/i";
         if( ($ua == '' || preg_match($uachar, $ua)) && !strpos(strtolower($_SERVER['REQUEST_URI']),'wap') )
         {
-        redirect(mroute('article_category',1));
+            redirect(route('Home::Article::category',['id'=>1]));
         }
          */
         return view('home.Index_index');

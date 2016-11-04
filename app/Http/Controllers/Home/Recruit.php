@@ -40,7 +40,7 @@ class Recruit extends Frontend
         //初始化参数
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('Recruit/index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Home::Recruit::index'));
         }
 
         $recruitInfo = Model\Recruit::mFind($id);
@@ -48,11 +48,11 @@ class Recruit extends Frontend
         $currentTime = Carbon::now();
         if ($recruitInfo['start_time'] < $currentTime && $recruitInfo['end_time'] < $currentTime) {
             return $this->error(trans('common.start') . trans('common.end') . trans('common.time') . trans('common.error'),
-                route('Recruit/index'));
+                route('Home::Recruit::index'));
         }
         if (0 != $recruitInfo['max_portion'] && $recruitInfo['current_portion'] >= $recruitInfo['max_portion']) {
             return $this->error(trans('common.re_recruit') . trans('common.number') . trans('common.gt') . trans('common.recruit') . trans('common.number'),
-                route('Quests/index'));
+                route('Home::Recruit::index'));
         }
         //存入数据
         if (request()->isMethod('POST')) {
@@ -68,10 +68,10 @@ class Recruit extends Frontend
             if ($resultAdd) {
                 Model\Recruit::where(['id' => $recruitInfo['id']])->setInc('current_portion');
                 return $this->success(trans('common.resume') . trans('common.submit') . trans('common.success'),
-                    route('Recruit/index'));
+                    route('Home::Recruit::index'));
             } else {
                 return $this->error(trans('common.resume') . trans('common.submit') . trans('common.error'),
-                    route('index'));
+                    route('Home::Recruit::index'));
             }
             return;
         }
@@ -101,7 +101,7 @@ class Recruit extends Frontend
         //初始化参数
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('Recruit/index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Home::Recruit::index'));
         }
 
         $recruitInfo            = Model\Recruit::mFind($id);

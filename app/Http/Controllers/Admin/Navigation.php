@@ -56,11 +56,11 @@ class Navigation extends Backend
             $resultAdd = Model\Navigation::mAdd($data);
             if ($resultAdd) {
                 return $this->success(trans('common.navigation') . trans('common.add') . trans('common.success'),
-                    route('index'));
+                    route('Admin::Navigation::index'));
                 return;
             } else {
                 return $this->error(trans('common.navigation') . trans('common.add') . trans('common.error'),
-                    route('add'));
+                    route('Admin::Navigation::add'));
             }
         }
 
@@ -74,7 +74,7 @@ class Navigation extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::Navigation::index'));
         }
 
         if (request()->isMethod('POST')) {
@@ -82,10 +82,11 @@ class Navigation extends Backend
             $resultEdit = Model\Navigation::mEdit($id, $data);
             if ($resultEdit) {
                 return $this->success(trans('common.navigation') . trans('common.edit') . trans('common.success'),
-                    route('index'));
+                    route('Admin::Navigation::index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
+                $errorGoLink = (is_array($id)) ? route('Admin::Navigation::index') : route('Admin::Navigation::edit',
+                    ['id' => $id]);
                 return $this->error(trans('common.navigation') . trans('common.edit') . trans('common.error'),
                     $errorGoLink);
             }
@@ -105,17 +106,17 @@ class Navigation extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::Navigation::index'));
         }
 
         $resultDel = Model\Navigation::mDel($id);
         if ($resultDel) {
             return $this->success(trans('common.navigation') . trans('common.del') . trans('common.success'),
-                route('index'));
+                route('Admin::Navigation::index'));
             return;
         } else {
             return $this->error(trans('common.navigation') . trans('common.del') . trans('common.error'),
-                route('index'));
+                route('Admin::Navigation::index'));
         }
     }
 
@@ -155,7 +156,8 @@ class Navigation extends Backend
         $extInfo   = $this->_make_navigation(request($this->navigation_config['post_name']));
 
         //检测初始化参数是否合法
-        $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', ['id' => $id]);
+        $errorGoLink = (!$id) ? route('Admin::Navigation::add') : (is_array($id)) ? route('Admin::Navigation::index') : route('Admin::Navigation::edit',
+            ['id' => $id]);
         if ('add' == ACTION_NAME || null !== $shortName) {
             $result = $this->doValidateForm('short_name', ['id' => $id, 'short_name' => $shortName]);
             if (!$result['status']) {

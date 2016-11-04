@@ -24,13 +24,13 @@ class Article extends Frontend
         $channelId = request('channel_id');
         if (!$id) {
             return $this->error(trans('common.article') . trans('common.id') . trans('common.error'),
-                route('Index/index'));
+                route('Home::Index::index'));
         }
 
         $articleInfo = Model\Article::where($this->_get_article_where())->mFind($id);
         if (!$articleInfo) {
             return $this->error(trans('common.article') . trans('common.by') . trans('common.hidden'),
-                route('Index/index'));
+                route('Home::Index::index'));
         }
 
         Model\Article::where(['id' => $id])->setInc('hits');
@@ -50,7 +50,7 @@ class Article extends Frontend
             $channelInfo['access_group_id']);
         if ($mFindAllows && !mInArray($memberGroupId, $mFindAllows)) {
             return $this->error(trans('common.none') . trans('common.privilege') . trans('common.access') . trans('common.comma') . trans('common.please') . trans('common.login'),
-                route('Member/index'));
+                route('Home::IMember::index'));
         }
 
         //缓存数据
@@ -84,13 +84,13 @@ class Article extends Frontend
         $channelId = request('channel_id');
         if (!$cateId) {
             return $this->error(trans('common.category') . trans('common.id') . trans('common.error'),
-                route('Index/index'));
+                route('Home::Index::index'));
         }
 
         $categoryInfo = Model\ArticleCategory::mFind($cateId);
         if (!$categoryInfo) {
             return $this->error(trans('common.category') . trans('common.id') . trans('common.error'),
-                route('Index/index'));
+                route('Home::Index::index'));
         }
 
         $channelInfo = Model\ArticleChannel::mFind($articleInfo['channel_id']);
@@ -104,7 +104,7 @@ class Article extends Frontend
             $channelInfo['access_group_id']);
         if ($mFindAllows && !mInArray($memberGroupId, $mFindAllows)) {
             return $this->error(trans('common.none') . trans('common.privilege') . trans('common.access') . trans('common.comma') . trans('common.please') . trans('common.login'),
-                route('Member/index'));
+                route('Home::IMember::index'));
         }
 
         $template = $this->_get_template($cateId, $channelId);
@@ -170,7 +170,7 @@ class Article extends Frontend
             $channelInfo['access_group_id']);
         if ($mFindAllows && !mInArray($memberGroupId, $mFindAllows)) {
             return $this->error(trans('common.none') . trans('common.privilege') . trans('common.access') . trans('common.comma') . trans('common.please') . trans('common.login'),
-                route('Member/index'));
+                route('Home::IMember::index'));
         }
 
         $assign['channel_info'] = $channelInfo;
@@ -185,7 +185,7 @@ class Article extends Frontend
         $keyword = request('keyword');
         if ('' == $keyword) {
             return $this->error(trans('common.please') . trans('common.input') . trans('common.keywords'),
-                route('Index/index'));
+                route('Home::Index::index'));
         }
         $keyword = '%' . $keyword . '%';
 
@@ -353,12 +353,12 @@ class Article extends Frontend
         $articleCategoryInfo = Model\ArticleCategory::mFind($cateId);
         $path[]              = [
             'name' => $articleCategoryInfo['name'],
-            'link' => mroute('article_category', ['cate_id' => $articleCategoryInfo['id']]),
+            'link' => mroute('Home::Article::category', ['cate_id' => $articleCategoryInfo['id']]),
         ];
         if (0 == $articleCategoryInfo['parent_id']) {
             $path[] = [
                 'name' => trans('common.homepage'),
-                'link' => mroute(),
+                'link' => route('Home::Index::index'),
             ];
             $path   = array_reverse($path);
 

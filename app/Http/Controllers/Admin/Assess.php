@@ -65,11 +65,12 @@ class Assess extends Backend
             $resultAdd = Model\Assess::mAdd($data);
             if ($resultAdd) {
                 return $this->success(trans('common.assess') . trans('common.add') . trans('common.success'),
-                    route('index'));
+                    route('Admin::Assess::index'));
 
                 return;
             } else {
-                return $this->error(trans('common.assess') . trans('common.add') . trans('common.error'), route('add'));
+                return $this->error(trans('common.assess') . trans('common.add') . trans('common.error'),
+                    route('Admin::Assess::add'));
             }
         }
 
@@ -82,7 +83,7 @@ class Assess extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::Assess::index'));
         }
 
         if (request()->isMethod('POST')) {
@@ -90,11 +91,12 @@ class Assess extends Backend
             $resultEdit = Model\Assess::mEdit($id, $data);
             if ($resultEdit) {
                 return $this->success(trans('common.assess') . trans('common.edit') . trans('common.success'),
-                    route('index'));
+                    route('Admin::Assess::index'));
 
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
+                $errorGoLink = (is_array($id)) ? route('Admin::Assess::index') : route('Admin::Assess::edit',
+                    ['id' => $id]);
                 return $this->error(trans('common.assess') . trans('common.edit') . trans('common.error'),
                     $errorGoLink);
             }
@@ -113,17 +115,18 @@ class Assess extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::Assess::index'));
         }
 
         $resultDel = Model\Assess::mDel($id);
         if ($resultDel) {
             return $this->success(trans('common.assess') . trans('common.del') . trans('common.success'),
-                route('index'));
+                route('Admin::Assess::index'));
 
             return;
         } else {
-            return $this->error(trans('common.assess') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.assess') . trans('common.del') . trans('common.error'),
+                route('Admin::Assess::index'));
         }
     }
 

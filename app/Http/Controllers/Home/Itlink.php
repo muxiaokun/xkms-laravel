@@ -13,7 +13,7 @@ class Itlink extends Frontend
         $id = request('id');
         if (!$id) {
             return $this->error(trans('common.itlink') . trans('common.id') . trans('common.error'),
-                route('Index/index'));
+                route('Home::ndex::index'));
         }
 
         $link       = request('link');

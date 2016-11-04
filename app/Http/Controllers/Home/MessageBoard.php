@@ -53,20 +53,23 @@ class MessageBoard extends Frontend
             }
 
             if (!$this->verifyCheck(request('verify')) && config('system.sys_frontend_verify')) {
-                return $this->error(trans('common.verify_code') . trans('common.error'), route('index', ['id' => $id]));
+                return $this->error(trans('common.verify_code') . trans('common.error'),
+                    route('Home::MessageBoard::index', ['id' => $id]));
             }
             $submitTime   = 300;
             if ($MessageBoard->check_dont_submit($submitTime)) {
                 return $this->error($submitTime . trans('common.second') . trans('common.later') . trans('common.again') . trans('common.send'),
-                    route('index', ['id' => $id]));
+                    route('Home::MessageBoard::index', ['id' => $id]));
             }
             $data      = $this->makeData();
             $resultAdd = $MessageBoard->mAdd($data);
             if ($resultAdd) {
-                return $this->success(trans('common.send') . trans('common.success'), route('index', ['id' => $id]));
+                return $this->success(trans('common.send') . trans('common.success'),
+                    route('Home::MessageBoard::index', ['id' => $id]));
                 return;
             } else {
-                return $this->error(trans('common.send') . trans('common.error'), route('index', ['id' => $id]));
+                return $this->error(trans('common.send') . trans('common.error'),
+                    route('Home::MessageBoard::index', ['id' => $id]));
             }
         }
     }
@@ -89,18 +92,20 @@ class MessageBoard extends Frontend
         foreach ($sendInfo as $name => $value) {
             //合法
             if (!is_array($config[$name])) {
-                return $this->error(trans('common.submit') . trans('common.error'), route('index', ['id' => $id]));
+                return $this->error(trans('common.submit') . trans('common.error'),
+                    route('Home::MessageBoard::index', ['id' => $id]));
             }
 
             //必选
             if (isset($config[$name]['msg_required']) && '' == $value) {
-                return $this->error($name . trans('common.required'), route('index', ['id' => $id]));
+                return $this->error($name . trans('common.required'),
+                    route('Home::MessageBoard::index', ['id' => $id]));
             }
 
             //长度
             if (0 < $config[$name]['msg_length'] && $config[$name]['msg_length'] < strlen($value)) {
                 return $this->error($name . trans('common.max') . trans('common.length') . $config[$name]['msg_length'],
-                    route('index', ['id' => $id]));
+                    route('Home::MessageBoard::index', ['id' => $id]));
             }
         }
 

@@ -14,7 +14,7 @@ class AssessLog extends Backend
         $id = request('get.id');
         if (!$id) {
             return $this->error(trans('common.assess') . trans('common.id') . trans('common.error'),
-                route('Assess/index'));
+                route('Admin::AssessLog::index'));
         }
 
         $assessInfo                  = Model\Assess::mFind($id);
@@ -68,17 +68,18 @@ class AssessLog extends Backend
     {
         $id = request('get.id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('edit', ['id' => $id]));
+            return $this->error(trans('common.id') . trans('common.error'),
+                route('Admin::AssessLog::edit', ['id' => $id]));
         }
 
         $resultDel = Model\AssessLog::mDel($id);
         if ($resultDel) {
             return $this->success(trans('common.assess') . trans('common.del') . trans('common.success'),
-                route('Assess/index'));
+                route('Admin::AssessLog::index'));
             return;
         } else {
             return $this->error(trans('common.assess') . trans('common.del') . trans('common.error'),
-                route('edit', ['id' => $id]));
+                route('Admin::AssessLog::edit', ['id' => $id]));
         }
     }
 

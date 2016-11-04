@@ -37,11 +37,12 @@ class ArticleCategory extends Backend
             $where['parent_id']           = $articleCategory['id'];
             unset($where['parent_id']);
             $articleCategory['show']          = ($articleCategory['if_show']) ? trans('common.show') : trans('common.hidden');
-            $articleCategory['ajax_api_link'] = route('ajax_api');
-            $articleCategory['look_link']     = route('Home/Article/category', ['cate_id' => $articleCategory['id']]);
-            $articleCategory['edit_link']     = route('edit', ['id' => $articleCategory['id']]);
-            $articleCategory['del_link']      = route('del', ['id' => $articleCategory['id']]);
-            $articleCategory['add_link']      = route('Article/add', ['cate_id' => $articleCategory['id']]);
+            $articleCategory['ajax_api_link'] = route('Admin::ArticleCategory::ajax_api');
+            $articleCategory['look_link']     = route('Home::Article::category', ['cate_id' => $articleCategory['id']]);
+            $articleCategory['edit_link']     = route('Admin::ArticleCategory::edit', ['id' => $articleCategory['id']]);
+            $articleCategory['del_link']      = route('Admin::ArticleCategory::del', ['id' => $articleCategory['id']]);
+            $articleCategory['add_link']      = route('Admin::ArticleCategory::Article/add',
+                ['cate_id' => $articleCategory['id']]);
         }
 
         if (request()->ajax()) {
@@ -85,12 +86,12 @@ class ArticleCategory extends Backend
             if ($resultAdd) {
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.article') . trans('common.category') . trans('common.add') . trans('common.success'),
-                    route('index'));
+                    route('Admin::ArticleCategory::index'));
 
                 return;
             } else {
                 return $this->error(trans('common.article') . trans('common.category') . trans('common.add') . trans('common.error'),
-                    route('add'));
+                    route('Admin::ArticleCategory::add'));
             }
         }
 
@@ -104,7 +105,7 @@ class ArticleCategory extends Backend
     {
         $id = request('get.id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::ArticleCategory::index'));
         }
 
 
@@ -112,7 +113,7 @@ class ArticleCategory extends Backend
             && !mInArray($id, Model\ArticleCategory::mFindAllow())
         ) {
             return $this->error(trans('common.none') . trans('common.privilege') . trans('common.edit') . trans('common.article') . trans('common.category'),
-                route('index'));
+                route('Admin::ArticleCategory::index'));
         }
 
         $maAllowArr = Model\ArticleCategory::mFindAllow('ma');
@@ -129,12 +130,12 @@ class ArticleCategory extends Backend
             if ($resultEdit) {
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.article') . trans('common.category') . trans('common.edit') . trans('common.success'),
-                    route('index'));
+                    route('Admin::ArticleCategory::index'));
 
                 return;
             } else {
                 return $this->error(trans('common.article') . trans('common.category') . trans('common.edit') . trans('common.error'),
-                    route('edit', ['id' => $id]));
+                    route('Admin::ArticleCategory::edit', ['id' => $id]));
             }
         }
 
@@ -173,7 +174,7 @@ class ArticleCategory extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::ArticleCategory::index'));
         }
 
         //删除必须是 属主
@@ -181,14 +182,14 @@ class ArticleCategory extends Backend
             && 1 != session('backend_info.id')
         ) {
             return $this->error(trans('common.none') . trans('common.privilege') . trans('common.del') . trans('common.article') . trans('common.category'),
-                route('index'));
+                route('Admin::ArticleCategory::index'));
         }
 
         //解除文章和被删除分类的关系
         $resultClean = Model\Article::mClean($id, 'cate_id');
         if (!$resultClean) {
             return $this->error(trans('common.article') . trans('common.clear') . trans('common.category') . trans('common.error'),
-                route('index'));
+                route('Admin::ArticleCategory::index'));
         }
 
         $resultDel = Model\ArticleCategory::mDel($id);
@@ -196,12 +197,12 @@ class ArticleCategory extends Backend
             //释放图片绑定
             Model\ManageUpload::mEdit($id);
             return $this->success(trans('common.article') . trans('common.category') . trans('common.del') . trans('common.success'),
-                route('index'));
+                route('Admin::ArticleCategory::index'));
 
             return;
         } else {
             return $this->error(trans('common.article') . trans('common.category') . trans('common.del') . trans('common.error'),
-                route('index'));
+                route('Admin::ArticleCategory::index'));
         }
     }
 

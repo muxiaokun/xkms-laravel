@@ -55,7 +55,7 @@ class QuestsAnswer extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::QuestsAnswer::index'));
         }
 
         $questsAnswerInfo = Model\QuestsAnswer::mFind($id);
@@ -85,7 +85,7 @@ class QuestsAnswer extends Backend
     {
         $questsId = request('quests_id');
         if (!$questsId) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::QuestsAnswer::index'));
         }
 
         //读取问题
@@ -131,7 +131,7 @@ class QuestsAnswer extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::QuestsAnswer::index'));
         }
 
         $questsAnswerInfo = Model\QuestsAnswer::mFind($id);
@@ -139,9 +139,10 @@ class QuestsAnswer extends Backend
         if ($resultDel) {
             Model\Quests::where(['id' => $questsAnswerInfo['quests_id']])->setDec('current_portion');
             return $this->success(trans('common.del') . trans('common.answer') . trans('common.success'),
-                route('index'));
+                route('Admin::QuestsAnswer::index'));
         } else {
-            return $this->error(trans('common.del') . trans('common.answer') . trans('common.error'), route('index'));
+            return $this->error(trans('common.del') . trans('common.answer') . trans('common.error'),
+                route('Admin::QuestsAnswer::index'));
         }
     }
 }

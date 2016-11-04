@@ -29,17 +29,17 @@ class Member extends FrontendMember
         switch ($this->doLogin($memberName, $memberPwd)) {
             case 'user_pwd_error':
                 return $this->error(trans('common.account') . trans('common.or') . trans('common.pass') . trans('common.error'),
-                    route('Member/index'));
+                    route('Home::Member::index'));
                 break;
             case 'verify_error':
-                return $this->error(trans('common.verify_code') . trans('common.error'), route('Member/index'));
+                return $this->error(trans('common.verify_code') . trans('common.error'), route('Home::Member::index'));
                 break;
             case 'lock_user_error':
                 return $this->error(trans('common.admin') . trans('common.by') . trans('common.lock') . trans('common.please') . config('system.sys_frontend_lock_time') . trans('common.second') . trans('common.again') . trans('common.login'),
-                    route('index'));
+                    route('Home::Member::index'));
                 break;
             default:
-                return $this->success(trans('common.login') . trans('common.success'), route('index'));
+                return $this->success(trans('common.login') . trans('common.success'), route('Home::Member::index'));
         }
     }
 
@@ -49,7 +49,7 @@ class Member extends FrontendMember
         if (request()->isMethod('POST')) {
             if (!$this->verifyCheck(request('verify'), 'register') && config('system.sys_frontend_verify')) {
                 return $this->error(trans('common.verify_code') . trans('common.error'),
-                    route('index', ['t' => 'register']));
+                    route('Home::Member::index', ['t' => 'register']));
             }
             $memberName     = request('re_member_name');
             $memberPwd      = request('password');
@@ -59,14 +59,14 @@ class Member extends FrontendMember
             if ('add' == ACTION_NAME || null !== $memberName) {
                 $result = $this->doValidateForm('re_member_name', ['re_member_name' => $memberName]);
                 if (!$result['status']) {
-                    return $this->error($result['info'], route('index', ['t' => 'register']));
+                    return $this->error($result['info'], route('Home::Member::index', ['t' => 'register']));
                 }
 
             }
             if ('add' == ACTION_NAME || null !== $memberPwd) {
                 $result = $this->doValidateForm('password', ['password' => $memberPwd]);
                 if (!$result['status']) {
-                    return $this->error($result['info'], route('index', ['t' => 'register']));
+                    return $this->error($result['info'], route('Home::Member::index', ['t' => 'register']));
                 }
 
             }
@@ -74,7 +74,7 @@ class Member extends FrontendMember
                 $result = $this->doValidateForm('password_again',
                     ['password' => $memberPwd, 'password_again' => $memberPwdAgain]);
                 if (!$result['status']) {
-                    return $this->error($result['info'], route('index', ['t' => 'register']));
+                    return $this->error($result['info'], route('Home::Member::index', ['t' => 'register']));
                 }
 
             }
@@ -90,11 +90,11 @@ class Member extends FrontendMember
             if ($addResult) {
                 $this->doLogin($memberName, $memberPwd, false);
                 return $this->success(trans('common.member') . trans('common.register') . trans('common.success'),
-                    route('index'));
+                    route('Home::Member::index'));
                 return;
             } else {
                 return $this->error(trans('common.member') . trans('common.register') . trans('common.error'),
-                    route('index', ['t' => 'register']));
+                    route('Home::Member::index', ['t' => 'register']));
             }
         }
     }
@@ -104,7 +104,7 @@ class Member extends FrontendMember
     {
         $this->doLogout();
         return $this->success(trans('common.logout') . trans('common.account') . trans('common.success'),
-            route('Index/index'));
+            route('Home::Index::index'));
     }
 
     //表单数据验证

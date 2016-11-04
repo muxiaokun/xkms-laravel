@@ -54,14 +54,16 @@ class AdminLog extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::AdminLog::index'));
         }
 
         $resultDel = Model\AdminLogs::mDel($id);
         if ($resultDel) {
-            return $this->success(trans('common.log') . trans('common.del') . trans('common.success'), route('index'));
+            return $this->success(trans('common.log') . trans('common.del') . trans('common.success'),
+                route('Admin::AdminLog::index'));
         } else {
-            return $this->error(trans('common.log') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.log') . trans('common.del') . trans('common.error'),
+                route('Admin::AdminLog::index'));
         }
     }
 
@@ -69,14 +71,16 @@ class AdminLog extends Backend
     public function del_all()
     {
         if (session('backend_info.id') != 1) {
-            return $this->error('only ROOT privilege', route('index'));
+            return $this->error('only ROOT privilege', route('Admin::AdminLog::index'));
         }
 
         $resultDel = Model\AdminLogs::mDel_all();
         if ($resultDel) {
-            return $this->success(trans('common.log') . trans('common.del') . trans('common.success'), route('index'));
+            return $this->success(trans('common.log') . trans('common.del') . trans('common.success'),
+                route('Admin::AdminLog::index'));
         } else {
-            return $this->error(trans('common.log') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.log') . trans('common.del') . trans('common.error'),
+                route('Admin::AdminLog::index'));
         }
     }
 

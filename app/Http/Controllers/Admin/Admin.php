@@ -75,11 +75,11 @@ class Admin extends Backend
             $resultAdd = Model\Admins::mAdd($data);
             if ($resultAdd) {
                 return $this->success(trans('common.admin') . trans('common.add') . trans('common.success'),
-                    route('index'));
+                    route('Admin::Admin::index'));
 
                 return;
             } else {
-                return $this->error(trans('common.admin') . trans('common.add') . trans('common.error'), route('add'));
+                return $this->error(trans('common.admin') . trans('common.add') . trans('common.error'));
             }
         }
         $this->addEditCommon();
@@ -92,7 +92,7 @@ class Admin extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::Admin::index'));
         }
 
         if (request()->isMethod('POST')) {
@@ -100,11 +100,10 @@ class Admin extends Backend
             $resultEdit = Model\Admins::mEdit($id, $data);
             if ($resultEdit) {
                 return $this->success(trans('common.admin') . trans('common.edit') . trans('common.success'),
-                    route('index'));
-
-                return;
+                    route('Admin::Admin::index'));
             } else {
-                $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
+                $errorGoLink = (is_array($id)) ? route('Admin::Admin::index') : route('Admin::Admin::edit',
+                    ['id' => $id]);
                 return $this->error(trans('common.admin') . trans('common.edit') . trans('common.error'), $errorGoLink);
             }
         }
@@ -127,17 +126,18 @@ class Admin extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::Admin::index'));
         }
 
         $resultDel = Model\Admins::mDel($id);
         if ($resultDel) {
             return $this->success(trans('common.admin') . trans('common.del') . trans('common.success'),
-                route('index'));
+                route('Admin::Admin::index'));
 
             return;
         } else {
-            return $this->error(trans('common.admin') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.admin') . trans('common.del') . trans('common.error'),
+                route('Admin::Admin::index'));
         }
     }
 
@@ -280,7 +280,8 @@ class Admin extends Backend
         $privilege     = request('privilege');
         $isEnable      = request('is_enable');
 
-        $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', ['id' => $id]);
+        $errorGoLink = (!$id) ? route('Admin::Admin::add') : (is_array($id)) ? route('Admin::Admin::index') : route('Admin::Admin::edit',
+            ['id' => $id]);
         //检测初始化参数是否合法
         if ('add' == ACTION_NAME || null !== $adminName) {
             $result = $this->doValidateForm('admin_name', ['id' => $id, 'admin_name' => $adminName]);

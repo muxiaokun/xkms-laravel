@@ -61,10 +61,11 @@ class Itlink extends Backend
             if ($resultAdd) {
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.itlink') . trans('common.add') . trans('common.success'),
-                    route('index'));
+                    route('Admin::Itlink::index'));
                 return;
             } else {
-                return $this->error(trans('common.itlink') . trans('common.add') . trans('common.error'), route('add'));
+                return $this->error(trans('common.itlink') . trans('common.add') . trans('common.error'),
+                    route('Admin::Itlink::add'));
             }
         }
 
@@ -77,7 +78,7 @@ class Itlink extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::Itlink::index'));
         }
 
         if (request()->isMethod('POST')) {
@@ -86,10 +87,11 @@ class Itlink extends Backend
             if ($resultEdit) {
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.itlink') . trans('common.edit') . trans('common.success'),
-                    route('index'));
+                    route('Admin::Itlink::index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
+                $errorGoLink = (is_array($id)) ? route('Admin::Itlink::index') : route('Admin::Itlink::edit',
+                    ['id' => $id]);
                 return $this->error(trans('common.itlink') . trans('common.edit') . trans('common.error'),
                     $errorGoLink);
             }
@@ -106,17 +108,18 @@ class Itlink extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::Itlink::index'));
         }
 
         $resultDel = Model\Itlink::mDel($id);
         if ($resultDel) {
             Model\ManageUpload::mEdit($id);
             return $this->success(trans('common.itlink') . trans('common.del') . trans('common.success'),
-                route('index'));
+                route('Admin::Itlink::index'));
             return;
         } else {
-            return $this->error(trans('common.itlink') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.itlink') . trans('common.del') . trans('common.error'),
+                route('Admin::Itlink::index'));
         }
     }
 
@@ -174,7 +177,8 @@ class Itlink extends Backend
         }
 
         //检测初始化参数是否合法
-        $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', ['id' => $id]);
+        $errorGoLink = (!$id) ? route('Admin::Itlink::add') : (is_array($id)) ? route('Admin::Itlink::index') : route('Admin::Itlink::edit',
+            ['id' => $id]);
         if ('add' == ACTION_NAME || null !== $shortName) {
             $result = $this->doValidateForm('short_name', ['id' => $id, 'short_name' => $shortName]);
             if (!$result['status']) {

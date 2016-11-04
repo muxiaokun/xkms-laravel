@@ -44,7 +44,7 @@ class Assess extends FrontendMember
         //初始化和权限检测
         $id = request('get.id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Home::Assess::index'));
         }
 
         $assessInfo  = Model\Assess::mFind($id);
@@ -56,7 +56,7 @@ class Assess extends FrontendMember
             $currentTime > $assessInfo['end_time']
         ) {
             return $this->error(trans('common.you') . trans('common.none') . trans('common.privilege') . trans('common.assess'),
-                route('index'));
+                route('Home::Assess::index'));
         }
 
         if (request()->isMethod('POST')) {
@@ -64,10 +64,10 @@ class Assess extends FrontendMember
             //提交时检测类型下可以被评分的组和组员
             $resultAdd     = $AssessLogMode->mAdd($data);
             if ($resultAdd) {
-                return $this->success(trans('common.grade') . trans('common.success'), route('index'));
+                return $this->success(trans('common.grade') . trans('common.success'), route('Home::Assess::index'));
                 return;
             } else {
-                return $this->error(trans('common.grade') . trans('common.error'), route('add'));
+                return $this->error(trans('common.grade') . trans('common.error'), route('Home::Assess::add'));
             }
         }
 
@@ -142,7 +142,8 @@ class Assess extends FrontendMember
         $score     = request('score');
 
         //检测初始化参数是否合法
-        $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', ['id' => $id]);
+        $errorGoLink = (!$assessId) ? route('Home::Assess::add') : (is_array($id)) ? route('Home::Assess::index') : route('Home::Assess::edit',
+            ['id' => $id]);
         if ('add' == ACTION_NAME || null !== $reGradeId) {
             $result = $this->doValidateForm('re_grade_id', ['re_grade_id' => $reGradeId]);
             if (!$result['status']) {

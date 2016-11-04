@@ -90,7 +90,7 @@ class FrontendMember extends Frontend
             }
         }
         $leftNav[] = [
-            'link' => route('Home/Member/logout'),
+            'link' => route('Home::Member::logout'),
             'name' => trans('common.logout') . trans('common.member'),
         ];
         return $leftNav;

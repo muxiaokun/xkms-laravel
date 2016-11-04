@@ -57,7 +57,7 @@ class MessageBoardLog extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::MessageBoardLog::index'));
         }
 
         if (request()->isMethod('POST')) {
@@ -67,10 +67,12 @@ class MessageBoardLog extends Backend
             ];
             $resultEdit = Model\MessageBoardLog::mEdit($id, $data);
             if ($resultEdit) {
-                return $this->success(trans('common.audit') . trans('common.success'), route('index'));
+                return $this->success(trans('common.audit') . trans('common.success'),
+                    route('Admin::MessageBoardLog::index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
+                $errorGoLink = (is_array($id)) ? route('Admin::MessageBoardLog::index') : route('Admin::MessageBoardLog::edit',
+                    ['id' => $id]);
                 return $this->error(trans('common.audit') . trans('common.error'), $errorGoLink);
             }
         }
@@ -93,17 +95,17 @@ class MessageBoardLog extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::MessageBoardLog::index'));
         }
 
         $resultDel = Model\MessageBoardLog::mDel($id);
         if ($resultDel) {
             return $this->success(trans('common.messageboard') . trans('common.log') . trans('common.del') . trans('common.success'),
-                route('index'));
+                route('Admin::MessageBoardLog::index'));
             return;
         } else {
             return $this->error(trans('common.messageboard') . trans('common.log') . trans('common.del') . trans('common.error'),
-                route('index'));
+                route('Admin::MessageBoardLog::index'));
         }
     }
 }

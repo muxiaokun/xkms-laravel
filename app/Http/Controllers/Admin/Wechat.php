@@ -61,7 +61,7 @@ class Wechat extends Backend
 
         //认证连接
         $Wechat                = new \Common\Lib\Wechat();
-        $ApiLink               = 'http://' . $_SERVER['SERVER_NAME'] . route(config('DEFAULT_MODULE') . '/Wechat/member_bind');
+        $ApiLink               = 'http://' . $_SERVER['SERVER_NAME'] . route('Home::Wechat::member_bind');
         $assign['Api_link']    = $ApiLink;
         $Oauth2Link            = $Wechat->Oauth2_enlink($ApiLink);
         $assign['Oauth2_link'] = $Oauth2Link;
@@ -75,13 +75,13 @@ class Wechat extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::Wechat::index'));
         }
 
         if (!config('app.debug')) {
             $templateIdShort = config('system.wechat_template_id');
             if (!$templateIdShort) {
-                return $this->error('WECHAT_TEMPLATE_ID' . trans('common.empty'), route('config'));
+                return $this->error('WECHAT_TEMPLATE_ID' . trans('common.empty'), route('Admin::Wechat::config'));
             }
 
         }
@@ -89,7 +89,7 @@ class Wechat extends Backend
         $editInfo['member_name'] = Model\Member::mFindColumn($editInfo['member_id'], 'member_name');
         $assign['edit_info']     = $editInfo;
         if (request()->isMethod('POST')) {
-            $errorGoLink = route('edit', ['id' => $id]);
+            $errorGoLink = route('Admin::Wechat::edit', ['id' => $id]);
             $Wechat      = new \Common\Lib\Wechat();
             $accessToken = $Wechat->get_access_token();
             if (!config('app.debug')) {
@@ -112,7 +112,7 @@ class Wechat extends Backend
             $putTemplate  = $Wechat->put_template($data);
             if (0 === $putTemplate['errcode']) {
                 return $this->success(trans('common.wechat') . trans('common.send') . trans('common.success'),
-                    route('Wechat/index'));
+                    route('Admin::Wechat::index'));
                 return;
             } else {
                 return $this->error(trans('common.wechat') . trans('common.send') . trans('common.error') . trans('error' . $putTemplate['errcode']),
@@ -135,11 +135,11 @@ class Wechat extends Backend
         $resultDel = Model\Wechat::mDel($id);
         if ($resultDel) {
             return $this->success(trans('common.wechat') . trans('common.bind') . trans('common.del') . trans('common.success'),
-                route('Wechat/index'));
+                route('Admin::Wechat::index'));
             return;
         } else {
             return $this->error(trans('common.wechat') . trans('common.bind') . trans('common.del') . trans('common.error'),
-                route('Wechat/edit', ['id' => $id]));
+                route('Admin::Wechat::edit', ['id' => $id]));
         }
     }
 

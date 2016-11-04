@@ -50,7 +50,7 @@ class MessageBoard extends Backend
                 return;
             } else {
                 return $this->error(trans('common.messageboard') . trans('common.add') . trans('common.error'),
-                    route('add', ['cate_id' => request('get.cate_id')]));
+                    route('Admin::MessageBoard::add', ['cate_id' => request('get.cate_id')]));
             }
         }
 
@@ -64,7 +64,7 @@ class MessageBoard extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::MessageBoard::index'));
         }
 
         if (request()->isMethod('POST')) {
@@ -72,10 +72,11 @@ class MessageBoard extends Backend
             $resultEdit = Model\MessageBoard::mEdit($id, $data);
             if ($resultEdit) {
                 return $this->success(trans('common.messageboard') . trans('common.edit') . trans('common.success'),
-                    route('index'));
+                    route('Admin::MessageBoard::index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
+                $errorGoLink = (is_array($id)) ? route('Admin::MessageBoard::index') : route('Admin::MessageBoard::edit',
+                    ['id' => $id]);
                 return $this->error(trans('common.messageboard') . trans('common.edit') . trans('common.error'),
                     $errorGoLink);
             }
@@ -95,17 +96,17 @@ class MessageBoard extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::MessageBoard::index'));
         }
 
         $resultDel = Model\MessageBoard::mDel($id);
         if ($resultDel) {
             return $this->success(trans('common.messageboard') . trans('common.del') . trans('common.success'),
-                route('index'));
+                route('Admin::MessageBoard::index'));
             return;
         } else {
             return $this->error(trans('common.messageboard') . trans('common.del') . trans('common.error'),
-                route('index'));
+                route('Admin::MessageBoard::index'));
         }
     }
 

@@ -60,12 +60,12 @@ class Message extends FrontendMember
             $content = request('content');
             if (null == $content) {
                 return $this->error(trans('common.content') . trans('common.not') . trans('common.empty'),
-                    route('index'));
+                    route('Home::Message::index'));
             }
 
             if (null == $receiveId) {
                 return $this->error(trans('common.receive') . trans('common.member') . trans('common.error'),
-                    route('index'));
+                    route('Home::Message::index'));
             }
 
             $data      = [
@@ -75,10 +75,10 @@ class Message extends FrontendMember
             ];
             $resultAdd = Model\Message::mAdd($data);
             if ($resultAdd) {
-                return $this->success(trans('common.send') . trans('common.success'), route('index'));
+                return $this->success(trans('common.send') . trans('common.success'), route('Home::Message::index'));
                 return;
             } else {
-                return $this->error(trans('common.send') . trans('common.error'), route('index'));
+                return $this->error(trans('common.send') . trans('common.error'), route('Home::Message::index'));
             }
         }
 
@@ -95,16 +95,17 @@ class Message extends FrontendMember
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Home::Message::index'));
         }
 
         $resultDel = Model\Message::mDel($id);
         if ($resultDel) {
             return $this->success(trans('common.message') . trans('common.del') . trans('common.success'),
-                route('index'));
+                route('Home::Message::index'));
             return;
         } else {
-            return $this->error(trans('common.message') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.message') . trans('common.del') . trans('common.error'),
+                route('Home::Message::index'));
         }
     }
 

@@ -51,11 +51,10 @@ class Quests extends Backend
             $resultAdd = Model\Quests::mAdd($data);
             if ($resultAdd) {
                 return $this->success(trans('common.quests') . trans('common.add') . trans('common.success'),
-                    route('Quests/index'));
-                return;
+                    route('Admin::Quests::index'));
             } else {
                 return $this->error(trans('common.quests') . trans('common.add') . trans('common.error'),
-                    route('Quests/add'));
+                    route('Admin::Quests::add'));
             }
         }
         $assign['title'] = trans('common.add') . trans('common.quests');
@@ -75,10 +74,10 @@ class Quests extends Backend
             $resultEdit = Model\Quests::mEdit($id, $data);
             if ($resultEdit) {
                 return $this->success(trans('common.quests') . trans('common.edit') . trans('common.success'),
-                    route('Quests/index'));
-                return;
+                    route('Admin::Quests::index'));
             } else {
-                $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
+                $errorGoLink = (is_array($id)) ? route('Admin::Quests::index') : route('Admin::Quests::edit',
+                    ['id' => $id]);
                 return $this->error(trans('common.quests') . trans('common.edit') . trans('common.error'),
                     $errorGoLink);
             }
@@ -95,7 +94,7 @@ class Quests extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('Quests/index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::Quests::index'));
         }
 
         $clear       = request('clear');
@@ -111,20 +110,20 @@ class Quests extends Backend
                 if ($resultClear) {
                     Model\Quests::where(['id' => $id])->data(['current_portion' => 0])->save();
                     return $this->success(trans('common.quests') . trans('common.clear') . trans('common.success'),
-                        route('Quests/index'));
+                        route('Admin::Quests::index'));
                     return;
                 } else {
                     return $this->error(trans('common.quests') . trans('common.clear') . trans('common.error'),
-                        route('Quests/index'));
+                        route('Admin::Quests::index'));
 
                 }
             }
             return $this->success(trans('common.quests') . trans('common.del') . trans('common.success'),
-                route('Quests/index'));
+                route('Admin::Quests::index'));
             return;
         } else {
             return $this->error(trans('common.quests') . trans('common.del') . trans('common.error'),
-                route('Quests/edit', ['id' => $id]));
+                route('Admin::Quests::edit', ['id' => $id]));
         }
     }
 

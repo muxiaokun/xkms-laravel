@@ -70,7 +70,7 @@ class Wechat extends Frontend
         $content = '';
         switch ($msgInfo['Content']) {
             case '登录':
-                $ApiLink    = 'http://' . $_SERVER['SERVER_NAME'] . route(config('DEFAULT_MODULE') . '/Wechat/member_bind');
+                $ApiLink    = 'http://' . $_SERVER['SERVER_NAME'] . route('Home::Wechat::member_bind');
                 $Oauth2Link = $this->Wechat->Oauth2_enlink($ApiLink);
                 $content    = $Oauth2Link;
                 break;
@@ -132,18 +132,16 @@ class Wechat extends Frontend
     {
         switch ($msg) {
             case 'user_pwd_error':
-                return $this->error(trans('common.account') . trans('common.or') . trans('common.pass') . trans('common.error'),
-                    route(ACTION_NAME));
+                return $this->error(trans('common.account') . trans('common.or') . trans('common.pass') . trans('common.error'));
                 break;
             case 'verify_error':
-                return $this->error(trans('common.verify_code') . trans('common.error'), route(ACTION_NAME));
+                return $this->error(trans('common.verify_code') . trans('common.error'));
                 break;
             case 'lock_user_error':
-                return $this->error(trans('common.admin') . trans('common.by') . trans('common.lock') . trans('common.please') . config('system.sys_frontend_lock_time') . trans('common.second') . trans('common.again') . trans('common.login'),
-                    route(ACTION_NAME));
+                return $this->error(trans('common.admin') . trans('common.by') . trans('common.lock') . trans('common.please') . config('system.sys_frontend_lock_time') . trans('common.second') . trans('common.again') . trans('common.login'));
                 break;
             default:
-                return $this->success(trans('common.login') . trans('common.success'), route('Member/index'));
+                return $this->success(trans('common.login') . trans('common.success'), route('Home::Member::index'));
         }
     }
 

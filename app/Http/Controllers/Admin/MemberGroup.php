@@ -50,11 +50,11 @@ class MemberGroup extends Backend
             $resultAdd = Model\MemberGroup::mAdd($data);
             if ($resultAdd) {
                 return $this->success(trans('common.member') . trans('common.group') . trans('common.add') . trans('common.success'),
-                    route('index'));
+                    route('Admin::MemberGroup::index'));
                 return;
             } else {
                 return $this->error(trans('common.member') . trans('common.group') . trans('common.add') . trans('common.error'),
-                    route('add'));
+                    route('Admin::MemberGroup::add'));
             }
         }
 
@@ -68,7 +68,7 @@ class MemberGroup extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::MemberGroup::index'));
         }
 
         if (request()->isMethod('POST')) {
@@ -76,10 +76,11 @@ class MemberGroup extends Backend
             $resultEdit = Model\MemberGroup::mEdit($id, $data);
             if ($resultEdit) {
                 return $this->success(trans('common.member') . trans('common.group') . trans('common.edit') . trans('common.success'),
-                    route('index'));
+                    route('Admin::MemberGroup::index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
+                $errorGoLink = (is_array($id)) ? route('Admin::MemberGroup::index') : route('Admin::MemberGroup::edit',
+                    ['id' => $id]);
                 return $this->error(trans('common.member') . trans('common.group') . trans('common.edit') . trans('common.error'),
                     $errorGoLink);
             }
@@ -104,7 +105,7 @@ class MemberGroup extends Backend
 
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::MemberGroup::index'));
         }
 
         $resultDel = Model\MemberGroup::mDel($id);
@@ -112,11 +113,11 @@ class MemberGroup extends Backend
             //删除成功后 删除管理员与组的关系
             Model\Member::mClean($id, 'group_id');
             return $this->success(trans('common.member') . trans('common.group') . trans('common.del') . trans('common.success'),
-                route('index'));
+                route('Admin::MemberGroup::index'));
             return;
         } else {
             return $this->error(trans('common.member') . trans('common.group') . trans('common.del') . trans('common.error'),
-                route('index'));
+                route('Admin::MemberGroup::index'));
         }
     }
 
@@ -206,7 +207,8 @@ class MemberGroup extends Backend
         $isEnable  = request('is_enable');
 
         //检测初始化参数是否合法
-        $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', ['id' => $id]);
+        $errorGoLink = (!$id) ? route('Admin::MemberGroup::add') : (is_array($id)) ? route('Admin::MemberGroup::index') : route('Admin::MemberGroup::edit',
+            ['id' => $id]);
         if ('add' == ACTION_NAME || null !== $name) {
             $result = $this->doValidateForm('name', ['id' => $id, 'name' => $name]);
             if (!$result['status']) {

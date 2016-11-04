@@ -57,11 +57,11 @@ class ArticleChannel extends Backend
             $resultAdd = Model\ArticleChannel::mAdd($data);
             if ($resultAdd) {
                 return $this->success(trans('common.channel') . trans('common.add') . trans('common.success'),
-                    route('index'));
+                    route('Admin::ArticleChannel::index'));
                 return;
             } else {
                 return $this->error(trans('common.channel') . trans('common.add') . trans('common.error'),
-                    route('add'));
+                    route('Admin::ArticleChannel::add'));
             }
         }
 
@@ -83,14 +83,14 @@ class ArticleChannel extends Backend
 
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::ArticleChannel::index'));
         }
 
         if (1 != session('backend_info.id')
             && !mInArray($id, Model\ArticleChannel::mFindAllow())
         ) {
             return $this->error(trans('common.none') . trans('common.privilege') . trans('common.edit') . trans('common.channel'),
-                route('index'));
+                route('Admin::ArticleChannel::index'));
         }
 
         $maAllowArr = Model\ArticleChannel::mFindAllow('ma');
@@ -106,10 +106,11 @@ class ArticleChannel extends Backend
             $resultEdit = Model\ArticleChannel::mEdit($id, $data);
             if ($resultEdit) {
                 return $this->success(trans('common.channel') . trans('common.edit') . trans('common.success'),
-                    route('index'));
+                    route('Admin::ArticleChannel::index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
+                $errorGoLink = (is_array($id)) ? route('Admin::ArticleChannel::index') : route('Admin::ArticleChannel::edit',
+                    ['id' => $id]);
                 return $this->error(trans('common.channel') . trans('common.edit') . trans('common.error'),
                     $errorGoLink);
             }
@@ -146,7 +147,7 @@ class ArticleChannel extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::ArticleChannel::index'));
         }
 
         //删除必须是 属主
@@ -154,23 +155,24 @@ class ArticleChannel extends Backend
             && !mInArray($id, Model\ArticleChannel::mFindAllow('ma'))
         ) {
             return $this->error(trans('common.none') . trans('common.privilege') . trans('common.del') . trans('common.channel'),
-                route('index'));
+                route('Admin::ArticleChannel::index'));
         }
 
         //解除文章和被删除频道的关系
         $resultClean = Model\Article::mClean($id, 'channel_id');
         if (!$resultClean) {
             return $this->error(trans('common.article') . trans('common.clear') . trans('common.channel') . trans('common.error'),
-                route('index'));
+                route('Admin::ArticleChannel::index'));
         }
 
         $resultDel = Model\ArticleChannel::mDel($id);
         if ($resultDel) {
             return $this->success(trans('common.channel') . trans('common.del') . trans('common.success'),
-                route('index'));
+                route('Admin::ArticleChannel::index'));
             return;
         } else {
-            return $this->error(trans('common.channel') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.channel') . trans('common.del') . trans('common.error'),
+                route('Admin::ArticleChannel::index'));
         }
     }
 

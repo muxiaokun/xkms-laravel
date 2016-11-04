@@ -66,15 +66,16 @@ class ManageUpload extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::ManageUpload::index'));
         }
 
         $resultDel = Model\ManageUpload::mDel($id);
         if ($resultDel) {
-            return $this->success(trans('common.file') . trans('common.del') . trans('common.success'), route('index'));
-            return;
+            return $this->success(trans('common.file') . trans('common.del') . trans('common.success'),
+                route('Admin::ManageUpload::index'));
         } else {
-            return $this->error(trans('common.file') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.file') . trans('common.del') . trans('common.error'),
+                route('Admin::ManageUpload::index'));
         }
     }
 
@@ -92,10 +93,11 @@ class ManageUpload extends Backend
             $resultDel = Model\ManageUpload::mDel($manageUpload['id']);
             if (!$resultDel) {
                 return $this->error(trans('common.clear') . trans('common.file') . $manageUpload['path'] . trans('common.error'),
-                    route('index'));
+                    route('Admin::ManageUpload::index'));
             }
         }
-        return $this->success(trans('common.clear') . trans('common.file') . trans('common.success'), route('index'));
+        return $this->success(trans('common.clear') . trans('common.file') . trans('common.success'),
+            route('Admin::ManageUpload::index'));
     }
 
     //上传接口实现

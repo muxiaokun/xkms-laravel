@@ -30,7 +30,7 @@ class Quests extends FrontendMember
         //初始化参数
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('Quests/index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Home::Quests::index'));
         }
 
         $questsInfo = Model\Quests::mFind($id);
@@ -38,16 +38,16 @@ class Quests extends FrontendMember
         $currentTime = Carbon::now();
         if ($questsInfo['start_time'] < $currentTime && $questsInfo['end_time'] < $currentTime) {
             return $this->error(trans('common.start') . trans('common.end') . trans('common.time') . trans('common.error'),
-                route('Quests/index'));
+                route('Home::Quests::index'));
         }
         if (0 != $questsInfo['max_portion'] && $questsInfo['current_portion'] >= $questsInfo['max_portion']) {
             return $this->error(trans('common.gt') . trans('common.max') . trans('common.portion'),
-                route('Quests/index'));
+                route('Home::Quests::index'));
         }
         $accessInfo = request('access_info');
         if (isset($questsInfo['access_info']) && $questsInfo['access_info'] != $accessInfo) {
             return $this->error(trans('common.access') . trans('common.pass') . trans('common.error'),
-                route('Quests/index'));
+                route('Home::Quests::index'));
         }
         //初始化问题
         $questsQuestList = json_decode($questsInfo['ext_info'], true);
@@ -74,10 +74,10 @@ class Quests extends FrontendMember
             if ($resultAdd) {
                 Model\Quests::where(['id' => $questsInfo['id']])->setInc('current_portion');
                 return $this->success(trans('common.answer') . trans('common.add') . trans('common.success'),
-                    route('Quests/index'));
+                    route('Home::Quests::index'));
             } else {
                 return $this->error(trans('common.answer') . trans('common.add') . trans('common.error'),
-                    route('index'));
+                    route('Home::Quests::index'));
             }
             return;
         }

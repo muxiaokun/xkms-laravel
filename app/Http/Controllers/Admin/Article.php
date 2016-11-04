@@ -121,7 +121,7 @@ class Article extends Backend
                 C('SYS_ARTICLE_THUMB_HEIGHT'));
             $resultAdd = Model\Article::mAdd($data);
             //增加了一个分类快捷添加文章的回跳链接
-            $rebackLink = request('get.cate_id') ? route('ArticleCategory/index') : U('index');
+            $rebackLink = request('get.cate_id') ? route('Admin::ArticleCategory::index') : route('Admin::Article::index');
             if ($resultAdd) {
                 $data['new_thumb'] = $thumbFile;
                 return $this->success(trans('common.article') . trans('common.add') . trans('common.success'),
@@ -129,7 +129,7 @@ class Article extends Backend
                 return;
             } else {
                 return $this->error(trans('common.article') . trans('common.add') . trans('common.error'),
-                    route('add', ['cate_id' => request('get.cate_id')]));
+                    route('Admin::Article::add', ['cate_id' => request('get.cate_id')]));
             }
         }
 
@@ -143,7 +143,7 @@ class Article extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::Article::index'));
         }
 
         if (request()->isMethod('POST')) {
@@ -155,10 +155,11 @@ class Article extends Backend
                 $data['new_thumb'] = $thumbFile;
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.article') . trans('common.edit') . trans('common.success'),
-                    route('index'));
+                    route('Admin::Article::index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
+                $errorGoLink = (is_array($id)) ? route('Admin::Article::index') : route('Admin::Article::edit',
+                    ['id' => $id]);
                 return $this->error(trans('common.article') . trans('common.edit') . trans('common.error'),
                     $errorGoLink);
             }
@@ -195,17 +196,18 @@ class Article extends Backend
         $this->_check_aed();
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::Article::index'));
         }
 
         $resultDel = Model\Article::mDel($id);
         if ($resultDel) {
             Model\ManageUpload::mEdit($id);
             return $this->success(trans('common.article') . trans('common.del') . trans('common.success'),
-                route('index'));
+                route('Admin::Article::index'));
             return;
         } else {
-            return $this->error(trans('common.article') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.article') . trans('common.del') . trans('common.error'),
+                route('Admin::Article::index'));
         }
     }
 
@@ -377,7 +379,7 @@ class Article extends Backend
             && !in_array($data['cate_id'], Model\ArticleCategory::mFindAllow())
         ) {
             return $this->error(trans('common.none') . trans('common.privilege') . trans('common.handle') . trans('common.article'),
-                route('index'));
+                route('Admin::Article::index'));
         }
 
     }

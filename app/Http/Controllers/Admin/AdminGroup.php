@@ -57,11 +57,11 @@ class AdminGroup extends Backend
             $resultAdd = Model\AdminGroups::mAdd($data);
             if ($resultAdd) {
                 return $this->success(trans('common.management') . trans('common.group') . trans('common.add') . trans('common.success'),
-                    route('index'));
+                    route('Admin::AdminGroup::index'));
                 return;
             } else {
                 return $this->error(trans('common.management') . trans('common.group') . trans('common.add') . trans('common.error'),
-                    route('add'));
+                    route('Admin::AdminGroup::add'));
             }
         }
 
@@ -75,7 +75,7 @@ class AdminGroup extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::AdminGroup::index'));
         }
 
         if (request()->isMethod('POST')) {
@@ -83,10 +83,11 @@ class AdminGroup extends Backend
             $resultEdit = Model\AdminGroups::mEdit($id, $data);
             if ($resultEdit) {
                 return $this->success(trans('common.management') . trans('common.group') . trans('common.edit') . trans('common.success'),
-                    route('index'));
+                    route('Admin::AdminGroup::index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
+                $errorGoLink = (is_array($id)) ? route('Admin::AdminGroup::index') : route('Admin::AdminGroup::edit',
+                    ['id' => $id]);
                 return $this->error(trans('common.management') . trans('common.group') . trans('common.edit') . trans('common.error'),
                     $errorGoLink);
             }
@@ -110,7 +111,7 @@ class AdminGroup extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::AdminGroup::index'));
         }
 
         if (1 != session('backend_info.id')) {
@@ -118,7 +119,8 @@ class AdminGroup extends Backend
             $mFindAllow = Model\AdminGroups::mFindAllow();
         }
         if ($id == 1 || (!in_array($id, $mFindAllow) && count(0 < $mFindAllow))) {
-            return $this->error(trans('common.id') . trans('common.not') . trans('common.del'), route('index'));
+            return $this->error(trans('common.id') . trans('common.not') . trans('common.del'),
+                route('Admin::AdminGroup::index'));
         }
 
         $resultDel = Model\AdminGroups::mDel($id);
@@ -126,11 +128,11 @@ class AdminGroup extends Backend
             //删除成功后 删除管理员与组的关系
             Model\Admins::mClean($id, 'group_id');
             return $this->success(trans('common.management') . trans('common.group') . trans('common.del') . trans('common.success'),
-                route('index'));
+                route('Admin::AdminGroup::index'));
             return;
         } else {
             return $this->error(trans('common.management') . trans('common.group') . trans('common.del') . trans('common.error'),
-                route('index'));
+                route('Admin::AdminGroup::index'));
         }
     }
 
@@ -227,7 +229,8 @@ class AdminGroup extends Backend
         $isEnable  = request('is_enable');
 
         //检测初始化参数是否合法
-        $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', ['id' => $id]);
+        $errorGoLink = (!$id) ? route('Admin::AdminGroup::add') : (is_array($id)) ? route('Admin::AdminGroup::index') : route('Admin::AdminGroup::edit',
+            ['id' => $id]);
         if ('add' == ACTION_NAME || null !== $name) {
             $result = $this->doValidateForm('name', ['id' => $id, 'name' => $name]);
             if (!$result['status']) {

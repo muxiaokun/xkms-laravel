@@ -61,10 +61,11 @@ class Member extends Backend
             $resultAdd = Model\Member::mAdd($data);
             if ($resultAdd) {
                 return $this->success(trans('common.member') . trans('common.add') . trans('common.success'),
-                    route('index'));
+                    route('Admin::Member::index'));
                 return;
             } else {
-                return $this->error(trans('common.member') . trans('common.add') . trans('common.error'), route('add'));
+                return $this->error(trans('common.member') . trans('common.add') . trans('common.error'),
+                    route('Admin::Member::add'));
             }
         }
         $this->addEditCommon();
@@ -77,7 +78,7 @@ class Member extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::Member::index'));
         }
 
         if (request()->isMethod('POST')) {
@@ -85,10 +86,11 @@ class Member extends Backend
             $resultEdit = Model\Member::mEdit($id, $data);
             if ($resultEdit) {
                 return $this->success(trans('common.member') . trans('common.edit') . trans('common.success'),
-                    route('index'));
+                    route('Admin::Member::index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
+                $errorGoLink = (is_array($id)) ? route('Admin::Member::index') : route('Admin::Member::edit',
+                    ['id' => $id]);
                 return $this->error(trans('common.member') . trans('common.edit') . trans('common.error'),
                     $errorGoLink);
             }
@@ -112,21 +114,23 @@ class Member extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::Member::index'));
         }
 
         //不能删除root用户
         if ($id == 1) {
-            return $this->error(trans('common.id') . trans('common.not') . trans('common.del'), route('index'));
+            return $this->error(trans('common.id') . trans('common.not') . trans('common.del'),
+                route('Admin::Member::index'));
         }
 
         $resultDel = Model\Member::mDel($id);
         if ($resultDel) {
             return $this->success(trans('common.member') . trans('common.del') . trans('common.success'),
-                route('index'));
+                route('Admin::Member::index'));
             return;
         } else {
-            return $this->error(trans('common.member') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.member') . trans('common.del') . trans('common.error'),
+                route('Admin::Member::index'));
         }
     }
 
@@ -267,7 +271,8 @@ class Member extends Backend
         $isEnable      = request('is_enable');
 
         //检测初始化参数是否合法
-        $errorGoLink = (!$id) ? route('add') : (is_array($id)) ? U('index') : U('edit', ['id' => $id]);
+        $errorGoLink = (!$id) ? route('Admin::Member::add') : (is_array($id)) ? route('Admin::Member::index') : route('Admin::Member::edit',
+            ['id' => $id]);
         if ('add' == ACTION_NAME || null !== $memberName) {
             $result = $this->doValidateForm('member_name', ['id' => $id, 'member_name' => $memberName]);
             if (!$result['status']) {

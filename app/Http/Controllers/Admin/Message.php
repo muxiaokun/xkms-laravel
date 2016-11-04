@@ -59,12 +59,12 @@ class Message extends Backend
             $content = request('content');
             if (null == $content) {
                 return $this->error(trans('common.content') . trans('common.not') . trans('common.empty'),
-                    route('index'));
+                    route('Admin::Message::index'));
             }
 
             if (null == $receiveId) {
                 return $this->error(trans('common.receive') . trans('common.member') . trans('common.error'),
-                    route('index'));
+                    route('Admin::Message::index'));
             }
 
             $data      = [
@@ -74,10 +74,10 @@ class Message extends Backend
             ];
             $resultAdd = Model\Message::mAdd($data);
             if ($resultAdd) {
-                return $this->success(trans('common.send') . trans('common.success'), route('index'));
+                return $this->success(trans('common.send') . trans('common.success'), route('Admin::Message::index'));
                 return;
             } else {
-                return $this->error(trans('common.send') . trans('common.error'), route('index'));
+                return $this->error(trans('common.send') . trans('common.error'), route('Admin::Message::index'));
             }
         }
 
@@ -94,16 +94,17 @@ class Message extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::Message::index'));
         }
 
         $resultDel = Model\Message::mDel($id);
         if ($resultDel) {
             return $this->success(trans('common.message') . trans('common.del') . trans('common.success'),
-                route('index'));
+                route('Admin::Message::index'));
             return;
         } else {
-            return $this->error(trans('common.message') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.message') . trans('common.del') . trans('common.error'),
+                route('Admin::Message::index'));
         }
     }
 

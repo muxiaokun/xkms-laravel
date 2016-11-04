@@ -50,11 +50,10 @@ class Recruit extends Backend
             $resultAdd = Model\Recruit::mAdd($data);
             if ($resultAdd) {
                 return $this->success(trans('common.recruit') . trans('common.add') . trans('common.success'),
-                    route('index'));
-                return;
+                    route('Admin::Recruit::index'));
             } else {
                 return $this->error(trans('common.recruit') . trans('common.add') . trans('common.error'),
-                    route('add'));
+                    route('Admin::Recruit::add'));
             }
         }
         $assign['title'] = trans('common.add') . trans('common.recruit');
@@ -66,7 +65,7 @@ class Recruit extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::Recruit::index'));
         }
 
         if (request()->isMethod('POST')) {
@@ -74,10 +73,11 @@ class Recruit extends Backend
             $resultEdit = Model\Recruit::mEdit($id, $data);
             if ($resultEdit) {
                 return $this->success(trans('common.recruit') . trans('common.edit') . trans('common.success'),
-                    route('index'));
+                    route('Admin::Recruit::index'));
                 return;
             } else {
-                $errorGoLink = (is_array($id)) ? route('index') : U('edit', ['id' => $id]);
+                $errorGoLink = (is_array($id)) ? route('Admin::Recruit::index') : route('Admin::Recruit::edit',
+                    ['id' => $id]);
                 return $this->error(trans('common.recruit') . trans('common.edit') . trans('common.error'),
                     $errorGoLink);
             }
@@ -95,7 +95,7 @@ class Recruit extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'), route('index'));
+            return $this->error(trans('common.id') . trans('common.error'), route('Admin::Recruit::index'));
         }
 
         $resultDel = Model\Recruit::mDel($id);
@@ -103,10 +103,11 @@ class Recruit extends Backend
             //TODO 需要定义数据列
             $resultDel = Model\RecruitLog::mClean($id);
             return $this->success(trans('common.recruit') . trans('common.del') . trans('common.success'),
-                route('index'));
+                route('Admin::Recruit::index'));
             return;
         } else {
-            return $this->error(trans('common.recruit') . trans('common.del') . trans('common.error'), route('index'));
+            return $this->error(trans('common.recruit') . trans('common.del') . trans('common.error'),
+                route('Admin::Recruit::index'));
         }
     }
 

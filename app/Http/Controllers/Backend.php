@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 use App\Model;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Filesystem\Filesystem;
 
 class Backend extends Common
 {
@@ -190,38 +189,21 @@ class Backend extends Common
     //保存系统配置
     protected function _put_config($col, $file)
     {
-        if (!is_array($col)) {
-            return $this->error(trans('common.save') . trans('common.error'));
-        }
-
-        //流程 1.读取旧的配置 2.存入新的配置 3.输出到文件
-        if (!in_array($file, ['website', 'system',])) {
+        if (!is_array($col) && !in_array($file, ['website', 'system',])) {
             return $this->error(trans('common.save') . trans('common.error'));
         }
 
         $cfgFile    = config_path($file . '.php');
-        $filesystem = new Filesystem();
-        $saveConfig = $filesystem->getRequire($cfgFile);
-        if (!is_array($saveConfig)) {
-            $saveConfig = [];
-        }
-
+        $saveConfig = [];
         foreach ($col as $option) {
             $saveConfig[$option] = request($option);
         }
-        $configStr = var_export($saveConfig, true);
-        $putConfig = <<<EOF
-<?php
-// {$file} config file
-return {$configStr};
-?>
-EOF;
-        $putResult = $filesystem->put($cfgFile, $putConfig);
+        $putResult = mPutArr($cfgFile, $saveConfig);
+
         if ($putResult) {
             return $this->success(trans('common.save') . trans('common.success'));
         } else {
             return $this->error(trans('common.save') . trans('common.error'));
         }
-        //此函数不做任何返回
     }
 }

@@ -1,7 +1,3 @@
 *
 !public/
 !.gitignore
-!xkms/
-!xkms/*
-!xkms/article/*
-!xkms/install_info/*

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 
 use App\Model;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\View;
 
 class Frontend extends Common
@@ -44,8 +43,7 @@ class Frontend extends Common
     //获取当前位置(也就是当前操作方法)
     protected function _get_position()
     {
-        $filesystem = new Filesystem();
-        $privilege  = $filesystem->getRequire(storage_path('app/install_menu'))['Home'];
+        $privilege = mGetArr(storage_path('app/install_menu'))['Home'];
         //跳过系统基本操作 删 异步接口,
         $allController = [
             'Home::Index::index' => trans('common.homepage'),

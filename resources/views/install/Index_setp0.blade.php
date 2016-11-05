@@ -4,7 +4,7 @@
     <section class="container">
         <div class="row">
             <div class="col-sm-12">
-                <pre>{{ $article }}</pre>
+                <pre>{{ $licenses }}</pre>
             </div>
             <div class="col-sm-12 text-center">
                 <div class="checkbox">

@@ -21,7 +21,7 @@ class MemberGroup extends Common
         }
 
         is_array($id) && $id = ['in', $id];
-        $data = $query->select('is_enable,privilege')->where(['id' => $id])->select();
+        $data = $query->select(['is_enable', 'privilege'])->where(['id' => $id])->select();
         foreach ($data as &$dataRow) {
             $query->mDecodeData($dataRow);
         }

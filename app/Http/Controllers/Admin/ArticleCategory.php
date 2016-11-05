@@ -46,9 +46,7 @@ class ArticleCategory extends Backend
         }
 
         if (request()->ajax()) {
-            $this->ajaxReturn($articleCategoryList);
-
-            return;
+            return $articleCategoryList->toJson();
         }
 
         $assign['article_category_list'] = $articleCategoryList;

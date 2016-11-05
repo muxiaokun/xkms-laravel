@@ -49,8 +49,7 @@ class ArticleChannel extends Backend
     public function add()
     {
         if (request()->ajax()) {
-            $this->ajaxReturn($this->_add_edit_category_common(), $assign);
-            return;
+            return $this->_add_edit_category_common()->toJson();
         }
         if (request()->isMethod('POST')) {
             $data      = $this->makeData();
@@ -76,7 +75,7 @@ class ArticleChannel extends Backend
         if (request()->ajax()) {
             $id       = request('get.id');
             $editInfo = Model\ArticleChannel::mFind($id);
-            $this->ajaxReturn($this->_add_edit_category_common($editInfo));
+            return $this->_add_edit_category_common($editInfo)->toJson();
         }
 
         $id = request('id');

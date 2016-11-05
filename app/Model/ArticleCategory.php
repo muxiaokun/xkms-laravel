@@ -17,14 +17,14 @@ class ArticleCategory extends Common
     public function scopeMList_tree($query, $where = null, $parentId = 0, $level = 0)
     {
         $config = [
-            'list_fn'     => 'mSelect',
+            'list_fn'     => 'mList',
             'list_where'  => $where,
-            'tree_fn'     => 'mSelect_tree',
+            'tree_fn'     => 'mList_tree',
             'id'          => 'id',
             'parent_id'   => 'parent_id',
             'retract_col' => 'name',
         ];
-        return $query->select('id,name')->mMakeTree($config, $parentId, $level);
+        return $query->select(['id', 'name'])->mMakeTree($config, $parentId, $level);
     }
 
     public function scopeMDel($query, $id)
@@ -44,7 +44,7 @@ class ArticleCategory extends Common
     public function scopeMFind_child_id($query, $id, $pushMe = true)
     {
         $where           = ['parent_id' => $id];
-        $articleCategory = $query->select('id')->mSelect($where);
+        $articleCategory = $query->select('id')->mList($where);
         $categoryChildId = [];
         foreach ($articleCategory as $category) {
             $categoryChildId[] = $category['id'];
@@ -81,7 +81,7 @@ class ArticleCategory extends Common
             return false;
         }
 
-        $categoryInfo = $query->select('id,parent_id')->mFind($id);
+        $categoryInfo = $query->select(['id', 'parent_id'])->mFind($id);
         if (0 != $categoryInfo['parent_id']) {
             return $query->mFind_top_id($categoryInfo['parent_id']);
         }
@@ -119,7 +119,7 @@ class ArticleCategory extends Common
             return $mFindAllow;
         }
 
-        $articleCategory = $query->select('id')->mSelect($where);
+        $articleCategory = $query->select('id')->mList($where);
         foreach ($articleCategory as $category) {
             $mFindAllow[] = $category['id'];
         }
@@ -135,7 +135,7 @@ class ArticleCategory extends Common
         isset($where['manage_id']) && $where['manage_id'] = $query->mMakeLikeArray($where['manage_id']);
         isset($where['manage_group_id']) && $where['manage_group_id'] = $query->mMakeLikeArray($where['manage_group_id']);
 
-        if ($where['manage_id'] && $where['manage_group_id']) {
+        if (isset($where['manage_id']) && isset($where['manage_group_id'])) {
             $where['_complex'] = [
                 '_logic'          => 'or',
                 'manage_id'       => $where['manage_id'],

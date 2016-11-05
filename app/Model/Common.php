@@ -36,7 +36,11 @@ class Common extends Model
         if (!$query->getQuery()->orders) {
             $query->orderBy('id', 'desc');
         }
-        $data = $query->mGetPage($page);
+        if ($page) {
+            $data = $query->mGetPage($page);
+        } else {
+            $data = $query->get();
+        }
         foreach ($data as &$dataRow) {
             $query->mDecodeData($dataRow);
         }
@@ -264,8 +268,7 @@ class Common extends Model
         }
 
         $listWhere[$config['parent_id']] = $parentId;
-        $countRow                        = $query->where($listWhere)->count();
-        $parentList                      = $query->limit($countRow)->$config['list_fn']($listWhere);
+        $parentList                      = $query->$config['list_fn']($listWhere);
         //占位符
         $retractStr = '&nbsp;';
         for ($i = 0; $i < $level; $i++) {
@@ -279,9 +282,7 @@ class Common extends Model
                 $parent[$config['retract_col']] = $retractStr . $tag . $parent[$config['retract_col']];
             }
             $parentTree[] = $parent;
-            //这里的limit解除系统限制的数量
-            $countRow  = $query->where($listWhere)->count();
-            $childList = $query->limit($countRow)->$config['tree_fn']($listWhere, $parent[$config['id']], $level);
+            $childList    = $query->$config['tree_fn']($listWhere, $parent[$config['id']], $level);
             foreach ($childList as $child) {
                 $parentTree[] = $child;
             }

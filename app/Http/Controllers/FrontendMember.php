@@ -62,31 +62,27 @@ class FrontendMember extends Frontend
     {
         //if(没有在权限中找到列表 就显示默认的列表)
         $memberGroupPriv = session('frontend_info.group_privilege');
-        $privilege       = F('privilege');
         $leftNav         = [];
         //跳过系统基本操作 增删改 异步接口,
-        $denyLink = ['add', 'del', 'edit', 'ajax_port'];
-        foreach ($privilege['Home'] as $controlGroup) {
-            foreach ($controlGroup as $controlName => $action) {
-                foreach ($action as $actionName => $actionValue) {
+        $installMenu = mGetArr(storage_path('app/install_menu'))['Admin'];
+        foreach ($installMenu as $groupName => $actions) {
+            foreach ($actions as $actionName => $actionValue) {
+                if (
                     //跳过系统基本操作
-                    if (in_array($actionName, $denyLink)) {
-                        continue;
-                    }
-
+                    preg_match('/.*::(add|edit|del)$/', $actionName) ||
                     //跳过没有权限的功能
-                    if (
+                    (
                         !in_array('all', $memberGroupPriv) &&
-                        !in_array($controlName . '_' . $actionName, $memberGroupPriv)
-                    ) {
-                        continue;
-                    }
-
-                    $leftNav[] = [
-                        'link' => route('Home/' . $controlName . '/' . $actionName),
-                        'name' => $actionValue,
-                    ];
+                        !in_array($actionName, $memberGroupPriv)
+                    )
+                ) {
+                    continue;
                 }
+
+                $leftNav[] = [
+                    'link' => route($actionName),
+                    'name' => $actionValue,
+                ];
             }
         }
         $leftNav[] = [

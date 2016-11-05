@@ -275,8 +275,7 @@ class Index extends Backend
         //if(没有在权限中找到列表 就显示默认的列表)
         $adminPriv      = session('backend_info.privilege');
         $adminGroupPriv = session('backend_info.group_privilege');
-        $filesystem     = new Filesystem();
-        $installMenu    = $filesystem->getRequire(storage_path('app/install_menu'))['Admin'];
+        $installMenu    = mGetArr(storage_path('app/install_menu'))['Admin'];
         foreach ($installMenu as $groupName => $actions) {
             foreach ($actions as $actionName => $actionDescription) {
                 if (

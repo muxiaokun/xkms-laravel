@@ -84,9 +84,9 @@
                     </div>
                     <div class="col-sm-12 text-center">
                         <button type="submit" class="btn btn-info">
-                            @if ($Think.const.ACTION_NAME == 'add')
+                            @if (Route::is('*::add'))
                                 @lang('common.add')
-                            @elseif ($Think.const.ACTION_NAME == 'edit')
+                            @elseif (Route::is('*::edit'))
                                 @lang('common.edit')
                             @endif
                         </button>

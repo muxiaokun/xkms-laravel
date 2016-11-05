@@ -9,7 +9,7 @@
                     <tr>
                         <th><input type="checkbox" onClick="M_allselect_par(this,'table')"/>&nbsp;@lang('common.id')
                         </th>
-                        <th>@lang('common.itlink')@lang('common.name')</th>
+                        <th>@lang('itlink.itlink')@lang('common.name')</th>
                         <th>@lang('common.short')@lang('common.name')</th>
                         <th>@lang('common.yes')@lang('common.no')@lang('common.enable')</th>
                         <th>@lang('common.yes')@lang('common.no')@lang('common.statistics')</th>
@@ -18,7 +18,7 @@
                         <td class="nowrap">
                             @if ($batch_handle['edit'])
                                 <a class="btn btn-xs btn-success"
-                                   href="{{ route('Admin::Itlink::add') }}">@lang('common.add')@lang('common.itlink')</a>
+                                   href="{{ route('Admin::Itlink::add') }}">@lang('common.add')@lang('itlink.itlink')</a>
                             @endif
                         </td>
                     </tr>

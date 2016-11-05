@@ -23,10 +23,10 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.itlink')@lang('common.name')</label>
+                                <label class="col-sm-4 control-label">@lang('itlink.itlink')@lang('common.name')</label>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control"
-                                           placeholder="@lang('common.itlink')@lang('common.name')" name="name"
+                                           placeholder="@lang('itlink.itlink')@lang('common.name')" name="name"
                                            value="{{ $edit_info['name'] }}"
                                            onchange="M_zh2py(this,'input[name=short_name]')"
                                            link="{{ route('Admin::Itlink::ajax_api') }}"/>
@@ -131,7 +131,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">@lang('common.add')@lang('common.itlink')</label>
+                                <label class="col-sm-2 control-label">@lang('common.add')@lang('itlink.itlink')</label>
                                 <div id="upload_btns" class="col-sm-10">
                                     <button id="uploadsbutton" type="button" class="btn btn-default">
                                         @lang('common.upload')@lang('common.image')@lang('common.group')

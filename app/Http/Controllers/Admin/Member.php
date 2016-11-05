@@ -144,8 +144,7 @@ class Member extends Backend
                 'SYS_FRONTEND_LOGIN_NUM',
                 'SYS_FRONTEND_LOCK_TIME',
             ];
-            $this->_put_config($col, 'system');
-            return;
+            return $this->_put_config($col, 'system');
         }
 
         $assign['title'] = trans('common.member') . trans('common.config');

@@ -150,9 +150,7 @@ class Admin extends Backend
                 'SYS_BACKEND_LOGIN_NUM',
                 'SYS_BACKEND_LOCK_TIME',
             ];
-            $this->_put_config($col, 'system');
-
-            return;
+            return $this->_put_config($col, 'system');
         }
 
         $assign['title'] = trans('common.admin') . trans('common.config');

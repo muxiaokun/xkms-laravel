@@ -219,8 +219,7 @@ class Article extends Backend
                 'SYS_ARTICLE_THUMB_WIDTH',
                 'SYS_ARTICLE_THUMB_HEIGHT',
             ];
-            $this->_put_config($col, 'system');
-            return;
+            return $this->_put_config($col, 'system');
         }
 
         $assign['title'] = trans('common.article') . trans('common.config');

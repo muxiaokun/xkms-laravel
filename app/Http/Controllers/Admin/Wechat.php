@@ -55,8 +55,7 @@ class Wechat extends Backend
                 'WECHAT_AESKEY',
                 'WECHAT_TEMPLATE_ID',
             ];
-            $this->_put_config($col, 'system');
-            return;
+            return $this->_put_config($col, 'system');
         }
 
         //认证连接

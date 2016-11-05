@@ -76,8 +76,7 @@ class Comment extends Backend
                 'COMMENT_INTERVAL',
             ];
             $_POST['allow'] = explode(',', request('allow'));
-            $this->_put_config($col, 'system');
-            return;
+            return $this->_put_config($col, 'system');
         }
 
         $assign['title'] = trans('common.config') . trans('common.comment');

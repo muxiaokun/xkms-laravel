@@ -8,14 +8,13 @@ use App\Http\Controllers\Backend;
 class Template extends Backend
 {
     //$tplInfoFile 与 Common/Common/function.php M_scan_template一致
-    private $tplInfoFile  = 'theme_info.php';
+    private $tplInfoFile = 'theme_info.php';
     private $defaultTheme = '';
-    private $viewPath     = '';
-    private $viewFiles    = [];
+    private $viewPath = '';
+    private $viewFiles = [];
 
-    public function _initialize()
+    public function commonInitialize()
     {
-        parent::_initialize();
         //初始化模板目录
         $this->viewPath = resource_path('views/home/');
         config('system.default_theme') && $this->viewPath .= config('system.default_theme') . '/';
@@ -30,6 +29,7 @@ class Template extends Backend
     //列表
     public function index()
     {
+        $this->commonInitialize();
         //刷新模本文件列表
         if (1 == request('refresh')) {
             $this->_refresh_viewFiles();
@@ -77,6 +77,7 @@ class Template extends Backend
     //新增
     public function add()
     {
+        $this->commonInitialize();
         if (request()->isMethod('POST')) {
             //添加时不可以创建新的目录 必须使用系统设置的后缀
             $fileName = trim(request('file_name'));
@@ -120,6 +121,7 @@ class Template extends Backend
     //编辑
     public function edit()
     {
+        $this->commonInitialize();
         $id = request('id');
         if (!is_array($this->viewFiles[$id])) {
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Template::index'));
@@ -151,6 +153,7 @@ class Template extends Backend
     //删除
     public function del()
     {
+        $this->commonInitialize();
         $id = request('id');
         if (!is_array($this->viewFiles[$id])) {
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Template::index'));
@@ -219,10 +222,9 @@ class Template extends Backend
             }
             $newPath = $this->viewPath . $info;
             if (is_file($newPath)) {
-                $relativeViewPath          = str_ireplace($this->viewPath, '', $newPath);
-                $fileMd5                   = md5($relativeViewPath);
+                $fileMd5                   = md5($info);
                 $this->viewFiles[$fileMd5] = [
-                    'file_name' => $relativeViewPath,
+                    'file_name' => $info,
                     'name'      => '',
                     'info'      => '',
                 ];

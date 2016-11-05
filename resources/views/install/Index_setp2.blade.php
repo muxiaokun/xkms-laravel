@@ -19,7 +19,7 @@
                 <table class="table table-hover">
                     <tr>
                         <th>
-                            @lang('common.controller')@lang('common.info')
+                            @lang('common.function')@lang('common.info')
                         </th>
                         <th>
                             @lang('common.table')@lang('common.info')

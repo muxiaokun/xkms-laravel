@@ -53,7 +53,7 @@ class MessageBoard extends Backend
             }
         }
 
-        $assign['template_list'] = mScanTemplate('index', config('DEFAULT_MODULE'), 'MessageBoard');
+        $assign['template_list'] = mScanTemplate('index', 'MessageBoard');
         $assign['title']         = trans('common.messageboard') . trans('common.add');
         return view('admin.MessageBoard_addedit', $assign);
     }
@@ -84,7 +84,7 @@ class MessageBoard extends Backend
         $editInfo['config']  = json_encode($editInfo['config']);
         $assign['edit_info'] = $editInfo;
 
-        $assign['template_list'] = mScanTemplate('index', config('DEFAULT_MODULE'), 'MessageBoard');
+        $assign['template_list'] = mScanTemplate('index', 'MessageBoard');
         $assign['title']         = trans('common.messageboard') . trans('common.edit');
         return view('admin.MessageBoard_addedit', $assign);
     }

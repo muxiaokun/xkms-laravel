@@ -331,8 +331,8 @@ class ArticleCategory extends Backend
         $managePrivilege                 = (1 == session('backend_info.id')) || in_array($id,
                 Model\ArticleCategory::mFindAllow('ma'));
         $assign['manage_privilege']      = $managePrivilege;
-        $assign['template_list']         = mScanTemplate('category', config('DEFAULT_MODULE'), 'Article');
-        $assign['list_template_list']    = mScanTemplate('list_category', config('DEFAULT_MODULE'), 'Article');
-        $assign['article_template_list'] = mScanTemplate('article', config('DEFAULT_MODULE'), 'Article');
+        $assign['template_list']         = mScanTemplate('category', 'Article');
+        $assign['list_template_list']    = mScanTemplate('list_category', 'Article');
+        $assign['article_template_list'] = mScanTemplate('article', 'Article');
     }
 }

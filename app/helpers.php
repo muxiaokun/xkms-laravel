@@ -605,18 +605,12 @@ EOF;
 }
 
 //扫描模板
-function mScanTemplate($name, $module, $controller)
+function mScanTemplate($name, $controller)
 {
-    $dir = APP_PATH . $module . '/' . config('system.default_v_layer') . '/';
-    config('system.DEFAULT_THEME') && $dir .= config('system.default_theme') . '/';
-    $themeInfo = F('theme_info', '', $dir);
-
-    if ('/' == config('system.tmpl_file_depr')) {
-        $dir .= $controller . '/';
-        $preg = '/^' . $name . '_(\w*)/';
-    } else {
-        $preg = '/^' . $controller . '_' . $name . '_(\w*)\./';
-    }
+    $dir = resource_path('views/home/');
+    config('system.default_theme') && $dir .= config('system.default_theme') . '/';
+    $themeInfo    = mGetArr($dir . 'theme_info.php');
+    $preg         = '/^' . $controller . '_' . $name . '_(\w*)\./';
     $templateList = [];
     $dirs         = scandir($dir);
     foreach ($dirs as $file) {

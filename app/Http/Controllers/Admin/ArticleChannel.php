@@ -264,10 +264,10 @@ class ArticleChannel extends Backend
                 Model\ArticleChannel::mFindAllow('ma')) || 1 == session('backend_info.id');
         $assign['manage_privilege'] = $managePrivilgeg;
 
-        $assign['channel_template_list'] = mScanTemplate('channel', config('DEFAULT_MODULE'), 'Article');
-        $assign['template_list']         = mScanTemplate('category', config('DEFAULT_MODULE'), 'Article');
-        $assign['list_template_list']    = mScanTemplate('list_category', config('DEFAULT_MODULE'), 'Article');
-        $assign['article_template_list'] = mScanTemplate('article', config('DEFAULT_MODULE'), 'Article');
+        $assign['channel_template_list'] = mScanTemplate('channel', 'Article');
+        $assign['template_list']         = mScanTemplate('category', 'Article');
+        $assign['list_template_list']    = mScanTemplate('list_category', 'Article');
+        $assign['article_template_list'] = mScanTemplate('article', 'Article');
     }
 
     //构造频道公共ajax

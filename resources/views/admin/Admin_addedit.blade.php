@@ -14,7 +14,7 @@
                                 'password': Array('password', 'is_pwd'),
                                 'password_again': Array('password', 'password_again', 'is_pwd')
                             },
-                            'ajax_url': "{{ route('ajax_api') }}",
+                            'ajax_url': "{{ route('Admin::Admin::ajax_api') }}",
                         };
                         new M_valid(config);
                     });
@@ -94,7 +94,7 @@
                                         'out_obj': $('#group_id_list'),
                                         'edit_obj': $('#group_list'),
                                         'post_name': 'group_id[]',
-                                        'ajax_url': '{{ route('ajax_api') }}',
+                                        'ajax_url': '{{ route('Admin::Admin::ajax_api') }}',
                                         'field': 'group_id'
                                     };
                                     new M_select_add(config);
@@ -112,7 +112,7 @@
                                         @lang('common.edit')
                                     @endif
                                 </button>
-                                <a href="{{ route('index') }}" class="btn btn-default">
+                                <a href="{{ route('Admin::Admin::index') }}" class="btn btn-default">
                                     @lang('common.goback')
                                 </a>
                             </div>

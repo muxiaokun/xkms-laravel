@@ -38,7 +38,7 @@
                         <button type="submit" class="btn btn-info">
                             @lang('common.audit')
                         </button>
-                        <a href="{{ route('index') }}" class="btn btn-default">
+                        <a href="{{ route('Admin::MessageBoardLog::index') }}" class="btn btn-default">
                             @lang('common.goback')
                         </a>
                     </div>

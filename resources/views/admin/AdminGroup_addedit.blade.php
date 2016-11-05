@@ -12,7 +12,7 @@
                             'check_list': {
                                 'name': Array('name', 'id')
                             },
-                            'ajax_url': "{{ route('ajax_api') }}",
+                            'ajax_url': "{{ route('Admin::AdminGroup::ajax_api') }}",
                         };
                         new M_valid(config);
                     });
@@ -78,7 +78,7 @@
                                         'out_obj': $('#manage_id_list'),
                                         'edit_obj': $('#admin_user_list'),
                                         'post_name': 'manage_id[]',
-                                        'ajax_url': '{{ route('ajax_api') }}',
+                                        'ajax_url': '{{ route('Admin::AdminGroup::ajax_api') }}',
                                         'field': 'manage_id'
                                     };
                                     new M_select_add(config);
@@ -95,7 +95,7 @@
                                     @lang('common.edit')
                                 @endif
                             </button>
-                            <a href="{{ route('index') }}" class="btn btn-default">
+                            <a href="{{ route('Admin::AdminGroup::index') }}" class="btn btn-default">
                                 @lang('common.goback')
                             </a>
                         </div>

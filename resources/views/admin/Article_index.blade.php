@@ -20,7 +20,7 @@
                         <td class="nowrap">
                             @if ($batch_handle['add'])
                                 <a class="btn btn-xs btn-success"
-                                   href="{{ route('add') }}">@lang('common.add')@lang('common.article')</a>
+                                   href="{{ route('Admin::Article::add') }}">@lang('common.add')@lang('common.article')</a>
                             @endif
                         </td>
                     </tr>
@@ -34,7 +34,7 @@
                                 {{ $article['title'] }}
                             </td>
                             <td onClick="M_line_edit(this);" field_id="{{ $article['id'] }}" field="sort"
-                                link="{{ route('ajax_api') }}">
+                                link="{{ route('Admin::Article::ajax_api') }}">
                                 {{ $article['sort'] }}
                             </td>
                             <td>
@@ -63,14 +63,14 @@
                                 @if ($batch_handle['edit'])
                                     &nbsp;|&nbsp;
                                     <a class="btn btn-xs btn-primary"
-                                       href="{{ route('edit',array('id'=>$article['id'])) }}">
+                                       href="{{ route('Admin::Article::edit',array('id'=>$article['id'])) }}">
                                         @lang('common.edit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['del'])
                                     &nbsp;|&nbsp;
                                     <a class="btn btn-xs btn-danger" href="javascript:void(0);"
-                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $article['title'] }}?','{{ route('del',array('id'=>$article['id'])) }}')">
+                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $article['title'] }}?','{{ route('Admin::Article::del',array('id'=>$article['id'])) }}')">
                                         @lang('common.del')
                                     </a>
                                 @endif
@@ -92,29 +92,29 @@
                                     @if ($batch_handle['edit'])
                                         config.type_data.push({
                                         'name': lang.commonshow,
-                                        'post_link': '{{ route('edit') }}',
+                                        'post_link': '{{ route('Admin::Article::edit') }}',
                                         'post_data': {'if_show': '1'}
                                     });
                                     config.type_data.push({
                                         'name': lang.commonhidden,
-                                        'post_link': '{{ route('edit') }}',
+                                        'post_link': '{{ route('Admin::Article::edit') }}',
                                         'post_data': {'if_show': '0'}
                                     });
                                     config.type_data.push({
                                         'name': lang.commonaudit,
-                                        'post_link': '{{ route('edit') }}',
+                                        'post_link': '{{ route('Admin::Article::edit') }}',
                                         'post_data': {'is_audit': '1'}
                                     });
                                     config.type_data.push({
                                         'name': lang.commoncancel + lang.commonaudit,
-                                        'post_link': '{{ route('edit') }}',
+                                        'post_link': '{{ route('Admin::Article::edit') }}',
                                         'post_data': {'is_audit': '0'}
                                     });
                                     @endif
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
                                         'name': lang.commondel,
-                                        'post_link': '{{ route('del') }}'
+                                        'post_link': '{{ route('Admin::Article::del') }}'
                                     });
                                     @endif
                                             new M_batch_handle(config);

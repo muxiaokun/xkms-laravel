@@ -14,7 +14,7 @@
                         <td class="col-sm-3  nowrap">
                             @if ($batch_handle['add'])
                                 <a class="btn btn-xs btn-success"
-                                   href="{{ route('add') }}">@lang('common.add')@lang('common.category')</a>
+                                   href="{{ route('Admin::ArticleCategory::add') }}">@lang('common.add')@lang('common.category')</a>
                             @endif
                         </td>
                     </tr>
@@ -27,7 +27,7 @@
                                 {{ $article_category['name'] }}(ID:{{ $article_category['id'] }})
                             </td>
                             <td onClick="M_line_edit(this);" field_id="{{ $article_category['id'] }}" field="sort"
-                                link="{{ route('ajax_api') }}">
+                                link="{{ route('Admin::ArticleCategory::ajax_api') }}">
                                 {{ $article_category['sort'] }}
                             </td>
                             <td>
@@ -41,14 +41,14 @@
                                 @if ($batch_handle['edit'])
                                     &nbsp;|&nbsp;
                                     <a class="btn btn-xs btn-primary"
-                                       href="{{ route('edit',array('id'=>$article_category['id'])) }}">
+                                       href="{{ route('Admin::ArticleCategory::edit',array('id'=>$article_category['id'])) }}">
                                         @lang('common.edit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['del'])
                                     &nbsp;|&nbsp;
                                     <a class="btn btn-xs btn-danger" href="javascript:void(0);"
-                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $article_category['name'] }}?','{{ route('del',array('id'=>$article_category['id'])) }}')">
+                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $article_category['name'] }}?','{{ route('Admin::ArticleCategory::del',array('id'=>$article_category['id'])) }}')">
                                         @lang('common.del')
                                     </a>
                                 @endif

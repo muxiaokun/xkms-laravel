@@ -32,7 +32,7 @@
                                                 }, @endif
                                                 'edit_obj': $('#group_level'),
                                                 'post_name': 'group_level',
-                                                'ajax_url': '{{ route('ajax_api') }}',
+                                                'ajax_url': '{{ route('Admin::Assess::ajax_api') }}',
                                                 'field': 'group_level'
                                             };
                                             new M_select_add(config);
@@ -115,7 +115,7 @@
                                     @lang('common.edit')
                                 @endif
                             </button>
-                            <a href="{{ route('index') }}" class="btn btn-default">
+                            <a href="{{ route('Admin::Assess::index') }}" class="btn btn-default">
                                 @lang('common.goback')
                             </a>
                         </div>

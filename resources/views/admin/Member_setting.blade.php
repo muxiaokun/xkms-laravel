@@ -9,7 +9,7 @@
                         {{--会员是否启用--}}
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.enable')@lang('common.member')@lang('common.controller')</label>
+                                <label class="col-sm-4 control-label">@lang('common.enable')@lang('common.member')</label>
                                 <div class="col-sm-7">
                                     <label class="radio-inline">
                                         <input type="radio" name="SYS_MEMBER_ENABLE" value="1"

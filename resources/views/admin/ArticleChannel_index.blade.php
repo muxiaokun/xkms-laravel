@@ -15,7 +15,7 @@
                         <td class="col-sm-2 nowrap">
                             @if ($batch_handle['add'])
                                 <a class="btn btn-xs btn-success"
-                                   href="{{ route('add') }}">@lang('common.add')@lang('common.channel')</a>
+                                   href="{{ route('Admin::ArticleChannel::add') }}">@lang('common.add')@lang('common.channel')</a>
                             @endif
                         </td>
                     </tr>
@@ -42,14 +42,14 @@
                                 @if ($batch_handle['edit'])
                                     &nbsp;|&nbsp;
                                     <a class="btn btn-xs btn-primary"
-                                       href="{{ route('edit',array('id'=>$article_channel['id'])) }}">
+                                       href="{{ route('Admin::ArticleChannel::edit',array('id'=>$article_channel['id'])) }}">
                                         @lang('common.edit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['del'])
                                     &nbsp;|&nbsp;
                                     <a class="btn btn-xs btn-danger" href="javascript:void(0);"
-                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $article_channel['name'] }}?','{{ route('del',array('id'=>$article_channel['id'])) }}')">
+                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $article_channel['name'] }}?','{{ route('Admin::ArticleChannel::del',array('id'=>$article_channel['id'])) }}')">
                                         @lang('common.del')
                                     </a>
                                 @endif
@@ -71,19 +71,19 @@
                                     @if ($batch_handle['edit'])
                                         config.type_data.push({
                                         'name': lang.commonshow,
-                                        'post_link': '{{ route('edit') }}',
+                                        'post_link': '{{ route('Admin::ArticleChannel::edit') }}',
                                         'post_data': {'if_show': '1'}
                                     });
                                     config.type_data.push({
                                         'name': lang.commonhidden,
-                                        'post_link': '{{ route('edit') }}',
+                                        'post_link': '{{ route('Admin::ArticleChannel::edit') }}',
                                         'post_data': {'if_show': '0'}
                                     });
                                     @endif
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
                                         'name': lang.commondel,
-                                        'post_link': '{{ route('del') }}'
+                                        'post_link': '{{ route('Admin::ArticleChannel::del') }}'
                                     });
                                     @endif
                                             new M_batch_handle(config);

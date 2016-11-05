@@ -17,7 +17,7 @@
                         <td class="nowrap">
                             @if ($batch_handle['add'])
                                 <a class="btn btn-xs btn-success"
-                                   href="{{ route('add') }}">@lang('common.add')@lang('common.quests')</a>
+                                   href="{{ route('Admin::Quests::add') }}">@lang('common.add')@lang('common.quests')</a>
                             @endif
                         </td>
                     </tr>
@@ -59,7 +59,7 @@
                                 @if ($batch_handle['answer_edit'] AND $batch_handle['edit'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['edit'])
                                     <a class="btn btn-xs btn-primary"
-                                       href="{{ route('edit',array('id'=>$quests['id'])) }}">
+                                       href="{{ route('Admin::Quests::edit',array('id'=>$quests['id'])) }}">
                                         @lang('common.edit')
                                     </a>
                                 @endif
@@ -67,12 +67,12 @@
                                 @if ($batch_handle['del'])
                                     <a class="btn btn-xs btn-danger" href="javascript:void(0);"
                                        onClick="return M_confirm('@lang('common.confirm')@lang('common.clear'){{ $quests['title'] }}@lang('common.answer')?',
-                                               '{{ route('del',array('id'=>$quests['id'],'clear'=>1)) }}')">
+                                               '{{ route('Admin::Quests::del',array('id'=>$quests['id'],'clear'=>1)) }}')">
                                         @lang('common.clear')@lang('common.answer')
                                     </a>
                                     &nbsp;|&nbsp;
                                     <a class="btn btn-xs btn-danger" href="javascript:void(0);"
-                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $quests['title'] }}?','{{ route('del',array('id'=>$quests['id'])) }}')">
+                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $quests['title'] }}?','{{ route('Admin::Quests::del',array('id'=>$quests['id'])) }}')">
                                         @lang('common.del')
                                     </a>
                                 @endif
@@ -94,7 +94,7 @@
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
                                         'name': lang.commondel,
-                                        'post_link': '{{ route('del') }}'
+                                        'post_link': '{{ route('Admin::Quests::del') }}'
                                     });
                                     @endif
                                             new M_batch_handle(config);

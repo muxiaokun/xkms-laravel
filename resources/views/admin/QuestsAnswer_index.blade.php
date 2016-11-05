@@ -39,7 +39,7 @@
                                 @if ($batch_handle['add'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
                                     <a class="btn btn-xs btn-danger" href="javascript:void(0);"
-                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del')?','{{ route('del',array('id'=>$quests_answer['id'])) }}')">
+                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del')?','{{ route('Admin::QuestsAnswer::del',array('id'=>$quests_answer['id'])) }}')">
                                         @lang('common.del')
                                     </a>
                                 @endif
@@ -61,7 +61,7 @@
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
                                         'name': lang.commondel,
-                                        'post_link': '{{ route('del') }}'
+                                        'post_link': '{{ route('Admin::QuestsAnswer::del') }}'
                                     });
                                     @endif
                                             new M_batch_handle(config);

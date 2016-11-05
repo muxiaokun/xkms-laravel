@@ -92,7 +92,7 @@
                                     'run_type': 'select',
                                     'select_obj': $('select[name=cate_id]'),
                                     'out_obj': $('#attribute'),
-                                    'ajax_url': '{{ route('ajax_api') }}',
+                                    'ajax_url': '{{ route('Admin::Article::ajax_api') }}',
                                     'post_name': 'attribute'
                                 };
                                 new M_attribute_editor(config);
@@ -109,7 +109,7 @@
                                     'out_obj': $('#extend_list'),
                                     'edit_obj': $('select[name=cate_id]'),
                                     'post_name': 'extend',
-                                    'ajax_url': '{{ route('ajax_api') }}'
+                                    'ajax_url': '{{ route('Admin::Article::ajax_api') }}'
                                 };
                                 new M_exttpl_editor(config);
                             });
@@ -239,7 +239,7 @@
                                         'out_obj': $('#access_group_id_list'),
                                         'edit_obj': $('#access_group_list'),
                                         'post_name': 'access_group_id[]',
-                                        'ajax_url': '{{ route('ajax_api') }}',
+                                        'ajax_url': '{{ route('Admin::Article::ajax_api') }}',
                                         'field': 'access_group_id'
                                     };
                                     new M_select_add(config);
@@ -364,7 +364,7 @@
                                     @lang('common.edit')
                                 @endif
                             </button>
-                            <a href="{{ route('index') }}" class="btn btn-default">
+                            <a href="{{ route('Admin::Article::index') }}" class="btn btn-default">
                                 @lang('common.goback')
                             </a>
                         </div>

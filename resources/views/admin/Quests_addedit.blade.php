@@ -90,7 +90,7 @@
                                 @lang('common.edit')
                             @endif
                         </button>
-                        <a href="{{ route('index') }}" class="btn btn-default">
+                        <a href="{{ route('Admin::Quests::index') }}" class="btn btn-default">
                             @lang('common.goback')
                         </a>
                     </div>

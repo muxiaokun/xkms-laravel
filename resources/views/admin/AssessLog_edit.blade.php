@@ -6,7 +6,7 @@
                 {{ $title }}
                 @if ($batch_handle['del'])
                     <a class="fr fs10" href="javascript:void();"
-                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del')@lang('common.all')@lang('common.record')?','{{ route('del',array('id'=>request('id'))) }}')">
+                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del')@lang('common.all')@lang('common.record')?','{{ route('Admin::AssessLog::del',array('id'=>request('id'))) }}')">
                         @lang('common.del')@lang('common.all')@lang('common.record')
                     </a>
                 @endif
@@ -30,7 +30,7 @@
                                     var config = {
                                         'edit_obj': $('#re_grade_id'),
                                         'post_name': 're_grade_id',
-                                        'ajax_url': '{{ route('ajax_api') }}',
+                                        'ajax_url': '{{ route('Admin::AssessLog::ajax_api') }}',
                                         'field': @if ('member' == $assess_info['target'])
                                                 'member'
                                         @elseif ('member_group' == $assess_info['target'])

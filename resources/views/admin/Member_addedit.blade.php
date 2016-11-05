@@ -16,7 +16,7 @@
                                 'email': Array('email'),
                                 'phone': Array('phone')
                             },
-                            'ajax_url': "{{ route('ajax_api') }}",
+                            'ajax_url': "{{ route('Admin::Member::ajax_api') }}",
                         };
                         new M_valid(config);
                     });
@@ -120,7 +120,7 @@
                                         'out_obj': $('#group_id_list'),
                                         'edit_obj': $('#group_list'),
                                         'post_name': 'group_id[]',
-                                        'ajax_url': '{{ route('ajax_api') }}',
+                                        'ajax_url': '{{ route('Admin::Member::ajax_api') }}',
                                         'field': 'group_id'
                                     };
                                     new M_select_add(config);
@@ -137,7 +137,7 @@
                                     @lang('common.edit')
                                 @endif
                             </button>
-                            <a href="{{ route('index') }}" class="btn btn-default">
+                            <a href="{{ route('Admin::Member::index') }}" class="btn btn-default">
                                 @lang('common.goback')
                             </a>
                         </div>

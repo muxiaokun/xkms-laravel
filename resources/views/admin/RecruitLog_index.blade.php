@@ -58,7 +58,7 @@
                                 @if ($batch_handle['del'])
                                     &nbsp;|&nbsp;
                                     <a class="btn btn-xs btn-danger" href="javascript:void(0);"
-                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $recruit_log['name'] }}?','{{ route('del',array('id'=>$recruit_log['id'])) }}')">
+                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $recruit_log['name'] }}?','{{ route('Admin::RecruitLog::del',array('id'=>$recruit_log['id'])) }}')">
                                         @lang('common.del')
                                     </a>
                                 @endif
@@ -80,7 +80,7 @@
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
                                         'name': lang.commondel,
-                                        'post_link': '{{ route('del') }}'
+                                        'post_link': '{{ route('Admin::RecruitLog::del') }}'
                                     });
                                     @endif
                                             new M_batch_handle(config);

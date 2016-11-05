@@ -13,13 +13,13 @@
                         <th>@lang('common.comment')@lang('common.member')</th>
                         <th>@lang('common.comment')@lang('common.time')</th>
                         <th>@lang('common.audit')@lang('common.admin')</th>
-                        <th>@lang('common.controller')</th>
+                        <th>@lang('common.route')@lang('common.name')</th>
                         <th>@lang('common.id')</th>
                         <th>@lang('common.comment') IP</th>
                         <td class="nowrap">
                             @if ($batch_handle['add'])
                                 <a class="btn btn-xs btn-success"
-                                   href="{{ route('add') }}">@lang('common.config')@lang('common.comment')</a>
+                                   href="{{ route('Admin::Comment::add') }}">@lang('common.config')@lang('common.comment')</a>
                             @endif
                         </td>
                     </tr>
@@ -63,14 +63,14 @@
                                 @if ($batch_handle['edit'])
                                     &nbsp;|&nbsp;
                                     <a class="btn btn-xs btn-primary"
-                                       href="{{ route('edit',array('id'=>$comment['id'])) }}">
+                                       href="{{ route('Admin::Comment::edit',array('id'=>$comment['id'])) }}">
                                         @lang('common.audit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['del'])
                                     &nbsp;|&nbsp;
                                     <a class="btn btn-xs btn-danger" href="javascript:void(0);"
-                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del')@lang('common.comment')?','{{ route('del',array('id'=>$comment['id'])) }}')">
+                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del')@lang('common.comment')?','{{ route('Admin::Comment::del',array('id'=>$comment['id'])) }}')">
                                         @lang('common.del')
                                     </a>
                                 @endif
@@ -92,13 +92,13 @@
                                     @if ($batch_handle['edit'])
                                         config.type_data.push({
                                         'name': lang.commonaudit,
-                                        'post_link': '{{ route('edit') }}'
+                                        'post_link': '{{ route('Admin::Comment::edit') }}'
                                     });
                                     @endif
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
                                         'name': lang.commondel,
-                                        'post_link': '{{ route('del') }}'
+                                        'post_link': '{{ route('Admin::Comment::del') }}'
                                     });
                                     @endif
                                             new M_batch_handle(config);

@@ -23,7 +23,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.permit')@lang('common.controller')
+                                <label class="col-sm-4 control-label">@lang('common.permit')@lang('common.privilege')
                                     A,B</label>
                                 <div class="col-sm-7">
                                     <input type="text" name="COMMENT_ALLOW" value="{{ config('system.comment_allow') }}"
@@ -64,7 +64,7 @@
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">@lang('common.save')</button>
                             <input class="btn btn-default" type="reset" value="@lang('common.reset')">
-                            <a href="{{ route('index') }}" class="btn btn-default">
+                            <a href="{{ route('Admin::Comment::index') }}" class="btn btn-default">
                                 @lang('common.goback')
                             </a>
                         </div>

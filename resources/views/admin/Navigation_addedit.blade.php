@@ -12,7 +12,7 @@
                             'check_list': {
                                 'short_name': Array('short_name', 'id')
                             },
-                            'ajax_url': "{{ route('ajax_api') }}",
+                            'ajax_url': "{{ route('Admin::Navigation::ajax_api') }}",
                         };
                         new M_valid(config);
                     });
@@ -29,7 +29,7 @@
                                            placeholder="@lang('common.navigation')@lang('common.name')" name="name"
                                            value="{{ $edit_info['name'] }}"
                                            onchange="M_zh2py(this,'input[name=short_name]')"
-                                           link="{{ route('ajax_api') }}"/>
+                                           link="{{ route('Admin::Navigation::ajax_api') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -110,7 +110,7 @@
                                     @lang('common.edit')
                                 @endif
                             </button>
-                            <a href="{{ route('index') }}" class="btn btn-default">
+                            <a href="{{ route('Admin::Navigation::index') }}" class="btn btn-default">
                                 @lang('common.goback')
                             </a>
                         </div>

@@ -15,7 +15,7 @@
                         <td class="nowrap">
                             @if ($batch_handle['add'])
                                 <a class="btn btn-xs btn-success"
-                                   href="{{ route('add') }}">@lang('common.send')@lang('common.message')</a>
+                                   href="{{ route('Admin::Message::add') }}">@lang('common.send')@lang('common.message')</a>
                             @endif
                         </td>
                     </tr>
@@ -58,7 +58,7 @@
                                     &nbsp;|&nbsp;
                                     @if (0 < $message['send_id'])
                                         <a class="btn btn-xs btn-primary"
-                                           href="{{ route('add',array('receive_id'=>$message['send_id'])) }}">
+                                           href="{{ route('Admin::Message::add',array('receive_id'=>$message['send_id'])) }}">
                                             @lang('common.reply')@lang('common.message')
                                         </a>
                                     @endif
@@ -66,7 +66,7 @@
                                 @if ($batch_handle['del'])
                                     &nbsp;|&nbsp;
                                     <a class="btn btn-xs btn-danger" href="javascript:void(0);"
-                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del')?','{{ route('del',array('id'=>$message['id'])) }}')">
+                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del')?','{{ route('Admin::Message::del',array('id'=>$message['id'])) }}')">
                                         @lang('common.del')
                                     </a>
                                 @endif
@@ -88,7 +88,7 @@
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
                                         'name': lang.commondel,
-                                        'post_link': '{{ route('del') }}'
+                                        'post_link': '{{ route('Admin::Message::del') }}'
                                     });
                                     @endif
                                             new M_batch_handle(config);

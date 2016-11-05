@@ -14,7 +14,7 @@
                         <td class="nowrap">
                             @if ($batch_handle['add'])
                                 <a class="btn btn-xs btn-success"
-                                   href="{{ route('add') }}">@lang('common.add')@lang('common.messageboard')</a>
+                                   href="{{ route('Admin::MessageBoard::add') }}">@lang('common.add')@lang('common.messageboard')</a>
                             @endif
                         </td>
                     </tr>
@@ -32,21 +32,21 @@
                             <td class="nowrap">
                                 @if ($batch_handle['log_index'])
                                     <a class="btn btn-xs btn-primary"
-                                       href="{{ route('Admin::MessageBoardLog::index',array('msg_id'=>$message_board['id'])) }}">
+                                       href="{{ route('Admin::MessageBoard::Admin::MessageBoardLog::index',array('msg_id'=>$message_board['id'])) }}">
                                         @lang('common.look')
                                     </a>
                                 @endif
                                 @if ($batch_handle['log_index'] AND $batch_handle['edit'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['edit'])
                                     <a class="btn btn-xs btn-primary"
-                                       href="{{ route('edit',array('id'=>$message_board['id'])) }}">
+                                       href="{{ route('Admin::MessageBoard::edit',array('id'=>$message_board['id'])) }}">
                                         @lang('common.edit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
                                     <a class="btn btn-xs btn-danger" href="javascript:void(0);"
-                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $message_board['name'] }}?','{{ route('del',array('id'=>$message_board['id'])) }}')">
+                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $message_board['name'] }}?','{{ route('Admin::MessageBoard::del',array('id'=>$message_board['id'])) }}')">
                                         @lang('common.del')
                                     </a>
                                 @endif
@@ -68,7 +68,7 @@
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
                                         'name': lang.commondel,
-                                        'post_link': '{{ route('del') }}'
+                                        'post_link': '{{ route('Admin::MessageBoard::del') }}'
                                     });
                                     @endif
                                             new M_batch_handle(config);

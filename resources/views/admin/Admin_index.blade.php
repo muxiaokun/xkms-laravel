@@ -18,7 +18,7 @@
                         <td class="nowrap">
                             @if ($batch_handle['add'])
                                 <a class="btn btn-xs btn-success"
-                                   href="{{ route('add') }}">@lang('common.add')@lang('common.admin')</a>
+                                   href="{{ route('Admin::Admin::add') }}">@lang('common.add')@lang('common.admin')</a>
                             @endif
                         </td>
                     </tr>
@@ -57,14 +57,14 @@
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])
                                     <a class="btn btn-xs btn-primary"
-                                       href="{{ route('edit',array('id'=>$admin['id'])) }}">
+                                       href="{{ route('Admin::Admin::edit',array('id'=>$admin['id'])) }}">
                                         @lang('common.edit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
                                     <a class="btn btn-xs btn-danger" href="javascript:void(0);"
-                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $admin['admin_name'] }}?','{{ route('del',array('id'=>$admin['id'])) }}')">
+                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $admin['admin_name'] }}?','{{ route('Admin::Admin::del',array('id'=>$admin['id'])) }}')">
                                         @lang('common.del')
                                     </a>
                                 @endif
@@ -86,19 +86,19 @@
                                     @if ($batch_handle['edit'])
                                         config.type_data.push({
                                         'name': lang.commonenable,
-                                        'post_link': '{{ route('edit') }}',
+                                        'post_link': '{{ route('Admin::Admin::edit') }}',
                                         'post_data': {'is_enable': '1'}
                                     });
                                     config.type_data.push({
                                         'name': lang.commondisable,
-                                        'post_link': '{{ route('edit') }}',
+                                        'post_link': '{{ route('Admin::Admin::edit') }}',
                                         'post_data': {'is_enable': '0'}
                                     });
                                     @endif
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
                                         'name': lang.commondel,
-                                        'post_link': '{{ route('del') }}'
+                                        'post_link': '{{ route('Admin::Admin::del') }}'
                                     });
                                     @endif
                                             new M_batch_handle(config);

@@ -18,7 +18,7 @@
                         <td class="nowrap">
                             @if ($batch_handle['add'])
                                 <a class="btn btn-xs btn-success"
-                                   href="{{ route('add') }}">@lang('common.config')@lang('common.wechat')</a>
+                                   href="{{ route('Admin::Wechat::add') }}">@lang('common.config')@lang('common.wechat')</a>
                             @endif
                         </td>
                     </tr>
@@ -50,14 +50,14 @@
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])
                                     <a class="btn btn-xs btn-primary"
-                                       href="{{ route('edit',array('id'=>$wechat['id'])) }}">
+                                       href="{{ route('Admin::Wechat::edit',array('id'=>$wechat['id'])) }}">
                                         @lang('common.send')@lang('common.info')
                                     </a>
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
                                     <a class="btn btn-xs btn-danger" href="javascript:void(0);"
-                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $wechat['member_name'] }}?','{{ route('del',array('id'=>$wechat['id'])) }}')">
+                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $wechat['member_name'] }}?','{{ route('Admin::Wechat::del',array('id'=>$wechat['id'])) }}')">
                                         @lang('common.del')
                                     </a>
                                 @endif
@@ -79,7 +79,7 @@
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
                                         'name': lang.commondel,
-                                        'post_link': '{{ route('del') }}'
+                                        'post_link': '{{ route('Admin::Wechat::del') }}'
                                     });
                                     @endif
                                             new M_batch_handle(config);

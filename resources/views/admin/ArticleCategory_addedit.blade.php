@@ -170,7 +170,7 @@
                                             'out_obj': $('#manage_id_list'),
                                             'edit_obj': $('#admin_user_list'),
                                             'post_name': 'manage_id[]',
-                                            'ajax_url': '{{ route('ajax_api') }}',
+                                            'ajax_url': '{{ route('Admin::ArticleCategory::ajax_api') }}',
                                             'field': 'manage_id'
                                         };
                                         new M_select_add(config);
@@ -195,7 +195,7 @@
                                             'out_obj': $('#manage_group_id_list'),
                                             'edit_obj': $('#admin_group_list'),
                                             'post_name': 'manage_group_id[]',
-                                            'ajax_url': '{{ route('ajax_api') }}',
+                                            'ajax_url': '{{ route('Admin::ArticleCategory::ajax_api') }}',
                                             'field': 'manage_group_id'
                                         };
                                         new M_select_add(config);
@@ -220,7 +220,7 @@
                                             'out_obj': $('#access_group_id_list'),
                                             'edit_obj': $('#access_group_list'),
                                             'post_name': 'access_group_id[]',
-                                            'ajax_url': '{{ route('ajax_api') }}',
+                                            'ajax_url': '{{ route('Admin::ArticleCategory::ajax_api') }}',
                                             'field': 'access_group_id'
                                         };
                                         new M_select_add(config);
@@ -311,7 +311,7 @@
                                     @lang('common.edit')
                                 @endif
                             </button>
-                            <a href="{{ route('index') }}" class="btn btn-default">
+                            <a href="{{ route('Admin::ArticleCategory::index') }}" class="btn btn-default">
                                 @lang('common.goback')
                             </a>
                         </div>

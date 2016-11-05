@@ -18,7 +18,7 @@
                         <td class="nowrap">
                             @if ($batch_handle['edit'])
                                 <a class="btn btn-xs btn-success"
-                                   href="{{ route('add') }}">@lang('common.add')@lang('common.itlink')</a>
+                                   href="{{ route('Admin::Itlink::add') }}">@lang('common.add')@lang('common.itlink')</a>
                             @endif
                         </td>
                     </tr>
@@ -49,14 +49,14 @@
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])
                                     <a class="btn btn-xs btn-primary"
-                                       href="{{ route('edit',array('id'=>$itlink['id'])) }}">
+                                       href="{{ route('Admin::Itlink::edit',array('id'=>$itlink['id'])) }}">
                                         @lang('common.edit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
                                     <a class="btn btn-xs btn-danger" href="javascript:void(0);"
-                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $itlink['name'] }}?','{{ route('del',array('id'=>$itlink['id'])) }}')">
+                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del'){{ $itlink['name'] }}?','{{ route('Admin::Itlink::del',array('id'=>$itlink['id'])) }}')">
                                         @lang('common.del')
                                     </a>
                                 @endif
@@ -78,29 +78,29 @@
                                     @if ($batch_handle['edit'])
                                         config.type_data.push({
                                         'name': lang.commonenable,
-                                        'post_link': '{{ route('edit') }}',
+                                        'post_link': '{{ route('Admin::Itlink::edit') }}',
                                         'post_data': {'is_enable': '1'}
                                     });
                                     config.type_data.push({
                                         'name': lang.commondisable,
-                                        'post_link': '{{ route('edit') }}',
+                                        'post_link': '{{ route('Admin::Itlink::edit') }}',
                                         'post_data': {'is_enable': '0'}
                                     });
                                     config.type_data.push({
                                         'name': lang.commonstatistics,
-                                        'post_link': '{{ route('edit') }}',
+                                        'post_link': '{{ route('Admin::Itlink::edit') }}',
                                         'post_data': {'is_statistics': '1'}
                                     });
                                     config.type_data.push({
                                         'name': lang.commoncancel + lang.commonstatistics,
-                                        'post_link': '{{ route('edit') }}',
+                                        'post_link': '{{ route('Admin::Itlink::edit') }}',
                                         'post_data': {'is_statistics': '0'}
                                     });
                                     @endif
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
                                         'name': lang.commondel,
-                                        'post_link': '{{ route('del') }}'
+                                        'post_link': '{{ route('Admin::Itlink::del') }}'
                                     });
                                     @endif
                                             new M_batch_handle(config);

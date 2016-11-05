@@ -36,14 +36,14 @@
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])
                                     <a class="btn btn-xs btn-primary"
-                                       href="{{ route('edit',array('id'=>$message_board_log['id'])) }}">
+                                       href="{{ route('Admin::MessageBoardLog::edit',array('id'=>$message_board_log['id'])) }}">
                                         @lang('common.audit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['edit'] AND $batch_handle['del'])&nbsp;|&nbsp;@endif
                                 @if ($batch_handle['del'])
                                     <a class="btn btn-xs btn-danger" href="javascript:void(0);"
-                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del')?','{{ route('del',array('id'=>$message_board_log['id'])) }}')">
+                                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del')?','{{ route('Admin::MessageBoardLog::del',array('id'=>$message_board_log['id'])) }}')">
                                         @lang('common.del')
                                     </a>
                                 @endif
@@ -65,19 +65,19 @@
                                     @if ($batch_handle['edit'])
                                         config.type_data.push({
                                         'name': lang.commonaudit,
-                                        'post_link': '{{ route('edit') }}',
+                                        'post_link': '{{ route('Admin::MessageBoardLog::edit') }}',
                                         'post_data': {'is_audit': '1'}
                                     });
                                     config.type_data.push({
                                         'name': lang.commoncancel + lang.commonaudit,
-                                        'post_link': '{{ route('edit') }}',
+                                        'post_link': '{{ route('Admin::MessageBoardLog::edit') }}',
                                         'post_data': {'is_audit': '0'}
                                     });
                                     @endif
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
                                         'name': lang.commondel,
-                                        'post_link': '{{ route('del') }}'
+                                        'post_link': '{{ route('Admin::MessageBoardLog::del') }}'
                                     });
                                     @endif
                                             new M_batch_handle(config);

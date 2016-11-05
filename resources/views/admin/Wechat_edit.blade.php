@@ -95,7 +95,7 @@
                         <div class="col-sm-12 text-center">
                             <button type="submit" class="btn btn-info">@lang('common.send')</button>
                             <input class="btn btn-default" type="reset" value="@lang('common.reset')">
-                            <a href="{{ route('index') }}" class="btn btn-default">
+                            <a href="{{ route('Admin::Wechat::index') }}" class="btn btn-default">
                                 @lang('common.goback')
                             </a>
                         </div>

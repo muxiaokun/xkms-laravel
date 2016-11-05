@@ -14,7 +14,7 @@
                                     <input type="text" class="form-control" placeholder="@lang('common.region_name')"
                                            name="region_name" value="{{ $edit_info['region_name'] }}"
                                            onchange="M_zh2py(this,'input[name=short_name]')"
-                                           link="{{ route('ajax_api') }}"/>
+                                           link="{{ route('Admin::Region::ajax_api') }}"/>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +86,7 @@
                                                 }, @endif
                                                 'edit_obj': $('#region_list'),
                                                 'post_name': 'parent_id',
-                                                'ajax_url': '{{ route('ajax_api') }}',
+                                                'ajax_url': '{{ route('Admin::Region::ajax_api') }}',
                                                 'field': 'parent_id'
                                             };
                                             new M_select_add(config);
@@ -120,7 +120,7 @@
                                     @lang('common.edit')
                                 @endif
                             </button>
-                            <a href="{{ route('index') }}" class="btn btn-default">
+                            <a href="{{ route('Admin::Region::index') }}" class="btn btn-default">
                                 @lang('common.goback')
                             </a>
                         </div>

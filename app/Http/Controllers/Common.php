@@ -212,19 +212,18 @@ class Common extends Controller
             return [];
         }
 
-        $privilegeOld = F('privilege');
-        $privilege    = [];
-        foreach ($privilegeOld[$module] as $controllersName => $controllers) {
-            foreach ($controllers as $controllerName => $controller) {
-                foreach ($controller as $actionName => $action) {
-                    if (is_array($contrast) && (!in_array('all',
-                                $contrast) && !in_array($controllerName . "_" . $actionName, $contrast))
-                    ) {
-                        continue;
-                    }
+        $privilegeOld = mGetArr(storage_path('app/install_menu'));
 
-                    $privilege[$controllersName][$controllerName][$actionName] = $action;
+        $privilege    = [];
+        foreach ($privilegeOld[$module] as $groupName => $actions) {
+            foreach ($actions as $action => $actionName) {
+                if (is_array($contrast) && (!in_array('all',
+                            $contrast) && !in_array($action, $contrast))
+                ) {
+                    continue;
                 }
+
+                $privilege[$groupName][$actionName] = $action;
             }
         }
         return $privilege;

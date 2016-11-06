@@ -23,6 +23,16 @@ class Common extends Model
         'Year',
     ];
 
+    public function scopeMGetColumn($query)
+    {
+        $columns       = $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
+        $empty_columns = [];
+        foreach ($columns as $column) {
+            $empty_columns[$column] = '';
+        }
+        return $empty_columns;
+    }
+
     /**
      * 列出数据
      * @access public

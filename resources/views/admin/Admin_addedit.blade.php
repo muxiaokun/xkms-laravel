@@ -22,7 +22,7 @@
                 <form id="form_valid" onSubmit="return false;" class="form-horizontal" role="form" action=""
                       method="post">
                     <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
-                    <input type="hidden" name="is_pwd" value="@if (Route::is('*::add'))1@else0@endif"/>
+                    <input type="hidden" name="is_pwd" value="@if (Route::is('*::add'))1 @else 0 @endif"/>
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
@@ -130,29 +130,28 @@
                                 </div>
                             </div>
                         </div>
-                        @foreach ($privilege as $controller => $privs)
+                        @foreach ($privilege as $groupName => $actions)
                             <div class="col-sm-12">
                                 <ul class="list-group">
                                     <li class="list-group-item list-group-item-info">
-                                        <label class="checkbox-inline"><input type="checkbox"
-                                                                              onClick="M_allselect_par(this,'ul')"/>@lang('common.allselect'){{ $controller }}
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox"
+                                                   onClick="M_allselect_par(this,'ul')"/>@lang('common.allselect'){{ $groupName }}
                                         </label>
                                     </li>
-                                    @foreach ($privs as $controller_name => $actions)
-                                        <li class="list-group-item">
-                                            @foreach ($actions as $action_name => $action_value)
-                                                <label class="checkbox-inline">
-                                                    <input type="checkbox" name="privilege[]"
-                                                           value="{{ $controller_name }}_{{ $action_name }}"
-                                                           @if ('all' == $edit_info['privilege'] or (is_array($edit_info['privilege']) AND in_array($controller_name.'_'.$action_name,$edit_info['privilege'])))
-                                                           checked="checked"
-                                                            @endif
-                                                    />
-                                                    {{ $action_value }}
-                                                </label>
-                                            @endforeach
-                                        </li>
-                                    @endforeach
+                                    <li class="list-group-item">
+                                        @foreach ($actions as $actionName => $action)
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="privilege[]"
+                                                       value="{{ $action }}"
+                                                       @if ('all' == $edit_info['privilege'] OR (is_array($edit_info['privilege']) AND in_array($action,$edit_info['privilege'])))
+                                                       checked="checked"
+                                                        @endif
+                                                />
+                                                {{ $actionName }}
+                                            </label>
+                                        @endforeach
+                                    </li>
                                 </ul>
                             </div>
                         @endforeach

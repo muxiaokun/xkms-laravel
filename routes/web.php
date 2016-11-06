@@ -138,6 +138,7 @@ Route::group([
         Route::get('edit', ['as' => 'edit', 'uses' => 'Admin@edit']);
         Route::get('del', ['as' => 'del', 'uses' => 'Admin@del']);
         Route::get('setting', ['as' => 'setting', 'uses' => 'Admin@setting']);
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Admin@ajax_api']);
     });
     Route::group([
         'as'     => 'AdminGroup::',

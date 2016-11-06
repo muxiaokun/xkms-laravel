@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
 use App\Model;
+use Illuminate\Support\Facades\View;
 
 class Admin extends Backend
 {
@@ -81,7 +82,8 @@ class Admin extends Backend
             }
         }
         $this->addEditCommon();
-        $assign['title'] = trans('common.admin') . trans('common.add');
+        $assign['edit_info'] = Model\Admins::mGetColumn();
+        $assign['title']     = trans('common.admin') . trans('common.add');
         return view('admin.Admin_addedit', $assign);
     }
 
@@ -334,5 +336,6 @@ class Admin extends Backend
     private function addEditCommon()
     {
         $assign['privilege'] = $this->getPrivilege('Admin', session('backend_info.privilege'));
+        View::share($assign);
     }
 }

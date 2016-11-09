@@ -128,12 +128,12 @@ class Index extends Frontend
             $install_info      = $this->_getInstallInfo();
             $install_privilege = [];
             foreach ($install_info as $controller_group) {
-                foreach ($controller_group['privilege'] as $group_name => $controller) {
-                    foreach ($controller as $controller_name => $actions) {
+                foreach ($controller_group['privilege'] as $group_name => $controllers) {
+                    foreach ($controllers as $controller_name => $actions) {
                         foreach ($actions as $action_name => $action_description) {
                             $install_privilege[$group_name]
                             [$controller_group['control_group']]
-                            [$controller_name]
+                            [$controller_group['control_info']]
                             [$group_name . '::' . $controller_name . '::' . $action_name] = $action_description;
                         }
                     }
@@ -157,7 +157,7 @@ class Index extends Frontend
             'show_height' => true,
             'progress'    => 0,
             'setp'        => trans('common.pfsetp', ['setp' => trans('four'), 'count' => trans('common.four')]),
-            'title'       => trans('common.setp4_title'),
+            'title'       => trans('install.setp4_title'),
         ];
         return view('install.Index_setp4', $assign);
     }

@@ -149,7 +149,7 @@ M_check_mysql.prototype.check = function(){
 
 function M_post_setp3(ajax_url, goto_url, setp_progress) {
 
-    show_install_message('#show_box', lang.common.install.setp3_commont2, 'info');
+    show_install_message('#show_box', lang.install.setp3_commont2, 'info');
 
     var _self = this;
     if (_self.running) {

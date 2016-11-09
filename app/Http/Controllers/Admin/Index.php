@@ -275,21 +275,23 @@ class Index extends Backend
         //if(没有在权限中找到列表 就显示默认的列表)
         $adminPriv      = session('backend_info.privilege');
         $adminGroupPriv = session('backend_info.group_privilege');
-        $installMenu    = mGetArr(storage_path('app/install_menu'))['Admin'];
-        foreach ($installMenu as $groupName => $actions) {
-            foreach ($actions as $actionName => $actionDescription) {
-                if (
-                    //跳过系统基本操作
-                    preg_match('/.*::(add|edit|del)$/', $actionName) ||
-                    //跳过没有权限的功能
-                    (
-                        !in_array('all', $adminPriv) &&
-                        !in_array($actionName, $adminPriv) &&
-                        !in_array('all', $adminGroupPriv) &&
-                        !in_array($actionName, $adminGroupPriv)
-                    )
-                ) {
-                    unset($installMenu[$groupName][$actionName]);
+        $installMenu    = mGetArr(storage_path('app/install_privilege.php'))['Admin'];
+        foreach ($installMenu as $groupName => $controllers) {
+            foreach ($controllers as $controllerName => $actions) {
+                foreach ($actions as $actionName => $actionDescription) {
+                    if (
+                        //跳过系统基本操作
+                        preg_match('/.*::(add|edit|del)$/', $actionName) ||
+                        //跳过没有权限的功能
+                        (
+                            !in_array('all', $adminPriv) &&
+                            !in_array($actionName, $adminPriv) &&
+                            !in_array('all', $adminGroupPriv) &&
+                            !in_array($actionName, $adminGroupPriv)
+                        )
+                    ) {
+                        unset($installMenu[$groupName][$controllerName][$actionName]);
+                    }
                 }
             }
         }

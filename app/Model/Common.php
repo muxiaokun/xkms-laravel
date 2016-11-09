@@ -133,7 +133,7 @@ class Common extends Model
         }
 
         $column = $query->where($columnName, '=', $value)->first();
-        return $column->id;
+        return $column->id ? $column->id : null;
     }
 
     /**

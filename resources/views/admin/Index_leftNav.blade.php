@@ -21,13 +21,15 @@
 <section class="left_nav">
     <div id="left_nav_menu" class="accordion">
         @if (count($installMenu) > 0)
-            @foreach ($installMenu as $group_name => $actions)
+            @foreach ($installMenu as $group_name => $controllers)
                 <h3>{{ $group_name }}</h3>
                 <ul class="nav text-center" role="tablist">
-                    @foreach ($actions as $link => $name)
-                        <li role="presentation">
-                            <a class="fs12" href="{{ route($link) }}" target="main">{{ $name }}</a>
-                        </li>
+                    @foreach ($controllers as $actions)
+                        @foreach ($actions as $link => $name)
+                            <li role="presentation">
+                                <a class="fs12" href="{{ route($link) }}" target="main">{{ $name }}</a>
+                            </li>
+                        @endforeach
                     @endforeach
                 </ul>
             @endforeach

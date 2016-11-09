@@ -183,7 +183,7 @@ class Admin extends Backend
                 //检查用户名是否存在
                 $adminInfo = Model\Admins::mList(['admin_name' => $data['admin_name'], 'id' => ['neq', $data['id']]]);
                 if (0 < count($adminInfo)) {
-                    $result['info'] = trans('admin') . trans('common.name') . trans('common.exists');
+                    $result['info'] = trans('common.admin') . trans('common.name') . trans('common.exists');
                     break;
                 }
                 break;

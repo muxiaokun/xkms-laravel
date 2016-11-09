@@ -43,7 +43,7 @@ class Frontend extends Common
     //获取当前位置(也就是当前操作方法)
     protected function _get_position()
     {
-        $privilege = mGetArr(storage_path('app/install_menu'))['Home'];
+        $privilege = mGetArr(storage_path('app/install_privilege.php'))['Home'];
         //跳过系统基本操作 删 异步接口,
         $allController = [
             'Home::Index::index' => trans('common.homepage'),

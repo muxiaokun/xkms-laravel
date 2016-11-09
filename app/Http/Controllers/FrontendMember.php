@@ -64,25 +64,27 @@ class FrontendMember extends Frontend
         $memberGroupPriv = session('frontend_info.group_privilege');
         $leftNav         = [];
         //跳过系统基本操作 增删改 异步接口,
-        $installMenu = mGetArr(storage_path('app/install_menu'))['Admin'];
-        foreach ($installMenu as $groupName => $actions) {
-            foreach ($actions as $actionName => $actionValue) {
-                if (
-                    //跳过系统基本操作
-                    preg_match('/.*::(add|edit|del)$/', $actionName) ||
-                    //跳过没有权限的功能
-                    (
-                        !in_array('all', $memberGroupPriv) &&
-                        !in_array($actionName, $memberGroupPriv)
-                    )
-                ) {
-                    continue;
-                }
+        $installMenu = mGetArr(storage_path('app/install_privilege.php'))['Admin'];
+        foreach ($installMenu as $groupName => $controllers) {
+            foreach ($controllers as $actions) {
+                foreach ($actions as $actionName => $actionValue) {
+                    if (
+                        //跳过系统基本操作
+                        preg_match('/.*::(add|edit|del)$/', $actionName) ||
+                        //跳过没有权限的功能
+                        (
+                            !in_array('all', $memberGroupPriv) &&
+                            !in_array($actionName, $memberGroupPriv)
+                        )
+                    ) {
+                        continue;
+                    }
 
-                $leftNav[] = [
-                    'link' => route($actionName),
-                    'name' => $actionValue,
-                ];
+                    $leftNav[] = [
+                        'link' => route($actionName),
+                        'name' => $actionValue,
+                    ];
+                }
             }
         }
         $leftNav[] = [

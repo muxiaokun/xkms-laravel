@@ -11,6 +11,6 @@ return array(
     'not_select_admin_group' => '选择管理组，不选为空',
     'not_select_group'       => '选择属组，不选分组为空',
     'not_select_group_admin' => '选择组管理员，不选为空',
-    'not_input_pass'         => '不输入密码，为不修改密码',
+    'not_input_pass'         => '不输入密码，将不修改密码',
     //功能名称语言包
 );

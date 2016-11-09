@@ -55,7 +55,7 @@
                                            placeholder="@lang('common.again')@lang('common.input')@lang('common.pass')"
                                            name="password_again"/>
                                     @if ($edit_info)
-                                        <span class="help-block">@lang('common.not_input_pass')</span>
+                                        <span class="help-block">@lang('backend.not_input_pass')</span>
                                     @endif
                                 </div>
                             </div>
@@ -130,7 +130,7 @@
                                 </div>
                             </div>
                         </div>
-                        @foreach ($privilege as $groupName => $actions)
+                        @foreach ($privilege as $groupName => $controllers)
                             <div class="col-sm-12">
                                 <ul class="list-group">
                                     <li class="list-group-item list-group-item-info">
@@ -139,19 +139,33 @@
                                                    onClick="M_allselect_par(this,'ul')"/>@lang('common.allselect'){{ $groupName }}
                                         </label>
                                     </li>
-                                    <li class="list-group-item">
-                                        @foreach ($actions as $actionName => $action)
-                                            <label class="checkbox-inline">
-                                                <input type="checkbox" name="privilege[]"
-                                                       value="{{ $action }}"
-                                                       @if ('all' == $edit_info['privilege'] OR (is_array($edit_info['privilege']) AND in_array($action,$edit_info['privilege'])))
-                                                       checked="checked"
-                                                        @endif
-                                                />
-                                                {{ $actionName }}
-                                            </label>
-                                        @endforeach
-                                    </li>
+                                    @foreach ($controllers as $controllerName => $actions)
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <label class="checkbox-inline">
+                                                        <input type="checkbox"
+                                                               onClick="M_allselect_par(this,'li')"/>@lang('common.allselect'){{ $controllerName }}
+                                                    </label>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                @foreach ($actions as $actionName => $action)
+                                                    <div class="col-sm-3">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" name="privilege[]"
+                                                                   value="{{ $action }}"
+                                                                   @if ('all' == $edit_info['privilege'] OR (is_array($edit_info['privilege']) AND in_array($action,$edit_info['privilege'])))
+                                                                   checked="checked"
+                                                                    @endif
+                                                            />
+                                                            {{ $actionName }}
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </li>
+                                    @endforeach
                                 </ul>
                             </div>
                         @endforeach

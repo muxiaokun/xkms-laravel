@@ -150,6 +150,17 @@ class Common extends Controller
         return $newFile;
     }
 
+    // 加强ajax_api接口安全性
+    public function ajax_api()
+    {
+        $allowAjaxApi = ['get_data'];
+        if (!in_array(request('type'), $allowAjaxApi)) {
+            return;
+        }
+
+        return $this->doAjaxApi();
+    }
+
     //Ajax 接口
     protected function doAjaxApi()
     {

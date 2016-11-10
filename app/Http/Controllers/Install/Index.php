@@ -3,12 +3,11 @@
 
 namespace App\Http\Controllers\Install;
 
-use App\Http\Controllers\Frontend;
+use App\Http\Controllers\Common;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
-class Index extends Frontend
+class Index extends Common
 {
     public function _initialize()
     {

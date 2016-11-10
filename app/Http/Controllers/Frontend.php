@@ -73,17 +73,6 @@ class Frontend extends Common
         View::share($assign);
     }
 
-    // 加强ajax_api接口安全性
-    public function ajax_api()
-    {
-        $allowAjaxApi = ['get_data'];
-        if (!in_array(request('type'), $allowAjaxApi)) {
-            return;
-        }
-
-        return $this->doAjaxApi();
-    }
-
     //登录功能
     /* $ifVc 是在快捷方式登陆时 不检测验证码
      * $memberInfo 是在快捷方式登陆时 提供用户信息（必须是mFind用户）

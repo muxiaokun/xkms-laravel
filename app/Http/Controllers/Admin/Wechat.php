@@ -130,7 +130,7 @@ class Wechat extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Wechat/index'));
         }
 
-        $resultDel = Model\Wechat::mDel($id);
+        $resultDel = Model\Wechat::destroy($id);
         if ($resultDel) {
             return $this->success(trans('common.wechat') . trans('common.bind') . trans('common.del') . trans('common.success'),
                 route('Admin::Wechat::index'));

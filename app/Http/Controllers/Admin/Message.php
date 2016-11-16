@@ -96,7 +96,7 @@ class Message extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Message::index'));
         }
 
-        $resultDel = Model\Message::mDel($id);
+        $resultDel = Model\Message::destroy($id);
         if ($resultDel) {
             return $this->success(trans('common.message') . trans('common.del') . trans('common.success'),
                 route('Admin::Message::index'));

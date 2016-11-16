@@ -121,7 +121,7 @@ class Member extends Backend
                 route('Admin::Member::index'));
         }
 
-        $resultDel = Model\Member::mDel($id);
+        $resultDel = Model\Member::destroy($id);
         if ($resultDel) {
             return $this->success(trans('common.member') . trans('common.del') . trans('common.success'),
                 route('Admin::Member::index'));

@@ -69,7 +69,7 @@ class ManageUpload extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::ManageUpload::index'));
         }
 
-        $resultDel = Model\ManageUpload::mDel($id);
+        $resultDel = Model\ManageUpload::deleteFile($id);
         if ($resultDel) {
             return $this->success(trans('common.file') . trans('common.del') . trans('common.success'),
                 route('Admin::ManageUpload::index'));
@@ -90,7 +90,7 @@ class ManageUpload extends Backend
         $where['_string'] = '(bind_info is NULL OR bind_info = "")';
         $manageUploadList = Model\ManageUpload::mList($where, Model\ManageUpload::where($where)->count());
         foreach ($manageUploadList as $manageUpload) {
-            $resultDel = Model\ManageUpload::mDel($manageUpload['id']);
+            $resultDel = Model\ManageUpload::deleteFile($manageUpload['id']);
             if (!$resultDel) {
                 return $this->error(trans('common.clear') . trans('common.file') . $manageUpload['path'] . trans('common.error'),
                     route('Admin::ManageUpload::index'));

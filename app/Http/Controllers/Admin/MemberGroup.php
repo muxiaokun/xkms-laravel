@@ -106,7 +106,10 @@ class MemberGroup extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::MemberGroup::index'));
         }
 
-        $resultDel = Model\MemberGroup::mDel($id);
+        $resultDel = false;
+        if (1 != $id || (is_array($id) && !in_array(1, $id))) {
+            $resultDel = Model\MemberGroup::destroy($id);
+        }
         if ($resultDel) {
             //删除成功后 删除管理员与组的关系
             Model\Member::mClean($id, 'group_id');

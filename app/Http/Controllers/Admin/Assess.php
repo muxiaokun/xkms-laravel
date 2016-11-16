@@ -115,7 +115,7 @@ class Assess extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Assess::index'));
         }
 
-        $resultDel = Model\Assess::mDel($id);
+        $resultDel = Model\Assess::destroy($id);
         if ($resultDel) {
             return $this->success(trans('common.assess') . trans('common.del') . trans('common.success'),
                 route('Admin::Assess::index'));

@@ -23,15 +23,6 @@ class Admins extends Common
         return $query->mAdd($data);
     }
 
-    public function scopeMDel($query, $id)
-    {
-        //不能删除root用户
-        if (!$id || 1 == $id || (is_array($id) && in_array(1, $id))) {
-            return false;
-        }
-        return $query->mDel($id);
-    }
-
     public function scopeMFind($query, $id)
     {
         $query->select(['*', 'login_ip as aip']);

@@ -97,7 +97,10 @@ class MessageBoard extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::MessageBoard::index'));
         }
 
-        $resultDel = Model\MessageBoard::mDel($id);
+        $resultDel = false;
+        if (1 != $id || (is_array($id) && !in_array(1, $id))) {
+            $resultDel = Model\MessageBoard::destroy($id);
+        }
         if ($resultDel) {
             return $this->success(trans('common.messageboard') . trans('common.del') . trans('common.success'),
                 route('Admin::MessageBoard::index'));

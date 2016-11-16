@@ -97,7 +97,7 @@ class MessageBoardLog extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::MessageBoardLog::index'));
         }
 
-        $resultDel = Model\MessageBoardLog::mDel($id);
+        $resultDel = Model\MessageBoardLog::destroy($id);
         if ($resultDel) {
             return $this->success(trans('common.messageboard') . trans('common.log') . trans('common.del') . trans('common.success'),
                 route('Admin::MessageBoardLog::index'));

@@ -110,7 +110,7 @@ class Comment extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Comment::index'));
         }
 
-        $resultDel = Model\Comment::mDel($id);
+        $resultDel = Model\Comment::destroy($id);
         if ($resultDel) {
             return $this->success(trans('common.comment') . trans('common.del') . trans('common.success'),
                 route('Admin::Comment::index'));

@@ -99,7 +99,7 @@ class Quests extends Backend
 
         $clear       = request('clear');
         if (!$clear) {
-            $resultDel = Model\Quests::mDel($id);
+            $resultDel = Model\Quests::destroy($id);
         }
 
         if ($resultDel || $clear) {

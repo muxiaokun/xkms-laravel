@@ -197,7 +197,7 @@ class Article extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Article::index'));
         }
 
-        $resultDel = Model\Article::mDel($id);
+        $resultDel = Model\Article::destroy($id);
         if ($resultDel) {
             Model\ManageUpload::bindFile($id);
             return $this->success(trans('common.article') . trans('common.del') . trans('common.success'),

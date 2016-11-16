@@ -135,7 +135,7 @@ class QuestsAnswer extends Backend
         }
 
         $questsAnswerInfo = Model\QuestsAnswer::mFind($id);
-        $resultDel        = Model\QuestsAnswer::mDel($questsAnswerInfo['id']);
+        $resultDel        = Model\QuestsAnswer::destroy($questsAnswerInfo['id']);
         if ($resultDel) {
             Model\Quests::where(['id' => $questsAnswerInfo['quests_id']])->setDec('current_portion');
             return $this->success(trans('common.del') . trans('common.answer') . trans('common.success'),

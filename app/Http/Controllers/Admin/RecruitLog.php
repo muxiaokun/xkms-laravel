@@ -53,7 +53,7 @@ class RecruitLog extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::RecruitLog::index'));
         }
 
-        $resultDel = Model\RecruitLog::mDel($id);
+        $resultDel = Model\RecruitLog::destroy($id);
         if ($resultDel) {
             return $this->success(trans('common.recruit_log') . trans('common.del') . trans('common.success'),
                 route('Admin::RecruitLog::index'));

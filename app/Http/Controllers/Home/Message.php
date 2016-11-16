@@ -97,7 +97,7 @@ class Message extends FrontendMember
             return $this->error(trans('common.id') . trans('common.error'), route('Home::Message::index'));
         }
 
-        $resultDel = Model\Message::mDel($id);
+        $resultDel = Model\Message::destroy($id);
         if ($resultDel) {
             return $this->success(trans('common.message') . trans('common.del') . trans('common.success'),
                 route('Home::Message::index'));

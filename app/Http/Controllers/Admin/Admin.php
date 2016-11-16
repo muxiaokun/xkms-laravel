@@ -129,7 +129,10 @@ class Admin extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Admin::index'));
         }
 
-        $resultDel = Model\Admins::mDel($id);
+        $resultDel = false;
+        if (1 != $id || (is_array($id) && !in_array(1, $id))) {
+            $resultDel = Model\Admins::destroy($id);
+        }
         if ($resultDel) {
             return $this->success(trans('common.admin') . trans('common.del') . trans('common.success'),
                 route('Admin::Admin::index'));

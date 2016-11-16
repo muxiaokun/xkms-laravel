@@ -161,7 +161,7 @@ class ArticleChannel extends Backend
                 route('Admin::ArticleChannel::index'));
         }
 
-        $resultDel = Model\ArticleChannel::mDel($id);
+        $resultDel = Model\ArticleChannel::destroy($id);
         if ($resultDel) {
             return $this->success(trans('common.channel') . trans('common.del') . trans('common.success'),
                 route('Admin::ArticleChannel::index'));

@@ -72,7 +72,7 @@ class AssessLog extends Backend
                 route('Admin::AssessLog::edit', ['id' => $id]));
         }
 
-        $resultDel = Model\AssessLog::mDel($id);
+        $resultDel = Model\AssessLog::destroy($id);
         if ($resultDel) {
             return $this->success(trans('common.assess') . trans('common.del') . trans('common.success'),
                 route('Admin::AssessLog::index'));

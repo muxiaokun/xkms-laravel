@@ -97,7 +97,7 @@ class Recruit extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Recruit::index'));
         }
 
-        $resultDel = Model\Recruit::mDel($id);
+        $resultDel = Model\Recruit::destroy($id);
         if ($resultDel) {
             //TODO 需要定义数据列
             $resultDel = Model\RecruitLog::mClean($id);

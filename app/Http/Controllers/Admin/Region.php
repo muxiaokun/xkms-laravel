@@ -104,7 +104,7 @@ class Region extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Region::index'));
         }
 
-        $resultDel = Model\Region::mDel($id);
+        $resultDel = Model\Region::destroy($id);
         if ($resultDel) {
             return $this->success(trans('common.region') . trans('common.del') . trans('common.success'),
                 route('Admin::Region::index'));

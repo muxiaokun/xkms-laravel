@@ -107,7 +107,7 @@ class Navigation extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Navigation::index'));
         }
 
-        $resultDel = Model\Navigation::mDel($id);
+        $resultDel = Model\Navigation::destroy($id);
         if ($resultDel) {
             return $this->success(trans('common.navigation') . trans('common.del') . trans('common.success'),
                 route('Admin::Navigation::index'));

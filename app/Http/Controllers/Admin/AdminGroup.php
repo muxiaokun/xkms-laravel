@@ -121,7 +121,10 @@ class AdminGroup extends Backend
                 route('Admin::AdminGroup::index'));
         }
 
-        $resultDel = Model\AdminGroups::mDel($id);
+        $resultDel = false;
+        if (1 != $id || (is_array($id) && !in_array(1, $id))) {
+            $resultDel = Model\AdminGroups::destroy($id);
+        }
         if ($resultDel) {
             //删除成功后 删除管理员与组的关系
             Model\Admins::mClean($id, 'group_id');

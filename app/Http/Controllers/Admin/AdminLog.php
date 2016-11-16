@@ -57,7 +57,7 @@ class AdminLog extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::AdminLog::index'));
         }
 
-        $resultDel = Model\AdminLogs::mDel($id);
+        $resultDel = Model\AdminLogs::destroy($id);
         if ($resultDel) {
             return $this->success(trans('common.log') . trans('common.del') . trans('common.success'),
                 route('Admin::AdminLog::index'));
@@ -74,7 +74,7 @@ class AdminLog extends Backend
             return $this->error('only ROOT privilege', route('Admin::AdminLog::index'));
         }
 
-        $resultDel = Model\AdminLogs::mDel_all();
+        $resultDel = Model\AdminLogs::truncate();
         if ($resultDel) {
             return $this->success(trans('common.log') . trans('common.del') . trans('common.success'),
                 route('Admin::AdminLog::index'));

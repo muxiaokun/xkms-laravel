@@ -188,7 +188,7 @@ class ArticleCategory extends Backend
                 route('Admin::ArticleCategory::index'));
         }
 
-        $resultDel = Model\ArticleCategory::mDel($id);
+        $resultDel = Model\ArticleCategory::destroy($id);
         if ($resultDel) {
             //释放图片绑定
             Model\ManageUpload::bindFile($id);

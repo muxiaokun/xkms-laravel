@@ -109,7 +109,7 @@ class Itlink extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Itlink::index'));
         }
 
-        $resultDel = Model\Itlink::mDel($id);
+        $resultDel = Model\Itlink::destroy($id);
         if ($resultDel) {
             Model\ManageUpload::bindFile($id);
             return $this->success(trans('common.itlink') . trans('common.del') . trans('common.success'),

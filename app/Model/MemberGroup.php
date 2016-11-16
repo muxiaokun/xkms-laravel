@@ -5,14 +5,6 @@ namespace App\Model;
 
 class MemberGroup extends Common
 {
-    public function scopeMDel($query, $id)
-    {
-        if (!$id || 1 == $id || (is_array($id) && in_array(1, $id))) {
-            return false;
-        }
-        return $query->mDel($id);
-    }
-
     //查找出组权限
     public function scopeMFindPrivilege($query, $id)
     {

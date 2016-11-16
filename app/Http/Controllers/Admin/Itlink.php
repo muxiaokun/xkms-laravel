@@ -82,7 +82,7 @@ class Itlink extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData();
-            $resultEdit = Model\Itlink::mEdit($id, $data);
+            $resultEdit = Model\Itlink::idWhere($id)->update($data);
             if ($resultEdit) {
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.itlink') . trans('common.edit') . trans('common.success'),
@@ -111,7 +111,7 @@ class Itlink extends Backend
 
         $resultDel = Model\Itlink::mDel($id);
         if ($resultDel) {
-            Model\ManageUpload::mEdit($id);
+            Model\ManageUpload::idWhere($id)->update($data);
             return $this->success(trans('common.itlink') . trans('common.del') . trans('common.success'),
                 route('Admin::Itlink::index'));
         } else {
@@ -211,6 +211,6 @@ class Itlink extends Backend
         foreach ($data as $item) {
             $bindFile[] = $item['link_image'];
         }
-        Model\ManageUpload::mEdit($id, $bindFile);
+        Model\ManageUpload::idWhere($id)->update($data);
     }
 }

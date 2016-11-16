@@ -122,8 +122,7 @@ class Message extends Backend
                 break;
             case 'read_message':
                 $currentTime = Carbon::now();
-                $where       = ['receive_id' => 0];
-                $resultEdit  = Model\Message::where($where)->mEdit($data['id'], ['receive_time' => $currentTime]);
+                $resultEdit  = Model\Message::where('receive_id', 0)->idWhere($data['id'])->update($data);
                 if ($resultEdit) {
                     $result['info'] = date(config('system.sys_date_detail'), $currentTime);
                 } else {

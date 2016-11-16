@@ -149,7 +149,7 @@ class Article extends Backend
             $data = $this->makeData();
             isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'], config('system.sys_article_thumb_width'),
                 C('SYS_ARTICLE_THUMB_HEIGHT'));
-            $resultEdit = Model\Article::mEdit($id, $data);
+            $resultEdit = Model\Article::idWhere($id)->update($data);
             if ($resultEdit) {
                 $data['new_thumb'] = $thumbFile;
                 $this->addEditAfterCommon($data, $id);
@@ -199,7 +199,7 @@ class Article extends Backend
 
         $resultDel = Model\Article::mDel($id);
         if ($resultDel) {
-            Model\ManageUpload::mEdit($id);
+            Model\ManageUpload::idWhere($id)->update($data);
             return $this->success(trans('common.article') . trans('common.del') . trans('common.success'),
                 route('Admin::Article::index'));
         } else {
@@ -234,7 +234,7 @@ class Article extends Backend
             return trans('common.not') . trans('common.edit') . $field;
         }
 
-        $resultEdit = Model\Article::mEdit($data['id'], [$field => $data['value']]);
+        $resultEdit = Model\Article::idWhere($id)->update($data);
         if ($resultEdit) {
             $data['value'] = Model\Article::mFindColumn($data['id'], $field);
             return ['status' => true, 'info' => $data['value']];
@@ -342,7 +342,7 @@ class Article extends Backend
         $bindFile[]    = $data['thumb'];
         $contentUpload = mGetContentUpload($data['content']);
         $bindFile      = array_merge($bindFile, $contentUpload);
-        Model\ManageUpload::mEdit($id, $bindFile);
+        Model\ManageUpload::idWhere($id)->update($data);
     }
 
     //添加 编辑 公共方法

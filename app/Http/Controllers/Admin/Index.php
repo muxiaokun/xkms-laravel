@@ -203,7 +203,7 @@ class Index extends Backend
                 return $this->error($result['info'], route('Admin::Index::editMyPass'));
             }
 
-            $resultEdit = Model\Admins::mEdit($adminInfo['id'], ['admin_pwd' => $password]);
+            $resultEdit = Model\Admins::idWhere($id)->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.edit') . trans('common.pass') . trans('common.success'),
                     route('Admin::Index::editMyPass'));

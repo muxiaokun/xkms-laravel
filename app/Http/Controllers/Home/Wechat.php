@@ -94,7 +94,8 @@ class Wechat extends Frontend
             if ($this->isLogin()) {
                 $wechatInfo              = session('wechat_info');
                 $wechatInfo['member_id'] = session('frontend_info.id');
-                Model\Wechat::bind_wechat($wechatInfo);
+                Model\Wechat::firstOrNew($wechatInfo)->update($wechatInfo);
+
                 session('wechat_info', null);
             }
             $this->_member_bind_msg($msg);

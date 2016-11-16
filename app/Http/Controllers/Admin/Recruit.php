@@ -70,7 +70,7 @@ class Recruit extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData();
-            $resultEdit = Model\Recruit::mEdit($id, $data);
+            $resultEdit = Model\Recruit::idWhere($id)->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.recruit') . trans('common.edit') . trans('common.success'),
                     route('Admin::Recruit::index'));

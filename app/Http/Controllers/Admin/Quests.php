@@ -71,7 +71,7 @@ class Quests extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData();
-            $resultEdit = Model\Quests::mEdit($id, $data);
+            $resultEdit = Model\Quests::idWhere($id)->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.quests') . trans('common.edit') . trans('common.success'),
                     route('Admin::Quests::index'));

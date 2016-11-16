@@ -123,7 +123,7 @@ class ArticleCategory extends Backend
                 unset($data['manage_group_id']);
                 unset($data['access_group_id']);
             }
-            $resultEdit = Model\ArticleCategory::mEdit($id, $data);
+            $resultEdit = Model\ArticleCategory::idWhere($id)->update($data);
             if ($resultEdit) {
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.article') . trans('common.category') . trans('common.edit') . trans('common.success'),
@@ -191,7 +191,7 @@ class ArticleCategory extends Backend
         $resultDel = Model\ArticleCategory::mDel($id);
         if ($resultDel) {
             //释放图片绑定
-            Model\ManageUpload::mEdit($id);
+            Model\ManageUpload::idWhere($id)->update($data);
             return $this->success(trans('common.article') . trans('common.category') . trans('common.del') . trans('common.success'),
                 route('Admin::ArticleCategory::index'));
 
@@ -209,7 +209,7 @@ class ArticleCategory extends Backend
             return trans('common.not') . trans('common.edit') . $field;
         }
 
-        $resultEdit = Model\ArticleCategory::mEdit($data['id'], [$field => $data['value']]);
+        $resultEdit = Model\ArticleCategory::idWhere($id)->update($data);
         if ($resultEdit) {
             $data['value'] = Model\ArticleCategory::mFindColumn($data['id'], $field);
 
@@ -315,7 +315,7 @@ class ArticleCategory extends Backend
     {
         $bindFile          = mGetContentUpload($data['content']);
         $bindFile[]        = $data['thumb'];
-        Model\ManageUpload::mEdit($id, $bindFile);
+        Model\ManageUpload::idWhere($id)->update($data);
     }
 
     //构造分类assign公共数据

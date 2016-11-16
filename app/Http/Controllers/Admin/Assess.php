@@ -86,7 +86,7 @@ class Assess extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData();
-            $resultEdit = Model\Assess::mEdit($id, $data);
+            $resultEdit = Model\Assess::idWhere($id)->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.assess') . trans('common.edit') . trans('common.success'),
                     route('Admin::Assess::index'));

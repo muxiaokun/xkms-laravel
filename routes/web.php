@@ -407,6 +407,8 @@ Route::get('VerificationCode/{name?}', 'VerificationCode@run')->name('Verificati
 
 //test error
 Route::get('t', function () {
+    $wechatInfo = ['id' => 1];
+    App\Model\Wechat::firstOrNew($wechatInfo)->update($wechatInfo)->save();
 
 });
 Route::get('tc', ['as' => 'index', 'uses' => 'Index@getInstallInfo']);

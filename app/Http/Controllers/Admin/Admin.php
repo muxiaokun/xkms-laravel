@@ -97,7 +97,7 @@ class Admin extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData();
-            $resultEdit = Model\Admins::mEdit($id, $data);
+            $resultEdit = Model\Admins::idWhere($id)->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.admin') . trans('common.edit') . trans('common.success'),
                     route('Admin::Admin::index'));

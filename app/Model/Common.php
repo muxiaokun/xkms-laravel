@@ -37,7 +37,7 @@ class Common extends Model
      * 列出数据
      * @access public
      * @param array $where 查询条件
-     * @param int $page 翻页数量
+     * @param int   $page  翻页数量
      * @return array 返回数据数组
      */
     public function scopeMList($query, $where = null, $page = false)
@@ -88,23 +88,6 @@ class Common extends Model
     }
 
     /**
-     * 编辑数据
-     * @param mixed $id
-     * @param array $data
-     * @return boolean
-     */
-    public function scopeMEdit($query, $id, $data)
-    {
-        if (!$id || !$data) {
-            return false;
-        }
-
-        is_array($id) && $id = ['in', $id];
-        $query->mEncodeData($data);
-        return $query->where(['id' => $id])->update($data);
-    }
-
-    /**
      * 查找数据
      * @param mixed $id
      * @return array
@@ -138,7 +121,7 @@ class Common extends Model
 
     /**
      * 查找数据
-     * @param int $id
+     * @param int    $id
      * @param string $columnName
      * @return string
      */
@@ -155,7 +138,7 @@ class Common extends Model
 
     /**
      * 清除数据
-     * @param mixed $id
+     * @param mixed  $id
      * @param string $columnName
      * @param string $data
      * @return boolean
@@ -225,7 +208,7 @@ class Common extends Model
 
     /**
      * 构造查询时用的like数组
-     * @param array $whereArr
+     * @param array  $whereArr
      * @param string $logic AND or OR
      * @return boolean
      */
@@ -266,8 +249,8 @@ class Common extends Model
     /**
      * 建立缩进树状数据(自动去除查询数量限制)
      * @param array $config
-     * @param int $parentId
-     * @param int $level
+     * @param int   $parentId
+     * @param int   $level
      * @return array
      */
     public function scopeMMakeTree($query, $config, $parentId = 0, $level = 0)
@@ -336,6 +319,16 @@ class Common extends Model
                 throw new \Exception('parse where error!');
             }
         }
+    }
+
+    public function scopeIdWhere($query, $id)
+    {
+        if (is_array($id)) {
+            $query->whereIn('id', $id);
+        } else {
+            $query->where('id', $id);
+        }
+
     }
 
     /**

@@ -111,7 +111,7 @@ class Itlink extends Backend
 
         $resultDel = Model\Itlink::mDel($id);
         if ($resultDel) {
-            Model\ManageUpload::idWhere($id)->update($data);
+            Model\ManageUpload::bindFile($id);
             return $this->success(trans('common.itlink') . trans('common.del') . trans('common.success'),
                 route('Admin::Itlink::index'));
         } else {
@@ -211,6 +211,6 @@ class Itlink extends Backend
         foreach ($data as $item) {
             $bindFile[] = $item['link_image'];
         }
-        Model\ManageUpload::idWhere($id)->update($data);
+        Model\ManageUpload::bindFile($id, $bindFile);
     }
 }

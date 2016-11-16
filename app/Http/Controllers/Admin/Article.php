@@ -199,7 +199,7 @@ class Article extends Backend
 
         $resultDel = Model\Article::mDel($id);
         if ($resultDel) {
-            Model\ManageUpload::idWhere($id)->update($data);
+            Model\ManageUpload::bindFile($id);
             return $this->success(trans('common.article') . trans('common.del') . trans('common.success'),
                 route('Admin::Article::index'));
         } else {
@@ -342,7 +342,7 @@ class Article extends Backend
         $bindFile[]    = $data['thumb'];
         $contentUpload = mGetContentUpload($data['content']);
         $bindFile      = array_merge($bindFile, $contentUpload);
-        Model\ManageUpload::idWhere($id)->update($data);
+        Model\ManageUpload::bindFile($id, $bindFile);
     }
 
     //添加 编辑 公共方法

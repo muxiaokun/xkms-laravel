@@ -191,7 +191,7 @@ class ArticleCategory extends Backend
         $resultDel = Model\ArticleCategory::mDel($id);
         if ($resultDel) {
             //释放图片绑定
-            Model\ManageUpload::idWhere($id)->update($data);
+            Model\ManageUpload::bindFile($id);
             return $this->success(trans('common.article') . trans('common.category') . trans('common.del') . trans('common.success'),
                 route('Admin::ArticleCategory::index'));
 
@@ -315,7 +315,7 @@ class ArticleCategory extends Backend
     {
         $bindFile          = mGetContentUpload($data['content']);
         $bindFile[]        = $data['thumb'];
-        Model\ManageUpload::idWhere($id)->update($data);
+        Model\ManageUpload::bindFile($id, $bindFile);
     }
 
     //构造分类assign公共数据

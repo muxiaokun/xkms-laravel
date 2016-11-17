@@ -155,7 +155,7 @@ class ArticleChannel extends Backend
         }
 
         //解除文章和被删除频道的关系
-        $resultClean = Model\Article::mClean($id, 'channel_id');
+        $resultClean = Model\Article::idWhere($id, 'channel_id')->delete();
         if (!$resultClean) {
             return $this->error(trans('common.article') . trans('common.clear') . trans('common.channel') . trans('common.error'),
                 route('Admin::ArticleChannel::index'));

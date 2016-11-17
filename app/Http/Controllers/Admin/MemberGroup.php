@@ -112,7 +112,7 @@ class MemberGroup extends Backend
         }
         if ($resultDel) {
             //删除成功后 删除管理员与组的关系
-            Model\Member::mClean($id, 'group_id');
+            Model\Member::idWhere($id, 'group_id')->delete();
             return $this->success(trans('common.member') . trans('common.group') . trans('common.del') . trans('common.success'),
                 route('Admin::MemberGroup::index'));
         } else {

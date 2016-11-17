@@ -182,7 +182,7 @@ class ArticleCategory extends Backend
         }
 
         //解除文章和被删除分类的关系
-        $resultClean = Model\Article::mClean($id, 'cate_id');
+        $resultClean = Model\Article::idWhere($id, 'cate_id')->delete();
         if (!$resultClean) {
             return $this->error(trans('common.article') . trans('common.clear') . trans('common.category') . trans('common.error'),
                 route('Admin::ArticleCategory::index'));

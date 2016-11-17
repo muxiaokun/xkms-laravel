@@ -104,8 +104,7 @@ class Quests extends Backend
 
         if ($resultDel || $clear) {
             //删除问卷会删除该问卷下的所有答案
-            //TODO 需要定义数据列
-            $resultClear = Model\QuestsAnswer::mClean($id);
+            $resultClear = Model\QuestsAnswer::idWhere($id, 'quests_id')->delete();
             if ($clear) {
                 if ($resultClear) {
                     Model\Quests::where(['id' => $id])->data(['current_portion' => 0])->save();

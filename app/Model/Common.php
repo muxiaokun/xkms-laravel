@@ -58,33 +58,6 @@ class Common extends Model
     }
 
     /**
-     * 清除数据
-     * @param mixed  $id
-     * @param string $columnName
-     * @param string $data
-     * @return boolean
-     */
-    public function scopeMClean($query, $id, $columnName = '', $data = false)
-    {
-        if (!$id) {
-            return false;
-        }
-
-        //默认清除id的列为第二列
-        if (!$columnName) {
-            $columnName = $query->selects[1];
-        }
-
-        is_array($id) && $id = ['in', $id];
-        $query->where([$columnName => $id]);
-        if (0 == $query->count()) {
-            return true;
-        }
-        $query->where([$columnName => $id]);
-        return (false === $data) ? $query->delete() : $query->save([$columnName => $data]);
-    }
-
-    /**
      * 获取最大页数
      * @access public
      * @param array $where 查询条件

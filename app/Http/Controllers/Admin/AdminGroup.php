@@ -127,7 +127,7 @@ class AdminGroup extends Backend
         }
         if ($resultDel) {
             //删除成功后 删除管理员与组的关系
-            Model\Admins::mClean($id, 'group_id');
+            Model\Admins::idWhere($id, 'group_id')->delete();
             return $this->success(trans('common.management') . trans('common.group') . trans('common.del') . trans('common.success'),
                 route('Admin::AdminGroup::index'));
         } else {

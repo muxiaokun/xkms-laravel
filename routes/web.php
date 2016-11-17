@@ -407,6 +407,6 @@ Route::get('VerificationCode/{name?}', 'VerificationCode@run')->name('Verificati
 
 //test error
 Route::get('t', function () {
-    dump(App\Model\Admins::where('id', 3)->first());
+
 });
 Route::get('tc', ['as' => 'index', 'uses' => 'Index@getInstallInfo']);

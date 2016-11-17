@@ -19,7 +19,7 @@ class AdminLog extends Backend
         $whereValue && $where[] = [
             'admin_id',
             'In',
-            Model\Admins::where([['admin_name', 'like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+            Model\Admins::where([['admin_name', 'like', '%' . $whereValue . '%']])->select(['id'])->pluck('id'),
         ];
         $whereValue = request('route_name');
         $whereValue && $where[] = ['route_name', $whereValue];

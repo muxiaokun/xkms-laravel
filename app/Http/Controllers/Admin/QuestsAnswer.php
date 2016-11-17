@@ -19,13 +19,13 @@ class QuestsAnswer extends Backend
         $whereValue && $where[] = [
             'quests_id',
             'in',
-            Model\Quests::where(['title' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+            Model\Quests::where(['title' => ['like', '%' . $whereValue . '%']])->select(['id'])->pluck('id'),
         ];
         $whereValue = request('member_id');
         $whereValue && $where[] = [
             'member_id',
             'in',
-            Model\Member::where(['member_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+            Model\Member::where(['member_name' => ['like', '%' . $whereValue . '%']])->select(['id'])->pluck('id'),
         ];
 
         $questsAnswerList = Model\QuestsAnswer::where($where)->paginate(config('system.sys_max_row'));

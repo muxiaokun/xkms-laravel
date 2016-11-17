@@ -25,7 +25,7 @@ class Admin extends Backend
         $whereValue = request('group_id');
         $whereValue && $where[] = [
             'group_id',
-            Model\MemberGroup::where(['name', 'like', '%' . $whereValue . '%'])->mColumn2Array('id'),
+            Model\MemberGroup::where(['name', 'like', '%' . $whereValue . '%'])->select(['id'])->pluck('id'),
         ];
         $whereValue = mMktimeRange('last_time');
         $whereValue && $where[] = ['last_time', $whereValue];

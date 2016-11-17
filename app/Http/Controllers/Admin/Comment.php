@@ -17,13 +17,13 @@ class Comment extends Backend
         $whereValue && $where[] = [
             'audit_id',
             'in',
-            Model\Admins::where(['admin_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+            Model\Admins::where(['admin_name' => ['like', '%' . $whereValue . '%']])->select(['id'])->pluck('id'),
         ];
         $whereValue = request('send_id');
         $whereValue && $where[] = [
             'send_id',
             'in',
-            Model\Member::where(['member_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+            Model\Member::where(['member_name' => ['like', '%' . $whereValue . '%']])->select(['id'])->pluck('id'),
         ];
         $whereValue = request('controller');
         $whereValue && $where[] = ['controller', $whereValue];

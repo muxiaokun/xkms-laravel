@@ -44,22 +44,6 @@ class Common extends Model
     }
 
     /**
-     * 获取指定列数组合集
-     * @access public
-     * @param string $column 列名称
-     * @return array 指定列数组合集
-     */
-    public function scopeMColumn2Array($query, $column)
-    {
-        $selectResult = $query->select($column)->get();
-        $reArr        = [];
-        foreach ($selectResult as $row) {
-            $reArr[] = $row[$column];
-        }
-        return new Collection($reArr);
-    }
-
-    /**
      * 构造查询时用的like数组
      * @param array  $whereArr
      * @param string $logic AND or OR

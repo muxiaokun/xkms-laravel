@@ -18,7 +18,7 @@ class Assess extends Backend
         $whereValue = request('group_level');
         $whereValue && $where[] = [
             'group_level',
-            Model\MemberGroup::where(['name', 'like', '%' . $whereValue . '%'])->mColumn2Array('id'),
+            Model\MemberGroup::where(['name', 'like', '%' . $whereValue . '%'])->select(['id'])->pluck('id'),
         ];
         $whereValue = mMktimeRange('start_time');
         $whereValue && $where[] = ['start_time', $whereValue];

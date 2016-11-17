@@ -21,7 +21,7 @@ class Message extends Backend
         $whereValue && $where[] = [
             'receive_id',
             'in',
-            Model\Member::where(['member_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+            Model\Member::where(['member_name' => ['like', '%' . $whereValue . '%']])->select(['id'])->pluck('id'),
         ];
         $whereValue = mMktimeRange('send_time');
         $whereValue && $where[] = ['send_time', $whereValue];

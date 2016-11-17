@@ -19,7 +19,7 @@ class MessageBoardLog extends Backend
         $whereValue && $where[] = [
             'audit_id',
             'in',
-            Model\Admins::where(['admin_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
+            Model\Admins::where(['admin_name' => ['like', '%' . $whereValue . '%']])->select(['id'])->pluck('id'),
         ];
         $whereValue = mMktimeRange('add_time');
         $whereValue && $where[] = ['add_time', $whereValue];

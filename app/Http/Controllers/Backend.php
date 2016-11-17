@@ -98,7 +98,8 @@ class Backend extends Common
         //检测后台尝试登陆次数
         $loginNum  = config('system.sys_backend_login_num');
         $lockTime  = config('system.sys_backend_lock_time');
-        $loginInfo = Model\Admins::mFind(Model\Admins::mFindId($userName, 'admin_name'));
+        $AdminId   = Model\Admins::where('admin_name', $userName)->first()['id'];
+        $loginInfo = Model\Admins::mFind($AdminId);
         if ($loginNum && $loginInfo->lock_time && strtotime($loginInfo->lock_time) > Carbon::now()->getTimestamp() - $lockTime) {
             $loginInfo->lock_time = Carbon::now();
             $loginInfo->save();

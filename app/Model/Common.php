@@ -104,22 +104,6 @@ class Common extends Model
     }
 
     /**
-     * 查找数据id
-     * @param string $value
-     * @param string $columnName
-     * @return string
-     */
-    public function scopeMFindId($query, $value, $columnName)
-    {
-        if (!$value || !$columnName) {
-            return false;
-        }
-
-        $column = $query->where($columnName, '=', $value)->first();
-        return $column->id ? $column->id : null;
-    }
-
-    /**
      * 查找数据
      * @param int    $id
      * @param string $columnName

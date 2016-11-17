@@ -16,7 +16,8 @@ class Member extends Backend
         $whereValue = request('member_name');
         $whereValue && $where['member_name'] = ['like', '%' . $whereValue . '%'];
         $whereValue = request('group_id');
-        $whereValue && $where['group_id'] = Model\MemberGroup::mFindId(['like', '%' . $whereValue . '%']);
+        $whereValue && $where['group_id'] = Model\MemberGroup::where('name', 'like',
+            '%' . $whereValue . '%')->first()['id'];
         $whereValue = mMktimeRange('register_time');
         $whereValue && $where[] = ['register_time', $whereValue];
         $whereValue = mMktimeRange('last_time');

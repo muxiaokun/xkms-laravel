@@ -33,42 +33,14 @@ class Common extends Model
         return $empty_columns;
     }
 
-    /**
-     * 列出数据
-     * @access public
-     * @param array $where 查询条件
-     * @param int   $page  翻页数量
-     * @return array 返回数据数组
-     */
-    public function scopeMList($query, $where = null, $page = false)
+    public function scopeIdWhere($query, $id, $colunm = 'id')
     {
-        $query->mParseWhere($where);
-        if (!$query->getQuery()->orders) {
-            $query->orderBy('id', 'desc');
-        }
-        if ($page) {
-            $data = $query->mGetPage($page);
+        if (is_array($id)) {
+            $query->whereIn($colunm, $id);
         } else {
-            $data = $query->get();
+            $query->where($colunm, $id);
         }
-        foreach ($data as &$dataRow) {
-            $query->mDecodeData($dataRow);
-        }
-        return $data;
-    }
 
-    /**
-     * 获取最大页数
-     * @access public
-     * @param array $where 查询条件
-     * @return int 最大页数
-     */
-    public function scopeMGetPageCount($query, $where)
-    {
-        $query->mParseWhere($where);
-        $pageCount  = $query->where($where)->count();
-        $sysMaxPage = config('system.sys_max_page') * config('system.sys_max_row');
-        return ($pageCount < $sysMaxPage) ? $pageCount : $sysMaxPage;
     }
 
     /**
@@ -85,19 +57,6 @@ class Common extends Model
             $reArr[] = $row[$column];
         }
         return new Collection($reArr);
-    }
-
-    /**
-     * 设置翻页中数据数量
-     * @param int $maxNum
-     */
-    public function scopeMGetPage($query, $maxNum)
-    {
-        if (!$maxNum) {
-            return;
-        }
-        $maxNum = (true === $maxNum) ? config('system.sys_max_row') : $maxNum;
-        return $query->paginate($maxNum);
     }
 
     /**
@@ -141,43 +100,6 @@ class Common extends Model
     }
 
     /**
-     * 建立缩进树状数据(自动去除查询数量限制)
-     * @param array $config
-     * @param int   $parentId
-     * @param int   $level
-     * @return array
-     */
-    public function scopeMMakeTree($query, $config, $parentId = 0, $level = 0)
-    {
-        $listWhere = $config['list_where'];
-        if (!is_array($listWhere)) {
-            $listWhere = [];
-        }
-
-        $listWhere[$config['parent_id']] = $parentId;
-        $parentList                      = $query->$config['list_fn']($listWhere);
-        //占位符
-        $retractStr = '&nbsp;';
-        for ($i = 0; $i < $level; $i++) {
-            $retractStr .= $retractStr;
-        }
-        $parentTree = [];
-        $level++;
-        foreach ($parentList as $parentKey => $parent) {
-            if (0 != $parentId) {
-                $tag                            = ($parentList[$parentKey + 1][$config['retract_col']]) ? "├" : "└";
-                $parent[$config['retract_col']] = $retractStr . $tag . $parent[$config['retract_col']];
-            }
-            $parentTree[] = $parent;
-            $childList    = $query->$config['tree_fn']($listWhere, $parent[$config['id']], $level);
-            foreach ($childList as $child) {
-                $parentTree[] = $child;
-            }
-        }
-        return $parentTree;
-    }
-
-    /**
      * 格式化编辑器生成的内容
      * 将内容的站内资源路径修改成相对路径
      * @param string $content
@@ -213,16 +135,6 @@ class Common extends Model
                 throw new \Exception('parse where error!');
             }
         }
-    }
-
-    public function scopeIdWhere($query, $id, $colunm = 'id')
-    {
-        if (is_array($id)) {
-            $query->whereIn($colunm, $id);
-        } else {
-            $query->where($colunm, $id);
-        }
-
     }
 
     /**

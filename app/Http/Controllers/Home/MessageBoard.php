@@ -24,7 +24,8 @@ class MessageBoard extends Frontend
 
         $where               = [];
         $where['audit_id']   = ['gt', 0];
-        $messageBoardLogList = Model\MessageBoardLog::orderBy('add_time', 'desc')->mList($where, true);
+        $messageBoardLogList = Model\MessageBoardLog::orderBy('add_time',
+            'desc')->where($where)->paginate(config('system.sys_max_row'));
         foreach ($messageBoardLogList as &$messageBoardLog) {
             $messageBoardLog['reply_info'] = ($messageBoardLog['reply_info']) ? $messageBoardLog['reply_info'] : trans('common.admin') . trans('common.reply') . trans('common.empty');
             $messageBoardLog['send_info']  = json_decode($messageBoardLog['send_info'], true);

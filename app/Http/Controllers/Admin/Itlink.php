@@ -23,8 +23,8 @@ class Itlink extends Backend
         $whereValue && $where['is_statistics'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $itlinkList                  = Model\Itlink::mList($where, true);
-        $assign['itlink_list']       = $itlinkList;
+        $itlinkList            = Model\Itlink::where($where)->paginate(config('system.sys_max_row'));
+        $assign['itlink_list'] = $itlinkList;
 
         //初始化where_info
         $whereInfo['name']          = ['type' => 'input', 'name' => trans('common.itlink') . trans('common.name')];
@@ -127,11 +127,11 @@ class Itlink extends Backend
         switch ($field) {
             case 'short_name':
                 //检查用户名是否存在
-                $itlinkInfo = Model\Itlink::mList([
+                $itlinkInfo = Model\Itlink::where([
                     'short_name' => $data['short_name'],
                     'id'         => ['neq', $data['id']],
-                ]);
-                if (0 < count($itlinkInfo)) {
+                ])->first();
+                if ($itlinkInfo) {
                     $result['info'] = trans('common.short') . trans('common.name') . trans('common.exists');
                     break;
                 }

@@ -17,7 +17,7 @@ class Region extends Frontend
             case 'parent_id':
                 $where['parent_id'] = ($data['id']) ? $data['id'] : 0;
                 $count              = Model\Region::where($where)->count();
-                $regionUserList     = Model\Region::field('id,region_name')->limit($count)->mList($where);
+                $regionUserList     = Model\Region::field('id,region_name')->limit($count)->where($where)->get();
                 $result['info']     = $regionUserList;
                 break;
         }

@@ -140,7 +140,7 @@ class Article extends Frontend
                 $page                       = $categoryInfo['s_limit'];
                 $assign['article_list_max'] = $page;
             }
-            $articleLsit = Model\Article::mList($where, $page);
+            $articleLsit = Model\Article::where($where)->paginate($page);
 
             $assign['article_list']       = $articleLsit;
         }
@@ -229,8 +229,8 @@ class Article extends Frontend
         }
         $where['_complex'] = $complex;
 
-        $articleLsit                  = Model\Article::mList($where, true);
-        $assign['article_list']       = $articleLsit;
+        $articleLsit            = Model\Article::where($where)->paginate(config('system.sys_max_row'));
+        $assign['article_list'] = $articleLsit;
 
         $request           = request();
         $assign['request'] = $request;
@@ -326,12 +326,11 @@ class Article extends Frontend
         $topCateId       = Model\ArticleCategory::mFind_top_id($cateId);
         $categoryTopInfo = Model\ArticleCategory::where('id', $topCateId)->first();
 
-        $where         = [
+        $where        = [
             'parent_id' => $topCateId,
             'if_show'   => 1,
         ];
-        $categoryCount = Model\ArticleCategory::where($where)->count();
-        $categoryList  = Model\ArticleCategory::mList($where, $categoryCount);
+        $categoryList = Model\ArticleCategory::where($where)->all();
 
         $categoryPosition                  = $categoryTopInfo;
         $categoryPosition['category_list'] = $categoryList;

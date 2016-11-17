@@ -26,8 +26,9 @@ class Message extends Backend
         $whereValue = mMktimeRange('send_time');
         $whereValue && $where[] = ['send_time', $whereValue];
 
-        $messageList = Model\Message::orderBy('receive_time', 'asc')->orderBy('send_time', 'desc')->mList($where, true);
-        $assign['message_list']       = $messageList;
+        $messageList            = Model\Message::orderBy('receive_time', 'asc')->orderBy('send_time',
+            'desc')->where($where)->paginate(config('system.sys_max_row'));
+        $assign['message_list'] = $messageList;
 
         //初始化where_info
         $whereInfo               = [];
@@ -109,7 +110,7 @@ class Message extends Backend
             case 'receive_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['member_name'] = ['like', '%' . $data['keyword'] . '%'];
-                $memberUserList = Model\Member::mList($where);
+                $memberUserList = Model\Member::where($where)->get();
                 foreach ($memberUserList as $memberUser) {
                     $result['info'][] = ['value' => $memberUser['id'], 'html' => $memberUser['member_name']];
                 }

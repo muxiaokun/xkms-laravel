@@ -33,7 +33,7 @@ class AssessLog extends Backend
         if ($reGradeName) {
             $where                = ['assess_id' => $id];
             $where['re_grade_id'] = $reGradeId;
-            $assessLogInfos       = Model\AssessLog::limit($countRow)->mList($where);
+            $assessLogInfos       = Model\AssessLog::limit($countRow)->where($where)->get();
             //算出各项评分
             $resultInfo             = [];
             $assessInfo['ext_info'] = json_decode($assessInfo['ext_info'], true);
@@ -93,7 +93,7 @@ class AssessLog extends Backend
                     'like',
                     '%' . $data['keyword'] . '%',
                 ];
-                $memberUserList = Model\Member::mList($where);
+                $memberUserList = Model\Member::where($where)->get();
                 //取出已经评价的
                 foreach ($memberUserList as $memberUser) {
                     $result['info'][] = ['value' => $memberUser['id'], 'html' => $memberUser['member_name']];
@@ -101,7 +101,7 @@ class AssessLog extends Backend
                 break;
             case 'member_group':
                 isset($data['keyword']) && $data['keyword'] = $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $memberGroupList = Model\MemberGroup::mList($where);
+                $memberGroupList = Model\MemberGroup::where($where)->get();
                 foreach ($memberGroupList as $memberGroup) {
                     $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
                 }

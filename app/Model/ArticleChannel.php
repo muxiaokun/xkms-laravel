@@ -24,7 +24,7 @@ class ArticleChannel extends Common
             return $mFindAllow;
         }
 
-        $articleChannel = $query->select('id')->mList($where);
+        $articleChannel = $query->select('id')->where($where)->get();
         foreach ($articleChannel as $channel) {
             $mFindAllow[] = $channel['id'];
         }

@@ -11,14 +11,14 @@ class Quests extends FrontendMember
     //列表
     public function index()
     {
-        $currentTime                 = Carbon::now();
-        $where                       = [
+        $currentTime           = Carbon::now();
+        $where                 = [
             'start_time' => ['lt', $currentTime],
             'end_time'   => ['gt', $currentTime],
             '(current_portion < max_portion OR max_portion = 0)',
         ];
-        $questsList                  = Model\Quests::mList($where, true);
-        $assign['quests_list']       = $questsList;
+        $questsList            = Model\Quests::where($where)->paginate(config('system.sys_max_row'));
+        $assign['quests_list'] = $questsList;
 
         $assign['title'] = trans('common.quests');
         return view('home.Quests_index', $assign);

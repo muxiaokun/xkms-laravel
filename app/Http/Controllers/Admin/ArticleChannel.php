@@ -22,8 +22,8 @@ class ArticleChannel extends Backend
             $where['id']  = ['in', $allowChannel];
         }
         //初始化翻页 和 列表数据
-        $articleChannelList                   = Model\ArticleChannel::mList($where, true);
-        $assign['article_channel_list']       = $articleChannelList;
+        $articleChannelList             = Model\ArticleChannel::where($where)->paginate(config('system.sys_max_row'));
+        $assign['article_channel_list'] = $articleChannelList;
 
         //初始化where_info
         $whereInfo            = [];
@@ -180,7 +180,7 @@ class ArticleChannel extends Backend
             case 'manage_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['admin_name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminUserList = Model\Admins::mList($where);
+                $adminUserList = Model\Admins::where($where)->get();
                 foreach ($adminUserList as $adminUser) {
                     $result['info'][] = ['value' => $adminUser['id'], 'html' => $adminUser['admin_name']];
                 }
@@ -188,7 +188,7 @@ class ArticleChannel extends Backend
             case 'manage_group_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminGroupList = Model\AdminGroups::mList($where);
+                $adminGroupList = Model\AdminGroups::where($where)->get();
                 foreach ($adminGroupList as $adminGroup) {
                     $result['info'][] = ['value' => $adminGroup['id'], 'html' => $adminGroup['name']];
                 }
@@ -196,7 +196,7 @@ class ArticleChannel extends Backend
             case 'access_group_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $memberGroupList = Model\MemberGroup::mList($where);
+                $memberGroupList = Model\MemberGroup::where($where)->get();
                 foreach ($memberGroupList as $memberGroup) {
                     $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
                 }
@@ -277,7 +277,7 @@ class ArticleChannel extends Backend
         $whereValue           = request('parent_id');
         $whereValue && $where[] = ['parent_id', $whereValue];
 
-        $articleCategoryList = Model\ArticleCategory::mList($where, Model\ArticleCategory::where($where)->count());
+        $articleCategoryList = Model\ArticleCategory::where($where)->all();
         foreach ($articleCategoryList as &$articleCategory) {
             $articleCategory['has_child'] = Model\ArticleCategory::where(['parent_id' => $articleCategory['id']])->count();
             if ($channelInfo && isset($channelInfo['ext_info'][$articleCategory['id']])) {

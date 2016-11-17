@@ -32,7 +32,7 @@ class AdminGroups extends Common
         $where       = [
             'manage_id' => session('backend_info.id'),
         ];
-        $manageGroup = $query->select('id')->mList($where);
+        $manageGroup = $query->select('id')->where($where)->get();
         $mFindAllow  = [];
         foreach ($manageGroup as $group) {
             $mFindAllow[] = $group['id'];

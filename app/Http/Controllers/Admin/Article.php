@@ -52,13 +52,12 @@ class Article extends Backend
             }
         }
         //初始化翻页 和 列表数据
-        $articleList = Model\Article::mList($where, true);
-        $assign['article_list']       = $articleList;
+        $articleList            = Model\Article::where($where)->paginate(config('system.sys_max_row'));
+        $assign['article_list'] = $articleList;
 
         //初始化where_info
-        $channelList        = Model\ArticleChannel::mList($channelWhere,
-            Model\ArticleChannel::where($channelWhere)->count());
-        $categoryList       = Model\ArticleCategory::mList_tree($categoryWhere);
+        $channelList        = Model\ArticleChannel::where($channelWhere)->all();
+        $categoryList       = Model\ArticleCategory::where($categoryWhere)->all();
         $searchChannelList  = [];
         $searchCategoryList = [];
         foreach ($channelList as $channel) {
@@ -245,7 +244,7 @@ class Article extends Backend
         switch ($field) {
             case 'access_group_id':
                 isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $memberGroupList = Model\MemberGroup::mList($where);
+                $memberGroupList = Model\MemberGroup::where($where)->get();
                 foreach ($memberGroupList as $memberGroup) {
                     $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
                 }
@@ -347,9 +346,8 @@ class Article extends Backend
             $channelWhere['id']  = ['in', Model\ArticleChannel::mFindAllow()];
             $categoryWhere['id'] = ['in', Model\ArticleCategory::mFindAllow()];
         }
-        $channelList             = Model\ArticleChannel::mList($channelWhere,
-            Model\ArticleChannel::where($channelWhere)->count());
-        $categoryList            = Model\ArticleCategory::mList_tree($categoryWhere);
+        $channelList             = Model\ArticleChannel::where($channelWhere)->all();
+        $categoryList            = Model\ArticleCategory::where($categoryWhere)->all();
         $assign['channel_list']  = $channelList;
         $assign['category_list'] = $categoryList;
     }

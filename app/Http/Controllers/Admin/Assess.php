@@ -26,8 +26,8 @@ class Assess extends Backend
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $assessList = Model\Assess::mList($where, true);
-        $assign['assess_list']       = $assessList;
+        $assessList            = Model\Assess::where($where)->paginate(config('system.sys_max_row'));
+        $assign['assess_list'] = $assessList;
 
         //初始化where_info
         $whereInfo                = [];
@@ -131,7 +131,7 @@ class Assess extends Backend
             case 'group_level':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $memberGroupList = Model\MemberGroup::mList($where);
+                $memberGroupList = Model\MemberGroup::where($where)->get();
                 foreach ($memberGroupList as $memberGroup) {
                     $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
                 }

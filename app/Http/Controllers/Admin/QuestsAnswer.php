@@ -28,7 +28,7 @@ class QuestsAnswer extends Backend
             Model\Member::where(['member_name' => ['like', '%' . $whereValue . '%']])->mColumn2Array('id'),
         ];
 
-        $questsAnswerList = Model\QuestsAnswer::mList($where, true);
+        $questsAnswerList = Model\QuestsAnswer::where($where)->paginate(config('system.sys_max_row'));
         foreach ($questsAnswerList as &$questsAnswer) {
             $memberName                  = Model\Member::idWhere($groupId)->first()['name'];
             $questsAnswer['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');

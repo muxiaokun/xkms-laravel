@@ -27,8 +27,8 @@ class Recruit extends Frontend
             $where['_complex']   = $complex;
         }
 
-        $recruitList                  = Model\Recruit::mList($where);
-        $assign['recruit_list']       = $recruitList;
+        $recruitList            = Model\Recruit::where($where)->get();
+        $assign['recruit_list'] = $recruitList;
 
         $assign['title'] = trans('common.recruit');
         return view('home.Recruit_index', $assign);

@@ -13,26 +13,12 @@ class ArticleCategory extends Common
         return parent::scopeMList($query, $where, $page);
     }
 
-    //获得缩进的分类树
-    public function scopeMList_tree($query, $where = null, $parentId = 0, $level = 0)
-    {
-        $config = [
-            'list_fn'     => 'mList',
-            'list_where'  => $where,
-            'tree_fn'     => 'mList_tree',
-            'id'          => 'id',
-            'parent_id'   => 'parent_id',
-            'retract_col' => 'name',
-        ];
-        return $query->select(['id', 'name'])->mMakeTree($config, $parentId, $level);
-    }
-
     //返回子级所有分类id 数组集合
     //$pushMe 是否包含传入id
     public function scopeMFind_child_id($query, $id, $pushMe = true)
     {
         $where           = ['parent_id' => $id];
-        $articleCategory = $query->select('id')->mList($where);
+        $articleCategory = $query->select('id')->where($where)->get();
         $categoryChildId = [];
         foreach ($articleCategory as $category) {
             $categoryChildId[] = $category['id'];
@@ -107,7 +93,7 @@ class ArticleCategory extends Common
             return $mFindAllow;
         }
 
-        $articleCategory = $query->select('id')->mList($where);
+        $articleCategory = $query->select('id')->where($where)->get();
         foreach ($articleCategory as $category) {
             $mFindAllow[] = $category['id'];
         }

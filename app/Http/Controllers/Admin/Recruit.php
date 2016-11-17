@@ -20,8 +20,8 @@ class Recruit extends Backend
         $whereValue = mMktimeRange('end_time');
         $whereValue && $where[] = ['end_time', $whereValue];
         //初始化翻页 和 列表数据
-        $recruitList                  = Model\Recruit::mList($where, true);
-        $assign['recruit_list']       = $recruitList;
+        $recruitList            = Model\Recruit::where($where)->paginate(config('system.sys_max_row'));
+        $assign['recruit_list'] = $recruitList;
 
         //初始化where_info
         $whereInfo               = [];

@@ -23,7 +23,7 @@ class Member extends Backend
         $whereValue = mMktimeRange('last_time');
         $whereValue && $where[] = ['last_time', $whereValue];
 
-        $memberList = Model\Member::mList($where, true);
+        $memberList = Model\Member::where($where)->paginate(config('system.sys_max_row'));
         foreach ($memberList as &$member) {
             foreach ($member['group_id'] as $groupId) {
                 $groupName = Model\MemberGroup::idWhere($groupId)->first()['name'];
@@ -174,11 +174,11 @@ class Member extends Backend
                     break;
                 }
                 //检查用户名是否存在
-                $memberInfo = Model\Member::mList([
+                $memberInfo = Model\Member::where([
                     'member_name' => $data['member_name'],
                     'id'          => ['neq', $data['id']],
-                ]);
-                if (0 < count($memberInfo)) {
+                ])->first();
+                if ($memberInfo) {
                     $result['info'] = trans('member') . trans('common.name') . trans('common.exists');
                     break;
                 }
@@ -245,7 +245,7 @@ class Member extends Backend
             case 'group_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $memberGroupList = Model\MemberGroup::mList($where);
+                $memberGroupList = Model\MemberGroup::where($where)->get();
                 foreach ($memberGroupList as $memberGroup) {
                     $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
                 }
@@ -318,7 +318,7 @@ class Member extends Backend
     //构造管理员assign公共数据
     private function addEditCommon()
     {
-        $memberGroupList             = Model\MemberGroup::mList();
+        $memberGroupList             = Model\MemberGroup::all();
         $assign['member_group_list'] = $memberGroupList;
     }
 }

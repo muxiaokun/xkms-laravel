@@ -21,7 +21,7 @@ class Assess extends FrontendMember
         ];
 
         //初始化翻页 和 列表数据
-        $assessList = Model\Assess::mList($where, true);
+        $assessList = Model\Assess::where($where)->paginate(config('system.sys_max_row'));
         foreach ($assessList as &$assess) {
             switch ($assess['target']) {
                 case 'member':
@@ -124,14 +124,14 @@ class Assess extends FrontendMember
                     'like',
                     '%' . $data['keyword'] . '%',
                 ];
-                $memberUserList = Model\Member::mList($where);
+                $memberUserList = Model\Member::where($where)->get();
                 foreach ($memberUserList as $memberUser) {
                     $result['info'][] = ['value' => $memberUser['id'], 'html' => $memberUser['member_name']];
                 }
                 break;
             case 'member_group':
                 isset($data['keyword']) && $data['keyword'] = $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $memberGroupList = Model\MemberGroup::mList($where);
+                $memberGroupList = Model\MemberGroup::where($where)->get();
                 foreach ($memberGroupList as $memberGroup) {
                     $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
                 }

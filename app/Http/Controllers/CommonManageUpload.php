@@ -47,12 +47,16 @@ class CommonManageUpload
         } else {
             $fileUrl = $UploadUtil->rootPath . $fileInfo['savepath'] . $fileInfo['savename'];
             // 上传文件的信息写入数据库
-            $data              = [
-                'name'   => substr($fileInfo['name'], 0, strrpos($fileInfo['name'], '.')),
-                'path'   => $fileUrl,
-                'mime'   => $fileInfo['type'],
-                'size'   => $fileInfo['size'],
-                'suffix' => $fileInfo['ext'],
+            $userId   = ('Admin' == MODULE_NAME) ? session('backend_info.id') : session('frontend_info.id');
+            $userType = ('Admin' == MODULE_NAME) ? 1 : 2;
+            $data     = [
+                'name'      => substr($fileInfo['name'], 0, strrpos($fileInfo['name'], '.')),
+                'user_id'   => $userId,
+                'user_type' => $userType,
+                'path'      => $fileUrl,
+                'mime'      => $fileInfo['type'],
+                'size'      => $fileInfo['size'],
+                'suffix'    => $fileInfo['ext'],
             ];
             Model\ManageUpload::create($data);
             // 上传成功 返回文件信息 伪静态目录结构__ROOT__ . '/' .

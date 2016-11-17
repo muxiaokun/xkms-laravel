@@ -62,7 +62,15 @@ class Assess extends FrontendMember
         if (request()->isMethod('POST')) {
             $data = $this->makeData();
             //提交时检测类型下可以被评分的组和组员
-            $resultAdd = Model\AssessLog::create($data);
+            $where = [];
+            if (isset($data['a_id']) && isset($data['grade_id']) && isset($data['re_grade_id'])) {
+                $where = [
+                    'a_id'        => $data['a_id'],
+                    'grade_id'    => $data['grade_id'],
+                    're_grade_id' => $data['re_grade_id'],
+                ];
+            }
+            $resultAdd = Model\AssessLog::updateOrCreate($where, $data);
             if ($resultAdd) {
                 return $this->success(trans('common.grade') . trans('common.success'), route('Home::Assess::index'));
             } else {

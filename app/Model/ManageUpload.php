@@ -5,20 +5,6 @@ namespace App\Model;
 
 class ManageUpload extends Common
 {
-    public function scopeMAdd($query, $data)
-    {
-        if (!$data) {
-            return false;
-        }
-
-        $userId            = ('Admin' == MODULE_NAME) ? session('backend_info.id') : session('frontend_info.id');
-        $data['user_id']   = $userId;
-        $userType          = ('Admin' == MODULE_NAME) ? 1 : 2;
-        $data['user_type'] = $userType;
-        $data['add_time']  = Carbon::now();
-        return $query->add($data);
-    }
-
     public static function deleteFile($id)
     {
         if (!$id) {

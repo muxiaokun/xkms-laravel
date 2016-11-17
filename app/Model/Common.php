@@ -58,21 +58,6 @@ class Common extends Model
     }
 
     /**
-     * 添加数据
-     * @param array $data
-     * @return boolean
-     */
-    public function scopeMAdd($query, $data)
-    {
-        if (!$data) {
-            return false;
-        }
-
-        $query->mEncodeData($data);
-        return $query->create($data);
-    }
-
-    /**
      * 查找数据
      * @param int    $id
      * @param string $columnName

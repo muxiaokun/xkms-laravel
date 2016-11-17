@@ -23,13 +23,13 @@ class CreateWechatsTable extends Migration
             $table->integer('member_id')->unsigned()->comment('系统会员编号');
             $table->string('unionid', 64)->comment('全局唯一id');
             $table->string('nickname', 64)->comment('昵称');
-            $table->tinyInteger('sex')->comment('性别');
-            $table->string('country', 64)->comment('国家');
-            $table->string('province', 64)->comment('省市');
-            $table->string('city', 64)->comment('城市');
-            $table->string('language', 64)->comment('语言');
-            $table->string('headimgurl', 256)->comment('头像46、64、96、132 ');
-            $table->integer('bind_time')->unsigned()->comment('bind_time');
+            $table->tinyInteger('sex')->nullable()->comment('性别');
+            $table->string('country', 64)->nullable()->comment('国家');
+            $table->string('province', 64)->nullable()->comment('省市');
+            $table->string('city', 64)->nullable()->comment('城市');
+            $table->string('language', 64)->nullable()->comment('语言');
+            $table->string('headimgurl', 256)->nullable()->comment('头像46、64、96、132 ');
+            $table->timestamp('bind_time')->nullable()->comment('bind_time');
         });
     }
 

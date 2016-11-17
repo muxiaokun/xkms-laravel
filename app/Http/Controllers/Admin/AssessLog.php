@@ -24,10 +24,10 @@ class AssessLog extends Backend
 
         switch ($assessInfo['target']) {
             case 'member':
-                $reGradeName = Model\Member::mFindColumn($reGradeId, 'member_name');
+                $reGradeName = Model\Member::idWhere($reGradeId)->first()['member_name'];
                 break;
             case 'member_group':
-                $reGradeName = Model\MemberGroup::mFindColumn($reGradeId, 'name');
+                $reGradeName = Model\MemberGroup::idWhere($reGradeId)->first()['name'];
                 break;
         }
         if ($reGradeName) {

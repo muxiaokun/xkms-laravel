@@ -21,7 +21,7 @@ class Wechat extends Backend
         //初始化翻页 和 列表数据
         $wechatList = Model\Wechat::mList($where, true);
         foreach ($wechatList as &$wechat) {
-            $wechat['member_name'] = Model\Member::mFindColumn($wechat['member_id'], 'member_name');
+            $wechat['member_name'] = Model\Member::idWhere($wechat['member_id'])->first()['member_name'];
         }
         $assign['wechat_list']       = $wechatList;
 
@@ -85,7 +85,7 @@ class Wechat extends Backend
 
         }
         $editInfo                = Model\Wechat::where('id', $id)->first();
-        $editInfo['member_name'] = Model\Member::mFindColumn($editInfo['member_id'], 'member_name');
+        $editInfo['member_name'] = Model\Member::idWhere($editInfo['member_id'])->first()['member_name'];
         $assign['edit_info']     = $editInfo;
         if (request()->isMethod('POST')) {
             $errorGoLink = route('Admin::Wechat::edit', ['id' => $id]);

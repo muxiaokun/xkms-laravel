@@ -29,12 +29,6 @@ class Message extends FrontendMember
         $whereValue && $where[] = ['send_time', $whereValue];
 
         $messageList = Model\Message::orderBy('receive_time', 'asc')->orderBy('send_time', 'desc')->mList($where, true);
-        foreach ($messageList as &$message) {
-            $message['send_name']    = ($message['send_id']) ? Model\Member::mFindColumn($message['send_id'],
-                'member_name') : trans('common.system');
-            $message['receive_name'] = ($message['receive_id']) ? Model\Member::mFindColumn($message['receive_id'],
-                'member_name') : trans('common.system');
-        }
         $assign['message_list']       = $messageList;
 
         //初始化where_info

@@ -310,7 +310,7 @@ class Article extends Frontend
             return $data[$cateId][$col];
         }
 
-        $parentId = Model\ArticleCategory::mFindColumn($cateId, 'parent_id');
+        $parentId = Model\ArticleCategory::idWhere($cateId)->first()['parent_id'];
         return ($cateId == $parentId) ? '' : $this->_get_channel_template($parentId, $col, $data);
     }
 

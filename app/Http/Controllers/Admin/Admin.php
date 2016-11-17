@@ -36,7 +36,7 @@ class Admin extends Backend
         $adminList = Model\Admins::mList($where, true);
         foreach ($adminList as &$admin) {
             foreach ($admin['group_id'] as $groupId) {
-                $groupName = Model\AdminGroups::mFindColumn($groupId, 'name');
+                $groupName = Model\AdminGroups::idWhere($groupId)->first()['name'];
                 isset($admin['group_name']) && $admin['group_name'] .= " | ";
                 $admin['group_name'] .= $groupName;
             }
@@ -110,7 +110,7 @@ class Admin extends Backend
 
         $editInfo = Model\Admins::where('id', $id)->first();
         foreach ($editInfo['group_id'] as &$groupId) {
-            $adminGroupName = Model\AdminGroups::mFindColumn($groupId, 'name');
+            $adminGroupName = Model\AdminGroups::idWhere($groupId)->first()['name'];
             $groupId        = ['value' => $groupId, 'html' => $adminGroupName];
         }
         $editInfo['group_id'] = json_encode($editInfo['group_id']);

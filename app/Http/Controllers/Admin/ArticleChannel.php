@@ -116,17 +116,17 @@ class ArticleChannel extends Backend
         //如果有管理权限进行进一步数据处理
         if (mInArray($id, $maAllowArr)) {
             foreach ($editInfo['manage_id'] as &$manageId) {
-                $adminName = Model\Admins::mFindColumn($manageId, 'admin_name');
+                $adminName = Model\Admins::idWhere($manageId)->first()['admin_name'];
                 $manageId  = ['value' => $manageId, 'html' => $adminName];
             }
             $editInfo['manage_id'] = json_encode($editInfo['manage_id']);
             foreach ($editInfo['manage_group_id'] as &$manageGroupId) {
-                $adminGroupName = Model\AdminGroups::mFindColumn($manageGroupId, 'name');
+                $adminGroupName = Model\AdminGroups::idWhere($manageGroupId)->first()['name'];
                 $manageGroupId  = ['value' => $manageGroupId, 'html' => $adminGroupName];
             }
             $editInfo['manage_group_id'] = json_encode($editInfo['manage_group_id']);
             foreach ($editInfo['access_group_id'] as &$accessGroupId) {
-                $adminGroupName = Model\MemberGroup::mFindColumn($accessGroupId, 'name');
+                $adminGroupName = Model\MemberGroup::idWhere($accessGroupId)->first()['name'];
                 $accessGroupId  = ['value' => $accessGroupId, 'html' => $adminGroupName];
             }
             $editInfo['access_group_id'] = json_encode($editInfo['access_group_id']);

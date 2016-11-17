@@ -26,7 +26,7 @@ class AdminLog extends Backend
         //初始化翻页 和 列表数据
         $adminLogList = Model\AdminLogs::mList($where, true);
         foreach ($adminLogList as &$adminLog) {
-            $adminLog['admin_name'] = Model\Admins::mFindColumn($adminLog['admin_id'], 'admin_name');
+            $adminLog['admin_name'] = Model\Admins::idWhere($adminLog['admin_id'])->first()['admin_name'];
         }
         $assign['admin_log_list']       = $adminLogList;
 

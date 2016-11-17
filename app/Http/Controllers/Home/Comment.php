@@ -60,7 +60,7 @@ class Comment extends Frontend
                 ];
                 $commentList = Model\Comment::mList($where, true);
                 foreach ($commentList as &$comment) {
-                    $memberName             = Model\Member::mFindColumn($comment['member_id'], 'member_name');
+                    $memberName             = Model\Member::idWhere($comment['member_id'])->first()['member_name'];
                     $comment['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');
                 }
                 $assign['comment_list']       = $commentList;

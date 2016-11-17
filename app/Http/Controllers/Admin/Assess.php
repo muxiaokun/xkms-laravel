@@ -27,10 +27,6 @@ class Assess extends Backend
 
         //初始化翻页 和 列表数据
         $assessList = Model\Assess::mList($where, true);
-        foreach ($assessList as &$assess) {
-            $assess['group_name'] = ($assess['group_level']) ? Model\MemberGroup::mFindColumn($assess['group_level'],
-                'name') : trans('common.empty');
-        }
         $assign['assess_list']       = $assessList;
 
         //初始化where_info
@@ -100,7 +96,7 @@ class Assess extends Backend
         }
 
         $editInfo               = Model\Assess::where('id', $id)->first();
-        $editInfo['group_name'] = Model\MemberGroup::mFindColumn($editInfo['group_level'], 'name');
+        $editInfo['group_name'] = Model\MemberGroup::idWhere($editInfo['group_level'])->first()['name'];
         $assign['edit_info']    = $editInfo;
 
         $assign['title'] = trans('common.assess') . trans('common.edit');

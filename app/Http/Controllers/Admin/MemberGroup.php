@@ -86,7 +86,7 @@ class MemberGroup extends Backend
         //获取分组默认信息
         $editInfo = Model\MemberGroup::where('id', $id)->first();
         foreach ($editInfo['manage_id'] as $manageKey => $manageId) {
-            $memberName                        = Model\Member::mFindColumn($manageId, 'member_name');
+            $memberName                        = Model\Member::idWhere($manageId)->first()['member_name'];
             $editInfo['manage_id'][$manageKey] = ['value' => $manageId, 'html' => $memberName];
         }
         $editInfo['manage_id'] = json_encode($editInfo['manage_id']);

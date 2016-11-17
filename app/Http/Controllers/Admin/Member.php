@@ -26,7 +26,7 @@ class Member extends Backend
         $memberList = Model\Member::mList($where, true);
         foreach ($memberList as &$member) {
             foreach ($member['group_id'] as $groupId) {
-                $groupName = Model\MemberGroup::mFindColumn($groupId, 'name');
+                $groupName = Model\MemberGroup::idWhere($groupId)->first()['name'];
                 isset($member['group_name']) && $member['group_name'] .= " | ";
                 $member['group_name'] .= $groupName;
             }
@@ -97,7 +97,7 @@ class Member extends Backend
 
         $editInfo = Model\Member::where('id', $id)->first();
         foreach ($editInfo['group_id'] as &$groupId) {
-            $memberGroupName = Model\MemberGroup::mFindColumn($groupId, 'name');
+            $memberGroupName = Model\MemberGroup::idWhere($groupId)->first()['name'];
             $groupId         = ['value' => $groupId, 'html' => $memberGroupName];
         }
         $editInfo['group_id'] = json_encode($editInfo['group_id']);

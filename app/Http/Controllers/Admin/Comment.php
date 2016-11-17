@@ -31,12 +31,6 @@ class Comment extends Backend
         $whereValue && $where[] = ['item', $whereValue];
 
         $commentList = Model\Comment::orderBy('add_time', 'desc')->mList($where, true);
-        foreach ($commentList as &$comment) {
-            $comment['audit_name']  = ($comment['audit_id']) ? Model\Admins::mFindColumn($comment['audit_id'],
-                'admin_name') : trans('common.none') . trans('common.audit');
-            $memberName             = Model\Member::mFindColumn($comment['member_id'], 'member_name');
-            $comment['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');
-        }
         $assign['comment_list']       = $commentList;
 
         //初始化where_info

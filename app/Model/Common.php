@@ -58,23 +58,6 @@ class Common extends Model
     }
 
     /**
-     * 查找数据
-     * @param int    $id
-     * @param string $columnName
-     * @return string
-     */
-    public function scopeMFindColumn($query, $id, $columnName)
-    {
-        if (!$id || !$columnName) {
-            return false;
-        }
-
-        $column = $query->select($columnName)->where(['id' => $id])->first();
-        $query->mDecodeData($column);
-        return $column[$columnName];
-    }
-
-    /**
      * 清除数据
      * @param mixed  $id
      * @param string $columnName

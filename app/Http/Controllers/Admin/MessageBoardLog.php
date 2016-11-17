@@ -25,12 +25,6 @@ class MessageBoardLog extends Backend
         $whereValue && $where[] = ['add_time', $whereValue];
 
         $messageBoardLogList = Model\MessageBoardLog::orderBy('add_time', 'desc')->mList($where, true);
-        foreach ($messageBoardLogList as &$messageBoardLog) {
-            $messageBoardLog['admin_name']  = ($messageBoardLog['audit_id']) ? Model\Admins::mFindColumn($messageBoardLog['audit_id'],
-                'admin_name') : trans('common.none') . trans('common.audit');
-            $memberName                     = Model\Member::mFindColumn($messageBoardLog['send_id'], 'member_name');
-            $messageBoardLog['member_name'] = ($memberName) ? $memberName : trans('common.empty');
-        }
         $assign['message_board_log_list']       = $messageBoardLogList;
 
         //初始化where_info
@@ -78,9 +72,7 @@ class MessageBoardLog extends Backend
 
 
         $editInfo                = Model\MessageBoardLog::where('id', $id)->first();
-        $editInfo['admin_name']  = ($editInfo['audit_id']) ? Model\Admins::mFindColumn($editInfo['audit_id'],
-            'admin_name') : trans('common.none') . trans('common.audit');
-        $memberName              = Model\Member::mFindColumn($editInfo['send_id'], 'member_name');
+        $memberName              = Model\Member::idWhere($editInfo['send_id'])->first()['member_name'];
         $editInfo['member_name'] = ($memberName) ? $memberName : trans('common.empty');
         $editInfo['send_info']   = json_decode($editInfo['send_info'], true);
         $assign['edit_info']     = $editInfo;

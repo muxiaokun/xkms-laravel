@@ -85,7 +85,7 @@ class ArticleCategory extends Common
         }
 
         $articleCategoryTopId = $query->mFind_top_id($id);
-        return $query->mFindColumn($articleCategoryTopId, $columnName);
+        return $query->idWhere($articleCategoryTopId)->first()[$columnName];
     }
 
     //返回有权管理的频道

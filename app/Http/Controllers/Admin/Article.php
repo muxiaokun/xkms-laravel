@@ -53,12 +53,6 @@ class Article extends Backend
         }
         //初始化翻页 和 列表数据
         $articleList = Model\Article::mList($where, true);
-        foreach ($articleList as &$article) {
-            $article['channel_name'] = ($article['channel_id']) ? Model\ArticleCategory::mFindColumn($article['channel_id'],
-                'name') : trans('common.empty');
-            $article['cate_name']    = ($article['cate_id']) ? Model\ArticleCategory::mFindColumn($article['cate_id'],
-                'name') : trans('common.empty');
-        }
         $assign['article_list']       = $articleList;
 
         //初始化where_info
@@ -168,7 +162,7 @@ class Article extends Backend
         config('SYS_ARTICLE_SYNC_IMAGE', $currentConfig);
 
         foreach ($editInfo['access_group_id'] as &$accessGroupId) {
-            $adminGroupName = Model\MemberGroup::mFindColumn($accessGroupId, 'name');
+            $adminGroupName = Model\MemberGroup::idWhere($accessGroupId)->first()['name'];
             $accessGroupId  = ['value' => $accessGroupId, 'html' => $adminGroupName];
         }
 
@@ -236,7 +230,7 @@ class Article extends Backend
 
         $resultEdit = Model\Article::idWhere($id)->update($data);
         if ($resultEdit) {
-            $data['value'] = Model\Article::mFindColumn($data['id'], $field);
+            $data['value'] = Model\Article::idWhere($data['id'])->first()[$field];
             return ['status' => true, 'info' => $data['value']];
         } else {
             return ['status' => false, 'info' => trans('common.edit') . trans('common.error')];

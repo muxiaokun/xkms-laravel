@@ -30,7 +30,7 @@ class QuestsAnswer extends Backend
 
         $questsAnswerList = Model\QuestsAnswer::mList($where, true);
         foreach ($questsAnswerList as &$questsAnswer) {
-            $memberName                  = Model\Member::mFindColumn($groupId, 'name');
+            $memberName                  = Model\Member::idWhere($groupId)->first()['name'];
             $questsAnswer['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');
         }
         $assign['quests_answer_list']       = $questsAnswerList;

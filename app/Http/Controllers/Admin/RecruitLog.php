@@ -24,7 +24,7 @@ class RecruitLog extends Backend
         $recruitSexData         = trans('common.recruit_sex_data');
         $recruitCertificateData = trans('common.recruit_certificate_data');
         foreach ($recruitLogList as &$recruitLog) {
-            $recruitLog['recruit_title'] = Model\Recruit::mFindColumn($recruitLog['r_id'], 'title');
+            $recruitLog['recruit_title'] = Model\Recruit::idWhere($recruitLog['r_id'])->first()['title'];
             $recruitLog['sex']           = $recruitSexData[$recruitLog['sex']];
             $recruitLog['certificate']   = $recruitCertificateData[$recruitLog['certificate']];
         }

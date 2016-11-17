@@ -14,7 +14,7 @@ class ManageUpload extends Common
         !is_array($id) && $id = [$id];
         foreach ($id as $i) {
 
-            $filePath      = (new static)->mFindColumn($id, 'path');
+            $filePath      = (new static)->idWhere($id)->first()['path'];
             $delFileResult = (is_file($filePath)) ? @unlink($filePath) : true;
             if (false === $delFileResult) {
                 return false;

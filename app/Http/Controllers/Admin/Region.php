@@ -25,7 +25,7 @@ class Region extends Backend
         //初始化翻页 和 列表数据
         $regionList = Model\Region::mList($where, true);
         foreach ($regionList as &$region) {
-            $region['parent_name'] = Model\Region::mFindColumn($region['parent_id'], 'region_name');
+            $region['parent_name'] = Model\Region::idWhere($region['parent_id'])->first()['region_name'];
         }
 
         $assign['region_list']       = $regionList;
@@ -90,7 +90,7 @@ class Region extends Backend
         }
 
         $editInfo                = Model\Region::where('id', $id)->first();
-        $editInfo['parent_name'] = Model\Region::mFindColumn($editInfo['parent_id'], 'region_name');
+        $editInfo['parent_name'] = Model\Region::idWhere($editInfo['parent_id'])->first()['region_name'];
         $assign['edit_info']     = $editInfo;
         $assign['title']         = trans('common.region') . trans('common.edit');
         return view('admin.Region_addedit', $assign);

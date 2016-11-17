@@ -233,7 +233,7 @@ class Index extends Backend
 
         if (0 === $exitCode) {
             //写入日志
-            Model\AdminLogs::mAdd(session('backend_info.id'));
+            Model\AdminLogs::record(session('backend_info.id'));
             return $this->success($messageStr . trans('common.clean') . trans('common.success'),
                 route('Admin::Index::main'));
         } else {
@@ -253,7 +253,7 @@ class Index extends Backend
         $cleanResult = Storage::put(storage_path('logs/laravel.log'), '');
         if ($cleanResult) {
             //写入日志
-            Model\AdminLogs::mAdd(session('backend_info.id'));
+            Model\AdminLogs::record(session('backend_info.id'));
             return $this->success(trans('common.clean') . trans('common.log') . trans('common.success'),
                 route('Admin::Index::main'));
         } else {

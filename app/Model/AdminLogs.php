@@ -5,7 +5,7 @@ namespace App\Model;
 class AdminLogs extends Common
 {
     //添加日志 管理员编号 信息为空为传参 操作的模型
-    public function scopeMAdd($query, $adminId, $message = false, $msg = false)
+    public static function record($adminId, $message = false, $msg = false)
     {
         if (!$adminId) {
             return false;
@@ -34,7 +34,7 @@ class AdminLogs extends Common
             'message'    => $message,
             'request'    => $request_json,
         ];
-        return $query->mAdd($data);
+        return (new static)->create($data);
     }
 
     //删除全部日志

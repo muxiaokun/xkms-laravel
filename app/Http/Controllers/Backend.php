@@ -40,7 +40,7 @@ class Backend extends Common
 
             //是否开启管理员日志 记录POST提交数据除了root用户
             if (config('system.sys_admin_auto_log') && 1 != session('backend_info.id') && request()->isMethod('POST')) {
-                    Model\AdminLogs::mAdd($backendInfo['id']);
+                Model\AdminLogs::record($backendInfo['id']);
             }
         } else {
             //检测不登陆就可以访问的

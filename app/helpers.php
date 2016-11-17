@@ -62,6 +62,26 @@ function mGetArr($path)
     return is_array($arr) ? $arr : [];
 }
 
+/**
+ * @param string $type
+ * @param int $length
+ * @return string
+ */
+function mRandStr($type = 'vc', $length = 4)
+{
+    $rand_range = [
+        //VerificationCode
+        'vc' => 'ABCDECFGHIJKLMNOPQRSTUVWXYZ',
+        //PaaswordRand
+        'pr' => '0123456789abcdecfghijklmnopqrstuvwxyzABCDECFGHIJKLMNOPQRSTUVWXYZ',
+    ];
+    $rand       = '';
+    for ($i = 0; $i < $length; $i++) {
+        $rand .= $rand_range[$type][rand(0, strlen($rand_range[$type]) - 1)];
+    }
+    return $rand;
+}
+
 //切割字符串
 //提取 Org\Util\String::msubstr
 function mSubstr($str, $len, $suffix = true, $start = 0)

@@ -14,7 +14,7 @@ class VerificationCode extends Controller
 
         $img = Image::canvas($weight * $length, $height, [rand(200, 255), rand(200, 255), rand(200, 255)]);
 
-        $code = $this->randStr($length);
+        $code = mRandStr('vc', $length);
         $this->saveCode($name, $code);
         for ($i = 0; $i < $length; $i++) {
             $img->text($code[$i], $weight * $i + $offset, $height / 2, function ($font) use ($font_size) {
@@ -55,15 +55,5 @@ class VerificationCode extends Controller
     protected function getSessionKey($name)
     {
         return $name ? 'VerificationCode_' . $name : 'VerificationCode';
-    }
-
-    protected function randStr($length = 4)
-    {
-        $rand_range = 'ABCDECFGHIJKLMNOPQRSTUVWXYZ';
-        $rand       = '';
-        for ($i = 0; $i < $length; $i++) {
-            $rand .= $rand_range[rand(0, strlen($rand_range) - 1)];
-        }
-        return $rand;
     }
 }

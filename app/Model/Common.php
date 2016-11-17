@@ -85,21 +85,6 @@ class Common extends Model
     }
 
     /**
-     * 生成随机字符串
-     * @param type $length 长度
-     * @return string
-     */
-    public function _make_rand($query, $length = 4)
-    {
-        $rand_range = '0123456789abcdecfghijklmnopqrstuvwxyzABCDECFGHIJKLMNOPQRSTUVWXYZ';
-        $rand       = '';
-        for ($i = 0; $i < $length; $i++) {
-            $rand .= $rand_range[rand(0, strlen($rand_range) - 1)];
-        }
-        return $rand;
-    }
-
-    /**
      * 格式化编辑器生成的内容
      * 将内容的站内资源路径修改成相对路径
      * @param string $content

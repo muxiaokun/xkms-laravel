@@ -47,7 +47,7 @@ class Member extends Common
     public function scopeMEncodeData($query, $data)
     {
         if ($data['member_pwd']) {
-            $randStr             = $query->_make_rand();
+            $randStr             = mRandStr('pr');
             $data['member_pwd']  = md5($data['member_pwd'] . $randStr);
             $data['member_rand'] = $randStr;
         } else {

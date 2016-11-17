@@ -52,7 +52,7 @@ class Admins extends Common
             unset($data['privilege']);
         }
         if ($data['admin_pwd']) {
-            $randStr            = $query->_make_rand();
+            $randStr            = mRandStr('pr');
             $data['admin_pwd']  = md5($data['admin_pwd'] . $randStr);
             $data['admin_rand'] = $randStr;
         } else {

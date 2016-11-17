@@ -33,7 +33,7 @@ class Quests extends FrontendMember
             return $this->error(trans('common.id') . trans('common.error'), route('Home::Quests::index'));
         }
 
-        $questsInfo = Model\Quests::mFind($id);
+        $questsInfo = Model\Quests::where('id', $id)->first();
         //检测是否能够提交
         $currentTime = Carbon::now();
         if ($questsInfo['start_time'] < $currentTime && $questsInfo['end_time'] < $currentTime) {

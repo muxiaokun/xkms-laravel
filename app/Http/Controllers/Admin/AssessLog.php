@@ -17,7 +17,7 @@ class AssessLog extends Backend
                 route('Admin::AssessLog::index'));
         }
 
-        $assessInfo                  = Model\Assess::mFind($id);
+        $assessInfo                  = Model\Assess::where('id', $id)->first();
         $assessInfo['all_grade']     = 0;
         $assessInfo['re_grade_name'] = '';
         $reGradeId                   = request('re_grade_id');

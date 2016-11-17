@@ -80,7 +80,7 @@ class MessageBoard extends Backend
             }
         }
 
-        $editInfo            = Model\MessageBoard::mFind($id);
+        $editInfo            = Model\MessageBoard::where('id', $id)->first();
         $editInfo['config']  = json_encode($editInfo['config']);
         $assign['edit_info'] = $editInfo;
 

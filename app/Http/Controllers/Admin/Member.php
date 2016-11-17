@@ -95,7 +95,7 @@ class Member extends Backend
             }
         }
 
-        $editInfo = Model\Member::mFind($id);
+        $editInfo = Model\Member::where('id', $id)->first();
         foreach ($editInfo['group_id'] as &$groupId) {
             $memberGroupName = Model\MemberGroup::mFindColumn($groupId, 'name');
             $groupId         = ['value' => $groupId, 'html' => $memberGroupName];

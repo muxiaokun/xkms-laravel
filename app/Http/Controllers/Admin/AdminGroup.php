@@ -91,7 +91,7 @@ class AdminGroup extends Backend
             }
         }
         //获取分组默认信息
-        $editInfo = Model\AdminGroups::mFind($id);
+        $editInfo = Model\AdminGroups::where('id', $id)->first();
         foreach ($editInfo['manage_id'] as $manageKey => $manageId) {
             $adminName                         = Model\Admins::mFindColumn($manageId, 'admin_name');
             $editInfo['manage_id'][$manageKey] = ['value' => $manageId, 'html' => $adminName];

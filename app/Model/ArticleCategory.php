@@ -26,7 +26,7 @@ class ArticleCategory extends Common
         ];
         return $query->select(['id', 'name'])->mMakeTree($config, $parentId, $level);
     }
-    
+
     //返回子级所有分类id 数组集合
     //$pushMe 是否包含传入id
     public function scopeMFind_child_id($query, $id, $pushMe = true)
@@ -59,7 +59,7 @@ class ArticleCategory extends Common
         }
 
         $articleCategoryTopId = $query->mFind_top_id($id);
-        return $query->mFind($articleCategoryTopId);
+        return $query->where('id', $articleCategoryTopId)->first();
     }
 
     // 寻找分类的顶级分类ID
@@ -69,7 +69,7 @@ class ArticleCategory extends Common
             return false;
         }
 
-        $categoryInfo = $query->select(['id', 'parent_id'])->mFind($id);
+        $categoryInfo = $query->select(['id', 'parent_id'])->where('id', $id)->first();
         if (0 != $categoryInfo['parent_id']) {
             return $query->mFind_top_id($categoryInfo['parent_id']);
         }

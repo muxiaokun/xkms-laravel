@@ -58,8 +58,8 @@ class QuestsAnswer extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::QuestsAnswer::index'));
         }
 
-        $questsAnswerInfo = Model\QuestsAnswer::mFind($id);
-        $questsInfo       = Model\Quests::mFind($questsAnswerInfo['quests_id']);
+        $questsAnswerInfo = Model\QuestsAnswer::where('id', $id)->first();
+        $questsInfo       = Model\Quests::where('id', $questsAnswerInfo['quests_id'])->first();
 
         //初始化问题
         $questsQuestList = json_decode($questsInfo['ext_info'], true);
@@ -89,7 +89,7 @@ class QuestsAnswer extends Backend
         }
 
         //读取问题
-        $questsInfo = Model\Quests::mFind($questsId);
+        $questsInfo = Model\Quests::where('id', $questsId)->first();
         //初始化问题
         $questsQuestList = json_decode($questsInfo['ext_info'], true);
         foreach ($questsQuestList as $questId => $quest) {
@@ -134,7 +134,7 @@ class QuestsAnswer extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::QuestsAnswer::index'));
         }
 
-        $questsAnswerInfo = Model\QuestsAnswer::mFind($id);
+        $questsAnswerInfo = Model\QuestsAnswer::where('id', $id)->first();
         $resultDel        = Model\QuestsAnswer::destroy($questsAnswerInfo['id']);
         if ($resultDel) {
             Model\Quests::where(['id' => $questsAnswerInfo['quests_id']])->setDec('current_portion');

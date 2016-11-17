@@ -43,7 +43,7 @@ class Recruit extends Frontend
             return $this->error(trans('common.id') . trans('common.error'), route('Home::Recruit::index'));
         }
 
-        $recruitInfo = Model\Recruit::mFind($id);
+        $recruitInfo = Model\Recruit::where('id', $id)->first();
         //检测是否能够提交
         $currentTime = Carbon::now();
         if ($recruitInfo['start_time'] < $currentTime && $recruitInfo['end_time'] < $currentTime) {
@@ -103,7 +103,7 @@ class Recruit extends Frontend
             return $this->error(trans('common.id') . trans('common.error'), route('Home::Recruit::index'));
         }
 
-        $recruitInfo            = Model\Recruit::mFind($id);
+        $recruitInfo            = Model\Recruit::where('id', $id)->first();
         $assign['recruit_info'] = $recruitInfo;
         $assign['title']        = trans('common.look') . trans('common.recruit');
         return view('home.Recruit_edit', $assign);

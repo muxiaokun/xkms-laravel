@@ -90,21 +90,6 @@ class ManageUpload extends Common
         return true;
     }
 
-    public function scopeMFind($query, $id, $isPath = false)
-    {
-        if (!$id) {
-            return false;
-        }
-
-        $where = ['id' => $id];
-        if ($isPath) {
-            $where = ['path' => $id];
-        }
-
-        $manageUpload = $query->where($where)->first();
-        return $manageUpload;
-    }
-
     public function scopeMDecodeData($query, $data)
     {
         $data['size'] = $query->format_size($data['size']);

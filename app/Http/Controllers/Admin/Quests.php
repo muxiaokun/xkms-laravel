@@ -82,7 +82,7 @@ class Quests extends Backend
                     $errorGoLink);
             }
         }
-        $editInfo            = Model\Quests::mFind($id);
+        $editInfo            = Model\Quests::where('id', $id)->first();
         $assign['edit_info'] = $editInfo;
 
         $assign['title'] = trans('common.edit') . trans('common.quests');

@@ -135,7 +135,7 @@ class Common extends Controller
         }
 
         //如果记录不存在 追加新生成文件的记录
-        $fileInfo = Model\ManageUpload::mFind($newFile, true);
+        $fileInfo = Model\ManageUpload::where('path', $newFile)->first();
         if (!$fileInfo) {
             $data = [
                 'name'   => $newName,

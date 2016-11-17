@@ -82,7 +82,7 @@ class Recruit extends Backend
             }
         }
 
-        $editInfo            = Model\Recruit::mFind($id);
+        $editInfo            = Model\Recruit::where('id', $id)->first();
         $assign['edit_info'] = $editInfo;
 
         $assign['title'] = trans('common.edit') . trans('common.recruit');

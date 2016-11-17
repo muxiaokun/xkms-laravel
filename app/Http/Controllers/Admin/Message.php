@@ -81,7 +81,7 @@ class Message extends Backend
         }
 
         if ($receiveId) {
-            $assign['receive_info'] = Model\Member::mFind($receiveId);
+            $assign['receive_info'] = Model\Member::where('id', $receiveId)->first();
         }
 
         $assign['title'] = trans('common.send') . trans('common.message');

@@ -99,7 +99,7 @@ class Assess extends Backend
             }
         }
 
-        $editInfo               = Model\Assess::mFind($id);
+        $editInfo               = Model\Assess::where('id', $id)->first();
         $editInfo['group_name'] = Model\MemberGroup::mFindColumn($editInfo['group_level'], 'name');
         $assign['edit_info']    = $editInfo;
 

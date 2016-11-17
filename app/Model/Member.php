@@ -5,12 +5,6 @@ namespace App\Model;
 
 class Member extends Common
 {
-    public function scopeMFind($query, $id)
-    {
-        $query->select(['*', 'login_ip as aip']);
-        return $query->mFind($id);
-    }
-
     public function authorized($query, $user, $pwd, $memberId)
     {
         if (!$user && !$memberId) {
@@ -34,7 +28,7 @@ class Member extends Common
                 'login_ip'  => request()->ip(),
             ];
             $query->where(['id' => $memberInfo['id']])->data($data)->save();
-            $memberInfo = $query->mFind($memberInfo['id']);
+            $memberInfo = $query->where('id', $memberInfo['id'])->first();
             return $memberInfo;
         } else {
             return false;

@@ -89,7 +89,7 @@ class Region extends Backend
             }
         }
 
-        $editInfo                = Model\Region::mFind($id);
+        $editInfo                = Model\Region::where('id', $id)->first();
         $editInfo['parent_name'] = Model\Region::mFindColumn($editInfo['parent_id'], 'region_name');
         $assign['edit_info']     = $editInfo;
         $assign['title']         = trans('common.region') . trans('common.edit');

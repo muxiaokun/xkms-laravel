@@ -89,7 +89,7 @@ class Frontend extends Common
         $lockTime = config('system.sys_frontend_lock_time');
         if (0 != $loginNum) {
             $memberId  = Model\Member::where('member_name', $userName)->first()['id'];
-            $loginInfo = Model\Member::mFind($memberId);
+            $loginInfo = Model\Member::where('id', $memberId)->first();
             if (0 != $loginInfo['lock_time'] && $loginInfo['lock_time'] > (Carbon::now() - $lockTime)) {
                 Model\Member::data(['lock_time' => Carbon::now()])->where(['id' => $loginInfo['id']])->save();
                 return 'lock_user_error';

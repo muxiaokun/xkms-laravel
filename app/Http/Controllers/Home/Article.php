@@ -27,7 +27,7 @@ class Article extends Frontend
                 route('Home::Index::index'));
         }
 
-        $articleInfo = Model\Article::where($this->_get_article_where())->mFind($id);
+        $articleInfo = Model\Article::where($this->_get_article_where())->where('id', $id)->first();
         if (!$articleInfo) {
             return $this->error(trans('common.article') . trans('common.by') . trans('common.hidden'),
                 route('Home::Index::index'));
@@ -35,9 +35,9 @@ class Article extends Frontend
 
         Model\Article::where(['id' => $id])->setInc('hits');
 
-        $categoryInfo = Model\ArticleCategory::mFind($articleInfo['cate_id']);
+        $categoryInfo = Model\ArticleCategory::where('id', $articleInfo['cate_id'])->first();
 
-        $channelInfo = Model\ArticleChannel::mFind($articleInfo['channel_id']);
+        $channelInfo = Model\ArticleChannel::where('id', $articleInfo['channel_id'])->first();
 
         //检测权限
         $memberGroupId = session('frontend_info.group_id');
@@ -87,13 +87,13 @@ class Article extends Frontend
                 route('Home::Index::index'));
         }
 
-        $categoryInfo = Model\ArticleCategory::mFind($cateId);
+        $categoryInfo = Model\ArticleCategory::where('id', $cateId)->first();
         if (!$categoryInfo) {
             return $this->error(trans('common.category') . trans('common.id') . trans('common.error'),
                 route('Home::Index::index'));
         }
 
-        $channelInfo = Model\ArticleChannel::mFind($articleInfo['channel_id']);
+        $channelInfo = Model\ArticleChannel::where('id', $articleInfo['channel_id'])->first();
 
         //检测权限
         $memberGroupId = session('frontend_info.group_id');
@@ -161,7 +161,7 @@ class Article extends Frontend
             $this->redirect('Index/index');
         }
 
-        $channelInfo = Model\ArticleChannel::mFind($channelId);
+        $channelInfo = Model\ArticleChannel::where('id', $channelId)->first();
 
         //检测权限
         $memberGroupId = session('frontend_info.group_id');
@@ -252,7 +252,7 @@ class Article extends Frontend
         $template = [];
         // 如果频道编号存在 则查询频道是否有模板的配置 覆盖一般分类配置
         if ($channelId) {
-            $channelInfo        = Model\ArticleChannel::mFind($channelId);
+            $channelInfo        = Model\ArticleChannel::where('id', $channelId)->first();
             $defChannelTemplate = CONTROLLER_NAME . config('TMPL_FILE_DEPR') . 'channel';
             $data               = $channelInfo['ext_info'];
             $template           = [
@@ -292,7 +292,7 @@ class Article extends Frontend
             return false;
         }
 
-        $categoryInfo = Model\ArticleCategory::mFind($cateId);
+        $categoryInfo = Model\ArticleCategory::where('id', $cateId)->first();
         if ($categoryInfo[$col]) {
             return $categoryInfo[$col];
         }
@@ -324,7 +324,7 @@ class Article extends Frontend
         }
 
         $topCateId       = Model\ArticleCategory::mFind_top_id($cateId);
-        $categoryTopInfo = Model\ArticleCategory::mFind($topCateId);
+        $categoryTopInfo = Model\ArticleCategory::where('id', $topCateId)->first();
 
         $where         = [
             'parent_id' => $topCateId,
@@ -350,7 +350,7 @@ class Article extends Frontend
             return $cacheValue;
         }
 
-        $articleCategoryInfo = Model\ArticleCategory::mFind($cateId);
+        $articleCategoryInfo = Model\ArticleCategory::where('id', $cateId)->first();
         $path[]              = [
             'name' => $articleCategoryInfo['name'],
             'link' => mroute('Home::Article::category', ['cate_id' => $articleCategoryInfo['id']]),
@@ -398,7 +398,7 @@ class Article extends Frontend
         $nCondition  = ('desc' == $mianOrder) ? 'lt' : 'gt';
         $pOrder      = ('desc' == $mianOrder) ? $originSort . ' asc' : $originSort . ' desc';
         $nOrder      = ('desc' == $mianOrder) ? $originSort . ' desc' : $originSort . ' asc';
-        $articleInfo = Model\Article::mFind($id);
+        $articleInfo = Model\Article::where('id', $id)->first();
         //上一篇
         $where[$mianSort] = [$pCondition, $articleInfo[$mianSort]];
         $articlePn['p']   = Model\Article::where($where)->order($pOrder)->limit($limit)->select();

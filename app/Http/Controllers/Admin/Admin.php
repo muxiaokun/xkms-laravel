@@ -108,7 +108,7 @@ class Admin extends Backend
             }
         }
 
-        $editInfo = Model\Admins::mFind($id);
+        $editInfo = Model\Admins::where('id', $id)->first();
         foreach ($editInfo['group_id'] as &$groupId) {
             $adminGroupName = Model\AdminGroups::mFindColumn($groupId, 'name');
             $groupId        = ['value' => $groupId, 'html' => $adminGroupName];

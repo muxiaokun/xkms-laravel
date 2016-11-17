@@ -5,12 +5,6 @@ namespace App\Model;
 
 class MessageBoardLog extends Common
 {
-    public function scopeMFind($query, $id)
-    {
-        $query->select(['*', 'login_ip as aip']);
-        return $query->mFind($id);
-    }
-
     public function check_dont_submit($query, $second)
     {
         $second = Carbon::now() - $second;

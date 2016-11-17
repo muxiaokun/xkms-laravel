@@ -77,7 +77,7 @@ class MessageBoardLog extends Backend
         }
 
 
-        $editInfo                = Model\MessageBoardLog::mFind($id);
+        $editInfo                = Model\MessageBoardLog::where('id', $id)->first();
         $editInfo['admin_name']  = ($editInfo['audit_id']) ? Model\Admins::mFindColumn($editInfo['audit_id'],
             'admin_name') : trans('common.none') . trans('common.audit');
         $memberName              = Model\Member::mFindColumn($editInfo['send_id'], 'member_name');

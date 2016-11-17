@@ -95,7 +95,7 @@ class Itlink extends Backend
             }
         }
 
-        $editInfo            = Model\Itlink::mFind($id);
+        $editInfo            = Model\Itlink::where('id', $id)->first();
         $assign['edit_info'] = $editInfo;
         $assign['title']     = trans('common.itlink') . trans('common.edit');
         return view('admin.Itlink_addedit', $assign);

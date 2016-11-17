@@ -164,7 +164,7 @@ class Article extends Backend
         }
         $currentConfig = config('system.sys_article_sync_image');
         config('SYS_ARTICLE_SYNC_IMAGE', false);
-        $editInfo = Model\Article::mFind($id);
+        $editInfo = Model\Article::where('id', $id)->first();
         config('SYS_ARTICLE_SYNC_IMAGE', $currentConfig);
 
         foreach ($editInfo['access_group_id'] as &$accessGroupId) {
@@ -369,7 +369,7 @@ class Article extends Backend
 
         if (!$data) {
             $id   = request('id');
-            $data = Model\Article::mFind($id);
+            $data = Model\Article::where('id', $id)->first();
         }
         if (!in_array($data['channel_id'], Model\ArticleChannel::mFindAllow())
             && !in_array($data['cate_id'], Model\ArticleCategory::mFindAllow())

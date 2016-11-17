@@ -13,13 +13,6 @@ class Admins extends Common
         return parent::scopeMList($query, $where, $page);
     }
 
-    public function scopeMFind($query, $id)
-    {
-        $query->select(['*', 'login_ip as aip']);
-        return parent::scopeMFind($query, $id);
-        return $query->mFind($id);
-    }
-
     public function scopeAuthorized($query, $user, $pwd)
     {
         if (!$user) {
@@ -37,7 +30,7 @@ class Admins extends Common
                 'login_ip'  => request()->ip(),
             ];
             $query->where('id', '=', $adminInfo['id'])->update($data);
-            $adminInfo = $query->mFind($adminInfo['id']);
+            $adminInfo = $query->where('id', $adminInfo['id'])->first();
             return $adminInfo;
         } else {
             return false;

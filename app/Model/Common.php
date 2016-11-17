@@ -74,22 +74,6 @@ class Common extends Model
 
     /**
      * 查找数据
-     * @param mixed $id
-     * @return array
-     */
-    public function scopeMFind($query, $id)
-    {
-        if (!$id) {
-            return false;
-        }
-
-        $data = $query->where(['id' => $id])->first();
-        $query->mDecodeData($data);
-        return $data;
-    }
-
-    /**
-     * 查找数据
      * @param int    $id
      * @param string $columnName
      * @return string

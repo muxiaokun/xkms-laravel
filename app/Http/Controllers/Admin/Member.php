@@ -58,7 +58,7 @@ class Member extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData();
-            $resultAdd = Model\Member::mAdd($data);
+            $resultAdd = Model\Member::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.member') . trans('common.add') . trans('common.success'),
                     route('Admin::Member::index'));

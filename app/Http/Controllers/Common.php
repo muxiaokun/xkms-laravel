@@ -144,7 +144,7 @@ class Common extends Controller
                 'mime'   => '',
                 'suffix' => $pathinfo['extension'],
             ];
-            Model\ManageUpload::mAdd($data);
+            Model\ManageUpload::create($data);
         }
 
         return $newFile;

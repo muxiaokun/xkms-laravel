@@ -18,16 +18,6 @@ class Article extends Common
         return parent::scopeMList($query, $where, $page);
     }
 
-    public function scopeMAdd($query, $data)
-    {
-        if (!$data) {
-            return false;
-        }
-
-        !isset($data['add_time']) && $data['add_time'] = Carbon::now();
-        return $query->mAdd($data);
-    }
-
     public function scopeMParseWhere($query, $where)
     {
         if (is_null($where)) {

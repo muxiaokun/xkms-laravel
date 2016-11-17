@@ -5,16 +5,6 @@ namespace App\Model;
 
 class Member extends Common
 {
-    public function scopeMAdd($query, $data)
-    {
-        if (!$data) {
-            return false;
-        }
-
-        $data['register_time'] = Carbon::now();
-        return $query->mAdd($data);
-    }
-
     public function scopeMFind($query, $id)
     {
         $query->select(['*', 'login_ip as aip']);

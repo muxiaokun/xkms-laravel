@@ -47,7 +47,7 @@ class MemberGroup extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData();
-            $resultAdd = Model\MemberGroup::mAdd($data);
+            $resultAdd = Model\MemberGroup::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.member') . trans('common.group') . trans('common.add') . trans('common.success'),
                     route('Admin::MemberGroup::index'));

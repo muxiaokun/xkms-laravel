@@ -73,7 +73,7 @@ class Admin extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData();
-            $resultAdd = Model\Admins::mAdd($data);
+            $resultAdd = Model\Admins::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.admin') . trans('common.add') . trans('common.success'),
                     route('Admin::Admin::index'));

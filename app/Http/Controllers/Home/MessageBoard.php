@@ -57,12 +57,12 @@ class MessageBoard extends Frontend
                     route('Home::MessageBoard::index', ['id' => $id]));
             }
             $submitTime   = 300;
-            if ($MessageBoard->check_dont_submit($submitTime)) {
+            if (Model\MessageBoard::check_dont_submit($submitTime)) {
                 return $this->error($submitTime . trans('common.second') . trans('common.later') . trans('common.again') . trans('common.send'),
                     route('Home::MessageBoard::index', ['id' => $id]));
             }
             $data      = $this->makeData();
-            $resultAdd = $MessageBoard->mAdd($data);
+            $resultAdd = Model\MessageBoard::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.send') . trans('common.success'),
                     route('Home::MessageBoard::index', ['id' => $id]));

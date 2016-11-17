@@ -45,7 +45,7 @@ class Comment extends Frontend
                     break;
                 }
 
-                $addResult      = Model\Comment::mAdd($data);
+                $addResult      = Model\Comment::create($data);
                 $result['info'] = ($addResult) ? trans('common.send') . trans('common.success') : trans('common.send') . trans('common.error');
                 break;
             case 'get_data':

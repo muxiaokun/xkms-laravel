@@ -57,7 +57,7 @@ class Itlink extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData();
-            $resultAdd = Model\Itlink::mAdd($data);
+            $resultAdd = Model\Itlink::create($data);
             if ($resultAdd) {
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.itlink') . trans('common.add') . trans('common.success'),

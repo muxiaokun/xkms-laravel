@@ -119,7 +119,7 @@ class Article extends Backend
             $data         = $this->makeData();
             isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'], config('system.sys_article_thumb_width'),
                 C('SYS_ARTICLE_THUMB_HEIGHT'));
-            $resultAdd = Model\Article::mAdd($data);
+            $resultAdd = Model\Article::create($data);
             //增加了一个分类快捷添加文章的回跳链接
             $rebackLink = request('get.cate_id') ? route('Admin::ArticleCategory::index') : route('Admin::Article::index');
             if ($resultAdd) {

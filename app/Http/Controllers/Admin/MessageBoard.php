@@ -43,7 +43,7 @@ class MessageBoard extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData();
-            $resultAdd = Model\MessageBoard::mAdd($data);
+            $resultAdd = Model\MessageBoard::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.messageboard') . trans('common.add') . trans('common.success'),
                     $rebackLink);

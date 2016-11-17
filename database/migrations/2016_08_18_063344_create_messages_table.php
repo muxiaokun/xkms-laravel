@@ -21,8 +21,6 @@ class CreateMessagesTable extends Migration
 
             $table->integer('send_id')->unsigned()->comment('0为系统发送');
             $table->integer('receive_id')->unsigned()->comment('0为系统接收');
-            $table->timestamp('send_time')->nullable()->comment('发送时间');
-            $table->timestamp('receive_time')->nullable()->comment('查看时间');
             $table->mediumText('content')->nullable()->comment('发送的内容');
         });
     }

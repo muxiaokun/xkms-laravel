@@ -53,7 +53,7 @@ class ArticleChannel extends Backend
         }
         if (request()->isMethod('POST')) {
             $data      = $this->makeData();
-            $resultAdd = Model\ArticleChannel::mAdd($data);
+            $resultAdd = Model\ArticleChannel::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.channel') . trans('common.add') . trans('common.success'),
                     route('Admin::ArticleChannel::index'));

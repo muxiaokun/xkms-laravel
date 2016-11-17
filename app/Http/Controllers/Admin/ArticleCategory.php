@@ -80,7 +80,7 @@ class ArticleCategory extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData();
-            $resultAdd = Model\ArticleCategory::mAdd($data);
+            $resultAdd = Model\ArticleCategory::create($data);
             if ($resultAdd) {
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.article') . trans('common.category') . trans('common.add') . trans('common.success'),

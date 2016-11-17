@@ -54,7 +54,7 @@ class CommonManageUpload
                 'size'   => $fileInfo['size'],
                 'suffix' => $fileInfo['ext'],
             ];
-            Model\ManageUpload::mAdd($data);
+            Model\ManageUpload::create($data);
             // 上传成功 返回文件信息 伪静态目录结构__ROOT__ . '/' .
             $this->kind_json(__ROOT__ . '/' . $fileUrl, false);
         }

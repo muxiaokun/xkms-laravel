@@ -53,7 +53,7 @@ class Region extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData();
-            $resultAdd = Model\Region::mAdd($data);
+            $resultAdd = Model\Region::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.region') . trans('common.add') . trans('common.success'),
                     route('Admin::Region::index'));

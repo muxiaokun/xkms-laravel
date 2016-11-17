@@ -13,16 +13,6 @@ class Admins extends Common
         return parent::scopeMList($query, $where, $page);
     }
 
-    public function scopeMAdd($query, $data)
-    {
-        if (!$data) {
-            return false;
-        }
-
-        $data['add_time'] = Carbon::now();
-        return $query->mAdd($data);
-    }
-
     public function scopeMFind($query, $id)
     {
         $query->select(['*', 'login_ip as aip']);

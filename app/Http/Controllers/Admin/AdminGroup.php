@@ -54,7 +54,7 @@ class AdminGroup extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData();
-            $resultAdd = Model\AdminGroups::mAdd($data);
+            $resultAdd = Model\AdminGroups::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.management') . trans('common.group') . trans('common.add') . trans('common.success'),
                     route('Admin::AdminGroup::index'));

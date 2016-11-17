@@ -70,7 +70,7 @@ class Quests extends FrontendMember
                     $data['answer'] .= $questId . ':' . $questsAnswer[$questId] . '|';
                 }
             }
-            $resultAdd = Model\QuestsAnswer::mAdd($data);
+            $resultAdd = Model\QuestsAnswer::create($data);
             if ($resultAdd) {
                 Model\Quests::where(['id' => $questsInfo['id']])->setInc('current_portion');
                 return $this->success(trans('common.answer') . trans('common.add') . trans('common.success'),

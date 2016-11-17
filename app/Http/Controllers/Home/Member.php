@@ -85,7 +85,7 @@ class Member extends FrontendMember
                 'member_pwd'  => $memberPwd,
                 'is_enable'   => $isEnable,
             ];
-            $addResult = Model\Member::mAdd($data);
+            $addResult = Model\Member::create($data);
             if ($addResult) {
                 $this->doLogin($memberName, $memberPwd, false);
                 return $this->success(trans('common.member') . trans('common.register') . trans('common.success'),

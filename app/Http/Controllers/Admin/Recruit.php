@@ -47,7 +47,7 @@ class Recruit extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData();
-            $resultAdd = Model\Recruit::mAdd($data);
+            $resultAdd = Model\Recruit::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.recruit') . trans('common.add') . trans('common.success'),
                     route('Admin::Recruit::index'));

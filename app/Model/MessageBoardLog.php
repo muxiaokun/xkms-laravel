@@ -5,17 +5,6 @@ namespace App\Model;
 
 class MessageBoardLog extends Common
 {
-    public function scopeMAdd($query, $data)
-    {
-        if (!$data) {
-            return false;
-        }
-
-        $data['add_time'] = Carbon::now();
-        $data['add_ip']   = request()->ip();
-        return $query->mAdd($data);
-    }
-
     public function scopeMFind($query, $id)
     {
         $query->select(['*', 'login_ip as aip']);

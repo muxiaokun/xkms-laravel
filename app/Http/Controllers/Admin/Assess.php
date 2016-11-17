@@ -62,7 +62,7 @@ class Assess extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData();
-            $resultAdd = Model\Assess::mAdd($data);
+            $resultAdd = Model\Assess::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.assess') . trans('common.add') . trans('common.success'),
                     route('Admin::Assess::index'));

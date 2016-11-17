@@ -73,7 +73,7 @@ class Message extends FrontendMember
                 'receive_id' => $receiveId,
                 'content'    => $content,
             ];
-            $resultAdd = Model\Message::mAdd($data);
+            $resultAdd = Model\Message::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.send') . trans('common.success'), route('Home::Message::index'));
             } else {

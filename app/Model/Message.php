@@ -12,14 +12,4 @@ class Message extends Common
         }
         return parent::scopeMList($query, $where, $page);
     }
-
-    public function scopeMAdd($query, $data)
-    {
-        if (!$data) {
-            return false;
-        }
-
-        $data['send_time'] = Carbon::now();
-        return $query->mAdd($data);
-    }
 }

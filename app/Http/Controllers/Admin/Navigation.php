@@ -53,7 +53,7 @@ class Navigation extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData();
-            $resultAdd = Model\Navigation::mAdd($data);
+            $resultAdd = Model\Navigation::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.navigation') . trans('common.add') . trans('common.success'),
                     route('Admin::Navigation::index'));

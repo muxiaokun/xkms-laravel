@@ -36,10 +36,4 @@ class AdminLogs extends Common
         ];
         return (new static)->create($data);
     }
-
-    //删除全部日志
-    public function scopeMDel_all($query)
-    {
-        return $query->where('1 = 1')->delete();
-    }
 }

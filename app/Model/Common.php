@@ -73,21 +73,6 @@ class Common extends Model
     }
 
     /**
-     * 删除数据
-     * @param mixed $id
-     * @return boolean
-     */
-    public function scopeMDel($query, $id)
-    {
-        if (!$id) {
-            return false;
-        }
-
-        is_array($id) && $id = ['in', $id];
-        return $query->where(['id' => $id])->delete();
-    }
-
-    /**
      * 查找数据
      * @param mixed $id
      * @return array
@@ -305,12 +290,12 @@ class Common extends Model
         }
     }
 
-    public function scopeIdWhere($query, $id)
+    public function scopeIdWhere($query, $id, $colunm = 'id')
     {
         if (is_array($id)) {
-            $query->whereIn('id', $id);
+            $query->whereIn($colunm, $id);
         } else {
-            $query->where('id', $id);
+            $query->where($colunm, $id);
         }
 
     }

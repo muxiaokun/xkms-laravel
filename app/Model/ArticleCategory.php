@@ -26,19 +26,7 @@ class ArticleCategory extends Common
         ];
         return $query->select(['id', 'name'])->mMakeTree($config, $parentId, $level);
     }
-
-    public function scopeMDel($query, $id)
-    {
-        if (!$id) {
-            return false;
-        }
-
-        is_array($id) && $id = ['in', $id];
-        //如果被删除的分类有子级，将子级的parent_id=0
-        $query->where(['parent_id' => $id])->data(['parent_id' => 0])->save();
-        return $query->where(['id' => $id])->delete();
-    }
-
+    
     //返回子级所有分类id 数组集合
     //$pushMe 是否包含传入id
     public function scopeMFind_child_id($query, $id, $pushMe = true)

@@ -190,6 +190,7 @@ class ArticleCategory extends Backend
 
         $resultDel = Model\ArticleCategory::destroy($id);
         if ($resultDel) {
+            Model\ArticleCategory::idWhere($id, 'parent_id')->update(['parent_id' => 0]);
             //释放图片绑定
             Model\ManageUpload::bindFile($id);
             return $this->success(trans('common.article') . trans('common.category') . trans('common.del') . trans('common.success'),

@@ -7,12 +7,6 @@ use Carbon\Carbon;
 
 class Admins extends Common
 {
-    public function scopeMList($query, $where = null, $page = false)
-    {
-        $query->select(['*', 'login_ip as aip']);
-        return parent::scopeMList($query, $where, $page);
-    }
-
     public function scopeAuthorized($query, $user, $pwd)
     {
         if (!$user) {

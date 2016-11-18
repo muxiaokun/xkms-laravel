@@ -10,19 +10,6 @@ class Common extends Model
 {
     public $guarded = [];
 
-    protected $whereClauses = [
-        'Between',
-        'NotBetween',
-        'In',
-        'NotIn',
-        'Null',
-        'NotNull',
-        'Date',
-        'Month',
-        'Day',
-        'Year',
-    ];
-
     public function scopeMGetColumn($query)
     {
         $columns       = $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
@@ -45,7 +32,10 @@ class Common extends Model
 
     public function scopeLikeWhere($query, $column, $value)
     {
-        is_string($value) && $value = explode('|', $value);
+        if (!$column || !$value) {
+            return $this;
+        }
+        !is_array($value) && $value = explode('|', $value);
         $query->where(function ($query) use ($column, $value) {
             foreach ($value as &$mid) {
                 $query->orWhere($column, 'like', '%|' . $mid . '|%');
@@ -69,26 +59,6 @@ class Common extends Model
 
         $urlpreg = MGetUrlpreg();
         return preg_replace($urlpreg['pattern'], $urlpreg['replacement'], $content);
-    }
-
-    /**
-     * 格式化查询条件接口
-     * @param type &$data
-     */
-    public function scopeMParseWhere($query, $wheres)
-    {
-        foreach ($wheres as $where) {
-            if (3 == count($where)) {
-                if (in_array($where[1], $this->whereClauses)) {
-                    $whereClause = 'where' . $where[1];
-                    $query->$whereClause($where[0], $where[2]);
-                }
-            } elseif (2 == count($where)) {
-                $query->where($where[0], $where[1]);
-            } else {
-                throw new \Exception('parse where error!');
-            }
-        }
     }
 
     /**

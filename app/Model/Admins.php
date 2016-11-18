@@ -37,15 +37,6 @@ class Admins extends Common
         }
     }
 
-    public function scopeMParseWhere($query, $where)
-    {
-        if (is_null($where)) {
-            return;
-        }
-
-        isset($where['group_id']) && $where['group_id'] = $query->likeWhere($where['group_id']);
-    }
-
     public function scopeMEncodeData($query, $data)
     {
         if (isset($data['id']) && (1 == $data['id'] || (is_array($data['id']) && in_array(1, $data['id'])))) {

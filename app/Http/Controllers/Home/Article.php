@@ -133,7 +133,7 @@ class Article extends Frontend
             $channelId && $where['channel_id'] = ['in', [0, $channelId]];
             $categoryTopInfo = Model\ArticleCategory::mFind_top($categoryInfo['id']);
             $attributeWhere  = mAttributeWhere($categoryTopInfo['attribute']);
-            $attributeWhere && $where['attribute'] = $attributeWhere;
+            $attributeWhere && $where['attribute'] = Model\ArticleCategory::likeWhere('attribute', $attributeWhere);
 
             $page         = true;
             if ($categoryInfo['s_limit']) {
@@ -195,7 +195,7 @@ class Article extends Frontend
             $where['cate_id'] = ['in', Model\ArticleCategory::mFind_child_id($cateId)];
             $categoryPosition = $this->_get_category_position($cateId);
             $attributeWhere   = mAttributeWhere($categoryPosition['attribute']);
-            $attributeWhere && $where['attribute'] = $attributeWhere;
+            $attributeWhere && $where['attribute'] = Model\ArticleCategory::likeWhere('attribute', $attributeWhere);
             $assign['category_position'] = $this->_get_category_position($cateId);
         }
         $channelId = request('cahnnel_id');

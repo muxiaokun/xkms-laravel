@@ -23,7 +23,7 @@ class Admin extends Backend
         $whereValue = request('admin_name');
         $whereValue && $where['admin_name'] = ['like', '%' . $whereValue . '%'];
         $whereValue = request('group_id');
-        $whereValue && $where[] = [
+        $whereValue && $where['group_id'] = [
             'group_id',
             Model\MemberGroup::where(['name', 'like', '%' . $whereValue . '%'])->select(['id'])->pluck('id'),
         ];
@@ -33,7 +33,8 @@ class Admin extends Backend
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $adminList = Model\Admins::where($where)->paginate(config('system.sys_max_row'));
+        $adminList = Model\Admins::likeWhere('group_id',
+            $where['group_id'])->where($where)->paginate(config('system.sys_max_row'));
         foreach ($adminList as &$admin) {
             foreach ($admin['group_id'] as $groupId) {
                 $groupName = Model\AdminGroups::idWhere($groupId)->first()['name'];
@@ -260,7 +261,7 @@ class Admin extends Backend
                 }
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminGroupList = Model\AdminGroups::where($where)->get();
+                $adminGroupList = Model\AdminGroups::likeWhere('manage_id', $where['manage_id'])->where($where)->get();
                 foreach ($adminGroupList as $adminGroup) {
                     $result['info'][] = ['value' => $adminGroup['id'], 'html' => $adminGroup['name']];
                 }

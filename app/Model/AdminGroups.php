@@ -42,15 +42,6 @@ class AdminGroups extends Common
         return $mFindAllow;
     }
 
-    public function scopeMParseWhere($query, $where)
-    {
-        if (is_null($where)) {
-            return;
-        }
-
-        isset($where['manage_id']) && $where['manage_id'] = $query->likeWhere($where['manage_id']);
-    }
-
     //检查和格式化数据
     public function scopeMEncodeData($query, $data)
     {

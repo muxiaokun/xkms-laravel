@@ -31,26 +31,6 @@ class ArticleChannel extends Common
         return $mFindAllow;
     }
 
-    public function scopeMParseWhere($query, $where)
-    {
-        if (is_null($where)) {
-            return;
-        }
-
-        isset($where['manage_id']) && $where['manage_id'] = $query->likeWhere($where['manage_id']);
-        isset($where['manage_group_id']) && $where['manage_group_id'] = $query->likeWhere($where['manage_group_id']);
-
-        if ($where['manage_id'] && $where['manage_group_id']) {
-            $where['_complex'] = [
-                '_logic'          => 'or',
-                'manage_id'       => $where['manage_id'],
-                'manage_group_id' => $where['manage_group_id'],
-            ];
-            unset($where['manage_id']);
-            unset($where['manage_group_id']);
-        }
-    }
-
     public function scopeMEncodeData($query, $data)
     {
         isset($data['manage_id']) && $data['manage_id'] = '|' . implode('|', $data['manage_id']) . '|';

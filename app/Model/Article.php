@@ -18,24 +18,6 @@ class Article extends Common
         return parent::scopeMList($query, $where, $page);
     }
 
-    public function scopeMParseWhere($query, $where)
-    {
-        if (is_null($where)) {
-            return;
-        }
-
-        if (isset($where['attribute'])) {
-            $attribute = [];
-            foreach ($where['attribute'] as $attr) {
-                $attr && $attribute[] = $query->likeWhere($attr);
-            }
-            $where['attribute'] = $attribute;
-            if (!$where['attribute']) {
-                unset($where['attribute']);
-            }
-        }
-    }
-
     public function scopeMEncodeData($query, $data)
     {
         !isset($data['update_time']) && $data['update_time'] = Carbon::now();

@@ -35,15 +35,6 @@ class Member extends Common
         }
     }
 
-    public function scopeMParseWhere($query, $where)
-    {
-        if (is_null($where)) {
-            return;
-        }
-
-        isset($where['group_id']) && $where['group_id'] = $query->likeWhere($where['group_id']);
-    }
-
     public function scopeMEncodeData($query, $data)
     {
         if ($data['member_pwd']) {

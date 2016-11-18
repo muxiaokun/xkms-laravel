@@ -111,7 +111,6 @@ class ArticleCategory extends Common
         isset($data['manage_group_id']) && $data['manage_group_id'] = '|' . implode('|',
                 $data['manage_group_id']) . '|';
         isset($data['access_group_id']) && $data['access_group_id'] = serialize($data['access_group_id']);
-        isset($data['content']) && $data['content'] = $query->mEncodeContent($data['content']);
         isset($data['extend']) && $data['extend'] = serialize($data['extend']);
         isset($data['attribute']) && $data['attribute'] = serialize($data['attribute']);
     }

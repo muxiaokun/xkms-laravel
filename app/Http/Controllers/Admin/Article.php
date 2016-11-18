@@ -302,7 +302,7 @@ class Article extends Backend
         ('add' == ACTION_NAME || null !== $title) && $data['title'] = $title;
         ('add' == ACTION_NAME || null !== $author) && $data['author'] = $author;
         ('add' == ACTION_NAME || null !== $description) && $data['description'] = $description;
-        ('add' == ACTION_NAME || null !== $content) && $data['content'] = $content;
+        ('add' == ACTION_NAME || null !== $content) && $data['content'] = mParseContent($content);
         ('add' == ACTION_NAME || null !== $cateId) && $data['cate_id'] = $cateId;
         ('add' == ACTION_NAME || null !== $channelId) && $data['channel_id'] = $channelId;
         ('add' == ACTION_NAME || null !== $thumb) && $data['thumb'] = $thumb;

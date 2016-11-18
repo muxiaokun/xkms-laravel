@@ -22,7 +22,6 @@ class Article extends Common
     {
         !isset($data['update_time']) && $data['update_time'] = Carbon::now();
         isset($data['access_group_id']) && $data['access_group_id'] = serialize($data['access_group_id']);
-        isset($data['content']) && $data['content'] = $query->mEncodeContent($data['content']);
         if (isset($data['extend']) && is_array($data['extend'])) {
             $newExtend = [];
             foreach ($data['extend'] as $key => $value) {

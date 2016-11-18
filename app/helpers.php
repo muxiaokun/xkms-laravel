@@ -82,6 +82,15 @@ function mRandStr($type = 'vc', $length = 4)
     return $rand;
 }
 
+function mParseContent($content)
+{
+    //删除相对路径前的../
+    $content = htmlspecialchars_decode($content);
+    $urlpreg = MGetUrlpreg();
+    $content = preg_replace($urlpreg['pattern'], $urlpreg['replacement'], $content);
+    return htmlspecialchars($content);
+}
+
 //切割字符串
 //提取 Org\Util\String::msubstr
 function mSubstr($str, $len, $suffix = true, $start = 0)

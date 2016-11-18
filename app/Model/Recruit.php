@@ -7,7 +7,6 @@ class Recruit extends Common
 {
     public function scopeMEncodeData($query, $data)
     {
-        isset($data['explains']) && $data['explains'] = $query->mEncodeContent($data['explains']);
         if (isset($data['ext_info']) && is_array($data['ext_info'])) {
             $newExtInfo = [];
             foreach ($data['ext_info'] as $key => $value) {

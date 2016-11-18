@@ -44,24 +44,6 @@ class Common extends Model
     }
 
     /**
-     * 格式化编辑器生成的内容
-     * 将内容的站内资源路径修改成相对路径
-     * @param string $content
-     * @return string
-     */
-    public function scopeMEncodeContent($query, $content)
-    {
-        //删除相对路径前的../
-        $content = htmlspecialchars_decode($content);
-        if (URL_REWRITE != config('system.url_model')) {
-            return $content;
-        }
-
-        $urlpreg = MGetUrlpreg();
-        return preg_replace($urlpreg['pattern'], $urlpreg['replacement'], $content);
-    }
-
-    /**
      * 格式化数据接口
      * @param type &$data
      */

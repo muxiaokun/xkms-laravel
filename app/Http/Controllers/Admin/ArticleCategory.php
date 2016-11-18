@@ -301,7 +301,7 @@ class ArticleCategory extends Backend
         ('add' == ACTION_NAME || null !== $sLimit) && $data['s_limit'] = $sLimit;
         ('add' == ACTION_NAME || null !== $ifShow) && $data['if_show'] = $ifShow;
         ('add' == ACTION_NAME || null !== $isContent) && $data['is_content'] = $isContent;
-        ('add' == ACTION_NAME || null !== $content) && $data['content'] = $content;
+        ('add' == ACTION_NAME || null !== $content) && $data['content'] = mParseContent($content);
         ('add' == ACTION_NAME || null !== $extend) && $data['extend'] = $extend;
         ('add' == ACTION_NAME || null !== $attribute) && $data['attribute'] = $attribute;
         ('add' == ACTION_NAME || null !== $template) && $data['template'] = $template;

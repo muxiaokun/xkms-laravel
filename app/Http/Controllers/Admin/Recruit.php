@@ -123,7 +123,7 @@ class Recruit extends Backend
 
         $data = [];
         ('add' == ACTION_NAME || null !== $title) && $data['title'] = $title;
-        ('add' == ACTION_NAME || null !== $explains) && $data['explains'] = $explains;
+        ('add' == ACTION_NAME || null !== $explains) && $data['explains'] = mParseContent($explains);
         ('add' == ACTION_NAME || null !== $isEnable) && $data['is_enable'] = $isEnable;
         ('add' == ACTION_NAME || null !== $currentPortion) && $data['current_portion'] = $currentPortion;
         ('add' == ACTION_NAME || null !== $maxPortion) && $data['max_portion'] = $maxPortion;

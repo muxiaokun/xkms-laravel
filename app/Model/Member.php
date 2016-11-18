@@ -41,7 +41,7 @@ class Member extends Common
             return;
         }
 
-        isset($where['group_id']) && $where['group_id'] = $query->mMakeLikeArray($where['group_id']);
+        isset($where['group_id']) && $where['group_id'] = $query->likeWhere($where['group_id']);
     }
 
     public function scopeMEncodeData($query, $data)

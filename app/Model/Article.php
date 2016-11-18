@@ -27,7 +27,7 @@ class Article extends Common
         if (isset($where['attribute'])) {
             $attribute = [];
             foreach ($where['attribute'] as $attr) {
-                $attr && $attribute[] = $query->mMakeLikeArray($attr);
+                $attr && $attribute[] = $query->likeWhere($attr);
             }
             $where['attribute'] = $attribute;
             if (!$where['attribute']) {

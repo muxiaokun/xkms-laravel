@@ -37,8 +37,8 @@ class ArticleChannel extends Common
             return;
         }
 
-        isset($where['manage_id']) && $where['manage_id'] = $query->mMakeLikeArray($where['manage_id']);
-        isset($where['manage_group_id']) && $where['manage_group_id'] = $query->mMakeLikeArray($where['manage_group_id']);
+        isset($where['manage_id']) && $where['manage_id'] = $query->likeWhere($where['manage_id']);
+        isset($where['manage_group_id']) && $where['manage_group_id'] = $query->likeWhere($where['manage_group_id']);
 
         if ($where['manage_id'] && $where['manage_group_id']) {
             $where['_complex'] = [

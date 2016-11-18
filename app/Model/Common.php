@@ -43,29 +43,14 @@ class Common extends Model
 
     }
 
-    /**
-     * 构造查询时用的like数组
-     * @param array  $whereArr
-     * @param string $logic AND or OR
-     * @return boolean
-     */
-    public function scopeMMakeLikeArray($query, $where, $logic = 'OR')
+    public function scopeLikeWhere($query, $column, $value)
     {
-        //将$where转换成数组
-        is_string($where) && $where = explode('|', $where);
-        if (!$where) {
-            return false;
-        }
-
-        foreach ($where as &$mid) {
-            $mid = '%|' . $mid . '|%';
-        }
-        $result = [
-            'like',
-            $where,
-        ];
-        'OR' != $logic && array_push($result, $logic);
-        return $result;
+        is_string($value) && $value = explode('|', $value);
+        $query->where(function ($query) use ($column, $value) {
+            foreach ($value as &$mid) {
+                $query->orWhere($column, 'like', '%|' . $mid . '|%');
+            }
+        });
     }
 
     /**

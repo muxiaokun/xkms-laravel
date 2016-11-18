@@ -109,7 +109,6 @@ class MessageBoard extends Frontend
             }
         }
 
-        $sendInfo = json_encode($sendInfo);
         $memberId = session('frontend_info.id');
         $memberId = ($memberId) ? $memberId : 0;
         $data     = [];

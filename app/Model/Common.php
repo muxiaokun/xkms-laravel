@@ -42,16 +42,4 @@ class Common extends Model
             }
         });
     }
-
-    /**
-     * 格式化数据接口
-     * @param type &$data
-     */
-    public function scopeMEncodeData($query, $data)
-    {
-    }
-
-    public function scopeMDecodeData($query, $data)
-    {
-    }
 }

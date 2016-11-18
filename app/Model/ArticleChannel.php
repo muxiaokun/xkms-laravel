@@ -30,23 +30,4 @@ class ArticleChannel extends Common
         }
         return $mFindAllow;
     }
-
-    public function scopeMEncodeData($query, $data)
-    {
-        isset($data['manage_id']) && $data['manage_id'] = '|' . implode('|', $data['manage_id']) . '|';
-        isset($data['manage_group_id']) && $data['manage_group_id'] = '|' . implode('|',
-                $data['manage_group_id']) . '|';
-        isset($data['access_group_id']) && $data['access_group_id'] = serialize($data['access_group_id']);
-        isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
-    }
-
-    public function scopeMDecodeData($query, $data)
-    {
-        isset($data['manage_id']) && $data['manage_id'] = explode('|',
-            substr($data['manage_id'], 1, strlen($data['manage_id']) - 2));
-        isset($data['manage_group_id']) && $data['manage_group_id'] = explode('|',
-            substr($data['manage_group_id'], 1, strlen($data['manage_group_id']) - 2));
-        isset($data['access_group_id']) && $data['access_group_id'] = unserialize($data['access_group_id']);
-        isset($data['ext_info']) && $data['ext_info'] = unserialize($data['ext_info']);
-    }
 }

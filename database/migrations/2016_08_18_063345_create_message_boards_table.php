@@ -21,7 +21,7 @@ class CreateMessageBoardsTable extends Migration
 
             $table->string('name', 64)->comment('名称');
             $table->string('template', 64)->nullable()->comment('模板');
-            $table->mediumText('config')->nullable()->comment('配置');
+            $table->json('config')->nullable()->comment('配置');
         });
     }
 

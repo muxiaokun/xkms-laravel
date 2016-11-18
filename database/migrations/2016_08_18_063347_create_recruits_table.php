@@ -26,7 +26,7 @@ class CreateRecruitsTable extends Migration
             $table->integer('max_portion')->unsigned()->comment('最大简历数');
             $table->timestamp('start_time')->nullable()->comment('开始时间');
             $table->timestamp('end_time')->nullable()->comment('结束时间');
-            $table->mediumText('ext_info')->nullable()->comment('输入项目');
+            $table->json('ext_info')->nullable()->comment('输入项目');
         });
     }
 

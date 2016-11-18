@@ -28,7 +28,7 @@ class CreateItlinksTable extends Migration
             $table->integer('show_num')->unsigned()->comment('显示数量');
             $table->integer('max_hit_num')->unsigned()->comment('最大点击数');
             $table->integer('hit_num')->unsigned()->comment('点击数');
-            $table->mediumText('ext_info')->nullable()->comment('扩展信息存储区');
+            $table->json('ext_info')->nullable()->comment('扩展信息');
         });
     }
 

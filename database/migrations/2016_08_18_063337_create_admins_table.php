@@ -21,8 +21,8 @@ class CreateAdminsTable extends Migration
             $table->string('admin_name', 64)->unique()->comment('用户名');
             $table->string('admin_pwd', 32)->comment('密码');
             $table->string('admin_rand', 32)->comment('随机加密值');
-            $table->mediumText('group_id')->nullable()->comment('NULL不属于任何组');
-            $table->mediumText('privilege')->nullable()->comment('all是全部权限');
+            $table->json('group_id')->nullable()->comment('NULL不属于任何组');
+            $table->json('privilege')->nullable()->comment('all是全部权限');
             $table->timestamp('last_time')->nullable()->comment('活跃时间');
             $table->ipAddress('login_ip')->nullable()->comment('活跃IP');
             $table->tinyInteger('login_num')->nullable()->comment('尝试登录数');

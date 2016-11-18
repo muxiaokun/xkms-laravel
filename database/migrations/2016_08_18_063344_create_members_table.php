@@ -22,7 +22,7 @@ class CreateMembersTable extends Migration
             $table->string('member_name', 64)->unique()->comment('用户名');
             $table->string('member_pwd', 32)->comment('密码');
             $table->string('member_rand', 32)->comment('随机加密值');
-            $table->mediumText('group_id')->nullable()->comment('NULL不属于任何组');
+            $table->json('group_id')->nullable()->comment('NULL不属于任何组');
             $table->timestamp('last_time')->nullable()->comment('活跃时间');
             $table->ipAddress('login_ip')->nullable()->comment('活跃IP');
             $table->tinyInteger('login_num')->comment('尝试登录数');

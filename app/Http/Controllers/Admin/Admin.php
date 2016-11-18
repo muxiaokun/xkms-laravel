@@ -114,7 +114,6 @@ class Admin extends Backend
             $adminGroupName = Model\AdminGroups::idWhere($groupId)->first()['name'];
             $groupId        = ['value' => $groupId, 'html' => $adminGroupName];
         }
-        $editInfo['group_id'] = json_encode($editInfo['group_id']);
         $assign['edit_info']  = $editInfo;
 
         $this->addEditCommon();

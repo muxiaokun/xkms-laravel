@@ -91,7 +91,6 @@ class Navigation extends Backend
         }
 
         $editInfo = Model\Navigation::where('id', $id)->first();
-        //$editInfo['ext_info'] = json_encode($editInfo['ext_info']);
         $assign['edit_info'] = $editInfo;
 
         $assign['navigation_config'] = $this->navigation_config;

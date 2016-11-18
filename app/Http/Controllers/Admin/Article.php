@@ -171,7 +171,6 @@ class Article extends Backend
             $valExtend[$template] = ($editInfo['extend'][$template]) ? $editInfo['extend'][$template] : '';
         }
         $editInfo['extend']        = $valExtend;
-        $editInfo['album']         = array_map("json_encode", $editInfo['album']);
         $editInfo['attribute_tpl'] = Model\ArticleCategory::mFindTopColumn($editInfo['cate_id'], 'attribute');
 
         $assign['edit_info'] = $editInfo;

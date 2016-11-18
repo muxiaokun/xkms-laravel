@@ -145,17 +145,14 @@ class ArticleCategory extends Backend
                 $adminName = Model\Admins::idWhere($manageId)->first()['admin_name'];
                 $manageId  = ['value' => $manageId, 'html' => $adminName];
             }
-            $editInfo['manage_id'] = json_encode($editInfo['manage_id']);
             foreach ($editInfo['manage_group_id'] as &$manageGroupId) {
                 $adminGroupName = Model\AdminGroups::idWhere($manageGroupId)->first()['name'];
                 $manageGroupId  = ['value' => $manageGroupId, 'html' => $adminGroupName];
             }
-            $editInfo['manage_group_id'] = json_encode($editInfo['manage_group_id']);
             foreach ($editInfo['access_group_id'] as &$accessGroupId) {
                 $adminGroupName = Model\MemberGroup::idWhere($accessGroupId)->first()['name'];
                 $accessGroupId  = ['value' => $accessGroupId, 'html' => $adminGroupName];
             }
-            $editInfo['access_group_id'] = json_encode($editInfo['access_group_id']);
         }
 
         $assign['edit_info'] = $editInfo;

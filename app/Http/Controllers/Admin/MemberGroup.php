@@ -89,7 +89,6 @@ class MemberGroup extends Backend
             $memberName                        = Model\Member::idWhere($manageId)->first()['member_name'];
             $editInfo['manage_id'][$manageKey] = ['value' => $manageId, 'html' => $memberName];
         }
-        $editInfo['manage_id'] = json_encode($editInfo['manage_id']);
         $assign['edit_info']   = $editInfo;
 
         $this->addEditCommon();

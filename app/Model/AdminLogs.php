@@ -26,7 +26,6 @@ class AdminLogs extends Common
                 }
 
             }
-            $request_json = json_encode($request);
         }
         $data = [
             'admin_id'   => $adminId,

@@ -160,7 +160,6 @@ class Assess extends Backend
         foreach (request('ext_info') as $value) {
             $gradeProject[] = json_decode(str_replace('&quot;', '"', $value), true);
         }
-        $extInfo = json_encode($gradeProject);
 
         $data = [];
         ('add' == ACTION_NAME || null !== $title) && $data['title'] = $title;

@@ -20,8 +20,6 @@ class Article extends Common
 
     public function scopeMEncodeData($query, $data)
     {
-        !isset($data['update_time']) && $data['update_time'] = Carbon::now();
-        isset($data['access_group_id']) && $data['access_group_id'] = serialize($data['access_group_id']);
         if (isset($data['extend']) && is_array($data['extend'])) {
             $newExtend = [];
             foreach ($data['extend'] as $key => $value) {
@@ -36,12 +34,10 @@ class Article extends Common
             }
             $data['attribute'] = '|' . implode('|', $newAttribute) . '|';
         }
-        isset($data['album']) && $data['album'] = serialize($data['album']);
     }
 
     public function scopeMDecodeData($query, $data)
     {
-        isset($data['access_group_id']) && $data['access_group_id'] = unserialize($data['access_group_id']);
         if (isset($data['extend']) && $data['extend']) {
             $data['extend'] = explode('|', substr($data['extend'], 1, strlen($data['extend']) - 2));
             $newExtend      = [];
@@ -60,6 +56,5 @@ class Article extends Common
             }
             $data['attribute'] = $newAttribute;
         }
-        isset($data['album']) && $data['album'] = unserialize($data['album']);
     }
 }

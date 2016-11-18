@@ -26,7 +26,7 @@ class CreateAssessesTable extends Migration
             $table->timestamp('end_time')->nullable()->comment('结束时间');
             $table->tinyInteger('is_enable')->comment('是否启用');
             $table->string('target', 64)->comment('考核目标');
-            $table->mediumText('ext_info')->nullable()->comment('条目数组');
+            $table->json('ext_info')->nullable()->comment('条目数组');
         });
     }
 

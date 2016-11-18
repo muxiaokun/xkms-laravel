@@ -100,7 +100,6 @@ class Member extends Backend
             $memberGroupName = Model\MemberGroup::idWhere($groupId)->first()['name'];
             $groupId         = ['value' => $groupId, 'html' => $memberGroupName];
         }
-        $editInfo['group_id'] = json_encode($editInfo['group_id']);
         $assign['edit_info']  = $editInfo;
 
         $this->addEditCommon();

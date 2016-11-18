@@ -23,7 +23,7 @@ class CreateAssessLogsTable extends Migration
             $table->integer('grade_id')->unsigned()->comment('评分人');
             $table->integer('re_grade_id')->unsigned()->comment('被评分人');
             $table->timestamp('add_time')->nullable()->comment('添加时间');
-            $table->mediumText('score')->nullable()->comment('评分数组');
+            $table->json('score')->nullable()->comment('评分数组');
         });
     }
 

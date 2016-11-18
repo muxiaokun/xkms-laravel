@@ -141,7 +141,6 @@ class Quests extends Backend
             $info = htmlspecialchars_decode($info);
             $info = json_decode($info, true);
         }
-        $extInfo = json_encode($extInfo);
 
         $data = [];
         ('add' == ACTION_NAME || null !== $title) && $data['title'] = $title;

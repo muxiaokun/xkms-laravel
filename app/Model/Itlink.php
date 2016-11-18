@@ -38,14 +38,4 @@ class Itlink extends Common
         $itlinkInfo['max_show_num'] > 0 && $query->where(['id' => $itlinkInfo['id']])->setInc('show_num');
         return is_array($links) ? $links : [];
     }
-
-    public function scopeMEncodeData($query, $data)
-    {
-        isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
-    }
-
-    public function scopeMDecodeData($query, $data)
-    {
-        isset($data['ext_info']) && $data['ext_info'] = unserialize($data['ext_info']);
-    }
 }

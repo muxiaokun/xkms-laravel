@@ -38,14 +38,4 @@ class Navigation extends Common
         }
         return $navigationData;
     }
-
-    public function scopeMEncodeData($query, $data)
-    {
-        isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
-    }
-
-    public function scopeMDecodeData($query, $data)
-    {
-        isset($data['ext_info']) && $data['ext_info'] = unserialize($data['ext_info']);
-    }
 }

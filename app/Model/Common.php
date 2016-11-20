@@ -3,12 +3,23 @@
 
 namespace App\Model;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class Common extends Model
 {
     public $guarded = [];
+
+    public $orders = [
+        'id' => 'desc',
+    ];
+
+    public function scopeMOrdered($query)
+    {
+        foreach ($this->orders as $orderBy => $orderDirection) {
+            $query->orderBy($orderBy, $orderDirection);
+        }
+
+    }
 
     public function scopeMGetColumn($query)
     {

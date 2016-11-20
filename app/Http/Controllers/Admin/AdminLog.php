@@ -24,7 +24,7 @@ class AdminLog extends Backend
         $whereValue = request('route_name');
         $whereValue && $where[] = ['route_name', $whereValue];
         //初始化翻页 和 列表数据
-        $adminLogList = Model\AdminLogs::where($where)->paginate(config('system.sys_max_row'));
+        $adminLogList = Model\AdminLogs::where($where)->ordered()->paginate(config('system.sys_max_row'));
         foreach ($adminLogList as &$adminLog) {
             $adminLog['admin_name'] = Model\Admins::idWhere($adminLog['admin_id'])->first()['admin_name'];
         }

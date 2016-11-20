@@ -20,7 +20,7 @@ class Quests extends Backend
         $whereValue = mMktimeRange('end_time');
         $whereValue && $where[] = ['end_time', $whereValue];
 
-        $questsList            = Model\Quests::where($where)->paginate(config('system.sys_max_row'));
+        $questsList            = Model\Quests::where($where)->ordered()->paginate(config('system.sys_max_row'));
         $assign['quests_list'] = $questsList;
 
         //初始化where_info

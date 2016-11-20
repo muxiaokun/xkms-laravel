@@ -25,7 +25,7 @@ class AdminGroup extends Backend
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $adminGroupList             = Model\AdminGroups::where($where)->paginate(config('system.sys_max_row'));
+        $adminGroupList             = Model\AdminGroups::where($where)->ordered()->paginate(config('system.sys_max_row'));
         $assign['admin_group_list'] = $adminGroupList;
 
         //初始化where_info

@@ -5,13 +5,12 @@ namespace App\Model;
 
 class ArticleCategory extends Common
 {
-    public function scopeMList($query, $where = null, $page = false)
-    {
-        if (!$query->getQuery()->orders) {
-            $query->orderBy('sort', 'asc');
-        }
-        return parent::scopeMList($query, $where, $page);
-    }
+    public $orders = [
+        [
+            'column'    => 'sort',
+            'direction' => 'asc',
+        ],
+    ];
 
     //返回子级所有分类id 数组集合
     //$pushMe 是否包含传入id

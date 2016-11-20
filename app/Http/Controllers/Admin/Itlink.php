@@ -23,7 +23,7 @@ class Itlink extends Backend
         $whereValue && $where['is_statistics'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $itlinkList            = Model\Itlink::where($where)->paginate(config('system.sys_max_row'));
+        $itlinkList            = Model\Itlink::where($where)->ordered()->paginate(config('system.sys_max_row'));
         $assign['itlink_list'] = $itlinkList;
 
         //初始化where_info

@@ -58,7 +58,7 @@ class Comment extends Frontend
                     'item'       => $data['item'],
                     'audit_id'   => ['gt', 0],
                 ];
-                $commentList = Model\Comment::where($where)->paginate(config('system.sys_max_row'));
+                $commentList = Model\Comment::where($where)->ordered()->paginate(config('system.sys_max_row'));
                 foreach ($commentList as &$comment) {
                     $memberName             = Model\Member::idWhere($comment['member_id'])->first()['member_name'];
                     $comment['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');

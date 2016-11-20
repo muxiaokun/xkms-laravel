@@ -8,15 +8,11 @@ class Article extends Common
 {
     use SoftDeletes;
 
-    public function scopeMList($query, $where = null, $page = false)
-    {
-        if (!$query->getQuery()->orders) {
-            $query->orderBy('is_stick', 'desc');
-            $query->orderBy('sort', 'asc');
-            $query->orderBy('update_at', 'desc');
-        }
-        return parent::scopeMList($query, $where, $page);
-    }
+    public $orders = [
+        'id'        => 'desc',
+        'sort'      => 'asc',
+        'update_at' => 'desc',
+    ];
 
     public function scopeMEncodeData($query, $data)
     {

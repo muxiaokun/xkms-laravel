@@ -26,7 +26,7 @@ class Assess extends Backend
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $assessList            = Model\Assess::where($where)->paginate(config('system.sys_max_row'));
+        $assessList            = Model\Assess::where($where)->ordered()->paginate(config('system.sys_max_row'));
         $assign['assess_list'] = $assessList;
 
         //初始化where_info

@@ -22,7 +22,7 @@ class ArticleChannel extends Backend
             $where['id']  = ['in', $allowChannel];
         }
         //初始化翻页 和 列表数据
-        $articleChannelList             = Model\ArticleChannel::where($where)->paginate(config('system.sys_max_row'));
+        $articleChannelList             = Model\ArticleChannel::where($where)->ordered()->paginate(config('system.sys_max_row'));
         $assign['article_channel_list'] = $articleChannelList;
 
         //初始化where_info

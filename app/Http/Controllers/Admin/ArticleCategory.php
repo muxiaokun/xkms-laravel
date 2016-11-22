@@ -305,6 +305,12 @@ class ArticleCategory extends Backend
         ('add' == ACTION_NAME || null !== $listTemplate) && $data['list_template'] = $listTemplate;
         ('add' == ACTION_NAME || null !== $articleTemplate) && $data['article_template'] = $articleTemplate;
 
+        //只有顶级可以设置扩展模板和属性
+        if (isset($data['parent_id']) && 0 < $data['parent_id']) {
+            unset($data['extend']);
+            unset($data['attribute']);
+        }
+
         return $data;
     }
 

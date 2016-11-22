@@ -98,13 +98,4 @@ class ArticleCategory extends Common
         }
         return $mFindAllow;
     }
-
-    public function scopeMEncodeData($query, $data)
-    {
-        //只有顶级可以设置扩展模板和属性
-        if (isset($data['parent_id']) && 0 < $data['parent_id']) {
-            unset($data['extend']);
-            unset($data['attribute']);
-        }
-    }
 }

@@ -33,15 +33,15 @@ class MinifyCompiler extends BladeCompiler
      * Create a new instance.
      *
      * @param \GrahamCampbell\HTMLMin\Minifiers\BladeMinifier $blade
-     * @param \Illuminate\Filesystem\Filesystem $files
-     * @param string $cachePath
+     * @param \Illuminate\Filesystem\Filesystem               $files
+     * @param string                                          $cachePath
      *
      * @return void
      */
     public function __construct(BladeMinifier $blade, Filesystem $files, $cachePath)
     {
         parent::__construct($files, $cachePath);
-        $this->blade       = $blade;
+        $this->blade = $blade;
         $this->compilers[] = 'Minify';
     }
 

@@ -38,14 +38,14 @@ class HtmlMinifier implements MinifierInterface
      * Create a new instance.
      *
      * @param \GrahamCampbell\HTMLMin\Minifiers\CssMinifier $css
-     * @param \GrahamCampbell\HTMLMin\Minifiers\JsMinifier $js
+     * @param \GrahamCampbell\HTMLMin\Minifiers\JsMinifier  $js
      *
      * @return void
      */
     public function __construct(CssMinifier $css, JsMinifier $js)
     {
         $this->css = $css;
-        $this->js  = $js;
+        $this->js = $js;
     }
 
     /**
@@ -58,10 +58,10 @@ class HtmlMinifier implements MinifierInterface
     public function render($value)
     {
         $options = [
-            'cssMinifier'     => function ($css) {
+            'cssMinifier' => function ($css) {
                 return $this->css->render($css);
             },
-            'jsMinifier'      => function ($js) {
+            'jsMinifier' => function ($js) {
                 return $this->js->render($js);
             },
             'jsCleanComments' => true,

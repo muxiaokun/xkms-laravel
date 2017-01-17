@@ -93,8 +93,8 @@ class BladeMinifier implements MinifierInterface
     protected function containsBadHtml($value)
     {
         return preg_match('/<(code|pre|textarea)/', $value) ||
-        preg_match('/<script[^\??>]*>[^<\/script>]/', $value) ||
-        preg_match('/value=("|\')(.*)([ ]{2,})(.*)("|\')/', $value);
+            preg_match('/<script[^\??>]*>[^<\/script>]/', $value) ||
+            preg_match('/value=("|\')(.*)([ ]{2,})(.*)("|\')/', $value);
     }
 
     /**

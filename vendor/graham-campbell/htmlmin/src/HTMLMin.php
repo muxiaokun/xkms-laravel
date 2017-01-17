@@ -55,18 +55,18 @@ class HTMLMin
      * Create a new instance.
      *
      * @param \GrahamCampbell\HTMLMin\Minifiers\BladeMinifier $blade
-     * @param \GrahamCampbell\HTMLMin\Minifiers\CssMinifier $css
-     * @param \GrahamCampbell\HTMLMin\Minifiers\JsMinifier $js
-     * @param \GrahamCampbell\HTMLMin\Minifiers\HtmlMinifier $html
+     * @param \GrahamCampbell\HTMLMin\Minifiers\CssMinifier   $css
+     * @param \GrahamCampbell\HTMLMin\Minifiers\JsMinifier    $js
+     * @param \GrahamCampbell\HTMLMin\Minifiers\HtmlMinifier  $html
      *
      * @return void
      */
     public function __construct(BladeMinifier $blade, CssMinifier $css, JsMinifier $js, HtmlMinifier $html)
     {
         $this->blade = $blade;
-        $this->css   = $css;
-        $this->js    = $js;
-        $this->html  = $html;
+        $this->css = $css;
+        $this->js = $js;
+        $this->html = $html;
     }
 
     /**

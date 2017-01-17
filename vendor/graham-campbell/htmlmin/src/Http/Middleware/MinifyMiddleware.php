@@ -45,7 +45,7 @@ class MinifyMiddleware
      * Handle an incoming request.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
+     * @param \Closure                 $next
      *
      * @return mixed
      */
@@ -54,7 +54,7 @@ class MinifyMiddleware
         $response = $next($request);
 
         if ($this->isAResponseObject($response) && $this->isAnHtmlResponse($response)) {
-            $output   = $response->getContent();
+            $output = $response->getContent();
             $minified = $this->html->render($output);
             $response->setContent($minified);
         }

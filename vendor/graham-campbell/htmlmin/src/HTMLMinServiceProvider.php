@@ -50,7 +50,7 @@ class HTMLMinServiceProvider extends ServiceProvider
      */
     protected function setupConfig()
     {
-        $source = realpath(__DIR__ . '/../config/htmlmin.php');
+        $source = realpath(__DIR__.'/../config/htmlmin.php');
 
         if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
             $this->publishes([$source => config_path('htmlmin.php')]);
@@ -131,7 +131,7 @@ class HTMLMinServiceProvider extends ServiceProvider
     {
         $this->app->singleton('htmlmin.html', function (Container $app) {
             $css = $app['htmlmin.css'];
-            $js  = $app['htmlmin.js'];
+            $js = $app['htmlmin.js'];
 
             return new HtmlMinifier($css, $js);
         });
@@ -163,8 +163,8 @@ class HTMLMinServiceProvider extends ServiceProvider
     protected function registerMinifyCompiler()
     {
         $this->app->singleton('htmlmin.compiler', function (Container $app) {
-            $blade       = $app['htmlmin.blade'];
-            $files       = $app['files'];
+            $blade = $app['htmlmin.blade'];
+            $files = $app['files'];
             $storagePath = $app->config->get('view.compiled');
 
             return new MinifyCompiler($blade, $files, $storagePath);
@@ -182,9 +182,9 @@ class HTMLMinServiceProvider extends ServiceProvider
     {
         $this->app->singleton('htmlmin', function (Container $app) {
             $blade = $app['htmlmin.blade'];
-            $css   = $app['htmlmin.css'];
-            $js    = $app['htmlmin.js'];
-            $html  = $app['htmlmin.html'];
+            $css = $app['htmlmin.css'];
+            $js = $app['htmlmin.js'];
+            $html = $app['htmlmin.html'];
 
             return new HTMLMin($blade, $css, $js, $html);
         });

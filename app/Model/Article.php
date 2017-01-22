@@ -22,12 +22,12 @@ class Article extends Common
 
     public function getAccessGroupIdAttribute($value)
     {
-        return $this->parseSetIdAttribute($value);
+        return $this->transfixionDecode($value);
     }
 
     public function setAccessGroupIdAttribute($value)
     {
-        return $this->parseSetIdAttribute($value);
+        return $this->transfixionEncode($value);
     }
 
 

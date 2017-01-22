@@ -9,12 +9,12 @@ class ManageUpload extends Common
 
     public function getBindInfoAttribute($value)
     {
-        return $this->parseSetIdAttribute($value);
+        return $this->transfixionDecode($value);
     }
 
     public function setBindInfoAttribute($value)
     {
-        return $this->parseSetIdAttribute($value);
+        return $this->transfixionEncode($value);
     }
 
     public static function deleteFile($id)

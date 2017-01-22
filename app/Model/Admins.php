@@ -13,12 +13,12 @@ class Admins extends Common
 
     public function getGroupIdAttribute($value)
     {
-        return $this->parseGetIdAttribute($value);
+        return $this->transfixionDecode($value);
     }
 
     public function setGroupIdAttribute($value)
     {
-        return $this->parseSetIdAttribute($value);
+        return $this->transfixionEncode($value);
     }
 
     public function scopeAuthorized($query, $user, $pwd)

@@ -11,12 +11,12 @@ class MemberGroup extends Common
 
     public function getManageIdAttribute($value)
     {
-        return $this->parseGetIdAttribute($value);
+        return $this->transfixionDecode($value);
     }
 
     public function setManageIdAttribute($value)
     {
-        return $this->parseSetIdAttribute($value);
+        return $this->transfixionEncode($value);
     }
 
     //查找出组权限

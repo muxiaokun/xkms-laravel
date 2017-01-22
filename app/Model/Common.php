@@ -13,6 +13,32 @@ class Common extends Model
         'id' => 'desc',
     ];
 
+
+    /**
+     * @param $value
+     * @return \Illuminate\Support\Collection
+     * 解析 |*| 模式
+     */
+    public function parseGetIdAttribute($value)
+    {
+        $collect = collect(explode('|', $value));
+        $collect->shift();
+        $collect->pop();
+        return $collect;
+    }
+
+    /**
+     * @param $value
+     * @return string
+     * 组合 |*| 模式
+     */
+    public function parseSetIdAttribute($value)
+    {
+        $collect      = collect($value);
+        $newAttribute = '|' . $collect->implode('|') . '|';
+        return $newAttribute;
+    }
+
     public function scopeMOrdered($query)
     {
         foreach ($this->orders as $orderBy => $orderDirection) {

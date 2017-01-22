@@ -407,6 +407,11 @@ Route::get('VerificationCode/{name?}', 'VerificationCode@run')->name('Verificati
 
 //test error
 Route::get('t', function () {
-
+    $user           = \App\Model\Admins::find(1);
+    $user->group_id = [1];
+    $user->save();
+    $new_user = \App\Model\Admins::find(1);
+    dump($new_user);
+    dump($new_user->group_id);
 });
 Route::get('tc', ['as' => 'index', 'uses' => 'Index@getInstallInfo']);

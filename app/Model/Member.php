@@ -5,6 +5,17 @@ namespace App\Model;
 
 class Member extends Common
 {
+
+    public function getGroupIdAttribute($value)
+    {
+        return $this->parseGetIdAttribute($value);
+    }
+
+    public function setGroupIdAttribute($value)
+    {
+        return $this->parseSetIdAttribute($value);
+    }
+
     public function authorized($query, $user, $pwd, $memberId)
     {
         if (!$user && !$memberId) {

@@ -22,7 +22,7 @@ class CreateNavigationsTable extends Migration
             $table->string('name', 128)->comment('名称');
             $table->string('short_name', 32)->comment('调用短名');
             $table->tinyInteger('is_enable')->comment('是否启用');
-            $table->json('ext_info')->nullable()->comment('扩展信息');
+            $table->longText('ext_info')->nullable()->comment('扩展信息');
         });
     }
 

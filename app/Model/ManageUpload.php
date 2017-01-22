@@ -5,6 +5,18 @@ namespace App\Model;
 
 class ManageUpload extends Common
 {
+
+
+    public function getBindInfoAttribute($value)
+    {
+        return $this->parseSetIdAttribute($value);
+    }
+
+    public function setBindInfoAttribute($value)
+    {
+        return $this->parseSetIdAttribute($value);
+    }
+
     public static function deleteFile($id)
     {
         if (!$id) {

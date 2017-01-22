@@ -4,6 +4,10 @@ namespace App\Model;
 
 class AdminLogs extends Common
 {
+    protected $casts = [
+        'request' => 'array',
+    ];
+
     //添加日志 管理员编号 信息为空为传参 操作的模型
     public static function record($adminId, $message = false, $msg = false)
     {

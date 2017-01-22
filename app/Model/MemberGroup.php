@@ -5,6 +5,20 @@ namespace App\Model;
 
 class MemberGroup extends Common
 {
+    protected $casts = [
+        'privilege' => 'array',
+    ];
+
+    public function getManageIdAttribute($value)
+    {
+        return $this->parseGetIdAttribute($value);
+    }
+
+    public function setManageIdAttribute($value)
+    {
+        return $this->parseSetIdAttribute($value);
+    }
+
     //查找出组权限
     public function scopeMFindPrivilege($query, $id)
     {

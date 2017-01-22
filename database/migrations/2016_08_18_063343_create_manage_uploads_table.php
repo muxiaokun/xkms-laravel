@@ -26,7 +26,7 @@ class CreateManageUploadsTable extends Migration
             $table->string('mime', 64)->comment('mime类型');
             $table->integer('size')->unsigned()->comment('大小');
             $table->string('suffix', 32)->comment('后缀');
-            $table->json('bind_info')->nullable()->comment('绑定信息');
+            $table->longText('bind_info')->nullable()->comment('绑定信息');
         });
     }
 

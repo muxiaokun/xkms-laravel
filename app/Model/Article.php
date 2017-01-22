@@ -8,11 +8,28 @@ class Article extends Common
 {
     use SoftDeletes;
 
+    protected $casts = [
+        'longText'  => 'array',
+        'attribute' => 'array',
+        'album'     => 'array',
+    ];
+
     public $orders = [
         'id'        => 'desc',
         'sort'      => 'asc',
         'update_at' => 'desc',
     ];
+
+    public function getAccessGroupIdAttribute($value)
+    {
+        return $this->parseSetIdAttribute($value);
+    }
+
+    public function setAccessGroupIdAttribute($value)
+    {
+        return $this->parseSetIdAttribute($value);
+    }
+
 
     public function scopeMEncodeData($query, $data)
     {

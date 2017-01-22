@@ -5,6 +5,10 @@ namespace App\Model;
 
 class QuestsAnswer extends Common
 {
+    protected $casts = [
+        'answer' => 'array',
+    ];
+
     //统计答案
     public function count_quests_answer($query, $questsId, $answer = false)
     {

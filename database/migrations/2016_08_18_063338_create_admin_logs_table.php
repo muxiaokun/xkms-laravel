@@ -22,7 +22,7 @@ class CreateAdminLogsTable extends Migration
             $table->integer('admin_id')->unsigned()->comment('管理员编号');
             $table->string('route_name', 128)->nullable()->comment('路由名称');
             $table->string('message', 32)->comment('操作信息');
-            $table->json('request')->nullable()->comment('参数');
+            $table->longText('request')->nullable()->comment('参数');
         });
     }
 

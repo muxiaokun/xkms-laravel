@@ -21,7 +21,7 @@ class CreateQuestsAnswersTable extends Migration
 
             $table->integer('quests_id')->unsigned()->comment('问卷编号');
             $table->integer('member_id')->unsigned()->comment('会员编号');
-            $table->json('answer')->nullable()->comment('答案编号或内容');
+            $table->longText('answer')->nullable()->comment('答案编号或内容');
         });
     }
 

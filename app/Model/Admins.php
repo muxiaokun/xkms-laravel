@@ -7,6 +7,20 @@ use Carbon\Carbon;
 
 class Admins extends Common
 {
+    protected $casts = [
+        'privilege' => 'array',
+    ];
+
+    public function getGroupIdAttribute($value)
+    {
+        return $this->parseGetIdAttribute($value);
+    }
+
+    public function setGroupIdAttribute($value)
+    {
+        return $this->parseSetIdAttribute($value);
+    }
+
     public function scopeAuthorized($query, $user, $pwd)
     {
         if (!$user) {

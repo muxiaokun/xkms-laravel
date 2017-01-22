@@ -5,6 +5,10 @@ namespace App\Model;
 
 class Itlink extends Common
 {
+    protected $casts = [
+        'ext_info' => 'array',
+    ];
+
     public function scopeMFind_data($query, $shortName)
     {
         if (!$shortName) {

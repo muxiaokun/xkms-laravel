@@ -5,6 +5,10 @@ namespace App\Model;
 
 class Recruit extends Common
 {
+    protected $casts = [
+        'ext_info' => 'array',
+    ];
+
     public function scopeMEncodeData($query, $data)
     {
         if (isset($data['ext_info']) && is_array($data['ext_info'])) {

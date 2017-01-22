@@ -24,7 +24,7 @@ class CreateRecruitLogsTable extends Migration
             $table->timestamp('birthday')->nullable()->comment('生日');
             $table->tinyInteger('sex')->comment('性别');
             $table->tinyInteger('certificate')->comment('结业证');
-            $table->json('ext_info')->nullable()->comment('扩展信息');
+            $table->longText('ext_info')->nullable()->comment('扩展信息');
         });
     }
 

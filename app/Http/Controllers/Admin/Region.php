@@ -31,10 +31,10 @@ class Region extends Backend
         $assign['region_list']       = $regionList;
 
         //初始化where_info
-        $whereInfo['region_name'] = ['type' => 'input', 'name' => trans('common.region_name')];
-        $whereInfo['short_spell'] = ['type' => 'input', 'name' => trans('common.short_spell')];
-        $whereInfo['areacode']    = ['type' => 'input', 'name' => trans('common.areacode')];
-        $whereInfo['postcode']    = ['type' => 'input', 'name' => trans('common.postcode')];
+        $whereInfo['region_name'] = ['type' => 'input', 'name' => trans('region.region_name')];
+        $whereInfo['short_spell'] = ['type' => 'input', 'name' => trans('region.short_spell')];
+        $whereInfo['areacode']    = ['type' => 'input', 'name' => trans('region.areacode')];
+        $whereInfo['postcode']    = ['type' => 'input', 'name' => trans('region.postcode')];
         $assign['where_info']     = $whereInfo;
 
         //初始化batch_handle
@@ -44,7 +44,7 @@ class Region extends Backend
         $batchHandle['del']     = $this->_check_privilege('del');
         $assign['batch_handle'] = $batchHandle;
 
-        $assign['title'] = trans('common.region') . trans('common.management');
+        $assign['title'] = trans('region.region') . trans('common.management');
         return view('admin.Region_index', $assign);
     }
 

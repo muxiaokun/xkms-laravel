@@ -9,17 +9,17 @@
                     <tr>
                         <th><input type="checkbox" onClick="M_allselect_par(this,'table')"/>&nbsp;@lang('common.id')
                         </th>
-                        <th>@lang('common.region_name')</th>
-                        <th>@lang('common.short_name')</th>
-                        <th>@lang('common.all_spell')</th>
-                        <th>@lang('common.short_spell')</th>
-                        <th>@lang('common.areacode')</th>
-                        <th>@lang('common.postcode')</th>
+                        <th>@lang('region.region_name')</th>
+                        <th>@lang('region.short_name')</th>
+                        <th>@lang('region.all_spell')</th>
+                        <th>@lang('region.short_spell')</th>
+                        <th>@lang('region.areacode')</th>
+                        <th>@lang('region.postcode')</th>
                         <th>@lang('common.yes')@lang('common.no')@lang('common.show')</th>
                         <td class="nowrap">
                             @if ($batch_handle['add'])
                                 <a class="btn btn-xs btn-success"
-                                   href="{{ route('Admin::Region::add') }}">@lang('common.add')@lang('common.region')</a>
+                                   href="{{ route('Admin::Region::add') }}">@lang('common.add')@lang('region.region')</a>
                             @endif
                         </td>
                     </tr>

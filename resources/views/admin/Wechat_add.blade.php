@@ -5,6 +5,7 @@
             <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <form method="post" class="form-horizontal" role="form">
+                    {{ csrf_field() }}
                     <div class="row">
                         {{--Api_link--}}
                         <div class="col-sm-12">

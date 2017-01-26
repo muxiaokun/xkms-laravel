@@ -94,6 +94,7 @@
                     @endforeach
                 </ul>
                 <form class="navbar-form navbar-right" role="search" action="{:M_U('Article/search')}" method="post">
+                    {{ csrf_field() }}
                     @if (isset($category_position['id']))
                         <input type="hidden" name="cate_id" value="{{ $category_position['id'] }}">
                     @endif

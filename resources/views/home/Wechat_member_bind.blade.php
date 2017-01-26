@@ -5,9 +5,9 @@
         </div>
         <div class="col-sm-6">
             <div class="tab-content">
-                <div class="tab-pane @if (register != request('t')">active@endif mt20 h350" id="login)
-                        <form class=" form-horizontal
-                " role="form" method="post"">
+                <div class="tab-pane @if ('register' != request('t')) active @endif mt20 h350" id="login">
+                    <form class="form-horizontal" role="form" method="post">
+                        {{ csrf_field() }}
                 <div class="form-group">
                     <label class="col-sm-3 control-label">@lang('common.account')</label>
                     <div class="col-sm-5">

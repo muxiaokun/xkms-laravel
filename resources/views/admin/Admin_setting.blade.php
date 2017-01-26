@@ -5,6 +5,7 @@
             <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <form method="post" class="form-horizontal" role="form">
+                    {{ csrf_field() }}
                     <div class="row">
                         {{--是否自动记录管理员日志--}}
                         <div class="col-sm-6">

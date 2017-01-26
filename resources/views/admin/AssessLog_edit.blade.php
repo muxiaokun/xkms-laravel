@@ -14,6 +14,7 @@
             <div class="panel-body">
                 <h1>{{ $assess_info['title'] }}</h1>
                 <form method="post" class="form-horizontal" role="form">
+                    {{ csrf_field() }}
                     <div class="form-group col-sm-12">
                         <label class="col-sm-2 control-label">
                             @if ('member' == $assess_info['target'])

@@ -1,6 +1,7 @@
 <section class="container">
     <div class="row">
         <form class="form-horizontal" action="{:M_U('add')}" method="post">
+            {{ csrf_field() }}
             <input type="hidden" name="id" value="{{ $message_board_info['id'] }}"/>
             <div class="col-sm-12">
                 @foreach ($message_board_info['config'] as $data)

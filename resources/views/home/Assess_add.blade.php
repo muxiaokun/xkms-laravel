@@ -14,6 +14,7 @@
         });
     </script>
     <form id="form_valid" onSubmit="return false;" method="post" class="form-horizontal" role="form">
+        {{ csrf_field() }}
         <div class="col-sm-12 mb20">
             <small>{{ $assess_info['explains'] }}</small>
         </div>

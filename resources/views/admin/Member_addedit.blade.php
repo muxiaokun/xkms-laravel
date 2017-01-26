@@ -23,6 +23,7 @@
                 </script>
                 <form id="form_valid" onSubmit="return false;" class="form-horizontal" role="form" action=""
                       method="post">
+                    {{ csrf_field() }}
                     <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
                     <input type="hidden" name="is_pwd" value="@if (Route::is('*::add'))1@else0@endif"/>
                     <div class="row">

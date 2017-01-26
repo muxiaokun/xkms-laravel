@@ -1,6 +1,7 @@
 @extends('home.Member_layout')
 @section('content')
     <form class="form-horizontal" role="form" action="" method="post">
+        {{ csrf_field() }}
         <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
         <div class="row">
             <div class="col-sm-12">

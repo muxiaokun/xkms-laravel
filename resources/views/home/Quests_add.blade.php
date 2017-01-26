@@ -41,6 +41,7 @@
     </div>
     <div class="col-sm-12">
         <form id="answer_form" onSubmit="return answer_submit();" method="post">
+            {{ csrf_field() }}
             <input type="hidden" name="id" value="{{ $quests_info['id'] }}"/>
             <input type="hidden" name="access_info" value="{{ $quests_info['access_info'] }}"/>
             @foreach ($quests_quest_list as $quest_id => $quest)

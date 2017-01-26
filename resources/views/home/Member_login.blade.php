@@ -36,6 +36,7 @@
                 });
                 </script>
                 <form id="form_valid_login" class="form-horizontal" role="form" method="post" action="{:M_U('login')}">
+                    {{ csrf_field() }}
                     <div class="form-group">
                         <label class="col-sm-3 control-label">@lang('common.account')</label>
                         <div class="col-sm-5">

@@ -5,6 +5,7 @@
             <div class="panel-heading">{{ $title }}</div>
             <div class="panel-body">
                 <form method="post">
+                    {{ csrf_field() }}
                     <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
                     <div class="col-sm-12 text-center"><h3>@lang('common.system')@lang('common.info')</h3></div>
                     <table class="table table-condensed table-hover col-sm-12">

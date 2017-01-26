@@ -1,5 +1,6 @@
 <section class="container">
     <form method="post" class="form-horizontal" role="form">
+        {{ csrf_field() }}
         <input type="hidden" name="id" value="{{ request('id') }}"/>
         <div class="row">
             <div class="col-sm-6">

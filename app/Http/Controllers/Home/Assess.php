@@ -21,7 +21,7 @@ class Assess extends FrontendMember
         ];
 
         //初始化翻页 和 列表数据
-        $assessList = Model\Assess::where($where)->ordered()->paginate(config('system.sys_max_row'));
+        $assessList = Model\Assess::where($where)->paginate(config('system.sys_max_row'));
         foreach ($assessList as &$assess) {
             switch ($assess['target']) {
                 case 'member':

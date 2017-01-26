@@ -34,7 +34,7 @@ class Admin extends Backend
 
         //初始化翻页 和 列表数据
         $adminList = Model\Admins::likeWhere('group_id',
-            $where['group_id'])->where($where)->ordered()->paginate(config('system.sys_max_row'));
+            $where['group_id'])->where($where)->paginate(config('system.sys_max_row'));
         foreach ($adminList as &$admin) {
             foreach ($admin['group_id'] as $groupId) {
                 $groupName = Model\AdminGroups::idWhere($groupId)->first()['name'];

@@ -23,7 +23,7 @@ class Navigation extends Backend
         $whereValue = request('is_enable');
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
         //初始化翻页 和 列表数据
-        $navigationList            = Model\Navigation::where($where)->ordered()->paginate(config('system.sys_max_row'));
+        $navigationList            = Model\Navigation::where($where)->paginate(config('system.sys_max_row'));
         $assign['navigation_list'] = $navigationList;
 
         //初始化where_info

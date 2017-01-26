@@ -20,7 +20,7 @@ class RecruitLog extends Backend
         $whereValue = mMktimeRange('birthday');
         $whereValue && $where[] = ['birthday', $whereValue];
         //初始化翻页 和 列表数据
-        $recruitLogList         = Model\RecruitLog::where($where)->ordered()->paginate(config('system.sys_max_row'));
+        $recruitLogList         = Model\RecruitLog::where($where)->paginate(config('system.sys_max_row'));
         $recruitSexData         = trans('common.recruit_sex_data');
         $recruitCertificateData = trans('common.recruit_certificate_data');
         foreach ($recruitLogList as &$recruitLog) {

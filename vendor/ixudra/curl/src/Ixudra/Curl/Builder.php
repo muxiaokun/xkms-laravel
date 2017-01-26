@@ -178,13 +178,13 @@ class Builder {
     /**
      * Add multiple HTTP header at the same time to the request
      *
-     * @param   array $headers Array of HTTP headers that must be added to the request
+     * @param   array $headers      Array of HTTP headers that must be added to the request
      * @return Builder
      */
     public function withHeaders(array $headers)
     {
-        $this->curlOptions['HTTPHEADER'] = array_merge(
-            $this->curlOptions['HTTPHEADER'], $headers
+        $this->curlOptions[ 'HTTPHEADER' ] = array_merge(
+            $this->curlOptions[ 'HTTPHEADER' ], $headers
         );
 
         return $this;
@@ -432,7 +432,7 @@ class Builder {
     {
         $parameterString = '';
         if( is_array($this->packageOptions[ 'data' ]) && count($this->packageOptions[ 'data' ]) != 0 ) {
-            $parameterString = '?'. http_build_query($this->packageOptions[ 'data' ]);
+            $parameterString = '?'. http_build_query( $this->packageOptions[ 'data' ], null, '&' );
         }
 
         return $this->curlOptions[ 'URL' ] .= $parameterString;

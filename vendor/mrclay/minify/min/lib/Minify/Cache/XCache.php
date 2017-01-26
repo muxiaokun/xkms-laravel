@@ -17,8 +17,7 @@
  * @package Minify
  * @author Elan Ruusamäe <glen@delfi.ee>
  **/
-class Minify_Cache_XCache
-{
+class Minify_Cache_XCache {
 
     /**
      * Create a Minify_Cache_XCache object, to be passed to
@@ -52,7 +51,7 @@ class Minify_Cache_XCache
      */
     public function getSize($id)
     {
-        if (!$this->_fetch($id)) {
+        if (! $this->_fetch($id)) {
             return false;
         }
         return (function_exists('mb_strlen') && ((int)ini_get('mbstring.func_overload') & 2))

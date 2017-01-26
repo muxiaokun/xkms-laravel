@@ -2,39 +2,37 @@
  * Minify URI Builder
  */
 var MUB = {
-    _uid: 0,
-    _minRoot: '/min/?',
-    checkRewrite: function () {
+    _uid : 0,
+    _minRoot : '/min/?',
+    checkRewrite : function () {
         var testUri = location.pathname.replace(/\/[^\/]*$/, '/rewriteTest.js').substr(1);
-
         function fail() {
             $('#minRewriteFailed')[0].className = 'topNote';
         }
-
         $.ajax({
-            url: '../f=' + testUri + '&' + (new Date()).getTime(),
-            success: function (data) {
+            url : '../f=' + testUri + '&' + (new Date()).getTime(),
+            success : function (data) {
                 if (data === '1') {
                     MUB._minRoot = '/min/';
                     $('span.minRoot').html('/min/');
                 } else
-                    fail();
+                    fail();                
             },
-            error: fail
+            error : fail
         });
     },
     /**
      * Get markup for new source LI element
      */
-    newLi: function () {
+    newLi : function () {
         return '<li id="li' + MUB._uid + '">http://' + location.host + '/<input type=text size=20>' +
-            ' <button class="btn btn-danger btn-sm" title="Remove">x</button> <button class="btn btn-default btn-sm" title="Include Earlier">&uarr;</button>' +
-            ' <button class="btn btn-default btn-sm" title="Include Later">&darr;</button> <span></span></li>';
+        ' <button class="btn btn-danger btn-sm" title="Remove">x</button> <button class="btn btn-default btn-sm" title="Include Earlier">&uarr;</button>' +
+        ' <button class="btn btn-default btn-sm" title="Include Later">&darr;</button> <span></span></li>';
     },
     /**
      * Add new empty source LI and attach handlers to buttons
      */
-    addLi: function () {
+    addLi : function () {
         $('#sources').append(MUB.newLi());
         var li = $('#li' + MUB._uid)[0];
         $('button[title=Remove]', li).click(function () {
@@ -68,32 +66,32 @@ var MUB = {
      * In the context of a source LI element, this will analyze the URI in
      * the INPUT and check the URL on the site.
      */
-    liUpdateTestLink: function () { // call in context of li element
-        if (!$('input', this)[0].value)
+    liUpdateTestLink : function () { // call in context of li element
+        if (! $('input', this)[0].value) 
             return;
         var li = this;
         $('span', this).html('');
         var url = location.protocol + '//' + location.host + '/' +
-            $('input', this)[0].value.replace(/^\//, '');
+                $('input', this)[0].value.replace(/^\//, '');
         $.ajax({
-            url: url,
-            complete: function (xhr, stat) {
+            url : url,
+            complete : function (xhr, stat) {
                 if ('success' === stat)
                     $('span', li).html('<a href="#" class="btn btn-success btn-sm disabled">&#x2713;</a>');
                 else {
                     $('span', li).html('<button class="btn btn-warning btn-sm"><b>404! </b> recheck</button>')
                         .find('button').click(function () {
-                        MUB.liUpdateTestLink.call(li);
-                    });
+                            MUB.liUpdateTestLink.call(li);
+                        });
                 }
             },
-            dataType: 'text'
+            dataType : 'text'
         });
     },
     /**
      * Check all source URLs
      */
-    updateAllTestLinks: function () {
+    updateAllTestLinks : function () {
         $('#sources li').each(MUB.liUpdateTestLink);
     },
     /**
@@ -103,7 +101,7 @@ var MUB = {
      * @param Number pos index to check
      * @return mixed a common char or '' if any do not match
      */
-    getCommonCharAtPos: function (arr, pos) {
+    getCommonCharAtPos : function (arr, pos) {
         var i,
             l = arr.length,
             c = arr[0].charAt(pos);
@@ -118,7 +116,7 @@ var MUB = {
      * Get the shortest URI to minify the set of source files
      * @param Array sources URIs
      */
-    getBestUri: function (sources) {
+    getBestUri : function (sources) {
         var pos = 0,
             base = '',
             c;
@@ -150,7 +148,7 @@ var MUB = {
     /**
      * Create the Minify URI for the sources
      */
-    update: function () {
+    update : function () {
         MUB.updateAllTestLinks();
         var sources = [],
             ext = false,
@@ -158,10 +156,10 @@ var MUB = {
             markup;
         $('#sources input').each(function () {
             var m, val;
-            if (!fail && this.value && (m = this.value.match(/\.(css|js)$/))) {
+            if (! fail && this.value && (m = this.value.match(/\.(css|js)$/))) {
                 var thisExt = m[1];
                 if (ext === false)
-                    ext = thisExt;
+                    ext = thisExt; 
                 else if (thisExt !== ext) {
                     fail = true;
                     return alert('extensions must match!');
@@ -172,9 +170,9 @@ var MUB = {
                     return alert('duplicate file!');
                 }
                 sources.push(this.value);
-            }
+            } 
         });
-        if (fail || !sources.length)
+        if (fail || ! sources.length)
             return;
         $('#groupConfig').val("    'keyName' => array('//" + sources.join("', '//") + "'),");
         var uri = MUB.getBestUri(sources),
@@ -191,7 +189,7 @@ var MUB = {
     /**
      * Handler for the "Add file +" button
      */
-    addButtonClick: function () {
+    addButtonClick : function () {
         $('#results').addClass('hide');
         MUB.addLi();
         MUB.updateAllTestLinks();
@@ -201,7 +199,7 @@ var MUB = {
     /**
      * Runs on DOMready
      */
-    init: function () {
+    init : function () {
         $('#jsDidntLoad').remove();
         $('#app').removeClass('hide');
         $('#sources').html('');
@@ -212,7 +210,7 @@ var MUB = {
         }).focus(function () {
             this.select();
         });
-        $('a.ext').attr({target: '_blank'});
+        $('a.ext').attr({target:'_blank'});
         if (location.hash) {
             // make links out of URIs from bookmarklet
             $('#getBm').addClass('hide');
@@ -231,17 +229,17 @@ var MUB = {
                 MUB.liUpdateTestLink.call($('#sources li:last')[0]);
                 $('#results').addClass('hide');
                 return false;
-            }).attr({title: 'Add file +'});
+            }).attr({title:'Add file +'});
         } else {
             // setup bookmarklet 1
             $.ajax({
-                url: '../?f=' + location.pathname.replace(/\/[^\/]*$/, '/bm.js').substr(1),
-                success: function (code) {
+                url : '../?f=' + location.pathname.replace(/\/[^\/]*$/, '/bm.js').substr(1),
+                success : function (code) {
                     $('#bm')[0].href = code
                         .replace('%BUILDER_URL%', location.href)
                         .replace(/\n/g, ' ');
                 },
-                dataType: 'text'
+                dataType : 'text'
             });
             if ($.browser.msie) {
                 $('#getBm p:last').append(' Sorry, not supported in MSIE!');
@@ -250,11 +248,11 @@ var MUB = {
         }
         // setup bookmarklet 2
         $.ajax({
-            url: '../?f=' + location.pathname.replace(/\/[^\/]*$/, '/bm2.js').substr(1),
-            success: function (code) {
+            url : '../?f=' + location.pathname.replace(/\/[^\/]*$/, '/bm2.js').substr(1),
+            success : function (code) {
                 $('#bm2')[0].href = code.replace(/\n/g, ' ');
             },
-            dataType: 'text'
+            dataType : 'text'
         });
         MUB.checkRewrite();
     }

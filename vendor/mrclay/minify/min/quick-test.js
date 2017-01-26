@@ -43,7 +43,7 @@ LCMCalculator.prototype = { // object literal
         return a;
     },
     // Object property names can be specified by strings delimited by double (") or single (') quotes.
-    "lcm": function () {
+    "lcm" : function () {
         // Variable names don't collide with object properties, e.g. |lcm| is not |this.lcm|.
         // not using |this.a * this.b| to avoid FP precision issues
         var lcm = this.a / this.gcd() * this.b;

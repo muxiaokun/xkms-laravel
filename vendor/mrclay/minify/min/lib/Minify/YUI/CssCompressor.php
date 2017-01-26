@@ -1,6 +1,6 @@
 <?php
 /**
- * Class Minify_YUI_CssCompressor
+ * Class Minify_YUI_CssCompressor 
  * @package Minify
  *
  * YUI Compressor
@@ -15,13 +15,12 @@
 
 /**
  * Compress CSS (incomplete DO NOT USE)
- *
+ * 
  * @see https://github.com/yui/yuicompressor/blob/master/src/com/yahoo/platform/yui/compressor/CssCompressor.java
  *
  * @package Minify
  */
-class Minify_YUI_CssCompressor
-{
+class Minify_YUI_CssCompressor {
 
     /**
      * Minify a CSS string
@@ -48,7 +47,7 @@ class Minify_YUI_CssCompressor
         // Remove the spaces before the things that should not have spaces before them.
         // But, be careful not to turn "p :link {...}" into "p:link{...}"
         // Swap out any pseudo-class colons with the token, and then swap back.
-        $css = preg_replace_callback("@(^|\\})(([^\\{:])+:)+([^\\{]*\\{)@", [$this, '_removeSpacesCB'], $css);
+        $css = preg_replace_callback("@(^|\\})(([^\\{:])+:)+([^\\{]*\\{)@", array($this, '_removeSpacesCB'), $css);
 
         $css = preg_replace("@\\s+([!{};:>+\\(\\)\\],])@", "$1", $css);
         $css = str_replace("___PSEUDOCLASSCOLON___", ":", $css);
@@ -75,7 +74,7 @@ class Minify_YUI_CssCompressor
 
         // Shorten colors from rgb(51,102,153) to #336699
         // This makes it more likely that it'll get further compressed in the next step.
-        $css = preg_replace_callback("@rgb\\s*\\(\\s*([0-9,\\s]+)\\s*\\)@", [$this, '_shortenRgbCB'], $css);
+        $css = preg_replace_callback("@rgb\\s*\\(\\s*([0-9,\\s]+)\\s*\\)@", array($this, '_shortenRgbCB'), $css);
 
         // Shorten colors from #AABBCC to #ABC. Note that we want to make sure
         // the color is not preceded by either ", " or =. Indeed, the property
@@ -83,8 +82,7 @@ class Minify_YUI_CssCompressor
         // would become
         //     filter: chroma(color="#FFF");
         // which makes the filter break in IE.
-        $css = preg_replace_callback("@([^\"'=\\s])(\\s*)#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])@",
-            [$this, '_shortenHexCB'], $css);
+        $css = preg_replace_callback("@([^\"'=\\s])(\\s*)#([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])([0-9a-fA-F])@", array($this, '_shortenHexCB'), $css);
 
         // Remove empty rules.
         $css = preg_replace("@[^\\}]+\\{;\\}@", "", $css);
@@ -97,9 +95,9 @@ class Minify_YUI_CssCompressor
             // Some source control tools don't like it when files containing lines longer
             // than, say 8000 characters, are checked in. The linebreak option is used in
             // that case to split long lines after a specific column.
-            $i            = 0;
+            $i = 0;
             $linestartpos = 0;
-            $sb           = $css;
+            $sb = $css;
 
             // make sure strlen returns byte count
             $mbIntEnc = null;
@@ -148,7 +146,7 @@ class Minify_YUI_CssCompressor
     protected function _shortenRgbCB($m)
     {
         $rgbcolors = explode(',', $m[1]);
-        $hexcolor  = '#';
+        $hexcolor = '#';
         for ($i = 0; $i < count($rgbcolors); $i++) {
             $val = round($rgbcolors[$i]);
             if ($val < 16) {
@@ -162,10 +160,9 @@ class Minify_YUI_CssCompressor
     protected function _shortenHexCB($m)
     {
         // Test for AABBCC pattern
-        if ((strtolower($m[3]) === strtolower($m[4])) &&
-            (strtolower($m[5]) === strtolower($m[6])) &&
-            (strtolower($m[7]) === strtolower($m[8]))
-        ) {
+        if ((strtolower($m[3])===strtolower($m[4])) &&
+                (strtolower($m[5])===strtolower($m[6])) &&
+                (strtolower($m[7])===strtolower($m[8]))) {
             return $m[1] . $m[2] . "#" . $m[3] . $m[5] . $m[7];
         } else {
             return $m[0];

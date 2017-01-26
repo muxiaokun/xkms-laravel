@@ -18,16 +18,15 @@
  * @author Stephen Clay <steve@mrclay.org>
  * @author Simon Schick <simonsimcity@gmail.com>
  */
-class Minify_ImportProcessor
-{
+class Minify_ImportProcessor {
 
-    public static $filesIncluded = [];
+    public static $filesIncluded = array();
 
     public static function process($file)
     {
-        self::$filesIncluded = [];
-        self::$_isCss        = (strtolower(substr($file, -4)) === '.css');
-        $obj                 = new Minify_ImportProcessor(dirname($file));
+        self::$filesIncluded = array();
+        self::$_isCss = (strtolower(substr($file, -4)) === '.css');
+        $obj = new Minify_ImportProcessor(dirname($file));
         return $obj->_getContent($file);
     }
 
@@ -48,14 +47,14 @@ class Minify_ImportProcessor
      */
     private function __construct($currentDir, $previewsDir = "")
     {
-        $this->_currentDir  = $currentDir;
+        $this->_currentDir = $currentDir;
         $this->_previewsDir = $previewsDir;
     }
 
     private function _getContent($file, $is_imported = false)
     {
         $file = realpath($file);
-        if (!$file
+        if (! $file
             || in_array($file, self::$filesIncluded)
             || false === ($content = @file_get_contents($file))
         ) {
@@ -63,10 +62,10 @@ class Minify_ImportProcessor
             return '';
         }
         self::$filesIncluded[] = realpath($file);
-        $this->_currentDir     = dirname($file);
+        $this->_currentDir = dirname($file);
 
         // remove UTF-8 BOM if present
-        if (pack("CCC", 0xef, 0xbb, 0xbf) === substr($content, 0, 3)) {
+        if (pack("CCC",0xef,0xbb,0xbf) === substr($content, 0, 3)) {
             $content = substr($content, 3);
         }
         // ensure uniform EOLs
@@ -84,8 +83,8 @@ class Minify_ImportProcessor
                 ([a-zA-Z,\\s]*)?     # 2 = media list
                 ;                    # end token
             /x'
-            , [$this, '_importCB']
-            , $content
+            ,array($this, '_importCB')
+            ,$content
         );
 
         // You only need to rework the import-path if the script is imported
@@ -93,8 +92,8 @@ class Minify_ImportProcessor
             // rewrite remaining relative URIs
             $content = preg_replace_callback(
                 '/url\\(\\s*([^\\)\\s]+)\\s*\\)/'
-                , [$this, '_urlCB']
-                , $content
+                ,array($this, '_urlCB')
+                ,$content
             );
         }
 
@@ -103,7 +102,7 @@ class Minify_ImportProcessor
 
     private function _importCB($m)
     {
-        $url       = $m[1];
+        $url = $m[1];
         $mediaList = preg_replace('/\\s+/', '', $m[2]);
 
         if (strpos($url, '://') > 0) {
@@ -114,7 +113,7 @@ class Minify_ImportProcessor
         }
         if ('/' === $url[0]) {
             // protocol-relative or root path
-            $url  = ltrim($url, '/');
+            $url = ltrim($url, '/');
             $file = realpath($_SERVER['DOCUMENT_ROOT']) . DIRECTORY_SEPARATOR
                 . strtr($url, '/', DIRECTORY_SEPARATOR);
         } else {
@@ -122,7 +121,7 @@ class Minify_ImportProcessor
             $file = $this->_currentDir . DIRECTORY_SEPARATOR
                 . strtr($url, '/', DIRECTORY_SEPARATOR);
         }
-        $obj     = new Minify_ImportProcessor(dirname($file), $this->_currentDir);
+        $obj = new Minify_ImportProcessor(dirname($file), $this->_currentDir);
         $content = $obj->_getContent($file, true);
         if ('' === $content) {
             // failed. leave in place for CSS, comment for JS
@@ -141,7 +140,7 @@ class Minify_ImportProcessor
         $quote = ($m[1][0] === "'" || $m[1][0] === '"')
             ? $m[1][0]
             : '';
-        $url   = ($quote === '')
+        $url = ($quote === '')
             ? $m[1]
             : substr($m[1], 1, strlen($m[1]) - 2);
         if ('/' !== $url[0]) {
@@ -167,11 +166,12 @@ class Minify_ImportProcessor
     private function getPathDiff($from, $to, $ps = DIRECTORY_SEPARATOR)
     {
         $realFrom = $this->truepath($from);
-        $realTo   = $this->truepath($to);
+        $realTo = $this->truepath($to);
 
         $arFrom = explode($ps, rtrim($realFrom, $ps));
-        $arTo   = explode($ps, rtrim($realTo, $ps));
-        while (count($arFrom) && count($arTo) && ($arFrom[0] == $arTo[0])) {
+        $arTo = explode($ps, rtrim($realTo, $ps));
+        while (count($arFrom) && count($arTo) && ($arFrom[0] == $arTo[0]))
+        {
             array_shift($arFrom);
             array_shift($arTo);
         }
@@ -189,18 +189,16 @@ class Minify_ImportProcessor
         // whether $path is unix or not
         $unipath = strlen($path) == 0 || $path{0} != '/';
         // attempts to detect if path is relative in which case, add cwd
-        if (strpos($path, ':') === false && $unipath) {
+        if (strpos($path, ':') === false && $unipath)
             $path = $this->_currentDir . DIRECTORY_SEPARATOR . $path;
-        }
 
         // resolve path parts (single dot, double dot and double delimiters)
-        $path      = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
-        $parts     = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
-        $absolutes = [];
+        $path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
+        $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
+        $absolutes = array();
         foreach ($parts as $part) {
-            if ('.' == $part) {
+            if ('.' == $part)
                 continue;
-            }
             if ('..' == $part) {
                 array_pop($absolutes);
             } else {
@@ -209,9 +207,8 @@ class Minify_ImportProcessor
         }
         $path = implode(DIRECTORY_SEPARATOR, $absolutes);
         // resolve any symlinks
-        if (file_exists($path) && linkinfo($path) > 0) {
+        if (file_exists($path) && linkinfo($path) > 0)
             $path = readlink($path);
-        }
         // put initial separator that could have been lost
         $path = !$unipath ? '/' . $path : $path;
         return $path;

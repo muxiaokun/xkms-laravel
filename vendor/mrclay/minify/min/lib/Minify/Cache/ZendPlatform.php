@@ -9,7 +9,7 @@
  * ZendPlatform-based cache class for Minify
  *
  * Based on Minify_Cache_APC, uses output_cache_get/put (currently deprecated)
- *
+ * 
  * <code>
  * Minify::setCache(new Minify_Cache_ZendPlatform());
  * </code>
@@ -17,8 +17,7 @@
  * @package Minify
  * @author Patrick van Dissel
  */
-class Minify_Cache_ZendPlatform
-{
+class Minify_Cache_ZendPlatform {
 
 
     /**

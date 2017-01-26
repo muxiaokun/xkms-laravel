@@ -1,29 +1,27 @@
 <?php
 /**
- * Class Minify_Controller_MinApp
+ * Class Minify_Controller_MinApp  
  * @package Minify
  */
 
 /**
  * Controller class for requests to /min/index.php
- *
+ * 
  * @package Minify
  * @author Stephen Clay <steve@mrclay.org>
  */
-class Minify_Controller_MinApp extends Minify_Controller_Base
-{
-
+class Minify_Controller_MinApp extends Minify_Controller_Base {
+    
     /**
      * Set up groups of files as sources
-     *
+     * 
      * @param array $options controller and Minify options
      *
      * @return array Minify options
      */
-    public function setupSources($options)
-    {
+    public function setupSources($options) {
         // PHP insecure by default: realpath() and other FS functions can't handle null bytes.
-        foreach (['g', 'b', 'f'] as $key) {
+        foreach (array('g', 'b', 'f') as $key) {
             if (isset($_GET[$key])) {
                 $_GET[$key] = str_replace("\x00", '', (string)$_GET[$key]);
             }
@@ -31,20 +29,17 @@ class Minify_Controller_MinApp extends Minify_Controller_Base
 
         // filter controller options
         $cOptions = array_merge(
-            [
-                'allowDirs'    => '//'
-                ,
-                'groupsOnly'   => false
-                ,
-                'groups'       => []
-                ,
-                'noMinPattern' => '@[-\\.]min\\.(?:js|css)$@i' // matched against basename
-            ]
-            , (isset($options['minApp']) ? $options['minApp'] : [])
+            array(
+                'allowDirs' => '//'
+                ,'groupsOnly' => false
+                ,'groups' => array()
+                ,'noMinPattern' => '@[-\\.]min\\.(?:js|css)$@i' // matched against basename
+            )
+            ,(isset($options['minApp']) ? $options['minApp'] : array())
         );
         unset($options['minApp']);
-        $sources              = [];
-        $this->selectionId    = '';
+        $sources = array();
+        $this->selectionId = '';
         $firstMissingResource = null;
         if (isset($_GET['g'])) {
             // add group(s)
@@ -55,15 +50,15 @@ class Minify_Controller_MinApp extends Minify_Controller_Base
                 return $options;
             }
             foreach ($keys as $key) {
-                if (!isset($cOptions['groups'][$key])) {
+                if (! isset($cOptions['groups'][$key])) {
                     $this->log("A group configuration for \"{$key}\" was not found");
                     return $options;
                 }
                 $files = $cOptions['groups'][$key];
                 // if $files is a single object, casting will break it
                 if (is_object($files)) {
-                    $files = [$files];
-                } elseif (!is_array($files)) {
+                    $files = array($files);
+                } elseif (! is_array($files)) {
                     $files = (array)$files;
                 }
                 foreach ($files as $file) {
@@ -99,13 +94,13 @@ class Minify_Controller_MinApp extends Minify_Controller_Base
                 }
             }
         }
-        if (!$cOptions['groupsOnly'] && isset($_GET['f'])) {
+        if (! $cOptions['groupsOnly'] && isset($_GET['f'])) {
             // try user files
             // The following restrictions are to limit the URLs that minify will
             // respond to.
             if (// verify at least one file, files are single comma separated, 
                 // and are all same extension
-                !preg_match('/^[^,]+\\.(css|js)(?:,[^,]+\\.\\1)*$/', $_GET['f'], $m)
+                ! preg_match('/^[^,]+\\.(css|js)(?:,[^,]+\\.\\1)*$/', $_GET['f'], $m)
                 // no "//"
                 || strpos($_GET['f'], '//') !== false
                 // no "\"
@@ -130,10 +125,9 @@ class Minify_Controller_MinApp extends Minify_Controller_Base
                 // check for validity
                 if (preg_match('@^[^/]+(?:/[^/]+)*$@', $_GET['b'])
                     && false === strpos($_GET['b'], '..')
-                    && $_GET['b'] !== '.'
-                ) {
+                    && $_GET['b'] !== '.') {
                     // valid base
-                    $base = "/{$_GET['b']}/";
+                    $base = "/{$_GET['b']}/";       
                 } else {
                     $this->log("GET param 'b' was invalid");
                     return $options;
@@ -141,16 +135,16 @@ class Minify_Controller_MinApp extends Minify_Controller_Base
             } else {
                 $base = '/';
             }
-            $allowDirs = [];
+            $allowDirs = array();
             foreach ((array)$cOptions['allowDirs'] as $allowDir) {
                 $allowDirs[] = realpath(str_replace('//', $_SERVER['DOCUMENT_ROOT'] . '/', $allowDir));
             }
-            $basenames = []; // just for cache id
+            $basenames = array(); // just for cache id
             foreach ($files as $file) {
-                $uri      = $base . $file;
-                $path     = $_SERVER['DOCUMENT_ROOT'] . $uri;
+                $uri = $base . $file;
+                $path = $_SERVER['DOCUMENT_ROOT'] . $uri;
                 $realpath = realpath($path);
-                if (false === $realpath || !is_file($realpath)) {
+                if (false === $realpath || ! is_file($realpath)) {
                     $this->log("The path \"{$path}\" (realpath \"{$realpath}\") could not be found (or was not a file)");
                     if (null === $firstMissingResource) {
                         $firstMissingResource = $uri;
@@ -168,7 +162,7 @@ class Minify_Controller_MinApp extends Minify_Controller_Base
                     $this->log($e->getMessage());
                     return $options;
                 }
-                $sources[]   = $this->_getFileSource($realpath, $cOptions);
+                $sources[] = $this->_getFileSource($realpath, $cOptions);
                 $basenames[] = basename($realpath, $ext);
             }
             if ($this->selectionId) {
@@ -178,17 +172,14 @@ class Minify_Controller_MinApp extends Minify_Controller_Base
         }
         if ($sources) {
             if (null !== $firstMissingResource) {
-                array_unshift($sources, new Minify_Source([
-                    'id'           => 'missingFile'
+                array_unshift($sources, new Minify_Source(array(
+                    'id' => 'missingFile'
                     // should not cause cache invalidation
-                    ,
-                    'lastModified' => 0
+                    ,'lastModified' => 0
                     // due to caching, filename is unreliable.
-                    ,
-                    'content'      => "/* Minify: at least one missing file. See " . Minify::URL_DEBUG . " */\n"
-                    ,
-                    'minifier'     => '',
-                ]));
+                    ,'content' => "/* Minify: at least one missing file. See " . Minify::URL_DEBUG . " */\n"
+                    ,'minifier' => ''
+                )));
             }
             $this->sources = $sources;
         } else {

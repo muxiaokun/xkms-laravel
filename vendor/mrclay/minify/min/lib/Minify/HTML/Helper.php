@@ -10,15 +10,14 @@
  * @package Minify
  * @author Stephen Clay <steve@mrclay.org>
  */
-class Minify_HTML_Helper
-{
+class Minify_HTML_Helper {
     public $rewriteWorks = true;
     public $minAppUri = '/min';
     public $groupsConfigFile = '';
 
     /**
      * Get an HTML-escaped Minify URI for a group or set of files
-     *
+     * 
      * @param string|array $keyOrFiles a group key or array of filepaths/URIs
      * @param array $opts options:
      *   'farExpires' : (default true) append a modified timestamp for cache revving
@@ -29,24 +28,19 @@ class Minify_HTML_Helper
      *   'groupsConfigFile' : specify if different
      * @return string
      */
-    public static function getUri($keyOrFiles, $opts = [])
+    public static function getUri($keyOrFiles, $opts = array())
     {
-        $opts                = array_merge([ // default options
-            'farExpires'       => true
-            ,
-            'debug'            => false
-            ,
-            'charset'          => 'UTF-8'
-            ,
-            'minAppUri'        => '/min'
-            ,
-            'rewriteWorks'     => true
-            ,
-            'groupsConfigFile' => '',
-        ], $opts);
-        $h                   = new self;
-        $h->minAppUri        = $opts['minAppUri'];
-        $h->rewriteWorks     = $opts['rewriteWorks'];
+        $opts = array_merge(array( // default options
+            'farExpires' => true
+            ,'debug' => false
+            ,'charset' => 'UTF-8'
+            ,'minAppUri' => '/min'
+            ,'rewriteWorks' => true
+            ,'groupsConfigFile' => ''
+        ), $opts);
+        $h = new self;
+        $h->minAppUri = $opts['minAppUri'];
+        $h->rewriteWorks = $opts['rewriteWorks'];
         $h->groupsConfigFile = $opts['groupsConfigFile'];
         if (is_array($keyOrFiles)) {
             $h->setFiles($keyOrFiles, $opts['farExpires']);
@@ -67,7 +61,7 @@ class Minify_HTML_Helper
     public function getRawUri($farExpires = true, $debug = false)
     {
         $path = rtrim($this->minAppUri, '/') . '/';
-        if (!$this->rewriteWorks) {
+        if (! $this->rewriteWorks) {
             $path .= '?';
         }
         if (null === $this->_groupKey) {
@@ -101,11 +95,10 @@ class Minify_HTML_Helper
             if (0 === strpos($file, '//')) {
                 $file = substr($file, 2);
             } elseif (0 === strpos($file, '/')
-                || 1 === strpos($file, ':\\')
-            ) {
+                      || 1 === strpos($file, ':\\')) {
                 $file = substr($file, strlen($_SERVER['DOCUMENT_ROOT']) + 1);
             }
-            $file      = strtr($file, '\\', '/');
+            $file = strtr($file, '\\', '/');
             $files[$k] = $file;
         }
         $this->_filePaths = $files;
@@ -121,11 +114,11 @@ class Minify_HTML_Helper
     {
         $this->_groupKey = $key;
         if ($checkLastModified) {
-            if (!$this->groupsConfigFile) {
+            if (! $this->groupsConfigFile) {
                 $this->groupsConfigFile = dirname(dirname(dirname(dirname(__FILE__)))) . '/groupsConfig.php';
             }
             if (is_file($this->groupsConfigFile)) {
-                $gc   = (require $this->groupsConfigFile);
+                $gc = (require $this->groupsConfigFile);
                 $keys = explode(',', $key);
                 foreach ($keys as $key) {
                     if (isset($gc[$key])) {
@@ -162,10 +155,10 @@ class Minify_HTML_Helper
     }
 
     protected $_groupKey = null; // if present, URI will be like g=...
-    protected $_filePaths = [];
+    protected $_filePaths = array();
     protected $_lastModified = null;
 
-
+    
     /**
      * In a given array of strings, find the character they all have at
      * a particular index
@@ -174,8 +167,7 @@ class Minify_HTML_Helper
      * @param int $pos index to check
      * @return mixed a common char or '' if any do not match
      */
-    protected static function _getCommonCharAtPos($arr, $pos)
-    {
+    protected static function _getCommonCharAtPos($arr, $pos) {
         if (!isset($arr[0][$pos])) {
             return '';
         }
@@ -199,9 +191,8 @@ class Minify_HTML_Helper
      * @param string $minRoot root-relative URI of the "min" application
      * @return string
      */
-    protected static function _getShortestUri($paths, $minRoot = '/min/')
-    {
-        $pos  = 0;
+    protected static function _getShortestUri($paths, $minRoot = '/min/') {
+        $pos = 0;
         $base = '';
         while (true) {
             $c = self::_getCommonCharAtPos($paths, $pos);
@@ -213,12 +204,12 @@ class Minify_HTML_Helper
             ++$pos;
         }
         $base = preg_replace('@[^/]+$@', '', $base);
-        $uri  = $minRoot . 'f=' . implode(',', $paths);
-
+        $uri = $minRoot . 'f=' . implode(',', $paths);
+        
         if (substr($base, -1) === '/') {
             // we have a base dir!
             $basedPaths = $paths;
-            $l          = count($paths);
+            $l = count($paths);
             for ($i = 0; $i < $l; ++$i) {
                 $basedPaths[$i] = substr($paths[$i], strlen($base));
             }

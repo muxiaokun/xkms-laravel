@@ -26,6 +26,10 @@ class MessageBoard extends Backend
         }
         $assign['message_board_list']       = $messageBoardList;
 
+        //初始化where_info
+        $whereInfo            = [];
+        $assign['where_info'] = $whereInfo;
+
         //初始化batch_handle
         $batchHandle              = [];
         $batchHandle['log_index'] = $this->_check_privilege('index', 'MessageBoardLog');

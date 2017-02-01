@@ -9,15 +9,15 @@
                     <tr>
                         <th><input type="checkbox" onClick="M_allselect_par(this,'table')"/>&nbsp;@lang('common.id')
                         </th>
-                        <th>@lang('common.recruit')@lang('common.name')</th>
+                        <th>@lang('recruit.recruit')@lang('common.name')</th>
                         <th>@lang('common.yes')@lang('common.no')@lang('common.enable')</th>
-                        <th>@lang('common.re_recruit')@lang('common.number')</th>
+                        <th>@lang('recruit.re_recruit')@lang('common.number')</th>
                         <th>@lang('common.start')@lang('common.time')</th>
                         <th>@lang('common.end')@lang('common.time')</th>
                         <td class="nowrap">
                             @if ($batch_handle['add'])
                                 <a class="btn btn-xs btn-success"
-                                   href="{{ route('Admin::Recruit::add') }}">@lang('common.add')@lang('common.recruit')</a>
+                                   href="{{ route('Admin::Recruit::add') }}">@lang('common.add')@lang('recruit.recruit')</a>
                             @endif
                         </td>
                     </tr>

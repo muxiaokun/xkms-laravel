@@ -15,7 +15,7 @@
                         <td class="nowrap">
                             @if ($batch_handle['add'])
                                 <a class="btn btn-xs btn-success"
-                                   href="{{ route('Admin::Message::add') }}">@lang('common.send')@lang('common.message')</a>
+                                   href="{{ route('Admin::Message::add') }}">@lang('common.send')@lang('message.message')</a>
                             @endif
                         </td>
                     </tr>
@@ -76,7 +76,7 @@
                 </table>
                 <div class="row">
                     <div id="batch_handle" class="col-sm-4 pagination">
-                        @if ($batch_handle['edit'] OR $batch_handle['del'])
+                        @if ($batch_handle['add'] OR $batch_handle['del'])
                             <script type="text/javascript" src="{{ asset('js/M_batch_handle.js') }}"></script>
                             <script type="text/javascript">
                                 $(function () {

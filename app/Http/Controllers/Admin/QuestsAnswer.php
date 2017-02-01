@@ -36,7 +36,7 @@ class QuestsAnswer extends Backend
         $assign['quests_answer_list']       = $questsAnswerList;
         //初始化where_info
         $whereInfo                 = [];
-        $whereInfo['quests_title'] = ['type' => 'input', 'name' => trans('common.quests') . trans('common.name')];
+        $whereInfo['quests_title'] = ['type' => 'input', 'name' => trans('quests.quests') . trans('common.name')];
         $whereInfo['member_id']    = ['type' => 'input', 'name' => trans('common.member') . trans('common.name')];
         $assign['where_info']      = $whereInfo;
 
@@ -46,7 +46,7 @@ class QuestsAnswer extends Backend
         $batchHandle['del']     = $this->_check_privilege('del');
         $assign['batch_handle'] = $batchHandle;
 
-        $assign['title'] = trans('common.quests') . trans('common.answer') . trans('common.management');
+        $assign['title'] = trans('quests.quests') . trans('common.answer') . trans('common.management');
         return view('admin.QuestsAnswer_index', $assign);
     }
 

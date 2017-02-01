@@ -31,7 +31,7 @@ class ArticleCategory extends Backend
             }
         }
         //初始化翻页 和 列表数据
-        $articleCategoryList = Model\ArticleCategory::where($where)->all();
+        $articleCategoryList = Model\ArticleCategory::where($where)->get();
         foreach ($articleCategoryList as &$articleCategory) {
             //parent_id 用完销毁不能产生歧义
             $where['parent_id']           = $articleCategory['id'];

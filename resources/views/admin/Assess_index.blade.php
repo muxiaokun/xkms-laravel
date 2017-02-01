@@ -10,14 +10,14 @@
                         <th><input type="checkbox" onClick="M_allselect_par(this,'table')"/>&nbsp;@lang('common.id')
                         </th>
                         <th>@lang('common.title')</th>
-                        <th>@lang('common.assess')@lang('common.group')</th>
+                        <th>@lang('assess.assess')@lang('common.group')</th>
                         <th>@lang('common.start')@lang('common.time')</th>
                         <th>@lang('common.end')@lang('common.time')</th>
                         <th>@lang('common.yes')@lang('common.no')@lang('common.enable')</th>
                         <td class="nowrap">
                             @if ($batch_handle['add'])
                                 <a class="btn btn-xs btn-success"
-                                   href="{{ route('Admin::Assess::add') }}">@lang('common.add')@lang('common.assess')</a>
+                                   href="{{ route('Admin::Assess::add') }}">@lang('common.add')@lang('assess.assess')</a>
                             @endif
                         </td>
                     </tr>

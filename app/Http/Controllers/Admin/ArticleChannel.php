@@ -42,7 +42,7 @@ class ArticleChannel extends Backend
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.channel') . trans('common.management');
-        return view('admin.ArticleChannel_index');
+        return view('admin.ArticleChannel_index', $assign);
     }
 
     //新增

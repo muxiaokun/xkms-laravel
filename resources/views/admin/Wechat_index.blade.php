@@ -18,7 +18,7 @@
                         <td class="nowrap">
                             @if ($batch_handle['add'])
                                 <a class="btn btn-xs btn-success"
-                                   href="{{ route('Admin::Wechat::add') }}">@lang('common.config')@lang('common.wechat')</a>
+                                   href="{{ route('Admin::Wechat::add') }}">@lang('common.config')@lang('wechat.wechat')</a>
                             @endif
                         </td>
                     </tr>

@@ -39,7 +39,7 @@ class Quests extends Backend
         $batchHandle['del']          = $this->_check_privilege('del');
         $assign['batch_handle']      = $batchHandle;
 
-        $assign['title'] = trans('common.quests') . trans('common.management');
+        $assign['title'] = trans('quests.quests') . trans('common.management');
         return view('admin.Quests_index', $assign);
     }
 

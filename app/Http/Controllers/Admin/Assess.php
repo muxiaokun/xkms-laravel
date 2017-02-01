@@ -32,7 +32,7 @@ class Assess extends Backend
         //初始化where_info
         $whereInfo                = [];
         $whereInfo['title']       = ['type' => 'input', 'name' => trans('common.title')];
-        $whereInfo['group_level'] = ['type' => 'input', 'name' => trans('common.assess') . trans('common.group')];
+        $whereInfo['group_level'] = ['type' => 'input', 'name' => trans('assess.assess') . trans('common.group')];
         $whereInfo['start_time']  = ['type' => 'time', 'name' => trans('common.add') . trans('common.time')];
         $whereInfo['is_enable']   = [
             'type'  => 'select',
@@ -49,7 +49,7 @@ class Assess extends Backend
         $batchHandle['del']      = $this->_check_privilege('del');
         $assign['batch_handle']  = $batchHandle;
 
-        $assign['title'] = trans('common.assess') . trans('common.management');
+        $assign['title'] = trans('assess.assess') . trans('common.management');
         return view('admin.Assess_index', $assign);
     }
 

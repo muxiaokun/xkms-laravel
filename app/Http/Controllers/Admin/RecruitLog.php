@@ -32,8 +32,8 @@ class RecruitLog extends Backend
 
         //初始化where_info
         $whereInfo             = [];
-        $whereInfo['name']     = ['type' => 'input', 'name' => trans('common.recruit_name')];
-        $whereInfo['birthday'] = ['type' => 'time', 'name' => trans('common.recruit_birthday')];
+        $whereInfo['name'] = ['type' => 'input', 'name' => trans('recruit.recruit_name')];
+        $whereInfo['birthday'] = ['type' => 'time', 'name' => trans('recruit.recruit_birthday')];
         $assign['where_info']  = $whereInfo;
 
         //初始化batch_handle
@@ -41,7 +41,7 @@ class RecruitLog extends Backend
         $batchHandle['del']     = $this->_check_privilege('del');
         $assign['batch_handle'] = $batchHandle;
 
-        $assign['title'] = trans('common.recruit_log') . trans('common.management');
+        $assign['title']        = trans('recruit.recruit_log') . trans('common.management');
         return view('admin.RecruitLog_index', $assign);
     }
 

@@ -10,12 +10,12 @@
                     <tr>
                         <th><input type="checkbox" onClick="M_allselect_par(this,'table')"/>&nbsp;@lang('common.id')
                         </th>
-                        <th>@lang('common.re_recruit')</th>
-                        <th>@lang('common.recruit_name')</th>
-                        <th>@lang('common.recruit')@lang('common.time')</th>
-                        <th>@lang('common.recruit_birthday')</th>
-                        <th>@lang('common.recruit_sex')</th>
-                        <th>@lang('common.recruit_certificate')</th>
+                        <th>@lang('recruit.re_recruit')</th>
+                        <th>@lang('recruit.recruit_name')</th>
+                        <th>@lang('recruit.recruit')@lang('common.time')</th>
+                        <th>@lang('recruit.recruit_birthday')</th>
+                        <th>@lang('recruit.recruit_sex')</th>
+                        <th>@lang('recruit.recruit_certificate')</th>
                         <th>@lang('common.handle')</th>
                     </tr>
                     @foreach ($recruit_log_list as $recruit_log)
@@ -68,7 +68,7 @@
                 </table>
                 <div class="row">
                     <div id="batch_handle" class="col-sm-4 pagination">
-                        @if ($batch_handle['edit'] OR $batch_handle['del'])
+                        @if ($batch_handle['del'])
                             <script type="text/javascript" src="{{ asset('js/M_batch_handle.js') }}"></script>
                             <script type="text/javascript">
                                 $(function () {

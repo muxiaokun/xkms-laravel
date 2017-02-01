@@ -25,7 +25,7 @@ class Recruit extends Backend
 
         //初始化where_info
         $whereInfo               = [];
-        $whereInfo['name']       = ['type' => 'input', 'name' => trans('common.recruit') . trans('common.name')];
+        $whereInfo['name'] = ['type' => 'input', 'name' => trans('recruit.recruit') . trans('common.name')];
         $whereInfo['start_time'] = ['type' => 'time', 'name' => trans('common.start') . trans('common.time')];
         $whereInfo['end_time']   = ['type' => 'time', 'name' => trans('common.end') . trans('common.time')];
         $assign['where_info']    = $whereInfo;
@@ -38,7 +38,7 @@ class Recruit extends Backend
         $batchHandle['del']       = $this->_check_privilege('del');
         $assign['batch_handle']   = $batchHandle;
 
-        $assign['title'] = trans('common.recruit') . trans('common.management');
+        $assign['title'] = trans('recruit.recruit') . trans('common.management');
         return view('admin.Recruit_index', $assign);
     }
 

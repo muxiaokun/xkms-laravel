@@ -32,7 +32,7 @@
                             <td class="nowrap">
                                 @if ($batch_handle['log_index'])
                                     <a class="btn btn-xs btn-primary"
-                                       href="{{ route('Admin::MessageBoard::Admin::MessageBoardLog::index',array('msg_id'=>$message_board['id'])) }}">
+                                       href="{{ route('Admin::MessageBoardLog::index',array('msg_id'=>$message_board['id'])) }}">
                                         @lang('common.look')
                                     </a>
                                 @endif

@@ -27,7 +27,7 @@ class Itlink extends Backend
         $assign['itlink_list'] = $itlinkList;
 
         //初始化where_info
-        $whereInfo['name']          = ['type' => 'input', 'name' => trans('common.itlink') . trans('common.name')];
+        $whereInfo['name'] = ['type' => 'input', 'name' => trans('itlink.itlink') . trans('common.name')];
         $whereInfo['short_name']    = ['type' => 'input', 'name' => trans('common.short') . trans('common.name')];
         $whereInfo['is_enable']     = [
             'type'  => 'select',
@@ -48,7 +48,7 @@ class Itlink extends Backend
         $batchHandle['del']     = $this->_check_privilege('del');
         $assign['batch_handle'] = $batchHandle;
 
-        $assign['title'] = trans('common.itlink') . trans('common.management');
+        $assign['title'] = trans('itlink.itlink') . trans('common.management');
         return view('admin.Itlink_index', $assign);
     }
 

@@ -17,7 +17,7 @@
                         <td class="nowrap">
                             @if ($batch_handle['add'])
                                 <a class="btn btn-xs btn-success"
-                                   href="{{ route('Admin::Quests::add') }}">@lang('common.add')@lang('common.quests')</a>
+                                   href="{{ route('Admin::Quests::add') }}">@lang('common.add')@lang('quests.quests')</a>
                             @endif
                         </td>
                     </tr>

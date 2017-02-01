@@ -56,8 +56,8 @@ class Article extends Backend
         $assign['article_list'] = $articleList;
 
         //初始化where_info
-        $channelList        = Model\ArticleChannel::where($channelWhere)->all();
-        $categoryList       = Model\ArticleCategory::where($categoryWhere)->all();
+        $channelList           = Model\ArticleChannel::where($channelWhere)->get();
+        $categoryList          = Model\ArticleCategory::where($categoryWhere)->get();
         $searchChannelList  = [];
         $searchCategoryList = [];
         foreach ($channelList as $channel) {
@@ -81,16 +81,16 @@ class Article extends Backend
             'name'  => trans('common.channel'),
             'value' => $searchChannelList,
         ];
-        $whereInfo['is_audit']   = ['type'  => 'select',
-                                    'name'  => trans('common.yes') . trans('common.no') . l('audit'),
-                                    'value' => [
+        $whereInfo['is_audit'] = ['type'  => 'select',
+                                  'name'  => trans('common.yes') . trans('common.no') . trans('common.audit'),
+                                  'value' => [
                                         1 => trans('common.audit'),
                                         2 => trans('common.none') . trans('common.audit'),
                                     ],
         ];
-        $whereInfo['if_show']    = ['type'  => 'select',
-                                    'name'  => trans('common.yes') . trans('common.no') . l('show'),
-                                    'value' => [1 => trans('common.show'), 2 => trans('common.hidden')],
+        $whereInfo['if_show']  = ['type'  => 'select',
+                                  'name'  => trans('common.yes') . trans('common.no') . trans('common.show'),
+                                  'value' => [1 => trans('common.show'), 2 => trans('common.hidden')],
         ];
         $assign['where_info']    = $whereInfo;
 

@@ -6,6 +6,9 @@ return array(
     're_recruit'               => '应聘',
     'resume'                   => '简历',
 
+    'recruit_log'              => '应聘记录',
+    're_recruit'               => '应聘',
+
     'recruit_name'             => '姓名',
     'recruit_birthday'         => '出生日期',
     'recruit_sex'              => '性别',

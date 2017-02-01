@@ -13,8 +13,8 @@ class Message extends Backend
     {
         $where = [];
         //0为系统发送/接收
-        $where['_complex']['_logic']     = 'OR';
-        $where['_complex']['receive_id'] = $where['_complex']['send_id'] = 0;
+        //$where['_complex']['_logic']     = 'OR';
+        //$where['_complex']['receive_id'] = $where['_complex']['send_id'] = 0;
         //建立where
         $whereValue = '';
         $whereValue = request('receive_id');
@@ -42,7 +42,7 @@ class Message extends Backend
         $batchHandle['del']     = $this->_check_privilege('del');
         $assign['batch_handle'] = $batchHandle;
 
-        $assign['title'] = trans('common.message') . trans('common.management');
+        $assign['title'] = trans('message.message') . trans('common.management');
         return view('admin.Message_index', $assign);
     }
 

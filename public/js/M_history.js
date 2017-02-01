@@ -49,7 +49,11 @@ M_history.prototype.initialize = function()
     _self.out_obj.prepend('<h3>' + lang.common.history + lang.common.handle + '</h3>');
     _self.out_obj.find('a').each(function(k,v){
         var a_obj = $(v);
-        a_obj.on('click',function(){_self.a_click(a_obj)});
+        if (!a_obj.attr('href').match(/javascript:/)) {
+            a_obj.on('click', function () {
+                _self.a_click(a_obj)
+            });
+        }
     });
     _self.initialize_data();
     _self.out_obj.accordion({

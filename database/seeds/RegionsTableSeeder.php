@@ -12,7 +12,16 @@ class RegionsTableSeeder extends Seeder
     public function run()
     {
         DB::table('regions')->insert([
-            ['id'=>'1','parent_id'=>'0','region_name'=>'中国省','short_name'=>'中国','all_spell'=>'zhongguo','short_spell'=>'zg','areacode'=>'NULL','postcode'=>'NULL','if_show'=>'1'],
+            ['id'          => '1',
+             'parent_id'   => '0',
+             'region_name' => '中华人民共和国',
+             'short_name'  => '中国',
+             'all_spell'   => 'zhongguo',
+             'short_spell' => 'zg',
+             'areacode'    => 'NULL',
+             'postcode'    => 'NULL',
+             'if_show'     => '1',
+            ],
             ['id'=>'2','parent_id'=>'1','region_name'=>'北京市','short_name'=>'北京','all_spell'=>'beijing','short_spell'=>'bj','areacode'=>'NULL','postcode'=>'NULL','if_show'=>'1'],
             ['id'=>'3','parent_id'=>'2','region_name'=>'北京市','short_name'=>'北京市','all_spell'=>'beijingshi','short_spell'=>'bjs','areacode'=>'010','postcode'=>'100000','if_show'=>'1'],
             ['id'=>'4','parent_id'=>'3','region_name'=>'东城区','short_name'=>'东城区','all_spell'=>'dongchengqu','short_spell'=>'dcq','areacode'=>'010','postcode'=>'100011','if_show'=>'1'],

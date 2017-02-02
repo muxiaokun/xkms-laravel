@@ -148,11 +148,11 @@ class Admin extends Backend
         if (request()->isMethod('POST')) {
             //表单提交的名称
             $col = [
-                'SYS_ADMIN_AUTO_LOG',
-                'SYS_BACKEND_VERIFY',
-                'SYS_BACKEND_TIMEOUT',
-                'SYS_BACKEND_LOGIN_NUM',
-                'SYS_BACKEND_LOCK_TIME',
+                'sys_admin_auto_log',
+                'sys_backend_verify',
+                'sys_backend_timeout',
+                'sys_backend_login_num',
+                'sys_backend_lock_time',
             ];
             return $this->_put_config($col, 'system');
         }

@@ -1,3 +1,6 @@
+1.多主题模板的前端实现
+2.权限检测需要重构不可以用die
+
 Backend
 OK 系统管理系统配置网站配置Admin::Index::websiteSet
 OK 系统管理系统配置系统配置Admin::Index::systemSet
@@ -8,11 +11,11 @@ OK 系统管理系统配置清除日志Admin::Index::cleanLog
 系统管理管理上传文件管理Admin::ManageUpload::index
 系统管理管理上传删除文件Admin::ManageUpload::del
 系统管理管理上传清除未用Admin::ManageUpload::edit
-系统管理模板管理模板设置Admin::Template::index
-系统管理模板管理添加模板Admin::Template::add
-系统管理模板管理删除模板Admin::Template::del
-系统管理模板管理添加模板Admin::Template::edit
-成员管理管理员管理员配置Admin::Admin::setting
+OK 系统管理模板管理模板设置Admin::Template::index
+OK 系统管理模板管理添加模板Admin::Template::add
+OK 系统管理模板管理删除模板Admin::Template::del
+OK 系统管理模板管理添加模板Admin::Template::edit
+OK 成员管理管理员管理员配置Admin::Admin::setting
 成员管理管理员管理员管理Admin::Admin::index
 成员管理管理员添加管理员Admin::Admin::add
 成员管理管理员删除管理员Admin::Admin::del

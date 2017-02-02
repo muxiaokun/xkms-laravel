@@ -13,11 +13,11 @@
                                 <label class="col-sm-4 control-label">@lang('common.auto')@lang('common.record')@lang('common.log')</label>
                                 <div class="col-sm-7">
                                     <label class="radio-inline">
-                                        <input type="radio" name="SYS_ADMIN_AUTO_LOG" value="1"
+                                        <input type="radio" name="sys_admin_auto_log" value="1"
                                                @if ('1' === config('system.sys_admin_auto_log'))checked="checked"@endif >@lang('common.open')
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="SYS_ADMIN_AUTO_LOG" value="0"
+                                        <input type="radio" name="sys_admin_auto_log" value="0"
                                                @if ('0' === config('system.sys_admin_auto_log'))checked="checked"@endif >@lang('common.close')
                                     </label>
                                 </div>
@@ -29,11 +29,11 @@
                                 <label class="col-sm-4 control-label">@lang('common.backend')@lang('common.verify_code')</label>
                                 <div class="col-sm-7">
                                     <label class="radio-inline">
-                                        <input type="radio" name="SYS_BACKEND_VERIFY" value="1"
+                                        <input type="radio" name="sys_backend_verify" value="1"
                                                @if ('1' === config('system.sys_backend_verify'))checked="checked"@endif >@lang('common.open')
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="SYS_BACKEND_VERIFY" value="0"
+                                        <input type="radio" name="sys_backend_verify" value="0"
                                                @if ('0' === config('system.sys_backend_verify'))checked="checked"@endif >@lang('common.close')
                                     </label>
                                 </div>
@@ -46,7 +46,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">@lang('common.backend')@lang('common.max')@lang('common.login')@lang('common.number')</label>
                                 <div class="col-sm-7">
-                                    <input type="text" name="SYS_BACKEND_LOGIN_NUM"
+                                    <input type="text" name="sys_backend_login_num"
                                            value="{{ config('system.sys_backend_login_num') }}" class="form-control"
                                            onKeyup="M_in_int(this);">
                                 </div>
@@ -58,7 +58,7 @@
                                 <label class="col-sm-4 control-label">@lang('common.backend')@lang('common.max')@lang('common.lock')@lang('common.time')
                                     (@lang('common.second'))</label>
                                 <div class="col-sm-7">
-                                    <input type="text" name="SYS_BACKEND_LOCK_TIME"
+                                    <input type="text" name="sys_backend_lock_time"
                                            value="{{ config('system.sys_backend_lock_time') }}" class="form-control"
                                            onKeyup="M_in_int(this);">
                                 </div>
@@ -72,7 +72,7 @@
                                 <label class="col-sm-4 control-label">@lang('common.backend')@lang('common.login')@lang('common.timeout')
                                     (@lang('common.second'))</label>
                                 <div class="col-sm-7">
-                                    <input type="text" name="SYS_BACKEND_TIMEOUT"
+                                    <input type="text" name="sys_backend_timeout"
                                            value="{{ config('system.sys_backend_timeout') }}" class="form-control"
                                            onKeyup="M_in_int(this);">
                                 </div>

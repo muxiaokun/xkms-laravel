@@ -82,7 +82,7 @@ class Assess extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData();
-            $resultEdit = Model\Assess::idWhere($id)->update($data);
+            $resultEdit = Model\Assess::colWhere($id)->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.assess') . trans('common.edit') . trans('common.success'),
                     route('Admin::Assess::index'));
@@ -96,7 +96,7 @@ class Assess extends Backend
         }
 
         $editInfo               = Model\Assess::where('id', $id)->first();
-        $editInfo['group_name'] = Model\MemberGroup::idWhere($editInfo['group_level'])->first()['name'];
+        $editInfo['group_name'] = Model\MemberGroup::colWhere($editInfo['group_level'])->first()['name'];
         $assign['edit_info']    = $editInfo;
 
         $assign['title'] = trans('common.assess') . trans('common.edit');

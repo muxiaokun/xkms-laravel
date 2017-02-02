@@ -70,7 +70,7 @@ class Recruit extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData();
-            $resultEdit = Model\Recruit::idWhere($id)->update($data);
+            $resultEdit = Model\Recruit::colWhere($id)->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.recruit') . trans('common.edit') . trans('common.success'),
                     route('Admin::Recruit::index'));
@@ -99,7 +99,7 @@ class Recruit extends Backend
 
         $resultDel = Model\Recruit::destroy($id);
         if ($resultDel) {
-            Model\RecruitLog::idWhere($id, 'r_id')->delete();
+            Model\RecruitLog::colWhere($id, 'r_id')->delete();
             return $this->success(trans('common.recruit') . trans('common.del') . trans('common.success'),
                 route('Admin::Recruit::index'));
         } else {

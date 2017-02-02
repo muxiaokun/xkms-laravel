@@ -36,7 +36,7 @@ class Admin extends Backend
         $adminList = Model\Admins::where($where)->paginate(config('system.sys_max_row'));
         foreach ($adminList as &$admin) {
             foreach ($admin['group_id'] as $groupId) {
-                $groupName = Model\AdminGroups::idWhere($groupId)->first()['name'];
+                $groupName = Model\AdminGroups::colWhere($groupId)->first()['name'];
                 isset($admin['group_name']) && $admin['group_name'] .= " | ";
                 $admin['group_name'] .= $groupName;
             }
@@ -97,7 +97,7 @@ class Admin extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData();
-            $resultEdit = Model\Admins::idWhere($id)->update($data);
+            $resultEdit = Model\Admins::colWhere($id)->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.admin') . trans('common.edit') . trans('common.success'),
                     route('Admin::Admin::index'));
@@ -110,7 +110,7 @@ class Admin extends Backend
 
         $editInfo = Model\Admins::where('id', $id)->first();
         foreach ($editInfo['group_id'] as &$groupId) {
-            $adminGroupName = Model\AdminGroups::idWhere($groupId)->first()['name'];
+            $adminGroupName = Model\AdminGroups::colWhere($groupId)->first()['name'];
             $groupId        = ['value' => $groupId, 'html' => $adminGroupName];
         }
         $assign['edit_info'] = $editInfo;

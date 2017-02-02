@@ -71,7 +71,7 @@ class Quests extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData();
-            $resultEdit = Model\Quests::idWhere($id)->update($data);
+            $resultEdit = Model\Quests::colWhere($id)->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.quests') . trans('common.edit') . trans('common.success'),
                     route('Admin::Quests::index'));
@@ -104,7 +104,7 @@ class Quests extends Backend
 
         if ($resultDel || $clear) {
             //删除问卷会删除该问卷下的所有答案
-            $resultClear = Model\QuestsAnswer::idWhere($id, 'quests_id')->delete();
+            $resultClear = Model\QuestsAnswer::colWhere($id, 'quests_id')->delete();
             if ($clear) {
                 if ($resultClear) {
                     Model\Quests::where(['id' => $id])->data(['current_portion' => 0])->save();

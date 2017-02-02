@@ -123,7 +123,7 @@ class ArticleCategory extends Backend
                 unset($data['manage_group_id']);
                 unset($data['access_group_id']);
             }
-            $resultEdit = Model\ArticleCategory::idWhere($id)->update($data);
+            $resultEdit = Model\ArticleCategory::colWhere($id)->update($data);
             if ($resultEdit) {
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.article') . trans('common.category') . trans('common.edit') . trans('common.success'),
@@ -142,15 +142,15 @@ class ArticleCategory extends Backend
         //如果有管理权限进行进一步数据处理
         if (mInArray($id, $maAllowArr)) {
             foreach ($editInfo['manage_id'] as &$manageId) {
-                $adminName = Model\Admins::idWhere($manageId)->first()['admin_name'];
+                $adminName = Model\Admins::colWhere($manageId)->first()['admin_name'];
                 $manageId  = ['value' => $manageId, 'html' => $adminName];
             }
             foreach ($editInfo['manage_group_id'] as &$manageGroupId) {
-                $adminGroupName = Model\AdminGroups::idWhere($manageGroupId)->first()['name'];
+                $adminGroupName = Model\AdminGroups::colWhere($manageGroupId)->first()['name'];
                 $manageGroupId  = ['value' => $manageGroupId, 'html' => $adminGroupName];
             }
             foreach ($editInfo['access_group_id'] as &$accessGroupId) {
-                $adminGroupName = Model\MemberGroup::idWhere($accessGroupId)->first()['name'];
+                $adminGroupName = Model\MemberGroup::colWhere($accessGroupId)->first()['name'];
                 $accessGroupId  = ['value' => $accessGroupId, 'html' => $adminGroupName];
             }
         }
@@ -179,7 +179,7 @@ class ArticleCategory extends Backend
         }
 
         //解除文章和被删除分类的关系
-        $resultClean = Model\Article::idWhere($id, 'cate_id')->delete();
+        $resultClean = Model\Article::colWhere($id, 'cate_id')->delete();
         if (!$resultClean) {
             return $this->error(trans('common.article') . trans('common.clear') . trans('common.category') . trans('common.error'),
                 route('Admin::ArticleCategory::index'));
@@ -187,7 +187,7 @@ class ArticleCategory extends Backend
 
         $resultDel = Model\ArticleCategory::destroy($id);
         if ($resultDel) {
-            Model\ArticleCategory::idWhere($id, 'parent_id')->update(['parent_id' => 0]);
+            Model\ArticleCategory::colWhere($id, 'parent_id')->update(['parent_id' => 0]);
             //释放图片绑定
             Model\ManageUpload::bindFile($id);
             return $this->success(trans('common.article') . trans('common.category') . trans('common.del') . trans('common.success'),
@@ -207,9 +207,9 @@ class ArticleCategory extends Backend
             return trans('common.not') . trans('common.edit') . $field;
         }
 
-        $resultEdit = Model\ArticleCategory::idWhere($id)->update($data);
+        $resultEdit = Model\ArticleCategory::colWhere($id)->update($data);
         if ($resultEdit) {
-            $data['value'] = Model\ArticleCategory::idWhere($data['id'])->first()[$field];
+            $data['value'] = Model\ArticleCategory::colWhere($data['id'])->first()[$field];
 
             return ['status' => true, 'info' => $data['value']];
         } else {

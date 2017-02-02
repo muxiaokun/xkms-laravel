@@ -79,7 +79,7 @@ class Common extends Model
         return $empty_columns;
     }
 
-    public function scopeIdWhere($query, $id, $column = 'id')
+    public function scopeColWhere($query, $id, $column = 'id')
     {
         if (is_array($id)) {
             $query->whereIn($column, $id);

@@ -47,6 +47,7 @@ class Backend extends Common
             $allowRoute = [
                 'Admin::Index::index',
                 'Admin::Index::login',
+                'Admin::Index::logout',
             ];
             if (!call_user_func_array('Route::is', $allowRoute)) {
                 die($this->error(trans('common.not_login') . trans('common.backend'), route('Admin::Index::index')));

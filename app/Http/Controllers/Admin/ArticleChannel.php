@@ -100,7 +100,7 @@ class ArticleChannel extends Backend
                 unset($data['manage_group_id']);
                 unset($data['access_group_id']);
             }
-            $resultEdit = Model\ArticleChannel::idWhere($id)->update($data);
+            $resultEdit = Model\ArticleChannel::colWhere($id)->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.channel') . trans('common.edit') . trans('common.success'),
                     route('Admin::ArticleChannel::index'));
@@ -116,15 +116,15 @@ class ArticleChannel extends Backend
         //如果有管理权限进行进一步数据处理
         if (mInArray($id, $maAllowArr)) {
             foreach ($editInfo['manage_id'] as &$manageId) {
-                $adminName = Model\Admins::idWhere($manageId)->first()['admin_name'];
+                $adminName = Model\Admins::colWhere($manageId)->first()['admin_name'];
                 $manageId  = ['value' => $manageId, 'html' => $adminName];
             }
             foreach ($editInfo['manage_group_id'] as &$manageGroupId) {
-                $adminGroupName = Model\AdminGroups::idWhere($manageGroupId)->first()['name'];
+                $adminGroupName = Model\AdminGroups::colWhere($manageGroupId)->first()['name'];
                 $manageGroupId  = ['value' => $manageGroupId, 'html' => $adminGroupName];
             }
             foreach ($editInfo['access_group_id'] as &$accessGroupId) {
-                $adminGroupName = Model\MemberGroup::idWhere($accessGroupId)->first()['name'];
+                $adminGroupName = Model\MemberGroup::colWhere($accessGroupId)->first()['name'];
                 $accessGroupId  = ['value' => $accessGroupId, 'html' => $adminGroupName];
             }
         }
@@ -152,7 +152,7 @@ class ArticleChannel extends Backend
         }
 
         //解除文章和被删除频道的关系
-        $resultClean = Model\Article::idWhere($id, 'channel_id')->delete();
+        $resultClean = Model\Article::colWhere($id, 'channel_id')->delete();
         if (!$resultClean) {
             return $this->error(trans('common.article') . trans('common.clear') . trans('common.channel') . trans('common.error'),
                 route('Admin::ArticleChannel::index'));

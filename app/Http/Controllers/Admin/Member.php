@@ -26,7 +26,7 @@ class Member extends Backend
         $memberList = Model\Member::where($where)->paginate(config('system.sys_max_row'));
         foreach ($memberList as &$member) {
             foreach ($member['group_id'] as $groupId) {
-                $groupName = Model\MemberGroup::idWhere($groupId)->first()['name'];
+                $groupName = Model\MemberGroup::colWhere($groupId)->first()['name'];
                 isset($member['group_name']) && $member['group_name'] .= " | ";
                 $member['group_name'] .= $groupName;
             }
@@ -83,7 +83,7 @@ class Member extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData(false);
-            $resultEdit = Model\Member::idWhere($id)->update($data);
+            $resultEdit = Model\Member::colWhere($id)->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.member') . trans('common.edit') . trans('common.success'),
                     route('Admin::Member::index'));
@@ -97,7 +97,7 @@ class Member extends Backend
 
         $editInfo = Model\Member::where('id', $id)->first();
         foreach ($editInfo['group_id'] as &$groupId) {
-            $memberGroupName = Model\MemberGroup::idWhere($groupId)->first()['name'];
+            $memberGroupName = Model\MemberGroup::colWhere($groupId)->first()['name'];
             $groupId         = ['value' => $groupId, 'html' => $memberGroupName];
         }
         $assign['edit_info']  = $editInfo;

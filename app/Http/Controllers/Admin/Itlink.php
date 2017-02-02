@@ -82,7 +82,7 @@ class Itlink extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData();
-            $resultEdit = Model\Itlink::idWhere($id)->update($data);
+            $resultEdit = Model\Itlink::colWhere($id)->update($data);
             if ($resultEdit) {
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.itlink') . trans('common.edit') . trans('common.success'),

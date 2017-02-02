@@ -35,7 +35,7 @@ class AdminLogs extends Common
             'admin_id'   => $adminId,
             'route_name' => request()->route()->getName(),
             'message'    => $message,
-            'request'    => $request_json,
+            'request'    => $request,
         ];
         return (new static)->create($data);
     }

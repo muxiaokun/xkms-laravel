@@ -60,7 +60,7 @@ class Comment extends Frontend
                 ];
                 $commentList = Model\Comment::where($where)->paginate(config('system.sys_max_row'));
                 foreach ($commentList as &$comment) {
-                    $memberName             = Model\Member::idWhere($comment['member_id'])->first()['member_name'];
+                    $memberName             = Model\Member::colWhere($comment['member_id'])->first()['member_name'];
                     $comment['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');
                 }
                 $assign['comment_list']       = $commentList;

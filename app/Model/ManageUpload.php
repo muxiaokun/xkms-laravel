@@ -26,13 +26,13 @@ class ManageUpload extends Common
         !is_array($id) && $id = [$id];
         foreach ($id as $i) {
 
-            $filePath      = (new static)->idWhere($id)->first()['path'];
+            $filePath = (new static)->colWhere($id)->first()['path'];
             $delFileResult = (is_file($filePath)) ? @unlink($filePath) : true;
             if (false === $delFileResult) {
                 return false;
             }
 
-            $delResult = (new static)->idWhere($i)->delete();
+            $delResult     = (new static)->colWhere($i)->delete();
             if (!$delResult) {
                 return false;
             }
@@ -79,7 +79,7 @@ class ManageUpload extends Common
         ];
         $fileList  = (new static)->select(['id', 'bind_info'])->where($fileWhere)->get();
         foreach ($fileList as $file) {
-            $editResult = (new static)->idWhere($file['id'])->update(['bind_info' => $file['bind_info'] . $ownerStr]);
+            $editResult = (new static)->colWhere($file['id'])->update(['bind_info' => $file['bind_info'] . $ownerStr]);
             if (!$editResult) {
                 return false;
             }

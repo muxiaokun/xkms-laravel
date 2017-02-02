@@ -79,7 +79,7 @@ class AdminGroup extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData();
-            $resultEdit = Model\AdminGroups::idWhere($id)->update($data);
+            $resultEdit = Model\AdminGroups::colWhere($id)->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.management') . trans('common.group') . trans('common.edit') . trans('common.success'),
                     route('Admin::AdminGroup::index'));
@@ -93,7 +93,7 @@ class AdminGroup extends Backend
         //获取分组默认信息
         $editInfo = Model\AdminGroups::where('id', $id)->first();
         foreach ($editInfo['manage_id'] as $manageKey => $manageId) {
-            $adminName                         = Model\Admins::idWhere($manageId)->first()['admin_name'];
+            $adminName                         = Model\Admins::colWhere($manageId)->first()['admin_name'];
             $editInfo['manage_id'][$manageKey] = ['value' => $manageId, 'html' => $adminName];
         }
         $assign['edit_info']   = $editInfo;
@@ -126,7 +126,7 @@ class AdminGroup extends Backend
         }
         if ($resultDel) {
             //删除成功后 删除管理员与组的关系
-            Model\Admins::idWhere($id, 'group_id')->delete();
+            Model\Admins::colWhere($id, 'group_id')->delete();
             return $this->success(trans('common.management') . trans('common.group') . trans('common.del') . trans('common.success'),
                 route('Admin::AdminGroup::index'));
         } else {

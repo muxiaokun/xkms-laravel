@@ -203,7 +203,11 @@ class Index extends Backend
                 return $this->error($result['info'], route('Admin::Index::editMyPass'));
             }
 
-            $resultEdit = Model\Admins::idWhere($id)->update($data);
+            $data               = [];
+            $randStr            = mRandStr('pr');
+            $data['admin_pwd']  = md5($password . $randStr);
+            $data['admin_rand'] = $randStr;
+            $resultEdit         = Model\Admins::colWhere(session('backend_info.id'))->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.edit') . trans('common.pass') . trans('common.success'),
                     route('Admin::Index::editMyPass'));
@@ -250,7 +254,9 @@ class Index extends Backend
             return;
         }
 
-        $cleanResult = Storage::put(storage_path('logs/laravel.log'), '');
+        $filesystem  = new Filesystem();
+        $files       = $filesystem->files(storage_path('logs'));
+        $cleanResult = $filesystem->delete($files);
         if ($cleanResult) {
             //写入日志
             Model\AdminLogs::record(session('backend_info.id'));

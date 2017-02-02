@@ -72,7 +72,7 @@ class MessageBoard extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData();
-            $resultEdit = Model\MessageBoard::idWhere($id)->update($data);
+            $resultEdit = Model\MessageBoard::colWhere($id)->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.messageboard') . trans('common.edit') . trans('common.success'),
                     route('Admin::MessageBoard::index'));

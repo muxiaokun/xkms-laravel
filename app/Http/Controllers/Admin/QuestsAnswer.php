@@ -30,7 +30,7 @@ class QuestsAnswer extends Backend
 
         $questsAnswerList = Model\QuestsAnswer::where($where)->paginate(config('system.sys_max_row'));
         foreach ($questsAnswerList as &$questsAnswer) {
-            $memberName                  = Model\Member::idWhere($groupId)->first()['name'];
+            $memberName                  = Model\Member::colWhere($groupId)->first()['name'];
             $questsAnswer['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');
         }
         $assign['quests_answer_list']       = $questsAnswerList;

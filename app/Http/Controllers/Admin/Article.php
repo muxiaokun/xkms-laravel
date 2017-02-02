@@ -142,7 +142,7 @@ class Article extends Backend
             $data = $this->makeData();
             isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'], config('system.sys_article_thumb_width'),
                 C('SYS_ARTICLE_THUMB_HEIGHT'));
-            $resultEdit = Model\Article::idWhere($id)->update($data);
+            $resultEdit = Model\Article::colWhere($id)->update($data);
             if ($resultEdit) {
                 $data['new_thumb'] = $thumbFile;
                 $this->addEditAfterCommon($data, $id);
@@ -161,7 +161,7 @@ class Article extends Backend
         config('SYS_ARTICLE_SYNC_IMAGE', $currentConfig);
 
         foreach ($editInfo['access_group_id'] as &$accessGroupId) {
-            $adminGroupName = Model\MemberGroup::idWhere($accessGroupId)->first()['name'];
+            $adminGroupName = Model\MemberGroup::colWhere($accessGroupId)->first()['name'];
             $accessGroupId  = ['value' => $accessGroupId, 'html' => $adminGroupName];
         }
 
@@ -226,9 +226,9 @@ class Article extends Backend
             return trans('common.not') . trans('common.edit') . $field;
         }
 
-        $resultEdit = Model\Article::idWhere($id)->update($data);
+        $resultEdit = Model\Article::colWhere($id)->update($data);
         if ($resultEdit) {
-            $data['value'] = Model\Article::idWhere($data['id'])->first()[$field];
+            $data['value'] = Model\Article::colWhere($data['id'])->first()[$field];
             return ['status' => true, 'info' => $data['value']];
         } else {
             return ['status' => false, 'info' => trans('common.edit') . trans('common.error')];

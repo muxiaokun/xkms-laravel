@@ -120,7 +120,7 @@ class Message extends FrontendMember
             case 'read_message':
                 $currentTime = Carbon::now();
                 $memberId    = session('frontend_info.id');
-                $resultEdit  = Model\Message::where('receive_id', $memberId)->idWhere($data['id'])->update($data);
+                $resultEdit = Model\Message::where('receive_id', $memberId)->colWhere($data['id'])->update($data);
                 if ($resultEdit) {
                     $result['info'] = date(config('system.sys_date_detail'), $currentTime);
                 } else {

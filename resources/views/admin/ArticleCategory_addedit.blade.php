@@ -71,7 +71,7 @@
                                 <div class="col-sm-3">
                                     <label class="radio-inline">
                                         <input type="radio" name="if_show" value="1"
-                                               @if ('1' === $edit_info['if_show'] or !isset($edit_info['if_show']))checked="checked"@endif />@lang('common.show')
+                                               @if ('1' === $edit_info['if_show'] or '' === $edit_info['if_show'])checked="checked"@endif />@lang('common.show')
                                     </label>
                                     <label class="radio-inline">
                                         <input type="radio" name="if_show" value="0"
@@ -291,7 +291,7 @@
                                     </label>
                                     <label class="radio-inline">
                                         <input type="radio" name="is_content" value="0"
-                                               @if ('0' === $edit_info['is_content'] or !isset($edit_info['is_content']))checked="checked"@endif />
+                                               @if ('0' === $edit_info['is_content'] or '' === $edit_info['is_content'])checked="checked"@endif />
                                         @lang('common.disable')(@lang('common.list')@lang('common.template'))
                                     </label>
                                 </div>

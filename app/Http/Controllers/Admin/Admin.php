@@ -21,18 +21,16 @@ class Admin extends Backend
         //建立where
         $whereValue = '';
         $whereValue = request('admin_name');
-        $whereValue && $where['admin_name'] = ['like', '%' . $whereValue . '%'];
+        $whereValue && $where[] = ['admin_name', 'like', '%' . $whereValue . '%'];
         $whereValue = request('group_id');
-        $whereValue && $where['group_id'] = [
-            'group_id',
-            Model\MemberGroup::where(['name', 'like', '%' . $whereValue . '%'])->select(['id'])->pluck('id'),
-        ];
+        $whereValue && $where[] = ['group_id', '=', 2];
         $whereValue = mMktimeRange('last_time');
         $whereValue && $where[] = ['last_time', $whereValue];
         $whereValue = request('is_enable');
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
+        dump($where);
         $adminList = Model\Admins::where($where)->paginate(config('system.sys_max_row'));
         foreach ($adminList as &$admin) {
             foreach ($admin['group_id'] as $groupId) {

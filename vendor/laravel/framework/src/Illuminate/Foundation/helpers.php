@@ -494,7 +494,7 @@ if (! function_exists('factory')) {
         $arguments = func_get_args();
 
         if (isset($arguments[1]) && is_string($arguments[1])) {
-            return $factory->of($arguments[0], $arguments[1])->times(isset($arguments[2]) ? $arguments[2] : 1);
+            return $factory->of($arguments[0], $arguments[1])->times(isset($arguments[2]) ? $arguments[2] : null);
         } elseif (isset($arguments[1])) {
             return $factory->of($arguments[0])->times($arguments[1]);
         } else {
@@ -583,7 +583,7 @@ if (! function_exists('mix')) {
 
         return $shouldHotReload = file_exists(public_path('hot'))
                     ? new HtmlString("http://localhost:8080{$manifest[$path]}")
-                    : new HtmlString(url($manifest[$path]));
+                    : new HtmlString($manifest[$path]);
     }
 }
 

@@ -6,11 +6,14 @@ use Closure;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Response;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Traits\Macroable;
 use PHPUnit\Framework\Assert as PHPUnit;
 use Symfony\Component\HttpFoundation\Cookie;
 
 class TestResponse extends Response
 {
+    use Macroable;
+
     /**
      * Convert the given response into a TestResponse.
      *
@@ -20,7 +23,7 @@ class TestResponse extends Response
     public static function fromBaseResponse($response)
     {
         $testResponse = new static(
-            $response->getContent(), $response->status()
+            $response->getContent(), $response->getStatusCode()
         );
 
         $testResponse->headers = $response->headers;
@@ -214,6 +217,42 @@ class TestResponse extends Response
     }
 
     /**
+     * Assert that the response has a given JSON structure.
+     *
+     * @param  array|null  $structure
+     * @param  array|null  $responseData
+     * @return $this
+     */
+    public function assertJsonStructure(array $structure = null, $responseData = null)
+    {
+        if (is_null($structure)) {
+            return $this->assertJson();
+        }
+
+        if (is_null($responseData)) {
+            $responseData = $this->decodeResponseJson();
+        }
+
+        foreach ($structure as $key => $value) {
+            if (is_array($value) && $key === '*') {
+                PHPUnit::assertInternalType('array', $responseData);
+
+                foreach ($responseData as $responseDataItem) {
+                    $this->assertJsonStructure($structure['*'], $responseDataItem);
+                }
+            } elseif (is_array($value)) {
+                PHPUnit::assertArrayHasKey($key, $responseData);
+
+                $this->assertJsonStructure($structure[$key], $responseData[$key]);
+            } else {
+                PHPUnit::assertArrayHasKey($value, $responseData);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Validate and return the decoded response JSON.
      *
      * @return array
@@ -231,6 +270,16 @@ class TestResponse extends Response
         }
 
         return $decodedResponse;
+    }
+
+    /**
+     * Validate and return the decoded response JSON.
+     *
+     * @return array
+     */
+    public function json()
+    {
+        return $this->decodeResponseJson();
     }
 
     /**
@@ -381,5 +430,23 @@ class TestResponse extends Response
     protected function session()
     {
         return app('session.store');
+    }
+
+    /**
+     * Dump the content from the response.
+     *
+     * @return void
+     */
+    public function dump()
+    {
+        $content = $this->getContent();
+
+        $json = json_decode($content);
+
+        if (json_last_error() === JSON_ERROR_NONE) {
+            $content = $json;
+        }
+
+        dd($content);
     }
 }

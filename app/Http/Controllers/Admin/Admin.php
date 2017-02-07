@@ -17,7 +17,7 @@ class Admin extends Backend
         $adminList = Model\Admins::where(function ($query) {
             $login_id = session('backend_info.id');
             $ids      = [];
-            if (1 == $login_id) {
+            if (1 != $login_id) {
                 //非root需要权限
                 $ids = Model\AdminGroups::where('manage_id', 'like', '%|' . $login_id . '|%')->pluck('id');
                 $query->transfixionWhere('group_id', $ids);
@@ -270,16 +270,28 @@ class Admin extends Backend
     //异步数据获取
     protected function getData($field, $data)
     {
-        $where  = [];
         $result = ['status' => true, 'info' => []];
         switch ($field) {
             case 'group_id':
-                if (1 != session('backend_info.id')) {
-                    $where['manage_id'] = session('backend_info.id');
-                }
-                isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminGroupList = Model\AdminGroups::likeWhere('manage_id', $where['manage_id'])->where($where)->get();
+                $adminGroupList = Model\AdminGroups::where(function ($query) use ($data) {
+                    $login_id = session('backend_info.id');
+                    $ids      = [];
+                    if (1 != $login_id) {
+                        //非root需要权限
+                        $ids = Model\AdminGroups::where('manage_id', 'like',
+                            '%|' . $login_id . '|%')->pluck('id')->push(-1);
+                        $query->transfixionWhere('group_id', $ids);
+                    }
+
+                    if (isset($data['inserted'])) {
+                        $query->whereNotIn('id', $data['inserted']);
+                    }
+
+                    if (isset($data['keyword'])) {
+                        $query->where('name', 'like', '%' . $data['keyword'] . '%');
+                    }
+
+                })->get();
                 foreach ($adminGroupList as $adminGroup) {
                     $result['info'][] = ['value' => $adminGroup['id'], 'html' => $adminGroup['name']];
                 }

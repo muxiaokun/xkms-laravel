@@ -12,26 +12,48 @@ class Admin extends Backend
     //列表
     public function index()
     {
-        $where = [];
-        if (1 != session('backend_info.id')) {
-            //非root需要权限
-            $mFindAllow        = Model\AdminGroups::mFindAllow();
-            $where['group_id'] = $mFindAllow;
-        }
-        //建立where
-        $whereValue = '';
-        $whereValue = request('admin_name');
-        $whereValue && $where[] = ['admin_name', 'like', '%' . $whereValue . '%'];
-        $whereValue = request('group_id');
-        $whereValue && $where[] = ['group_id', '=', 2];
-        $whereValue = mMktimeRange('last_time');
-        $whereValue && $where[] = ['last_time', $whereValue];
-        $whereValue = request('is_enable');
-        $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        dump($where);
-        $adminList = Model\Admins::where($where)->paginate(config('system.sys_max_row'));
+        $adminList = Model\Admins::where(function ($query) {
+            $login_id = session('backend_info.id');
+            $ids      = [];
+            if (1 == $login_id) {
+                //非root需要权限
+                $ids = Model\AdminGroups::where('manage_id', 'like', '%|' . $login_id . '|%')->pluck('id');
+                $query->transfixionWhere('group_id', $ids);
+            }
+
+            $admin_name = request('admin_name');
+            if ($admin_name) {
+                $query->where('admin_name', 'like', '%' . $admin_name . '%');
+            }
+
+            $group_id = request('group_id');
+            if ($group_id) {
+                $search_ids = Model\AdminGroups::where('name', 'like', '%' . $group_id . '%')->pluck('id');
+                //管理组权限检测
+                if ($ids) {
+                    $search_ids = $search_ids->intersect($ids);
+                }
+                //搜索结果为空时 添加错误条件
+                if ($search_ids->isEmpty()) {
+                    $search_ids->push(-1);
+                }
+                $query->transfixionWhere('group_id', $search_ids);
+            }
+
+            $last_time = mMktimeRange('last_time');
+            if ($last_time) {
+                //TODO not ok
+                $query->timeRange('last_time', $last_time);
+            }
+
+            $is_enable = request('is_enable');
+            if ($is_enable) {
+                $query->where('is_enable', '=', (1 == $is_enable) ? 1 : 0);
+            }
+
+        })->paginate(config('system.sys_max_row'));
         foreach ($adminList as &$admin) {
             foreach ($admin['group_id'] as $groupId) {
                 $groupName = Model\AdminGroups::colWhere($groupId)->first()['name'];

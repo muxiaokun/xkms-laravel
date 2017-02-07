@@ -64,7 +64,7 @@ function mGetArr($path)
 
 /**
  * @param string $type
- * @param int $length
+ * @param int    $length
  * @return string
  */
 function mRandStr($type = 'vc', $length = 4)
@@ -135,14 +135,12 @@ function mMktime($date, $isDetail = false)
     $i      = 1;
     $subPos = [];
     foreach ($pos as $k => $v) {
-        if ($v !== false) {
-            $subPos[$k] = $i++;
-        }
-
+        $subPos[$k] = ($v !== false) ? 0 : $i++;
     }
     $pos = $subPos;
     if (preg_match($matchFormat, $date, $sub)) {
-        $time = mktime($sub[$pos['H']], $sub[$pos['i']], $sub[$pos['s']], $sub[$pos['m']], $sub[$pos['d']],
+        $sub[0] = 0;
+        $time   = mktime($sub[$pos['H']], $sub[$pos['i']], $sub[$pos['s']], $sub[$pos['m']], $sub[$pos['d']],
             $sub[$pos['Y']]);
     } else {
         $time = null;
@@ -153,15 +151,17 @@ function mMktime($date, $isDetail = false)
 //创建where_info中时间范围的数组
 function mMktimeRange($inputName)
 {
-    $timeRange = [];
-    $gtTime    = mMktime(request($inputName . '_start'));
-    $ltTime    = mMktime(request($inputName . '_end')) + 86400;
-    if (request($inputName . '_start') && 0 < $gtTime) {
-        $timeRange[] = ['gt', $gtTime];
+    $timeRange      = [];
+    $startInputName = $inputName . '_start';
+    $endInputName   = $inputName . '_end';
+    $gtTime         = mMktime(request($startInputName));
+    $ltTime         = mMktime(request($endInputName)) + 86400;
+    if ($gtTime && 0 < $gtTime) {
+        $timeRange[$startInputName] = $gtTime;
     }
 
-    if (request($inputName . '_end') && 0 < $ltTime) {
-        $timeRange[] = ['lt', $ltTime];
+    if ($ltTime && 86400 < $ltTime) {
+        $timeRange[$endInputName] = $ltTime;
     }
 
     return $timeRange;

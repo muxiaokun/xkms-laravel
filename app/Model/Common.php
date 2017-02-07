@@ -41,15 +41,29 @@ class Common extends Model
 
     }
 
-    public function scopeTransfixionWhere($query, $column, $value)
+    public function scopeTimeRange($query, $column, $timeRange)
     {
-        if (!$column || !$value) {
-            return $this;
+        $startInputName = $column . '_start';
+        $endInputName   = $column . '_end';
+        if ($timeRange[$startInputName]) {
+            $query->where($column, 'gt', $startInputName);
         }
-        !is_array($value) && $value = explode('|', $value);
-        $query->where(function ($query) use ($column, $value) {
-            foreach ($value as &$mid) {
-                $query->orWhere($column, 'like', '%|' . $mid . '|%');
+        if ($timeRange[$endInputName]) {
+            $query->where($column, 'lt', $endInputName);
+        }
+    }
+
+    /**
+     * @param $query
+     * @param $column
+     * @param $ids
+     * 建立like %||% 查询
+     */
+    public function scopeTransfixionWhere($query, $column, $ids)
+    {
+        $query->where(function ($query) use ($column, $ids) {
+            foreach ($ids as $id) {
+                $query->orWhere($column, 'like', '%|' . $id . '|%');
             }
         });
     }
@@ -58,7 +72,7 @@ class Common extends Model
      * @param $string 字符串
      * @param $useKey 是否解析Key
      * @return \Illuminate\Support\Collection
-     * 解析 |*| 模式
+     *                解析 |*| 模式
      */
     public function transfixionDecode($string, $useKey = false)
     {
@@ -79,10 +93,10 @@ class Common extends Model
     }
 
     /**
-     * @param $value 数组
+     * @param $value  数组
      * @param $useKey 是否组合Key
      * @return string
-     * 组合 |*| 模式
+     *                组合 |*| 模式
      */
     public function transfixionEncode($value, $useKey = false)
     {

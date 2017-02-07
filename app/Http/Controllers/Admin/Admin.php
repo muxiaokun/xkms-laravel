@@ -92,7 +92,7 @@ class Admin extends Backend
     public function add()
     {
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData();
+            $data      = $this->makeData('add');
             $resultAdd = Model\Admins::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.admin') . trans('common.add') . trans('common.success'),
@@ -116,7 +116,7 @@ class Admin extends Backend
         }
 
         if (request()->isMethod('POST')) {
-            $data       = $this->makeData();
+            $data       = $this->makeData('edit');
             $resultEdit = Model\Admins::colWhere($id)->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.admin') . trans('common.edit') . trans('common.success'),
@@ -303,7 +303,7 @@ class Admin extends Backend
 
     //构造数据
     //$isPwd 是否检测密码规则
-    private function makeData()
+    private function makeData($type)
     {
         //初始化参数
         $id            = request('id');
@@ -317,32 +317,33 @@ class Admin extends Backend
         $errorGoLink = (!$id) ? route('Admin::Admin::add') : (is_array($id)) ? route('Admin::Admin::index') : route('Admin::Admin::edit',
             ['id' => $id]);
         //检测初始化参数是否合法
-        if ('add' == ACTION_NAME || null !== $adminName) {
+        if ('add' == $type || null !== $adminName) {
             $result = $this->doValidateForm('admin_name', ['id' => $id, 'admin_name' => $adminName]);
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
             }
 
         }
-        if ('add' == ACTION_NAME || null !== $password) {
-            $isPwd  = ('add' == ACTION_NAME) ? true : false;
+        if ('add' == $type || null !== $password) {
+            $isPwd  = ('add' == $type) ? true : false;
             $result = $this->doValidateForm('password', ['password' => $password, 'is_pwd' => $isPwd]);
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
             }
 
         }
-        if ('add' == ACTION_NAME || null !== $password) {
+        if ('add' == $type || null !== $password) {
             $result = $this->doValidateForm('password_again', [
                 'password'       => $password,
                 'password_again' => $passwordAgain,
+                'is_pwd'         => $isPwd,
             ]);
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
             }
 
         }
-        if ('add' == ACTION_NAME || null !== $privilege) {
+        if ('add' == $type || null !== $privilege) {
             $result = $this->doValidateForm('privilege', $privilege);
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
@@ -360,11 +361,11 @@ class Admin extends Backend
         }
 
         $data = [];
-        ('add' == ACTION_NAME || null !== $adminName) && $data['admin_name'] = $adminName;
-        ('add' == ACTION_NAME || null !== $password) && $data['admin_pwd'] = $password;
-        ('add' == ACTION_NAME || null !== $groupId) && $data['group_id'] = $groupId;
-        ('add' == ACTION_NAME || null !== $privilege) && $data['privilege'] = $privilege;
-        ('add' == ACTION_NAME || null !== $isEnable) && $data['is_enable'] = $isEnable;
+        ('add' == $type || null !== $adminName) && $data['admin_name'] = $adminName;
+        ('add' == $type || null !== $password) && $data['admin_pwd'] = $password;
+        ('add' == $type || null !== $groupId) && $data['group_id'] = $groupId;
+        ('add' == $type || null !== $privilege) && $data['privilege'] = $privilege;
+        ('add' == $type || null !== $isEnable) && $data['is_enable'] = $isEnable;
 
         return $data;
     }

@@ -134,9 +134,9 @@ Route::group([
         'prefix' => 'Admin',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Admin@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Admin@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'Admin@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'Admin@del']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Admin@add']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'Admin@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'Admin@del']);
         Route::match(['get', 'post'], 'setting', ['as' => 'setting', 'uses' => 'Admin@setting']);
         Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Admin@ajax_api']);
     });

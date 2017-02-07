@@ -124,10 +124,11 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">@lang('common.admin')@lang('common.privilege')</label>
                                 <div class="col-sm-8 mb10">
-                                    <label class="checkbox-inline"><input type="checkbox"
-                                                                          onClick="M_allselect_par(this,'.row')"/>@lang('common.allselect')
+                                    <label class="checkbox-inline">
+                                        <input type="checkbox"
+                                               onClick="M_allselect_par(this,'.row')"/>@lang('common.allselect')
                                     </label>
-                                    <input type="hidden" value="" name="privilege"/>
+                                    <input type="hidden" value="" name="privilege[]"/>
                                 </div>
                             </div>
                         </div>

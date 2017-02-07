@@ -41,15 +41,15 @@ class Common extends Model
 
     }
 
-    public function scopeTimeRange($query, $column, $timeRange)
+    public function scopeTimeWhere($query, $column, $timeRange)
     {
         $startInputName = $column . '_start';
         $endInputName   = $column . '_end';
         if ($timeRange[$startInputName]) {
-            $query->where($column, 'gt', $startInputName);
+            $query->where($column, '>', $timeRange[$startInputName]);
         }
         if ($timeRange[$endInputName]) {
-            $query->where($column, 'lt', $endInputName);
+            $query->where($column, '<', $timeRange[$endInputName]);
         }
     }
 

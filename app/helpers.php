@@ -135,7 +135,7 @@ function mMktime($date, $isDetail = false)
     $i      = 1;
     $subPos = [];
     foreach ($pos as $k => $v) {
-        $subPos[$k] = ($v !== false) ? 0 : $i++;
+        $subPos[$k] = ($v === false) ? 0 : $i++;
     }
     $pos = $subPos;
     if (preg_match($matchFormat, $date, $sub)) {
@@ -157,11 +157,11 @@ function mMktimeRange($inputName)
     $gtTime         = mMktime(request($startInputName));
     $ltTime         = mMktime(request($endInputName)) + 86400;
     if ($gtTime && 0 < $gtTime) {
-        $timeRange[$startInputName] = $gtTime;
+        $timeRange[$startInputName] = date('Y-m-d H:i:s', $gtTime);
     }
 
     if ($ltTime && 86400 < $ltTime) {
-        $timeRange[$endInputName] = $ltTime;
+        $timeRange[$endInputName] = date('Y-m-d H:i:s', $ltTime);
     }
 
     return $timeRange;

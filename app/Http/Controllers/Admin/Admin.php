@@ -44,8 +44,7 @@ class Admin extends Backend
 
             $last_time = mMktimeRange('last_time');
             if ($last_time) {
-                //TODO not ok
-                $query->timeRange('last_time', $last_time);
+                $query->timeWhere('last_time', $last_time);
             }
 
             $is_enable = request('is_enable');
@@ -54,6 +53,7 @@ class Admin extends Backend
             }
 
         })->paginate(config('system.sys_max_row'));
+
         foreach ($adminList as &$admin) {
             foreach ($admin['group_id'] as $groupId) {
                 $groupName = Model\AdminGroups::colWhere($groupId)->first()['name'];

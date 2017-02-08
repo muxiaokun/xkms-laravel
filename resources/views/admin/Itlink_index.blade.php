@@ -35,10 +35,10 @@
                                 {{ $itlink['short_name'] }}
                             </td>
                             <td>
-                                @if ($itlink['is_enable'])@lang('common.yes')@else@lang('common.no')@endif
+                                @if ($itlink['is_enable'])@lang('common.yes')@else @lang('common.no')@endif
                             </td>
                             <td>
-                                @if ($itlink['is_statistics'])@lang('common.yes')@else@lang('common.no')@endif
+                                @if ($itlink['is_statistics'])@lang('common.yes')@else @lang('common.no')@endif
                             </td>
                             <td>
                                 {{ $itlink['show_num'] }}

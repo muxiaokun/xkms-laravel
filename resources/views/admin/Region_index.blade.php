@@ -49,7 +49,7 @@
                                 {{ $region['postcode'] }}
                             </td>
                             <td>
-                                @if ($region['if_show'])@lang('common.show')@else@lang('common.hidden')@endif
+                                @if ($region['if_show'])@lang('common.show')@else @lang('common.hidden')@endif
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])

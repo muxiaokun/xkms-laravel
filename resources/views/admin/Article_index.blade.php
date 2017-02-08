@@ -47,10 +47,10 @@
                                 {{ mDate($article['created_at']) }}
                             </td>
                             <td>
-                                @if ($article['if_show'])@lang('common.yes')@else@lang('common.no')@endif
+                                @if ($article['if_show'])@lang('common.yes')@else @lang('common.no')@endif
                             </td>
                             <td>
-                                @if ($article['is_audit'])@lang('common.yes')@else@lang('common.no')@endif
+                                @if ($article['is_audit'])@lang('common.yes')@else @lang('common.no')@endif
                             </td>
                             <td>
                                 {{ $article['hits'] }}

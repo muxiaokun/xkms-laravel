@@ -22,7 +22,7 @@ if (config('system.layout_on')) {
         <div class="panel @if ($message">panel-info@elsepanel-danger@endif )
                 <div class=" panel-heading text-center
         ">
-        @lang('common.system')@if ($message)@lang('common.info')@else@lang('common.error')@endif
+        @lang('common.system')@if ($message)@lang('common.info')@else @lang('common.error')@endif
     </div>
     <div class="panel-body">
         <div class="col-sm-4 text-center">

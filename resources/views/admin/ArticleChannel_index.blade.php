@@ -29,10 +29,10 @@
                                 {{ $article_channel['name'] }}
                             </td>
                             <td>
-                                @if ($article_channel['if_show'])@lang('common.show')@else@lang('common.hidden')@endif
+                                @if ($article_channel['if_show'])@lang('common.show')@else @lang('common.hidden')@endif
                             </td>
                             <td>
-                                @if ($article_channel['template']){{ $article_channel['template'] }}@else@lang('common.default')@endif
+                                @if ($article_channel['template']){{ $article_channel['template'] }}@else @lang('common.default')@endif
                             </td>
                             <td class="nowrap">
                                 <a class="btn btn-xs btn-primary" target="_blank"

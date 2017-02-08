@@ -31,7 +31,7 @@
                                 {{ $recruit['title'] }}
                             </td>
                             <td>
-                                @if ($recruit['is_enable'])@lang('common.enable')@else@lang('common.disable')@endif
+                                @if ($recruit['is_enable'])@lang('common.enable')@else @lang('common.disable')@endif
                             </td>
                             <td>
                                 {{ $recruit['current_portion'] }}/{{ $recruit['max_portion'] }}

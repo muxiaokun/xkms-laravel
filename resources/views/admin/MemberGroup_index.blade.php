@@ -36,7 +36,7 @@
                                 {{ mSubstr($member_group['explains'],10)}}
                             </td>
                             <td>
-                                @if ($member_group['is_enable'])@lang('common.enable')@else@lang('common.disable')@endif
+                                @if ($member_group['is_enable'])@lang('common.enable')@else @lang('common.disable')@endif
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])

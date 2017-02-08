@@ -32,7 +32,7 @@
                                 {{ $navigation['short_name'] }}
                             </td>
                             <td>
-                                @if ($navigation['is_enable'])@lang('common.enable')@else@lang('common.disable')@endif
+                                @if ($navigation['is_enable'])@lang('common.enable')@else @lang('common.disable')@endif
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])

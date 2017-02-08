@@ -44,7 +44,7 @@
                                 {{ $member['aip'] }}
                             </td>
                             <td>
-                                @if ($member['is_enable'])@lang('common.enable')@else@lang('common.disable')@endif
+                                @if ($member['is_enable'])@lang('common.enable')@else @lang('common.disable')@endif
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])

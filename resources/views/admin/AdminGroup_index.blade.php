@@ -36,7 +36,7 @@
                                 {{ $admin_group['explains'] }}
                             </td>
                             <td>
-                                @if ($admin_group['is_enable'])@lang('common.enable')@else@lang('common.disable')@endif
+                                @if ($admin_group['is_enable'])@lang('common.enable')@else @lang('common.disable')@endif
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])

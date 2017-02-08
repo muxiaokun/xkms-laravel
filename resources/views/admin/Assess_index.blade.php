@@ -40,7 +40,7 @@
                                 {{ mDate($assess['end_time']) }}
                             </td>
                             <td>
-                                @if ($assess['is_enable'])@lang('common.enable')@else@lang('common.disable')@endif
+                                @if ($assess['is_enable'])@lang('common.enable')@else @lang('common.disable')@endif
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['log_edit'])

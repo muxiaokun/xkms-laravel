@@ -39,7 +39,7 @@
                                 {{ $admin['group_name'] }}
                             </td>
                             <td>
-                                @if (0 < $admin['created_at'])
+                                @if ($admin['created_at'])
                                     {{ mDate($admin['created_at']) }}
                                 @else
                                     @lang('common.system')@lang('common.add')
@@ -52,7 +52,7 @@
                                 {{ $admin['aip'] }}
                             </td>
                             <td>
-                                @if ($admin['is_enable'])@lang('common.enable')@else@lang('common.disable')@endif
+                                @if ($admin['is_enable'])@lang('common.enable')@else @lang('common.disable')@endif
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])

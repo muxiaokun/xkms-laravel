@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
 use App\Model;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Validator;
 
 class Admin extends Backend
 {
@@ -89,10 +91,13 @@ class Admin extends Backend
     }
 
     //新增
-    public function add()
+    public function add(Request $request)
     {
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData('add');
+            $data = $this->makeData('add');
+            if (!is_array($data)) {
+                return $data;
+            }
             $resultAdd = Model\Admins::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.admin') . trans('common.add') . trans('common.success'),
@@ -117,6 +122,10 @@ class Admin extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData('edit');
+            if (!is_array($data)) {
+                return $data;
+            }
+            dump($data);
             $resultEdit = Model\Admins::colWhere($id)->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.admin') . trans('common.edit') . trans('common.success'),
@@ -226,15 +235,15 @@ class Admin extends Backend
                     }
                 }
                 break;
-            case 'password_again':
-                if ($data['is_pwd'] || '' != $data['password'] || '' != $data['password_again']) {
+            case 'password_confirmed':
+                if ($data['is_pwd'] || '' != $data['password'] || '' != $data['password_confirmed']) {
                     //检测再一次输入的密码是否一致
-                    if ($data['password'] != $data['password_again']) {
+                    if ($data['password'] != $data['password_confirmed']) {
                         $result['info'] = trans('common.password_again_error');
                         break;
                     }
                     //不能为空
-                    if ('' == $data['password_again']) {
+                    if ('' == $data['password_confirmed']) {
                         $result['info'] = trans('common.pass') . trans('common.not') . trans('common.empty');
                         break;
                     }
@@ -244,17 +253,19 @@ class Admin extends Backend
                 //对比权限
                 $privilege      = $this->getPrivilege('Admin', session('backend_info.privilege'));
                 $checkPrivilege = [];
-                foreach ($privilege as $controllerCn => $privs) {
-                    foreach ($privs as $controllerName => $controller) {
-                        foreach ($controller as $actionName => $action) {
-                            $checkPrivilege[] = $controllerName . '_' . $actionName;
+                foreach ($privilege as $groupName => $controllers) {
+                    foreach ($controllers as $controller => $actions) {
+                        foreach ($actions as $action => $actionName) {
+                            $checkPrivilege[] = $actionName;
                         }
                     }
                 }
-                foreach ($data as $priv) {
-                    if (!in_array($priv, $checkPrivilege)) {
-                        $result['info'] = trans('common.privilege') . trans('common.submit') . trans('common.error');
-                        break;
+                if (is_array($data)) {
+                    foreach ($data as $priv) {
+                        if (!in_array($priv, $checkPrivilege)) {
+                            $result['info'] = trans('common.privilege') . trans('common.submit') . trans('common.error');
+                            break;
+                        }
                     }
                 }
                 break;
@@ -360,11 +371,13 @@ class Admin extends Backend
 
         }
 
-        $data = [];
+        $data    = [];
+        $randStr = mRandStr('pr');
         ('add' == $type || null !== $adminName) && $data['admin_name'] = $adminName;
-        ('add' == $type || null !== $password) && $data['admin_pwd'] = $password;
+        ('add' == $type || null !== $password) && $data['admin_pwd'] = md5($password . $randStr);
+        ('add' == $type || null !== $password) && $data['admin_rand'] = $randStr;
         ('add' == $type || null !== $groupId) && $data['group_id'] = $groupId;
-        ('add' == $type || null !== $privilege) && $data['privilege'] = $privilege;
+        ('add' == $type || null !== $privilege) && $data['privilege'] = json_encode($privilege);
         ('add' == $type || null !== $isEnable) && $data['is_enable'] = $isEnable;
 
         return $data;

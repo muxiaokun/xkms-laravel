@@ -80,7 +80,7 @@ return [
     'string'               => 'The :attribute must be a string.',
     'timezone'             => 'The :attribute must be a valid zone.',
     'unique'               => 'The :attribute has already been taken.',
-    'url'                  => 'The :attribute format is invalid.',
+    'url'         => 'The :attribute format is invalid.',
 
     /*
     |--------------------------------------------------------------------------
@@ -92,8 +92,11 @@ return [
     | specify a specific custom language line for a given attribute rule.
     |
     */
-
-    'custom' => [
+    'user_name'   => '用户名不能为空或者不符合规则！',
+    'password'    => '密码不能为空或者少于6位！',
+    'privilege'   => '超出可授权权限范围！',
+    'admin_exist' => '管理员已存在！',
+    'custom'      => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
@@ -111,5 +114,4 @@ return [
     */
 
     'attributes' => [],
-
 ];

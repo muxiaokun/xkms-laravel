@@ -17,10 +17,10 @@ OK 系统管理模板管理添加模板Admin::Template::add
 OK 系统管理模板管理删除模板Admin::Template::del
 OK 系统管理模板管理添加模板Admin::Template::edit
 OK 成员管理管理员管理员配置Admin::Admin::setting
-成员管理管理员管理员管理Admin::Admin::index
-成员管理管理员添加管理员Admin::Admin::add
-成员管理管理员删除管理员Admin::Admin::del
-成员管理管理员编辑管理员Admin::Admin::edit
+OK 成员管理管理员管理员管理Admin::Admin::index
+OK 成员管理管理员添加管理员Admin::Admin::add
+OK 成员管理管理员删除管理员Admin::Admin::del
+OK 成员管理管理员编辑管理员Admin::Admin::edit
 成员管理管理员管理组管理Admin::AdminGroup::index
 成员管理管理员添加管理组Admin::AdminGroup::add
 成员管理管理员删除管理组Admin::AdminGroup::del

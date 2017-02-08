@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
 use App\Model;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 
 class Admin extends Backend
@@ -187,77 +188,29 @@ class Admin extends Backend
         $result = ['status' => true, 'info' => ''];
         switch ($field) {
             case 'admin_name':
-                //不能为空
-                if ('' == $data['admin_name']) {
-                    $result['info'] = trans('common.admin') . trans('common.name') . trans('common.not') . trans('common.empty');
-                    break;
-                }
-                //检查用户名规则
-                if ('utf-8' != config('DEFAULT_CHARSET')) {
-                    $data['admin_name'] = iconv(config('DEFAULT_CHARSET'), 'utf-8', $data['admin_name']);
-                }
-
-                preg_match('/([^\x80-\xffa-zA-Z0-9\s]*)/', $data['admin_name'], $matches);
-                if ('' != $matches[1]) {
-                    $result['info'] = trans('common.name_format_error', ['string' => $matches[1]]);
-                    break;
-                }
-                //检查用户名是否存在
-                $adminInfo = Model\Admins::where([
-                    'admin_name' => $data['admin_name'],
-                    'id'         => ['neq', $data['id']],
-                ])->first();
-                if ($adminInfo) {
-                    $result['info'] = trans('common.admin') . trans('common.name') . trans('common.exists');
-                    break;
-                }
+                $validator = Validator::make($data, [
+                    'admin_name' => 'admin_exist|user_name',
+                ]);
                 break;
             case 'password':
-                if ($data['is_pwd'] || '' != $data['password']) {
-                    //不能为空
-                    if ('' == $data['password']) {
-                        $result['info'] = trans('common.pass') . trans('common.not') . trans('common.empty');
-                        break;
-                    }
-                    //密码长度不能小于6
-                    if (6 > strlen($data['password'])) {
-                        $result['info'] = trans('common.pass_len_error');
-                        break;
-                    }
-                }
+                $validator = Validator::make($data, [
+                    'password' => 'password:' . $data['is_pwd'],
+                ]);
                 break;
-            case 'password_again':
-                if ($data['is_pwd'] || '' != $data['password'] || '' != $data['password_again']) {
-                    //检测再一次输入的密码是否一致
-                    if ($data['password'] != $data['password_again']) {
-                        $result['info'] = trans('common.password_again_error');
-                        break;
-                    }
-                    //不能为空
-                    if ('' == $data['password_again']) {
-                        $result['info'] = trans('common.pass') . trans('common.not') . trans('common.empty');
-                        break;
-                    }
-                }
+            case 'password_confirmation':
+                $validator = Validator::make($data, [
+                    'password' => 'confirmed',
+                ]);
                 break;
             case 'privilege':
-                //对比权限
-                $privilege      = $this->getPrivilege('Admin', session('backend_info.privilege'));
-                $checkPrivilege = [];
-                foreach ($privilege as $controllerCn => $privs) {
-                    foreach ($privs as $controllerName => $controller) {
-                        foreach ($controller as $actionName => $action) {
-                            $checkPrivilege[] = $controllerName . '_' . $actionName;
-                        }
-                    }
-                }
-                foreach ($data as $priv) {
-                    if (!in_array($priv, $checkPrivilege)) {
-                        $result['info'] = trans('common.privilege') . trans('common.submit') . trans('common.error');
-                        break;
-                    }
-                }
+                $validator = Validator::make($data, [
+                    'privilege' => 'privilege:backend_info',
+                ]);
                 break;
+        }
+
+        if (isset($validator) && $validator->fails()) {
+            $result['info'] = implode('', $validator->errors()->all());
         }
 
         if ($result['info']) {

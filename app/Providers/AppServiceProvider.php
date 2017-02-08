@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +14,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Validator::extendImplicit('user_name', 'App\Http\Validators\Common@user_name');
+        Validator::extendImplicit('password', 'App\Http\Validators\Common@password');
+        Validator::extend('privilege', 'App\Http\Validators\Common@privilege');
+        Validator::extend('admin_exist', 'App\Http\Validators\Admin@admin_exist');
     }
 
     /**

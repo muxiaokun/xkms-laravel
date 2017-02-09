@@ -11,6 +11,14 @@ class Admins extends Common
         'privilege' => 'array',
     ];
 
+    public function setAdminPwdAttribute($value)
+    {
+        $randStr                        = mRandStr('pr');
+        $password                       = md5($value . $randStr);
+        $this->attributes['admin_rand'] = $randStr;
+        return $password;
+    }
+
     public function getGroupIdAttribute($value)
     {
         return $this->transfixionDecode($value);

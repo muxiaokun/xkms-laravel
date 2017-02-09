@@ -27,7 +27,7 @@ class Common
      */
     public function password($attribute, $value, $parameters, $validator)
     {
-        if (isset($parameters[0]) && $parameters[0] || '' != $value) {
+        if (1 == $parameters[0] || '' != $value) {
             return (6 <= strlen($value)) ? true : false;
         }
         return true;

@@ -19,9 +19,9 @@ class Admin
         $where[] = ['admin_name', $value];
         $data    = $validator->getData();
         if (isset($data['id'])) {
-            $where[] = ['id', '!=', $value];
+            $where[] = ['id', '!=', $data['id']];
         }
-        $exist = Model\Admins::where('admin_name', $value)->first();
+        $exist = Model\Admins::where($where)->first();
         return $exist ? false : true;
     }
 }

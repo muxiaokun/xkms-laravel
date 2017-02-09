@@ -120,11 +120,12 @@ class Admin extends Backend
         }
 
         if (request()->isMethod('POST')) {
-            $data       = $this->makeData('edit');
+            $data = $this->makeData('edit');
             if (!is_array($data)) {
                 return $data;
             }
-            $resultEdit = Model\Admins::colWhere($id)->update($data);
+
+            $resultEdit = Model\Admins::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.admin') . trans('common.edit') . trans('common.success'),
                     route('Admin::Admin::index'));
@@ -135,7 +136,7 @@ class Admin extends Backend
             }
         }
 
-        $editInfo = Model\Admins::where('id', $id)->first();
+        $editInfo = Model\Admins::colWhere($id)->first();
         foreach ($editInfo['group_id'] as &$groupId) {
             $adminGroupName = Model\AdminGroups::colWhere($groupId)->first()['name'];
             $groupId        = ['value' => $groupId, 'html' => $adminGroupName];
@@ -320,13 +321,11 @@ class Admin extends Backend
         }
 
         $data    = [];
-        $randStr = mRandStr('pr');
         ('add' == $type || null !== $adminName) && $data['admin_name'] = $adminName;
         ('add' == $type || null !== $password) && $data['admin_pwd'] = $password;
         ('add' == $type || null !== $groupId) && $data['group_id'] = $groupId;
         ('add' == $type || null !== $privilege) && $data['privilege'] = $privilege;
         ('add' == $type || null !== $isEnable) && $data['is_enable'] = $isEnable;
-
         return $data;
     }
 

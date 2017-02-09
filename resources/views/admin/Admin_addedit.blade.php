@@ -12,7 +12,7 @@
                             'check_list': {
                                 'admin_name': Array('admin_name', 'id'),
                                 'password': Array('password', 'is_pwd'),
-                                'password_confirmed': Array('password', 'password_confirmed', 'is_pwd')
+                                'password_confirmation': Array('password', 'password_confirmation', 'is_pwd')
                             },
                             'ajax_url': "{{ route('Admin::Admin::ajax_api') }}",
                         };
@@ -54,7 +54,7 @@
                                 <div class="col-sm-3">
                                     <input type="password" class="form-control"
                                            placeholder="@lang('common.again')@lang('common.input')@lang('common.pass')"
-                                           name="password_confirmed"/>
+                                           name="password_confirmation"/>
                                     @if ($edit_info)
                                         <span class="help-block">@lang('backend.not_input_pass')</span>
                                     @endif
@@ -128,6 +128,7 @@
                                         <input type="checkbox"
                                                onClick="M_allselect_par(this,'.row')"/>@lang('common.allselect')
                                     </label>
+                                    <input type="hidden" value="" name="privilege[]"/>
                                 </div>
                             </div>
                         </div>

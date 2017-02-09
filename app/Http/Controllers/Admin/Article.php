@@ -142,7 +142,7 @@ class Article extends Backend
             $data = $this->makeData();
             isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'], config('system.sys_article_thumb_width'),
                 C('SYS_ARTICLE_THUMB_HEIGHT'));
-            $resultEdit = Model\Article::colWhere($id)->update($data);
+            $resultEdit = Model\Article::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 $data['new_thumb'] = $thumbFile;
                 $this->addEditAfterCommon($data, $id);
@@ -226,7 +226,7 @@ class Article extends Backend
             return trans('common.not') . trans('common.edit') . $field;
         }
 
-        $resultEdit = Model\Article::colWhere($id)->update($data);
+        $resultEdit = Model\Article::colWhere($id)->first()->update($data);
         if ($resultEdit) {
             $data['value'] = Model\Article::colWhere($data['id'])->first()[$field];
             return ['status' => true, 'info' => $data['value']];

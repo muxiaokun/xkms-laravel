@@ -100,7 +100,7 @@ class ArticleChannel extends Backend
                 unset($data['manage_group_id']);
                 unset($data['access_group_id']);
             }
-            $resultEdit = Model\ArticleChannel::colWhere($id)->update($data);
+            $resultEdit = Model\ArticleChannel::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.channel') . trans('common.edit') . trans('common.success'),
                     route('Admin::ArticleChannel::index'));

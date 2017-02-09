@@ -77,7 +77,7 @@ class Region extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData();
-            $resultEdit = Model\Region::colWhere($id)->update($data);
+            $resultEdit = Model\Region::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.region') . trans('common.edit') . trans('common.success'),
                     route('Admin::Region::index'));

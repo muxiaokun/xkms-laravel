@@ -83,7 +83,7 @@ class Member extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData(false);
-            $resultEdit = Model\Member::colWhere($id)->update($data);
+            $resultEdit = Model\Member::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.member') . trans('common.edit') . trans('common.success'),
                     route('Admin::Member::index'));

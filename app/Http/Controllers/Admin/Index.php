@@ -207,7 +207,7 @@ class Index extends Backend
             $randStr            = mRandStr('pr');
             $data['admin_pwd']  = md5($password . $randStr);
             $data['admin_rand'] = $randStr;
-            $resultEdit         = Model\Admins::colWhere(session('backend_info.id'))->update($data);
+            $resultEdit = Model\Admins::colWhere(session('backend_info.id'))->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.edit') . trans('common.pass') . trans('common.success'),
                     route('Admin::Index::editMyPass'));

@@ -79,7 +79,7 @@ class AdminGroup extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData();
-            $resultEdit = Model\AdminGroups::colWhere($id)->update($data);
+            $resultEdit = Model\AdminGroups::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.management') . trans('common.group') . trans('common.edit') . trans('common.success'),
                     route('Admin::AdminGroup::index'));

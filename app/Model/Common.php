@@ -21,6 +21,11 @@ class Common extends Model
 
     }
 
+    /**
+     * @param $query
+     * @return array
+     * 获取表列
+     */
     public function scopeMGetColumn($query)
     {
         $columns       = $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
@@ -31,6 +36,12 @@ class Common extends Model
         return $empty_columns;
     }
 
+    /**
+     * @param $query
+     * @param $id
+     * @param string $column
+     * 列条件 默认id 支持IN数组
+     */
     public function scopeColWhere($query, $id, $column = 'id')
     {
         if (is_array($id)) {

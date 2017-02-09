@@ -118,7 +118,7 @@ class Backend extends Common
                 $loginData              = [];
                 $loginData['login_num'] = 0;
                 $loginData['lock_time'] = null;
-                Model\Admins::where('id', $loginInfo->id)->update($loginData);
+                Model\Admins::colWhere($loginInfo->id)->first()->update($loginData);
             }
             $adminInfo['login_time'] = Carbon::now();
             session(['backend_info' => $adminInfo->toArray()]);
@@ -129,7 +129,7 @@ class Backend extends Common
                 $loginData              = [];
                 $loginData['login_num'] = $loginInfo->login_num + 1;
                 $loginData['lock_time'] = ($loginNum <= $loginData['login_num']) ? Carbon::now() : null;
-                Model\Admins::where('id', $loginInfo->id)->update($loginData);
+                Model\Admins::colWhere($loginInfo->id)->first()->update($loginData);
             }
             return 'user_pwd_error';
         }

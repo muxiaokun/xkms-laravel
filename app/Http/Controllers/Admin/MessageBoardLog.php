@@ -60,7 +60,7 @@ class MessageBoardLog extends Backend
                 'audit_id'   => session('backend_info.id'),
                 'reply_info' => request('reply_info'),
             ];
-            $resultEdit = Model\MessageBoardLog::colWhere($id)->update($data);
+            $resultEdit = Model\MessageBoardLog::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.audit') . trans('common.success'),
                     route('Admin::MessageBoardLog::index'));

@@ -78,7 +78,7 @@ class Navigation extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData();
-            $resultEdit = Model\Navigation::colWhere($id)->update($data);
+            $resultEdit = Model\Navigation::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.navigation') . trans('common.edit') . trans('common.success'),
                     route('Admin::Navigation::index'));

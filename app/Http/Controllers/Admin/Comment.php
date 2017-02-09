@@ -87,7 +87,7 @@ class Comment extends Backend
         }
 
         $data       = ['audit_id' => session('backend_info.id')];
-        $resultEdit = Model\Comment::colWhere($id)->update($data);
+        $resultEdit = Model\Comment::colWhere($id)->first()->update($data);
         if ($resultEdit) {
             return $this->success(trans('common.comment') . trans('common.audit') . trans('common.success'),
                 route('Admin::Comment::index'));

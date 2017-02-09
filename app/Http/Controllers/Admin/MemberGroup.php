@@ -72,7 +72,7 @@ class MemberGroup extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData();
-            $resultEdit = Model\MemberGroup::colWhere($id)->update($data);
+            $resultEdit = Model\MemberGroup::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.member') . trans('common.group') . trans('common.edit') . trans('common.success'),
                     route('Admin::MemberGroup::index'));

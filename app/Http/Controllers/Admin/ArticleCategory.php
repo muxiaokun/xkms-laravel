@@ -123,7 +123,7 @@ class ArticleCategory extends Backend
                 unset($data['manage_group_id']);
                 unset($data['access_group_id']);
             }
-            $resultEdit = Model\ArticleCategory::colWhere($id)->update($data);
+            $resultEdit = Model\ArticleCategory::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.article') . trans('common.category') . trans('common.edit') . trans('common.success'),
@@ -187,7 +187,7 @@ class ArticleCategory extends Backend
 
         $resultDel = Model\ArticleCategory::destroy($id);
         if ($resultDel) {
-            Model\ArticleCategory::colWhere($id, 'parent_id')->update(['parent_id' => 0]);
+            Model\ArticleCategory::colWhere($id, 'parent_id')->first()->update(['parent_id' => 0]);
             //释放图片绑定
             Model\ManageUpload::bindFile($id);
             return $this->success(trans('common.article') . trans('common.category') . trans('common.del') . trans('common.success'),
@@ -207,7 +207,7 @@ class ArticleCategory extends Backend
             return trans('common.not') . trans('common.edit') . $field;
         }
 
-        $resultEdit = Model\ArticleCategory::colWhere($id)->update($data);
+        $resultEdit = Model\ArticleCategory::colWhere($id)->first()->update($data);
         if ($resultEdit) {
             $data['value'] = Model\ArticleCategory::colWhere($data['id'])->first()[$field];
 

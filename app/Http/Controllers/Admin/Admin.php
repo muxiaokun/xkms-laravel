@@ -106,7 +106,7 @@ class Admin extends Backend
             }
         }
         $this->addEditCommon();
-        $assign['edit_info'] = Model\Admins::mGetColumn();
+        $assign['edit_info'] = Model\Admins::columnEmptyData();
         $assign['title']     = trans('common.admin') . trans('common.add');
         return view('admin.Admin_addedit', $assign);
     }

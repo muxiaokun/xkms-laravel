@@ -24,9 +24,9 @@ class Common extends Model
     /**
      * @param $query
      * @return array
-     * 获取表列
+     * 获取表列空数据
      */
-    public function scopeMGetColumn($query)
+    public function scopeColumnEmptyData($query)
     {
         $columns       = $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
         $empty_columns = [];

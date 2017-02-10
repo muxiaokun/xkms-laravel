@@ -27,7 +27,7 @@
                         <div class="col-sm-3">
                             <input type="password" class="form-control"
                                    placeholder="@lang('common.again')@lang('common.input')@lang('common.pass')"
-                                   name="password_again"/>
+                                   name="password_confirmation"/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -54,7 +54,7 @@
             'form_obj': $('#form_valid'),
             'check_list': {
                 'password': Array('password'),
-                'password_again': Array('password', 'password_again')
+                'password_confirmation': Array('password', 'password_confirmation')
             },
             'ajax_url': "{{ route('Admin::Index::ajax_api') }}",
         };

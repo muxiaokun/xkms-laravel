@@ -7,8 +7,8 @@ use App\Http\Controllers\Backend;
 use App\Model;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Validator;
 
 class Index extends Backend
 {
@@ -188,25 +188,26 @@ class Index extends Backend
                     route('Admin::Index::editMyPass'));
             }
 
-            $password      = request('password');
-            $passwordAgain = request('password_again');
+            $password             = request('password');
+            $passwordConfirmation = request('password_confirmation');
 
             //只有一个分支的提交 不进行判断必须检测
-            $result = $this->doValidateForm('password', ['password' => $password]);
+            $result = $this->doValidateForm('password', ['password' => $password, 'is_pwd' => true]);
             if (!$result['status']) {
                 return $this->error($result['info'], route('Admin::Index::editMyPass'));
             }
 
-            $result = $this->doValidateForm('password_again',
-                ['password' => $password, 'password_again' => $passwordAgain]);
+            $result            = $this->doValidateForm('password_confirmation', [
+                'password'              => $password,
+                'password_confirmation' => $passwordConfirmation,
+                'is_pwd'                => true,
+            ]);
             if (!$result['status']) {
                 return $this->error($result['info'], route('Admin::Index::editMyPass'));
             }
 
             $data               = [];
-            $randStr            = mRandStr('pr');
-            $data['admin_pwd']  = md5($password . $randStr);
-            $data['admin_rand'] = $randStr;
+            $data['admin_pwd'] = $password;
             $resultEdit = Model\Admins::colWhere(session('backend_info.id'))->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.edit') . trans('common.pass') . trans('common.success'),
@@ -366,29 +367,19 @@ class Index extends Backend
         $result = ['status' => true, 'info' => ''];
         switch ($field) {
             case 'password':
-                //不能为空
-                if ('' == $data['password']) {
-                    $result['info'] = trans('common.pass') . trans('common.not') . trans('common.empty');
-                    break;
-                }
-                //密码长度不能小于6
-                if (6 > strlen($data['password'])) {
-                    $result['info'] = trans('common.pass_len_error');
-                    break;
-                }
+                $validator = Validator::make($data, [
+                    'password' => 'password:' . true,
+                ]);
                 break;
-            case 'password_again':
-                //检测再一次输入的密码是否一致
-                if ($data['password'] != $data['password_again']) {
-                    $result['info'] = trans('common.password_again_error');
-                    break;
-                }
-                //不能为空
-                if ('' == $data['password_again']) {
-                    $result['info'] = trans('common.pass') . trans('common.not') . trans('common.empty');
-                    break;
-                }
+            case 'password_confirmation':
+                $validator = Validator::make($data, [
+                    'password' => 'confirmed',
+                ]);
                 break;
+        }
+
+        if (isset($validator) && $validator->fails()) {
+            $result['info'] = implode('', $validator->errors()->all());
         }
 
         if ($result['info']) {

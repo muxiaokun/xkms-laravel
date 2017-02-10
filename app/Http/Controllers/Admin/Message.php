@@ -79,7 +79,8 @@ class Message extends Backend
             $assign['receive_info'] = Model\Member::colWhere($receiveId)->first()->toArray();
         }
 
-        $assign['title'] = trans('common.send') . trans('common.message');
+        $assign['edit_info'] = Model\Message::columnEmptyData();
+        $assign['title']     = trans('common.send') . trans('common.message');
         return view('admin.Message_add', $assign);
     }
 

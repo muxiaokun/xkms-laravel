@@ -56,7 +56,8 @@ class Recruit extends Backend
                     route('Admin::Recruit::add'));
             }
         }
-        $assign['title'] = trans('common.add') . trans('common.recruit');
+        $assign['edit_info'] = Model\Recruit::columnEmptyData();
+        $assign['title']     = trans('common.add') . trans('common.recruit');
         return view('admin.Recruit_addedit', $assign);
     }
 

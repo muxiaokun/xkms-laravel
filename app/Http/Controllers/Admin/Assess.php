@@ -68,7 +68,8 @@ class Assess extends Backend
             }
         }
 
-        $assign['title'] = trans('common.assess') . trans('common.add');
+        $assign['edit_info'] = Model\Assess::columnEmptyData();
+        $assign['title']     = trans('common.assess') . trans('common.add');
         return view('admin.Assess_addedit', $assign);
     }
 

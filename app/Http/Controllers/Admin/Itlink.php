@@ -57,7 +57,7 @@ class Itlink extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData();
-            $resultAdd = Model\Itlink::create($data);
+            $resultAdd       = Model\Itlink::create($data);
             if ($resultAdd) {
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.itlink') . trans('common.add') . trans('common.success'),
@@ -68,7 +68,8 @@ class Itlink extends Backend
             }
         }
 
-        $assign['title'] = trans('common.itlink') . trans('common.add');
+        $assign['edit_info'] = Model\Itlink::columnEmptyData();
+        $assign['title']     = trans('common.itlink') . trans('common.add');
         return view('admin.Itlink_addedit', $assign);
     }
 

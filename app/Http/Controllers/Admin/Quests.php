@@ -57,7 +57,8 @@ class Quests extends Backend
                     route('Admin::Quests::add'));
             }
         }
-        $assign['title'] = trans('common.add') . trans('common.quests');
+        $assign['edit_info'] = Model\Quests::columnEmptyData();
+        $assign['title']     = trans('common.add') . trans('common.quests');
         return view('admin.Quests_addedit', $assign);
     }
 

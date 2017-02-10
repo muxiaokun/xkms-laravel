@@ -58,6 +58,7 @@ class MessageBoard extends Backend
         }
 
         $assign['template_list'] = mScanTemplate('index', 'MessageBoard');
+        $assign['edit_info'] = Model\MessageBoard::columnEmptyData();
         $assign['title']         = trans('common.messageboard') . trans('common.add');
         return view('admin.MessageBoard_addedit', $assign);
     }

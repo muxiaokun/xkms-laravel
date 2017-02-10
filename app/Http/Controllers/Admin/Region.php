@@ -63,7 +63,8 @@ class Region extends Backend
             }
         }
 
-        $assign['title'] = trans('common.region') . trans('common.add');
+        $assign['edit_info'] = Model\Region::columnEmptyData();
+        $assign['title']     = trans('common.region') . trans('common.add');
         return view('admin.Region_addedit', $assign);
     }
 

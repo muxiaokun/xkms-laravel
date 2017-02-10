@@ -76,6 +76,7 @@ class QuestsAnswer extends Backend
         $assign['quests_answer_list'] = $questsAnswerList;
         $assign['quests_info']        = $questsInfo;
         $assign['quests_answer_info'] = $questsAnswerInfo;
+        $assign['edit_info'] = Model\QuestsAnswer::columnEmptyData();
         $assign['title']              = trans('common.quests') . trans('common.answer');
         return view('admin.QuestsAnswer_add', $assign);
     }

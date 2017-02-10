@@ -47,7 +47,7 @@ class MemberGroup extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData();
-            $resultAdd = Model\MemberGroup::create($data);
+            $resultAdd       = Model\MemberGroup::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.member') . trans('common.group') . trans('common.add') . trans('common.success'),
                     route('Admin::MemberGroup::index'));
@@ -58,7 +58,8 @@ class MemberGroup extends Backend
         }
 
         $this->addEditCommon();
-        $assign['title'] = trans('common.member') . trans('common.group') . trans('common.add');
+        $assign['edit_info'] = Model\MemberGroup::columnEmptyData();
+        $assign['title']     = trans('common.member') . trans('common.group') . trans('common.add');
         return view('admin.MemberGroup_addedit', $assign);
     }
 

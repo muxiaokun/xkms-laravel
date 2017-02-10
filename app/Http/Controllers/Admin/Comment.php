@@ -74,7 +74,8 @@ class Comment extends Backend
             return $this->_put_config($col, 'system');
         }
 
-        $assign['title'] = trans('common.config') . trans('common.comment');
+        $assign['edit_info'] = Model\Comment::columnEmptyData();
+        $assign['title']     = trans('common.config') . trans('common.comment');
         return view('admin.Comment_add', $assign);
     }
 

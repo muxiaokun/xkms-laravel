@@ -54,7 +54,7 @@ class AdminGroup extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData();
-            $resultAdd = Model\AdminGroups::create($data);
+            $resultAdd       = Model\AdminGroups::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.management') . trans('common.group') . trans('common.add') . trans('common.success'),
                     route('Admin::AdminGroup::index'));
@@ -65,7 +65,8 @@ class AdminGroup extends Backend
         }
 
         $this->addEditCommon();
-        $assign['title'] = trans('common.admin') . trans('common.group') . trans('common.add');
+        $assign['edit_info'] = Model\AdminGroups::columnEmptyData();
+        $assign['title']     = trans('common.admin') . trans('common.group') . trans('common.add');
         return view('admin.AdminGroup_addedit', $assign);
     }
 

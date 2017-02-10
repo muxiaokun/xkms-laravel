@@ -65,6 +65,7 @@ class Wechat extends Backend
         $Oauth2Link            = $Wechat->Oauth2_enlink($ApiLink);
         $assign['Oauth2_link'] = $Oauth2Link;
 
+        $assign['edit_info'] = Model\Wechat::columnEmptyData();
         $assign['title'] = trans('common.config') . trans('common.wechat');
         return view('admin.Wechat_add', $assign);
     }

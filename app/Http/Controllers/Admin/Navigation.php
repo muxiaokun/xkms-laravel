@@ -64,6 +64,7 @@ class Navigation extends Backend
         }
 
         $assign['navigation_config'] = $this->navigation_config;
+        $assign['edit_info'] = Model\Navigation::columnEmptyData();
         $assign['title']             = trans('common.add') . trans('common.navigation');
         return view('admin.Navigation_addedit', $assign);
     }

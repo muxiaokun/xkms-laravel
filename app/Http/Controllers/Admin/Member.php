@@ -69,7 +69,8 @@ class Member extends Backend
             }
         }
         $this->addEditCommon();
-        $assign['title'] = trans('common.member') . trans('common.add');
+        $assign['edit_info'] = Model\Member::columnEmptyData();
+        $assign['title']     = trans('common.member') . trans('common.add');
         return view('admin.Member_addedit', $assign);
     }
 

@@ -93,7 +93,8 @@ class ArticleCategory extends Backend
         }
 
         $this->addEditCommon();
-        $assign['title'] = trans('common.add') . trans('common.article') . trans('common.category');
+        $assign['edit_info'] = Model\ArticleCategory::columnEmptyData();
+        $assign['title']     = trans('common.add') . trans('common.article') . trans('common.category');
         return view('admin.ArticleCategory_addedit', $assign);
     }
 

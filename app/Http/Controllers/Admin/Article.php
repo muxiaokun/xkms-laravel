@@ -126,7 +126,8 @@ class Article extends Backend
         }
 
         $this->addEditCommon();
-        $assign['title'] = trans('common.article') . trans('common.add');
+        $assign['edit_info'] = Model\Article::columnEmptyData();
+        $assign['title']     = trans('common.article') . trans('common.add');
         return view('admin.Article_addedit', $assign);
     }
 

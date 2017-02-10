@@ -53,7 +53,7 @@ class ArticleChannel extends Backend
         }
         if (request()->isMethod('POST')) {
             $data      = $this->makeData();
-            $resultAdd = Model\ArticleChannel::create($data);
+            $resultAdd       = Model\ArticleChannel::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.channel') . trans('common.add') . trans('common.success'),
                     route('Admin::ArticleChannel::index'));
@@ -64,8 +64,8 @@ class ArticleChannel extends Backend
         }
 
         $this->addEditCommon();
-
-        $assign['title'] = trans('common.add') . trans('common.channel');
+        $assign['edit_info'] = Model\ArticleChannel::columnEmptyData();
+        $assign['title']     = trans('common.add') . trans('common.channel');
         return view('admin.ArticleChannel_addedit', $assign);
     }
 

@@ -99,9 +99,8 @@ class Backend extends Common
         //检测后台尝试登陆次数
         $loginNum  = config('system.sys_backend_login_num');
         $lockTime  = config('system.sys_backend_lock_time');
-        $AdminId   = Model\Admins::where('admin_name', $userName)->first()['id'];
-        $loginInfo = Model\Admins::colWhere($AdminId)->first()->toArray();
-        if ($loginNum && $loginInfo->lock_time && strtotime($loginInfo->lock_time) > Carbon::now()->getTimestamp() - $lockTime) {
+        $loginInfo = Model\Admins::where('admin_name', $userName)->first();
+        if ($loginNum && null !== $loginInfo && strtotime($loginInfo->lock_time) > Carbon::now()->getTimestamp() - $lockTime) {
             $loginInfo->lock_time = Carbon::now();
             $loginInfo->save();
             return 'lock_user_error';
@@ -110,7 +109,7 @@ class Backend extends Common
         $adminInfo = Model\Admins::authorized($userName, $password);
         if ($adminInfo) {
             //管理员有组的 加载分组权限
-            if (0 < count($adminInfo['group_id'])) {
+            if (0 < count($adminInfo->group_id->toArray())) {
                 $adminInfo['group_privilege'] = Model\AdminGroups::mFindPrivilege($adminInfo['group_id']);
             }
             //重置登录次数

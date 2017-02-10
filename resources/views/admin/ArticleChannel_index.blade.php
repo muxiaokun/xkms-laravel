@@ -70,19 +70,19 @@
                                     };
                                     @if ($batch_handle['edit'])
                                         config.type_data.push({
-                                        'name': lang.commonshow,
+                                        'name': lang.common.show,
                                         'post_link': '{{ route('Admin::ArticleChannel::edit') }}',
                                         'post_data': {'if_show': '1'}
                                     });
                                     config.type_data.push({
-                                        'name': lang.commonhidden,
+                                        'name': lang.common.hidden,
                                         'post_link': '{{ route('Admin::ArticleChannel::edit') }}',
                                         'post_data': {'if_show': '0'}
                                     });
                                     @endif
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
-                                        'name': lang.commondel,
+                                        'name': lang.common.del,
                                         'post_link': '{{ route('Admin::ArticleChannel::del') }}'
                                     });
                                     @endif

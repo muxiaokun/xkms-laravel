@@ -70,7 +70,7 @@
                         'type_data': []
                     };
                     @if ($batch_handle['del'])
-                        config.type_data.push({'name': lang.commondel, 'post_link': '{:M_U('del')}'});
+                        config.type_data.push({'name': lang.common.del, 'post_link': '{:M_U('del')}'});
                     @endif
                             new M_batch_handle(config);
                 });

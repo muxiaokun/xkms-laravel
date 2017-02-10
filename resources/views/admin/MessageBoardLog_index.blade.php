@@ -64,19 +64,19 @@
                                     };
                                     @if ($batch_handle['edit'])
                                         config.type_data.push({
-                                        'name': lang.commonaudit,
+                                        'name': lang.common.audit,
                                         'post_link': '{{ route('Admin::MessageBoardLog::edit') }}',
                                         'post_data': {'is_audit': '1'}
                                     });
                                     config.type_data.push({
-                                        'name': lang.commoncancel + lang.commonaudit,
+                                        'name': lang.common.cancel + lang.common.audit,
                                         'post_link': '{{ route('Admin::MessageBoardLog::edit') }}',
                                         'post_data': {'is_audit': '0'}
                                     });
                                     @endif
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
-                                        'name': lang.commondel,
+                                        'name': lang.common.del,
                                         'post_link': '{{ route('Admin::MessageBoardLog::del') }}'
                                     });
                                     @endif

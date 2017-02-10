@@ -38,6 +38,7 @@ M_batch_handle.prototype =
     'out_obj':{},
     'form_obj':Array(
         '<form method="post" onSubmit="return false"><div class="col-sm-6">',
+        '<input type="hidden" name="_token" value="' + $('meta[name=csrf-token]').attr('content') + '" />',
         '<select class="form-control"></select></div>',
         '<button type="submit" class="btn btn-default col-sm-2">',
         lang.common.submit + '</button>',

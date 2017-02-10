@@ -69,19 +69,19 @@
                                     };
                                     @if ($batch_handle['edit'])
                                         config.type_data.push({
-                                        'name': lang.commonenable,
+                                        'name': lang.common.enable,
                                         'post_link': '{{ route('Admin::MemberGroup::edit') }}',
                                         'post_data': {'is_enable': '1'}
                                     });
                                     config.type_data.push({
-                                        'name': lang.commondisable,
+                                        'name': lang.common.disable,
                                         'post_link': '{{ route('Admin::MemberGroup::edit') }}',
                                         'post_data': {'is_enable': '0'}
                                     });
                                     @endif
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
-                                        'name': lang.commondel,
+                                        'name': lang.common.del,
                                         'post_link': '{{ route('Admin::MemberGroup::del') }}'
                                     });
                                     @endif

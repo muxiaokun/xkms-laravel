@@ -91,29 +91,29 @@
                                     };
                                     @if ($batch_handle['edit'])
                                         config.type_data.push({
-                                        'name': lang.commonshow,
+                                        'name': lang.common.show,
                                         'post_link': '{{ route('Admin::Article::edit') }}',
                                         'post_data': {'if_show': '1'}
                                     });
                                     config.type_data.push({
-                                        'name': lang.commonhidden,
+                                        'name': lang.common.hidden,
                                         'post_link': '{{ route('Admin::Article::edit') }}',
                                         'post_data': {'if_show': '0'}
                                     });
                                     config.type_data.push({
-                                        'name': lang.commonaudit,
+                                        'name': lang.common.audit,
                                         'post_link': '{{ route('Admin::Article::edit') }}',
                                         'post_data': {'is_audit': '1'}
                                     });
                                     config.type_data.push({
-                                        'name': lang.commoncancel + lang.commonaudit,
+                                        'name': lang.common.cancel + lang.common.audit,
                                         'post_link': '{{ route('Admin::Article::edit') }}',
                                         'post_data': {'is_audit': '0'}
                                     });
                                     @endif
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
-                                        'name': lang.commondel,
+                                        'name': lang.common.del,
                                         'post_link': '{{ route('Admin::Article::del') }}'
                                     });
                                     @endif

@@ -60,7 +60,7 @@
                                     };
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
-                                        'name': lang.commondel,
+                                        'name': lang.common.del,
                                         'post_link': '{{ route('Admin::QuestsAnswer::del') }}'
                                     });
                                     @endif

@@ -77,29 +77,29 @@
                                     };
                                     @if ($batch_handle['edit'])
                                         config.type_data.push({
-                                        'name': lang.commonenable,
+                                        'name': lang.common.enable,
                                         'post_link': '{{ route('Admin::Itlink::edit') }}',
                                         'post_data': {'is_enable': '1'}
                                     });
                                     config.type_data.push({
-                                        'name': lang.commondisable,
+                                        'name': lang.common.disable,
                                         'post_link': '{{ route('Admin::Itlink::edit') }}',
                                         'post_data': {'is_enable': '0'}
                                     });
                                     config.type_data.push({
-                                        'name': lang.commonstatistics,
+                                        'name': lang.common.statistics,
                                         'post_link': '{{ route('Admin::Itlink::edit') }}',
                                         'post_data': {'is_statistics': '1'}
                                     });
                                     config.type_data.push({
-                                        'name': lang.commoncancel + lang.commonstatistics,
+                                        'name': lang.common.cancel + lang.common.statistics,
                                         'post_link': '{{ route('Admin::Itlink::edit') }}',
                                         'post_data': {'is_statistics': '0'}
                                     });
                                     @endif
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
-                                        'name': lang.commondel,
+                                        'name': lang.common.del,
                                         'post_link': '{{ route('Admin::Itlink::del') }}'
                                     });
                                     @endif

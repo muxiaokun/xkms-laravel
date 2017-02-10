@@ -91,13 +91,13 @@
                                     };
                                     @if ($batch_handle['edit'])
                                         config.type_data.push({
-                                        'name': lang.commonaudit,
+                                        'name': lang.common.audit,
                                         'post_link': '{{ route('Admin::Comment::edit') }}'
                                     });
                                     @endif
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
-                                        'name': lang.commondel,
+                                        'name': lang.common.del,
                                         'post_link': '{{ route('Admin::Comment::del') }}'
                                     });
                                     @endif

@@ -105,23 +105,20 @@ class Backend extends Common
             $loginInfo->save();
             return 'lock_user_error';
         }
+
         //验证用户名密码
-        $adminInfo = Model\Admins::authorized($userName, $password);
-        if ($adminInfo) {
-            //管理员有组的 加载分组权限
-            if (0 < count($adminInfo->group_id->toArray())) {
-                $adminInfo['group_privilege'] = Model\AdminGroups::mFindPrivilege($adminInfo['group_id']);
-            }
-            //重置登录次数
-            if (0 != $adminInfo['login_num']) {
-                $loginData              = [];
-                $loginData['login_num'] = 0;
-                $loginData['lock_time'] = null;
-                Model\Admins::colWhere($loginInfo->id)->first()->update($loginData);
-            }
-            $adminInfo['login_time'] = Carbon::now();
-            session(['backend_info' => $adminInfo->toArray()]);
-            return 'login_success';
+        $where     = [
+            ['admin_name', $userName],
+            ['is_enable', '1'],
+        ];
+        $adminInfo = Model\Admins::where($where)->first();
+        if ($adminInfo['admin_pwd'] == md5($password . $adminInfo['admin_rand'])) {
+            $data = [
+                'last_time' => Carbon::now(),
+                'login_ip'  => request()->ip(),
+            ];
+            Model\Admins::colWhere($adminInfo['id'])->update($data);
+            $adminInfo = Model\Admins::colWhere($adminInfo['id'])->first();
         } else {
             //检测后台尝试登陆次数
             if ($loginNum) {
@@ -132,6 +129,21 @@ class Backend extends Common
             }
             return 'user_pwd_error';
         }
+
+        //管理员有组的 加载分组权限
+        if (0 < count($adminInfo->group_id->toArray())) {
+            $adminInfo['group_privilege'] = Model\AdminGroups::mFindPrivilege($adminInfo['group_id']);
+        }
+        //重置登录次数
+        if (0 != $adminInfo['login_num']) {
+            $loginData              = [];
+            $loginData['login_num'] = 0;
+            $loginData['lock_time'] = null;
+            Model\Admins::colWhere($loginInfo->id)->first()->update($loginData);
+        }
+        $adminInfo['login_time'] = Carbon::now();
+        session(['backend_info' => $adminInfo->toArray()]);
+        return 'login_success';
     }
 
     //登出功能

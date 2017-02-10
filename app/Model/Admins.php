@@ -31,28 +31,4 @@ class Admins extends Common
         sort($value);
         $this->attributes['group_id'] = $this->transfixionEncode($value);
     }
-
-    public function scopeAuthorized($query, $user, $pwd)
-    {
-        if (!$user) {
-            return false;
-        }
-
-        $where     = [
-            'admin_name' => $user,
-            'is_enable'  => '1',
-        ];
-        $adminInfo = $query->where($where)->first();
-        if ($adminInfo['admin_pwd'] == md5($pwd . $adminInfo['admin_rand'])) {
-            $data = [
-                'last_time' => Carbon::now(),
-                'login_ip'  => request()->ip(),
-            ];
-            $query->where('id', '=', $adminInfo['id'])->update($data);
-            $adminInfo = $query->where('id', $adminInfo['id'])->first();
-            return $adminInfo;
-        } else {
-            return false;
-        }
-    }
 }

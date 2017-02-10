@@ -290,16 +290,10 @@ class Article extends Backend
         $sort          = request('sort');
         $isStick       = request('is_stick');
         $isAudit       = request('is_audit');
-        $isAudit && $isAudit = session('backend_info.id');
         $ifShow = request('if_show');
         $extend = request('extend');
-        $album  = request('album');
-        foreach ($album as &$imageInfo) {
-            $imageInfo = json_decode(htmlspecialchars_decode($imageInfo), true);
-        }
+        $album = request('album');
         $attribute = request('attribute');
-
-        !$description && $description = trim(mSubstr(strip_tags(htmlspecialchars_decode($content)), 100));
 
         $data = [];
         if ('add' == $type || null !== $accessGroupId) {
@@ -312,7 +306,11 @@ class Article extends Backend
             $data['author'] = $author;
         }
         if ('add' == $type || null !== $description) {
-            $data['description'] = $description;
+            if ($description) {
+                $data['description'] = $description;
+            } else {
+                $data['description'] = trim(mSubstr(strip_tags(htmlspecialchars_decode($content)), 100));
+            }
         }
         if ('add' == $type || null !== $content) {
             $data['content'] = mParseContent($content);
@@ -339,7 +337,7 @@ class Article extends Backend
             $data['is_stick'] = $isStick;
         }
         if ('add' == $type || null !== $isAudit) {
-            $data['is_audit'] = $isAudit;
+            $data['is_audit'] = $isAudit ? session('backend_info.id') : 0;
         }
         if ('add' == $type || null !== $ifShow) {
             $data['if_show'] = $ifShow;
@@ -351,6 +349,9 @@ class Article extends Backend
             $data['attribute'] = $attribute;
         }
         if ('add' == $type || null !== $album) {
+            foreach ($album as &$imageInfo) {
+                $imageInfo = json_decode(htmlspecialchars_decode($imageInfo), true);
+            }
             $data['album'] = $album;
         }
         $this->_check_aed($data);

@@ -136,7 +136,7 @@
                                 <div class="col-sm-4">
                                     <label class="radio-inline">
                                         <input type="radio" name="is_audit" value="1"
-                                               @if ('1' === $edit_info['is_audit'] or '' === $edit_info['is_audit'])checked="checked"@endif />@lang('common.yes')
+                                               @if (0 < $edit_info['is_audit'] or '' === $edit_info['is_audit'])checked="checked"@endif />@lang('common.yes')
                                     </label>
                                     <label class="radio-inline">
                                         <input type="radio" name="is_audit" value="0"

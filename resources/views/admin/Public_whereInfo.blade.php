@@ -10,7 +10,7 @@
                         @lang('common.to')
                         <input type="text" name="{{ $input_name }}_end" class="form-control w100"
                                value="{{ request($input_name.'_end') }}" onClick="$(this).val('')"/>
-                        <M:Datepicker start="$input_name" end="$input_name"/>
+                        @datepicker($input_name,$input_name)
                     @elseif ('input' == $data['type'])
                         <input type="text" name="{{ $input_name }}" class="form-control w100"
                                value="{{ request($input_name) }}"

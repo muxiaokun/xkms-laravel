@@ -14,7 +14,7 @@
             <div class="col-sm-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label">@lang('common.recruit_birthday')</label>
-                    <M:Datepicker start="birthday"/>
+                    @datepicker(birthday)
                     <div class="col-sm-7">
                         <input type="text" name="birthday" value="{{ $start_year }}" class="form-control">
                     </div>

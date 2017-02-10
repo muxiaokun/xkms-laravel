@@ -13,10 +13,10 @@ class AdminLog extends Backend
     {
 
         //初始化翻页 和 列表数据
-        $adminLogList = Model\AdminLogs::where(function ($query) {
-            $last_time = mMktimeRange('add_time');
+        $adminLogList            = Model\AdminLogs::where(function ($query) {
+            $last_time = mMktimeRange('created_at');
             if ($last_time) {
-                $query->timeWhere('add_time', $last_time);
+                $query->timeWhere('created_at', $last_time);
             }
 
             $admin_id = request('admin_id');
@@ -44,7 +44,7 @@ class AdminLog extends Backend
 
         //初始化where_info
         $whereInfo               = [];
-        $whereInfo['add_time']   = ['type' => 'time', 'name' => trans('common.add') . trans('common.time')];
+        $whereInfo['created_at'] = ['type' => 'time', 'name' => trans('common.add') . trans('common.time')];
         $whereInfo['admin_id']   = ['type' => 'input', 'name' => trans('common.admin') . trans('common.name')];
         $whereInfo['route_name'] = [
             'type' => 'input',

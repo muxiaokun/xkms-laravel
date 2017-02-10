@@ -9,7 +9,6 @@ class BladeServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
-     *
      * @return void
      */
     public function boot()
@@ -25,7 +24,7 @@ class BladeServiceProvider extends ServiceProvider
             $tag['order']  = isset($tag['order']) ? $tag['order'] : '';
             $tag['limit']  = isset($tag['limit']) ? $tag['limit'] : '';
             $tag['page']   = isset($tag['page']) ? $tag['page'] : '';
-            $cache         = C('SYS_TD_CACHE', null, 60);
+            $cache = config('system.SYS_TD_CACHE', null, 60);
             $cache         = (10 < $cache && !APP_DEBUG) ? $cache : 0;
             $pageStr       = '';
             if ($tag['page']) {
@@ -55,15 +54,25 @@ class BladeServiceProvider extends ServiceProvider
                 return 'missing:src';
             }
 
-            $tag['src']                      = __ROOT__ . '/' . $tag['src'];
-            $width                           = $height                           = '';
-            isset($tag['width']) && $width   = ' width="' . $tag['width'] . '"';
+            $tag['src'] = __ROOT__ . '/' . $tag['src'];
+            $width      = $height = '';
+            isset($tag['width']) && $width = ' width="' . $tag['width'] . '"';
             isset($tag['height']) && $height = ' height="' . $tag['height'] . '"';
-            $flash_attr                      = array(
-                'devicefont', 'autoplay', 'loop', 'quality', 'bgcolor', 'scale', 'salign', 'base', 'menu', 'wmode', 'allowscriptaccess',
-            );
-            $param_str = '<param name="movie" value="' . $tag['src'] . '" />';
-            $embed_str = '<embed type="application/x-shockwave-flash" ';
+            $flash_attr = [
+                'devicefont',
+                'autoplay',
+                'loop',
+                'quality',
+                'bgcolor',
+                'scale',
+                'salign',
+                'base',
+                'menu',
+                'wmode',
+                'allowscriptaccess',
+            ];
+            $param_str  = '<param name="movie" value="' . $tag['src'] . '" />';
+            $embed_str  = '<embed type="application/x-shockwave-flash" ';
             $embed_str .= ' src="' . $tag['src'] . '" ' . $width . ' ' . $height;
             foreach ($flash_attr as $attr_name) {
                 if (isset($tag[$attr_name])) {
@@ -90,9 +99,9 @@ EOF;
             $cfg_roll      = "'roll'=>\${$tag['name']}_roll,";
 
             $start_content = $cfg_content = $end_content = '';
-            $cfg_preg_div  = $cfg_preg_a  = $cfg_preg_current  = $cfg_preg_rows  = $cfg_preg_njump  = '';
+            $cfg_preg_div = $cfg_preg_a = $cfg_preg_current = $cfg_preg_rows = $cfg_preg_njump = '';
 
-            $preg_result = array();
+            $preg_result = [];
             if (preg_match('/(.*)<config>(.*)<\/config>(.*)/is', $content, $preg_result)) {
                 $start_content = $preg_result[1];
                 $cfg_content   = $preg_result[2];
@@ -104,7 +113,8 @@ EOF;
                     $cfg_preg_a = "'preg_a'=>'" . str_replace('\"', '"', addslashes($preg_result[1])) . "',";
                 }
                 if (preg_match('/<preg_current>(.*?)<\/preg_current>/is', $cfg_content, $preg_result)) {
-                    $cfg_preg_current = "'preg_current'=>'" . str_replace('\"', '"', addslashes($preg_result[1])) . "',";
+                    $cfg_preg_current = "'preg_current'=>'" . str_replace('\"', '"',
+                            addslashes($preg_result[1])) . "',";
                 }
                 if (preg_match('/<preg_rows>(.*?)<\/preg_rows>/is', $cfg_content, $preg_result)) {
                     $cfg_preg_rows = "'preg_rows'=>'" . str_replace('\"', '"', addslashes($preg_result[1])) . "',";
@@ -138,25 +148,33 @@ EOF;
 
             return $page_str;
         });
-        Blade::directive('_Datepicker', function () {
-            if (!isset($tag['start'])) {
-                return 'missing:start,[end]';
+        Blade::directive('datepicker', function ($expression) {
+            if (!isset($expression)) {
+                return 'missing:start[,end]';
+            }
+            $end_input = '';
+            $inputs    = explode(',', $expression);
+            if (1 < count($inputs)) {
+                list($start_input, $end_input) = $inputs;
+            } else {
+                $start_input = $inputs[0];
             }
 
-            if (isset($tag['start']) && preg_match('/^\s*?\$/', $tag['start'])) {
-                $tag['start'] = '<?php echo ' . $tag['start'] . ' ?>';
+            if ($start_input) {
+                $start_input = '<?php echo "' . $start_input . '" ?>';
             }
-            if (isset($tag['end']) && preg_match('/^\s*?\$/', $tag['end'])) {
-                $tag['end'] = '<?php echo ' . $tag['end'] . ' ?>';
+            if ($end_input) {
+                $end_input = '<?php echo "' . $end_input . '" ?>';
             }
-            $dateFormat  = str_replace(array('Y', 'm', 'd'), array('yy', 'mm', 'dd'), C('SYS_DATE'));
+
+            $dateFormat  = str_replace(['Y', 'm', 'd'], ['yy', 'mm', 'dd'], config('system.sys_date'));
             $date_config = 'changeYear: true,changeMonth: true,numberOfMonths: 1,showButtonPanel: true,dateFormat:"' . $dateFormat . '"';
-            if (isset($tag['start']) && isset($tag['end'])) {
+            if ($start_input && $end_input) {
                 $re_script = <<<EOF
 <script>
 $(function() {
-    var datepicker_from_obj = $( "input[name={$tag['start']}_start]" );
-    var datepicker_to_obj = $( "input[name={$tag['end']}_end]" );
+    var datepicker_from_obj = $( "input[name={$start_input}_start]" );
+    var datepicker_to_obj = $( "input[name={$end_input}_end]" );
     datepicker_from_obj.datepicker({ {$date_config},
             onClose: function( selectedDate ) { datepicker_to_obj.datepicker( "option", "minDate", selectedDate );}
     });
@@ -172,7 +190,7 @@ EOF;
                 $re_script = <<<EOF
 <script>
 $(function() {
-    var datepicker_obj = $( "input[name={$tag['start']}]" ).datepicker({ {$date_config} });
+    var datepicker_obj = $( "input[name={$start_input}]" ).datepicker({ {$date_config} });
     datepicker_obj.datepicker( $.datepicker.regional[ "zh-CN" ] );
 });
 </script>
@@ -192,9 +210,9 @@ EOF;
                 $tag['end'] = '<?php echo ' . $tag['end'] . ' ?>';
             }
             //日期与时分秒必须以空格隔开
-            $format_arr = explode(' ', C('SYS_DATE_DETAIL'));
-            $dateFormat = '';
-            $timeFormat = '';
+            $format_arr = explode(' ', config('system.SYS_DATE_DETAIL'));
+            $dateFormat  = '';
+            $timeFormat  = '';
             if (preg_match('/[Y|m|d]/', $format_arr[0])) {
                 $dateFormat = $format_arr[0];
                 $timeFormat = $format_arr[1];
@@ -202,8 +220,8 @@ EOF;
                 $dateFormat = $format_arr[1];
                 $timeFormat = $format_arr[0];
             }
-            $dateFormat  = str_replace(array('Y', 'm', 'd'), array('yy', 'mm', 'dd'), $dateFormat);
-            $timeFormat  = str_replace(array('H', 'i', 's'), array('HH', 'mm', 'ss'), $timeFormat);
+            $dateFormat  = str_replace(['Y', 'm', 'd'], ['yy', 'mm', 'dd'], $dateFormat);
+            $timeFormat  = str_replace(['H', 'i', 's'], ['HH', 'mm', 'ss'], $timeFormat);
             $date_config = 'changeYear:true,changeMonth:true,numberOfMonths:1,dateFormat:"' . $dateFormat . '",timeFormat: "' . $timeFormat . '"';
             if (isset($tag['start']) && isset($tag['end'])) {
                 $re_script = <<<EOF
@@ -261,7 +279,7 @@ EOF;
 
             //后期修改afterSelectFile
             $UploadFileUrl = U('ManageUpload/UploadFile');
-            $ManageFileUrl = U('ManageUpload/ManageFile', array('t' => 'kindeditor'));
+            $ManageFileUrl = U('ManageUpload/ManageFile', ['t' => 'kindeditor']);
             $editor_config = <<<EOF
 uploadJson : '{$UploadFileUrl}',
 fileManagerJson : '{$ManageFileUrl}',
@@ -372,7 +390,7 @@ EOF;
 EOF;
             }
             $UploadFileUrl = U('ManageUpload/UploadFile');
-            $ManageFileUrl = U('ManageUpload/ManageFile', array('t' => $tag['dir']));
+            $ManageFileUrl = U('ManageUpload/ManageFile', ['t' => $tag['dir']]);
             $re_script     = <<<EOF
 <import file="kindeditor/kindeditor-all-min" />
 <script type="text/javascript">
@@ -408,7 +426,6 @@ EOF;
 
     /**
      * Register the application services.
-     *
      * @return void
      */
     public function register()

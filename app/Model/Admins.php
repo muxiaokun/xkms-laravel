@@ -15,8 +15,8 @@ class Admins extends Common
     {
         $randStr                        = mRandStr('pr');
         $password                       = md5($value . $randStr);
+        $this->attributes['admin_pwd'] = $password;
         $this->attributes['admin_rand'] = $randStr;
-        return $password;
     }
 
     public function getGroupIdAttribute($value)
@@ -26,7 +26,7 @@ class Admins extends Common
 
     public function setGroupIdAttribute($value)
     {
-        return $this->transfixionEncode($value);
+        $this->attributes['group_id'] = $this->transfixionEncode($value);
     }
 
     public function scopeAuthorized($query, $user, $pwd)

@@ -60,7 +60,7 @@ class MessageBoardLog extends Backend
                 'audit_id'   => session('backend_info.id'),
                 'reply_info' => request('reply_info'),
             ];
-            $resultEdit = Model\MessageBoardLog::colWhere($id)->first()->update($data);
+            $resultEdit          = Model\MessageBoardLog::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.audit') . trans('common.success'),
                     route('Admin::MessageBoardLog::index'));
@@ -72,8 +72,8 @@ class MessageBoardLog extends Backend
         }
 
 
-        $editInfo                = Model\MessageBoardLog::where('id', $id)->first();
-        $memberName = Model\Member::colWhere($editInfo['send_id'])->first()['member_name'];
+        $editInfo                = Model\MessageBoardLog::colWhere($id)->first()->toArray();
+        $memberName              = Model\Member::colWhere($editInfo['send_id'])->first()['member_name'];
         $editInfo['member_name'] = ($memberName) ? $memberName : trans('common.empty');
         $editInfo['send_info']   = json_decode($editInfo['send_info'], true);
         $assign['edit_info']     = $editInfo;

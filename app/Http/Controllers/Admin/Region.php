@@ -89,7 +89,7 @@ class Region extends Backend
             }
         }
 
-        $editInfo                = Model\Region::where('id', $id)->first();
+        $editInfo                = Model\Region::colWhere($id)->first()->toArray();
         $editInfo['parent_name'] = Model\Region::colWhere($editInfo['parent_id'])->first()['region_name'];
         $assign['edit_info']     = $editInfo;
         $assign['title']         = trans('common.region') . trans('common.edit');

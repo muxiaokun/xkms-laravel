@@ -137,7 +137,7 @@ class Common extends Controller
         //如果记录不存在 追加新生成文件的记录
         $userId   = ('Admin' == MODULE_NAME) ? session('backend_info.id') : session('frontend_info.id');
         $userType = ('Admin' == MODULE_NAME) ? 1 : 2;
-        $fileInfo = Model\ManageUpload::where('path', $newFile)->first();
+        $fileInfo = Model\ManageUpload::where('path', $newFile)->first()->toArray();
         if (!$fileInfo) {
             $data = [
                 'name'      => $newName,

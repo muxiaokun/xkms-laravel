@@ -74,7 +74,7 @@ class ArticleChannel extends Backend
     {
         if (request()->ajax()) {
             $id       = request('get.id');
-            $editInfo = Model\ArticleChannel::where('id', $id)->first();
+            $editInfo = Model\ArticleChannel::colWhere($id)->first()->toArray();
             return $this->_add_edit_category_common($editInfo)->toJson();
         }
 
@@ -112,7 +112,7 @@ class ArticleChannel extends Backend
             }
         }
 
-        $editInfo = Model\ArticleChannel::where('id', $id)->first();
+        $editInfo = Model\ArticleChannel::colWhere($id)->first()->toArray();
         //如果有管理权限进行进一步数据处理
         if (mInArray($id, $maAllowArr)) {
             foreach ($editInfo['manage_id'] as &$manageId) {

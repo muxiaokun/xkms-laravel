@@ -47,7 +47,7 @@ class Assess extends FrontendMember
             return $this->error(trans('common.id') . trans('common.error'), route('Home::Assess::index'));
         }
 
-        $assessInfo  = Model\Assess::where('id', $id)->first();
+        $assessInfo = Model\Assess::colWhere($id)->first()->toArray();
         $currentTime = Carbon::now();
         if (
             1 != $assessInfo['is_enable'] ||

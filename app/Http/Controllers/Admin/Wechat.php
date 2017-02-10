@@ -84,7 +84,7 @@ class Wechat extends Backend
             }
 
         }
-        $editInfo                = Model\Wechat::where('id', $id)->first();
+        $editInfo = Model\Wechat::colWhere($id)->first()->toArray();
         $editInfo['member_name'] = Model\Member::colWhere($editInfo['member_id'])->first()['member_name'];
         $assign['edit_info']     = $editInfo;
         if (request()->isMethod('POST')) {

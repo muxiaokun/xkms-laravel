@@ -84,7 +84,7 @@ class MemberGroup extends Backend
             }
         }
         //获取分组默认信息
-        $editInfo = Model\MemberGroup::where('id', $id)->first();
+        $editInfo = Model\MemberGroup::colWhere($id)->first()->toArray();
         foreach ($editInfo['manage_id'] as $manageKey => $manageId) {
             $memberName                        = Model\Member::colWhere($manageId)->first()['member_name'];
             $editInfo['manage_id'][$manageKey] = ['value' => $manageId, 'html' => $memberName];
@@ -145,7 +145,7 @@ class MemberGroup extends Backend
                 $memberInfo = Model\MemberGroup::where([
                     'name' => $data['name'],
                     'id'   => ['neq', $data['id']],
-                ])->first();
+                ])->first()->toArray();
                 if ($memberInfo) {
                     $result['info'] = trans('member') . trans('common.group') . trans('common.name') . trans('common.exists');
                     break;

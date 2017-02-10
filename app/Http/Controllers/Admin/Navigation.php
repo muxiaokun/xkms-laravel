@@ -90,7 +90,7 @@ class Navigation extends Backend
             }
         }
 
-        $editInfo = Model\Navigation::where('id', $id)->first();
+        $editInfo            = Model\Navigation::colWhere($id)->first()->toArray();
         $assign['edit_info'] = $editInfo;
 
         $assign['navigation_config'] = $this->navigation_config;
@@ -126,7 +126,7 @@ class Navigation extends Backend
                 $itlinkInfo = Model\Navigation::where([
                     'short_name' => $data['short_name'],
                     'id'         => ['neq', $data['id']],
-                ])->first();
+                ])->first()->toArray();
                 if ($itlinkInfo) {
                     $result['info'] = trans('common.short') . trans('common.name') . trans('common.exists');
                     break;

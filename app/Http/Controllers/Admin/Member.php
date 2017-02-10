@@ -95,7 +95,7 @@ class Member extends Backend
             }
         }
 
-        $editInfo = Model\Member::where('id', $id)->first();
+        $editInfo = Model\Member::colWhere($id)->first()->toArray();
         foreach ($editInfo['group_id'] as &$groupId) {
             $memberGroupName = Model\MemberGroup::colWhere($groupId)->first()['name'];
             $groupId         = ['value' => $groupId, 'html' => $memberGroupName];
@@ -176,7 +176,7 @@ class Member extends Backend
                 $memberInfo = Model\Member::where([
                     'member_name' => $data['member_name'],
                     'id'          => ['neq', $data['id']],
-                ])->first();
+                ])->first()->toArray();
                 if ($memberInfo) {
                     $result['info'] = trans('member') . trans('common.name') . trans('common.exists');
                     break;

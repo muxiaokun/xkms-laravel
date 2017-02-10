@@ -84,7 +84,7 @@ class MessageBoard extends Backend
             }
         }
 
-        $editInfo            = Model\MessageBoard::where('id', $id)->first();
+        $editInfo            = Model\MessageBoard::colWhere($id)->first()->toArray();
         $assign['edit_info'] = $editInfo;
 
         $assign['template_list'] = mScanTemplate('index', 'MessageBoard');

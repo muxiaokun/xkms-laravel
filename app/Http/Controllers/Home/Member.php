@@ -117,7 +117,7 @@ class Member extends FrontendMember
                     break;
                 }
                 //检查用户名是否存在
-                $memberInfo = Model\Member::where(['member_name' => $data['user']])->first();
+                $memberInfo = Model\Member::where(['member_name' => $data['user']])->first()->toArray();
                 if (!$memberInfo) {
                     $result['info'] = trans('common.member') . trans('common.name') . trans('common.dont') . trans('common.exists');
                     break;
@@ -165,7 +165,7 @@ class Member extends FrontendMember
                     break;
                 }
                 //检查用户名是否存在
-                $memberInfo = Model\Member::where(['member_name' => $data['re_member_name']])->first();
+                $memberInfo = Model\Member::where(['member_name' => $data['re_member_name']])->first()->toArray();
                 if ($memberInfo) {
                     $result['info'] = trans('common.member') . trans('common.name') . trans('common.exists');
                     break;

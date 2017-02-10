@@ -28,7 +28,7 @@ class FrontendMember extends Frontend
             }
 
             //检查管理员或者管理员组权限变动 先检查数量 提高效率
-            $memberInfo           = Model\Member::where('id', $frontendInfo['id'])->first();
+            $memberInfo           = Model\Member::colWhere($frontendInfo['id'])->first()->toArray();
             $memberGroupPrivilege = Model\MemberGroup::mFindPrivilege($memberInfo['group_id']);
             if ($frontendInfo['group_privilege']->toArray() !== $memberGroupPrivilege->toArray()) {
                 $this->doLogout();

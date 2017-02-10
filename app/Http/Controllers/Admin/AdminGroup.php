@@ -91,7 +91,7 @@ class AdminGroup extends Backend
             }
         }
         //获取分组默认信息
-        $editInfo = Model\AdminGroups::where('id', $id)->first();
+        $editInfo = Model\AdminGroups::colWhere($id)->first()->toArray();
         foreach ($editInfo['manage_id'] as $manageKey => $manageId) {
             $adminName                         = Model\Admins::colWhere($manageId)->first()['admin_name'];
             $editInfo['manage_id'][$manageKey] = ['value' => $manageId, 'html' => $adminName];
@@ -157,7 +157,10 @@ class AdminGroup extends Backend
                     break;
                 }
                 //检查管理组名是否存在
-                $adminInfo = Model\AdminGroups::where(['name' => $data['name'], 'id' => ['neq', $data['id']]])->first();
+                $adminInfo = Model\AdminGroups::where([
+                    'name' => $data['name'],
+                    'id'   => ['neq', $data['id']],
+                ])->first()->toArray();
                 if ($adminInfo) {
                     $result['info'] = trans('admin') . trans('common.group') . trans('common.name') . trans('common.exists');
                     break;

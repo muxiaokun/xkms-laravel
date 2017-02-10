@@ -95,7 +95,7 @@ class Assess extends Backend
             }
         }
 
-        $editInfo               = Model\Assess::where('id', $id)->first();
+        $editInfo               = Model\Assess::colWhere($id)->first()->toArray();
         $editInfo['group_name'] = Model\MemberGroup::colWhere($editInfo['group_level'])->first()['name'];
         $assign['edit_info']    = $editInfo;
 

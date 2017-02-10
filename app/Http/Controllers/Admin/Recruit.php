@@ -82,7 +82,7 @@ class Recruit extends Backend
             }
         }
 
-        $editInfo            = Model\Recruit::where('id', $id)->first();
+        $editInfo            = Model\Recruit::colWhere($id)->first()->toArray();
         $assign['edit_info'] = $editInfo;
 
         $assign['title'] = trans('common.edit') . trans('common.recruit');

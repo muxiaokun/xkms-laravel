@@ -15,7 +15,7 @@ class MessageBoard extends Frontend
             return $this->error(trans('common.id') . trans('common.error'));
         }
 
-        $messageBoardInfo = Model\MessageBoard::where('id', $id)->first();
+        $messageBoardInfo = Model\MessageBoard::colWhere($id)->first()->toArray();
         if (!$messageBoardInfo) {
             return $this->error(trans('common.messageboard') . trans('common.dont') . trans('common.exists'));
         }
@@ -48,7 +48,7 @@ class MessageBoard extends Frontend
                 return $this->error(trans('common.id') . trans('common.error'));
             }
 
-            $messageBoardInfo = Model\MessageBoard::where('id', $id)->first();
+            $messageBoardInfo = Model\MessageBoard::colWhere($id)->first()->toArray();
             if (!$messageBoardInfo) {
                 return $this->error(trans('common.id') . trans('common.error'));
             }
@@ -87,7 +87,7 @@ class MessageBoard extends Frontend
 
         }
         //检测数据
-        $messageBoardInfo = Model\MessageBoard::where('id', $id)->first();
+        $messageBoardInfo = Model\MessageBoard::colWhere($id)->first()->toArray();
         $config           = $messageBoardInfo['config'];
         foreach ($sendInfo as $name => $value) {
             //合法

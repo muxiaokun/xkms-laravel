@@ -95,7 +95,7 @@ class Itlink extends Backend
             }
         }
 
-        $editInfo            = Model\Itlink::where('id', $id)->first();
+        $editInfo            = Model\Itlink::colWhere($id)->first()->toArray();
         $assign['edit_info'] = $editInfo;
         $assign['title']     = trans('common.itlink') . trans('common.edit');
         return view('admin.Itlink_addedit', $assign);
@@ -130,7 +130,7 @@ class Itlink extends Backend
                 $itlinkInfo = Model\Itlink::where([
                     'short_name' => $data['short_name'],
                     'id'         => ['neq', $data['id']],
-                ])->first();
+                ])->first()->toArray();
                 if ($itlinkInfo) {
                     $result['info'] = trans('common.short') . trans('common.name') . trans('common.exists');
                     break;

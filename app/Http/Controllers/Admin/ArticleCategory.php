@@ -137,7 +137,7 @@ class ArticleCategory extends Backend
 
         $currentConfig = config('system.sys_article_sync_image');
         config('SYS_ARTICLE_SYNC_IMAGE', false);
-        $editInfo = Model\ArticleCategory::where('id', $id)->first();
+        $editInfo = Model\ArticleCategory::colWhere($id)->first()->toArray();
         config('SYS_ARTICLE_SYNC_IMAGE', $currentConfig);
         //如果有管理权限进行进一步数据处理
         if (mInArray($id, $maAllowArr)) {

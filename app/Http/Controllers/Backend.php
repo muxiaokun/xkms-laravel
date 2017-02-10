@@ -22,7 +22,7 @@ class Backend extends Common
                 die($this->error(trans('common.login') . trans('common.timeout'), route('Admin::Index::index')));
             }
             //检查管理员或者管理员组权限变动 先检查数量 提高效率
-            $adminInfo           = Model\Admins::where('id', $backendInfo['id'])->first();
+            $adminInfo = Model\Admins::colWhere($backendInfo['id'])->first()->toArray();
             $adminGroupPrivilege = Model\AdminGroups::mFindPrivilege($adminInfo['group_id']);
             if (
                 $backendInfo['privilege'] !== $adminInfo['privilege'] ||
@@ -100,7 +100,7 @@ class Backend extends Common
         $loginNum  = config('system.sys_backend_login_num');
         $lockTime  = config('system.sys_backend_lock_time');
         $AdminId   = Model\Admins::where('admin_name', $userName)->first()['id'];
-        $loginInfo = Model\Admins::where('id', $AdminId)->first();
+        $loginInfo = Model\Admins::colWhere($AdminId)->first()->toArray();
         if ($loginNum && $loginInfo->lock_time && strtotime($loginInfo->lock_time) > Carbon::now()->getTimestamp() - $lockTime) {
             $loginInfo->lock_time = Carbon::now();
             $loginInfo->save();

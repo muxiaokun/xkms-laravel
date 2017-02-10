@@ -119,6 +119,10 @@ class Admin extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Admin::index'));
         }
 
+        if (1 == $id || (is_array($id) && in_array(1, $id))) {
+            return $this->error('root' . trans('common.not') . trans('common.edit'), route('Admin::Admin::index'));
+        }
+
         if (request()->isMethod('POST')) {
             $data = $this->makeData('edit');
             if (!is_array($data)) {
@@ -155,10 +159,11 @@ class Admin extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Admin::index'));
         }
 
-        $resultDel = false;
-        if (1 != $id || (is_array($id) && !in_array(1, $id))) {
-            $resultDel = Model\Admins::destroy($id);
+        if (1 == $id || (is_array($id) && in_array(1, $id))) {
+            return $this->error('root' . trans('common.not') . trans('common.del'), route('Admin::Admin::index'));
         }
+
+        $resultDel = Model\Admins::destroy($id);
         if ($resultDel) {
             return $this->success(trans('common.admin') . trans('common.del') . trans('common.success'),
                 route('Admin::Admin::index'));

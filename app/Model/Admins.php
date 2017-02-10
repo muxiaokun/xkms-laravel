@@ -55,25 +55,4 @@ class Admins extends Common
             return false;
         }
     }
-
-    public function scopeMEncodeData($query, $data)
-    {
-        if (isset($data['id']) && (1 == $data['id'] || (is_array($data['id']) && in_array(1, $data['id'])))) {
-            unset($data['privilege']);
-        }
-        if ($data['admin_pwd']) {
-            $randStr            = mRandStr('pr');
-            $data['admin_pwd']  = md5($data['admin_pwd'] . $randStr);
-            $data['admin_rand'] = $randStr;
-        } else {
-            unset($data['admin_pwd']);
-            unset($data['admin_rand']);
-        }
-    }
-
-    public function scopeMDecodeData($query, $data)
-    {
-        unset($data['admin_pwd']);
-        unset($data['admin_rand']);
-    }
 }

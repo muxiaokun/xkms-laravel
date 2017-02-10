@@ -119,15 +119,24 @@ class Admin extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Admin::index'));
         }
 
-        if (1 == $id || (is_array($id) && in_array(1, $id))) {
-            return $this->error('root' . trans('common.not') . trans('common.edit'), route('Admin::Admin::index'));
-        }
-
         if (request()->isMethod('POST')) {
             $data = $this->makeData('edit');
             if (!is_array($data)) {
                 return $data;
             }
+
+            //root账号只能修改 用户名和密码
+            if (1 == $id || (is_array($id) && in_array(1, $id))) {
+                $root_data = [];
+                if (isset($data['admin_name'])) {
+                    $root_data['admin_name'] = $data['admin_name'];
+                }
+                if (isset($data['admin_pwd'])) {
+                    $root_data['admin_pwd'] = $data['admin_pwd'];
+                }
+                $data = $root_data;
+            }
+
             $resultEdit = Model\Admins::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.admin') . trans('common.edit') . trans('common.success'),

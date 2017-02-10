@@ -71,7 +71,10 @@ class Article extends Frontend
         $assign['title']             = $articleInfo['title'];
         $assign['category_position'] = $this->_get_category_position($articleInfo['cate_id']);
         $assign['article_position']  = $this->_get_article_position($articleInfo['cate_id']);
-        $pnWhere                     = ['cate_id' => $articleInfo['cate_id'], 'channel_id' => $articleInfo['channel_id']];
+        $pnWhere = [
+            'cate_id'    => $articleInfo['cate_id'],
+            'channel_id' => $articleInfo['channel_id'],
+        ];
         $assign['article_pn']        = $this->_get_article_pn($articleInfo['id'], $pnWhere);
         $template                    = $this->_get_template($articleInfo['cate_id'], $channelId);
         $this->display($template['article_template']);
@@ -126,7 +129,7 @@ class Article extends Frontend
             //如果分类是列表页
             $template = $template['list_template'];
             $childArr = Model\ArticleCategory::mFind_child_id($cateId);
-            $where    = array_merge($this->_get_article_where(), [
+            $where                  = array_merge($this->_get_article_where(), [
                 'channel_id' => 0,
                 'cate_id'    => ['in', $childArr],
             ]);
@@ -135,14 +138,14 @@ class Article extends Frontend
             $attributeWhere  = mAttributeWhere($categoryTopInfo['attribute']);
             $attributeWhere && $where['attribute'] = Model\ArticleCategory::likeWhere('attribute', $attributeWhere);
 
-            $page         = true;
+            $page = true;
             if ($categoryInfo['s_limit']) {
                 $page                       = $categoryInfo['s_limit'];
                 $assign['article_list_max'] = $page;
             }
             $articleLsit = Model\Article::where($where)->paginate($page);
 
-            $assign['article_list']       = $articleLsit;
+            $assign['article_list'] = $articleLsit;
         }
 
         $assign['category_info']     = $categoryInfo;

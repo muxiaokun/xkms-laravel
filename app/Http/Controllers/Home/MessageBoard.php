@@ -24,13 +24,13 @@ class MessageBoard extends Frontend
 
         $where               = [];
         $where['audit_id']   = ['gt', 0];
-        $messageBoardLogList = Model\MessageBoardLog::orderBy('add_time',
+        $messageBoardLogList              = Model\MessageBoardLog::orderBy('add_time',
             'desc')->where($where)->paginate(config('system.sys_max_row'));
         foreach ($messageBoardLogList as &$messageBoardLog) {
             $messageBoardLog['reply_info'] = ($messageBoardLog['reply_info']) ? $messageBoardLog['reply_info'] : trans('common.admin') . trans('common.reply') . trans('common.empty');
             $messageBoardLog['send_info']  = json_decode($messageBoardLog['send_info'], true);
         }
-        $assign['message_board_log_list']       = $messageBoardLogList;
+        $assign['message_board_log_list'] = $messageBoardLogList;
 
         $defTemplate = CONTROLLER_NAME . config('TMPL_FILE_DEPR') . ACTION_NAME;
         $template    = ($messageBoardInfo['template']) ? $defTemplate . '_' . $messageBoardInfo['template'] : $defTemplate;
@@ -57,12 +57,12 @@ class MessageBoard extends Frontend
                 return $this->error(trans('common.verify_code') . trans('common.error'),
                     route('Home::MessageBoard::index', ['id' => $id]));
             }
-            $submitTime   = 300;
+            $submitTime = 300;
             if (Model\MessageBoard::check_dont_submit($submitTime)) {
                 return $this->error($submitTime . trans('common.second') . trans('common.later') . trans('common.again') . trans('common.send'),
                     route('Home::MessageBoard::index', ['id' => $id]));
             }
-            $data      = $this->makeData();
+            $data = $this->makeData('add');
             $resultAdd = Model\MessageBoard::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.send') . trans('common.success'),

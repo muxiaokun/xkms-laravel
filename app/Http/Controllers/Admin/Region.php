@@ -28,7 +28,7 @@ class Region extends Backend
             $region['parent_name'] = Model\Region::colWhere($region['parent_id'])->first()['region_name'];
         }
 
-        $assign['region_list']       = $regionList;
+        $assign['region_list'] = $regionList;
 
         //初始化where_info
         $whereInfo['region_name'] = ['type' => 'input', 'name' => trans('region.region_name')];
@@ -52,7 +52,7 @@ class Region extends Backend
     public function add()
     {
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData();
+            $data      = $this->makeData('add');
             $resultAdd = Model\Region::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.region') . trans('common.add') . trans('common.success'),
@@ -77,7 +77,7 @@ class Region extends Backend
         }
 
         if (request()->isMethod('POST')) {
-            $data       = $this->makeData();
+            $data       = $this->makeData('edit');
             $resultEdit = Model\Region::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.region') . trans('common.edit') . trans('common.success'),
@@ -116,7 +116,7 @@ class Region extends Backend
     }
 
     //构造数据
-    private function makeData()
+    private function makeData($type)
     {
         //初始化参数
         $parentId   = request('parent_id');
@@ -128,13 +128,27 @@ class Region extends Backend
         $ifShow     = request('if_show');
 
         $data = [];
-        ('add' == ACTION_NAME || null !== $parentId) && $data['parent_id'] = $parentId;
-        ('add' == ACTION_NAME || null !== $regionName) && $data['region_name'] = $regionName;
-        ('add' == ACTION_NAME || null !== $shortName) && $data['short_name'] = $shortName;
-        ('add' == ACTION_NAME || null !== $shortSpell) && $data['short_spell'] = $shortSpell;
-        ('add' == ACTION_NAME || null !== $areacode) && $data['areacode'] = $areacode;
-        ('add' == ACTION_NAME || null !== $postcode) && $data['postcode'] = $postcode;
-        ('add' == ACTION_NAME || null !== $ifShow) && $data['if_show'] = $ifShow;
+        if ('add' == $type || null !== $parentId) {
+            $data['parent_id'] = $parentId;
+        }
+        if ('add' == $type || null !== $regionName) {
+            $data['region_name'] = $regionName;
+        }
+        if ('add' == $type || null !== $shortName) {
+            $data['short_name'] = $shortName;
+        }
+        if ('add' == $type || null !== $shortSpell) {
+            $data['short_spell'] = $shortSpell;
+        }
+        if ('add' == $type || null !== $areacode) {
+            $data['areacode'] = $areacode;
+        }
+        if ('add' == $type || null !== $postcode) {
+            $data['postcode'] = $postcode;
+        }
+        if ('add' == $type || null !== $ifShow) {
+            $data['if_show'] = $ifShow;
+        }
         return $data;
     }
 

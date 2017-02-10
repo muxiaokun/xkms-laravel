@@ -40,7 +40,7 @@ class Common extends Controller
     /**
      * @param string $message
      * @param string $backUrl
-     * @param int $timeout
+     * @param int    $timeout
      * @param string $template
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */

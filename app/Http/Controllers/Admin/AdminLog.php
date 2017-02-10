@@ -28,7 +28,7 @@ class AdminLog extends Backend
         foreach ($adminLogList as &$adminLog) {
             $adminLog['admin_name'] = Model\Admins::colWhere($adminLog['admin_id'])->first()['admin_name'];
         }
-        $assign['admin_log_list']       = $adminLogList;
+        $assign['admin_log_list'] = $adminLogList;
 
         //初始化where_info
         $whereInfo               = [];

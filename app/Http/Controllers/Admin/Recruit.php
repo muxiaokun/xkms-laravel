@@ -46,7 +46,7 @@ class Recruit extends Backend
     public function add()
     {
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData();
+            $data      = $this->makeData('add');
             $resultAdd = Model\Recruit::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.recruit') . trans('common.add') . trans('common.success'),
@@ -70,7 +70,7 @@ class Recruit extends Backend
         }
 
         if (request()->isMethod('POST')) {
-            $data       = $this->makeData();
+            $data       = $this->makeData('edit');
             $resultEdit = Model\Recruit::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.recruit') . trans('common.edit') . trans('common.success'),
@@ -110,7 +110,7 @@ class Recruit extends Backend
     }
 
     //构造数据
-    private function makeData()
+    private function makeData($type)
     {
         //初始化参数
         $title          = request('title');
@@ -123,14 +123,30 @@ class Recruit extends Backend
         $extInfo        = request('ext_info');
 
         $data = [];
-        ('add' == ACTION_NAME || null !== $title) && $data['title'] = $title;
-        ('add' == ACTION_NAME || null !== $explains) && $data['explains'] = mParseContent($explains);
-        ('add' == ACTION_NAME || null !== $isEnable) && $data['is_enable'] = $isEnable;
-        ('add' == ACTION_NAME || null !== $currentPortion) && $data['current_portion'] = $currentPortion;
-        ('add' == ACTION_NAME || null !== $maxPortion) && $data['max_portion'] = $maxPortion;
-        ('add' == ACTION_NAME || null !== $startTime) && $data['start_time'] = $startTime;
-        ('add' == ACTION_NAME || null !== $endTime) && $data['end_time'] = $endTime;
-        ('add' == ACTION_NAME || null !== $extInfo) && $data['ext_info'] = $extInfo;
+        if ('add' == $type || null !== $title) {
+            $data['title'] = $title;
+        }
+        if ('add' == $type || null !== $explains) {
+            $data['explains'] = mParseContent($explains);
+        }
+        if ('add' == $type || null !== $isEnable) {
+            $data['is_enable'] = $isEnable;
+        }
+        if ('add' == $type || null !== $currentPortion) {
+            $data['current_portion'] = $currentPortion;
+        }
+        if ('add' == $type || null !== $maxPortion) {
+            $data['max_portion'] = $maxPortion;
+        }
+        if ('add' == $type || null !== $startTime) {
+            $data['start_time'] = $startTime;
+        }
+        if ('add' == $type || null !== $endTime) {
+            $data['end_time'] = $endTime;
+        }
+        if ('add' == $type || null !== $extInfo) {
+            $data['ext_info'] = $extInfo;
+        }
 
         return $data;
     }

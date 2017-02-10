@@ -8,10 +8,10 @@ use App\Http\Controllers\Backend;
 class Template extends Backend
 {
     //$tplInfoFile 与 Common/Common/function.php M_scan_template一致
-    private $tplInfoFile = 'theme_info.php';
+    private $tplInfoFile  = 'theme_info.php';
     private $defaultTheme = '';
-    private $viewPath = '';
-    private $viewFiles = [];
+    private $viewPath     = '';
+    private $viewFiles    = [];
 
     public function commonInitialize()
     {

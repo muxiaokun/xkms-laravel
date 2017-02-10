@@ -47,7 +47,7 @@ class Quests extends Backend
     public function add()
     {
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData();
+            $data      = $this->makeData('add');
             $resultAdd = Model\Quests::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.quests') . trans('common.add') . trans('common.success'),
@@ -71,7 +71,7 @@ class Quests extends Backend
         }
 
         if (request()->isMethod('POST')) {
-            $data       = $this->makeData();
+            $data       = $this->makeData('edit');
             $resultEdit = Model\Quests::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.quests') . trans('common.edit') . trans('common.success'),
@@ -98,7 +98,7 @@ class Quests extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Quests::index'));
         }
 
-        $clear       = request('clear');
+        $clear = request('clear');
         if (!$clear) {
             $resultDel = Model\Quests::destroy($id);
         }
@@ -126,7 +126,7 @@ class Quests extends Backend
     }
 
     //构造数据
-    private function makeData()
+    private function makeData($type)
     {
         $title        = request('title');
         $maxPortion   = request('max_portion');
@@ -144,14 +144,30 @@ class Quests extends Backend
         }
 
         $data = [];
-        ('add' == ACTION_NAME || null !== $title) && $data['title'] = $title;
-        ('add' == ACTION_NAME || null !== $maxPortion) && $data['max_portion'] = $maxPortion;
-        ('add' == ACTION_NAME || null !== $startTime) && $data['start_time'] = $startTime;
-        ('add' == ACTION_NAME || null !== $endTime) && $data['end_time'] = $endTime;
-        ('add' == ACTION_NAME || null !== $startContent) && $data['start_content'] = $startContent;
-        ('add' == ACTION_NAME || null !== $endContent) && $data['end_content'] = $endContent;
-        ('add' == ACTION_NAME || null !== $accessInfo) && $data['access_info'] = $accessInfo;
-        ('add' == ACTION_NAME || null !== $extInfo) && $data['ext_info'] = $extInfo;
+        if ('add' == $type || null !== $title) {
+            $data['title'] = $title;
+        }
+        if ('add' == $type || null !== $maxPortion) {
+            $data['max_portion'] = $maxPortion;
+        }
+        if ('add' == $type || null !== $startTime) {
+            $data['start_time'] = $startTime;
+        }
+        if ('add' == $type || null !== $endTime) {
+            $data['end_time'] = $endTime;
+        }
+        if ('add' == $type || null !== $startContent) {
+            $data['start_content'] = $startContent;
+        }
+        if ('add' == $type || null !== $endContent) {
+            $data['end_content'] = $endContent;
+        }
+        if ('add' == $type || null !== $accessInfo) {
+            $data['access_info'] = $accessInfo;
+        }
+        if ('add' == $type || null !== $extInfo) {
+            $data['ext_info'] = $extInfo;
+        }
         return $data;
     }
 }

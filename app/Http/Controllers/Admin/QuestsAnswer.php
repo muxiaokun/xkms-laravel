@@ -33,7 +33,7 @@ class QuestsAnswer extends Backend
             $memberName                  = Model\Member::colWhere($groupId)->first()['name'];
             $questsAnswer['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');
         }
-        $assign['quests_answer_list']       = $questsAnswerList;
+        $assign['quests_answer_list'] = $questsAnswerList;
         //初始化where_info
         $whereInfo                 = [];
         $whereInfo['quests_title'] = ['type' => 'input', 'name' => trans('quests.quests') . trans('common.name')];

@@ -32,7 +32,7 @@ class Assess extends FrontendMember
                     break;
             }
         }
-        $assign['assess_list']       = $assessList;
+        $assign['assess_list'] = $assessList;
 
         $assign['title'] = trans('common.assess');
         return view('home.Assess_index', $assign);
@@ -60,7 +60,7 @@ class Assess extends FrontendMember
         }
 
         if (request()->isMethod('POST')) {
-            $data = $this->makeData();
+            $data = $this->makeData('add');
             //提交时检测类型下可以被评分的组和组员
             $where = [];
             if (isset($data['a_id']) && isset($data['grade_id']) && isset($data['re_grade_id'])) {
@@ -141,29 +141,41 @@ class Assess extends FrontendMember
     }
 
     //建立数据
-    private function makeData()
+    private function makeData($type)
     {
-        $assessId  = request('get.id');
+        $id        = request('get.id');
         $gradeId   = session('frontend_info.id');
         $reGradeId = request('re_grade_id');
         $score     = request('score');
 
         //检测初始化参数是否合法
-        $errorGoLink = (!$assessId) ? route('Home::Assess::add') : (is_array($id)) ? route('Home::Assess::index') : route('Home::Assess::edit',
-            ['id' => $id]);
-        if ('add' == ACTION_NAME || null !== $reGradeId) {
+        if ($id) {
+            if (is_array($id)) {
+                $errorGoLink = route('Admin::MemberGroup::index');
+            } else {
+                $errorGoLink = route('Admin::MemberGroup::edit', ['id' => $id]);
+            }
+        } else {
+            $errorGoLink = route('Admin::MemberGroup::add');
+        }
+
+        $data = [];
+        if ('add' == $type || null !== $id) {
+            $data['assess_id'] = $id;
+        }
+        if ('add' == $type || null !== $gradeId) {
+            $data['grade_id'] = $gradeId;
+        }
+        if ('add' == $type || null !== $reGradeId) {
             $result = $this->doValidateForm('re_grade_id', ['re_grade_id' => $reGradeId]);
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
             }
-
+            $data['re_grade_id'] = $reGradeId;
         }
-
-        $data = [];
-        ('add' == ACTION_NAME || null !== $assessId) && $data['assess_id'] = $assessId;
-        ('add' == ACTION_NAME || null !== $gradeId) && $data['grade_id'] = $gradeId;
-        ('add' == ACTION_NAME || null !== $reGradeId) && $data['re_grade_id'] = $reGradeId;
-        ('add' == ACTION_NAME || null !== $score) && $data['score'] = $score;
+        if ('add' == $type || null !== $score) {
+            $data['score'] = $score;
+        }
         return $data;
     }
 }

@@ -34,7 +34,7 @@ class ArticleCategory extends Backend
         $articleCategoryList = Model\ArticleCategory::where($where)->get();
         foreach ($articleCategoryList as &$articleCategory) {
             //parent_id 用完销毁不能产生歧义
-            $where['parent_id']           = $articleCategory['id'];
+            $where['parent_id'] = $articleCategory['id'];
             unset($where['parent_id']);
             $articleCategory['show']          = ($articleCategory['if_show']) ? trans('common.show') : trans('common.hidden');
             $articleCategory['ajax_api_link'] = route('Admin::ArticleCategory::ajax_api');
@@ -79,7 +79,7 @@ class ArticleCategory extends Backend
     public function add()
     {
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData();
+            $data      = $this->makeData('add');
             $resultAdd = Model\ArticleCategory::create($data);
             if ($resultAdd) {
                 $this->addEditAfterCommon($data, $id);
@@ -116,7 +116,7 @@ class ArticleCategory extends Backend
 
         $maAllowArr = Model\ArticleCategory::mFindAllow('ma');
         if (request()->isMethod('POST')) {
-            $data = $this->makeData();
+            $data = $this->makeData('edit');
             if (1 != session('backend_info.id')
                 && !mInArray($id, $maAllowArr)
             ) {
@@ -254,14 +254,14 @@ class ArticleCategory extends Backend
     }
 
     //构造数据
-    private function makeData()
+    private function makeData($type)
     {
         //初始化参数
         $parentId = request('parent_id');
         $name     = request('name');
         $manageId = request('manage_id');
         $addId    = session('backend_info.id');
-        if (('add' == ACTION_NAME || null !== $manageId)
+        if (('add' == $type || null !== $manageId)
             && !in_array($addId, $manageId)
         ) {
             $manageId[] = $addId;
@@ -289,22 +289,54 @@ class ArticleCategory extends Backend
         $articleTemplate = request('article_template');
 
         $data = [];
-        ('add' == ACTION_NAME || null !== $parentId) && $data['parent_id'] = $parentId;
-        ('add' == ACTION_NAME || null !== $name) && $data['name'] = $name;
-        ('add' == ACTION_NAME || null !== $manageId) && $data['manage_id'] = $manageId;
-        ('add' == ACTION_NAME || null !== $manageGroupId) && $data['manage_group_id'] = $manageGroupId;
-        ('add' == ACTION_NAME || null !== $accessGroupId) && $data['access_group_id'] = $accessGroupId;
-        ('add' == ACTION_NAME || null !== $thumb) && $data['thumb'] = $thumb;
-        ('add' == ACTION_NAME || null !== $sort) && $data['sort'] = $sort;
-        ('add' == ACTION_NAME || null !== $sLimit) && $data['s_limit'] = $sLimit;
-        ('add' == ACTION_NAME || null !== $ifShow) && $data['if_show'] = $ifShow;
-        ('add' == ACTION_NAME || null !== $isContent) && $data['is_content'] = $isContent;
-        ('add' == ACTION_NAME || null !== $content) && $data['content'] = mParseContent($content);
-        ('add' == ACTION_NAME || null !== $extend) && $data['extend'] = $extend;
-        ('add' == ACTION_NAME || null !== $attribute) && $data['attribute'] = $attribute;
-        ('add' == ACTION_NAME || null !== $template) && $data['template'] = $template;
-        ('add' == ACTION_NAME || null !== $listTemplate) && $data['list_template'] = $listTemplate;
-        ('add' == ACTION_NAME || null !== $articleTemplate) && $data['article_template'] = $articleTemplate;
+        if ('add' == $type || null !== $parentId) {
+            $data['parent_id'] = $parentId;
+        }
+        if ('add' == $type || null !== $name) {
+            $data['name'] = $name;
+        }
+        if ('add' == $type || null !== $manageId) {
+            $data['manage_id'] = $manageId;
+        }
+        if ('add' == $type || null !== $manageGroupId) {
+            $data['manage_group_id'] = $manageGroupId;
+        }
+        if ('add' == $type || null !== $accessGroupId) {
+            $data['access_group_id'] = $accessGroupId;
+        }
+        if ('add' == $type || null !== $thumb) {
+            $data['thumb'] = $thumb;
+        }
+        if ('add' == $type || null !== $sort) {
+            $data['sort'] = $sort;
+        }
+        if ('add' == $type || null !== $sLimit) {
+            $data['s_limit'] = $sLimit;
+        }
+        if ('add' == $type || null !== $ifShow) {
+            $data['if_show'] = $ifShow;
+        }
+        if ('add' == $type || null !== $isContent) {
+            $data['is_content'] = $isContent;
+        }
+        if ('add' == $type || null !== $content) {
+            $data['content'] = mParseContent($content);
+        }
+        if ('add' == $type || null !== $extend) {
+            $data['extend'] = $extend;
+        }
+        if ('add' == $type || null !== $attribute) {
+            $data['attribute'] = $attribute;
+        }
+        if ('add' == $type || null !== $template) {
+            $data['template'] = $template;
+        }
+        if ('add' == $type || null !== $listTemplate) {
+            $data['list_template'] = $listTemplate;
+        }
+        if ('add' == $type || null !== $articleTemplate) {
+            $data['article_template'] = $articleTemplate;
+        }
 
         //只有顶级可以设置扩展模板和属性
         if (isset($data['parent_id']) && 0 < $data['parent_id']) {
@@ -318,16 +350,16 @@ class ArticleCategory extends Backend
     //添加 编辑 之后 公共方法
     private function addEditAfterCommon(&$data, $id)
     {
-        $bindFile          = mGetContentUpload($data['content']);
-        $bindFile[]        = $data['thumb'];
+        $bindFile   = mGetContentUpload($data['content']);
+        $bindFile[] = $data['thumb'];
         Model\ManageUpload::bindFile($id, $bindFile);
     }
 
     //构造分类assign公共数据
     private function addEditCommon()
     {
-        $id                   = request('id');
-        $where                = [];
+        $id    = request('id');
+        $where = [];
         if ($id) {
             $where['id'] = ['neq', $id];
         }

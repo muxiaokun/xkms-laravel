@@ -56,8 +56,8 @@ class Itlink extends Backend
     public function add()
     {
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData();
-            $resultAdd       = Model\Itlink::create($data);
+            $data      = $this->makeData('add');
+            $resultAdd = Model\Itlink::create($data);
             if ($resultAdd) {
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.itlink') . trans('common.add') . trans('common.success'),
@@ -82,7 +82,7 @@ class Itlink extends Backend
         }
 
         if (request()->isMethod('POST')) {
-            $data       = $this->makeData();
+            $data       = $this->makeData('edit');
             $resultEdit = Model\Itlink::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 $this->addEditAfterCommon($data, $id);
@@ -147,7 +147,7 @@ class Itlink extends Backend
     }
 
     //构造数据
-    private function makeData()
+    private function makeData($type)
     {
         //初始化参数
         $id           = request('id');
@@ -175,28 +175,54 @@ class Itlink extends Backend
         }
 
         //检测初始化参数是否合法
-        $errorGoLink = (!$id) ? route('Admin::Itlink::add') : (is_array($id)) ? route('Admin::Itlink::index') : route('Admin::Itlink::edit',
-            ['id' => $id]);
-        if ('add' == ACTION_NAME || null !== $shortName) {
+        if ($id) {
+            if (is_array($id)) {
+                $errorGoLink = route('Admin::Itlink::index');
+            } else {
+                $errorGoLink = route('Admin::Itlink::edit', ['id' => $id]);
+            }
+        } else {
+            $errorGoLink = route('Admin::Itlink::add');
+        }
+
+        $data = [];
+        if ('add' == $type || null !== $name) {
+            $data['name'] = $name;
+        }
+        if ('add' == $type || null !== $shortName) {
             $result = $this->doValidateForm('short_name', ['id' => $id, 'short_name' => $shortName]);
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
             }
-
+            $data['short_name'] = $shortName;
         }
-
-        $data = [];
-        ('add' == ACTION_NAME || null !== $name) && $data['name'] = $name;
-        ('add' == ACTION_NAME || null !== $shortName) && $data['short_name'] = $shortName;
-        ('add' == ACTION_NAME || null !== $startTime) && $data['start_time'] = $startTime;
-        ('add' == ACTION_NAME || null !== $endTime) && $data['end_time'] = $endTime;
-        ('add' == ACTION_NAME || null !== $isEnable) && $data['is_enable'] = $isEnable;
-        ('add' == ACTION_NAME || null !== $isStatistics) && $data['is_statistics'] = $isStatistics;
-        ('add' == ACTION_NAME || null !== $maxShowNum) && $data['max_show_num'] = $maxShowNum;
-        ('add' == ACTION_NAME || null !== $maxHitNum) && $data['max_hit_num'] = $maxHitNum;
-        ('add' == ACTION_NAME || null !== $showNum) && $data['show_num'] = $showNum;
-        ('add' == ACTION_NAME || null !== $hitNum) && $data['hit_num'] = $hitNum;
-        ('add' == ACTION_NAME || 0 < count($extInfo)) && $data['ext_info'] = $extInfo;
+        if ('add' == $type || null !== $startTime) {
+            $data['start_time'] = $startTime;
+        }
+        if ('add' == $type || null !== $endTime) {
+            $data['end_time'] = $endTime;
+        }
+        if ('add' == $type || null !== $isEnable) {
+            $data['is_enable'] = $isEnable;
+        }
+        if ('add' == $type || null !== $isStatistics) {
+            $data['is_statistics'] = $isStatistics;
+        }
+        if ('add' == $type || null !== $maxShowNum) {
+            $data['max_show_num'] = $maxShowNum;
+        }
+        if ('add' == $type || null !== $maxHitNum) {
+            $data['max_hit_num'] = $maxHitNum;
+        }
+        if ('add' == $type || null !== $showNum) {
+            $data['show_num'] = $showNum;
+        }
+        if ('add' == $type || null !== $hitNum) {
+            $data['hit_num'] = $hitNum;
+        }
+        if ('add' == $type || 0 < count($extInfo)) {
+            $data['ext_info'] = $extInfo;
+        }
         return $data;
     }
 
@@ -208,7 +234,7 @@ class Itlink extends Backend
             return;
         }
 
-        $bindFile          = [];
+        $bindFile = [];
         foreach ($data as $item) {
             $bindFile[] = $item['link_image'];
         }

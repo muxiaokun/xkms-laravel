@@ -25,9 +25,10 @@ class MemberGroup extends Backend
         //初始化where_info
         $whereInfo              = [];
         $whereInfo['name']      = ['type' => 'input', 'name' => trans('common.group') . trans('common.name')];
-        $whereInfo['is_enable'] = ['type'  => 'select',
-                                   'name'  => trans('common.yes') . trans('common.no') . trans('common.enable'),
-                                   'value' => [1 => trans('common.enable'), 2 => trans('common.disable')],
+        $whereInfo['is_enable'] = [
+            'type'  => 'select',
+            'name'  => trans('common.yes') . trans('common.no') . trans('common.enable'),
+            'value' => [1 => trans('common.enable'), 2 => trans('common.disable')],
         ];
         $assign['where_info']   = $whereInfo;
 
@@ -46,8 +47,8 @@ class MemberGroup extends Backend
     public function add()
     {
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData();
-            $resultAdd       = Model\MemberGroup::create($data);
+            $data      = $this->makeData('add');
+            $resultAdd = Model\MemberGroup::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.member') . trans('common.group') . trans('common.add') . trans('common.success'),
                     route('Admin::MemberGroup::index'));
@@ -72,7 +73,7 @@ class MemberGroup extends Backend
         }
 
         if (request()->isMethod('POST')) {
-            $data       = $this->makeData();
+            $data       = $this->makeData('edit');
             $resultEdit = Model\MemberGroup::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.member') . trans('common.group') . trans('common.edit') . trans('common.success'),
@@ -90,7 +91,7 @@ class MemberGroup extends Backend
             $memberName                        = Model\Member::colWhere($manageId)->first()['member_name'];
             $editInfo['manage_id'][$manageKey] = ['value' => $manageId, 'html' => $memberName];
         }
-        $assign['edit_info']   = $editInfo;
+        $assign['edit_info'] = $editInfo;
 
         $this->addEditCommon();
         $assign['title'] = trans('common.member') . trans('common.group') . trans('common.edit');
@@ -199,7 +200,7 @@ class MemberGroup extends Backend
     }
 
     //构造数据
-    private function makeData()
+    private function makeData($type)
     {
         //初始化参数
         $id        = request('id');
@@ -210,29 +211,42 @@ class MemberGroup extends Backend
         $isEnable  = request('is_enable');
 
         //检测初始化参数是否合法
-        $errorGoLink = (!$id) ? route('Admin::MemberGroup::add') : (is_array($id)) ? route('Admin::MemberGroup::index') : route('Admin::MemberGroup::edit',
-            ['id' => $id]);
-        if ('add' == ACTION_NAME || null !== $name) {
+        if ($id) {
+            if (is_array($id)) {
+                $errorGoLink = route('Admin::MemberGroup::index');
+            } else {
+                $errorGoLink = route('Admin::MemberGroup::edit', ['id' => $id]);
+            }
+        } else {
+            $errorGoLink = route('Admin::MemberGroup::add');
+        }
+
+        $data      = [];
+        if ('add' == $type || null !== $manageId) {
+            $data['manage_id'] = $manageId;
+        }
+        if ('add' == $type || null !== $name) {
             $result = $this->doValidateForm('name', ['id' => $id, 'name' => $name]);
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
             }
 
+            $data['name'] = $name;
         }
-        if ('add' == ACTION_NAME || null !== $privilege) {
+        if ('add' == $type || null !== $explains) {
+            $data['explains'] = $explains;
+        }
+        if ('add' == $type || null !== $privilege) {
             $result = $this->doValidateForm('privilege', $privilege);
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
             }
 
+            $data['privilege'] = $privilege;
         }
-
-        $data = [];
-        ('add' == ACTION_NAME || null !== $manageId) && $data['manage_id'] = $manageId;
-        ('add' == ACTION_NAME || null !== $name) && $data['name'] = $name;
-        ('add' == ACTION_NAME || null !== $explains) && $data['explains'] = $explains;
-        ('add' == ACTION_NAME || null !== $privilege) && $data['privilege'] = $privilege;
-        ('add' == ACTION_NAME || null !== $isEnable) && $data['is_enable'] = $isEnable;
+        if ('add' == $type || null !== $isEnable) {
+            $data['is_enable'] = $isEnable;
+        }
         return $data;
     }
 

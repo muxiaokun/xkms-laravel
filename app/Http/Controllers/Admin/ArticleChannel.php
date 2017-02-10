@@ -28,9 +28,10 @@ class ArticleChannel extends Backend
         //初始化where_info
         $whereInfo            = [];
         $whereInfo['name']    = ['type' => 'input', 'name' => trans('common.channel') . trans('common.name')];
-        $whereInfo['if_show'] = ['type'  => 'select',
-                                 'name'  => trans('common.yes') . trans('common.no') . trans('common.show'),
-                                 'value' => [1 => trans('common.show'), 2 => trans('common.hidden')],
+        $whereInfo['if_show'] = [
+            'type'  => 'select',
+            'name'  => trans('common.yes') . trans('common.no') . trans('common.show'),
+            'value' => [1 => trans('common.show'), 2 => trans('common.hidden')],
         ];
         $assign['where_info'] = $whereInfo;
 
@@ -52,8 +53,8 @@ class ArticleChannel extends Backend
             return $this->_add_edit_category_common()->toJson();
         }
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData();
-            $resultAdd       = Model\ArticleChannel::create($data);
+            $data      = $this->makeData('add');
+            $resultAdd = Model\ArticleChannel::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.channel') . trans('common.add') . trans('common.success'),
                     route('Admin::ArticleChannel::index'));
@@ -92,7 +93,7 @@ class ArticleChannel extends Backend
 
         $maAllowArr = Model\ArticleChannel::mFindAllow('ma');
         if (request()->isMethod('POST')) {
-            $data = $this->makeData();
+            $data = $this->makeData('edit');
             if (1 != session('backend_info.id')
                 && !mInArray($id, $maAllowArr)
             ) {
@@ -203,7 +204,7 @@ class ArticleChannel extends Backend
     }
 
     //构造数据
-    private function makeData()
+    private function makeData($type)
     {
         //初始化参数
         $name        = request('name');
@@ -212,7 +213,7 @@ class ArticleChannel extends Backend
         $other       = request('other');
         $manageId    = request('manage_id');
         $addId       = session('backend_info.id');
-        if (('add' == ACTION_NAME || null !== $manageId)
+        if (('add' == $type || null !== $manageId)
             && !in_array($addId, $manageId)
         ) {
             $manageId[] = $addId;
@@ -238,16 +239,36 @@ class ArticleChannel extends Backend
         }
 
         $data = [];
-        ('add' == ACTION_NAME || null !== $name) && $data['name'] = $name;
-        ('add' == ACTION_NAME || null !== $keywords) && $data['keywords'] = $keywords;
-        ('add' == ACTION_NAME || null !== $description) && $data['description'] = $description;
-        ('add' == ACTION_NAME || null !== $other) && $data['other'] = $other;
-        ('add' == ACTION_NAME || null !== $manageId) && $data['manage_id'] = $manageId;
-        ('add' == ACTION_NAME || null !== $manageGroupId) && $data['manage_group_id'] = $manageGroupId;
-        ('add' == ACTION_NAME || null !== $accessGroupId) && $data['access_group_id'] = $accessGroupId;
-        ('add' == ACTION_NAME || null !== $ifShow) && $data['if_show'] = $ifShow;
-        ('add' == ACTION_NAME || null !== $template) && $data['template'] = $template;
-        ('add' == ACTION_NAME || null !== $extInfo) && $data['ext_info'] = $extInfo;
+        if ('add' == $type || null !== $name) {
+            $data['name'] = $name;
+        }
+        if ('add' == $type || null !== $keywords) {
+            $data['keywords'] = $keywords;
+        }
+        if ('add' == $type || null !== $description) {
+            $data['description'] = $description;
+        }
+        if ('add' == $type || null !== $other) {
+            $data['other'] = $other;
+        }
+        if ('add' == $type || null !== $manageId) {
+            $data['manage_id'] = $manageId;
+        }
+        if ('add' == $type || null !== $manageGroupId) {
+            $data['manage_group_id'] = $manageGroupId;
+        }
+        if ('add' == $type || null !== $accessGroupId) {
+            $data['access_group_id'] = $accessGroupId;
+        }
+        if ('add' == $type || null !== $ifShow) {
+            $data['if_show'] = $ifShow;
+        }
+        if ('add' == $type || null !== $template) {
+            $data['template'] = $template;
+        }
+        if ('add' == $type || null !== $extInfo) {
+            $data['ext_info'] = $extInfo;
+        }
         return $data;
     }
 
@@ -256,8 +277,8 @@ class ArticleChannel extends Backend
     {
         $assign['article_category_list'] = $this->_add_edit_category_common($channelInfo);
 
-        $id                  = request('id');
-        $managePrivilgeg     = in_array($id,
+        $id              = request('id');
+        $managePrivilgeg = in_array($id,
                 Model\ArticleChannel::mFindAllow('ma')) || 1 == session('backend_info.id');
         $assign['manage_privilege'] = $managePrivilgeg;
 
@@ -270,8 +291,8 @@ class ArticleChannel extends Backend
     //构造频道公共ajax
     private function _add_edit_category_common($channelInfo = false)
     {
-        $where['parent_id']   = 0;
-        $whereValue           = request('parent_id');
+        $where['parent_id'] = 0;
+        $whereValue         = request('parent_id');
         $whereValue && $where[] = ['parent_id', $whereValue];
 
         $articleCategoryList = Model\ArticleCategory::where($where)->all();

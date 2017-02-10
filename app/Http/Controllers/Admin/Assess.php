@@ -57,7 +57,7 @@ class Assess extends Backend
     public function add()
     {
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData();
+            $data      = $this->makeData('add');
             $resultAdd = Model\Assess::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.assess') . trans('common.add') . trans('common.success'),
@@ -82,7 +82,7 @@ class Assess extends Backend
         }
 
         if (request()->isMethod('POST')) {
-            $data       = $this->makeData();
+            $data       = $this->makeData('edit');
             $resultEdit = Model\Assess::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.assess') . trans('common.edit') . trans('common.success'),
@@ -143,10 +143,9 @@ class Assess extends Backend
     }
 
     //构造数据
-    private function makeData()
+    private function makeData($type)
     {
         //初始化参数
-        $id           = request('get.id');
         $title        = request('title');
         $explains     = request('explains');
         $groupLevel   = request('group_level');
@@ -163,14 +162,30 @@ class Assess extends Backend
         }
 
         $data = [];
-        ('add' == ACTION_NAME || null !== $title) && $data['title'] = $title;
-        ('add' == ACTION_NAME || null !== $explains) && $data['explains'] = $explains;
-        ('add' == ACTION_NAME || null !== $groupLevel) && $data['group_level'] = $groupLevel;
-        ('add' == ACTION_NAME || null !== $startTime) && $data['start_time'] = $startTime;
-        ('add' == ACTION_NAME || null !== $endTime) && $data['end_time'] = $endTime;
-        ('add' == ACTION_NAME || null !== $isEnable) && $data['is_enable'] = $isEnable;
-        ('add' == ACTION_NAME || null !== $target) && $data['target'] = $target;
-        ('add' == ACTION_NAME || null !== $extInfo) && $data['ext_info'] = $extInfo;
+        if ('add' == $type || null !== $title) {
+            $data['title'] = $title;
+        }
+        if ('add' == $type || null !== $explains) {
+            $data['explains'] = $explains;
+        }
+        if ('add' == $type || null !== $groupLevel) {
+            $data['group_level'] = $groupLevel;
+        }
+        if ('add' == $type || null !== $startTime) {
+            $data['start_time'] = $startTime;
+        }
+        if ('add' == $type || null !== $endTime) {
+            $data['end_time'] = $endTime;
+        }
+        if ('add' == $type || null !== $isEnable) {
+            $data['is_enable'] = $isEnable;
+        }
+        if ('add' == $type || null !== $target) {
+            $data['target'] = $target;
+        }
+        if ('add' == $type || null !== $extInfo) {
+            $data['ext_info'] = $extInfo;
+        }
 
         return $data;
     }

@@ -13,7 +13,7 @@ class Message extends FrontendMember
         $memberId            = session('frontend_info.id');
         $assign['member_id'] = $memberId;
 
-        $where        = [];
+        $where = [];
         //0为系统发送/接收
         $where['_complex']['_logic']     = 'OR';
         $where['_complex']['receive_id'] = $where['_complex']['send_id'] = $memberId;
@@ -50,7 +50,7 @@ class Message extends FrontendMember
     //发送信息
     public function add()
     {
-        $receiveId    = request('receive_id');
+        $receiveId = request('receive_id');
         if (request()->isMethod('POST')) {
             $content = request('content');
             if (null == $content) {

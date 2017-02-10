@@ -49,7 +49,7 @@ class Message extends Backend
     //发送信息
     public function add()
     {
-        $receiveId    = request('receive_id');
+        $receiveId = request('receive_id');
         if (request()->isMethod('POST')) {
             $content = request('content');
             if (null == $content) {

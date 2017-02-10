@@ -264,7 +264,6 @@ class Admin extends Backend
     //$isPwd 是否检测密码规则
     private function makeData($type)
     {
-        $data = [];
         //初始化参数
         $id                   = request('id');
         $adminName            = request('admin_name');
@@ -284,6 +283,7 @@ class Admin extends Backend
             $errorGoLink = route('Admin::Admin::add');
         }
 
+        $data                 = [];
         //检测初始化参数是否合法
         if ('add' == $type || null !== $adminName) {
             $result = $this->doValidateForm('admin_name', ['id' => $id, 'admin_name' => $adminName]);

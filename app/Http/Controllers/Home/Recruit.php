@@ -11,14 +11,14 @@ class Recruit extends Frontend
     //列表
     public function index()
     {
-        $currentTime                  = Carbon::now();
-        $logCount                     = 0;
-        $where                        = [
+        $currentTime = Carbon::now();
+        $logCount    = 0;
+        $where       = [
             'start_time' => ['lt', $currentTime],
             'end_time'   => ['gt', $currentTime],
             '(current_portion < max_portion OR max_portion = 0)',
         ];
-        $keyword                      = request('keyword');
+        $keyword     = request('keyword');
         if ($keyword) {
             $keyword             = '%' . $keyword . '%';
             $complex             = ['_logic' => 'or'];

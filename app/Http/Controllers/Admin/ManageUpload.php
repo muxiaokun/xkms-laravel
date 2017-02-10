@@ -42,7 +42,7 @@ class ManageUpload extends Backend
             }
             $manageUpload['bind_info'] = json_encode($bindInfo);
         }
-        $assign['manage_upload_list']       = $manageUploadList;
+        $assign['manage_upload_list'] = $manageUploadList;
 
         //初始化where_info
         $whereInfo              = [];

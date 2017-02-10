@@ -55,27 +55,20 @@ class Member extends FrontendMember
             $memberPwdAgain = request('password_again');
 
             //检测初始化参数是否合法
-            if ('add' == ACTION_NAME || null !== $memberName) {
-                $result = $this->doValidateForm('re_member_name', ['re_member_name' => $memberName]);
-                if (!$result['status']) {
-                    return $this->error($result['info'], route('Home::Member::index', ['t' => 'register']));
-                }
-
+            $result = $this->doValidateForm('re_member_name', ['re_member_name' => $memberName]);
+            if (!$result['status']) {
+                return $this->error($result['info'], route('Home::Member::index', ['t' => 'register']));
             }
-            if ('add' == ACTION_NAME || null !== $memberPwd) {
-                $result = $this->doValidateForm('password', ['password' => $memberPwd]);
-                if (!$result['status']) {
-                    return $this->error($result['info'], route('Home::Member::index', ['t' => 'register']));
-                }
 
+            $result = $this->doValidateForm('password', ['password' => $memberPwd]);
+            if (!$result['status']) {
+                return $this->error($result['info'], route('Home::Member::index', ['t' => 'register']));
             }
-            if ('add' == ACTION_NAME || null !== $memberPwdAgain) {
-                $result = $this->doValidateForm('password_again',
-                    ['password' => $memberPwd, 'password_again' => $memberPwdAgain]);
-                if (!$result['status']) {
-                    return $this->error($result['info'], route('Home::Member::index', ['t' => 'register']));
-                }
 
+            $result = $this->doValidateForm('password_again',
+                ['password' => $memberPwd, 'password_again' => $memberPwdAgain]);
+            if (!$result['status']) {
+                return $this->error($result['info'], route('Home::Member::index', ['t' => 'register']));
             }
 
             //是否自动启用

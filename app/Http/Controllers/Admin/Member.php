@@ -33,7 +33,7 @@ class Member extends Backend
             !isset($member['group_name']) && $member['group_name'] = trans('common.empty');
             !isset($member['add_time']) && $member['add_time'] = trans('common.system') . trans('common.add');
         }
-        $assign['member_list']       = $memberList;
+        $assign['member_list'] = $memberList;
 
         //初始化where_info
         $whereInfo                  = [];
@@ -58,7 +58,7 @@ class Member extends Backend
     public function add()
     {
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData();
+            $data      = $this->makeData('add');
             $resultAdd = Model\Member::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.member') . trans('common.add') . trans('common.success'),
@@ -83,7 +83,7 @@ class Member extends Backend
         }
 
         if (request()->isMethod('POST')) {
-            $data       = $this->makeData(false);
+            $data       = $this->makeData('edit');
             $resultEdit = Model\Member::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.member') . trans('common.edit') . trans('common.success'),
@@ -101,7 +101,7 @@ class Member extends Backend
             $memberGroupName = Model\MemberGroup::colWhere($groupId)->first()['name'];
             $groupId         = ['value' => $groupId, 'html' => $memberGroupName];
         }
-        $assign['edit_info']  = $editInfo;
+        $assign['edit_info'] = $editInfo;
 
         $this->addEditCommon();
         $assign['title'] = trans('common.member') . trans('common.edit');
@@ -255,29 +255,39 @@ class Member extends Backend
     }
 
     //构造数据
-    private function makeData($isPwd = true)
+    private function makeData($type)
     {
         //初始化参数
         $id            = request('id');
         $memberName    = request('member_name');
         $password      = request('password');
         $passwordAgain = request('password_again');
-        $email         = request('email');
-        $phone         = request('phone');
-        $groupId       = request('group_id');
-        $isEnable      = request('is_enable');
+        $email    = request('email');
+        $phone    = request('phone');
+        $groupId  = request('group_id');
+        $isEnable = request('is_enable');
 
         //检测初始化参数是否合法
-        $errorGoLink = (!$id) ? route('Admin::Member::add') : (is_array($id)) ? route('Admin::Member::index') : route('Admin::Member::edit',
-            ['id' => $id]);
-        if ('add' == ACTION_NAME || null !== $memberName) {
+        if ($id) {
+            if (is_array($id)) {
+                $errorGoLink = route('Admin::Member::index');
+            } else {
+                $errorGoLink = route('Admin::Member::edit', ['id' => $id]);
+            }
+        } else {
+            $errorGoLink = route('Admin::Member::add');
+        }
+
+        $data     = [];
+        if ('add' == $type || null !== $memberName) {
             $result = $this->doValidateForm('member_name', ['id' => $id, 'member_name' => $memberName]);
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
             }
-
+            $data['member_name'] = $memberName;
         }
-        if ('add' == ACTION_NAME || null !== $password) {
+        if ('add' == $type || null !== $password) {
+            $isPwd  = ('add' == $type) ? true : false;
             $result = $this->doValidateForm('password', ['password' => $password, 'is_pwd' => $isPwd]);
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
@@ -289,29 +299,28 @@ class Member extends Backend
                 return $this->error($result['info'], $errorGoLink);
             }
 
+            $data['member_pwd'] = $password;
         }
-        if ('add' == ACTION_NAME || null !== $email) {
+        if ('add' == $type || null !== $email) {
             $result = $this->doValidateForm('email', ['email' => $email]);
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
             }
-
+            $data['email'] = $email;
         }
-        if ('add' == ACTION_NAME || null !== $phone) {
+        if ('add' == $type || null !== $phone) {
             $result = $this->doValidateForm('phone', ['phone' => $phone]);
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
             }
-
+            $data['phone'] = $phone;
         }
-
-        $data = [];
-        ('add' == ACTION_NAME || null !== $memberName) && $data['member_name'] = $memberName;
-        ('add' == ACTION_NAME || null !== $password) && $data['member_pwd'] = $password;
-        ('add' == ACTION_NAME || null !== $email) && $data['email'] = $email;
-        ('add' == ACTION_NAME || null !== $phone) && $data['phone'] = $phone;
-        ('add' == ACTION_NAME || null !== $groupId) && $data['group_id'] = $groupId;
-        ('add' == ACTION_NAME || null !== $isEnable) && $data['is_enable'] = $isEnable;
+        if ('add' == $type || null !== $groupId) {
+            $data['group_id'] = $groupId;
+        }
+        if ('add' == $type || null !== $isEnable) {
+            $data['is_enable'] = $isEnable;
+        }
         return $data;
     }
 

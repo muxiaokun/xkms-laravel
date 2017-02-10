@@ -28,11 +28,11 @@ class RecruitLog extends Backend
             $recruitLog['sex']           = $recruitSexData[$recruitLog['sex']];
             $recruitLog['certificate']   = $recruitCertificateData[$recruitLog['certificate']];
         }
-        $assign['recruit_log_list']       = $recruitLogList;
+        $assign['recruit_log_list'] = $recruitLogList;
 
         //初始化where_info
         $whereInfo             = [];
-        $whereInfo['name'] = ['type' => 'input', 'name' => trans('recruit.recruit_name')];
+        $whereInfo['name']          = ['type' => 'input', 'name' => trans('recruit.recruit_name')];
         $whereInfo['birthday'] = ['type' => 'time', 'name' => trans('recruit.recruit_birthday')];
         $assign['where_info']  = $whereInfo;
 
@@ -41,7 +41,7 @@ class RecruitLog extends Backend
         $batchHandle['del']     = $this->_check_privilege('del');
         $assign['batch_handle'] = $batchHandle;
 
-        $assign['title']        = trans('recruit.recruit_log') . trans('common.management');
+        $assign['title'] = trans('recruit.recruit_log') . trans('common.management');
         return view('admin.RecruitLog_index', $assign);
     }
 

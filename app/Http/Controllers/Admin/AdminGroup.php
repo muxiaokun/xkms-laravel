@@ -53,8 +53,8 @@ class AdminGroup extends Backend
     public function add()
     {
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData();
-            $resultAdd       = Model\AdminGroups::create($data);
+            $data      = $this->makeData('add');
+            $resultAdd = Model\AdminGroups::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.management') . trans('common.group') . trans('common.add') . trans('common.success'),
                     route('Admin::AdminGroup::index'));
@@ -79,7 +79,7 @@ class AdminGroup extends Backend
         }
 
         if (request()->isMethod('POST')) {
-            $data       = $this->makeData();
+            $data       = $this->makeData('edit');
             $resultEdit = Model\AdminGroups::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.management') . trans('common.group') . trans('common.edit') . trans('common.success'),
@@ -97,7 +97,7 @@ class AdminGroup extends Backend
             $adminName                         = Model\Admins::colWhere($manageId)->first()['admin_name'];
             $editInfo['manage_id'][$manageKey] = ['value' => $manageId, 'html' => $adminName];
         }
-        $assign['edit_info']   = $editInfo;
+        $assign['edit_info'] = $editInfo;
 
         $this->addEditCommon();
         $assign['title'] = trans('common.admin') . trans('common.group') . trans('common.edit');
@@ -214,47 +214,56 @@ class AdminGroup extends Backend
     }
 
     //构造数据
-    private function makeData()
+    private function makeData($type)
     {
         //初始化参数
         $id       = request('id');
         $manageId = request('manage_id');
-        $addId    = session('backend_info.id');
-        if (('add' == ACTION_NAME || null !== $manageId)
-            && !in_array($addId, $manageId)
-        ) {
-            $manageId[] = $addId;
-        }
-
         $name      = request('name');
         $explains  = request('explains');
         $privilege = request('privilege');
         $isEnable  = request('is_enable');
 
         //检测初始化参数是否合法
-        $errorGoLink = (!$id) ? route('Admin::AdminGroup::add') : (is_array($id)) ? route('Admin::AdminGroup::index') : route('Admin::AdminGroup::edit',
-            ['id' => $id]);
-        if ('add' == ACTION_NAME || null !== $name) {
+        if ($id) {
+            if (is_array($id)) {
+                $errorGoLink = route('Admin::AdminGroup::index');
+            } else {
+                $errorGoLink = route('Admin::AdminGroup::edit', ['id' => $id]);
+            }
+        } else {
+            $errorGoLink = route('Admin::AdminGroup::add');
+        }
+
+        $data      = [];
+        if ('add' == $type || null !== $manageId) {
+            $addId = session('backend_info.id');
+            if (!in_array($addId, $manageId)) {
+                $manageId[] = $addId;
+            }
+            $data['manage_id'] = $manageId;
+        }
+        if ('add' == $type || null !== $name) {
             $result = $this->doValidateForm('name', ['id' => $id, 'name' => $name]);
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
             }
 
+            $data['name'] = $name;
         }
-        if ('add' == ACTION_NAME || null !== $privilege) {
+        if ('add' == $type || null !== $explains) {
+            $data['explains'] = $explains;
+        }
+        if ('add' == $type || null !== $privilege) {
             $result = $this->doValidateForm('privilege', $privilege);
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
             }
-
+            $data['privilege'] = $privilege;
         }
-
-        $data = [];
-        ('add' == ACTION_NAME || null !== $manageId) && $data['manage_id'] = $manageId;
-        ('add' == ACTION_NAME || null !== $name) && $data['name'] = $name;
-        ('add' == ACTION_NAME || null !== $explains) && $data['explains'] = $explains;
-        ('add' == ACTION_NAME || null !== $privilege) && $data['privilege'] = $privilege;
-        ('add' == ACTION_NAME || null !== $isEnable) && $data['is_enable'] = $isEnable;
+        if ('add' == $type || null !== $isEnable) {
+            $data['is_enable'] = $isEnable;
+        }
         return $data;
     }
 

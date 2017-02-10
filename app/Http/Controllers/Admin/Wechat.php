@@ -12,8 +12,8 @@ class Wechat extends Backend
     public function index()
     {
         //建立where
-        $where       = [];
-        $whereValue  = request('member_name');
+        $where      = [];
+        $whereValue = request('member_name');
         $whereValue && $where[] = ['member_name', $whereValue];
         $whereValue = mMktimeRange('bind_time');
         $whereValue && $where[] = ['bind_time', $whereValue];
@@ -23,7 +23,7 @@ class Wechat extends Backend
         foreach ($wechatList as &$wechat) {
             $wechat['member_name'] = Model\Member::colWhere($wechat['member_id'])->first()['member_name'];
         }
-        $assign['wechat_list']       = $wechatList;
+        $assign['wechat_list'] = $wechatList;
 
         //初始化where_info
         $whereInfo                = [];
@@ -38,7 +38,7 @@ class Wechat extends Backend
         $batchHandle['del']     = $this->_check_privilege('del');
         $assign['batch_handle'] = $batchHandle;
 
-        $assign['title']          = trans('wechat.wechat') . trans('common.management');
+        $assign['title'] = trans('wechat.wechat') . trans('common.management');
         return view('admin.Wechat_index', $assign);
     }
 
@@ -108,7 +108,7 @@ class Wechat extends Backend
                 "url"         => "http://ms.xjhywh.cn",
                 "topcolor"    => "#000000",
             ];
-            $data['data'] = $this->makeData();
+            $data['data'] = $this->makeData('add');
             $putTemplate  = $Wechat->put_template($data);
             if (0 === $putTemplate['errcode']) {
                 return $this->success(trans('common.wechat') . trans('common.send') . trans('common.success'),
@@ -142,7 +142,7 @@ class Wechat extends Backend
     }
 
     //构造数据
-    private function makeData()
+    private function makeData($type)
     {
         $startContent      = request('start_content');
         $startContentColor = request('start_content_color');

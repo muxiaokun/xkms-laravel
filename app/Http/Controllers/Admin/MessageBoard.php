@@ -13,7 +13,7 @@ class MessageBoard extends Backend
     {
         //建立where
         $where      = [];
-        $whereValue = request('name');
+        $whereValue                   = request('name');
         $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
 
         $messageBoardList = Model\MessageBoard::where($where)->paginate(config('system.sys_max_row'));
@@ -24,7 +24,7 @@ class MessageBoard extends Backend
             }
             $messageBoard['option'] = mSubstr(implode(',', $option), 40);
         }
-        $assign['message_board_list']       = $messageBoardList;
+        $assign['message_board_list'] = $messageBoardList;
 
         //初始化where_info
         $whereInfo            = [];
@@ -46,7 +46,7 @@ class MessageBoard extends Backend
     public function add()
     {
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData();
+            $data      = $this->makeData('add');
             $resultAdd = Model\MessageBoard::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.messageboard') . trans('common.add') . trans('common.success'),
@@ -72,7 +72,7 @@ class MessageBoard extends Backend
         }
 
         if (request()->isMethod('POST')) {
-            $data       = $this->makeData();
+            $data       = $this->makeData('edit');
             $resultEdit = Model\MessageBoard::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.messageboard') . trans('common.edit') . trans('common.success'),
@@ -115,16 +115,22 @@ class MessageBoard extends Backend
     }
 
     //构造数据
-    private function makeData()
+    private function makeData($type)
     {
         $name     = request('name');
         $template = request('template');
         $config   = json_decode(htmlspecialchars_decode(request('config')), true);
 
         $data = [];
-        ('add' == ACTION_NAME || null !== $name) && $data['name'] = $name;
-        ('add' == ACTION_NAME || null !== $template) && $data['template'] = $template;
-        ('add' == ACTION_NAME || null !== $config) && $data['config'] = $config;
+        if ('add' == $type || null !== $name) {
+            $data['name'] = $name;
+        }
+        if ('add' == $type || null !== $template) {
+            $data['template'] = $template;
+        }
+        if ('add' == $type || null !== $config) {
+            $data['config'] = $config;
+        }
 
         return $data;
     }

@@ -52,7 +52,7 @@ class Navigation extends Backend
     public function add()
     {
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData();
+            $data      = $this->makeData('add');
             $resultAdd = Model\Navigation::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.navigation') . trans('common.add') . trans('common.success'),
@@ -78,7 +78,7 @@ class Navigation extends Backend
         }
 
         if (request()->isMethod('POST')) {
-            $data       = $this->makeData();
+            $data       = $this->makeData('edit');
             $resultEdit = Model\Navigation::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.navigation') . trans('common.edit') . trans('common.success'),
@@ -143,7 +143,7 @@ class Navigation extends Backend
     }
 
     //构造数据
-    private function makeData()
+    private function makeData($type)
     {
         //初始化参数
         $id        = request('id');
@@ -153,21 +153,33 @@ class Navigation extends Backend
         $extInfo   = $this->_make_navigation(request($this->navigation_config['post_name']));
 
         //检测初始化参数是否合法
-        $errorGoLink = (!$id) ? route('Admin::Navigation::add') : (is_array($id)) ? route('Admin::Navigation::index') : route('Admin::Navigation::edit',
-            ['id' => $id]);
-        if ('add' == ACTION_NAME || null !== $shortName) {
+        if ($id) {
+            if (is_array($id)) {
+                $errorGoLink = route('Admin::Navigation::index');
+            } else {
+                $errorGoLink = route('Admin::Navigation::edit', ['id' => $id]);
+            }
+        } else {
+            $errorGoLink = route('Admin::Navigation::add');
+        }
+
+        $data      = [];
+        if ('add' == $type || null !== $name) {
+            $data['name'] = $name;
+        }
+        if ('add' == $type || null !== $shortName) {
             $result = $this->doValidateForm('short_name', ['id' => $id, 'short_name' => $shortName]);
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
             }
-
+            $data['short_name'] = $shortName;
         }
-
-        $data = [];
-        ('add' == ACTION_NAME || null !== $name) && $data['name'] = $name;
-        ('add' == ACTION_NAME || null !== $shortName) && $data['short_name'] = $shortName;
-        ('add' == ACTION_NAME || null !== $isEnable) && $data['is_enable'] = $isEnable;
-        ('add' == ACTION_NAME || null !== $extInfo) && $data['ext_info'] = $extInfo;
+        if ('add' == $type || null !== $isEnable) {
+            $data['is_enable'] = $isEnable;
+        }
+        if ('add' == $type || null !== $extInfo) {
+            $data['ext_info'] = $extInfo;
+        }
 
         return $data;
     }

@@ -81,16 +81,18 @@ class Article extends Backend
             'name'  => trans('common.channel'),
             'value' => $searchChannelList,
         ];
-        $whereInfo['is_audit'] = ['type'  => 'select',
-                                  'name'  => trans('common.yes') . trans('common.no') . trans('common.audit'),
-                                  'value' => [
-                                        1 => trans('common.audit'),
-                                        2 => trans('common.none') . trans('common.audit'),
-                                    ],
+        $whereInfo['is_audit'] = [
+            'type'  => 'select',
+            'name'  => trans('common.yes') . trans('common.no') . trans('common.audit'),
+            'value' => [
+                1 => trans('common.audit'),
+                2 => trans('common.none') . trans('common.audit'),
+            ],
         ];
-        $whereInfo['if_show']  = ['type'  => 'select',
-                                  'name'  => trans('common.yes') . trans('common.no') . trans('common.show'),
-                                  'value' => [1 => trans('common.show'), 2 => trans('common.hidden')],
+        $whereInfo['if_show']  = [
+            'type'  => 'select',
+            'name'  => trans('common.yes') . trans('common.no') . trans('common.show'),
+            'value' => [1 => trans('common.show'), 2 => trans('common.hidden')],
         ];
         $assign['where_info']    = $whereInfo;
 
@@ -109,8 +111,9 @@ class Article extends Backend
     public function add()
     {
         if (request()->isMethod('POST')) {
-            $data         = $this->makeData();
-            isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'], config('system.sys_article_thumb_width'),
+            $data = $this->makeData('add');
+            isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'],
+                config('system.sys_article_thumb_width'),
                 C('SYS_ARTICLE_THUMB_HEIGHT'));
             $resultAdd = Model\Article::create($data);
             //增加了一个分类快捷添加文章的回跳链接
@@ -140,8 +143,9 @@ class Article extends Backend
         }
 
         if (request()->isMethod('POST')) {
-            $data = $this->makeData();
-            isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'], config('system.sys_article_thumb_width'),
+            $data = $this->makeData('edit');
+            isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'],
+                config('system.sys_article_thumb_width'),
                 C('SYS_ARTICLE_THUMB_HEIGHT'));
             $resultEdit = Model\Article::colWhere($id)->first()->update($data);
             if ($resultEdit) {
@@ -270,7 +274,7 @@ class Article extends Backend
 
     //构造数据
     //$isPwd 是否检测密码规则
-    private function makeData()
+    private function makeData($type)
     {
         //初始化参数
         $accessGroupId = request('access_group_id');
@@ -298,23 +302,57 @@ class Article extends Backend
         !$description && $description = trim(mSubstr(strip_tags(htmlspecialchars_decode($content)), 100));
 
         $data = [];
-        ('add' == ACTION_NAME || null !== $accessGroupId) && $data['access_group_id'] = $accessGroupId;
-        ('add' == ACTION_NAME || null !== $title) && $data['title'] = $title;
-        ('add' == ACTION_NAME || null !== $author) && $data['author'] = $author;
-        ('add' == ACTION_NAME || null !== $description) && $data['description'] = $description;
-        ('add' == ACTION_NAME || null !== $content) && $data['content'] = mParseContent($content);
-        ('add' == ACTION_NAME || null !== $cateId) && $data['cate_id'] = $cateId;
-        ('add' == ACTION_NAME || null !== $channelId) && $data['channel_id'] = $channelId;
-        ('add' == ACTION_NAME || null !== $thumb) && $data['thumb'] = $thumb;
-        ('add' == ACTION_NAME || null !== $addTime) && $data['add_time'] = $addTime;
-        ('add' == ACTION_NAME || null !== $updateTime) && $data['update_time'] = $updateTime;
-        ('add' == ACTION_NAME || null !== $sort) && $data['sort'] = $sort;
-        ('add' == ACTION_NAME || null !== $isStick) && $data['is_stick'] = $isStick;
-        ('add' == ACTION_NAME || null !== $isAudit) && $data['is_audit'] = $isAudit;
-        ('add' == ACTION_NAME || null !== $ifShow) && $data['if_show'] = $ifShow;
-        ('add' == ACTION_NAME || null !== $extend) && $data['extend'] = $extend;
-        ('add' == ACTION_NAME || null !== $attribute) && $data['attribute'] = $attribute;
-        ('add' == ACTION_NAME || null !== $album) && $data['album'] = $album;
+        if ('add' == $type || null !== $accessGroupId) {
+            $data['access_group_id'] = $accessGroupId;
+        }
+        if ('add' == $type || null !== $title) {
+            $data['title'] = $title;
+        }
+        if ('add' == $type || null !== $author) {
+            $data['author'] = $author;
+        }
+        if ('add' == $type || null !== $description) {
+            $data['description'] = $description;
+        }
+        if ('add' == $type || null !== $content) {
+            $data['content'] = mParseContent($content);
+        }
+        if ('add' == $type || null !== $cateId) {
+            $data['cate_id'] = $cateId;
+        }
+        if ('add' == $type || null !== $channelId) {
+            $data['channel_id'] = $channelId;
+        }
+        if ('add' == $type || null !== $thumb) {
+            $data['thumb'] = $thumb;
+        }
+        if ('add' == $type || null !== $addTime) {
+            $data['add_time'] = $addTime;
+        }
+        if ('add' == $type || null !== $updateTime) {
+            $data['update_time'] = $updateTime;
+        }
+        if ('add' == $type || null !== $sort) {
+            $data['sort'] = $sort;
+        }
+        if ('add' == $type || null !== $isStick) {
+            $data['is_stick'] = $isStick;
+        }
+        if ('add' == $type || null !== $isAudit) {
+            $data['is_audit'] = $isAudit;
+        }
+        if ('add' == $type || null !== $ifShow) {
+            $data['if_show'] = $ifShow;
+        }
+        if ('add' == $type || null !== $extend) {
+            $data['extend'] = $extend;
+        }
+        if ('add' == $type || null !== $attribute) {
+            $data['attribute'] = $attribute;
+        }
+        if ('add' == $type || null !== $album) {
+            $data['album'] = $album;
+        }
         $this->_check_aed($data);
         return $data;
     }
@@ -341,7 +379,7 @@ class Article extends Backend
     //添加 编辑 公共方法
     private function addEditCommon()
     {
-        $channelWhere         = $categoryWhere = [];
+        $channelWhere = $categoryWhere = [];
         if (1 != session('backend_info.id')) {
             $channelWhere['id']  = ['in', Model\ArticleChannel::mFindAllow()];
             $categoryWhere['id'] = ['in', Model\ArticleCategory::mFindAllow()];

@@ -19,7 +19,7 @@ class Comment extends Frontend
 
         switch ($field) {
             case 'put_data':
-                $data         = $this->makeData();
+                $data = $this->makeData();
                 if (!config('system.comment_anony') && 0 == $data['send_id']) {
                     $result = ['status' => false, 'info' => trans('common.comment_error2')];
                     break;
@@ -63,7 +63,7 @@ class Comment extends Frontend
                     $memberName             = Model\Member::colWhere($comment['member_id'])->first()['member_name'];
                     $comment['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');
                 }
-                $assign['comment_list']       = $commentList;
+                $assign['comment_list'] = $commentList;
                 return view('home.index', $assign);
                 exit();
                 break;

@@ -407,6 +407,8 @@ Route::get('VerificationCode/{name?}', 'VerificationCode@run')->name('Verificati
 
 //test error
 Route::get('t', function () {
+    dump(request('a'));
+    return;
     $user           = \App\Model\Admins::find(1);
     $user->group_id = [1];
     $user->save();

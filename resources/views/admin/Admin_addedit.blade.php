@@ -91,7 +91,8 @@
                             <script type="text/javascript">
                                 $(function () {
                                     var config = {
-                                        @if ($edit_info['group_id'])'def_data':{{ $edit_info['group_id'] }}, @endif
+                                        @if ($edit_info['group_id'])'def_data':{!! json_encode($edit_info['group_id']) !!},
+                                        @endif
                                         'out_obj': $('#group_id_list'),
                                         'edit_obj': $('#group_list'),
                                         'post_name': 'group_id[]',

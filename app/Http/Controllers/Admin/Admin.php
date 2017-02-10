@@ -124,7 +124,6 @@ class Admin extends Backend
             if (!is_array($data)) {
                 return $data;
             }
-
             $resultEdit = Model\Admins::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.admin') . trans('common.edit') . trans('common.success'),
@@ -136,7 +135,7 @@ class Admin extends Backend
             }
         }
 
-        $editInfo = Model\Admins::colWhere($id)->first();
+        $editInfo = Model\Admins::colWhere($id)->first()->toArray();
         foreach ($editInfo['group_id'] as &$groupId) {
             $adminGroupName = Model\AdminGroups::colWhere($groupId)->first()['name'];
             $groupId        = ['value' => $groupId, 'html' => $adminGroupName];
@@ -265,24 +264,33 @@ class Admin extends Backend
     //$isPwd 是否检测密码规则
     private function makeData($type)
     {
+        $data = [];
         //初始化参数
-        $id            = request('id');
-        $adminName     = request('admin_name');
-        $password      = request('password');
-        $passwordAgain = request('password_again');
-        $groupId       = request('group_id');
-        $privilege     = request('privilege');
-        $isEnable      = request('is_enable');
+        $id                   = request('id');
+        $adminName            = request('admin_name');
+        $password             = request('password');
+        $passwordConfirmation = request('password_confirmation');
+        $groupId              = request('group_id');
+        $privilege            = request('privilege');
+        $isEnable             = request('is_enable');
 
-        $errorGoLink = (!$id) ? route('Admin::Admin::add') : (is_array($id)) ? route('Admin::Admin::index') : route('Admin::Admin::edit',
-            ['id' => $id]);
+        if ($id) {
+            if (is_array($id)) {
+                $errorGoLink = route('Admin::Admin::index');
+            } else {
+                $errorGoLink = route('Admin::Admin::edit', ['id' => $id]);
+            }
+        } else {
+            $errorGoLink = route('Admin::Admin::add');
+        }
+
         //检测初始化参数是否合法
         if ('add' == $type || null !== $adminName) {
             $result = $this->doValidateForm('admin_name', ['id' => $id, 'admin_name' => $adminName]);
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
             }
-
+            $data['admin_name'] = $adminName;
         }
         if ('add' == $type || null !== $password) {
             $isPwd  = ('add' == $type) ? true : false;
@@ -290,24 +298,30 @@ class Admin extends Backend
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
             }
-
+            $data['admin_pwd'] = $password;
         }
         if ('add' == $type || null !== $password) {
-            $result = $this->doValidateForm('password_again', [
-                'password'       => $password,
-                'password_again' => $passwordAgain,
-                'is_pwd'         => $isPwd,
+            $result = $this->doValidateForm('password_confirmation', [
+                'password'              => $password,
+                'password_confirmation' => $passwordConfirmation,
+                'is_pwd'                => $isPwd,
             ]);
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
             }
-
+            $data['group_id'] = $groupId;
         }
         if ('add' == $type || null !== $privilege) {
             $result = $this->doValidateForm('privilege', $privilege);
             if (!$result['status']) {
                 return $this->error($result['info'], $errorGoLink);
             }
+            $data['privilege'] = $privilege;
+
+        }
+
+        if ('add' == $type || null !== $isEnable) {
+            $data['is_enable'] = $isEnable;
 
         }
 
@@ -320,12 +334,6 @@ class Admin extends Backend
 
         }
 
-        $data    = [];
-        ('add' == $type || null !== $adminName) && $data['admin_name'] = $adminName;
-        ('add' == $type || null !== $password) && $data['admin_pwd'] = $password;
-        ('add' == $type || null !== $groupId) && $data['group_id'] = $groupId;
-        ('add' == $type || null !== $privilege) && $data['privilege'] = $privilege;
-        ('add' == $type || null !== $isEnable) && $data['is_enable'] = $isEnable;
         return $data;
     }
 

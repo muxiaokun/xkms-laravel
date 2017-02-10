@@ -13,10 +13,12 @@ class Admins extends Common
 
     public function setAdminPwdAttribute($value)
     {
-        $randStr                        = mRandStr('pr');
-        $password                       = md5($value . $randStr);
-        $this->attributes['admin_pwd'] = $password;
-        $this->attributes['admin_rand'] = $randStr;
+        if ($value) {
+            $randStr                        = mRandStr('pr');
+            $password                       = md5($value . $randStr);
+            $this->attributes['admin_pwd']  = $password;
+            $this->attributes['admin_rand'] = $randStr;
+        }
     }
 
     public function getGroupIdAttribute($value)
@@ -26,6 +28,7 @@ class Admins extends Common
 
     public function setGroupIdAttribute($value)
     {
+        sort($value);
         $this->attributes['group_id'] = $this->transfixionEncode($value);
     }
 

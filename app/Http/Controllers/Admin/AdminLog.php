@@ -11,20 +11,32 @@ class AdminLog extends Backend
     //列表
     public function index()
     {
-        //建立where
-        $where      = [];
-        $whereValue = mMktimeRange('add_time');
-        $whereValue && $where[] = ['add_time', $whereValue];
-        $whereValue = request('admin_id');
-        $whereValue && $where[] = [
-            'admin_id',
-            'In',
-            Model\Admins::where([['admin_name', 'like', '%' . $whereValue . '%']])->select(['id'])->pluck('id'),
-        ];
-        $whereValue = request('route_name');
-        $whereValue && $where[] = ['route_name', $whereValue];
+
         //初始化翻页 和 列表数据
-        $adminLogList = Model\AdminLogs::where($where)->paginate(config('system.sys_max_row'));
+        $adminLogList = Model\AdminLogs::where(function ($query) {
+            $last_time = mMktimeRange('add_time');
+            if ($last_time) {
+                $query->timeWhere('add_time', $last_time);
+            }
+
+            $admin_id = request('admin_id');
+            if ($admin_id) {
+                $ids = Model\Admins::where([
+                    [
+                        'admin_name',
+                        'like',
+                        '%' . $admin_id . '%',
+                    ],
+                ])->select(['id'])->pluck('id');
+                $query->whereIn('admin_id', $ids);
+            }
+
+            $route_name = request('route_name');
+            if ($route_name) {
+                $query->where('route_name', 'like', '%' . $route_name . '%');
+            }
+
+        })->paginate(config('system.sys_max_row'));
         foreach ($adminLogList as &$adminLog) {
             $adminLog['admin_name'] = Model\Admins::colWhere($adminLog['admin_id'])->first()['admin_name'];
         }

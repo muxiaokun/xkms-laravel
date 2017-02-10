@@ -39,7 +39,7 @@
                                 {{ $admin_log['route_name'] }}
                             </td>
                             <td>
-                                @if (2 < strlen($admin_log['request']))
+                                @if ($admin_log['request'])
                                     <a id="M_alert_log_{{ $admin_log['id'] }}" class="btn btn-xs btn-primary"
                                        href="javascript:void(0);">@lang('common.look')</a>
                                     <script>
@@ -47,7 +47,7 @@
                                             var config = {
                                                 'bind_obj': $('#M_alert_log_{{ $admin_log['id'] }}'),
                                                 'title': '@lang('common.admin')@lang('common.handle')@lang('common.log')',
-                                                'message':{{ $admin_log['request'] }}
+                                                'message':{!! json_encode($admin_log['request']) !!}
                                             }
                                             new M_alert_log(config);
                                         });

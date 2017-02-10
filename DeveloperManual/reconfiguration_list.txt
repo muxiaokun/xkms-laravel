@@ -21,11 +21,11 @@ OK 成员管理管理员管理员管理Admin::Admin::index
 OK 成员管理管理员添加管理员Admin::Admin::add
 OK 成员管理管理员删除管理员Admin::Admin::del
 OK 成员管理管理员编辑管理员Admin::Admin::edit
-成员管理管理员管理组管理Admin::AdminGroup::index
+OK 成员管理管理员管理组管理Admin::AdminGroup::index
 成员管理管理员添加管理组Admin::AdminGroup::add
 成员管理管理员删除管理组Admin::AdminGroup::del
 成员管理管理员编辑管理组Admin::AdminGroup::edit
-成员管理管理员查看管理日志Admin::AdminLog::index
+OK 成员管理管理员查看管理日志Admin::AdminLog::index
 成员管理管理员删除管理日志Admin::AdminLog::del
 成员管理会员管理会员配置Admin::Member::setting
 成员管理会员管理会员管理Admin::Member::index

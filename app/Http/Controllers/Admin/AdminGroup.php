@@ -11,21 +11,25 @@ class AdminGroup extends Backend
     //列表
     public function index()
     {
-        $where = [];
-        if (1 != session('backend_info.id')) {
-            //非root需要权限
-            $mFindAllow  = Model\AdminGroups::mFindAllow();
-            $where['id'] = ['in', $mFindAllow];
-        }
-        //建立where
-        $whereValue = '';
-        $whereValue = request('name');
-        $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
-        $whereValue = request('is_enable');
-        $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
-
         //初始化翻页 和 列表数据
-        $adminGroupList             = Model\AdminGroups::where($where)->paginate(config('system.sys_max_row'));
+        $adminGroupList             = Model\AdminGroups::where(function ($query) {
+            $login_id = session('backend_info.id');
+            if (1 != $login_id) {
+                //非root需要权限
+                $ids = Model\AdminGroups::where('manage_id', 'like', '%|' . $login_id . '|%')->pluck('id');
+                $query->transfixionWhere('group_id', $ids);
+            }
+
+            $name = request('name');
+            if ($name) {
+                $query->where('name', 'like', '%' . $name . '%');
+            }
+            $is_enable = request('is_enable');
+            if ($is_enable) {
+                $query->where('is_enable', '=', (1 == $is_enable) ? 1 : 0);
+            }
+
+        })->paginate(config('system.sys_max_row'));
         $assign['admin_group_list'] = $adminGroupList;
 
         //初始化where_info

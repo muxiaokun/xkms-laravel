@@ -32,12 +32,15 @@
         @else
             <li class="disabled"><span>&raquo;</span></li>
         @endif
-        <li class="disabled"><span>{{ $paginator->currentPage() }}/{{ $paginator->count() }}</span></li>
+        <li class="disabled"><span>{{ $paginator->currentPage() }}/{{ $paginator->lastPage() }}</span></li>
         <li>
             <div class="fr">
-                <form class="form-inline" action="{{ $paginator->perPage() }}">
+                <form class="form-inline">
+                    @foreach (request()->all() as $name => $value)
+                        <input type="hidden" name="{{ $name }}" value="{{ $value }}">
+                    @endforeach
                     <input class="form-control w80" type="text" name="page"
-                           onKeyup="M_in_int_range(this,1,{{ $paginator->count() }});"/>
+                           onKeyup="M_in_int_range(this,1,{{ $paginator->lastPage() }});"/>
                     <button class="btn btn-default" type="submit">@lang('common.jump')</button>
                 </form>
             </div>

@@ -22,7 +22,7 @@ class ManageUpload extends Backend
         $whereValue && $where[] = ['add_time', $whereValue];
 
         //初始化翻页 和 列表数据
-        $manageUploadList = Model\ManageUpload::where($where)->paginate(config('system.sys_max_row'));
+        $manageUploadList = Model\ManageUpload::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
         foreach ($manageUploadList as &$manageUpload) {
             switch ($manageUpload['user_type']) {
                 case 1:

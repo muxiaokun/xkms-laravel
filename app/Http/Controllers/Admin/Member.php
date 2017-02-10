@@ -23,7 +23,7 @@ class Member extends Backend
         $whereValue = mMktimeRange('last_time');
         $whereValue && $where[] = ['last_time', $whereValue];
 
-        $memberList = Model\Member::where($where)->paginate(config('system.sys_max_row'));
+        $memberList = Model\Member::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
         foreach ($memberList as &$member) {
             foreach ($member['group_id'] as $groupId) {
                 $groupName = Model\MemberGroup::colWhere($groupId)->first()['name'];

@@ -19,7 +19,7 @@ class MemberGroup extends Backend
         $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
 
         //初始化翻页 和 列表数据
-        $memberGroupList             = Model\MemberGroup::where($where)->paginate(config('system.sys_max_row'));
+        $memberGroupList = Model\MemberGroup::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
         $assign['member_group_list'] = $memberGroupList;
 
         //初始化where_info

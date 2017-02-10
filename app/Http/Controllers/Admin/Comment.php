@@ -31,7 +31,7 @@ class Comment extends Backend
         $whereValue && $where[] = ['item', $whereValue];
 
         $commentList            = Model\Comment::orderBy('add_time',
-            'desc')->where($where)->paginate(config('system.sys_max_row'));
+            'desc')->where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
         $assign['comment_list'] = $commentList;
 
         //初始化where_info

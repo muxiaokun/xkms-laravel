@@ -52,7 +52,7 @@ class Article extends Backend
             }
         }
         //初始化翻页 和 列表数据
-        $articleList            = Model\Article::where($where)->paginate(config('system.sys_max_row'));
+        $articleList            = Model\Article::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
         $assign['article_list'] = $articleList;
 
         //初始化where_info

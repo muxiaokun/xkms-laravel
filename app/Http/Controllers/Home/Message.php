@@ -29,7 +29,7 @@ class Message extends FrontendMember
         $whereValue && $where[] = ['send_time', $whereValue];
 
         $messageList            = Model\Message::orderBy('receive_time', 'asc')->orderBy('send_time',
-            'desc')->where($where)->paginate(config('system.sys_max_row'));
+            'desc')->where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
         $assign['message_list'] = $messageList;
 
         //初始化where_info

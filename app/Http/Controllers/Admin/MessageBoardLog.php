@@ -25,7 +25,7 @@ class MessageBoardLog extends Backend
         $whereValue && $where[] = ['add_time', $whereValue];
 
         $messageBoardLogList              = Model\MessageBoardLog::orderBy('add_time',
-            'desc')->where($where)->paginate(config('system.sys_max_row'));
+            'desc')->where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
         $assign['message_board_log_list'] = $messageBoardLogList;
 
         //初始化where_info

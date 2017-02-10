@@ -36,7 +36,7 @@ class AdminLog extends Backend
                 $query->where('route_name', 'like', '%' . $route_name . '%');
             }
 
-        })->paginate(config('system.sys_max_row'));
+        })->paginate(config('system.sys_max_row'))->appends(request()->all());
         foreach ($adminLogList as &$adminLog) {
             $adminLog['admin_name'] = Model\Admins::colWhere($adminLog['admin_id'])->first()['admin_name'];
         }

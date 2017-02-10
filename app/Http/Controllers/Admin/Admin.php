@@ -53,7 +53,7 @@ class Admin extends Backend
                 $query->where('is_enable', '=', (1 == $is_enable) ? 1 : 0);
             }
 
-        })->paginate(config('system.sys_max_row'));
+        })->paginate(config('system.sys_max_row'))->appends(request()->all());
 
         foreach ($adminList as &$admin) {
             foreach ($admin['group_id'] as $groupId) {

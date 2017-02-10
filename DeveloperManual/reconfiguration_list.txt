@@ -26,7 +26,7 @@ OK 成员管理管理员管理组管理Admin::AdminGroup::index
 成员管理管理员删除管理组Admin::AdminGroup::del
 成员管理管理员编辑管理组Admin::AdminGroup::edit
 OK 成员管理管理员查看管理日志Admin::AdminLog::index
-成员管理管理员删除管理日志Admin::AdminLog::del
+OK 成员管理管理员删除管理日志Admin::AdminLog::del
 成员管理会员管理会员配置Admin::Member::setting
 成员管理会员管理会员管理Admin::Member::index
 成员管理会员管理添加会员Admin::Member::add

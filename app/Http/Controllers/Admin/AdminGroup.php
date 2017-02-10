@@ -29,7 +29,7 @@ class AdminGroup extends Backend
                 $query->where('is_enable', '=', (1 == $is_enable) ? 1 : 0);
             }
 
-        })->paginate(config('system.sys_max_row'));
+        })->paginate(config('system.sys_max_row'))->appends(request()->all());
         $assign['admin_group_list'] = $adminGroupList;
 
         //初始化where_info

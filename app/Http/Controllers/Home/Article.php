@@ -143,7 +143,7 @@ class Article extends Frontend
                 $page                       = $categoryInfo['s_limit'];
                 $assign['article_list_max'] = $page;
             }
-            $articleLsit = Model\Article::where($where)->paginate($page);
+            $articleLsit = Model\Article::where($where)->paginate($page)->appends(request()->all());
 
             $assign['article_list'] = $articleLsit;
         }
@@ -232,7 +232,7 @@ class Article extends Frontend
         }
         $where['_complex'] = $complex;
 
-        $articleLsit            = Model\Article::where($where)->paginate(config('system.sys_max_row'));
+        $articleLsit = Model\Article::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
         $assign['article_list'] = $articleLsit;
 
         $request           = request();

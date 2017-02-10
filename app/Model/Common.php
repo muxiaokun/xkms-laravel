@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Common extends Model
 {
-    public $guarded = [];
+    protected $guarded = [];
 
-    public $orders = [
+    protected $orders = [
         'id' => 'desc',
     ];
 

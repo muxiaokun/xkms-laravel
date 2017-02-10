@@ -2,9 +2,6 @@
 
 namespace App\Model;
 
-
-use Carbon\Carbon;
-
 class Admins extends Common
 {
     protected $casts = [

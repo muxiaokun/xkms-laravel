@@ -10,11 +10,9 @@ class ArticleCategory extends Common
         'attribute' => 'array',
     ];
 
-    public $orders = [
-        [
-            'column'    => 'sort',
-            'direction' => 'asc',
-        ],
+    protected $orders = [
+        'column'    => 'sort',
+        'direction' => 'asc',
     ];
 
     public function getManageIdAttribute($value)

@@ -14,7 +14,7 @@ class Article extends Common
         'album'     => 'array',
     ];
 
-    public $orders = [
+    protected $orders = [
         'id'        => 'desc',
         'sort'      => 'asc',
         'update_at' => 'desc',

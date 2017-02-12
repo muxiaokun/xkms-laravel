@@ -25,7 +25,7 @@
                       method="post">
                     {{ csrf_field() }}
                     <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
-                    <input type="hidden" name="is_pwd" value="@if (Route::is('*::add'))1@else0@endif"/>
+                    <input type="hidden" name="is_pwd" value="@if (Route::is('*::add'))1 @else 0 @endif"/>
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">

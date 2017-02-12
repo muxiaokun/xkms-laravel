@@ -15,7 +15,7 @@
 <body>
 <section class="container">
     <div class="col-sm-8 col-sm-offset-2">
-        <div class="panel @if ($message">panel-info@elsepanel-danger@endif )
+        <div class="panel @if ($message">panel-info @else panel-danger @endif )
                 <div class=" panel-heading text-center
         ">
         @lang('common.system')@if ($message)@lang('common.info')@else @lang('common.error')@endif

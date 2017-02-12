@@ -200,7 +200,7 @@
                                         parent_id="{{ $article_category['parent_id'] }}"
                                         has_child="{{ $article_category['has_child'] }}">
                                         <td>
-                                        <span class="glyphicon @if (0 < $article_category['has_child'])glyphicon-plus@elseglyphicon-minus@endif mlr10"
+                                        <span class="glyphicon @if (0 < $article_category['has_child'])glyphicon-plus @else glyphicon-minus @endif mlr10"
                                               onclick="M_cate_tree(this,article_channel_cb);"></span>
                                             <input type="checkbox" name="category_list[]"
                                                    value="{{ $article_category['id'] }}"

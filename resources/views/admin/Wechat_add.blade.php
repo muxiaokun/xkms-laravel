@@ -82,11 +82,11 @@
                                 <div class="col-sm-7">
                                     <label class="radio-inline">
                                         <input type="radio" name="WECHAT_RECORD_LOG" value="1"
-                                               @if ('1' === $wechat['WECHAT_RECORD_LOG'] or '' === $wechat['WECHAT_RECORD_LOG'])checked="checked"@endif >@lang('common.open')
+                                               @if (1 === $wechat['WECHAT_RECORD_LOG'] or '' === $wechat['WECHAT_RECORD_LOG'])checked="checked"@endif >@lang('common.open')
                                     </label>
                                     <label class="radio-inline">
                                         <input type="radio" name="WECHAT_RECORD_LOG" value="0"
-                                               @if ('0' === $wechat['WECHAT_RECORD_LOG'])checked="checked"@endif >@lang('common.close')
+                                               @if (0 === $wechat['WECHAT_RECORD_LOG'])checked="checked"@endif >@lang('common.close')
                                     </label>
                                 </div>
                             </div>

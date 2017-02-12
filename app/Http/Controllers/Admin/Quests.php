@@ -48,6 +48,10 @@ class Quests extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData('add');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultAdd = Model\Quests::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.quests') . trans('common.add') . trans('common.success'),
@@ -72,6 +76,10 @@ class Quests extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData('edit');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultEdit = Model\Quests::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.quests') . trans('common.edit') . trans('common.success'),

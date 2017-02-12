@@ -80,6 +80,10 @@ class ArticleCategory extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData('add');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultAdd = Model\ArticleCategory::create($data);
             if ($resultAdd) {
                 $this->addEditAfterCommon($data, $id);
@@ -117,6 +121,10 @@ class ArticleCategory extends Backend
         $maAllowArr = Model\ArticleCategory::mFindAllow('ma');
         if (request()->isMethod('POST')) {
             $data = $this->makeData('edit');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             if (1 != session('backend_info.id')
                 && !mInArray($id, $maAllowArr)
             ) {

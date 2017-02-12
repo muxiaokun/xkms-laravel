@@ -53,6 +53,10 @@ class Region extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData('add');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultAdd = Model\Region::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.region') . trans('common.add') . trans('common.success'),
@@ -78,6 +82,10 @@ class Region extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData('edit');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultEdit = Model\Region::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.region') . trans('common.edit') . trans('common.success'),

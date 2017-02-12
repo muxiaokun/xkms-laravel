@@ -112,6 +112,10 @@ class Article extends Backend
     {
         if (request()->isMethod('POST')) {
             $data = $this->makeData('add');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'],
                 config('system.sys_article_thumb_width'),
                 config('system.sys_article_thumb_height'));
@@ -144,6 +148,10 @@ class Article extends Backend
 
         if (request()->isMethod('POST')) {
             $data = $this->makeData('edit');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'],
                 config('system.sys_article_thumb_width'),
                 C('SYS_ARTICLE_THUMB_HEIGHT'));

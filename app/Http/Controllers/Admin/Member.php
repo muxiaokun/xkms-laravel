@@ -59,6 +59,10 @@ class Member extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData('add');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultAdd = Model\Member::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.member') . trans('common.add') . trans('common.success'),
@@ -84,6 +88,10 @@ class Member extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData('edit');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultEdit = Model\Member::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.member') . trans('common.edit') . trans('common.success'),

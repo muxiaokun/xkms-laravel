@@ -54,6 +54,10 @@ class ArticleChannel extends Backend
         }
         if (request()->isMethod('POST')) {
             $data      = $this->makeData('add');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultAdd = Model\ArticleChannel::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.channel') . trans('common.add') . trans('common.success'),
@@ -94,6 +98,10 @@ class ArticleChannel extends Backend
         $maAllowArr = Model\ArticleChannel::mFindAllow('ma');
         if (request()->isMethod('POST')) {
             $data = $this->makeData('edit');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             if (1 != session('backend_info.id')
                 && !mInArray($id, $maAllowArr)
             ) {

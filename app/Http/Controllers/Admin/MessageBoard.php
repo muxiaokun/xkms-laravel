@@ -47,6 +47,10 @@ class MessageBoard extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData('add');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultAdd = Model\MessageBoard::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.messageboard') . trans('common.add') . trans('common.success'),
@@ -73,6 +77,10 @@ class MessageBoard extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData('edit');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultEdit = Model\MessageBoard::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.messageboard') . trans('common.edit') . trans('common.success'),

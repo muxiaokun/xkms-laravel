@@ -61,6 +61,10 @@ class Assess extends FrontendMember
 
         if (request()->isMethod('POST')) {
             $data = $this->makeData('add');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             //提交时检测类型下可以被评分的组和组员
             $where = [];
             if (isset($data['a_id']) && isset($data['grade_id']) && isset($data['re_grade_id'])) {

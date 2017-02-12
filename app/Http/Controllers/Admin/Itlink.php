@@ -57,6 +57,10 @@ class Itlink extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData('add');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultAdd = Model\Itlink::create($data);
             if ($resultAdd) {
                 $this->addEditAfterCommon($data, $id);
@@ -83,6 +87,10 @@ class Itlink extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData('edit');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultEdit = Model\Itlink::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 $this->addEditAfterCommon($data, $id);

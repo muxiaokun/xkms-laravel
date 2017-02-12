@@ -53,6 +53,10 @@ class Navigation extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData('add');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultAdd = Model\Navigation::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.navigation') . trans('common.add') . trans('common.success'),
@@ -79,6 +83,10 @@ class Navigation extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData('edit');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultEdit = Model\Navigation::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.navigation') . trans('common.edit') . trans('common.success'),

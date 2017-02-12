@@ -47,6 +47,10 @@ class Recruit extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData('add');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultAdd = Model\Recruit::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.recruit') . trans('common.add') . trans('common.success'),
@@ -71,6 +75,10 @@ class Recruit extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData('edit');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultEdit = Model\Recruit::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.recruit') . trans('common.edit') . trans('common.success'),

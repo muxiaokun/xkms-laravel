@@ -63,6 +63,10 @@ class MessageBoard extends Frontend
                     route('Home::MessageBoard::index', ['id' => $id]));
             }
             $data = $this->makeData('add');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultAdd = Model\MessageBoard::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.send') . trans('common.success'),

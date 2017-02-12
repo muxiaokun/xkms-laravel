@@ -58,6 +58,10 @@ class Assess extends Backend
     {
         if (request()->isMethod('POST')) {
             $data      = $this->makeData('add');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultAdd = Model\Assess::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.assess') . trans('common.add') . trans('common.success'),
@@ -83,6 +87,10 @@ class Assess extends Backend
 
         if (request()->isMethod('POST')) {
             $data       = $this->makeData('edit');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultEdit = Model\Assess::colWhere($id)->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.assess') . trans('common.edit') . trans('common.success'),

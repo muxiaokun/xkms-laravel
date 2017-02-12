@@ -137,7 +137,12 @@ class Admin extends Backend
                 $data = $root_data;
             }
 
-            $resultEdit = Model\Admins::colWhere($id)->first()->update($data);
+            if (is_array($id)) {
+                $resultEdit = Model\Admins::colWhere($id)->update($data);
+            } else {
+                $resultEdit = Model\Admins::colWhere($id)->first()->update($data);
+            }
+
             if ($resultEdit) {
                 return $this->success(trans('common.admin') . trans('common.edit') . trans('common.success'),
                     route('Admin::Admin::index'));
@@ -209,7 +214,7 @@ class Admin extends Backend
         switch ($field) {
             case 'admin_name':
                 $validator = Validator::make($data, [
-                    'admin_name' => 'admin_exist|user_name',
+                    'admin_name' => 'user_name|admin_exist',
                 ]);
                 break;
             case 'password':

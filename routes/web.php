@@ -146,9 +146,10 @@ Route::group([
         'prefix' => 'AdminGroup',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'AdminGroup@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'AdminGroup@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'AdminGroup@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'AdminGroup@del']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'AdminGroup@add']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'AdminGroup@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'AdminGroup@del']);
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'AdminGroup@ajax_api']);
     });
     Route::group([
         'as'     => 'AdminLog::',

@@ -18,7 +18,7 @@ class AdminGroups extends Common
 
     public function setManageIdAttribute($value)
     {
-        return $this->transfixionEncode($value);
+        $this->attributes['manage_id'] = $this->transfixionEncode($value);
     }
 
     //查找出组权限
@@ -43,24 +43,11 @@ class AdminGroups extends Common
     //返回有权管理的组
     public function scopeMFindAllow($query)
     {
-        $where       = [
-            'manage_id' => session('backend_info.id'),
-        ];
-        $manageGroup = $query->select('id')->where($where)->get();
-        $mFindAllow  = [];
-        foreach ($manageGroup as $group) {
-            $mFindAllow[] = $group['id'];
-        }
-        //不归组的任何人都可以管理
-        $mFindAllow[] = 0;
-        return $mFindAllow;
-    }
-
-    //检查和格式化数据
-    public function scopeMEncodeData($query, $data)
-    {
-        if (isset($data['id']) && (1 == $data['id'] || (is_array($data['id']) && in_array(1, $data['id'])))) {
-            unset($data['privilege']);
-        }
+        $manageGroup = $query->select('id')
+            ->where('manage_id', 'like', '%|' . session('backend_info.id') . '|%')
+            ->pluck('id')
+            ->push(0)
+            ->toArray();
+        return $manageGroup;
     }
 }

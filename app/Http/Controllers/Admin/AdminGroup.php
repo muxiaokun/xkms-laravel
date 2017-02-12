@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
 use App\Model;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
 
 class AdminGroup extends Backend
 {
@@ -57,7 +59,11 @@ class AdminGroup extends Backend
     public function add()
     {
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData('add');
+            $data = $this->makeData('add');
+            if (!is_array($data)) {
+                return $data;
+            }
+
             $resultAdd = Model\AdminGroups::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.management') . trans('common.group') . trans('common.add') . trans('common.success'),
@@ -83,8 +89,17 @@ class AdminGroup extends Backend
         }
 
         if (request()->isMethod('POST')) {
-            $data       = $this->makeData('edit');
-            $resultEdit = Model\AdminGroups::colWhere($id)->first()->update($data);
+            $data = $this->makeData('edit');
+            if (!is_array($data)) {
+                return $data;
+            }
+
+            if (is_array($id)) {
+                $resultEdit = Model\AdminGroups::colWhere($id)->update($data);
+            } else {
+                $resultEdit = Model\AdminGroups::colWhere($id)->first()->update($data);
+            }
+
             if ($resultEdit) {
                 return $this->success(trans('common.management') . trans('common.group') . trans('common.edit') . trans('common.success'),
                     route('Admin::AdminGroup::index'));
@@ -116,19 +131,20 @@ class AdminGroup extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::AdminGroup::index'));
         }
 
-        if (1 != session('backend_info.id')) {
-            //非root需要权限
-            $mFindAllow = Model\AdminGroups::mFindAllow();
-        }
-        if ($id == 1 || (!in_array($id, $mFindAllow) && count(0 < $mFindAllow))) {
-            return $this->error(trans('common.id') . trans('common.not') . trans('common.del'),
-                route('Admin::AdminGroup::index'));
+        if (1 == $id || (is_array($id) && in_array(1, $id))) {
+            return $this->error('root' . trans('common.not') . trans('common.del'), route('Admin::Admin::index'));
         }
 
-        $resultDel = false;
-        if (1 != $id || (is_array($id) && !in_array(1, $id))) {
-            $resultDel = Model\AdminGroups::destroy($id);
+        if (1 == session('backend_info.id')) {
+            //非root需要权限
+            $mFindAllow = Model\AdminGroups::mFindAllow();
+            if (!mInArray($id, $mFindAllow) && 0 < count($mFindAllow)) {
+                return $this->error(trans('common.id') . trans('common.not') . trans('common.del'),
+                    route('Admin::AdminGroup::index'));
+            }
         }
+
+        $resultDel = Model\AdminGroups::destroy($id);
         if ($resultDel) {
             //删除成功后 删除管理员与组的关系
             Model\Admins::colWhere($id, 'group_id')->delete();
@@ -146,50 +162,19 @@ class AdminGroup extends Backend
         $result = ['status' => true, 'info' => ''];
         switch ($field) {
             case 'name':
-                //不能为空
-                if ('' == $data['name']) {
-                    $result['info'] = trans('common.admin') . trans('common.group') . trans('common.name') . trans('common.not') . trans('common.empty');
-                    break;
-                }
-                //检查用户名规则
-                if ('utf-8' != config('DEFAULT_CHARSET')) {
-                    $data['name'] = iconv(config('DEFAULT_CHARSET'), 'utf-8', $data['name']);
-                }
-
-                preg_match('/([^\x80-\xffa-zA-Z0-9\s]*)/', $data['name'], $matches);
-                if ('' != $matches[1]) {
-                    $result['info'] = trans('common.name_format_error', ['string' => $matches[1]]);
-                    break;
-                }
-                //检查管理组名是否存在
-                $adminInfo = Model\AdminGroups::where([
-                    'name' => $data['name'],
-                    'id'   => ['neq', $data['id']],
-                ])->first()->toArray();
-                if ($adminInfo) {
-                    $result['info'] = trans('admin') . trans('common.group') . trans('common.name') . trans('common.exists');
-                    break;
-                }
+                $validator = Validator::make($data, [
+                    'name' => 'user_name|admin_group_exist',
+                ]);
                 break;
             case 'privilege':
-                //对比权限
-                $privilege      = $this->getPrivilege('Admin', session('backend_info.privilege'));
-                $checkPrivilege = [];
-                foreach ($privilege as $controllerCn => $privs) {
-                    foreach ($privs as $controllerName => $controller) {
-                        foreach ($controller as $actionName => $action) {
-                            $checkPrivilege[] = $controllerName . '_' . $actionName;
-
-                        }
-                    }
-                }
-                foreach ($data as $priv) {
-                    if (!in_array($priv, $checkPrivilege)) {
-                        $result['info'] = trans('common.privilege') . trans('common.submit') . trans('common.error');
-                        break;
-                    }
-                }
+                $validator = Validator::make($data, [
+                    'privilege' => 'privilege:backend_info',
+                ]);
                 break;
+        }
+
+        if (isset($validator) && $validator->fails()) {
+            $result['info'] = implode('', $validator->errors()->all());
         }
 
         if ($result['info']) {
@@ -206,9 +191,15 @@ class AdminGroup extends Backend
         $result = ['status' => true, 'info' => []];
         switch ($field) {
             case 'manage_id':
-                isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                isset($data['keyword']) && $where['admin_name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminUserList = Model\Admins::where($where)->get();
+                $adminUserList = Model\Admins::where(function ($query) use ($data) {
+                    if (isset($data['inserted'])) {
+                        $query->whereNotIn('id', $data['inserted']);
+                    }
+
+                    if (isset($data['keyword'])) {
+                        $query->where('admin_name', 'like', '%' . $data['keyword'] . '%');
+                    }
+                })->get();
                 foreach ($adminUserList as $adminUser) {
                     $result['info'][] = ['value' => $adminUser['id'], 'html' => $adminUser['admin_name']];
                 }
@@ -275,5 +266,6 @@ class AdminGroup extends Backend
     private function addEditCommon()
     {
         $assign['privilege'] = $this->getPrivilege('Admin', session('backend_info.privilege'));
+        View::share($assign);
     }
 }

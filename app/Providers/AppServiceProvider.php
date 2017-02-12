@@ -18,6 +18,7 @@ class AppServiceProvider extends ServiceProvider
         Validator::extendImplicit('password', 'App\Http\Validators\Common@password');
         Validator::extend('privilege', 'App\Http\Validators\Common@privilege');
         Validator::extend('admin_exist', 'App\Http\Validators\Admin@admin_exist');
+        Validator::extend('admin_group_exist', 'App\Http\Validators\AdminGroup@admin_group_exist');
     }
 
     /**

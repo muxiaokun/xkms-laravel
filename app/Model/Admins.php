@@ -25,7 +25,6 @@ class Admins extends Common
 
     public function setGroupIdAttribute($value)
     {
-        sort($value);
         $this->attributes['group_id'] = $this->transfixionEncode($value);
     }
 }

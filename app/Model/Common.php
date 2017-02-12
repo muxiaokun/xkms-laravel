@@ -111,7 +111,7 @@ class Common extends Model
      */
     public function transfixionEncode($value, $useKey = false)
     {
-        $collect = collect($value);
+        $collect = collect($value)->filter()->sort();
 
         if ($useKey) {
             $useKeyCollect = collect();

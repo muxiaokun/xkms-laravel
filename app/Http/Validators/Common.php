@@ -59,4 +59,20 @@ class Common
         }
         return true;
     }
+
+
+    /**
+     * @param $attribute
+     * @param $value
+     * @param $parameters
+     * @param $validator
+     * @return bool
+     * 验证手机格式
+     */
+    public function phone($attribute, $value, $parameters, $validator)
+    {
+        preg_match('/^(1\d{10})$/', $value, $matches);
+        return ($matches[1] == $value) ? true : false;
+    }
+
 }

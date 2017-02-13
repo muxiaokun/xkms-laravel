@@ -5,6 +5,19 @@ namespace App\Model;
 
 class Member extends Common
 {
+    protected $casts = [
+        'privilege' => 'array',
+    ];
+
+    public function setMemberPwdAttribute($value)
+    {
+        if ($value) {
+            $randStr                         = mRandStr('pr');
+            $password                        = md5($value . $randStr);
+            $this->attributes['member_pwd']  = $password;
+            $this->attributes['member_rand'] = $randStr;
+        }
+    }
 
     public function getGroupIdAttribute($value)
     {
@@ -44,32 +57,5 @@ class Member extends Common
         } else {
             return false;
         }
-    }
-
-    public function scopeMEncodeData($query, $data)
-    {
-        if ($data['member_pwd']) {
-            $randStr             = mRandStr('pr');
-            $data['member_pwd']  = md5($data['member_pwd'] . $randStr);
-            $data['member_rand'] = $randStr;
-        } else {
-            unset($data['member_pwd']);
-            unset($data['member_rand']);
-        }
-        !isset($data['group_id']) && $data['group_id'] = [1];
-        //组合权限
-        isset($data['group_id']) && $data['group_id'] = '|' . implode('|', $data['group_id']) . '|';
-        isset($data['privilege']) && $data['privilege'] = implode('|', $data['privilege']);
-        isset($data['ext_info']) && $data['ext_info'] = serialize($data['ext_info']);
-    }
-
-    public function scopeMDecodeData($query, $data)
-    {
-        unset($data['member_pwd']);
-        unset($data['member_rand']);
-        isset($data['group_id']) && $data['group_id'] = explode('|',
-            substr($data['group_id'], 1, strlen($data['group_id']) - 2));
-        isset($data['privilege']) && $data['privilege'] = explode('|', $data['privilege']);
-        isset($data['ext_info']) && $data['ext_info'] = unserialize($data['ext_info']);
     }
 }

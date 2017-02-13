@@ -35,10 +35,10 @@
                                 {{ $member['group_name'] }}
                             </td>
                             <td>
-                                {{ mDate($member['register_time']) }}
+                                {{ $member['created_at'] }}
                             </td>
                             <td>
-                                {{ mDate($member['last_time']) }}
+                                {{ $member['last_time'] }}
                             </td>
                             <td>
                                 {{ $member['aip'] }}

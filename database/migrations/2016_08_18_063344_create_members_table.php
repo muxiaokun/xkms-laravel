@@ -25,7 +25,7 @@ class CreateMembersTable extends Migration
             $table->longText('group_id')->nullable()->comment('NULL不属于任何组');
             $table->timestamp('last_time')->nullable()->comment('活跃时间');
             $table->ipAddress('login_ip')->nullable()->comment('活跃IP');
-            $table->tinyInteger('login_num')->comment('尝试登录数');
+            $table->tinyInteger('login_num')->nullable()->comment('尝试登录数');
             $table->timestamp('lock_time')->nullable()->comment('登录锁定时间');
             $table->tinyInteger('is_enable')->comment('是否启用');
             $table->string('email', 64)->comment('电邮');

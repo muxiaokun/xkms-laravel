@@ -5,33 +5,47 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
 use App\Model;
+use Illuminate\Support\Facades\Validator;
 
 class Member extends Backend
 {
     //列表
     public function index()
     {
-        //建立where
-        $where      = [];
-        $whereValue = request('member_name');
-        $whereValue && $where['member_name'] = ['like', '%' . $whereValue . '%'];
-        $whereValue = request('group_id');
-        $whereValue && $where['group_id'] = Model\MemberGroup::where('name', 'like',
-            '%' . $whereValue . '%')->first()['id'];
-        $whereValue = mMktimeRange('register_time');
-        $whereValue && $where[] = ['register_time', $whereValue];
-        $whereValue = mMktimeRange('last_time');
-        $whereValue && $where[] = ['last_time', $whereValue];
 
-        $memberList = Model\Member::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
-        foreach ($memberList as &$member) {
-            foreach ($member['group_id'] as $groupId) {
-                $groupName = Model\MemberGroup::colWhere($groupId)->first()['name'];
-                isset($member['group_name']) && $member['group_name'] .= " | ";
-                $member['group_name'] .= $groupName;
+        $memberList              = Model\Member::where(function ($query) {
+            $member_name = request('member_name');
+            if ($member_name) {
+                $query->where('member_name', 'like', '%' . $member_name . '%');
             }
-            !isset($member['group_name']) && $member['group_name'] = trans('common.empty');
-            !isset($member['add_time']) && $member['add_time'] = trans('common.system') . trans('common.add');
+
+            $group_id = request('group_id');
+            if ($group_id) {
+                $search_ids = Model\AdminGroup::where('name', 'like', '%' . $group_id . '%')->pluck('id');
+                //搜索结果为空时 添加错误条件
+                if ($search_ids->isEmpty()) {
+                    $search_ids->push(-1);
+                }
+                $query->transfixionWhere('group_id', $search_ids);
+            }
+
+            $created_at = mMktimeRange('created_at');
+            if ($created_at) {
+                $query->timeWhere('created_at', $created_at);
+            }
+
+            $last_time = mMktimeRange('last_time');
+            if ($last_time) {
+                $query->timeWhere('last_time', $last_time);
+            }
+
+        })->paginate(config('system.sys_max_row'))->appends(request()->all());
+        foreach ($memberList as &$member) {
+            if ($member['group_id']->isEmpty()) {
+                $member['group_name'] = trans('common.empty');
+            } else {
+                Model\MemberGroup::colWhere($member['group_id']->toArray())->get()->pluck('name');
+            }
         }
         $assign['member_list'] = $memberList;
 
@@ -39,7 +53,7 @@ class Member extends Backend
         $whereInfo                  = [];
         $whereInfo['member_name']   = ['type' => 'input', 'name' => trans('common.member') . trans('common.name')];
         $whereInfo['group_id']      = ['type' => 'input', 'name' => trans('common.group') . trans('common.name')];
-        $whereInfo['register_time'] = ['type' => 'time', 'name' => trans('common.register') . trans('common.time')];
+        $whereInfo['created_at'] = ['type' => 'time', 'name' => trans('common.register') . trans('common.time')];
         $whereInfo['last_time']     = ['type' => 'time', 'name' => trans('common.login') . trans('common.time')];
         $assign['where_info']       = $whereInfo;
 
@@ -128,12 +142,6 @@ class Member extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Member::index'));
         }
 
-        //不能删除root用户
-        if ($id == 1) {
-            return $this->error(trans('common.id') . trans('common.not') . trans('common.del'),
-                route('Admin::Member::index'));
-        }
-
         $resultDel = Model\Member::destroy($id);
         if ($resultDel) {
             return $this->success(trans('common.member') . trans('common.del') . trans('common.success'),
@@ -170,75 +178,34 @@ class Member extends Backend
         $result = ['status' => true, 'info' => ''];
         switch ($field) {
             case 'member_name':
-                //不能为空
-                if ('' == $data['member_name']) {
-                    $result['info'] = trans('common.member') . trans('common.name') . trans('common.not') . trans('common.empty');
-                    break;
-                }
-                //检查用户名规则
-                if ('utf-8' != config('DEFAULT_CHARSET')) {
-                    $data['member_name'] = iconv(config('DEFAULT_CHARSET'), 'utf-8', $data['member_name']);
-                }
-
-                preg_match('/([^\x80-\xffa-zA-Z0-9\s]*)/', $data['member_name'], $matches);
-                if ('' != $matches[1]) {
-                    $result['info'] = trans('common.name_format_error', ['string' => $matches[1]]);
-                    break;
-                }
-                //检查用户名是否存在
-                $memberInfo = Model\Member::where([
-                    'member_name' => $data['member_name'],
-                    'id'          => ['neq', $data['id']],
-                ])->first()->toArray();
-                if ($memberInfo) {
-                    $result['info'] = trans('member') . trans('common.name') . trans('common.exists');
-                    break;
-                }
+                $validator = Validator::make($data, [
+                    'member_name' => 'user_name|member_exist',
+                ]);
                 break;
             case 'password':
-                if ($data['is_pwd'] || '' != $data['password']) {
-                    //不能为空
-                    if ('' == $data['password']) {
-                        $result['info'] = trans('common.pass') . trans('common.not') . trans('common.empty');
-                        break;
-                    }
-                    //密码长度不能小于6
-                    if (6 > strlen($data['password'])) {
-                        $result['info'] = trans('common.pass_len_error');
-                        break;
-                    }
-                }
+                $validator = Validator::make($data, [
+                    'password' => 'password:' . $data['is_pwd'],
+                ]);
                 break;
-            case 'password_again':
-                if ($data['is_pwd'] || '' != $data['password'] || '' != $data['password_again']) {
-                    //检测再一次输入的密码是否一致
-                    if ($data['password'] != $data['password_again']) {
-                        $result['info'] = trans('common.password_again_error');
-                        break;
-                    }
-                    //不能为空
-                    if ('' == $data['password_again']) {
-                        $result['info'] = trans('common.pass') . trans('common.not') . trans('common.empty');
-                        break;
-                    }
-                }
+            case 'password_confirmation':
+                $validator = Validator::make($data, [
+                    'password' => 'confirmed',
+                ]);
                 break;
             case 'email':
-                //检查邮箱名规则
-                preg_match('/^(\w+@[\w+\.]+\w+)$/', $data['email'], $matches);
-                if ('' != $data['email'] && $matches[1] != $data['email']) {
-                    $result['info'] = trans('common.email') . trans('common.format') . trans('common.error');
-                    break;
-                }
+                $validator = Validator::make($data, [
+                    'email' => 'email',
+                ]);
                 break;
             case 'phone':
-                //检查手机号规则
-                preg_match('/^(1\d{10})$/', $data['phone'], $matches);
-                if ('' != $data['phone'] && $matches[1] != $data['phone']) {
-                    $result['info'] = trans('common.phone') . trans('common.format') . trans('common.error');
-                    break;
-                }
+                $validator = Validator::make($data, [
+                    'phone' => 'phone',
+                ]);
                 break;
+        }
+
+        if (isset($validator) && $validator->fails()) {
+            $result['info'] = implode('', $validator->errors()->all());
         }
 
         if ($result['info']) {

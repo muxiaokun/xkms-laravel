@@ -27,10 +27,10 @@ OK 成员管理管理员编辑管理组Admin::AdminGroup::edit
 OK 成员管理管理员查看管理日志Admin::AdminLog::index
 OK 成员管理管理员删除管理日志Admin::AdminLog::del
 OK 成员管理会员管理会员配置Admin::Member::setting
-成员管理会员管理会员管理Admin::Member::index
-成员管理会员管理添加会员Admin::Member::add
-成员管理会员管理删除会员Admin::Member::del
-成员管理会员管理编辑会员Admin::Member::edit
+OK 成员管理会员管理会员管理Admin::Member::index
+OK 成员管理会员管理添加会员Admin::Member::add
+OK 成员管理会员管理删除会员Admin::Member::del
+OK 成员管理会员管理编辑会员Admin::Member::edit
 成员管理会员管理会员组管理Admin::MemberGroup::index
 成员管理会员管理添加会员组Admin::MemberGroup::add
 成员管理会员管理删除会员组Admin::MemberGroup::del

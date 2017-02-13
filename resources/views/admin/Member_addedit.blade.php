@@ -58,7 +58,7 @@
                                            placeholder="@lang('common.again')@lang('common.input')@lang('common.pass')"
                                            name="password_again"/>
                                     @if ($edit_info)
-                                        <span class="help-block">@lang('common.not_input_pass')</span>
+                                        <span class="help-block">@lang('backend.not_input_pass')</span>
                                     @endif
                                 </div>
                             </div>

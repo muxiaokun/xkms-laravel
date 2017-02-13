@@ -81,7 +81,11 @@ class MessageBoard extends Backend
                 return $data;
             }
 
-            $resultEdit = Model\MessageBoard::colWhere($id)->first()->update($data);
+            $resultEdit = false;
+            Model\MessageBoard::colWhere($id)->get()->each(function ($item, $key) use ($data, &$resultEdit) {
+                $resultEdit = $item->update($data);
+                return $resultEdit;
+            });
             if ($resultEdit) {
                 return $this->success(trans('common.messageboard') . trans('common.edit') . trans('common.success'),
                     route('Admin::MessageBoard::index'));

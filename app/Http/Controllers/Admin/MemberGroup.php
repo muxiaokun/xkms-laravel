@@ -82,7 +82,11 @@ class MemberGroup extends Backend
                 return $data;
             }
 
-            $resultEdit = Model\MemberGroup::colWhere($id)->first()->update($data);
+            $resultEdit = false;
+            Model\MemberGroup::colWhere($id)->get()->each(function ($item, $key) use ($data, &$resultEdit) {
+                $resultEdit = $item->update($data);
+                return $resultEdit;
+            });
             if ($resultEdit) {
                 return $this->success(trans('common.member') . trans('common.group') . trans('common.edit') . trans('common.success'),
                     route('Admin::MemberGroup::index'));

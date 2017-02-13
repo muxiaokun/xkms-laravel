@@ -132,7 +132,12 @@ class ArticleCategory extends Backend
                 unset($data['manage_group_id']);
                 unset($data['access_group_id']);
             }
-            $resultEdit = Model\ArticleCategory::colWhere($id)->first()->update($data);
+
+            $resultEdit = false;
+            Model\ArticleCategory::colWhere($id)->get()->each(function ($item, $key) use ($data, &$resultEdit) {
+                $resultEdit = $item->update($data);
+                return $resultEdit;
+            });
             if ($resultEdit) {
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.article') . trans('common.category') . trans('common.edit') . trans('common.success'),
@@ -151,11 +156,11 @@ class ArticleCategory extends Backend
         //如果有管理权限进行进一步数据处理
         if (mInArray($id, $maAllowArr)) {
             foreach ($editInfo['manage_id'] as &$manageId) {
-                $adminName = Model\Admins::colWhere($manageId)->first()['admin_name'];
+                $adminName = Model\Admin::colWhere($manageId)->first()['admin_name'];
                 $manageId  = ['value' => $manageId, 'html' => $adminName];
             }
             foreach ($editInfo['manage_group_id'] as &$manageGroupId) {
-                $adminGroupName = Model\AdminGroups::colWhere($manageGroupId)->first()['name'];
+                $adminGroupName = Model\AdminGroup::colWhere($manageGroupId)->first()['name'];
                 $manageGroupId  = ['value' => $manageGroupId, 'html' => $adminGroupName];
             }
             foreach ($editInfo['access_group_id'] as &$accessGroupId) {
@@ -235,7 +240,7 @@ class ArticleCategory extends Backend
             case 'manage_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['admin_name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminUserList = Model\Admins::where($where)->get();
+                $adminUserList = Model\Admin::where($where)->get();
                 foreach ($adminUserList as $adminUser) {
                     $result['info'][] = ['value' => $adminUser['id'], 'html' => $adminUser['admin_name']];
                 }
@@ -243,7 +248,7 @@ class ArticleCategory extends Backend
             case 'manage_group_id':
                 isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
                 isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminGroupList = Model\AdminGroups::where($where)->get();
+                $adminGroupList = Model\AdminGroup::where($where)->get();
                 foreach ($adminGroupList as $adminGroup) {
                     $result['info'][] = ['value' => $adminGroup['id'], 'html' => $adminGroup['name']];
                 }

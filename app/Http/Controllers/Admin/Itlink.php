@@ -91,7 +91,11 @@ class Itlink extends Backend
                 return $data;
             }
 
-            $resultEdit = Model\Itlink::colWhere($id)->first()->update($data);
+            $resultEdit = false;
+            Model\Itlink::colWhere($id)->get()->each(function ($item, $key) use ($data, &$resultEdit) {
+                $resultEdit = $item->update($data);
+                return $resultEdit;
+            });
             if ($resultEdit) {
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.itlink') . trans('common.edit') . trans('common.success'),

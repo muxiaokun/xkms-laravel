@@ -17,7 +17,7 @@ class Comment extends Backend
         $whereValue && $where[] = [
             'audit_id',
             'in',
-            Model\Admins::where(['admin_name' => ['like', '%' . $whereValue . '%']])->select(['id'])->pluck('id'),
+            Model\Admin::where(['admin_name' => ['like', '%' . $whereValue . '%']])->select(['id'])->pluck('id'),
         ];
         $whereValue = request('send_id');
         $whereValue && $where[] = [
@@ -86,9 +86,13 @@ class Comment extends Backend
         if (!$id) {
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Comment::index'));
         }
+        $data = ['audit_id' => session('backend_info.id')];
 
-        $data       = ['audit_id' => session('backend_info.id')];
-        $resultEdit = Model\Comment::colWhere($id)->first()->update($data);
+        $resultEdit = false;
+        Model\Comment::colWhere($id)->get()->each(function ($item, $key) use ($data, &$resultEdit) {
+            $resultEdit = $item->update($data);
+            return $resultEdit;
+        });
         if ($resultEdit) {
             return $this->success(trans('common.comment') . trans('common.audit') . trans('common.success'),
                 route('Admin::Comment::index'));

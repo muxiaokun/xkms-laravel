@@ -155,7 +155,12 @@ class Article extends Backend
             isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'],
                 config('system.sys_article_thumb_width'),
                 C('SYS_ARTICLE_THUMB_HEIGHT'));
-            $resultEdit = Model\Article::colWhere($id)->first()->update($data);
+
+            $resultEdit = false;
+            Model\Article::colWhere($id)->get()->each(function ($item, $key) use ($data, &$resultEdit) {
+                $resultEdit = $item->update($data);
+                return $resultEdit;
+            });
             if ($resultEdit) {
                 $data['new_thumb'] = $thumbFile;
                 $this->addEditAfterCommon($data, $id);

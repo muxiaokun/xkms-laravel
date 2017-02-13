@@ -79,7 +79,11 @@ class Recruit extends Backend
                 return $data;
             }
 
-            $resultEdit = Model\Recruit::colWhere($id)->first()->update($data);
+            $resultEdit = false;
+            Model\Recruit::colWhere($id)->get()->each(function ($item, $key) use ($data, &$resultEdit) {
+                $resultEdit = $item->update($data);
+                return $resultEdit;
+            });
             if ($resultEdit) {
                 return $this->success(trans('common.recruit') . trans('common.edit') . trans('common.success'),
                     route('Admin::Recruit::index'));

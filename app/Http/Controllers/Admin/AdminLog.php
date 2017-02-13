@@ -13,7 +13,7 @@ class AdminLog extends Backend
     {
 
         //初始化翻页 和 列表数据
-        $adminLogList            = Model\AdminLogs::where(function ($query) {
+        $adminLogList = Model\AdminLog::where(function ($query) {
             $last_time = mMktimeRange('created_at');
             if ($last_time) {
                 $query->timeWhere('created_at', $last_time);
@@ -21,7 +21,7 @@ class AdminLog extends Backend
 
             $admin_id = request('admin_id');
             if ($admin_id) {
-                $ids = Model\Admins::where([
+                $ids = Model\Admin::where([
                     [
                         'admin_name',
                         'like',
@@ -38,7 +38,7 @@ class AdminLog extends Backend
 
         })->paginate(config('system.sys_max_row'))->appends(request()->all());
         foreach ($adminLogList as &$adminLog) {
-            $adminLog['admin_name'] = Model\Admins::colWhere($adminLog['admin_id'])->first()['admin_name'];
+            $adminLog['admin_name'] = Model\Admin::colWhere($adminLog['admin_id'])->first()['admin_name'];
         }
         $assign['admin_log_list'] = $adminLogList;
 
@@ -69,7 +69,7 @@ class AdminLog extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::AdminLog::index'));
         }
 
-        $resultDel = Model\AdminLogs::destroy($id);
+        $resultDel = Model\AdminLog::destroy($id);
         if ($resultDel) {
             return $this->success(trans('common.log') . trans('common.del') . trans('common.success'),
                 route('Admin::AdminLog::index'));
@@ -86,7 +86,7 @@ class AdminLog extends Backend
             return $this->error('only ROOT privilege', route('Admin::AdminLog::index'));
         }
 
-        $resultDel = Model\AdminLogs::truncate();
+        $resultDel = Model\AdminLog::truncate();
         if ($resultDel) {
             return $this->success(trans('common.log') . trans('common.del') . trans('common.success'),
                 route('Admin::AdminLog::index'));

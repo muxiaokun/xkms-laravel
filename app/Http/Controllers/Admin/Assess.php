@@ -91,7 +91,11 @@ class Assess extends Backend
                 return $data;
             }
 
-            $resultEdit = Model\Assess::colWhere($id)->first()->update($data);
+            $resultEdit = false;
+            Model\Assess::colWhere($id)->get()->each(function ($item, $key) use ($data, &$resultEdit) {
+                $resultEdit = $item->update($data);
+                return $resultEdit;
+            });
             if ($resultEdit) {
                 return $this->success(trans('common.assess') . trans('common.edit') . trans('common.success'),
                     route('Admin::Assess::index'));

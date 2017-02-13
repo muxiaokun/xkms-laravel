@@ -19,7 +19,7 @@ class MessageBoardLog extends Backend
         $whereValue && $where[] = [
             'audit_id',
             'in',
-            Model\Admins::where(['admin_name' => ['like', '%' . $whereValue . '%']])->select(['id'])->pluck('id'),
+            Model\Admin::where(['admin_name' => ['like', '%' . $whereValue . '%']])->select(['id'])->pluck('id'),
         ];
         $whereValue = mMktimeRange('add_time');
         $whereValue && $where[] = ['add_time', $whereValue];
@@ -60,7 +60,12 @@ class MessageBoardLog extends Backend
                 'audit_id'   => session('backend_info.id'),
                 'reply_info' => request('reply_info'),
             ];
-            $resultEdit = Model\MessageBoardLog::colWhere($id)->first()->update($data);
+
+            $resultEdit = false;
+            Model\MessageBoardLog::colWhere($id)->get()->each(function ($item, $key) use ($data, &$resultEdit) {
+                $resultEdit = $item->update($data);
+                return $resultEdit;
+            });
             if ($resultEdit) {
                 return $this->success(trans('common.audit') . trans('common.success'),
                     route('Admin::MessageBoardLog::index'));

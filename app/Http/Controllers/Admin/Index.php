@@ -182,7 +182,7 @@ class Index extends Backend
     {
         if (request()->isMethod('POST')) {
             $curPassword = request('cur_password');
-            $adminInfo   = Model\Admins::authorized(session('backend_info.admin_name'), $curPassword);
+            $adminInfo = Model\Admin::authorized(session('backend_info.admin_name'), $curPassword);
             if (!$adminInfo) {
                 return $this->error(trans('common.current') . trans('common.pass') . trans('common.error'),
                     route('Admin::Index::editMyPass'));
@@ -208,7 +208,7 @@ class Index extends Backend
 
             $data               = [];
             $data['admin_pwd'] = $password;
-            $resultEdit = Model\Admins::colWhere(session('backend_info.id'))->first()->update($data);
+            $resultEdit = Model\Admin::colWhere(session('backend_info.id'))->first()->update($data);
             if ($resultEdit) {
                 return $this->success(trans('common.edit') . trans('common.pass') . trans('common.success'),
                     route('Admin::Index::editMyPass'));
@@ -238,7 +238,7 @@ class Index extends Backend
 
         if (0 === $exitCode) {
             //写入日志
-            Model\AdminLogs::record(session('backend_info.id'));
+            Model\AdminLog::record(session('backend_info.id'));
             return $this->success($messageStr . trans('common.clean') . trans('common.success'),
                 route('Admin::Index::main'));
         } else {
@@ -260,7 +260,7 @@ class Index extends Backend
         $cleanResult = $filesystem->delete($files);
         if ($cleanResult) {
             //写入日志
-            Model\AdminLogs::record(session('backend_info.id'));
+            Model\AdminLog::record(session('backend_info.id'));
             return $this->success(trans('common.clean') . trans('common.log') . trans('common.success'),
                 route('Admin::Index::main'));
         } else {

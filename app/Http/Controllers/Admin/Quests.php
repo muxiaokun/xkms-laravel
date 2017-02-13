@@ -80,7 +80,11 @@ class Quests extends Backend
                 return $data;
             }
 
-            $resultEdit = Model\Quests::colWhere($id)->first()->update($data);
+            $resultEdit = false;
+            Model\Quests::colWhere($id)->get()->each(function ($item, $key) use ($data, &$resultEdit) {
+                $resultEdit = $item->update($data);
+                return $resultEdit;
+            });
             if ($resultEdit) {
                 return $this->success(trans('common.quests') . trans('common.edit') . trans('common.success'),
                     route('Admin::Quests::index'));

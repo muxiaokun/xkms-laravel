@@ -86,7 +86,11 @@ class Region extends Backend
                 return $data;
             }
 
-            $resultEdit = Model\Region::colWhere($id)->first()->update($data);
+            $resultEdit = false;
+            Model\Region::colWhere($id)->get()->each(function ($item, $key) use ($data, &$resultEdit) {
+                $resultEdit = $item->update($data);
+                return $resultEdit;
+            });
             if ($resultEdit) {
                 return $this->success(trans('common.region') . trans('common.edit') . trans('common.success'),
                     route('Admin::Region::index'));

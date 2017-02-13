@@ -99,18 +99,4 @@ class ManageUpload extends Backend
         return $this->success(trans('common.clear') . trans('common.file') . trans('common.success'),
             route('Admin::ManageUpload::index'));
     }
-
-    //上传接口实现
-    public function UploadFile()
-    {
-        $CommonManageUpload = new CommonManageUpload();
-        return $CommonManageUpload->UploadFile();
-    }
-
-    //文件管理接口实现
-    public function ManageFile()
-    {
-        $CommonManageUpload = new CommonManageUpload();
-        return $CommonManageUpload->ManageFile();
-    }
 }

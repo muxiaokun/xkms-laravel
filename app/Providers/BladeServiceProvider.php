@@ -188,21 +188,24 @@ EOF;
             //后期修改afterSelectFile
             $UploadFileUrl = route('UploadFile');
             $ManageFileUrl = route('ManageFile', ['t' => 'kindeditor']);
-            $editor_config = <<<EOF
-uploadJson : '{$UploadFileUrl}',
-filemanagerjson : '{$ManageFileUrl}',
-extraFileUploadParams : {'t':'kindeditor','session_id':'{{ session_id() }}'},
-formatUploadUrl:false,
-resizeType:1,
-themeType : 'simple',
-urlType : 'relative',
-allowFileManager : true
-EOF;
+            $editor_config = json_encode([
+                'uploadJson'            => $UploadFileUrl,
+                'filemanagerjson'       => $ManageFileUrl,
+                'extraFileUploadParams' => [
+                    't'          => 'kindeditor',
+                    'session_id' => session_id(),
+                ],
+                'formatUploadUrl'       => false,
+                'resizeType'            => 1,
+                'themeType'             => 'simple',
+                'urlType'               => 'relative',
+                'allowFileManager'      => true,
+            ]);
             $js_global         = '';
             $js_create         = '';
             foreach ($element as $e) {
                 $js_global .= 'var kindeditor_' . $e . ";";
-                $js_create .= 'kindeditor_' . $e . ' = ' . "K.create('textarea[name=\"" . $e . "\"]', { {$editor_config} });";
+                $js_create .= 'kindeditor_' . $e . ' = ' . "K.create('textarea[name=\"" . $e . "\"]',{$editor_config});";
 
             }
             /*

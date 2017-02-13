@@ -5,7 +5,7 @@ namespace App\Model;
 
 use Illuminate\Support\Collection;
 
-class AdminGroups extends Common
+class AdminGroup extends Common
 {
     protected $casts = [
         'privilege' => 'array',

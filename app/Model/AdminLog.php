@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-class AdminLogs extends Common
+class AdminLog extends Common
 {
     protected $casts = [
         'request' => 'array',

@@ -21,7 +21,7 @@ class Admin
         if (isset($data['id'])) {
             $where[] = ['id', '!=', $data['id']];
         }
-        $exist = Model\Admins::where($where)->first();
+        $exist = Model\Admin::where($where)->first();
         return $exist ? false : true;
     }
 }

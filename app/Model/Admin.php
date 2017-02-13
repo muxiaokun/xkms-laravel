@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-class Admins extends Common
+class Admin extends Common
 {
     protected $casts = [
         'privilege' => 'array',

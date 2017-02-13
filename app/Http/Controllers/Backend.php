@@ -22,8 +22,8 @@ class Backend extends Common
                 die($this->error(trans('common.login') . trans('common.timeout'), route('Admin::Index::index')));
             }
             //检查管理员或者管理员组权限变动 先检查数量 提高效率
-            $adminInfo = Model\Admins::colWhere($backendInfo['id'])->first()->toArray();
-            $adminGroupPrivilege = Model\AdminGroups::mFindPrivilege($adminInfo['group_id']);
+            $adminInfo           = Model\Admin::colWhere($backendInfo['id'])->first()->toArray();
+            $adminGroupPrivilege = Model\AdminGroup::mFindPrivilege($adminInfo['group_id']);
             if (
                 $backendInfo['privilege'] !== $adminInfo['privilege'] ||
                 $backendInfo['group_privilege']->toArray() !== $adminGroupPrivilege->toArray()
@@ -40,7 +40,7 @@ class Backend extends Common
 
             //是否开启管理员日志 记录POST提交数据除了root用户
             if (config('system.sys_admin_auto_log') && 1 != session('backend_info.id') && request()->isMethod('POST')) {
-                Model\AdminLogs::record($backendInfo['id']);
+                Model\AdminLog::record($backendInfo['id']);
             }
         } else {
             //检测不登陆就可以访问的
@@ -99,7 +99,7 @@ class Backend extends Common
         //检测后台尝试登陆次数
         $loginNum  = config('system.sys_backend_login_num');
         $lockTime  = config('system.sys_backend_lock_time');
-        $loginInfo = Model\Admins::where('admin_name', $userName)->first();
+        $loginInfo = Model\Admin::where('admin_name', $userName)->first();
         if ($loginNum && null !== $loginInfo && strtotime($loginInfo->lock_time) > Carbon::now()->getTimestamp() - $lockTime) {
             $loginInfo->lock_time = Carbon::now();
             $loginInfo->save();
@@ -111,35 +111,35 @@ class Backend extends Common
             ['admin_name', $userName],
             ['is_enable', '1'],
         ];
-        $adminInfo = Model\Admins::where($where)->first();
+        $adminInfo = Model\Admin::where($where)->first();
         if ($adminInfo['admin_pwd'] == md5($password . $adminInfo['admin_rand'])) {
             $data = [
                 'last_time' => Carbon::now(),
                 'login_ip'  => request()->ip(),
             ];
-            Model\Admins::colWhere($adminInfo['id'])->update($data);
-            $adminInfo = Model\Admins::colWhere($adminInfo['id'])->first();
+            Model\Admin::colWhere($adminInfo['id'])->update($data);
+            $adminInfo = Model\Admin::colWhere($adminInfo['id'])->first();
         } else {
             //检测后台尝试登陆次数
             if ($loginNum) {
                 $loginData              = [];
                 $loginData['login_num'] = $loginInfo->login_num + 1;
                 $loginData['lock_time'] = ($loginNum <= $loginData['login_num']) ? Carbon::now() : null;
-                Model\Admins::colWhere($loginInfo->id)->first()->update($loginData);
+                Model\Admin::colWhere($loginInfo->id)->first()->update($loginData);
             }
             return 'user_pwd_error';
         }
 
         //管理员有组的 加载分组权限
         if (0 < count($adminInfo->group_id->toArray())) {
-            $adminInfo['group_privilege'] = Model\AdminGroups::mFindPrivilege($adminInfo['group_id']);
+            $adminInfo['group_privilege'] = Model\AdminGroup::mFindPrivilege($adminInfo['group_id']);
         }
         //重置登录次数
         if (0 != $adminInfo['login_num']) {
             $loginData              = [];
             $loginData['login_num'] = 0;
             $loginData['lock_time'] = null;
-            Model\Admins::colWhere($loginInfo->id)->first()->update($loginData);
+            Model\Admin::colWhere($loginInfo->id)->first()->update($loginData);
         }
         $adminInfo['login_time'] = Carbon::now();
         session(['backend_info' => $adminInfo->toArray()]);

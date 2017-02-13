@@ -21,7 +21,7 @@ class AdminGroup
         if (isset($data['id'])) {
             $where[] = ['id', '!=', $data['id']];
         }
-        $exist = Model\AdminGroups::where($where)->first();
+        $exist = Model\AdminGroup::where($where)->first();
         return $exist ? false : true;
     }
 }

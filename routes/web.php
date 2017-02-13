@@ -170,6 +170,7 @@ Route::group([
         Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'Article@edit']);
         Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'Article@del']);
         Route::match(['get', 'post'], 'setting', ['as' => 'setting', 'uses' => 'Article@setting']);
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Article@ajax_api']);
     });
     Route::group([
         'as'     => 'ArticleCategory::',
@@ -180,6 +181,7 @@ Route::group([
         Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'ArticleCategory@add']);
         Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'ArticleCategory@edit']);
         Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'ArticleCategory@del']);
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'ArticleCategory@ajax_api']);
     });
     Route::group([
         'as'     => 'ArticleChannel::',
@@ -190,6 +192,7 @@ Route::group([
         Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'ArticleChannel@add']);
         Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'ArticleChannel@edit']);
         Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'ArticleChannel@del']);
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'ArticleChannel@ajax_api']);
     });
     Route::group([
         'as'     => 'Assess::',
@@ -256,8 +259,6 @@ Route::group([
         Route::get('index', ['as' => 'index', 'uses' => 'ManageUpload@index']);
         Route::get('del', ['as' => 'del', 'uses' => 'ManageUpload@del']);
         Route::get('edit', ['as' => 'edit', 'uses' => 'ManageUpload@edit']);
-        Route::get('UploadFile', ['as' => 'UploadFile', 'uses' => 'ManageUpload@UploadFile']);
-        Route::get('ManageFile', ['as' => 'ManageFile', 'uses' => 'ManageUpload@ManageFile']);
     });
     Route::group([
         'as'     => 'Member::',
@@ -407,6 +408,8 @@ Route::group([
 
 Route::get('Minify/{type}', 'Minify@run')->name('Minify');
 Route::get('VerificationCode/{name?}', 'VerificationCode@run')->name('VerificationCode');
+Route::get('Upload/ManageFile', 'Upload@ManageFile')->name('ManageFile');
+Route::post('Upload/UploadFile', 'Upload@UploadFile')->name('UploadFile');
 
 //test error
 Route::get('t', function () {

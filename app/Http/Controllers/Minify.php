@@ -19,13 +19,13 @@ class Minify extends Controller
                 $contentType = 'application/x-javascript;charset=utf-8';
                 break;
             default:
-                return 'type not empty!';
+                return 'type cannot be empty!';
         }
 
         $content = '';
         $files   = request('files');
         if (!$files) {
-            return 'files not empty';
+            return 'files cannot be empty';
         }
         $lang    = request('lang');
         $refresh = request('refresh');

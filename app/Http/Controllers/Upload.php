@@ -1,5 +1,5 @@
 <?php
-//后台 管理上传 控制器
+//上传控制器
 //kindeditor上传文件接口(全站上传也将使用kindedior插件)
 //Upload 目录为基准目录
 
@@ -7,7 +7,7 @@ namespace App\Http\Controllers;
 
 use App\Model;
 
-class CommonManageUpload
+class Upload
 {
     protected $config = [
 

@@ -321,5 +321,5 @@
             </div>
         </div>
     </section>
-    <M:Kindeditor name="content"/>
+    @kindeditor(content)
 @endsection

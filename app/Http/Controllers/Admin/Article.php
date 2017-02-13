@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
 use App\Model;
+use Illuminate\Support\Facades\View;
 
 class Article extends Backend
 {
@@ -134,6 +135,7 @@ class Article extends Backend
 
         $this->addEditCommon();
         $assign['edit_info'] = Model\Article::columnEmptyData();
+        $assign['edit_info']['attribute_tpl'] = [];
         $assign['title']     = trans('common.article') . trans('common.add');
         return view('admin.Article_addedit', $assign);
     }
@@ -398,10 +400,11 @@ class Article extends Backend
             $channelWhere['id']  = ['in', Model\ArticleChannel::mFindAllow()];
             $categoryWhere['id'] = ['in', Model\ArticleCategory::mFindAllow()];
         }
-        $channelList             = Model\ArticleChannel::where($channelWhere)->all();
-        $categoryList            = Model\ArticleCategory::where($categoryWhere)->all();
+        $channelList  = Model\ArticleChannel::where($channelWhere)->get();
+        $categoryList = Model\ArticleCategory::where($categoryWhere)->get();
         $assign['channel_list']  = $channelList;
         $assign['category_list'] = $categoryList;
+        View::share($assign);
     }
 
     //检查是否有 add edit del privilege

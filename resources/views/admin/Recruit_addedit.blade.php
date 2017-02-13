@@ -129,5 +129,5 @@
             </div>
         </div>
     </section>
-    <M:Kindeditor name="explains"/>
+    @kindeditor(explains)
 @endsection

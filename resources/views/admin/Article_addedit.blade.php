@@ -45,7 +45,7 @@
                                     <input type="text" class="form-control" placeholder="@lang('common.sort')"
                                            name="sort"
                                            onKeyup="M_in_int_range(this,1,100);"
-                                           value="@if ($edit_info['sort']){{ $edit_info['sort'] }}@else100@endif"/>
+                                           value="@if ($edit_info['sort']){{ $edit_info['sort'] }}@else 100 @endif"/>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +86,7 @@
                         <script type="text/javascript">
                             $(function () {
                                 var config = {
-                                    @if ($edit_info['attribute_tpl'])'def_data':{{ $edit_info['attribute_tpl']|json_encode }},
+                                    @if ($edit_info['attribute_tpl'])'def_data':{!! json_encode($edit_info['attribute_tpl']) !!},
                                     @endif
                                             @if ($edit_info['attribute'])'def_selected':{{ $edit_info['attribute']|json_encode }},
                                     @endif
@@ -105,7 +105,8 @@
                         <script type="text/javascript">
                             $(function () {
                                 var config = {
-                                    @if ($edit_info['extend'])'def_data':{{ $edit_info['extend']|json_encode }}, @endif
+                                    @if ($edit_info['extend'])'def_data':{!! json_encode($edit_info['extend']) !!},
+                                    @endif
                                     'run_type': 'edit',
                                     'out_obj': $('#extend_list'),
                                     'edit_obj': $('select[name=cate_id]'),
@@ -235,7 +236,7 @@
                             <script type="text/javascript">
                                 $(function () {
                                     var config = {
-                                        @if ($edit_info['access_group_id'])'def_data':{{ $edit_info['access_group_id'] }},
+                                        @if ($edit_info['access_group_id'])'def_data':{!! json_encode($edit_info['access_group_id']) !!},
                                         @endif
                                         'out_obj': $('#access_group_id_list'),
                                         'edit_obj': $('#access_group_list'),
@@ -374,5 +375,5 @@
             </div>
         </div>
     </section>
-    <M:Kindeditor name="content"/>
+    @kindeditor(content)
 @endsection

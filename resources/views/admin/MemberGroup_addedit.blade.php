@@ -109,36 +109,49 @@
                                     <label class="checkbox-inline"><input type="checkbox"
                                                                           onClick="M_allselect_par(this,'.row')"/>@lang('common.allselect')
                                     </label>
-                                    <input type="hidden" value="" name="privilege"/>
+                                    <input type="hidden" value="" name="privilege[]"/>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12">
-                            @foreach ($privilege as $controller => $privs)
+                        @foreach ($privilege as $groupName => $controllers)
+                            <div class="col-sm-12">
                                 <ul class="list-group">
                                     <li class="list-group-item list-group-item-info">
-                                        <label class="checkbox-inline"><input type="checkbox"
-                                                                              onClick="M_allselect_par(this,'ul')"/>@lang('common.allselect'){{ $controller }}
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox"
+                                                   onClick="M_allselect_par(this,'ul')"/>@lang('common.allselect'){{ $groupName }}
                                         </label>
                                     </li>
-                                    @foreach ($privs as $controller_name => $actions)
+                                    @foreach ($controllers as $controllerName => $actions)
                                         <li class="list-group-item">
-                                            @foreach ($actions as $action_name => $action_value)
-                                                <label class="checkbox-inline">
-                                                    <input type="checkbox" name="privilege[]"
-                                                           value="{{ $controller_name }}_{{ $action_name }}"
-                                                           @if ('all' == $edit_info['privilege'] or (is_array($edit_info['privilege']) AND in_array($controller_name.'_'.$action_name,$edit_info['privilege'])))
-                                                           checked="checked"
-                                                            @endif
-                                                    />
-                                                    {{ $action_value }}
-                                                </label>
-                                            @endforeach
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <label class="checkbox-inline">
+                                                        <input type="checkbox"
+                                                               onClick="M_allselect_par(this,'li')"/>@lang('common.allselect'){{ $controllerName }}
+                                                    </label>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                                @foreach ($actions as $actionName => $action)
+                                                    <div class="col-sm-3">
+                                                        <label class="checkbox-inline">
+                                                            <input type="checkbox" name="privilege[]"
+                                                                   value="{{ $action }}"
+                                                                   @if ('all' == $edit_info['privilege'] OR (is_array($edit_info['privilege']) AND in_array($action,$edit_info['privilege'])))
+                                                                   checked="checked"
+                                                                    @endif
+                                                            />
+                                                            {{ $actionName }}
+                                                        </label>
+                                                    </div>
+                                                @endforeach
+                                                <div class="clearfix"></div>
+                                            </div>
                                         </li>
                                     @endforeach
                                 </ul>
-                            @endforeach
-                        </div>
+                            </div>
+                        @endforeach
                     </div>
                 </form>
             </div>

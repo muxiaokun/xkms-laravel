@@ -218,16 +218,21 @@ class Member extends Backend
     //异步数据获取
     protected function getData($field, $data)
     {
-        $where  = [];
         $result = ['status' => true, 'info' => []];
         switch ($field) {
             case 'group_id':
-                isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $memberGroupList = Model\MemberGroup::where($where)->get();
-                foreach ($memberGroupList as $memberGroup) {
-                    $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
-                }
+                Model\MemberGroup::where(function ($query) use ($data) {
+                    if (isset($data['inserted'])) {
+                        $query->whereNotIn('id', $data['inserted']);
+                    }
+
+                    if (isset($data['keyword'])) {
+                        $query->where('member_name', 'like', '%' . $data['keyword'] . '%');
+                    }
+
+                })->get()->each(function ($item, $key) use (&$result) {
+                    $result['info'][] = ['value' => $item['id'], 'html' => $item['name']];
+                });
                 break;
         }
         return $result;

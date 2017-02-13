@@ -94,6 +94,18 @@ class AdminGroup extends Backend
                 return $data;
             }
 
+            //root组只能修改 名和说明
+            if (1 == $id || (is_array($id) && in_array(1, $id))) {
+                $root_data = [];
+                if (isset($data['name'])) {
+                    $root_data['name'] = $data['name'];
+                }
+                if (isset($data['explains'])) {
+                    $root_data['explains'] = $data['explains'];
+                }
+                $data = $root_data;
+            }
+
             $resultEdit = false;
             Model\AdminGroup::colWhere($id)->get()->each(function ($item, $key) use ($data, &$resultEdit) {
                 $resultEdit = $item->update($data);
@@ -190,7 +202,7 @@ class AdminGroup extends Backend
         $result = ['status' => true, 'info' => []];
         switch ($field) {
             case 'manage_id':
-                $adminUserList = Model\Admin::where(function ($query) use ($data) {
+                Model\Admin::where(function ($query) use ($data) {
                     if (isset($data['inserted'])) {
                         $query->whereNotIn('id', $data['inserted']);
                     }
@@ -198,10 +210,10 @@ class AdminGroup extends Backend
                     if (isset($data['keyword'])) {
                         $query->where('admin_name', 'like', '%' . $data['keyword'] . '%');
                     }
-                })->get();
-                foreach ($adminUserList as $adminUser) {
-                    $result['info'][] = ['value' => $adminUser['id'], 'html' => $adminUser['admin_name']];
-                }
+
+                })->get()->each(function ($item, $key) use (&$result) {
+                    $result['info'][] = ['value' => $item['id'], 'html' => $item['admin_name']];
+                });
                 break;
         }
         return $result;

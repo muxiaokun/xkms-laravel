@@ -250,9 +250,8 @@ class Admin extends Backend
         $result = ['status' => true, 'info' => []];
         switch ($field) {
             case 'group_id':
-                $adminGroupList = Model\AdminGroup::where(function ($query) use ($data) {
+                Model\AdminGroup::where(function ($query) use ($data) {
                     $login_id = session('backend_info.id');
-                    $ids      = [];
                     if (1 != $login_id) {
                         //非root需要权限
                         $ids = Model\AdminGroup::where('manage_id', 'like',
@@ -268,10 +267,9 @@ class Admin extends Backend
                         $query->where('name', 'like', '%' . $data['keyword'] . '%');
                     }
 
-                })->get();
-                foreach ($adminGroupList as $adminGroup) {
-                    $result['info'][] = ['value' => $adminGroup['id'], 'html' => $adminGroup['name']];
-                }
+                })->get()->each(function ($item, $key) use (&$result) {
+                    $result['info'][] = ['value' => $item['id'], 'html' => $item['name']];
+                });
                 break;
         }
 

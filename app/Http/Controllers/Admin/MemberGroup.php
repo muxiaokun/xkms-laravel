@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
 use App\Model;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
 
 class MemberGroup extends Backend
 {
@@ -82,6 +84,18 @@ class MemberGroup extends Backend
                 return $data;
             }
 
+            //root组只能修改 名和说明
+            if (1 == $id || (is_array($id) && in_array(1, $id))) {
+                $root_data = [];
+                if (isset($data['name'])) {
+                    $root_data['name'] = $data['name'];
+                }
+                if (isset($data['explains'])) {
+                    $root_data['explains'] = $data['explains'];
+                }
+                $data = $root_data;
+            }
+
             $resultEdit = false;
             Model\MemberGroup::colWhere($id)->get()->each(function ($item, $key) use ($data, &$resultEdit) {
                 $resultEdit = $item->update($data);
@@ -119,6 +133,10 @@ class MemberGroup extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::MemberGroup::index'));
         }
 
+        if (1 == $id || (is_array($id) && in_array(1, $id))) {
+            return $this->error('root' . trans('common.not') . trans('common.del'), route('Admin::Admin::index'));
+        }
+
         $resultDel = false;
         if (1 != $id || (is_array($id) && !in_array(1, $id))) {
             $resultDel = Model\MemberGroup::destroy($id);
@@ -140,50 +158,19 @@ class MemberGroup extends Backend
         $result = ['status' => true, 'info' => ''];
         switch ($field) {
             case 'name':
-                //不能为空
-                if ('' == $data['name']) {
-                    $result['info'] = trans('common.member') . trans('common.group') . trans('common.name') . trans('common.not') . trans('common.empty');
-                    break;
-                }
-                //检查用户名规则
-                if ('utf-8' != config('DEFAULT_CHARSET')) {
-                    $data['name'] = iconv(config('DEFAULT_CHARSET'), 'utf-8', $data['name']);
-                }
-
-                preg_match('/([^\x80-\xffa-zA-Z0-9\s]*)/', $data['name'], $matches);
-                if ('' != $matches[1]) {
-                    $result['info'] = trans('common.name_format_error', ['string' => $matches[1]]);
-                    break;
-                }
-                //检查管理组名是否存在
-                $memberInfo = Model\MemberGroup::where([
-                    'name' => $data['name'],
-                    'id'   => ['neq', $data['id']],
-                ])->first()->toArray();
-                if ($memberInfo) {
-                    $result['info'] = trans('member') . trans('common.group') . trans('common.name') . trans('common.exists');
-                    break;
-                }
+                $validator = Validator::make($data, [
+                    'name' => 'user_name|member_group_exist',
+                ]);
                 break;
             case 'privilege':
-                //对比权限
-                $privilege      = $this->getPrivilege('Home');
-                $checkPrivilege = [];
-                foreach ($privilege as $controllerCn => $privs) {
-                    foreach ($privs as $controllerName => $controller) {
-                        foreach ($controller as $actionName => $action) {
-                            $checkPrivilege[] = $controllerName . '_' . $actionName;
-
-                        }
-                    }
-                }
-                foreach ($data as $priv) {
-                    if (!in_array($priv, $checkPrivilege)) {
-                        $result['info'] = trans('common.privilege') . trans('common.submit') . trans('common.error');
-                        break;
-                    }
-                }
+                $validator = Validator::make($data, [
+                    'privilege' => 'privilege:frontend_info',
+                ]);
                 break;
+        }
+
+        if (isset($validator) && $validator->fails()) {
+            $result['info'] = implode('', $validator->errors()->all());
         }
 
         if ($result['info']) {
@@ -196,16 +183,21 @@ class MemberGroup extends Backend
     //异步数据获取
     protected function getData($field, $data)
     {
-        $where  = [];
         $result = ['status' => true, 'info' => []];
         switch ($field) {
             case 'manage_id':
-                isset($data['keyword']) && $where['member_name'] = ['like', '%' . $data['keyword'] . '%'];
-                isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                $memberUserList = Model\Member::where($where)->get();
-                foreach ($memberUserList as $memberUser) {
-                    $result['info'][] = ['value' => $memberUser['id'], 'html' => $memberUser['member_name']];
-                }
+                Model\Member::where(function ($query) use ($data) {
+                    if (isset($data['inserted']) && $data['inserted']) {
+                        $query->whereNotIn('id', $data['inserted']);
+                    }
+
+                    if (isset($data['keyword']) && $data['keyword']) {
+                        $query->where('member_name', 'like', '%' . $data['keyword'] . '%');
+                    }
+
+                })->get()->each(function ($item, $key) use (&$result) {
+                    $result['info'][] = ['value' => $item['id'], 'html' => $item['member_name']];
+                });
                 break;
         }
         return $result;
@@ -266,5 +258,6 @@ class MemberGroup extends Backend
     private function addEditCommon()
     {
         $assign['privilege'] = $this->getPrivilege('Home');
+        View::share($assign);
     }
 }

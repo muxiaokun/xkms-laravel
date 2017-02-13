@@ -31,10 +31,10 @@ OK 成员管理会员管理会员管理Admin::Member::index
 OK 成员管理会员管理添加会员Admin::Member::add
 OK 成员管理会员管理删除会员Admin::Member::del
 OK 成员管理会员管理编辑会员Admin::Member::edit
-成员管理会员管理会员组管理Admin::MemberGroup::index
-成员管理会员管理添加会员组Admin::MemberGroup::add
-成员管理会员管理删除会员组Admin::MemberGroup::del
-成员管理会员管理编辑会员组Admin::MemberGroup::edit
+OK 成员管理会员管理会员组管理Admin::MemberGroup::index
+OK 成员管理会员管理添加会员组Admin::MemberGroup::add
+OK 成员管理会员管理删除会员组Admin::MemberGroup::del
+OK 成员管理会员管理编辑会员组Admin::MemberGroup::edit
 内容管理文章文章配置Admin::Article::setting
 内容管理文章文章管理Admin::Article::index
 内容管理文章添加文章Admin::Article::add

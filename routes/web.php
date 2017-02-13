@@ -166,30 +166,30 @@ Route::group([
         'prefix' => 'Article',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Article@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Article@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'Article@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'Article@del']);
-        Route::get('setting', ['as' => 'setting', 'uses' => 'Article@setting']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Article@add']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'Article@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'Article@del']);
+        Route::match(['get', 'post'], 'setting', ['as' => 'setting', 'uses' => 'Article@setting']);
     });
     Route::group([
         'as'     => 'ArticleCategory::',
         //'middleware'=>'auth',
         'prefix' => 'ArticleCategory',
     ], function () {
-        Route::get('index', ['as' => 'index', 'uses' => 'ArticleCategory@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'ArticleCategory@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'ArticleCategory@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'ArticleCategory@del']);
+        Route::match(['get', 'post'], 'index', ['as' => 'index', 'uses' => 'ArticleCategory@index']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'ArticleCategory@add']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'ArticleCategory@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'ArticleCategory@del']);
     });
     Route::group([
         'as'     => 'ArticleChannel::',
         //'middleware'=>'auth',
         'prefix' => 'ArticleChannel',
     ], function () {
-        Route::get('index', ['as' => 'index', 'uses' => 'ArticleChannel@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'ArticleChannel@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'ArticleChannel@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'ArticleChannel@del']);
+        Route::match(['get', 'post'], 'index', ['as' => 'index', 'uses' => 'ArticleChannel@index']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'ArticleChannel@add']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'ArticleChannel@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'ArticleChannel@del']);
     });
     Route::group([
         'as'     => 'Assess::',

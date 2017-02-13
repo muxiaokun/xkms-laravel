@@ -224,10 +224,10 @@ class Article extends Backend
         if (request()->isMethod('POST')) {
             //表单提交的名称
             $col = [
-                'SYS_ARTICLE_SYNC_IMAGE',
-                'SYS_ARTICLE_PN_LIMIT',
-                'SYS_ARTICLE_THUMB_WIDTH',
-                'SYS_ARTICLE_THUMB_HEIGHT',
+                'sys_article_sync_image',
+                'sys_article_pn_limit',
+                'sys_article_thumb_width',
+                'sys_article_thumb_height',
             ];
             return $this->_put_config($col, 'system');
         }

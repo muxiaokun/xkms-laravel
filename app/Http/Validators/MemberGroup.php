@@ -3,7 +3,7 @@ namespace App\Http\Validators;
 
 use App\Model;
 
-class Member
+class MemberGroup
 {
     /**
      * @param $attribute
@@ -11,17 +11,17 @@ class Member
      * @param $parameters
      * @param $validator
      * @return bool
-     * 成员是否存在
+     * 成员组是否存在
      */
-    public function member_exist($attribute, $value, $parameters, $validator)
+    public function member_group_exist($attribute, $value, $parameters, $validator)
     {
         $where   = [];
-        $where[] = ['member_name', $value];
+        $where[] = ['name', $value];
         $data    = $validator->getData();
         if (isset($data['id'])) {
             $where[] = ['id', '!=', $data['id']];
         }
-        $exist = Model\Member::where($where)->first();
+        $exist = Model\MemberGroup::where($where)->first();
         return $exist ? false : true;
     }
 }

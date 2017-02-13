@@ -14,7 +14,7 @@ class Common
      */
     public function user_name($attribute, $value, $parameters, $validator)
     {
-        return preg_match('/^[a-zA-Z0-9_]+$/', $value) ? true : false;
+        return preg_match('/^[\w\x80-\xff]+$/', $value) ? true : false;
     }
 
     /**

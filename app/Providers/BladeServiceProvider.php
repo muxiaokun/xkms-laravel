@@ -13,43 +13,10 @@ class BladeServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Blade::directive('D', function () {
-
-            if (!isset($tag['item']) || !isset($tag['name']) || !isset($tag['fn'])) {
-                return 'missing:item,name,fn';
-            }
-
-            $tag['fn_arg'] = isset($tag['fn_arg']) ? $this->_parseCondition($tag['fn_arg']) : '';
-            $tag['where']  = isset($tag['where']) ? $this->_parseCondition($tag['where']) : '';
-            $tag['order']  = isset($tag['order']) ? $tag['order'] : '';
-            $tag['limit']  = isset($tag['limit']) ? $tag['limit'] : '';
-            $tag['page']   = isset($tag['page']) ? $tag['page'] : '';
-            $cache = config('system.SYS_TD_CACHE', null, 60);
-            $cache         = (10 < $cache && !APP_DEBUG) ? $cache : 0;
-            $pageStr       = '';
-            if ($tag['page']) {
-                $pageStr .= "\${$tag['item']}_count = D('{$tag['name']}')";
-                $cache && $pageStr .= "->cache(true,{$cache})";
-                $tag['where'] && $pageStr .= "->where({$tag['where']})";
-                $tag['fn_arg'] && $pageStr .= "->where({$tag['fn_arg']})";
-                $pageStr .= "->count();";
-                'true' != $tag['page'] && $pageStr .= "\${$tag['item']}_max = {$tag['page']};";
-                $tag['page'] = ",{$tag['page']}";
-            }
-            $parseStr = "<?php {$pageStr}";
-            $parseStr .= "\${$tag['item']} = D('{$tag['name']}')";
-            $cache && $parseStr .= "->cache(true,{$cache})";
-            $tag['where'] && $parseStr .= "->where({$tag['where']})";
-            $tag['order'] && $parseStr .= "->order('{$tag['order']}')";
-            $tag['limit'] && $parseStr .= "->limit('{$tag['limit']}')";
-            $parseStr .= "->{$tag['fn']}({$tag['fn_arg']}{$tag['page']}); ?>";
-
-            return $parseStr;
-        });
         Blade::directive('syncImg', function ($expression) {
             return mSyncImg($expression);
         });
-        Blade::directive('_Flash', function () {
+        Blade::directive('flash', function () {
             if (!isset($tag['src'])) {
                 return 'missing:src';
             }
@@ -88,65 +55,6 @@ class BladeServiceProvider extends ServiceProvider
 </object>
 EOF;
             return $parseStr;
-        });
-        Blade::directive('_Page', function () {
-            if (!isset($tag['name'])) {
-                return 'missing:name';
-            }
-
-            $cfg_count_row = "'count_row'=>\${$tag['name']}_count,";
-            $cfg_max_row   = "'max_row'=>\${$tag['name']}_max,";
-            $cfg_roll      = "'roll'=>\${$tag['name']}_roll,";
-
-            $start_content = $cfg_content = $end_content = '';
-            $cfg_preg_div = $cfg_preg_a = $cfg_preg_current = $cfg_preg_rows = $cfg_preg_njump = '';
-
-            $preg_result = [];
-            if (preg_match('/(.*)<config>(.*)<\/config>(.*)/is', $content, $preg_result)) {
-                $start_content = $preg_result[1];
-                $cfg_content   = $preg_result[2];
-                $end_content   = $preg_result[3];
-                if (preg_match('/<preg_div>(.*?)<\/preg_div>/is', $cfg_content, $preg_result)) {
-                    $cfg_preg_div = "'preg_div'=>'" . str_replace('\"', '"', addslashes($preg_result[1])) . "',";
-                }
-                if (preg_match('/<preg_a>(.*?)<\/preg_a>/is', $cfg_content, $preg_result)) {
-                    $cfg_preg_a = "'preg_a'=>'" . str_replace('\"', '"', addslashes($preg_result[1])) . "',";
-                }
-                if (preg_match('/<preg_current>(.*?)<\/preg_current>/is', $cfg_content, $preg_result)) {
-                    $cfg_preg_current = "'preg_current'=>'" . str_replace('\"', '"',
-                            addslashes($preg_result[1])) . "',";
-                }
-                if (preg_match('/<preg_rows>(.*?)<\/preg_rows>/is', $cfg_content, $preg_result)) {
-                    $cfg_preg_rows = "'preg_rows'=>'" . str_replace('\"', '"', addslashes($preg_result[1])) . "',";
-                }
-                if (preg_match('/<preg_njump>(.*?)<\/preg_njump>/is', $cfg_content, $preg_result)) {
-                    $cfg_preg_njump = "'preg_njump'=>true,";
-                }
-            }
-
-            $page_str = <<<EOF
-            <?php
-                \$config = array(
-                    $cfg_count_row
-                    $cfg_max_row
-                    $cfg_roll
-                    $cfg_preg_div
-                    $cfg_preg_a
-                    $cfg_preg_current
-                    $cfg_preg_rows
-                    $cfg_preg_njump
-                    );
-                \$page = M_page(\$config);
-                if(\$page)
-                {
-                    echo('$start_content');
-                    echo(\$page);
-                    echo('$end_content');
-                }
-            ?>
-EOF;
-
-            return $page_str;
         });
         Blade::directive('datepicker', function ($expression) {
             if (!isset($expression)) {
@@ -198,7 +106,7 @@ EOF;
             }
             return $re_script;
         });
-        Blade::directive('D_Timepicker', function () {
+        Blade::directive('timepicker', function ($expression) {
             if (!isset($tag['start'])) {
                 return 'missing:start,[end]';
             }
@@ -271,27 +179,27 @@ EOF;
             }
             return $re_script;
         });
-        Blade::directive('_Kindeditor', function () {
-            isset($tag['name']) && $element = explode('|', $tag['name']);
+        Blade::directive('kindeditor', function ($expression) {
+            isset($expression) && $element = explode('|', $expression);
             if (!is_array($element)) {
                 return 'missing:name[|name]';
             }
 
             //后期修改afterSelectFile
-            $UploadFileUrl = U('ManageUpload/UploadFile');
-            $ManageFileUrl = U('ManageUpload/ManageFile', ['t' => 'kindeditor']);
+            $UploadFileUrl = route('UploadFile');
+            $ManageFileUrl = route('ManageFile', ['t' => 'kindeditor']);
             $editor_config = <<<EOF
 uploadJson : '{$UploadFileUrl}',
-fileManagerJson : '{$ManageFileUrl}',
-extraFileUploadParams : {'t':'kindeditor','session_id':'{:session_id()}'},
+filemanagerjson : '{$ManageFileUrl}',
+extraFileUploadParams : {'t':'kindeditor','session_id':'{{ session_id() }}'},
 formatUploadUrl:false,
 resizeType:1,
 themeType : 'simple',
 urlType : 'relative',
 allowFileManager : true
 EOF;
-            $js_global = '';
-            $js_create = '';
+            $js_global         = '';
+            $js_create         = '';
             foreach ($element as $e) {
                 $js_global .= 'var kindeditor_' . $e . ";";
                 $js_create .= 'kindeditor_' . $e . ' = ' . "K.create('textarea[name=\"" . $e . "\"]', { {$editor_config} });";
@@ -300,8 +208,9 @@ EOF;
             /*
              * KindEditor.options.htmlTags.script = [];
              */
-            $re_script = <<<EOF
-<import file="kindeditor/kindeditor-all-min" />
+            $kindeditor_js_src = asset('kindeditor/kindeditor-all-min.js');
+            $re_script         = <<<EOF
+<script type="text/javascript" src="{$kindeditor_js_src}"></script>
 <script type="text/javascript">
 $(function(){
     {$js_global}
@@ -313,7 +222,7 @@ $(function(){
 EOF;
             return $re_script;
         });
-        Blade::directive('_Uploadfile', function () {
+        Blade::directive('uploadfile', function ($expression) {
             if (!isset($tag['id']) || !isset($tag['type']) || !isset($tag['cb_fn'])) {
                 return "missing:id,type,cb_fn";
             }
@@ -415,12 +324,8 @@ $(function(){
 EOF;
             return $re_script;
         });
-        Blade::directive('_CKplayer', function () {
+        Blade::directive('ckplayer', function ($expression) {
             return M_ckplayer($tag);
-        });
-        Blade::directive('_Uploadfile', function () {
-        });
-        Blade::directive('_Uploadfile', function () {
         });
     }
 
@@ -431,50 +336,5 @@ EOF;
     public function register()
     {
         //
-    }
-
-    //格式化数组 -> 字符串
-    private function _parseCondition($str)
-    {
-        if ('' == $str) {
-            return false;
-        }
-
-        //匹配模板变量
-        $pattern_var = '/^\$|array\(|true|false|null|\w\(.*?\)/i';
-        //匹配数组 where 条件
-        $pattern_condition = '/(.*?)\s(eq|neq|gt|egt|lt|elt|like|(not\s)?between|(not\s)?in)\s(.*)/i';
-
-        //分割参数
-        $strs          = explode('||', $str);
-        $condition_str = '';
-        foreach ($strs as $condition) {
-            if ('' == $condition) {
-                continue;
-            }
-            $condition_str && $condition_str .= ',';
-            //分割条件
-            $args     = explode('|', $condition);
-            $is_array = 1 < count($args);
-            $re_str   = $is_array ? 'array(' : '';
-            foreach ($args as $arg) {
-                if ('' == $arg) {
-                    continue;
-                }
-                //模板中不支持=>需要一次转换
-                $arg = str_replace('=', '=>', $arg);
-                if (preg_match($pattern_condition, $arg, $matches)) {
-                    $re_str .= ('eq' != $matches[2]) ? "'{$matches[1]}'=>array('{$matches[2]}'," : "'{$matches[1]}'=>";
-                    $re_str .= (preg_match($pattern_var, $matches[5])) ? $matches[5] : "'{$matches[5]}'";
-                    $re_str .= ('eq' != $matches[2]) ? '),' : ',';
-                } else {
-                    $re_str .= (preg_match($pattern_var, $arg)) ? $arg : "'{$arg}'";
-                    $is_array && $re_str .= ',';
-                }
-            }
-            $is_array && $re_str .= ')';
-            $condition_str .= $re_str;
-        }
-        return $condition_str;
     }
 }

@@ -19,13 +19,13 @@ class Minify extends Controller
                 $contentType = 'application/x-javascript;charset=utf-8';
                 break;
             default:
-                return '';
+                return 'type not empty!';
         }
 
         $content = '';
         $files   = request('files');
         if (!$files) {
-            return '';
+            return 'files not empty';
         }
         $lang    = request('lang');
         $refresh = request('refresh');
@@ -48,7 +48,7 @@ class Minify extends Controller
         foreach (explode(',', $files) as $file) {
             //防止使用父级目录
             if (false !== strrpos($file, '..')) {
-                return '';
+                return 'Parent directory is not allowed!';
             }
             //检测文件修改时间
             $filePath              = public_path($type . '/' . $file . '.' . $type);
@@ -146,7 +146,7 @@ class Minify extends Controller
         foreach (explode(',', $lang) as $lang_file) {
             $langArr[$lang_file] = trans($lang_file);
         }
-        return $langArr ? 'var lang = ' . json_encode($langArr) . ';' : '';
+        return $langArr ? 'if(!lang)var lang = {}; Object.assign(lang,' . json_encode($langArr) . ');' : '';
     }
 
     protected function getCacheName($filePath)

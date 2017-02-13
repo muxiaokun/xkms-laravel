@@ -150,12 +150,12 @@ class Member extends Backend
         if (request()->isMethod('POST')) {
             //表单提交的名称
             $col = [
-                'SYS_MEMBER_ENABLE',
-                'SYS_MEMBER_AUTO_ENABLE',
-                'SYS_FRONTEND_VERIFY',
-                'SYS_FRONTEND_TIMEOUT',
-                'SYS_FRONTEND_LOGIN_NUM',
-                'SYS_FRONTEND_LOCK_TIME',
+                'sys_member_enable',
+                'sys_member_auto_enable',
+                'sys_frontend_verify',
+                'sys_frontend_timeout',
+                'sys_frontend_login_num',
+                'sys_frontend_lock_time',
             ];
             return $this->_put_config($col, 'system');
         }

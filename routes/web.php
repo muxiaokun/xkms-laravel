@@ -265,10 +265,11 @@ Route::group([
         'prefix' => 'Member',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Member@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Member@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'Member@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'Member@del']);
-        Route::get('setting', ['as' => 'setting', 'uses' => 'Member@setting']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Member@add']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'Member@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'Member@del']);
+        Route::match(['get', 'post'], 'setting', ['as' => 'setting', 'uses' => 'Member@setting']);
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Member@ajax_api']);
     });
     Route::group([
         'as'     => 'MemberGroup::',
@@ -276,9 +277,10 @@ Route::group([
         'prefix' => 'MemberGroup',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'MemberGroup@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'MemberGroup@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'MemberGroup@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'MemberGroup@del']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'MemberGroup@add']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'MemberGroup@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'MemberGroup@del']);
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'MemberGroup@ajax_api']);
     });
     Route::group([
         'as'     => 'Message::',

@@ -17,7 +17,7 @@
                                     </a>
                                     <br/>@lang('common.click')@lang('common.path')@lang('common.copy')
                                     <a href="{:M_qrcode($Api_link)}" target="_blank">
-                                        <M:Img class="w100 h100" src="{:M_qrcode($Api_link)}"/>
+                                        @asyncImg(<img class="w100 h100" src="{{ mQrcode($Api_link) }}"/>)
                                     </a>
                                     <script type="text/javascript" charset="utf-8">M_ZeroClipboard('Api_link');</script>
                                 </div>
@@ -34,7 +34,7 @@
                                     </a>
                                     <br/>@lang('common.click')@lang('common.path')@lang('common.copy')
                                     <a href="{:M_qrcode($Oauth2_link)}" target="_blank">
-                                        <M:Img class="w100 h100" src="{:M_qrcode($Oauth2_link)}"/>
+                                        @asyncImg(<img class="w100 h100" src="{{ mQrcode($Oauth2_link) }}"/>)
                                     </a>
                                     <script type="text/javascript"
                                             charset="utf-8">M_ZeroClipboard('Oauth2_link');</script>

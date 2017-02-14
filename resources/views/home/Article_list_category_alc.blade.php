@@ -21,7 +21,7 @@
                                 <div class=" col-sm-12 pb10">
                         <div class="col-sm-2 pt10">
                             <a id="prettyPhoto{{ $index }}" href="{:M_U('article',$data['id'])}">
-                                <M:Img class="img-thumbnail" src="{{ $data['thumb']|M_exists }}"/>
+                                @asyncImg(<img class="img-thumbnail" src="{{ mExists($data['thumb']) }}"/>)
                             </a>
                         </div>
                         <a href="{:M_U('article',$data['id'])}">

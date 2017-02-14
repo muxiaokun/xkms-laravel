@@ -170,7 +170,7 @@ function mMktimeRange($inputName)
 function mExists($url, $isThumb = false)
 {
     if (!$url || !is_file(public_path($url))) {
-        $url = config('system.sys_default_image', $systemDefault);
+        $url = config('system.sys_default_image');
     } elseif ($isThumb) {
         $pathinfo = pathinfo(public_path($url));
         $newName  = $pathinfo['filename'] . '_thumb.' . $pathinfo['extension'];
@@ -190,7 +190,7 @@ function mGetContentUpload($str)
 }
 
 //将内容中的IMG标签替换成异步IMG标签
-function mSyncImg($content)
+function mAsyncImg($content)
 {
     $pattern = '/(<img.*?)\ssrc=([\'|\"])(.*?)\2(.*?\/?>)/is';
     $content = preg_replace_callback($pattern, function ($match) {

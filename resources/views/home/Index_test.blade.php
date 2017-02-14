@@ -27,16 +27,16 @@
 <body>
 <section class="container">
     <div class="w1000 h400">
-        <M:Img src="{:M_exists('Uploads/attached/image/index/banner1.png')}"/>
+        @asyncImg(<img src="{{ mExists('Uploads/attached/image/index/banner1.png') }}"/>)
     </div>
     <div class="w1000 h400">
-        <M:Img src="Uploads/attached/image/index/banner2.png"/>
+        @asyncImg(<img src="Uploads/attached/image/index/banner2.png"/>)
     </div>
     <div class="w1000 h400">
-        <M:Img src="Uploads/attached/image/index/banner1.png"/>
+        @asyncImg(<img src="Uploads/attached/image/index/banner1.png"/>)
     </div>
     <div class="w1000 h400">
-        <M:Img src="Uploads/attached/image/index/banner2.png"/>
+        @asyncImg(<img src="Uploads/attached/image/index/banner2.png"/>)
     </div>
 </section>
 <section class="container hidden">

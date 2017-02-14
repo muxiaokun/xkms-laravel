@@ -12,7 +12,7 @@
                         <div class="col-sm-3">
                             <div class="thumbnail">
                                 <a href="{:M_U('article',$data['id'])}">
-                                    <M:Img src="{{ $data['thumb']|M_exists }}"/>
+                                    @asyncImg(<img src="{{ mExists($data['thumb']) }}"/>)
                                 </a>
                                 <div class="caption">
                                     <a href="{:M_U('article',$data['id'])}">
@@ -38,7 +38,7 @@
                         <div class="col-sm-3">
                             <div class="thumbnail">
                                 <a href="{:M_U('article',$data['id'])}">
-                                    <M:Img src="{{ $data['thumb']|M_exists }}"/>
+                                    @asyncImg(<img src="{{ mExists($data['thumb']) }}"/>)
                                 </a>
                                 <div class="caption">
                                     <a href="{:M_U('article',$data['id'])}">

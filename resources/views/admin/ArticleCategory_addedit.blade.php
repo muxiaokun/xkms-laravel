@@ -135,7 +135,7 @@
                                     <div id="uploadbutton"
                                          title="@lang('common.selection')@lang('common.or')@lang('common.upload')"
                                          class="default_image">
-                                        <M:Img id="thumb_src" src="{:M_exists($edit_info['thumb'])}"/>
+                                        @asyncImg(<img id="thumb_src" src="{{ mExists($edit_info['thumb']) }}"/>)
                                     </div>
                                     <input id="thumb_val" type="hidden" name="thumb" value="{{ $edit_info['thumb'] }}"/>
                                     <script>

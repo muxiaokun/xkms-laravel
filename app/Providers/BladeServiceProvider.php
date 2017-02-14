@@ -13,8 +13,8 @@ class BladeServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Blade::directive('syncImg', function ($expression) {
-            return mSyncImg($expression);
+        Blade::directive('asyncImg', function ($expression) {
+            return mAsyncImg($expression);
         });
         Blade::directive('flash', function () {
             if (!isset($tag['src'])) {

@@ -36,7 +36,7 @@
                                 </div>
                             </div>
                             <div class="form-group text-center">
-                                @syncImg(<img class="col-sm-offset-4 col-sm-4" style="max-height:50px;"
+                                @asyncImg(<img class="col-sm-offset-4 col-sm-4" style="max-height:50px;"
                                      src="{{ route('VerificationCode') }}"
                                      onClick="M_change_verify(this,$('input[name=verify]'))"/>)
                             </div>

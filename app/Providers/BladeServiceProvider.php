@@ -107,20 +107,27 @@ EOF;
             return $re_script;
         });
         Blade::directive('timepicker', function ($expression) {
-            if (!isset($tag['start'])) {
+            if (!isset($expression)) {
                 return 'missing:start,[end]';
             }
 
-            if (isset($tag['start']) && preg_match('/^\s*?\$/', $tag['start'])) {
-                $tag['start'] = '<?php echo ' . $tag['start'] . ' ?>';
+            $end_input = '';
+            $inputs    = explode(',', $expression);
+            if (1 < count($inputs)) {
+                list($start_input, $end_input) = $inputs;
+            } else {
+                $start_input = $inputs[0];
             }
-            if (isset($tag['end']) && preg_match('/^\s*?\$/', $tag['end'])) {
-                $tag['end'] = '<?php echo ' . $tag['end'] . ' ?>';
+
+            if ($start_input) {
+                $start_input = '<?php echo "' . $start_input . '" ?>';
             }
+            if ($end_input) {
+                $end_input = '<?php echo "' . $end_input . '" ?>';
+            }
+
             //日期与时分秒必须以空格隔开
-            $format_arr = explode(' ', config('system.SYS_DATE_DETAIL'));
-            $dateFormat  = '';
-            $timeFormat  = '';
+            $format_arr = explode(' ', config('system.sys_date_detail'));
             if (preg_match('/[Y|m|d]/', $format_arr[0])) {
                 $dateFormat = $format_arr[0];
                 $timeFormat = $format_arr[1];
@@ -131,12 +138,11 @@ EOF;
             $dateFormat  = str_replace(['Y', 'm', 'd'], ['yy', 'mm', 'dd'], $dateFormat);
             $timeFormat  = str_replace(['H', 'i', 's'], ['HH', 'mm', 'ss'], $timeFormat);
             $date_config = 'changeYear:true,changeMonth:true,numberOfMonths:1,dateFormat:"' . $dateFormat . '",timeFormat: "' . $timeFormat . '"';
-            if (isset($tag['start']) && isset($tag['end'])) {
+            if ($start_input && $end_input) {
                 $re_script = <<<EOF
-<script>
 $(function() {
-    var datepicker_from_obj = $( "input[name={$tag['start']}]" );
-    var datepicker_to_obj = $( "input[name={$tag['end']}]" );
+    var datepicker_from_obj = $( "input[name={$start_input}]" );
+    var datepicker_to_obj = $( "input[name={$end_input}]" );
     datepicker_from_obj.datetimepicker({ {$date_config},
         onClose: function(dateText, inst) {
                 if (datepicker_to_obj.val() != '') {
@@ -170,14 +176,13 @@ $(function() {
         }
     });
 });
-</script>
 EOF;
             } else {
                 $re_script = <<<EOF
-    var datepicker_obj = $( "input[name={$tag['start']}]" ).datetimepicker({ {$date_config} })';
+    var datepicker_obj = $( "input[name={$start_input}]" ).datetimepicker({ {$date_config} });
 EOF;
             }
-            return $re_script;
+            return '<script type="text/javascript">' . $re_script . '</script>';
         });
         Blade::directive('kindeditor', function ($expression) {
             isset($expression) && $element = explode('|', $expression);
@@ -201,8 +206,8 @@ EOF;
                 'urlType'               => 'relative',
                 'allowFileManager'      => true,
             ]);
-            $js_global         = '';
-            $js_create         = '';
+            $js_global = '';
+            $js_create = '';
             foreach ($element as $e) {
                 $js_global .= 'var kindeditor_' . $e . ";";
                 $js_create .= 'kindeditor_' . $e . ' = ' . "K.create('textarea[name=\"" . $e . "\"]',{$editor_config});";

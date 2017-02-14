@@ -83,7 +83,7 @@
                                 </div>
                             </div>
                         </div>
-                        <M:Timepicker start="start_time" end="end_time"/>
+                        @timepicker(add_time,update_time)
                     </div>
                     <div class="row">
                         <div class="col-sm-6">

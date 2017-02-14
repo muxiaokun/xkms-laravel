@@ -216,7 +216,7 @@
                                 }
                             }
                         </script>
-                        <M:Timepicker start="add_time" end="update_time"/>
+                        @timepicker(add_time,update_time)
                         <label class="checkbox-inline">
                             <input type="checkbox"
                                    onclick="change_time(this)"/>@lang('common.change')@lang('common.time')

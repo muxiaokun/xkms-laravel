@@ -83,7 +83,7 @@
                                 </div>
                             </div>
                         </div>
-                        @timepicker(add_time,update_time)
+                        @timepicker(start_time,end_time)
                     </div>
                     <div class="row">
                         <div class="col-sm-6">

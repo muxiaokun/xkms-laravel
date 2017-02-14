@@ -189,7 +189,7 @@
                                 <label class="col-sm-6 control-label">@lang('common.add')@lang('common.time')</label>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control" disabled="disabled"
-                                           placeholder="@lang('common.add')@lang('common.time')" name="add_time"
+                                           placeholder="@lang('common.add')@lang('common.time')" name="created_at"
                                            value="{{ mDate($edit_info['created_at']) }}"/>
                                 </div>
                             </div>
@@ -199,14 +199,14 @@
                                 <label class="col-sm-6 control-label">@lang('common.update')@lang('common.time')</label>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control" disabled="disabled"
-                                           placeholder="@lang('common.update')@lang('common.time')" name="update_time"
+                                           placeholder="@lang('common.update')@lang('common.time')" name="updated_at"
                                            value="{{ mDate($edit_info['updated_at']) }}"/>
                                 </div>
                             </div>
                         </div>
                         <script type="text/javascript">
                             function change_time(obj) {
-                                var time_obj = $(obj).parent().parent().find('[name=add_time],[name=update_time]');
+                                var time_obj = $(obj).parent().parent().find('[name=created_at],[name=updated_at]');
                                 var status = $(obj).prop('checked');
                                 if (status) {
                                     time_obj.prop('disabled', false);
@@ -216,7 +216,7 @@
                                 }
                             }
                         </script>
-                        @timepicker(add_time,update_time)
+                        @timepicker(created_at,updated_at)
                         <label class="checkbox-inline">
                             <input type="checkbox"
                                    onclick="change_time(this)"/>@lang('common.change')@lang('common.time')

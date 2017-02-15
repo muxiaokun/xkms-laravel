@@ -231,19 +231,20 @@ EOF;
             return $re_script;
         });
         Blade::directive('uploadfile', function ($expression) {
-            if (!isset($tag['id']) || !isset($tag['type']) || !isset($tag['cb_fn'])) {
-                return "missing:id,type,cb_fn";
+            list($id, $type, $dir, $cb_fn) = explode(',', $expression);
+            if (!$id || !$type || !$dir || !$cb_fn) {
+                return "missing:id,type,cb_fn,dir";
             }
 
-            $button = '';
-            switch ($tag['type']) {
+            $filemanage = '';
+            switch ($type) {
                 case 'insertfile':
                     $button = <<<EOF
             editor.loadPlugin('insertfile', function() {
                 editor.plugin.fileDialog({
                     fileUrl : K('#url').val(),
                     clickFn : function(url, title) {
-                        {$tag['cb_fn']}(url,title)
+                        {$cb_fn}(url,title)
                         editor.hideDialog();
                     }
                 });
@@ -255,10 +256,10 @@ EOF;
                  * 在多文件上传按钮后面追加的按钮id默认加_filemanage
                  */
                 case 'multiimage':
-                    $lang1      = L('selection') . L('image');
+                    $lang1      = trans('common.selection') . trans('common.image');
                     $filemanage = <<<EOF
-        $('#{$tag['id']}').after('<button id="{$tag['id']}_filemanage" type="button" class="btn btn-default ml20">{$lang1}</button>');
-        K('#{$tag['id']}_filemanage').click(function() {
+        $('#{$id}').after('<button id="{$id}_filemanage" type="button" class="btn btn-default ml20">{$lang1}</button>');
+        K('#{$id}_filemanage').click(function() {
             editor.loadPlugin('filemanager', function() {
                 editor.plugin.filemanagerDialog({
                     viewType : 'VIEW',
@@ -270,7 +271,7 @@ EOF;
                         }
                         else
                         {
-                            {$tag['cb_fn']}(url,title);
+                            {$cb_fn}(url,title);
                         }
                         editor.hideDialog();
                     }
@@ -278,14 +279,14 @@ EOF;
             });
         });
 EOF;
-                    $button = <<<EOF
+                    $button     = <<<EOF
             editor.loadPlugin('multiimage', function() {
                 editor.plugin.multiImageDialog({
                     clickFn : function(urlList) {
                         K.each(urlList, function(i, data) {
                             var url = data.url;
                             var title = '';
-                            {$tag['cb_fn']}(url,title);
+                            {$cb_fn}(url,title);
                         });
                         editor.hideDialog();
                     }
@@ -299,15 +300,15 @@ EOF;
                 editor.plugin.imageDialog({
                     imageUrl : K('#url1').val(),
                     clickFn : function(url, title, width, height, border, align) {
-                        {$tag['cb_fn']}(url, title, width, height, border, align);
+                        {$cb_fn}(url, title, width, height, border, align);
                         editor.hideDialog();
                     }
                 });
             });
 EOF;
             }
-            $UploadFileUrl = U('ManageUpload/UploadFile');
-            $ManageFileUrl = U('ManageUpload/ManageFile', ['t' => $tag['dir']]);
+            $UploadFileUrl = route('UploadFile');
+            $ManageFileUrl = route('ManageFile', ['t' => $dir]);
             $re_script     = <<<EOF
 <import file="kindeditor/kindeditor-all-min" />
 <script type="text/javascript">
@@ -315,7 +316,7 @@ $(function(){
     KindEditor.create();
     KindEditor.ready(function(K) {
         var editor = K.editor({
-            extraFileUploadParams : {'t':'{$tag['dir']}','session_id':'{:session_id()}'},
+            extraFileUploadParams : {'t':'{$dir}','session_id':'{:session_id()}'},
             uploadJson : '{$UploadFileUrl}',
             fileManagerJson : '{$ManageFileUrl}',
             themeType : 'simple',
@@ -323,7 +324,7 @@ $(function(){
             allowFileManager : true
         });
         {$filemanage}
-        K('#{$tag['id']}').click(function() {
+        K('#{$id}').click(function() {
             {$button}
         });
     });

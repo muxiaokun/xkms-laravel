@@ -177,8 +177,7 @@
                                             }
                                             M_jqueryui_tooltip('#uploadbutton');
                                     </script>
-                                    <M:Uploadfile id="uploadbutton" type="image" dir="kindeditor"
-                                                  cb_fn="M_article_uploadbutton"/>
+                                    @uploadfile(uploadbutton,image,kindeditor,M_article_uploadbutton)
                                 </div>
                             </div>
                         </div>
@@ -325,8 +324,7 @@
                                             });
                                         @endif
                                     </script>
-                                    <M:Uploadfile id="uploadsbutton" type="multiimage" dir="kindeditor"
-                                                  cb_fn="M_article_uploadsbutton"/>
+                                    @uploadfile(uploadsbutton,multiimage,kindeditor,M_article_uploadsbutton)
                                 </div>
                             </div>
                         </div>

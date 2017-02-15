@@ -137,8 +137,7 @@
                                     <button id="uploadsbutton" type="button" class="btn btn-default">
                                         @lang('common.upload')@lang('common.image')@lang('common.group')
                                     </button>
-                                    <M:Uploadfile id="uploadsbutton" type="multiimage" dir="kindeditor"
-                                                  cb_fn="M_callback_itlink"/>
+                                    @uploadfile(uploadsbutton,multiimage,kindeditor,M_article_uploadsbutton)
                                 </div>
                             </div>
                             <script type="text/javascript" src="{{ asset('js/M_itlink_editor.js') }}"></script>

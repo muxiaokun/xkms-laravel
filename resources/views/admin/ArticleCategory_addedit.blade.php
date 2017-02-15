@@ -146,8 +146,7 @@
                                             }
                                             M_jqueryui_tooltip('#uploadbutton');
                                     </script>
-                                    <M:Uploadfile id="uploadbutton" type="image" dir="kindeditor"
-                                                  cb_fn="M_article_uploadbutton"/>
+                                    @uploadfile(uploadbutton,image,kindeditor,M_article_uploadbutton)
                                 </div>
                             </div>
                         </div>

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class BladeServiceProvider extends ServiceProvider
@@ -195,10 +196,11 @@ EOF;
             $ManageFileUrl = route('ManageFile', ['t' => 'kindeditor']);
             $editor_config = json_encode([
                 'uploadJson'            => $UploadFileUrl,
-                'filemanagerjson'       => $ManageFileUrl,
+                'fileManagerJson'       => $ManageFileUrl,
                 'extraFileUploadParams' => [
-                    't'          => 'kindeditor',
-                    'session_id' => session_id(),
+                    't'         => 'kindeditor',
+                    'user_type' => Route::is("Admin::*"),
+                    '_token'    => csrf_token(),
                 ],
                 'formatUploadUrl'       => false,
                 'resizeType'            => 1,
@@ -309,20 +311,28 @@ EOF;
             }
             $UploadFileUrl = route('UploadFile');
             $ManageFileUrl = route('ManageFile', ['t' => $dir]);
-            $re_script     = <<<EOF
+            $editor_config = json_encode([
+                'uploadJson'            => $UploadFileUrl,
+                'fileManagerJson'       => $ManageFileUrl,
+                'extraFileUploadParams' => [
+                    't'         => 'kindeditor',
+                    'user_type' => Route::is("Admin::*") ? 1 : 2,
+                    '_token'    => csrf_token(),
+                ],
+                'formatUploadUrl'       => false,
+                'resizeType'            => 1,
+                'themeType'             => 'simple',
+                'urlType'               => 'relative',
+                'allowFileManager'      => true,
+            ]);
+
+            $re_script = <<<EOF
 <import file="kindeditor/kindeditor-all-min" />
 <script type="text/javascript">
 $(function(){
     KindEditor.create();
     KindEditor.ready(function(K) {
-        var editor = K.editor({
-            extraFileUploadParams : {'t':'{$dir}','session_id':'{:session_id()}'},
-            uploadJson : '{$UploadFileUrl}',
-            fileManagerJson : '{$ManageFileUrl}',
-            themeType : 'simple',
-            urlType : 'relative',
-            allowFileManager : true
-        });
+        var editor = K.editor({$editor_config});
         {$filemanage}
         K('#{$id}').click(function() {
             {$button}

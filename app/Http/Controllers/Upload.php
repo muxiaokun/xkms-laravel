@@ -6,62 +6,48 @@
 namespace App\Http\Controllers;
 
 use App\Model;
+use Illuminate\Http\Request;
+use Illuminate\Filesystem\Filesystem;
 
-class Upload
+class Upload extends Controller
 {
-    protected $config = [
-
-//        Upload Class base configure
-        //        'mimes'         =>  array(), //允许上传的文件MiMe类型
-        //        'maxSize'       =>  0, //上传的文件大小限制 (0-不做限制)
-        //        'exts'          =>  array(), //允许上传的文件后缀
-        //        'autoSub'       =>  true, //自动子目录保存文件
-        //        'subName'       =>  array('date', 'Y-m-d'), //子目录创建方式，[0]-函数名，[1]-参数，多个参数使用数组
-        'rootPath' => 'Uploads/', //保存根路径
-        //        'savePath'      =>  '', //保存路径
-        //        'saveName'      =>  array('uniqid', ''), //上传文件命名规则，[0]-函数名，[1]-参数，多个参数使用数组
-        //        'saveExt'       =>  '', //文件保存后缀，空则使用原后缀
-        //        'replace'       =>  false, //存在同名是否覆盖
-        //        'hash'          =>  true, //是否生成hash编码
-        //        'callback'      =>  false, //检测文件是否存在回调，如果存在返回文件信息数组
-        //        'driver'        =>  '', // 文件上传驱动
-        //        'driverConfig'  =>  array(), // 上传驱动配置
-    ];
-
-    public function UploadFile()
+    public function UploadFile(Request $request)
     {
-        $UploadUtil  = new \Think\Upload($this->config);
-        $getPathExts = $this->get_path_exts();
-        if (!$getPathExts) {
-            return;
+        if (!$request->hasFile('imgFile')) {
+            return $this->kind_json('file not exists!');
         }
 
-        $UploadUtil->savePath = $getPathExts['path'] . $getPathExts['dir_name'];
-        $UploadUtil->exts     = $getPathExts['exts'];
+        if (!$request->file('imgFile')->isValid()) {
+
+            return $this->kind_json($request->file('imgFile')->getErrorMessage());
+        }
+
+        $getPathExts = $this->get_path_exts();
+
+        $path = $request->imgFile->store($getPathExts['path'], 'public');
         //大文件上传
         set_time_limit(0);
-        $fileInfo = $UploadUtil->uploadOne($_FILES['imgFile']);
-        if (!$fileInfo) {
-            // 上传错误提示错误信息
-            $this->kind_json($UploadUtil->getError());
-        } else {
-            $fileUrl = $UploadUtil->rootPath . $fileInfo['savepath'] . $fileInfo['savename'];
-            // 上传文件的信息写入数据库
-            $userId   = ('Admin' == MODULE_NAME) ? session('backend_info.id') : session('frontend_info.id');
-            $userType = ('Admin' == MODULE_NAME) ? 1 : 2;
-            $data     = [
-                'name'      => substr($fileInfo['name'], 0, strrpos($fileInfo['name'], '.')),
-                'user_id'   => $userId,
-                'user_type' => $userType,
-                'path'      => $fileUrl,
-                'mime'      => $fileInfo['type'],
-                'size'      => $fileInfo['size'],
-                'suffix'    => $fileInfo['ext'],
-            ];
-            Model\ManageUpload::create($data);
-            // 上传成功 返回文件信息 伪静态目录结构__ROOT__ . '/' .
-            $this->kind_json(__ROOT__ . '/' . $fileUrl, false);
+        // 上传文件的信息写入数据库
+        $userType = request('user_type');
+        $userId   = $userType ? session('backend_info.id') : session('frontend_info.id');
+        if (!$userId) {
+            return $this->kind_json('No permission!');
         }
+
+
+        $data = [
+            'name'      => $request->file('imgFile')->getClientOriginalName(),
+            'user_id'   => $userId,
+            'user_type' => $userType,
+            'path'      => $path,
+            'mime'      => $request->file('imgFile')->getMimeType(),
+            'size'      => $request->file('imgFile')->getSize(),
+            'suffix'    => $request->file('imgFile')->getClientOriginalExtension(),
+        ];
+        Model\ManageUpload::create($data);
+        $filesystem   = new Filesystem();
+        $storage_path = asset('storage/' . $getPathExts['path'] . '/' . $filesystem->basename($path));
+        return $this->kind_json($storage_path, false);
     }
 
     //kindeditor文件管理器接口
@@ -72,164 +58,119 @@ class Upload
             return;
         }
 
-        $UploadUtil = new \Think\Upload($this->config);
-        $rootPath   = $UploadUtil->rootPath . $getPathExts['path'];
+        $filesystem = new Filesystem();
+        $rootUrl    = asset('storage') . '/';
+        $rootPath   = storage_path('app/public/');
         //目录名
-        $dirName = $getPathExts['dir_name'];
-        if ($dirName !== '') {
-            $rootPath .= $dirName;
-            $rootUrl = $rootPath;
-            if (!file_exists($rootPath)) {
-                mkdir($rootPath, 0755, true);
-            }
+        $path = $getPathExts['path'];
+        if ($path !== '') {
+            $rootPath .= $path . '/';
+            $rootUrl .= $path . '/';
         }
         //根据path参数，设置各路径和URL
-        $getPath = request('get.path');
-        if (!$getPath) {
+        $getPath            = request('path');
+        if ($getPath) {
+            $currentPath    = $rootPath;
+            $currentUrl     = $rootUrl;
+            $currentDirPath = $getPath;
+            $moveupDirPath  = preg_replace('/(.*?)[^\/]+\/$/', '$1', $currentDirPath);
+        } else {
             $currentPath    = $rootPath;
             $currentUrl     = $rootUrl;
             $currentDirPath = '';
             $moveupDirPath  = '';
-        } else {
-            $currentPath    = $rootPath . '/' . $getPath;
-            $currentUrl     = $rootUrl . $getPath;
-            $currentDirPath = $getPath;
-            $moveupDirPath  = preg_replace('/(.*?)[^\/]+\/$/', '$1', $currentDirPath);
         }
         $order = request('get.order') ? request('get.order') : 'name';
 
         //不允许使用..移动到上一级目录
         if (preg_match('/\.\./', $currentPath)) {
-            echo 'Access is not allowed.';
-            return;
+            return 'Access is not allowed.';
         }
         //最后一个字符不是/
         if (!preg_match('/\/$/', $currentPath)) {
-            echo 'Parameter is not valid.';
-            return;
+            return 'Parameter is not valid.';
         }
         //目录不存在或不是目录
-        if (!file_exists($currentPath) || !is_dir($currentPath)) {
-            echo 'Directory does not exist.';
-            return;
+        if (!$filesystem->isDirectory($currentPath)) {
+            return 'Directory does not exist.';
         }
 
         //图片扩展名
         $extArr = ['gif', 'jpg', 'jpeg', 'png', 'bmp'];
         //遍历目录取得文件信息
-        $fileList = [];
-        if ($handle = opendir($currentPath)) {
-            $i = 0;
-            while (false !== ($filename = readdir($handle))) {
-                if ($filename{0} == '.') {
-                    continue;
-                }
-
-                $file = $currentPath . $filename;
-                if (is_dir($file)) {
-                    $fileList[$i]['is_dir']   = true; //是否文件夹
-                    $fileList[$i]['has_file'] = (count(scandir($file)) > 2); //文件夹是否包含文件
-                    $fileList[$i]['filesize'] = 0; //文件大小
-                    $fileList[$i]['is_photo'] = false; //是否图片
-                    $fileList[$i]['filetype'] = ''; //文件类别，用扩展名判断
-                } else {
-                    $fileList[$i]['is_dir']   = false;
-                    $fileList[$i]['has_file'] = false;
-                    $fileList[$i]['filesize'] = filesize($file);
-                    $fileList[$i]['dir_path'] = '';
-                    $fileExt                  = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-                    $fileList[$i]['is_photo'] = in_array($fileExt, $extArr);
-                    $fileList[$i]['filetype'] = $fileExt;
-                }
-                $fileList[$i]['filename'] = $filename; //文件名，包含扩展名
-                $fileList[$i]['datetime'] = date('Y-m-d H:i:s', filemtime($file)); //文件最后修改时间
-                $i++;
-            }
-            closedir($handle);
-        }
-        //匿名函数phpversion>5.3.0
-        usort($fileList, function ($a, $b) {
-            $order = request('get.order', null, 'strtolower');
-            if ($a['is_dir'] && !$b['is_dir']) {
-                return -1;
-            } else {
-                if (!$a['is_dir'] && $b['is_dir']) {
-                    return 1;
-                } else {
-                    if ($order == 'size') {
-                        if ($a['filesize'] > $b['filesize']) {
-                            return 1;
-                        } else {
-                            if ($a['filesize'] < $b['filesize']) {
-                                return -1;
-                            } else {
-                                return 0;
-                            }
-                        }
-                    } else {
-                        if ($order == 'type') {
-                            return strcmp($a['filetype'], $b['filetype']);
-                        } else {
-                            return strcmp($a['filename'], $b['filename']);
-                        }
-                    }
-                }
-            }
-        });
+        $fileList = $filesystem->files($currentPath);
 
         $result = [];
+        foreach ($fileList as $key => $file) {
+            if ($filesystem->isDirectory($file)) {
+                $result['file_list'][$key]['is_dir']   = true;
+                $result['file_list'][$key]['has_file'] = ($filesystem->files($currentPath)) ? true : false;
+                $result['file_list'][$key]['filesize'] = 0;
+                $result['file_list'][$key]['is_photo'] = false;
+                $result['file_list'][$key]['filetype'] = '';
+            } elseif ($filesystem->isFile($file)) {
+                $result['file_list'][$key]['is_dir']   = false;
+                $result['file_list'][$key]['has_file'] = false;
+                $result['file_list'][$key]['filesize'] = $filesystem->size($file);
+                $fileExt                               = $filesystem->extension($file);
+                $result['file_list'][$key]['is_photo'] = in_array($fileExt, $extArr);
+                $result['file_list'][$key]['filetype'] = $fileExt;
+
+            }
+            $result['file_list'][$key]['filename'] = $filesystem->basename($file); //文件名，包含扩展名
+            $result['file_list'][$key]['datetime'] = date('Y-m-d H:i:s', $filesystem->lastModified($file)); //文件最后修改时间
+        }
+
         //相对于根目录的上一级目录
         $result['moveup_dir_path'] = $moveupDirPath;
         //相对于根目录的当前目录
         $result['current_dir_path'] = $currentDirPath;
         //当前目录的URL 伪静态目录结构__ROOT__ . '/' .
-        $result['current_url'] = __ROOT__ . '/' . $currentUrl;
+        $result['current_url'] = $currentUrl;
         //文件数
         $result['total_count'] = count($fileList);
         //文件列表数组
-        $result['file_list'] = $fileList;
 
-        //输出JSON字符串
-        header('Content-type: application/json; charset=UTF-8');
-        echo json_encode($result);
+        return $result;
     }
 
     private function kind_json($msg, $isError = true)
     {
-        header('Content-type: text/html; charset=UTF-8');
         if ($isError) {
-            echo json_encode(['error' => 1, 'message' => $msg]);
+            return ['error' => 1, 'message' => $msg];
         } else {
-            echo json_encode(['error' => 0, 'url' => $msg]);
+            return ['error' => 0, 'url' => $msg];
         }
-        return;
     }
 
     private function get_path_exts()
     {
+        $dir      = request('dir');
         $allowArr = [
             'image' => ['gif', 'jpg', 'jpeg', 'png', 'bmp'],
             'flash' => ['swf', 'flv'],
             'media' => ['swf', 'flv', 'mp3', 'wav', 'wma', 'wmv', 'mid', 'avi', 'mpg', 'asf', 'rm', 'rmvb'],
             'file'  => ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'htm', 'html', 'txt', 'zip', 'rar', 'gz', 'bz2'],
         ];
-        $dirName  = request('get.dir') ? request('get.dir') : '';
-        if (empty($allowArr[$dirName]) && '' != $dirName) {
-            $this->kind_json("Invalid Directory name.");
-            return false;
-        }
-        if ($dirName) {
-            $dirName .= '/';
+
+        if (isset($allowArr[$dir])) {
+            $exts = $allowArr[$dir];
+        } else {
+            false;
         }
 
         switch (request('t')) {
             case 'kindeditor':
-                $path = 'attached/';
+                $path = 'attached';
                 break;
             default:
-                $path = 'other/';
+                $path = 'other';
+        }
+        if ($dir) {
+            $path .= '/' . $dir;
         }
 
-        return ['path' => $path, 'exts' => $allowArr[$dirName], 'dir_name' => $dirName];
+
+        return ['path' => $path, 'exts' => $exts, 'dir' => $dir,];
     }
 }

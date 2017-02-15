@@ -140,7 +140,7 @@
                                     <input id="thumb_val" type="hidden" name="thumb" value="{{ $edit_info['thumb'] }}"/>
                                     <script>
                                         function M_article_uploadbutton(url, title) {
-                                            {//必须替换掉__ROOT__/ 原因伪静态目录结构}
+                                            {{-- 必须替换掉__ROOT__/ 原因伪静态目录结构 --}}
                                                 $('#thumb_val').val(url.replace(RegExp('^' + $Think.root), ''));
                                                 $('#thumb_src').attr('src', url);
                                             }
@@ -151,7 +151,7 @@
                             </div>
                         </div>
                     </div>
-                    {//是否可以管理权限}
+                    {{-- 是否可以管理权限 --}}
                     @if ($manage_privilege)
                         <div class="row">
                             <div class="col-sm-6">

@@ -4,7 +4,7 @@
     <script type="text/javascript">
         $(function () {
                 @foreach ($article_category_list as $article_category)
-            {//默认展开所有的子级分类,如果不展开提交时表单数据将不存在}
+            {{-- 默认展开所有的子级分类,如果不展开提交时表单数据将不存在 --}}
                 @if ($article_category['checked'])
     $('input[name="s_limit[{{ $article_category['id'] }}]"]').val('{{ $edit_info['ext_info'][$article_category['id']]['s_limit'] }}' || 0);
                 $('select[name="template_list[{{ $article_category['id'] }}]"] option[value="{{ $edit_info['ext_info'][$article_category['id']]['template'] }}"]').prop('selected', true);
@@ -98,7 +98,7 @@
                             </div>
                         </div>
                     </div>
-                    {//是否可以管理权限}
+                    {{-- 是否可以管理权限 --}}
                     @if ($manage_privilege)
                         <div class="row">
                             <div class="col-sm-6">

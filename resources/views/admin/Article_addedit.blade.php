@@ -171,11 +171,11 @@
                                     <input id="thumb_val" type="hidden" name="thumb" value="{{ $edit_info['thumb'] }}"/>
                                     <script>
                                         function M_article_uploadbutton(url, title) {
-                                            {//必须替换掉__ROOT__/ 原因伪静态目录结构}
-                                                $('#thumb_val').val(url.replace(RegExp('^' + $Think.root), ''));
-                                                $('#thumb_src').attr('src', url);
-                                            }
+                                            {{-- 必须替换掉__ROOT__/ 原因伪静态目录结构 --}}
+                                            $('#thumb_val').val(url);
+                                            $('#thumb_src').attr('src', url);
                                             M_jqueryui_tooltip('#uploadbutton');
+                                        }
                                     </script>
                                     @uploadfile(uploadbutton,image,kindeditor,M_article_uploadbutton)
                                 </div>
@@ -270,15 +270,15 @@
                                     <script>
                                         function M_article_uploadsbutton(url, title, description) {
                                             var image_box = $(Array(
-                                                    '<div class="fl mr20 mb20" style="width:195px;height:120px;">',
-                                                    '<div class="default_image">',
-                                                    '<img />',
-                                                    '<input type="hidden" name="album[]" />',
-                                                    '</div>',
-                                                    '<div class="fr glyphicon glyphicon-remove" style="top:-115px;right:5px;cursor:pointer;" ></div>',
-                                                    '</div>'
+                                                '<div class="fl mr20 mb20" style="width:195px;height:120px;">',
+                                                '<div class="default_image">',
+                                                '<img />',
+                                                '<input type="hidden" name="album[]" />',
+                                                '</div>',
+                                                '<div class="fr glyphicon glyphicon-remove" style="top:-115px;right:5px;cursor:pointer;" ></div>',
+                                                '</div>'
                                             ).join(''));
-                                            {//必须替换掉__ROOT__/ 原因伪静态目录结构}
+                                            {{-- 必须替换掉__ROOT__/ 原因伪静态目录结构 --}}
                                                 if ('object' == typeof(url)) {
                                                     console.log(url);
                                                     title = url.title;

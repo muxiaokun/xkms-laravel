@@ -21,7 +21,7 @@ class BladeServiceProvider extends ServiceProvider
                 return 'missing:src';
             }
 
-            $tag['src'] = __ROOT__ . '/' . $tag['src'];
+            $tag['src'] = asset($tag['src']);
             $width      = $height = '';
             isset($tag['width']) && $width = ' width="' . $tag['width'] . '"';
             isset($tag['height']) && $height = ' height="' . $tag['height'] . '"';
@@ -334,7 +334,13 @@ EOF;
             return $re_script;
         });
         Blade::directive('ckplayer', function ($expression) {
-            return M_ckplayer($tag);
+            $argv   = explode(',', $expression);
+            $config = [];
+            foreach ($argv as $value) {
+                list($k, $v) = explode('=', $value);
+                $config[$k] = $v;
+            }
+            return mCkplayer($expression);
         });
     }
 

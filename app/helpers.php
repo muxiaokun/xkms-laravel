@@ -4,6 +4,7 @@
 /**
  * @param        $key
  * @param string $item
+ * 修改环境变量文件
  */
 function mPutenv($key, $item = '')
 {
@@ -29,6 +30,7 @@ function mPutenv($key, $item = '')
  * @param array $arr
  * @param bool  $useOld
  * @return bool|int
+ * 数组写入到文件
  */
 function mPutArr($path, $arr = [], $useOld = true)
 {
@@ -51,6 +53,7 @@ EOF;
 /**
  * @param $path
  * @return bool|mixed
+ * 获取文件中的数组
  */
 function mGetArr($path)
 {
@@ -66,6 +69,7 @@ function mGetArr($path)
  * @param string $type
  * @param int    $length
  * @return string
+ * 随即字符串
  */
 function mRandStr($type = 'vc', $length = 4)
 {
@@ -82,13 +86,55 @@ function mRandStr($type = 'vc', $length = 4)
     return $rand;
 }
 
-function mParseContent($content)
+/**
+ * @param $fileUrl
+ * @return mixed
+ * @return string
+ * 资源绝对路径转相对路径
+ */
+function mParseUploadUrl($fileUrl)
 {
-    //删除相对路径前的../
+    $baseUrl = request()->getBaseUrl() . '/';
+    $urlPreg = '/' . str_replace('/', '\/', $baseUrl) . '/';
+    return preg_replace($urlPreg, '', $fileUrl, 1);
+}
+
+/**
+ * @param $fileUrl
+ * @return string
+ * 资源相对路径转绝对路径
+ */
+function mMakeUploadUrl($fileUrl)
+{
+    $baseUrl = request()->getBaseUrl() . '/';
+    return $baseUrl . $fileUrl;
+}
+
+/**
+ * @param      $content
+ * @param bool $useBaseUrl
+ * @return string
+ * 格式化内容中的资源地址 绝对和相对互转
+ */
+function mParseContent($content, $useBaseUrl = false)
+{
     $content = htmlspecialchars_decode($content);
-    $urlpreg = MGetUrlpreg();
-    $content = preg_replace($urlpreg['pattern'], $urlpreg['replacement'], $content);
+    $urlPreg = mGetUrlpreg($useBaseUrl);
+    $content = preg_replace($urlPreg['pattern'], $urlPreg['replacement'], $content);
     return htmlspecialchars($content);
+}
+
+/**
+ * @param $content
+ * @return mixed
+ * 获取内容中的资源地址
+ */
+function mGetContentUpload($content)
+{
+    $baseUrl = request()->getBaseUrl() . '/';
+    $baseUrl = str_replace('/', '\/', $baseUrl);
+    preg_match_all('/(\'|\")' . $baseUrl . '(storage\/.*?)\1/i', $content, $uploadLinks);
+    return $uploadLinks[2];
 }
 
 //切割字符串
@@ -179,14 +225,7 @@ function mExists($url, $isThumb = false)
             return $newFile;
         }
     }
-    return asset($url);
-}
-
-// 获得字符串中的本站资源链接
-function mGetContentUpload($str)
-{
-    preg_match_all('/(&quot;|\')\s*(?!(http:\/\/|https:\/\/|ftp:\/\/))[^\1]*?(Uploads[^\1]*?)\1/i', $str, $uploadLinks);
-    return $uploadLinks[3];
+    return mMakeUploadUrl($url);
 }
 
 //将内容中的IMG标签替换成异步IMG标签
@@ -657,12 +696,13 @@ function mScanTemplate($name, $controller)
 }
 
 //生成处理url的preg
-function mGetUrlpreg($prefix = '')
+function mGetUrlpreg($useBaseUrl = false)
 {
-    $pregRoot = '((\.\.\/){0,})(?!';
-    $pregRoot .= (__ROOT__) ? str_replace('/', '\/', __ROOT__) : '\/';
-    $pregRoot .= '|#|\w*:)';
-    $urlpreg['pattern']     = [
+    $baseUrl  = request()->getBaseUrl() . '/';
+    $pregRoot = '(';
+    $pregRoot .= ($baseUrl) ? str_replace('/', '\/', $baseUrl) : '\/';
+    $pregRoot .= '|#|\w*:)?';
+    $urlPreg['pattern']     = [
         '/(<a.*?\shref=)([\'|\"])' . $pregRoot . '(.*?)\2(.*?>)/is',
         '/(<script.*?\ssrc=)([\'|\"])' . $pregRoot . '(.*?)\2(.*?>)/is',
         '/(<link.*?\shref=)([\'|\"])' . $pregRoot . '(.*?)\2(.*?\/?>)/is',
@@ -675,8 +715,8 @@ function mGetUrlpreg($prefix = '')
         //处理获得src
         '/(.?)<ntag.*?\surl=([\'|\"])' . $pregRoot . '(.*?)\2.*?\/?>(.?)/is',
     ];
-    $urlpreg['replacement'] = '\1\2' . $prefix . '\5\2\6';
-    return $urlpreg;
+    $urlPreg['replacement'] = $useBaseUrl ? '\1\2' . $baseUrl . '\4\2\5' : '\1\2\4\2\5';
+    return $urlPreg;
 }
 
 //使用PHPMailer发送邮件

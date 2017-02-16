@@ -88,7 +88,7 @@
                                 var config = {
                                     @if ($edit_info['attribute_tpl'])'def_data':{!! json_encode($edit_info['attribute_tpl']) !!},
                                     @endif
-                                            @if ($edit_info['attribute'])'def_selected':{{ $edit_info['attribute']|json_encode }},
+                                            @if ($edit_info['attribute'])'def_selected':{!! json_encode($edit_info['attribute']) !!},
                                     @endif
                                     'run_type': 'select',
                                     'select_obj': $('select[name=cate_id]'),
@@ -280,18 +280,17 @@
                                             ).join(''));
                                             {{-- 必须替换掉__ROOT__/ 原因伪静态目录结构 --}}
                                                 if ('object' == typeof(url)) {
-                                                    console.log(url);
                                                     title = url.title;
                                                     description = url.description;
                                                     url = url.src;
                                                 }
                                                 var img_data = {
-                                                    'src': url.replace(RegExp('^' + $Think.root), ''),
+                                                    'src': url,
                                                     'title': title,
                                                     'description': description
                                                 }
                                                 image_box.find('input').val(JSON.stringify(img_data));
-                                                image_box.find('img').attr('src', $Think.root + url.replace(RegExp('^' + $Think.root), ''));
+                                            image_box.find('img').attr('src', url);
 
                                                 var image_title = $('#image_title');
                                                 var image_description = $('#image_description');
@@ -319,7 +318,7 @@
                                             @if ($edit_info['album'])
                                             $(function () {
                                                 @foreach ($edit_info['album'] as $data)
-                                                     @if ('null' != $data)M_article_uploadsbutton({{ $data }});@endif
+                                                     @if ('null' != $data)M_article_uploadsbutton({!! json_encode($data) !!});@endif
                                                 @endforeach
                                             });
                                         @endif

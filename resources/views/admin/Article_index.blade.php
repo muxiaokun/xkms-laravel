@@ -44,7 +44,7 @@
                                 {{ $article['cate_name'] }}
                             </td>
                             <td>
-                                {{ mDate($article['created_at']) }}
+                                {{ $article['created_at'] }}
                             </td>
                             <td>
                                 @if ($article['if_show'])@lang('common.yes')@else @lang('common.no')@endif

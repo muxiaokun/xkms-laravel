@@ -202,10 +202,8 @@ EOF;
                     'user_type' => Route::is("Admin::*"),
                     '_token'    => csrf_token(),
                 ],
-                'formatUploadUrl'       => false,
                 'resizeType'            => 1,
                 'themeType'             => 'simple',
-                'urlType'               => 'relative',
                 'allowFileManager'      => true,
             ]);
             $js_global = '';
@@ -319,10 +317,8 @@ EOF;
                     'user_type' => Route::is("Admin::*") ? 1 : 2,
                     '_token'    => csrf_token(),
                 ],
-                'formatUploadUrl'       => false,
                 'resizeType'            => 1,
                 'themeType'             => 'simple',
-                'urlType'               => 'relative',
                 'allowFileManager'      => true,
             ]);
 

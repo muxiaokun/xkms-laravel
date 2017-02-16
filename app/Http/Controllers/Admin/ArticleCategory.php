@@ -5,33 +5,33 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
 use App\Model;
+use Illuminate\Support\Facades\View;
 
 class ArticleCategory extends Backend
 {
     //列表
     public function index()
     {
-        //建立where
-        $where      = [];
-        $whereValue = request('name');
-        $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
-        $whereValue = request('channel_id');
-        $whereValue && $where[] = ['channel_id', $whereValue];
-        $whereValue = request('if_show');
-        $whereValue && $where['if_show'] = (1 == $whereValue) ? 1 : 0;
-        $where['parent_id'] = 0;
-        $whereValue         = request('parent_id');
-        $whereValue && $where[] = ['parent_id', $whereValue];
-        if (1 != session('backend_info.id')) {
-            $allowCategory = Model\ArticleCategory::mFindAllow();
-            if (isset($where['id']) && in_array($where['id'], $allowCategory)) {
-                $where['id'] = $where['id'];
-            } else {
-                $where['id'] = ['in', $allowCategory];
-            }
-        }
+        $allowCategory = Model\ArticleChannel::mFindAllow();
         //初始化翻页 和 列表数据
-        $articleCategoryList = Model\ArticleCategory::where($where)->get();
+        $articleCategoryList    = Model\ArticleCategory::where(function ($query) use ($allowCategory) {
+            $name = request('name');
+            if ($name) {
+                $query->where('name', 'like', '%' . $name . '%');
+            }
+
+            $if_show = request('if_show');
+            if ($if_show) {
+                $query->where('if_show', '=', (1 == $if_show) ? 1 : 0);
+            }
+
+            $login_id = session('backend_info.id');
+            if (1 != $login_id) {
+                //非root需要权限
+                $query->colWhere($allowCategory);
+            }
+
+        })->get();
         foreach ($articleCategoryList as &$articleCategory) {
             //parent_id 用完销毁不能产生歧义
             $where['parent_id'] = $articleCategory['id'];
@@ -79,7 +79,7 @@ class ArticleCategory extends Backend
     public function add()
     {
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData('add');
+            $data = $this->makeData('add');
             if (!is_array($data)) {
                 return $data;
             }
@@ -234,32 +234,49 @@ class ArticleCategory extends Backend
     //异步数据获取
     protected function getData($field, $data)
     {
-        $where  = [];
         $result = ['status' => true, 'info' => []];
         switch ($field) {
             case 'manage_id':
-                isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                isset($data['keyword']) && $where['admin_name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminUserList = Model\Admin::where($where)->get();
-                foreach ($adminUserList as $adminUser) {
-                    $result['info'][] = ['value' => $adminUser['id'], 'html' => $adminUser['admin_name']];
-                }
+                Model\Admin::where(function ($query) use ($data) {
+                    if (isset($data['inserted'])) {
+                        $query->whereNotIn('id', $data['inserted']);
+                    }
+
+                    if (isset($data['keyword'])) {
+                        $query->where('admin_name', 'like', '%' . $data['keyword'] . '%');
+                    }
+
+                })->get()->each(function ($item, $key) use (&$result) {
+                    $result['info'][] = ['value' => $item['id'], 'html' => $item['admin_name']];
+                });
                 break;
             case 'manage_group_id':
-                isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminGroupList = Model\AdminGroup::where($where)->get();
-                foreach ($adminGroupList as $adminGroup) {
-                    $result['info'][] = ['value' => $adminGroup['id'], 'html' => $adminGroup['name']];
-                }
+                Model\AdminGroup::where(function ($query) use ($data) {
+                    if (isset($data['inserted'])) {
+                        $query->whereNotIn('id', $data['inserted']);
+                    }
+
+                    if (isset($data['keyword'])) {
+                        $query->where('name', 'like', '%' . $data['keyword'] . '%');
+                    }
+
+                })->get()->each(function ($item, $key) use (&$result) {
+                    $result['info'][] = ['value' => $item['id'], 'html' => $item['name']];
+                });
                 break;
             case 'access_group_id':
-                isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $memberGroupList = Model\MemberGroup::where($where)->get();
-                foreach ($memberGroupList as $memberGroup) {
-                    $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
-                }
+                Model\MemberGroup::where(function ($query) use ($data) {
+                    if (isset($data['inserted'])) {
+                        $query->whereNotIn('id', $data['inserted']);
+                    }
+
+                    if (isset($data['keyword'])) {
+                        $query->where('name', 'like', '%' . $data['keyword'] . '%');
+                    }
+
+                })->get()->each(function ($item, $key) use (&$result) {
+                    $result['info'][] = ['value' => $item['id'], 'html' => $item['name']];
+                });
                 break;
         }
 
@@ -377,12 +394,12 @@ class ArticleCategory extends Backend
             $where['id'] = ['neq', $id];
         }
 
-        $assign['category_list']         = Model\ArticleCategory::where($where)->all();
-        $managePrivilege                 = (1 == session('backend_info.id')) || in_array($id,
-                Model\ArticleCategory::mFindAllow('ma'));
+        $assign['category_list'] = Model\ArticleCategory::where($where)->get();
+        $managePrivilege         = Model\ArticleCategory::mFindAllow('ma')->search($id) || 1 == session('backend_info.id');
         $assign['manage_privilege']      = $managePrivilege;
         $assign['template_list']         = mScanTemplate('category', 'Article');
         $assign['list_template_list']    = mScanTemplate('list_category', 'Article');
         $assign['article_template_list'] = mScanTemplate('article', 'Article');
+        View::share($assign);
     }
 }

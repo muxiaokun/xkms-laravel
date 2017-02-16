@@ -52,12 +52,12 @@ class Article extends Backend
         $assign['article_list'] = $articleList;
 
         //初始化where_info
-        $categoryList = Model\ArticleCategory::whereIn('cate_id', $allowCategory)->get();
+        $categoryList = Model\ArticleCategory::colWhere($allowCategory)->get();
         $searchCategoryList     = [];
         foreach ($categoryList as $category) {
             $searchCategoryList[$category['id']] = $category['name'];
         }
-        $channelList            = Model\ArticleChannel::whereIn('channel_id', $allowChannel)->get();
+        $channelList = Model\ArticleChannel::colWhere($allowChannel)->get();
         $searchChannelList      = [];
         foreach ($channelList as $channel) {
             $searchChannelList[$channel['id']] = $channel['name'];

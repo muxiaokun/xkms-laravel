@@ -5,24 +5,34 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
 use App\Model;
+use Illuminate\Support\Facades\View;
 
 class ArticleChannel extends Backend
 {
     //列表
     public function index()
     {
-        //建立where
-        $where      = [];
-        $whereValue = request('name');
-        $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
-        $whereValue = request('if_show');
-        $whereValue && $where['if_show'] = (1 == $whereValue) ? 1 : 0;
-        if (1 != session('backend_info.id')) {
-            $allowChannel = Model\ArticleChannel::mFindAllow();
-            $where['id']  = ['in', $allowChannel];
-        }
+
+        $allowChannel = Model\ArticleChannel::mFindAllow();
         //初始化翻页 和 列表数据
-        $articleChannelList = Model\ArticleChannel::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
+        $articleChannelList             = Model\ArticleChannel::where(function ($query) use ($allowChannel) {
+            $name = request('name');
+            if ($name) {
+                $query->where('name', 'like', '%' . $name . '%');
+            }
+
+            $if_show = request('if_show');
+            if ($if_show) {
+                $query->where('if_show', '=', (1 == $if_show) ? 1 : 0);
+            }
+
+            $login_id = session('backend_info.id');
+            if (1 != $login_id) {
+                //非root需要权限
+                $query->colWhere($allowChannel);
+            }
+
+        })->paginate(config('system.sys_max_row'))->appends(request()->all());
         $assign['article_channel_list'] = $articleChannelList;
 
         //初始化where_info
@@ -185,32 +195,49 @@ class ArticleChannel extends Backend
     //异步数据获取
     protected function getData($field, $data)
     {
-        $where  = [];
         $result = ['status' => true, 'info' => []];
         switch ($field) {
             case 'manage_id':
-                isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                isset($data['keyword']) && $where['admin_name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminUserList = Model\Admin::where($where)->get();
-                foreach ($adminUserList as $adminUser) {
-                    $result['info'][] = ['value' => $adminUser['id'], 'html' => $adminUser['admin_name']];
-                }
+                Model\Admin::where(function ($query) use ($data) {
+                    if (isset($data['inserted'])) {
+                        $query->whereNotIn('id', $data['inserted']);
+                    }
+
+                    if (isset($data['keyword'])) {
+                        $query->where('admin_name', 'like', '%' . $data['keyword'] . '%');
+                    }
+
+                })->get()->each(function ($item, $key) use (&$result) {
+                    $result['info'][] = ['value' => $item['id'], 'html' => $item['admin_name']];
+                });
                 break;
             case 'manage_group_id':
-                isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $adminGroupList = Model\AdminGroup::where($where)->get();
-                foreach ($adminGroupList as $adminGroup) {
-                    $result['info'][] = ['value' => $adminGroup['id'], 'html' => $adminGroup['name']];
-                }
+                Model\AdminGroup::where(function ($query) use ($data) {
+                    if (isset($data['inserted'])) {
+                        $query->whereNotIn('id', $data['inserted']);
+                    }
+
+                    if (isset($data['keyword'])) {
+                        $query->where('name', 'like', '%' . $data['keyword'] . '%');
+                    }
+
+                })->get()->each(function ($item, $key) use (&$result) {
+                    $result['info'][] = ['value' => $item['id'], 'html' => $item['name']];
+                });
                 break;
             case 'access_group_id':
-                isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                isset($data['keyword']) && $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $memberGroupList = Model\MemberGroup::where($where)->get();
-                foreach ($memberGroupList as $memberGroup) {
-                    $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
-                }
+                Model\MemberGroup::where(function ($query) use ($data) {
+                    if (isset($data['inserted'])) {
+                        $query->whereNotIn('id', $data['inserted']);
+                    }
+
+                    if (isset($data['keyword'])) {
+                        $query->where('name', 'like', '%' . $data['keyword'] . '%');
+                    }
+
+                })->get()->each(function ($item, $key) use (&$result) {
+                    $result['info'][] = ['value' => $item['id'], 'html' => $item['name']];
+                });
                 break;
         }
         return $result;
@@ -291,14 +318,14 @@ class ArticleChannel extends Backend
         $assign['article_category_list'] = $this->_add_edit_category_common($channelInfo);
 
         $id              = request('id');
-        $managePrivilgeg = in_array($id,
-                Model\ArticleChannel::mFindAllow('ma')) || 1 == session('backend_info.id');
-        $assign['manage_privilege'] = $managePrivilgeg;
+        $managePrivilege = Model\ArticleChannel::mFindAllow('ma')->search($id) || 1 == session('backend_info.id');
+        $assign['manage_privilege'] = $managePrivilege;
 
         $assign['channel_template_list'] = mScanTemplate('channel', 'Article');
         $assign['template_list']         = mScanTemplate('category', 'Article');
         $assign['list_template_list']    = mScanTemplate('list_category', 'Article');
         $assign['article_template_list'] = mScanTemplate('article', 'Article');
+        View::share($assign);
     }
 
     //构造频道公共ajax
@@ -308,7 +335,7 @@ class ArticleChannel extends Backend
         $whereValue         = request('parent_id');
         $whereValue && $where[] = ['parent_id', $whereValue];
 
-        $articleCategoryList = Model\ArticleCategory::where($where)->all();
+        $articleCategoryList = Model\ArticleCategory::where($where)->get();
         foreach ($articleCategoryList as &$articleCategory) {
             $articleCategory['has_child'] = Model\ArticleCategory::where(['parent_id' => $articleCategory['id']])->count();
             if ($channelInfo && isset($channelInfo['ext_info'][$articleCategory['id']])) {

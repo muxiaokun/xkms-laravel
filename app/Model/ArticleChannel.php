@@ -16,7 +16,7 @@ class ArticleChannel extends Common
 
     public function setManageIdAttribute($value)
     {
-        return $this->transfixionEncode($value);
+        $this->attributes['manage_id'] = $this->transfixionEncode($value);
     }
 
     public function getManageGroupIdAttribute($value)
@@ -26,7 +26,7 @@ class ArticleChannel extends Common
 
     public function setManageGroupIdAttribute($value)
     {
-        return $this->transfixionEncode($value);
+        $this->attributes['manage_group_id'] = $this->transfixionEncode($value);
     }
 
     public function getAccessGroupIdAttribute($value)
@@ -36,7 +36,7 @@ class ArticleChannel extends Common
 
     public function setAccessGroupIdAttribute($value)
     {
-        return $this->transfixionEncode($value);
+        $this->attributes['access_group_id'] = $this->transfixionEncode($value);
     }
 
     //返回有权管理的频道

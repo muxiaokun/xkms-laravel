@@ -16,7 +16,7 @@ class MemberGroup extends Common
 
     public function setManageIdAttribute($value)
     {
-        return $this->transfixionEncode($value);
+        $this->attributes['manage_id'] = $this->transfixionEncode($value);
     }
 
     //查找出组权限

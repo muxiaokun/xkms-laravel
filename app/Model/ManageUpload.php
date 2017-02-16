@@ -14,7 +14,7 @@ class ManageUpload extends Common
 
     public function setBindInfoAttribute($value)
     {
-        return $this->transfixionEncode($value);
+        $this->attributes['bind_info'] = $this->transfixionEncode($value);
     }
 
     public static function deleteFile($id)

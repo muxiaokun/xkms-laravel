@@ -26,7 +26,7 @@ class Member extends Common
 
     public function setGroupIdAttribute($value)
     {
-        return $this->transfixionEncode($value);
+        $this->attributes['group_id'] = $this->transfixionEncode($value);
     }
 
     public function authorized($query, $user, $pwd, $memberId)

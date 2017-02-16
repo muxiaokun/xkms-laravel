@@ -22,7 +22,7 @@ class ArticleCategory extends Common
 
     public function setManageIdAttribute($value)
     {
-        return $this->transfixionEncode($value);
+        $this->attributes['manage_id'] = $this->transfixionEncode($value);
     }
 
     public function getManageGroupIdAttribute($value)
@@ -32,7 +32,7 @@ class ArticleCategory extends Common
 
     public function setManageGroupIdAttribute($value)
     {
-        return $this->transfixionEncode($value);
+        $this->attributes['manage_group_id'] = $this->transfixionEncode($value);
     }
 
     public function getAccessGroupIdAttribute($value)
@@ -42,7 +42,7 @@ class ArticleCategory extends Common
 
     public function setAccessGroupIdAttribute($value)
     {
-        return $this->transfixionEncode($value);
+        $this->attributes['access_group_id'] = $this->transfixionEncode($value);
     }
 
     //返回子级所有分类id 数组集合

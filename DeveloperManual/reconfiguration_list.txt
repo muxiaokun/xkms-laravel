@@ -1,5 +1,6 @@
 1.多主题模板的前端实现
 2.权限检测需要重构不可以用die
+3.request('get.
 
 Backend
 OK 系统管理系统配置网站配置Admin::Index::websiteSet

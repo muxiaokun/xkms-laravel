@@ -40,9 +40,9 @@ class ArticleChannel extends Common
     }
 
     //返回有权管理的频道
-    public function scopeMFind_allow($query, $type = true)
+    public function scopeMFindAllow($query, $type = true)
     {
-        $where = [];
+        return $where = [];
         //ma = manage admin 编辑属主 属组
         if (true === $type || 'ma' == $type) {
             $where['manage_id'] = session('backend_info.id');

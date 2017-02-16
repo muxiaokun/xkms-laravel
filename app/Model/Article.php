@@ -11,7 +11,6 @@ class Article extends Common
     protected $casts = [
         'longText'  => 'array',
         'attribute' => 'array',
-        'album'     => 'array',
     ];
 
     protected $orders = [
@@ -27,47 +26,76 @@ class Article extends Common
 
     public function setAccessGroupIdAttribute($value)
     {
-        return $this->transfixionEncode($value);
+        $this->attributes['access_group_id'] = $this->transfixionEncode($value);
     }
 
 
-    public function scopeMEncodeData($query, $data)
+    public function getContentAttribute($value)
     {
-        if (isset($data['extend']) && is_array($data['extend'])) {
-            $newExtend = [];
-            foreach ($data['extend'] as $key => $value) {
-                $newExtend[] = $key . ':' . $value;
-            }
-            $data['extend'] = '|' . implode('|', $newExtend) . '|';
-        }
-        if (isset($data['attribute']) && is_array($data['attribute'])) {
-            $newAttribute = [];
-            foreach ($data['attribute'] as $key => $value) {
-                $newAttribute[] = $key . ':' . $value;
-            }
-            $data['attribute'] = '|' . implode('|', $newAttribute) . '|';
-        }
+        return mParseContent($value, true);
     }
 
-    public function scopeMDecodeData($query, $data)
+    public function setContentAttribute($value)
     {
-        if (isset($data['extend']) && $data['extend']) {
-            $data['extend'] = explode('|', substr($data['extend'], 1, strlen($data['extend']) - 2));
-            $newExtend      = [];
-            foreach ($data['extend'] as $valueStr) {
-                list($key, $value) = explode(':', $valueStr);
-                $newExtend[$key] = $value;
-            }
-            $data['extend'] = $newExtend;
-        }
-        if (isset($data['attribute']) && $data['attribute']) {
-            $data['attribute'] = explode('|', substr($data['attribute'], 1, strlen($data['attribute']) - 2));
-            $newAttribute      = [];
-            foreach ($data['attribute'] as $valueStr) {
-                list($key, $value) = explode(':', $valueStr);
-                $newAttribute[$key] = $value;
-            }
-            $data['attribute'] = $newAttribute;
-        }
+        $this->attributes['content'] = mParseContent($value);
     }
+
+    public function setCateIdAttribute($value)
+    {
+        $this->attributes['cate_id'] = $value ? $value : 0;
+    }
+
+    public function setChannelIdAttribute($value)
+    {
+        $this->attributes['channel_id'] = $value ? $value : 0;
+    }
+
+    public function setIsAuditAttribute($value)
+    {
+        $this->attributes['is_audit'] = $value ? session('backend_info.id') : 0;
+    }
+
+    public function setThumbAttribute($value)
+    {
+        $this->attributes['thumb'] = mParseUploadUrl($value);
+    }
+
+    public function getAlbumAttribute($value)
+    {
+        $value = json_decode($value, true);
+        foreach ($value as &$imageInfo) {
+            $imageInfo['src'] = mMakeUploadUrl($imageInfo['src']);
+        }
+        return $value;
+    }
+
+    public function setAlbumAttribute($value)
+    {
+        foreach ($value as &$imageInfo) {
+            $imageInfo        = json_decode(htmlspecialchars_decode($imageInfo), true);
+            $imageInfo['src'] = mParseUploadUrl($imageInfo['src']);
+        }
+        $this->attributes['album'] = json_encode($value);
+    }
+
+    public function getExtendAttribute($value)
+    {
+        return $this->transfixionDecode($value);
+    }
+
+    public function setExtendAttribute($value)
+    {
+        $this->attributes['extend'] = $this->transfixionEncode($value, true);
+    }
+
+    public function getAttributeAttribute($value)
+    {
+        return $this->transfixionDecode($value);
+    }
+
+    public function setAttributeAttribute($value)
+    {
+        $this->attributes['attribute'] = $this->transfixionEncode($value, true);
+    }
+
 }

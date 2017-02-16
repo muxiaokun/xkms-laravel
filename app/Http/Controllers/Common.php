@@ -115,6 +115,8 @@ class Common extends Controller
     //生成缩略图 是源文件名后加 thumb
     protected function imageThumb($file, $width = 195, $height = 120)
     {
+        //TODO 暂时不实现
+        return '';
         if (!is_file($file) || !$width || !$height) {
             return '';
         }

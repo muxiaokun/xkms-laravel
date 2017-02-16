@@ -12,62 +12,57 @@ class Article extends Backend
     //列表
     public function index()
     {
-        //建立where
-        $where      = [];
-        $whereValue = request('title');
-        $whereValue && $where['title'] = ['like', '%' . $whereValue . '%'];
-        $whereValue = request('cate_id');
-        $whereValue && $where['cate_id'] = ['in', Model\ArticleCategory::mFind_child_id($whereValue)];
-        $whereValue = request('channel_id');
-        $whereValue && $where[] = ['channel_id', $whereValue];
-        $whereValue = mMktimeRange('add_time');
-        $whereValue && $where[] = ['add_time', $whereValue];
-        $whereValue = request('is_audit');
-        $whereValue && $where['is_audit'] = (1 == $whereValue) ? ['gt', 0] : 0;
-        $whereValue = request('if_show');
-        $whereValue && $where['if_show'] = (1 == $whereValue) ? 1 : 0;
-        $channelWhere = $categoryWhere = [];
-        if (1 != session('backend_info.id')) {
-            $allowChannel = Model\ArticleChannel::mFindAllow();
-            is_array($allowChannel) && $channelWhere = ['id' => ['in', $allowChannel]];
-            if (isset($where['channel_id']) && in_array($where['channel_id'], $allowChannel)) {
-                $where['channel_id'] = $where['channel_id'];
-            } else {
-                $where['channel_id'] = ['in', $allowChannel];
-            }
-
-            $allowCategory = Model\ArticleCategory::mFindAllow();
-            is_array($allowCategory) && $categoryWhere = ['id' => ['in', $allowCategory]];
-            if (isset($where['cate_id']) && !mInArray($where['cate_id'], $allowCategory)) {
-                $where['cate_id'] = ['in', $allowCategory];
-            }
-
-            if (isset($where['channel_id']) && isset($where['cate_id'])) {
-                $where['_complex'] = [
-                    '_logic'     => 'and',
-                    'channel_id' => $where['channel_id'],
-                    'cate_id'    => $where['cate_id'],
-                ];
-                unset($where['channel_id']);
-                unset($where['cate_id']);
-            }
-        }
+        $allowCategory = Model\ArticleCategory::mFindAllow();
+        $allowChannel  = Model\ArticleChannel::mFindAllow();
         //初始化翻页 和 列表数据
-        $articleList            = Model\Article::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
+        $articleList = Model\Article::where(function ($query) use ($allowCategory, $allowChannel) {
+            $title = request('title');
+            if ($title) {
+                $query->where('title', 'like', '%' . $title . '%');
+            }
+
+            $is_audit = request('is_audit');
+            if ($is_audit) {
+                $query->where('is_audit', (1 == $is_audit) ? '>' : '=', 0);
+            }
+
+            $if_show = request('if_show');
+            if ($if_show) {
+                $query->where('if_show', '=', (1 == $if_show) ? 1 : 0);
+            }
+
+            $cate_id = request('cate_id');
+            if ($cate_id) {
+                $query->whereIn('cate_id', Model\ArticleCategory::mFind_child_id($cate_id));
+            }
+
+            $channel_id = request('channel_id');
+            if ($channel_id) {
+                $query->where('channel_id', $channel_id);
+            }
+
+            $login_id = session('backend_info.id');
+            if (1 != $login_id) {
+                //非root需要权限
+                $query->whereIn('cate_id', $allowCategory);
+                $query->whereIn('channel_id', $allowChannel);
+            }
+
+        })->paginate(config('system.sys_max_row'))->appends(request()->all());
         $assign['article_list'] = $articleList;
 
         //初始化where_info
-        $channelList           = Model\ArticleChannel::where($channelWhere)->get();
-        $categoryList          = Model\ArticleCategory::where($categoryWhere)->get();
-        $searchChannelList  = [];
-        $searchCategoryList = [];
+        $categoryList = Model\ArticleCategory::whereIn('cate_id', $allowCategory)->get();
+        $searchCategoryList     = [];
+        foreach ($categoryList as $category) {
+            $searchCategoryList[$category['id']] = $category['name'];
+        }
+        $channelList            = Model\ArticleChannel::whereIn('channel_id', $allowChannel)->get();
+        $searchChannelList      = [];
         foreach ($channelList as $channel) {
             $searchChannelList[$channel['id']] = $channel['name'];
         }
 
-        foreach ($categoryList as $category) {
-            $searchCategoryList[$category['id']] = $category['name'];
-        }
 
         //初始化where_info
         $whereInfo               = [];
@@ -82,7 +77,7 @@ class Article extends Backend
             'name'  => trans('common.channel'),
             'value' => $searchChannelList,
         ];
-        $whereInfo['is_audit'] = [
+        $whereInfo['is_audit']  = [
             'type'  => 'select',
             'name'  => trans('common.yes') . trans('common.no') . trans('common.audit'),
             'value' => [
@@ -90,7 +85,7 @@ class Article extends Backend
                 2 => trans('common.none') . trans('common.audit'),
             ],
         ];
-        $whereInfo['if_show']  = [
+        $whereInfo['if_show']   = [
             'type'  => 'select',
             'name'  => trans('common.yes') . trans('common.no') . trans('common.show'),
             'value' => [1 => trans('common.show'), 2 => trans('common.hidden')],
@@ -120,11 +115,13 @@ class Article extends Backend
             isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'],
                 config('system.sys_article_thumb_width'),
                 config('system.sys_article_thumb_height'));
+            dump($data);
             $resultAdd = Model\Article::create($data);
             //增加了一个分类快捷添加文章的回跳链接
             $rebackLink = request('get.cate_id') ? route('Admin::ArticleCategory::index') : route('Admin::Article::index');
             if ($resultAdd) {
                 $data['new_thumb'] = $thumbFile;
+                $this->addEditAfterCommon($data, $resultAdd->id);
                 return $this->success(trans('common.article') . trans('common.add') . trans('common.success'),
                     $rebackLink);
             } else {
@@ -134,9 +131,9 @@ class Article extends Backend
         }
 
         $this->addEditCommon();
-        $assign['edit_info'] = Model\Article::columnEmptyData();
+        $assign['edit_info']                  = Model\Article::columnEmptyData();
         $assign['edit_info']['attribute_tpl'] = [];
-        $assign['title']     = trans('common.article') . trans('common.add');
+        $assign['title']                      = trans('common.article') . trans('common.add');
         return view('admin.Article_addedit', $assign);
     }
 
@@ -156,7 +153,7 @@ class Article extends Backend
 
             isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'],
                 config('system.sys_article_thumb_width'),
-                C('SYS_ARTICLE_THUMB_HEIGHT'));
+                config('system.sys_article_thumb_height'));
 
             $resultEdit = false;
             Model\Article::colWhere($id)->get()->each(function ($item, $key) use ($data, &$resultEdit) {
@@ -300,8 +297,8 @@ class Article extends Backend
         $cateId        = request('cate_id');
         $channelId     = request('channel_id');
         $thumb         = request('thumb');
-        $addTime       = mMktime(request('add_time'), true);
-        $updateTime    = mMktime(request('update_time'), true);
+        $createdAt = mMktime(request('created_at'), true);
+        $updatedAt = mMktime(request('updated_at'), true);
         $sort          = request('sort');
         $isStick       = request('is_stick');
         $isAudit       = request('is_audit');
@@ -328,10 +325,10 @@ class Article extends Backend
             }
         }
         if ('add' == $type || null !== $content) {
-            $data['content'] = mParseContent($content);
+            $data['content'] = $content;
         }
         if ('add' == $type || null !== $cateId) {
-            $data['cate_id'] = $cateId;
+            $data['cate_id'] = $channelId;
         }
         if ('add' == $type || null !== $channelId) {
             $data['channel_id'] = $channelId;
@@ -339,11 +336,12 @@ class Article extends Backend
         if ('add' == $type || null !== $thumb) {
             $data['thumb'] = $thumb;
         }
-        if ('add' == $type || null !== $addTime) {
-            $data['add_time'] = $addTime;
+        if (null !== $createdAt) {
+            dump($data);
+            $data['created_at'] = $createdAt;
         }
-        if ('add' == $type || null !== $updateTime) {
-            $data['update_time'] = $updateTime;
+        if (null !== $updatedAt) {
+            $data['updated_at'] = $updatedAt;
         }
         if ('add' == $type || null !== $sort) {
             $data['sort'] = $sort;
@@ -352,7 +350,7 @@ class Article extends Backend
             $data['is_stick'] = $isStick;
         }
         if ('add' == $type || null !== $isAudit) {
-            $data['is_audit'] = $isAudit ? session('backend_info.id') : 0;
+            $data['is_audit'] = $isAudit;
         }
         if ('add' == $type || null !== $ifShow) {
             $data['if_show'] = $ifShow;
@@ -364,10 +362,7 @@ class Article extends Backend
             $data['attribute'] = $attribute;
         }
         if ('add' == $type || null !== $album) {
-            foreach ($album as &$imageInfo) {
-                $imageInfo = json_decode(htmlspecialchars_decode($imageInfo), true);
-            }
-            $data['album'] = $album;
+            $data['album'] = is_array($album) ? $album : [];
         }
         $this->_check_aed($data);
         return $data;
@@ -381,8 +376,9 @@ class Article extends Backend
             return;
         }
 
-        foreach ($data['album'] as &$imageInfo) {
-            $bindFile[] = $imageInfo['src'];
+        foreach ($data['album'] as $imageInfo) {
+            $info = json_decode($imageInfo, true);
+            isset($info['src']) && $bindFile[] = $info['src'];
         }
 
         $bindFile[]    = $data['new_thumb'];

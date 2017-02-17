@@ -25,7 +25,7 @@
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control" placeholder="@lang('common.sort')"
                                            name="sort"
-                                           value="{{ $edit_info['sort'] }}" onKeyup="M_in_int(this);"/>
+                                           value="{{ $edit_info['sort'] }}" onKeyup="M_in_int_range(this,1,100);"/>
                                 </div>
                             </div>
                         </div>

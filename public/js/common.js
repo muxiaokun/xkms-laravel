@@ -156,7 +156,7 @@ function M_in_int(obj)
     if('' != input_val)
     {
         input_val = parseInt(input_val);
-        if('' === input_val)input_val = '';
+        if (!input_val) input_val = '';
     }
     obj.val(input_val);
     if(!obj.data('onkeypress'))

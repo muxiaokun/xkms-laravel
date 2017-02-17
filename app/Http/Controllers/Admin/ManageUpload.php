@@ -18,11 +18,27 @@ class ManageUpload extends Backend
         $whereValue && $where[] = ['suffix', $whereValue];
         $whereValue = request('bind_info');
         $whereValue && $where['bind_info'] = ['like', '%|' . $whereValue . ':%'];
-        $whereValue = mMktimeRange('add_time');
-        $whereValue && $where[] = ['add_time', $whereValue];
+        $whereValue = mMktimeRange('created_at');
+        $whereValue && $where[] = ['created_at', $whereValue];
 
         //初始化翻页 和 列表数据
-        $manageUploadList = Model\ManageUpload::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
+        $manageUploadList = Model\ManageUpload::where(function ($query) {
+            $created_at = mMktimeRange('created_at');
+            if ($created_at) {
+                $query->timeWhere('created_at', $created_at);
+            }
+
+            $suffix = request('suffix');
+            if ($suffix) {
+                $query->where('suffix', 'like', '%' . $suffix . '%');
+            }
+
+            $bind_info = request('bind_info');
+            if ($bind_info) {
+                $query->where('bind_info', 'like', '%|' . $bind_info . ':%');
+            }
+
+        })->paginate(config('system.sys_max_row'))->appends(request()->all());
         foreach ($manageUploadList as &$manageUpload) {
             switch ($manageUpload['user_type']) {
                 case 1:
@@ -32,11 +48,11 @@ class ManageUpload extends Backend
                     $manageUpload['user_name'] = Model\Member::colWhere($manageUpload['user_id'])->first()['member_name'];
                     break;
             }
-            $bindInfo    = [trans('common.controller') => trans('common.relevance') . trans('common.id')];
+            $bindInfo    = [trans('common.route') => trans('common.relevance') . trans('common.id')];
             $bindInfoArr = explode('|', $manageUpload['bind_info']);
             foreach ($bindInfoArr as $info) {
-                if ($info) {
-                    $bindInfoTmp               = explode(':', $info);
+                $bindInfoTmp = explode(':', $info);
+                if (2 == count($bindInfoTmp)) {
                     $bindInfo[$bindInfoTmp[0]] = $bindInfoTmp[1];
                 }
             }
@@ -45,11 +61,11 @@ class ManageUpload extends Backend
         $assign['manage_upload_list'] = $manageUploadList;
 
         //初始化where_info
-        $whereInfo              = [];
-        $whereInfo['add_time']  = ['type' => 'time', 'name' => trans('common.add') . trans('common.time')];
-        $whereInfo['suffix']    = ['type' => 'input', 'name' => trans('common.suffix')];
-        $whereInfo['bind_info'] = ['type' => 'input', 'name' => trans('common.bind') . trans('common.info')];
-        $assign['where_info']   = $whereInfo;
+        $whereInfo               = [];
+        $whereInfo['created_at'] = ['type' => 'time', 'name' => trans('common.add') . trans('common.time')];
+        $whereInfo['suffix']     = ['type' => 'input', 'name' => trans('common.suffix')];
+        $whereInfo['bind_info']  = ['type' => 'input', 'name' => trans('common.bind') . trans('common.info')];
+        $assign['where_info']    = $whereInfo;
 
         //初始化batch_handle
         $batchHandle            = [];
@@ -87,8 +103,7 @@ class ManageUpload extends Backend
             return;
         }
 
-        $where['_string'] = '(bind_info is NULL OR bind_info = "")';
-        $manageUploadList = Model\ManageUpload::where($where)->all();
+        $manageUploadList = Model\ManageUpload::whereNull('bind_info')->orWhere('bind_info', '=', '')->get();
         foreach ($manageUploadList as $manageUpload) {
             $resultDel = Model\ManageUpload::deleteFile($manageUpload['id']);
             if (!$resultDel) {

@@ -9,9 +9,9 @@ OK 系统管理系统配置数据库配置Admin::Index::databaseSet
 OK 系统管理系统配置修改密码Admin::Index::editMyPass
 OK 系统管理系统配置清空缓存Admin::Index::cleanCache
 OK 系统管理系统配置清除日志Admin::Index::cleanLog
-系统管理管理上传文件管理Admin::ManageUpload::index
-系统管理管理上传删除文件Admin::ManageUpload::del
-系统管理管理上传清除未用Admin::ManageUpload::edit
+OK 系统管理管理上传文件管理Admin::ManageUpload::index
+OK 系统管理管理上传删除文件Admin::ManageUpload::del
+OK 系统管理管理上传清除未用Admin::ManageUpload::edit
 OK 系统管理模板管理模板设置Admin::Template::index
 OK 系统管理模板管理添加模板Admin::Template::add
 OK 系统管理模板管理删除模板Admin::Template::del
@@ -41,10 +41,10 @@ OK 内容管理文章文章配置Admin::Article::setting
 内容管理文章添加文章Admin::Article::add
 内容管理文章删除文章Admin::Article::del
 内容管理文章编辑文章Admin::Article::edit
-内容管理文章文章分类Admin::ArticleCategory::index
-内容管理文章添加分类Admin::ArticleCategory::add
-内容管理文章删除分类Admin::ArticleCategory::del
-内容管理文章编辑分类Admin::ArticleCategory::edit
+OK 内容管理文章文章分类Admin::ArticleCategory::index
+OK 内容管理文章添加分类Admin::ArticleCategory::add
+OK 内容管理文章删除分类Admin::ArticleCategory::del
+OK 内容管理文章编辑分类Admin::ArticleCategory::edit
 内容管理文章文章频道Admin::ArticleChannel::index
 内容管理文章添加频道Admin::ArticleChannel::add
 内容管理文章删除频道Admin::ArticleChannel::del

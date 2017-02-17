@@ -42,7 +42,7 @@ class Assess extends FrontendMember
     public function add()
     {
         //初始化和权限检测
-        $id = request('get.id');
+        $id = request('id');
         if (!$id) {
             return $this->error(trans('common.id') . trans('common.error'), route('Home::Assess::index'));
         }
@@ -147,7 +147,7 @@ class Assess extends FrontendMember
     //建立数据
     private function makeData($type)
     {
-        $id        = request('get.id');
+        $id        = request('id');
         $gradeId   = session('frontend_info.id');
         $reGradeId = request('re_grade_id');
         $score     = request('score');

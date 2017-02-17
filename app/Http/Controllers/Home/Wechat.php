@@ -20,9 +20,9 @@ class Wechat extends Frontend
 
     public function index()
     {
-        $signature      = request('get.signature');
-        $timestamp      = request('get.timestamp');
-        $nonce          = request('get.nonce');
+        $signature      = request('signature');
+        $timestamp      = request('timestamp');
+        $nonce          = request('nonce');
         $checkSignature = $this->Wechat->checkSignature($signature, $timestamp, $nonce);
         if (!$checkSignature) {
             echo "verify error!";

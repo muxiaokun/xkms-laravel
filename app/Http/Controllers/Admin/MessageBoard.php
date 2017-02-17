@@ -57,7 +57,7 @@ class MessageBoard extends Backend
                     $rebackLink);
             } else {
                 return $this->error(trans('common.messageboard') . trans('common.add') . trans('common.error'),
-                    route('Admin::MessageBoard::add', ['cate_id' => request('get.cate_id')]));
+                    route('Admin::MessageBoard::add', ['cate_id' => request('cate_id')]));
             }
         }
 

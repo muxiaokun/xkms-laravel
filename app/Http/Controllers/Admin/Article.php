@@ -115,10 +115,9 @@ class Article extends Backend
             isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'],
                 config('system.sys_article_thumb_width'),
                 config('system.sys_article_thumb_height'));
-            dump($data);
             $resultAdd = Model\Article::create($data);
             //增加了一个分类快捷添加文章的回跳链接
-            $rebackLink = request('get.cate_id') ? route('Admin::ArticleCategory::index') : route('Admin::Article::index');
+            $rebackLink = request('cate_id') ? route('Admin::ArticleCategory::index') : route('Admin::Article::index');
             if ($resultAdd) {
                 $data['new_thumb'] = $thumbFile;
                 $this->addEditAfterCommon($data, $resultAdd->id);
@@ -126,7 +125,7 @@ class Article extends Backend
                     $rebackLink);
             } else {
                 return $this->error(trans('common.article') . trans('common.add') . trans('common.error'),
-                    route('Admin::Article::add', ['cate_id' => request('get.cate_id')]));
+                    route('Admin::Article::add', ['cate_id' => request('cate_id')]));
             }
         }
 
@@ -240,12 +239,15 @@ class Article extends Backend
     {
         $allowField = ['sort'];
         if (!in_array($field, $allowField)) {
-            return trans('common.not') . trans('common.edit') . $field;
+            return ['status' => false, 'info' => trans('common.not') . trans('common.edit') . $field];
         }
 
-        $resultEdit = Model\Article::colWhere($id)->first()->update($data);
+        $edit_data  = [
+            $field => (0 <= $data['value'] && 100 >= $data['value']) ? $data['value'] : 100,
+        ];
+        $resultEdit = Model\ArticleCategory::colWhere($data['id'])->first()->update($edit_data);
         if ($resultEdit) {
-            $data['value'] = Model\Article::colWhere($data['id'])->first()[$field];
+            $data['value'] = Model\ArticleCategory::colWhere($data['id'])->first()[$field];
             return ['status' => true, 'info' => $data['value']];
         } else {
             return ['status' => false, 'info' => trans('common.edit') . trans('common.error')];
@@ -337,7 +339,6 @@ class Article extends Backend
             $data['thumb'] = $thumb;
         }
         if (null !== $createdAt) {
-            dump($data);
             $data['created_at'] = $createdAt;
         }
         if (null !== $updatedAt) {

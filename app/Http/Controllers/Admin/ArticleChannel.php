@@ -88,7 +88,7 @@ class ArticleChannel extends Backend
     public function edit()
     {
         if (request()->ajax()) {
-            $id       = request('get.id');
+            $id       = request('id');
             $editInfo = Model\ArticleChannel::colWhere($id)->first()->toArray();
             return $this->_add_edit_category_common($editInfo)->toJson();
         }

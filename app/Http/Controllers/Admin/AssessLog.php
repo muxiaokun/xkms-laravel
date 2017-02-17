@@ -11,7 +11,7 @@ class AssessLog extends Backend
     //统计考核结果
     public function edit()
     {
-        $id = request('get.id');
+        $id = request('id');
         if (!$id) {
             return $this->error(trans('common.assess') . trans('common.id') . trans('common.error'),
                 route('Admin::AssessLog::index'));
@@ -66,7 +66,7 @@ class AssessLog extends Backend
     //删除
     public function del()
     {
-        $id = request('get.id');
+        $id = request('id');
         if (!$id) {
             return $this->error(trans('common.id') . trans('common.error'),
                 route('Admin::AssessLog::edit', ['id' => $id]));

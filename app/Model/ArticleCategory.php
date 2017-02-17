@@ -45,6 +45,21 @@ class ArticleCategory extends Common
         $this->attributes['access_group_id'] = $this->transfixionEncode($value);
     }
 
+    public function setThumbAttribute($value)
+    {
+        $this->attributes['thumb'] = mParseUploadUrl($value);
+    }
+
+    public function getContentAttribute($value)
+    {
+        return mParseContent($value, true);
+    }
+
+    public function setContentAttribute($value)
+    {
+        $this->attributes['content'] = mParseContent($value);
+    }
+
     //返回子级所有分类id 数组集合
     //$pushMe 是否包含传入id
     public function scopeMFind_child_id($query, $id, $pushMe = true)

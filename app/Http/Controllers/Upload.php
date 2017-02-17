@@ -80,7 +80,7 @@ class Upload extends Controller
             $currentDirPath = '';
             $moveupDirPath  = '';
         }
-        $order = request('get.order') ? request('get.order') : 'name';
+        $order = request('order') ? request('order') : 'name';
 
         //不允许使用..移动到上一级目录
         if (preg_match('/\.\./', $currentPath)) {

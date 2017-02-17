@@ -25,7 +25,8 @@
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control" placeholder="@lang('common.sort')"
                                            name="sort"
-                                           value="{{ $edit_info['sort'] }}" onKeyup="M_in_int_range(this,1,100);"/>
+                                           onKeyup="M_in_int_range(this,1,100);"
+                                           value="@if ($edit_info['sort']){{ $edit_info['sort'] }}@else 100 @endif"/>
                                 </div>
                             </div>
                         </div>
@@ -46,7 +47,7 @@
                                     <script type="text/javascript">
                                         $(function () {
                                             function check_cate_id(obj) {
-                                                var top_cate_col = $('#template_list,#attribute').parents('.row');
+                                                var top_cate_col = $('#extend,#attribute').parents('.row');
                                                 if (0 == obj.val()) {
                                                     top_cate_col.show();
                                                 }
@@ -124,7 +125,8 @@
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control"
                                            placeholder="@lang('common.list')@lang('common.number')" name="s_limit"
-                                           value="{{ $edit_info['s_limit'] }}" onKeyup="M_in_int(this);"/>
+                                           onKeyup="M_in_int(this);"
+                                           value="@if ($edit_info['s_limit']){{ $edit_info['s_limit'] }}@else 0 @endif"/>
                                 </div>
                             </div>
                         </div>
@@ -141,10 +143,10 @@
                                     <script>
                                         function M_article_uploadbutton(url, title) {
                                             {{-- 必须替换掉__ROOT__/ 原因伪静态目录结构 --}}
-                                                $('#thumb_val').val(url.replace(RegExp('^' + $Think.root), ''));
-                                                $('#thumb_src').attr('src', url);
-                                            }
-                                            M_jqueryui_tooltip('#uploadbutton');
+                                                $('#thumb_val').val(url);
+                                            $('#thumb_src').attr('src', url);
+                                        }
+                                        M_jqueryui_tooltip('#uploadbutton');
                                     </script>
                                     @uploadfile(uploadbutton,image,kindeditor,M_article_uploadbutton)
                                 </div>
@@ -165,7 +167,7 @@
                                 <script type="text/javascript">
                                     $(function () {
                                         var config = {
-                                            @if ($edit_info['manage_id'])'def_data':{{ $edit_info['manage_id'] }},
+                                            @if ($edit_info['manage_id'])'def_data':{!! json_encode($edit_info['manage_id']) !!},
                                             @endif
                                             'out_obj': $('#manage_id_list'),
                                             'edit_obj': $('#admin_user_list'),
@@ -190,7 +192,7 @@
                                 <script type="text/javascript">
                                     $(function () {
                                         var config = {
-                                            @if ($edit_info['manage_group_id'])'def_data':{{ $edit_info['manage_group_id'] }},
+                                            @if ($edit_info['manage_group_id'])'def_data':{!! json_encode($edit_info['manage_group_id']) !!},
                                             @endif
                                             'out_obj': $('#manage_group_id_list'),
                                             'edit_obj': $('#admin_group_list'),
@@ -215,7 +217,7 @@
                                 <script type="text/javascript">
                                     $(function () {
                                         var config = {
-                                            @if ($edit_info['access_group_id'])'def_data':{{ $edit_info['access_group_id'] }},
+                                            @if ($edit_info['access_group_id'])'def_data':{!! json_encode($edit_info['access_group_id']) !!},
                                             @endif
                                             'out_obj': $('#access_group_id_list'),
                                             'edit_obj': $('#access_group_list'),
@@ -234,20 +236,20 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">@lang('common.other')@lang('common.info')@lang('common.template')</label>
                                 <div class="col-sm-6">
-                                    <ul id="template_list" class="list-group"></ul>
+                                    <ul id="extend" class="list-group"></ul>
                                 </div>
                             </div>
                         </div>
-                        <div id="template_edit" class="col-sm-6">
+                        <div id="extend_edit" class="col-sm-6">
                             <script type="text/javascript" src="{{ asset('js/M_exttpl_editor.js') }}"></script>
                             <script type="text/javascript">
                                 $(function () {
                                     var config = {
-                                        @if ($edit_info['extend'])'def_data':{{ $edit_info['extend']|json_encode }},
+                                        @if ($edit_info['extend'])'def_data':{!! json_encode($edit_info['extend']) !!},
                                         @endif
                                         'run_type': 'add',
-                                        'out_obj': $('#template_list'),
-                                        'edit_obj': $('#template_edit'),
+                                        'out_obj': $('#extend'),
+                                        'edit_obj': $('#extend_edit'),
                                         'post_name': 'extend[]'
                                     };
                                     new M_exttpl_editor(config);
@@ -265,7 +267,7 @@
                                     <script type="text/javascript">
                                         $(function () {
                                             var config = {
-                                                @if ($edit_info['attribute'])'def_data':{{ $edit_info['attribute']|json_encode }},
+                                                @if ($edit_info['attribute'])'def_data':{!! json_encode($edit_info['attribute']) !!},
                                                 @endif
                                                 'run_type': 'edit',
                                                 'out_obj': $('#attribute'),

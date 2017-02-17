@@ -92,9 +92,7 @@
                         @endif
                     </div>
                     <div class="col-sm-8 text-right">
-                        <M:Page name="article_channel_list">
-                            <config></config>
-                        </M:Page>
+                        {{ $article_channel_list->links('admin.pagination') }}
                     </div>
                 </div>
             </div>

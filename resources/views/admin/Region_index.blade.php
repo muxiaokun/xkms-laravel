@@ -104,9 +104,7 @@
                         @endif
                     </div>
                     <div class="col-sm-8 text-right">
-                        <M:Page name="region_list">
-                            <config></config>
-                        </M:Page>
+                        {{ $region_list->links('admin.pagination') }}
                     </div>
                 </div>
             </div>

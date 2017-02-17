@@ -70,9 +70,7 @@
                         @endif
                     </div>
                     <div class="col-sm-8 text-right">
-                        <M:Page name="quests_answer_list">
-                            <config></config>
-                        </M:Page>
+                        {{ $quests_answer_list->links('admin.pagination') }}
                     </div>
                 </div>
             </div>

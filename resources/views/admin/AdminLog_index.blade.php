@@ -89,9 +89,6 @@
                     </div>
                     <div class="col-sm-8 text-right">
                         {{ $admin_log_list->links('admin.pagination') }}
-                        <M:Page name="admin_log_list">
-                            <config></config>
-                        </M:Page>
                     </div>
                 </div>
             </div>

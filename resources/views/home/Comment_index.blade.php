@@ -1,9 +1,7 @@
 @if (IS_AJAX AND config('system.comment_switch')){{-- 下一行的div只是ajax获取元素时的外壳 --}}
 <div>
     <div class="col-sm-12">
-        <M:Page name="comment_list">
-            <config></config>
-        </M:Page>
+        {{ $comment_list->links('home.pagination') }}
     </div>
     <div class="col-sm-12">
         <table class="table">

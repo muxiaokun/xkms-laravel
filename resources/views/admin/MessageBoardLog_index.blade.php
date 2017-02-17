@@ -86,9 +86,7 @@
                         @endif
                     </div>
                     <div class="col-sm-8 text-right">
-                        <M:Page name="message_board_log_list">
-                            <config></config>
-                        </M:Page>
+                        {{ $message_board_log_list->links('admin.pagination') }}
                     </div>
                 </div>
             </div>

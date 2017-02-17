@@ -54,9 +54,7 @@
                 </div>
             @endforeach
         </div>
-        <M:Page name="article_list">
             <div class="col-sm-12">
-                <config></config>
+                {{ $article_list->links('home.pagination') }}
             </div>
-        </M:Page>
 @endsection

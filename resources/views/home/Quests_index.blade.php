@@ -35,13 +35,11 @@
             </tr>
         @endforeach
     </table>
-    <M:Page name="quests_list">
         <table class="table">
             <tr>
                 <td class="text-right">
-                    <config></config>
+                    {{ $quests_list->links('home.pagination') }}
                 </td>
             </tr>
         </table>
-    </M:Page>
 @endsection

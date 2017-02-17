@@ -43,14 +43,12 @@
             @endforeach
         </table>
     </div>
-    <M:Page name="recruit_list">
         <table class="table">
             <tr>
                 <td class="text-right">
-                    <config></config>
+                    {{ $recruit_list->links('home.pagination') }}
                 </td>
             </tr>
         </table>
-    </M:Page>
 </section>
   

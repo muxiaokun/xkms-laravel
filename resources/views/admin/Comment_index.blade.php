@@ -107,9 +107,7 @@
                         @endif
                     </div>
                     <div class="col-sm-8 text-right">
-                        <M:Page name="comment_list">
-                            <config></config>
-                        </M:Page>
+                        {{ $comment_list->links('admin.pagination') }}
                     </div>
                 </div>
             </div>

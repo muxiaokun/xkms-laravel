@@ -87,9 +87,7 @@
                         @endif
                     </div>
                     <div class="col-sm-8 text-right">
-                        <M:Page name="navigation_list">
-                            <config></config>
-                        </M:Page>
+                        {{ $navigation_list->links('admin.pagination') }}
                     </div>
                 </div>
             </div>

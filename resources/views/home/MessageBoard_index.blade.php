@@ -82,14 +82,12 @@
                     </td>
                 </tr>
         </table>
-        <M:Page name="message_board_log_list">
             <table class="table">
                 <tr>
                     <td class="text-right">
-                        <config></config>
+                        {{ $message_board_log_list->links('home.pagination') }}
                     </td>
                 </tr>
             </table>
-        </M:Page>
     </div>
 </section>

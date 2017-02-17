@@ -88,9 +88,7 @@
                         @endif
                     </div>
                     <div class="col-sm-8 text-right">
-                        <M:Page name="wechat_list">
-                            <config></config>
-                        </M:Page>
+                        {{ $wechat_list->links('admin.pagination') }}
                     </div>
                 </div>
             </div>

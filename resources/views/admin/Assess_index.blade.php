@@ -102,9 +102,7 @@
                         @endif
                     </div>
                     <div class="col-sm-8 text-right">
-                        <M:Page name="assess_list">
-                            <config></config>
-                        </M:Page>
+                        {{ $assess_list->links('admin.pagination') }}
                     </div>
                 </div>
             </div>

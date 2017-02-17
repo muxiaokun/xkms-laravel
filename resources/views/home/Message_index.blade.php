@@ -77,13 +77,11 @@
             </script>
         @endif
     </div>
-    <M:Page name="message_list">
         <table class="table">
             <tr>
                 <td class="text-right">
-                    <config></config>
+                    {{ $message_list->links('home.pagination') }}
                 </td>
             </tr>
         </table>
-    </M:Page>
 @endsection

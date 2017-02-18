@@ -52,13 +52,13 @@ class Article extends Backend
         $assign['article_list'] = $articleList;
 
         //初始化where_info
-        $categoryList = Model\ArticleCategory::colWhere($allowCategory)->get();
-        $searchCategoryList     = [];
+        $categoryList       = Model\ArticleCategory::colWhere($allowCategory)->get();
+        $searchCategoryList = [];
         foreach ($categoryList as $category) {
             $searchCategoryList[$category['id']] = $category['name'];
         }
-        $channelList = Model\ArticleChannel::colWhere($allowChannel)->get();
-        $searchChannelList      = [];
+        $channelList           = Model\ArticleChannel::colWhere($allowChannel)->get();
+        $searchChannelList     = [];
         foreach ($channelList as $channel) {
             $searchChannelList[$channel['id']] = $channel['name'];
         }
@@ -77,7 +77,7 @@ class Article extends Backend
             'name'  => trans('common.channel'),
             'value' => $searchChannelList,
         ];
-        $whereInfo['is_audit']  = [
+        $whereInfo['is_audit'] = [
             'type'  => 'select',
             'name'  => trans('common.yes') . trans('common.no') . trans('common.audit'),
             'value' => [
@@ -85,7 +85,7 @@ class Article extends Backend
                 2 => trans('common.none') . trans('common.audit'),
             ],
         ];
-        $whereInfo['if_show']   = [
+        $whereInfo['if_show']  = [
             'type'  => 'select',
             'name'  => trans('common.yes') . trans('common.no') . trans('common.show'),
             'value' => [1 => trans('common.show'), 2 => trans('common.hidden')],
@@ -204,7 +204,6 @@ class Article extends Backend
         if (!$id) {
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Article::index'));
         }
-
         $resultDel = Model\Article::destroy($id);
         if ($resultDel) {
             Model\ManageUpload::bindFile($id);
@@ -376,12 +375,12 @@ class Article extends Backend
         if (is_array($id)) {
             return;
         }
-
-        foreach ($data['album'] as $imageInfo) {
-            $info = json_decode($imageInfo, true);
-            isset($info['src']) && $bindFile[] = $info['src'];
+        if (isset($data['album']) && is_array($data['album'])) {
+            foreach ($data['album'] as $imageInfo) {
+                $info = json_decode($imageInfo, true);
+                isset($info['src']) && $bindFile[] = $info['src'];
+            }
         }
-
         $bindFile[]    = $data['new_thumb'];
         $bindFile[]    = $data['thumb'];
         $contentUpload = mGetContentUpload($data['content']);

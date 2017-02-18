@@ -194,18 +194,20 @@ EOF;
             //后期修改afterSelectFile
             $UploadFileUrl = route('UploadFile');
             $ManageFileUrl = route('ManageFile', ['t' => 'kindeditor']);
-            $editor_config = json_encode([
-                'uploadJson'            => $UploadFileUrl,
-                'fileManagerJson'       => $ManageFileUrl,
-                'extraFileUploadParams' => [
-                    't'         => 'kindeditor',
-                    'user_type' => Route::is("Admin::*"),
-                    '_token'    => csrf_token(),
-                ],
-                'resizeType'            => 1,
-                'themeType'             => 'simple',
-                'allowFileManager'      => true,
-            ]);
+            $editor_config = <<<EOF
+{
+    uploadJson:'{$UploadFileUrl}'
+    ,fileManagerJson:'{$ManageFileUrl}'
+    ,extraFileUploadParams:{
+        t:'kindeditor'
+        ,user_type:{{ Route::is("Admin::*") ? 1 : 2  }}
+        ,_token:'{{ csrf_token() }}'
+    }
+    ,resizeType:1
+    ,themeType:'simple'
+    ,allowFileManager:true
+}
+EOF;
             $js_global = '';
             $js_create = '';
             foreach ($element as $e) {
@@ -309,18 +311,20 @@ EOF;
             }
             $UploadFileUrl = route('UploadFile');
             $ManageFileUrl = route('ManageFile', ['t' => $dir]);
-            $editor_config = json_encode([
-                'uploadJson'            => $UploadFileUrl,
-                'fileManagerJson'       => $ManageFileUrl,
-                'extraFileUploadParams' => [
-                    't'         => 'kindeditor',
-                    'user_type' => Route::is("Admin::*") ? 1 : 2,
-                    '_token'    => csrf_token(),
-                ],
-                'resizeType'            => 1,
-                'themeType'             => 'simple',
-                'allowFileManager'      => true,
-            ]);
+            $editor_config = <<<EOF
+{
+    uploadJson:'{$UploadFileUrl}'
+    ,fileManagerJson:'{$ManageFileUrl}'
+    ,extraFileUploadParams:{
+        t:'kindeditor'
+        ,user_type:{{ Route::is("Admin::*") ? 1 : 2  }}
+        ,_token:'{{ csrf_token() }}'
+    }
+    ,resizeType:1
+    ,themeType:'simple'
+    ,allowFileManager:true
+}
+EOF;
 
             $re_script = <<<EOF
 <import file="kindeditor/kindeditor-all-min" />

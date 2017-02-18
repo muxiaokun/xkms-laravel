@@ -2,43 +2,26 @@
 
 namespace App\Model;
 
+use Illuminate\Support\Facades\Route;
 
 class ManageUpload extends Common
 {
 
+    public function getSizeAttribute($value)
+    {
+        return mFormatSize($value);
+    }
 
     public function getBindInfoAttribute($value)
     {
-        return $this->transfixionDecode($value);
+        return $this->transfixionDecode($value, true);
     }
 
     public function setBindInfoAttribute($value)
     {
+        //['id'=>?,'paths'=>?]
+        $old_info                      = $this->getAttribute('bind_info');
         $this->attributes['bind_info'] = $this->transfixionEncode($value);
-    }
-
-    public static function deleteFile($id)
-    {
-        if (!$id) {
-            return false;
-        }
-
-        !is_array($id) && $id = [$id];
-        foreach ($id as $i) {
-
-            $filePath = (new static)->colWhere($id)->first()['path'];
-            $delFileResult = (is_file($filePath)) ? @unlink($filePath) : true;
-            if (false === $delFileResult) {
-                return false;
-            }
-
-            $delResult     = (new static)->colWhere($i)->delete();
-            if (!$delResult) {
-                return false;
-            }
-
-        }
-        return true;
     }
 
     //修改文件属主关系 $paths 不进行传参 就只进行 属主文件归零
@@ -58,7 +41,7 @@ class ManageUpload extends Common
             return true;
         }
 
-        $routeName = \Illuminate\Support\Facades\Route::currentRouteName();
+        $routeName = Route::currentRouteName();
         //文件解除属主
         $ownerStr  = '|' . $routeName . ':' . $item . '|';
         $ownerList = (new static)->select(['id', 'bind_info'])
@@ -86,36 +69,5 @@ class ManageUpload extends Common
         }
 
         return true;
-    }
-
-    public function scopeMDecodeData($query, $data)
-    {
-        $data['size'] = $query->format_size($data['size']);
-    }
-
-    private function format_size($query, $size)
-    {
-        $reStr = '';
-        switch ($size) {
-            //GB
-            case 0 < intval($size / 1073741824):
-                $reStr .= round($size / 1073741824, 3) . " GB";
-                break;
-            //MB
-            case 0 < intval($size / 1048576):
-                $reStr .= round($size / 1048576, 3) . " MB";
-                $size = $size % 1048576;
-                break;
-            //KB
-            case 0 < intval($size / 1024):
-                $reStr .= round($size / 1024, 3) . " KB";
-                $size = $size % 1024;
-                break;
-            //Byte
-            default:
-                $reStr .= $size . " B";
-                break;
-        }
-        return $reStr;
     }
 }

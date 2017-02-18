@@ -746,3 +746,34 @@ function mSendmail($to, $title = '', $content = '', $chart = 'utf-8', $attachmen
     }
     $PHPMailer->Send();
 }
+
+/**
+ * @param int $size Byte
+ * @return string
+ *                  格式化文件大小
+ */
+function mFormatSize($size = 0)
+{
+    $reStr = '';
+    switch ($size) {
+        //GB
+        case 0 < intval($size / 1073741824):
+            $reStr .= round($size / 1073741824, 3) . " GB";
+            break;
+        //MB
+        case 0 < intval($size / 1048576):
+            $reStr .= round($size / 1048576, 3) . " MB";
+            $size = $size % 1048576;
+            break;
+        //KB
+        case 0 < intval($size / 1024):
+            $reStr .= round($size / 1024, 3) . " KB";
+            $size = $size % 1024;
+            break;
+        //Byte
+        default:
+            $reStr .= $size . " B";
+            break;
+    }
+    return $reStr;
+}

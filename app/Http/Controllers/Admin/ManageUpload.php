@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Backend;
 use App\Http\Controllers\CommonManageUpload;
 use App\Model;
+use Illuminate\Filesystem\Filesystem;
 
 class ManageUpload extends Backend
 {
@@ -84,8 +85,15 @@ class ManageUpload extends Backend
         if (!$id) {
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::ManageUpload::index'));
         }
+        $filesystem = new Filesystem();
+        $resultDel  = false;
+        Model\ManageUpload::colWhere($id)->get()->each(function ($item, $key) use ($filesystem, &$resultDel) {
+            $path = storage_path('app/public/' . $item->path);
+            if ($filesystem->delete($path)) {
+                $resultDel = $item->delete();
+            }
 
-        $resultDel = Model\ManageUpload::deleteFile($id);
+        });
         if ($resultDel) {
             return $this->success(trans('common.file') . trans('common.del') . trans('common.success'),
                 route('Admin::ManageUpload::index'));
@@ -103,15 +111,23 @@ class ManageUpload extends Backend
             return;
         }
 
-        $manageUploadList = Model\ManageUpload::whereNull('bind_info')->orWhere('bind_info', '=', '')->get();
-        foreach ($manageUploadList as $manageUpload) {
-            $resultDel = Model\ManageUpload::deleteFile($manageUpload['id']);
-            if (!$resultDel) {
-                return $this->error(trans('common.clear') . trans('common.file') . $manageUpload['path'] . trans('common.error'),
-                    route('Admin::ManageUpload::index'));
-            }
+        $filesystem = new Filesystem();
+        $resultDel  = false;
+        Model\ManageUpload::whereNull('bind_info')->orWhere('bind_info', '=', '')->get()
+            ->each(function ($item, $key) use ($filesystem, &$resultDel) {
+                $path = storage_path('app/public/' . $item->path);
+                if ($filesystem->delete($path)) {
+                    $resultDel = $item->delete();
+                }
+
+            });
+
+        if ($resultDel) {
+            return $this->success(trans('common.clear') . trans('common.file') . trans('common.success'),
+                route('Admin::ManageUpload::index'));
+        } else {
+            return $this->error(trans('common.clear') . trans('common.file') . trans('common.error'),
+                route('Admin::ManageUpload::index'));
         }
-        return $this->success(trans('common.clear') . trans('common.file') . trans('common.success'),
-            route('Admin::ManageUpload::index'));
     }
 }

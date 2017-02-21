@@ -160,7 +160,7 @@ M_itlink_editor.prototype.add_itlink = function(data)
     var itl_text_obj = itlink_tr_obj.find('[mtype=itl_text]');
     var itl_target_obj = itlink_tr_obj.find('[mtype=itl_target]');
     var itl_link_obj = itlink_tr_obj.find('[mtype=itl_link]');
-    itl_image_img_obj.attr('src',$Think.root + _self.def_image);
+    itl_image_img_obj.attr('src', _self.def_image);
     itl_image_in_obj.attr('name',_self.post_name + '[itl_image][' + auto_id + ']');
     itl_text_obj.attr('name',_self.post_name + '[itl_text][' + auto_id + ']');
     itl_target_obj.attr('name',_self.post_name + '[itl_target][' + auto_id + ']');
@@ -170,8 +170,8 @@ M_itlink_editor.prototype.add_itlink = function(data)
         //支持伪静态路径
         if(data.itl_image)
         {
-            itl_image_img_obj.attr('src',$Think.root + data.itl_image.replace(RegExp('^'+$Think.root),''));
-            itl_image_in_obj.val(data.itl_image.replace(RegExp('^'+$Think.root),''));
+            itl_image_img_obj.attr('src', data.itl_image);
+            itl_image_in_obj.val(data.itl_image);
         }
         itl_text_obj.val(data.itl_text);
         itl_target_obj.find('[value=' + data.itl_target + ']').prop('selected',true);
@@ -202,7 +202,7 @@ M_itlink_editor.prototype.edit_itlink_img = function(auto_id)
             'var edit_obj = $("#'+ _self.callback_fn + auto_id + '");',
             'if(url || title){',
                 'edit_obj.find("img").attr("src",url);',
-                'edit_obj.find("input").val(url.replace(RegExp(\'^\'+$Think.root + \'\'),""));',
+        'edit_obj.find("input").val(url);',
             '}',
         '}'
     ).join('');

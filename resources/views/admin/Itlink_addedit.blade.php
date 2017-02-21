@@ -137,7 +137,7 @@
                                     <button id="uploadsbutton" type="button" class="btn btn-default">
                                         @lang('common.upload')@lang('common.image')@lang('common.group')
                                     </button>
-                                    @uploadfile(uploadsbutton,multiimage,kindeditor,M_article_uploadsbutton)
+                                    @uploadfile(uploadsbutton,multiimage,kindeditor,M_callback_itlink)
                                 </div>
                             </div>
                             <script type="text/javascript" src="{{ asset('js/M_itlink_editor.js') }}"></script>
@@ -148,13 +148,13 @@
                                 }
                                 $(function () {
                                     var config = {
-                                        @if ($edit_info['ext_info'])'def_data':{{ $edit_info['ext_info']|json_encode }},
+                                        @if ($edit_info['ext_info'])'def_data':{!! json_encode($edit_info['ext_info']) !!} ,
                                         @endif
                                         'global_var': 'itlink_editor',
                                         'out_obj': $('#ext_info'),
                                         'upload_btn': '#uploadsbutton',
                                         'callback_fn': 'M_callback_itlink',
-                                        'def_image': '{:M_exists()}',
+                                        'def_image': '{{ mExists() }}',
                                         'post_name': 'ext_info'
                                     };
                                     window.itlink_editor = new M_itlink_editor(config);

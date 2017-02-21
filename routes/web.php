@@ -247,9 +247,10 @@ Route::group([
         'prefix' => 'Itlink',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Itlink@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Itlink@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'Itlink@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'Itlink@del']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Itlink@add']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'Itlink@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'Itlink@del']);
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Itlink@ajax_api']);
     });
     Route::group([
         'as'     => 'ManageUpload::',

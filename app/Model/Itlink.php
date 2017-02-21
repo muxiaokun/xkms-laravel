@@ -5,9 +5,49 @@ namespace App\Model;
 
 class Itlink extends Common
 {
-    protected $casts = [
-        'ext_info' => 'array',
-    ];
+    public function setMaxShowNumAttribute($value)
+    {
+        $this->attributes['max_show_num'] = $value ? $value : 0;
+    }
+
+    public function setMaxHitNumAttribute($value)
+    {
+        $this->attributes['max_hit_num'] = $value ? $value : 0;
+    }
+
+    public function setShowNumAttribute($value)
+    {
+        $this->attributes['show_num'] = $value ? $value : 0;
+    }
+
+    public function setHitNumAttribute($value)
+    {
+        $this->attributes['hit_num'] = $value ? $value : 0;
+    }
+
+    public function getExtInfoAttribute($value)
+    {
+        $value = json_decode($value, true);
+        if (!is_array($value)) {
+            return [];
+        }
+
+        foreach ($value as &$info) {
+            $info['itl_image'] = mMakeUploadUrl($info['itl_image']);
+        }
+
+        return $value;
+    }
+
+    public function setExtInfoAttribute($value)
+    {
+        foreach ($value as &$info) {
+            $info['itl_image'] = mParseUploadUrl($info['itl_image']);
+        }
+
+        $this->attributes['ext_info'] = json_encode($value);
+    }
+
 
     public function scopeMFind_data($query, $shortName)
     {

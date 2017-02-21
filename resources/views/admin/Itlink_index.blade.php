@@ -12,7 +12,6 @@
                         <th>@lang('itlink.itlink')@lang('common.name')</th>
                         <th>@lang('common.short')@lang('common.name')</th>
                         <th>@lang('common.yes')@lang('common.no')@lang('common.enable')</th>
-                        <th>@lang('common.yes')@lang('common.no')@lang('common.statistics')</th>
                         <th>@lang('common.show')@lang('common.statistics')</th>
                         <th>@lang('common.click')@lang('common.statistics')</th>
                         <td class="nowrap">
@@ -38,13 +37,18 @@
                                 @if ($itlink['is_enable'])@lang('common.yes')@else @lang('common.no')@endif
                             </td>
                             <td>
-                                @if ($itlink['is_statistics'])@lang('common.yes')@else @lang('common.no')@endif
+                                @if ($itlink['max_show_num'])
+                                    {{ $itlink['show_num'] }}/{{ $itlink['max_show_num'] }}
+                                @else
+                                    @lang('common.none')@lang('common.limit')
+                                @endif
                             </td>
                             <td>
-                                {{ $itlink['show_num'] }}
-                            </td>
-                            <td>
-                                {{ $itlink['hit_num'] }}
+                                @if ($itlink['max_show_num'])
+                                    {{ $itlink['hit_num'] }}/{{ $itlink['max_show_num'] }}
+                                @else
+                                    @lang('common.none')@lang('common.limit')
+                                @endif
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])
@@ -86,16 +90,6 @@
                                         'post_link': '{{ route('Admin::Itlink::edit') }}',
                                         'post_data': {'is_enable': '0'}
                                     });
-                                    config.type_data.push({
-                                        'name': lang.common.statistics,
-                                        'post_link': '{{ route('Admin::Itlink::edit') }}',
-                                        'post_data': {'is_statistics': '1'}
-                                    });
-                                    config.type_data.push({
-                                        'name': lang.common.cancel + lang.common.statistics,
-                                        'post_link': '{{ route('Admin::Itlink::edit') }}',
-                                        'post_data': {'is_statistics': '0'}
-                                    });
                                     @endif
                                     @if ($batch_handle['del'])
                                         config.type_data.push({
@@ -103,7 +97,7 @@
                                         'post_link': '{{ route('Admin::Itlink::del') }}'
                                     });
                                     @endif
-                                            new M_batch_handle(config);
+                                        new M_batch_handle(config);
                                 });
                             </script>
                         @endif

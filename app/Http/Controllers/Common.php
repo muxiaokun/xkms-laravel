@@ -108,7 +108,7 @@ class Common extends Controller
     //生成中文拼音首字母缩写
     protected function _zh2py($str)
     {
-        $MZh2py = new \App\Library\mZh2py();
+        $MZh2py = new \App\Library\MZh2py();
         return $MZh2py->encode($str, false);
     }
 

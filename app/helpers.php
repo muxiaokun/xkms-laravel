@@ -213,7 +213,7 @@ function mMktimeRange($inputName)
     return $timeRange;
 }
 
-function mExists($url, $isThumb = false)
+function mExists($url = '', $isThumb = false)
 {
     if (!$url || !is_file(public_path($url))) {
         $url = config('system.sys_default_image');

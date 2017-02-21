@@ -4,7 +4,7 @@
 //echo $M_zh2py->encode('阿里巴巴科技有限公司');
 namespace App\Library;
 
-class M_zh2py
+class MZh2py
 {
     /**
      * 拼音字符转换图

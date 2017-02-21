@@ -74,8 +74,6 @@ class Minify extends Controller
                 if ('js' == $type) {
                     //js类型引入语言包
                     $content .= $this->getJSLang($lang);
-                    //js类型扩展全局参数
-                    $content .= 'var asset_storage="' . asset('storage') . '/' . '";';
                 }
                 foreach (explode(',', $files) as $file) {
                     //压缩和缓存文件

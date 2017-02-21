@@ -83,7 +83,7 @@ class Article extends Common
 
     public function getExtendAttribute($value)
     {
-        return $this->transfixionDecode($value);
+        return $this->transfixionDecode($value, true);
     }
 
     public function setExtendAttribute($value)
@@ -93,7 +93,7 @@ class Article extends Common
 
     public function getAttributeAttribute($value)
     {
-        return $this->transfixionDecode($value);
+        return $this->transfixionDecode($value, true);
     }
 
     public function setAttributeAttribute($value)

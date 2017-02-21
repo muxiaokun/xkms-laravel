@@ -326,8 +326,9 @@ EOF;
 }
 EOF;
 
-            $re_script = <<<EOF
-<import file="kindeditor/kindeditor-all-min" />
+            $kindeditor_js_src = asset('kindeditor/kindeditor-all-min.js');
+            $re_script         = <<<EOF
+<script type="text/javascript" src="{$kindeditor_js_src}"></script>
 <script type="text/javascript">
 $(function(){
     KindEditor.create();

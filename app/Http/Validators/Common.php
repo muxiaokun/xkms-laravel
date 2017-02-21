@@ -75,4 +75,17 @@ class Common
         return ($matches[1] == $value) ? true : false;
     }
 
+    /**
+     * @param $attribute
+     * @param $value
+     * @param $parameters
+     * @param $validator
+     * @return bool
+     * 短名格式
+     */
+    public function short_name($attribute, $value, $parameters, $validator)
+    {
+        preg_match('/^(\w*)$/', $value, $matches);
+        return ($matches[1] == $value) ? true : false;
+    }
 }

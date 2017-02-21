@@ -46,7 +46,8 @@ class Upload extends Controller
         ];
         Model\ManageUpload::create($data);
         $filesystem   = new Filesystem();
-        $storage_path = asset('storage/' . $getPathExts['path'] . '/' . $filesystem->basename($path));
+        $baseUrl = request()->getBaseUrl() . '/storage/';
+        $storage_path = $baseUrl . $getPathExts['path'] . '/' . $filesystem->basename($path);
         return $this->kind_json($storage_path, false);
     }
 

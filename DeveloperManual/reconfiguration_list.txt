@@ -37,10 +37,10 @@ OK 成员管理会员管理添加会员组Admin::MemberGroup::add
 OK 成员管理会员管理删除会员组Admin::MemberGroup::del
 OK 成员管理会员管理编辑会员组Admin::MemberGroup::edit
 OK 内容管理文章文章配置Admin::Article::setting
-内容管理文章文章管理Admin::Article::index
-内容管理文章添加文章Admin::Article::add
-内容管理文章删除文章Admin::Article::del
-内容管理文章编辑文章Admin::Article::edit
+OK 内容管理文章文章管理Admin::Article::index
+OK 内容管理文章添加文章Admin::Article::add
+OK 内容管理文章删除文章Admin::Article::del
+OK 内容管理文章编辑文章Admin::Article::edit
 OK 内容管理文章文章分类Admin::ArticleCategory::index
 OK 内容管理文章添加分类Admin::ArticleCategory::add
 OK 内容管理文章删除分类Admin::ArticleCategory::del

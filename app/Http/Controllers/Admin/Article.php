@@ -329,7 +329,7 @@ class Article extends Backend
             $data['content'] = $content;
         }
         if ('add' == $type || null !== $cateId) {
-            $data['cate_id'] = $channelId;
+            $data['cate_id'] = $cateId;
         }
         if ('add' == $type || null !== $channelId) {
             $data['channel_id'] = $channelId;
@@ -415,7 +415,7 @@ class Article extends Backend
             $data = Model\Article::colWhere($id)->first()->toArray();
         }
         if (!in_array($data['channel_id'], Model\ArticleChannel::mFindAllow())
-            && !in_array($data['cate_id'], Model\ArticleCategory::mFindAllow())
+            || !in_array($data['cate_id'], Model\ArticleCategory::mFindAllow())
         ) {
             return $this->error(trans('common.none') . trans('common.privilege') . trans('common.handle') . trans('common.article'),
                 route('Admin::Article::index'));

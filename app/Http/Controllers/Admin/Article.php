@@ -33,7 +33,7 @@ class Article extends Backend
 
             $cate_id = request('cate_id');
             if ($cate_id) {
-                $query->whereIn('cate_id', Model\ArticleCategory::mFind_child_id($cate_id));
+                $query->whereIn('cate_id', $this->findCateChildIds($cate_id));
             }
 
             $channel_id = request('channel_id');
@@ -49,6 +49,16 @@ class Article extends Backend
             }
 
         })->paginate(config('system.sys_max_row'))->appends(request()->all());
+        foreach ($articleList as &$article) {
+            $article['channel_name'] = trans('common.empty');
+            $article['cate_name']    = trans('common.empty');
+            if ($article['channel_id']) {
+                $article['channel_name'] = Model\ArticleChannel::colWhere($article['channel_id'])->first()['name'];
+            }
+            if ($article['cate_id']) {
+                $article['cate_name'] = Model\ArticleCategory::colWhere($article['cate_id'])->first()['name'];
+            }
+        }
         $assign['article_list'] = $articleList;
 
         //初始化where_info
@@ -181,13 +191,13 @@ class Article extends Backend
             $accessGroupId  = ['value' => $accessGroupId, 'html' => $adminGroupName];
         }
 
-        $extendTpl = Model\ArticleCategory::mFindTopColumn($editInfo['cate_id'], 'extend');
+        $extendTpl                 = $this->findTopCategory($editInfo['cate_id'], 'extend');
         $valExtend = [];
         foreach ($extendTpl as $template) {
-            $valExtend[$template] = ($editInfo['extend'][$template]) ? $editInfo['extend'][$template] : '';
+            $valExtend[$template] = (isset($editInfo['extend'][$template])) ? $editInfo['extend'][$template] : '';
         }
         $editInfo['extend']        = $valExtend;
-        $editInfo['attribute_tpl'] = Model\ArticleCategory::mFindTopColumn($editInfo['cate_id'], 'attribute');
+        $editInfo['attribute_tpl'] = $this->findTopCategory($editInfo['cate_id'], 'attribute');
 
         $assign['edit_info'] = $editInfo;
 
@@ -268,7 +278,7 @@ class Article extends Backend
                 break;
             case 'exttpl_id':
                 isset($data['id']) && $cateId = $data['id'];
-                $extendTpl = Model\ArticleCategory::mFindTopColumn($cateId, 'extend');
+                $extendTpl = $this->findTopCategory($cateId, 'extend');
                 foreach ($extendTpl as $template) {
                     $result['info'][$template] = '';
                 }
@@ -276,7 +286,7 @@ class Article extends Backend
             case 'attribute':
                 if ($data['id']) {
                     $cateId         = $data['id'];
-                    $result['info'] = Model\ArticleCategory::mFindTopColumn($cateId, 'attribute');
+                    $result['info'] = $this->findTopCategory($cateId, 'attribute');
                 } else {
                     $result = ['status' => false, 'info' => 'id error'];
                 }
@@ -421,5 +431,25 @@ class Article extends Backend
                 route('Admin::Article::index'));
         }
 
+    }
+
+    private function findTopCategory($id, $column)
+    {
+        $categoryInfo = Model\ArticleCategory::colWhere($id)->first();
+        if ($categoryInfo && $categoryInfo->parent_id) {
+            return $this->findTopCategory($categoryInfo->parent_id, $column);
+        }
+        return $categoryInfo[$column] ? $categoryInfo[$column] : [];
+    }
+
+    private function findCateChildIds($id)
+    {
+        $childIds = collect();
+        Model\ArticleCategory::colWhere($id, 'parent_id')->get()->each(function ($item, $key) use ($childIds) {
+            $childIds->merge($this->findCateChildIds($item->id));
+            $childIds->push($item->id);
+        });
+        $childIds->push($id);
+        return $childIds->toArray();
     }
 }

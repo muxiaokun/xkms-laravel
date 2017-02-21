@@ -199,13 +199,14 @@ class ArticleCategory extends Backend
         }
 
         //解除文章和被删除分类的关系
-        $articleCount = Model\Article::colWhere($id, 'cate_id')->count();
-        if ($articleCount) {
-            $resultClean = Model\Article::colWhere($id, 'cate_id')->delete();
-            if (!$resultClean) {
-                return $this->error(trans('common.article') . trans('common.clear') . trans('common.category') . trans('common.error'),
-                    route('Admin::ArticleCategory::index'));
-            }
+        $resultClean = true;
+        Model\Article::colWhere($id, 'cate_id')->get()->each(function ($item, $key) use (&$resultClean) {
+            $resultClean = $item->update(['cate_id' => 0]);
+            return $resultClean;
+        });
+        if (!$resultClean) {
+            return $this->error(trans('common.article') . trans('common.clear') . trans('common.category') . trans('common.error'),
+                route('Admin::ArticleCategory::index'));
         }
 
         $resultDel = Model\ArticleCategory::destroy($id);

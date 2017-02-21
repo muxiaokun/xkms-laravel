@@ -6,10 +6,10 @@
                 @foreach ($article_category_list as $article_category)
             {{-- 默认展开所有的子级分类,如果不展开提交时表单数据将不存在 --}}
                 @if ($article_category['checked'])
-    $('input[name="s_limit[{{ $article_category['id'] }}]"]').val('{{ $edit_info['ext_info'][$article_category['id']]['s_limit'] }}' || 0);
-                $('select[name="template_list[{{ $article_category['id'] }}]"] option[value="{{ $edit_info['ext_info'][$article_category['id']]['template'] }}"]').prop('selected', true);
-                $('select[name="list_template_list[{{ $article_category['id'] }}]"] option[value="{{ $edit_info['ext_info'][$article_category['id']]['list_template'] }}"]').prop('selected', true);
-                $('select[name="article_template_list[{{ $article_category['id'] }}]"] option[value="{{ $edit_info['ext_info'][$article_category['id']]['article_template'] }}"]').prop('selected', true);
+    $('input[name="s_limit[{{ $article_category['id'] }}]"]').val('{{ $edit_info['extend'][$article_category['id']]['s_limit'] }}' || 0);
+                $('select[name="template_list[{{ $article_category['id'] }}]"] option[value="{{ $edit_info['extend'][$article_category['id']]['template'] }}"]').prop('selected', true);
+                $('select[name="list_template_list[{{ $article_category['id'] }}]"] option[value="{{ $edit_info['extend'][$article_category['id']]['list_template'] }}"]').prop('selected', true);
+                $('select[name="article_template_list[{{ $article_category['id'] }}]"] option[value="{{ $edit_info['extend'][$article_category['id']]['article_template'] }}"]').prop('selected', true);
                 M_cate_tree('input[name="category_list[]"][value="{{ $article_category['id'] }}"]', article_channel_cb);
                 @endif
                 @endforeach
@@ -113,7 +113,7 @@
                                 <script type="text/javascript">
                                     $(function () {
                                         var config = {
-                                            @if ($edit_info['manage_id'])'def_data':{{ $edit_info['manage_id'] }},
+                                            @if ($edit_info['manage_id'])'def_data':{!! json_encode($edit_info['manage_id']) !!},
                                             @endif
                                             'out_obj': $('#manage_id_list'),
                                             'edit_obj': $('#admin_user_list'),
@@ -138,7 +138,7 @@
                                 <script type="text/javascript">
                                     $(function () {
                                         var config = {
-                                            @if ($edit_info['manage_group_id'])'def_data':{{ $edit_info['manage_group_id'] }},
+                                            @if ($edit_info['manage_group_id'])'def_data':{!! json_encode($edit_info['manage_group_id']) !!},
                                             @endif
                                             'out_obj': $('#manage_group_id_list'),
                                             'edit_obj': $('#admin_group_list'),
@@ -164,7 +164,7 @@
                                 <script type="text/javascript">
                                     $(function () {
                                         var config = {
-                                            @if ($edit_info['access_group_id'])'def_data':{{ $edit_info['access_group_id'] }},
+                                            @if ($edit_info['access_group_id'])'def_data':{!! json_encode($edit_info['access_group_id']) !!},
                                             @endif
                                             'out_obj': $('#access_group_id_list'),
                                             'edit_obj': $('#access_group_list'),

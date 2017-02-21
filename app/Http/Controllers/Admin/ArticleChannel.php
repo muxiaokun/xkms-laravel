@@ -63,7 +63,7 @@ class ArticleChannel extends Backend
             return $this->_add_edit_category_common()->toJson();
         }
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData('add');
+            $data = $this->makeData('add');
             if (!is_array($data)) {
                 return $data;
             }
@@ -99,13 +99,13 @@ class ArticleChannel extends Backend
         }
 
         if (1 != session('backend_info.id')
-            && !mInArray($id, Model\ArticleChannel::mFindAllow())
+            && !mInArray($id, Model\ArticleChannel::mFindAllow()->toArray())
         ) {
             return $this->error(trans('common.none') . trans('common.privilege') . trans('common.edit') . trans('common.channel'),
                 route('Admin::ArticleChannel::index'));
         }
 
-        $maAllowArr = Model\ArticleChannel::mFindAllow('ma');
+        $maAllowArr = Model\ArticleChannel::mFindAllow('ma')->toArray();
         if (request()->isMethod('POST')) {
             $data = $this->makeData('edit');
             if (!is_array($data)) {
@@ -169,14 +169,18 @@ class ArticleChannel extends Backend
 
         //删除必须是 属主
         if (1 != session('backend_info.id')
-            && !mInArray($id, Model\ArticleChannel::mFindAllow('ma'))
+            && !mInArray($id, Model\ArticleChannel::mFindAllow('ma')->toArray())
         ) {
             return $this->error(trans('common.none') . trans('common.privilege') . trans('common.del') . trans('common.channel'),
                 route('Admin::ArticleChannel::index'));
         }
 
         //解除文章和被删除频道的关系
-        $resultClean = Model\Article::colWhere($id, 'channel_id')->delete();
+        $resultClean = true;
+        Model\Article::colWhere($id, 'channel_id')->get()->each(function ($item, $key) use (&$resultClean) {
+            $resultClean = $item->update(['channel_id' => 0]);
+            return $resultClean;
+        });
         if (!$resultClean) {
             return $this->error(trans('common.article') . trans('common.clear') . trans('common.channel') . trans('common.error'),
                 route('Admin::ArticleChannel::index'));
@@ -254,9 +258,9 @@ class ArticleChannel extends Backend
         $manageId    = request('manage_id');
         $addId       = session('backend_info.id');
         if (('add' == $type || null !== $manageId)
-            && !in_array($addId, $manageId)
+            && (!is_array($manageId) || !in_array($addId, $manageId))
         ) {
-            $manageId[] = $addId;
+            $manageId = [$addId];
         }
 
         $manageGroupId       = request('manage_group_id');
@@ -268,9 +272,9 @@ class ArticleChannel extends Backend
         $templateList        = request('template_list');
         $listTemplateList    = request('list_template_list');
         $articleTemplateList = request('article_template_list');
-        $extInfo             = [];
+        $extend = [];
         foreach ($categoryList as $id) {
-            $extInfo[$id] = [
+            $extend[$id] = [
                 's_limit'          => $sLimit[$id],
                 'template'         => $templateList[$id],
                 'list_template'    => $listTemplateList[$id],
@@ -306,8 +310,8 @@ class ArticleChannel extends Backend
         if ('add' == $type || null !== $template) {
             $data['template'] = $template;
         }
-        if ('add' == $type || null !== $extInfo) {
-            $data['ext_info'] = $extInfo;
+        if ('add' == $type || null !== $extend) {
+            $data['extend'] = $extend;
         }
         return $data;
     }
@@ -331,19 +335,19 @@ class ArticleChannel extends Backend
     //构造频道公共ajax
     private function _add_edit_category_common($channelInfo = false)
     {
-        $where['parent_id'] = 0;
-        $whereValue         = request('parent_id');
-        $whereValue && $where[] = ['parent_id', $whereValue];
+        $articleCategoryList                         = Model\ArticleCategory::where(function ($query) {
+            $parent_id = request('parent_id', 0);
+            $query->where('parent_id', '=', $parent_id);
 
-        $articleCategoryList = Model\ArticleCategory::where($where)->get();
+        })->get();
         foreach ($articleCategoryList as &$articleCategory) {
             $articleCategory['has_child'] = Model\ArticleCategory::where(['parent_id' => $articleCategory['id']])->count();
-            if ($channelInfo && isset($channelInfo['ext_info'][$articleCategory['id']])) {
+            if ($channelInfo && isset($channelInfo['extend'][$articleCategory['id']])) {
                 $articleCategory['checked']          = true;
-                $articleCategory['s_limit']          = $channelInfo['ext_info'][$articleCategory['id']]['s_limit'];
-                $articleCategory['template']         = $channelInfo['ext_info'][$articleCategory['id']]['template'];
-                $articleCategory['list_template']    = $channelInfo['ext_info'][$articleCategory['id']]['list_template'];
-                $articleCategory['article_template'] = $channelInfo['ext_info'][$articleCategory['id']]['article_template'];
+                $articleCategory['s_limit']          = $channelInfo['extend'][$articleCategory['id']]['s_limit'];
+                $articleCategory['template']         = $channelInfo['extend'][$articleCategory['id']]['template'];
+                $articleCategory['list_template']    = $channelInfo['extend'][$articleCategory['id']]['list_template'];
+                $articleCategory['article_template'] = $channelInfo['extend'][$articleCategory['id']]['article_template'];
             }
         }
         return $articleCategoryList;

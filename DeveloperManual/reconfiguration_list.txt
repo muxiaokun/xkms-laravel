@@ -45,10 +45,10 @@ OK 内容管理文章文章分类Admin::ArticleCategory::index
 OK 内容管理文章添加分类Admin::ArticleCategory::add
 OK 内容管理文章删除分类Admin::ArticleCategory::del
 OK 内容管理文章编辑分类Admin::ArticleCategory::edit
-内容管理文章文章频道Admin::ArticleChannel::index
-内容管理文章添加频道Admin::ArticleChannel::add
-内容管理文章删除频道Admin::ArticleChannel::del
-内容管理文章编辑频道Admin::ArticleChannel::edit
+OK 内容管理文章文章频道Admin::ArticleChannel::index
+OK 内容管理文章添加频道Admin::ArticleChannel::add
+OK 内容管理文章删除频道Admin::ArticleChannel::del
+OK 内容管理文章编辑频道Admin::ArticleChannel::edit
 内容管理图文链接图文管理Admin::Itlink::index
 内容管理图文链接添加图文Admin::Itlink::add
 内容管理图文链接删除图文Admin::Itlink::del

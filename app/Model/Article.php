@@ -63,6 +63,9 @@ class Article extends Common
     public function getAlbumAttribute($value)
     {
         $value = json_decode($value, true);
+        if (!is_array($value)) {
+            return [];
+        }
         foreach ($value as &$imageInfo) {
             $imageInfo['src'] = mMakeUploadUrl($imageInfo['src']);
         }

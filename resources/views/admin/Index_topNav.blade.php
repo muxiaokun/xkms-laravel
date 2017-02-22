@@ -16,7 +16,7 @@
            target="main">@lang('common.backend')@lang('common.homepage')</a>
     </div>
     <div class="right_menu">
-        <a class="btn btn-sm btn-primary" href="__ROOT__/"
+        <a class="btn btn-sm btn-primary" href="{{ asset('') }}"
            target="_blank">@lang('common.frontend')@lang('common.homepage')</a>
     </div>
 </header>

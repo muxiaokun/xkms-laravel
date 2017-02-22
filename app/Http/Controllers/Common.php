@@ -106,10 +106,14 @@ class Common extends Controller
     }
 
     //生成中文拼音首字母缩写
-    protected function _zh2py($str)
+    protected function _zh2py($field, $str)
     {
         $MZh2py = new \App\Library\MZh2py();
-        return $MZh2py->encode($str, false);
+        if ($field == '') {
+            return $MZh2py->encode($str, false);
+        } else {
+            return str_replace(' ', '', $MZh2py->encode($str, true));
+        }
     }
 
     //生成缩略图 是源文件名后加 thumb
@@ -197,7 +201,7 @@ class Common extends Controller
             case 'zh2py':
                 $result           = [];
                 $result['status'] = 1;
-                $result['info']   = $this->_zh2py(request('data'));
+                $result['info'] = $this->_zh2py(request('field'), request('data'));
                 break;
         }
         if ($result['status']) {

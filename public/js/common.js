@@ -307,7 +307,7 @@ function M_line_edit(obj)
 }
 
 //中文转拼音
-function M_zh2py(obj,to)
+function M_zh2py(obj, to, allSpell)
 {
     var _self = $(obj);
     _self.prop('disabled',true);
@@ -317,7 +317,7 @@ function M_zh2py(obj,to)
         type:'post',
         dataType:'json',
         cache:false,
-        data:{'type':'zh2py','data':_self.val()},
+        data: {'type': 'zh2py', 'field': allSpell, 'data': _self.val()},
         success:function(data)
         {
             if(data.status)

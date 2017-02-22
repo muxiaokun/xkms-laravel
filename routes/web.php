@@ -318,9 +318,10 @@ Route::group([
         'prefix' => 'Navigation',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Navigation@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Navigation@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'Navigation@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'Navigation@del']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Navigation@add']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'Navigation@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'Navigation@del']);
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'MemberGroup@ajax_api']);
     });
     Route::group([
         'as'     => 'Quests::',

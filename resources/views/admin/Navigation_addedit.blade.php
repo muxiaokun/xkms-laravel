@@ -92,11 +92,12 @@
                             <script>
                                 $(function () {
                                     new M_navigation_editor({
-                                        @if ($edit_info['ext_info'])'def_data':{{ $edit_info['ext_info'] }}, @endif
+                                        @if ($edit_info['ext_info'])'def_data':{!! json_encode($edit_info['ext_info']) !!},
+                                        @endif
                                         'out_obj': $('#navigation_out'),
                                         'edit_obj': $('#edit_window'),
                                         'post_name': '{{ $navigation_config['post_name'] }}',
-                                        'max_level':{{ $navigation_config['navigation_level'] }},
+                                        'max_level':{{ $navigation_config['navigation_level'] }}
                                     });
                                 });
                             </script>

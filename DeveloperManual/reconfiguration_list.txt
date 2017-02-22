@@ -53,10 +53,10 @@ OK 内容管理图文链接图文管理Admin::Itlink::index
 OK 内容管理图文链接添加图文Admin::Itlink::add
 OK 内容管理图文链接删除图文Admin::Itlink::del
 OK 内容管理图文链接编辑图文Admin::Itlink::edit
-内容管理导航导航管理Admin::Navigation::index
-内容管理导航添加导航Admin::Navigation::add
-内容管理导航删除导航Admin::Navigation::del
-内容管理导航编辑导航Admin::Navigation::edit
+OK 内容管理导航导航管理Admin::Navigation::index
+OK 内容管理导航添加导航Admin::Navigation::add
+OK 内容管理导航删除导航Admin::Navigation::del
+OK 内容管理导航编辑导航Admin::Navigation::edit
 扩展管理微信微信管理Admin::Wechat::index
 扩展管理微信配置微信Admin::Wechat::add
 扩展管理微信删除微信绑定Admin::Wechat::del

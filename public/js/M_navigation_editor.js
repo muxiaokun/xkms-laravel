@@ -126,7 +126,7 @@ M_navigation_editor.prototype.initialize_data = function(data,level,pid)
         //回调继续添加
         if(null != v.nav_child)
         {
-            _self.initialize_data(JSON.parse(v.nav_child),level+1,a_obj_id);
+            _self.initialize_data(v.nav_child, level + 1, a_obj_id);
         }
     });
     var sortable_objs = _self.out_obj.find('.list-group');
@@ -181,7 +181,7 @@ M_navigation_editor.prototype.remove_nav = function(obj)
     }
     remove_child_obj.remove();
     nav_obj.remove();
-    for(i = next_level;i < _self.max_level;i++)
+    for (var i = next_level; i < _self.max_level; i++)
     {
         var level_button = _self.out_obj.find('[mlevel=' + i + '] > button');
         level_button.off('click');

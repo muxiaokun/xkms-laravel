@@ -141,7 +141,7 @@ class Itlink extends Backend
         switch ($field) {
             case 'short_name':
                 $validator = Validator::make($data, [
-                    'admin_name' => 'short_name|itlink_name_exist',
+                    'short_name' => 'short_name|itlink_name_exist',
                 ]);
                 break;
         }

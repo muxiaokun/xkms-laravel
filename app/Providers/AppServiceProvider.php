@@ -24,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend('member_exist', 'App\Http\Validators\Member@member_exist');
         Validator::extend('member_group_exist', 'App\Http\Validators\MemberGroup@member_group_exist');
         Validator::extend('itlink_name_exist', 'App\Http\Validators\Itlink@itlink_name_exist');
+        Validator::extend('navigation_name_exist', 'App\Http\Validators\Navigation@navigation_name_exist');
     }
 
     /**

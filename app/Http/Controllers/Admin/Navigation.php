@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
 use App\Model;
+use Illuminate\Support\Facades\Validator;
 
 class Navigation extends Backend
 {
@@ -14,16 +15,24 @@ class Navigation extends Backend
     //列表
     public function index()
     {
-        //建立where
-        $where      = [];
-        $whereValue = request('name');
-        $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
-        $whereValue = request('short_name');
-        $whereValue && $where['short_name'] = ['like', '%' . $whereValue . '%'];
-        $whereValue = request('is_enable');
-        $whereValue && $where['is_enable'] = (1 == $whereValue) ? 1 : 0;
         //初始化翻页 和 列表数据
-        $navigationList = Model\Navigation::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
+        $navigationList            = Model\Navigation::where(function ($query) {
+            $name = request('name');
+            if ($name) {
+                $query->where('name', 'like', '%' . $name . '%');
+            }
+
+            $shortName = request('short_name');
+            if ($shortName) {
+                $query->where('short_name', 'like', '%' . $shortName . '%');
+            }
+
+            $is_enable = request('is_enable');
+            if ($is_enable) {
+                $query->where('is_enable', '=', (1 == $is_enable) ? 1 : 0);
+            }
+
+        })->paginate(config('system.sys_max_row'))->appends(request()->all());
         $assign['navigation_list'] = $navigationList;
 
         //初始化where_info
@@ -52,7 +61,7 @@ class Navigation extends Backend
     public function add()
     {
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData('add');
+            $data = $this->makeData('add');
             if (!is_array($data)) {
                 return $data;
             }
@@ -67,8 +76,8 @@ class Navigation extends Backend
             }
         }
 
-        $assign['navigation_config'] = $this->navigation_config;
-        $assign['edit_info'] = Model\Navigation::columnEmptyData();
+        $assign['navigation_config'] = $this->navigationConfig;
+        $assign['edit_info']         = Model\Navigation::columnEmptyData();
         $assign['title']             = trans('common.add') . trans('common.navigation');
         return view('admin.Navigation_addedit', $assign);
     }
@@ -82,7 +91,7 @@ class Navigation extends Backend
         }
 
         if (request()->isMethod('POST')) {
-            $data       = $this->makeData('edit');
+            $data = $this->makeData('edit');
             if (!is_array($data)) {
                 return $data;
             }
@@ -106,7 +115,7 @@ class Navigation extends Backend
         $editInfo            = Model\Navigation::colWhere($id)->first()->toArray();
         $assign['edit_info'] = $editInfo;
 
-        $assign['navigation_config'] = $this->navigation_config;
+        $assign['navigation_config'] = $this->navigationConfig;
         $assign['title']             = trans('common.edit') . trans('common.navigation');
         return view('admin.Navigation_addedit', $assign);
     }
@@ -135,16 +144,14 @@ class Navigation extends Backend
         $result = ['status' => true, 'info' => ''];
         switch ($field) {
             case 'short_name':
-                //检查用户名是否存在
-                $itlinkInfo = Model\Navigation::where([
-                    'short_name' => $data['short_name'],
-                    'id'         => ['neq', $data['id']],
-                ])->first()->toArray();
-                if ($itlinkInfo) {
-                    $result['info'] = trans('common.short') . trans('common.name') . trans('common.exists');
-                    break;
-                }
+                $validator = Validator::make($data, [
+                    'short_name' => 'short_name|navigation_name_exist',
+                ]);
                 break;
+        }
+
+        if (isset($validator) && $validator->fails()) {
+            $result['info'] = implode('', $validator->errors()->all());
         }
 
         if ($result['info']) {
@@ -162,7 +169,7 @@ class Navigation extends Backend
         $name      = request('name');
         $shortName = request('short_name');
         $isEnable  = request('is_enable');
-        $extInfo   = $this->_make_navigation(request($this->navigation_config['post_name']));
+        $extInfo = $this->_make_navigation(request($this->navigationConfig['post_name']));
 
         //检测初始化参数是否合法
         if ($id) {
@@ -175,7 +182,7 @@ class Navigation extends Backend
             $errorGoLink = route('Admin::Navigation::add');
         }
 
-        $data      = [];
+        $data = [];
         if ('add' == $type || null !== $name) {
             $data['name'] = $name;
         }
@@ -197,14 +204,16 @@ class Navigation extends Backend
     }
 
     //构造导航数据
-    private function _make_navigation(&$data, $pid = 0)
+    private function _make_navigation($data, $pid = 0)
     {
         $result = [];
-        foreach ($data[$pid] as $nav) {
-            $child              = json_decode(str_replace(['&quot;', '&amp;'], ['"', '&'], $nav), true);
-            $child['nav_child'] = $this->_make_navigation($data, $child['nav_id']);
-            $result[]           = $child;
+        if (isset($data[$pid]) && is_array($data[$pid])) {
+            foreach ($data[$pid] as $nav) {
+                $child              = json_decode(str_replace(['&quot;', '&amp;'], ['"', '&'], $nav), true);
+                $child['nav_child'] = $this->_make_navigation($data, $child['nav_id']);
+                $result[]           = $child;
+            }
         }
-        return json_encode($result);
+        return $result;
     }
 }

@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap#min.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap-theme#min.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/common.css') }}"/>
-    <link rel="stylesheet" href="{{ asset('css/admin.css') }}"/>
     <script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
     <!--[if lt IE 9]>
     <script type="text/javascript" src="{{ asset('js/supporthtml5.js') }}"></script>

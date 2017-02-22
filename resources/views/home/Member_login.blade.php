@@ -9,7 +9,7 @@
 <section class="container Member">
     <div class="row">
         <div class="col-sm-6">
-            <img class="col-sm-12 login-logo" src="__PUBLIC__/css/bimages/app_logo.png"/>
+            <img class="col-sm-12 login-logo" src="{{ asset('/css/bimages/app_logo.png') }}"/>
         </div>
         <div class="col-sm-6">
             <ul id="login_tab" class="nav nav-tabs" role="tablist">

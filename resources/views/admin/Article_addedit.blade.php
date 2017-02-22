@@ -171,7 +171,6 @@
                                     <input id="thumb_val" type="hidden" name="thumb" value="{{ $edit_info['thumb'] }}"/>
                                     <script>
                                         function M_article_uploadbutton(url, title) {
-                                            {{-- 必须替换掉__ROOT__/ 原因伪静态目录结构 --}}
                                             $('#thumb_val').val(url);
                                             $('#thumb_src').attr('src', url);
                                             M_jqueryui_tooltip('#uploadbutton');
@@ -278,7 +277,6 @@
                                                 '<div class="fr glyphicon glyphicon-remove" style="top:-115px;right:5px;cursor:pointer;" ></div>',
                                                 '</div>'
                                             ).join(''));
-                                            {{-- 必须替换掉__ROOT__/ 原因伪静态目录结构 --}}
                                                 if ('object' == typeof(url)) {
                                                     title = url.title;
                                                     description = url.description;

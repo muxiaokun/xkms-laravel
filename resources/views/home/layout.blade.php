@@ -1,3 +1,4 @@
-@include('home.public_header')
-{__CONTENT__}
-@include('home.public_footer')
+@include('admin.Public_header')
+@section('body')
+@show
+@include('admin.Public_footer')

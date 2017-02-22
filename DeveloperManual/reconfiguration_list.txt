@@ -94,10 +94,10 @@ OK 内容管理图文链接编辑图文Admin::Itlink::edit
 扩展管理问卷答案管理Admin::QuestsAnswer::index
 扩展管理问卷清空答案Admin::QuestsAnswer::del
 扩展管理问卷统计问卷Admin::QuestsAnswer::edit
-扩展管理地域地域管理Admin::Region::index
-扩展管理地域新增地域Admin::Region::add
-扩展管理地域删除地域Admin::Region::del
-扩展管理地域编辑地域Admin::Region::edit
+OK 扩展管理地域地域管理Admin::Region::index
+OK 扩展管理地域新增地域Admin::Region::add
+OK 扩展管理地域删除地域Admin::Region::del
+OK 扩展管理地域编辑地域Admin::Region::edit
 
 
 Frontend

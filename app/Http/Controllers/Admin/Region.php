@@ -11,19 +11,29 @@ class Region extends Backend
     //列表
     public function index()
     {
-        //建立where
-        $where      = [];
-        $whereValue = request('region_name');
-        $whereValue && $where['region_name'] = ['like', '%' . $whereValue . '%'];
-        $whereValue = request('short_spell');
-        $whereValue && $where['short_spell'] = ['like', '%' . $whereValue . '%'];
-        $whereValue = request('areacode');
-        $whereValue && $where['areacode'] = ['like', '%' . $whereValue . '%'];
-        $whereValue = request('postcode');
-        $whereValue && $where['postcode'] = ['like', '%' . $whereValue . '%'];
-
         //初始化翻页 和 列表数据
-        $regionList = Model\Region::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
+        $regionList = Model\Region::where(function ($query) {
+            $regionName = request('region_name');
+            if ($regionName) {
+                $query->where('region_name', 'like', '%' . $regionName . '%');
+            }
+
+            $shortSpell = request('short_spell');
+            if ($shortSpell) {
+                $query->where('short_spell', 'like', '%' . $shortSpell . '%');
+            }
+
+            $areacode = request('areacode');
+            if ($areacode) {
+                $query->where('areacode', 'like', '%' . $areacode . '%');
+            }
+
+            $postcode = request('postcode');
+            if ($postcode) {
+                $query->where('postcode', 'like', '%' . $postcode . '%');
+            }
+
+        })->paginate(config('system.sys_max_row'))->appends(request()->all());
         foreach ($regionList as &$region) {
             $region['parent_name'] = Model\Region::colWhere($region['parent_id'])->first()['region_name'];
         }
@@ -59,16 +69,16 @@ class Region extends Backend
 
             $resultAdd = Model\Region::create($data);
             if ($resultAdd) {
-                return $this->success(trans('common.region') . trans('common.add') . trans('common.success'),
+                return $this->success(trans('region.region') . trans('common.add') . trans('common.success'),
                     route('Admin::Region::index'));
             } else {
-                return $this->error(trans('common.region') . trans('common.add') . trans('common.error'),
+                return $this->error(trans('region.region') . trans('common.add') . trans('common.error'),
                     route('Admin::Region::add'));
             }
         }
 
         $assign['edit_info'] = Model\Region::columnEmptyData();
-        $assign['title']     = trans('common.region') . trans('common.add');
+        $assign['title'] = trans('region.region') . trans('common.add');
         return view('admin.Region_addedit', $assign);
     }
 
@@ -92,12 +102,12 @@ class Region extends Backend
                 return $resultEdit;
             });
             if ($resultEdit) {
-                return $this->success(trans('common.region') . trans('common.edit') . trans('common.success'),
+                return $this->success(trans('region.region') . trans('common.edit') . trans('common.success'),
                     route('Admin::Region::index'));
             } else {
                 $errorGoLink = (is_array($id)) ? route('Admin::Region::index') : route('Admin::Region::edit',
                     ['id' => $id]);
-                return $this->error(trans('common.region') . trans('common.edit') . trans('common.error'),
+                return $this->error(trans('region.region') . trans('common.edit') . trans('common.error'),
                     $errorGoLink);
             }
         }
@@ -105,7 +115,7 @@ class Region extends Backend
         $editInfo                = Model\Region::colWhere($id)->first()->toArray();
         $editInfo['parent_name'] = Model\Region::colWhere($editInfo['parent_id'])->first()['region_name'];
         $assign['edit_info']     = $editInfo;
-        $assign['title']         = trans('common.region') . trans('common.edit');
+        $assign['title'] = trans('region.region') . trans('common.edit');
         return view('admin.Region_addedit', $assign);
     }
 
@@ -119,12 +129,36 @@ class Region extends Backend
 
         $resultDel = Model\Region::destroy($id);
         if ($resultDel) {
-            return $this->success(trans('common.region') . trans('common.del') . trans('common.success'),
+            return $this->success(trans('region.region') . trans('common.del') . trans('common.success'),
                 route('Admin::Region::index'));
         } else {
-            return $this->error(trans('common.region') . trans('common.del') . trans('common.error'),
+            return $this->error(trans('region.region') . trans('common.del') . trans('common.error'),
                 route('Admin::Region::index'));
         }
+    }
+
+    //异步数据获取
+    protected function getData($field, $data)
+    {
+        $result = ['status' => true, 'info' => []];
+        switch ($field) {
+            case 'parent_id':
+                Model\Region::where(function ($query) use ($data) {
+                    if (isset($data['inserted'])) {
+                        $query->whereNotIn('id', $data['inserted']);
+                    }
+
+                    if (isset($data['keyword'])) {
+                        $query->where('region_name', 'like', '%' . $data['keyword'] . '%');
+                    }
+
+                })->get()->take(10)->each(function ($item, $key) use (&$result) {
+                    $result['info'][] = ['value' => $item['id'], 'html' => $item['region_name']];
+                });
+                break;
+        }
+
+        return $result;
     }
 
     //构造数据
@@ -134,6 +168,7 @@ class Region extends Backend
         $parentId   = request('parent_id');
         $regionName = request('region_name');
         $shortName  = request('short_name');
+        $allSpell = request('all_spell');
         $shortSpell = request('short_spell');
         $areacode   = request('areacode');
         $postcode   = request('postcode');
@@ -148,6 +183,9 @@ class Region extends Backend
         }
         if ('add' == $type || null !== $shortName) {
             $data['short_name'] = $shortName;
+        }
+        if ('add' == $type || null !== $allSpell) {
+            $data['all_spell'] = $allSpell;
         }
         if ('add' == $type || null !== $shortSpell) {
             $data['short_spell'] = $shortSpell;

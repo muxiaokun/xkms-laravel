@@ -366,9 +366,10 @@ Route::group([
         'prefix' => 'Region',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Region@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Region@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'Region@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'Region@del']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Region@add']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'Region@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'Region@del']);
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Region@ajax_api']);
     });
     Route::group([
         'as'     => 'Template::',

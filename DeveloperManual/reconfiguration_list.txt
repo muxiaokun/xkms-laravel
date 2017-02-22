@@ -57,9 +57,9 @@ OK 内容管理导航导航管理Admin::Navigation::index
 OK 内容管理导航添加导航Admin::Navigation::add
 OK 内容管理导航删除导航Admin::Navigation::del
 OK 内容管理导航编辑导航Admin::Navigation::edit
-扩展管理微信微信管理Admin::Wechat::index
-扩展管理微信配置微信Admin::Wechat::add
-扩展管理微信删除微信绑定Admin::Wechat::del
+OK 扩展管理微信微信管理Admin::Wechat::index
+OK 扩展管理微信配置微信Admin::Wechat::add
+OK 扩展管理微信删除微信绑定Admin::Wechat::del
 扩展管理微信推送消息Admin::Wechat::edit
 扩展管理留言板留言板管理Admin::MessageBoard::index
 扩展管理留言板添加留言板Admin::MessageBoard::add

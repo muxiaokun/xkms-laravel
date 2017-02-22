@@ -32,13 +32,13 @@ class Wechat
  */
     public function __construct()
     {
-        $this->appId          = C('WECHAT_ID');
-        $this->appSecret      = C('WECHAT_SECRET');
-        $this->token          = C('WECHAT_TOKEN');
-        $this->encodingAesKey = C('WECHAT_AESKEY');
+        $this->appId          = config('system.wechat_id');
+        $this->appSecret      = config('system.wechat_secret');
+        $this->token          = config('system.wechat_token');
+        $this->encodingAesKey = config('system.wechat_aeskey');
         //给默认值一般不许修改 不可动态配置
-        $this->block_size  = 32; //C('WECHAT_BLOCK_SIZE',null,32);
-        $this->Oauth2_code = 'code'; //C('WECHAT_OAUTH2_CODE',null,'code');
+        $this->block_size  = 32;
+        $this->Oauth2_code = 'code';
     }
 
     /*
@@ -51,7 +51,6 @@ class Wechat
     public function checkSignature($signature, $timestamp, $nonce)
     {
         if (!$this->token) {
-            $this->log('token not exists!');
             return false;
         }
         $tmpArr = array($this->token, $timestamp, $nonce);
@@ -59,11 +58,9 @@ class Wechat
         $tmpStr = implode($tmpArr);
         if ($signature == sha1($tmpStr)) {
             //验证成功
-            $this->log('checkSignature true');
             return true;
         } else {
             //验证失败
-            $this->log('checkSignature false');
             return false;
         }
     }
@@ -93,7 +90,6 @@ class Wechat
         $enlink       = sprintf($enlink_fonmot, $appId, $appSecret);
         $json_str     = file_get_contents($enlink);
         $access_token = json_decode($json_str, true);
-        $this->log('access_token' . $json_str);
         return $access_token;
     }
 
@@ -112,7 +108,6 @@ class Wechat
         $enlink        = sprintf($enlink_fonmot, $access_token);
         $json_str      = file_get_contents($enlink);
         $server_ip     = json_decode($json_str, true);
-        $this->log('server_ip' . $json_str);
         return $server_ip['ip_list'];
     }
 
@@ -122,7 +117,7 @@ class Wechat
      * @param $scope string 获取用户信息类型
      * @param $state string 用户扩展信息
      */
-    public function Oauth2_enlink($url, $scope, $state = '')
+    public function Oauth2_enlink($url, $scope = '', $state = '')
     {
         $appId      = $this->appId;
         $code       = $this->Oauth2_code;
@@ -162,7 +157,6 @@ class Wechat
         $enlink       = sprintf($enlink_fonmot, $appId, $appSecret, $code);
         $json_str     = file_get_contents($enlink);
         $access_token = json_decode($json_str, true);
-        $this->log('Oauth2_access_token' . $json_str);
         return $access_token;
     }
 
@@ -182,7 +176,6 @@ class Wechat
         $enlink       = sprintf($enlink_fonmot, $appId, $refresh_code);
         $json_str     = file_get_contents($enlink);
         $access_token = json_decode($json_str, true);
-        $this->log('Oauth2_refresh_token' . $json_str);
         return $access_token;
     }
     /*
@@ -248,7 +241,6 @@ class Wechat
         $enlink        = sprintf($enlink_fonmot, $access_token);
         $data          = json_encode(array('template_id_short' => $template_id_short));
         $get_template  = $this->post($enlink, $data);
-        $this->log('get_template_id' . $put_template);
         $template_id = json_decode($get_template, true);
         return $template_id;
     }
@@ -265,7 +257,6 @@ class Wechat
         $enlink        = sprintf($enlink_fonmot, $access_token);
         $data          = json_encode($data);
         $put_template  = $this->post($enlink, $data);
-        $this->log('put_template' . $put_template);
         $put_template = json_decode($put_template, true);
         return $put_template;
     }
@@ -282,7 +273,6 @@ class Wechat
         $enlink        = sprintf($enlink_fonmot, $access_token);
         $data          = json_encode($data);
         $put_msg       = $this->post($enlink, $data);
-        $this->log('put_msg' . $put_msg);
         return $put_msg;
     }
 
@@ -330,7 +320,6 @@ class Wechat
         $xml->appendChild($node_xml);
         $xml_str = $xml->saveXML();
         $xml_str = preg_replace('/<\?.*?\?>\n/', '', $xml_str);
-        $this->log(var_export($xml_str, true));
         return $xml_str;
     }
 
@@ -354,7 +343,6 @@ class Wechat
             }
 
         }
-        $this->log(var_export($xml_info, true));
         return $xml_info;
     }
 
@@ -643,21 +631,5 @@ class Wechat
             $str .= $str_pol[mt_rand(0, $max)];
         }
         return $str;
-    }
-
-    public function log($str)
-    {
-        if (!APP_DEBUG && !C('WECHAT_RECORD_LOG')) {
-            return;
-        }
-
-        \Think\Log::record(sprintf("[Date:%s][LOG:%s]\n", date('Y-md H:i:s'), $str), 'INFO');
-        // $fhandle = fopen('wechat.log','a');
-        // if($fhandle)
-        // {
-        // $log_fomat = "[Date:%s][LOG:%s]\n";
-        // fwrite($fhandle,sprintf($log_fomat,date('Y-md H:i:s'),$str));
-        // }
-        // fclose($fhandle);
     }
 }

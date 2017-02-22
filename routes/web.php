@@ -117,7 +117,7 @@ Route::group([
         'prefix' => 'Wechat',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Wechat@index']);
-        Route::get('member', ['as' => 'member', 'uses' => 'Wechat@member']);
+        Route::match(['get', 'post'], 'member_bind', ['as' => 'member_bind', 'uses' => 'Wechat@member_bind']);
     });
 
 });
@@ -388,9 +388,9 @@ Route::group([
         'prefix' => 'Wechat',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Wechat@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Wechat@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'Wechat@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'Wechat@del']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Wechat@add']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'Wechat@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'Wechat@del']);
     });
 });
 Route::group([
@@ -416,13 +416,5 @@ Route::post('Upload/UploadFile', 'Upload@UploadFile')->name('UploadFile');
 
 //test error
 Route::get('t', function () {
-    dump(request('a'));
-    return;
-    $user           = \App\Model\Admins::find(1);
-    $user->group_id = [1];
-    $user->save();
-    $new_user = \App\Model\Admins::find(1);
-    dump($new_user);
-    dump($new_user->group_id);
 });
 Route::get('tc', ['as' => 'index', 'uses' => 'Index@getInstallInfo']);

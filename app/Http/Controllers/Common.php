@@ -73,32 +73,6 @@ class Common extends Controller
         return view($template, $assign);
     }
 
-    public function cache()
-    {
-        $id   = request('id');
-        $type = request('type');
-        if (!$id || !in_array($type, ['qrcode'])) {
-            return;
-        }
-
-        $cache = S($id);
-        if (!$cache) {
-            return;
-        }
-
-        $echoCache = '';
-        //解决文件出现Byte Order Mark  BOM
-        //ob_clean();
-        switch ($type) {
-            case 'qrcode':
-                header('Content-Type:image/png');
-                $echoCache = $cache;
-                break;
-        }
-        echo $echoCache;
-        return;
-    }
-
     //检查验证码是否正确
     protected function verifyCheck($code, $name = '')
     {

@@ -599,78 +599,25 @@ function mIptoadd($ip, $type = 0)
  * $margin 0 - N
  * 并生成缓存 无失效期
  */
-function mQrcode($data, $level = 'H', $size = 10, $margin = 0)
+function mQrcode($data, $level = 'L', $size = 10, $margin = 0)
 {
     if (!$data) {
         return mExists();
     }
-
     $dataMd5 = 'QRcode_' . md5($data . $level . $size . $margin);
-    $pngData = S($dataMd5);
-    if (!$pngData) {
-        $QRcode  = new \Common\Lib\QRcode();
-        $pngPath = TEMP_PATH . md5($dataMd5) . '.png';
-        $QRcode->png($data, $pngPath, $level, $size, $margin);
-        $pngData = file_get_contents($pngPath);
-        @unlink($pngPath);
-        S($dataMd5, $pngData);
+    $filesystem = new \Illuminate\Filesystem\Filesystem();
+    $qrFileDir = storage_path('app/public/qrcode/');
+    $qrFilePath = $qrFileDir . $dataMd5;
+    if (!$filesystem->isDirectory($qrFileDir)) {
+        $filesystem->makeDirectory($qrFileDir);
     }
-    return U('Home/Index/cache', ['type' => 'qrcode', 'id' => $dataMd5]);
+    if (!$filesystem->isFile($qrFilePath)) {
+        $QRcode = new \App\Library\QRcode();
+        $QRcode->png($data, $qrFilePath, $level, $size, $margin);
+    }
+    return asset('storage/qrcode/' . $dataMd5);
 }
 
-// 构造Page html 必须放在公共函数中 配合ViewFilterBehavior
-function mPage($config)
-{
-    $maxRow   = ($config['max_row']) ? $config['max_row'] : config('system.sys_max_row');
-    $countRow = ($config['count_row']) ? $config['count_row'] : 0;
-    $roll     = ($config['roll']) ? $config['roll'] : 5;
-    if ($maxRow >= $countRow) {
-        return '';
-    }
-    $parameter = request('', '', 'urlencode');
-    if (config('system.token_on')) {
-        unset($parameter[config('system.token_name')]);
-    }
-
-    $Page           = new \Think\Page($countRow, $maxRow, $parameter);
-    $Page->rollPage = $roll;
-    $Page->setConfig('header',
-        '<span class="rows">' . trans('common.inall') . ' %TOTAL_ROW% ' . trans('common.inall') . trans('common.item') . '</span>');
-    $Page->setConfig('prev', trans('common.previous') . trans('common.page'));
-    $Page->setConfig('next', trans('common.next') . trans('common.page'));
-    $Page->setConfig('first', trans('common.first') . trans('common.page') . '...');
-    $Page->setConfig('last', '...' . trans('common.last') . trans('common.one') . trans('common.page'));
-    $Page->setConfig('theme', '%HEADER% %FIRST% %UP_PAGE% %LINK_PAGE% %DOWN_PAGE% %END%');
-
-    unset($parameter['p']);
-    $inputJumpLink = U(ACTION_NAME, $parameter);
-    !isset($config['preg_njump']) && $inputJump = <<<EOF
-    <div class="fr">
-        <form class="form-inline" action="{$inputJumpLink}">
-            <input class="form-control w80" type="text" name="p" onKeyup="mInIntRange(this,1,{$countRow});" />
-            <button class="btn btn-default" type="submit" >GO</button>
-        </form>
-    </div>
-EOF;
-    //默认的翻页样式
-    $replacement = [
-        'preg_div'     => '<ul class="pagination">' . $inputJump . '\1</ul>',
-        'preg_a'       => '<li>\1</li>',
-        'preg_current' => '<li class="active"><a>\1</a></li>',
-        'preg_rows'    => '<li><a>\1</a></li>',
-    ];
-    isset($config['preg_div']) && $replacement['preg_div'] = $config['preg_div'];
-    isset($config['preg_a']) && $replacement['preg_a'] = $config['preg_a'];
-    isset($config['preg_current']) && $replacement['preg_current'] = $config['preg_current'];
-    isset($config['preg_rows']) && $replacement['preg_rows'] = $config['preg_rows'];
-    $pageStr = $Page->show();
-    $pageStr = preg_replace('/<div>(.*)<\/div>/', $replacement['preg_div'], $pageStr);
-    $pageStr = preg_replace('/(<a[^<]+<\/a>)/', $replacement['preg_a'], $pageStr);
-    $pageStr = preg_replace('/<span class\=\"current.+>([^<]+)<\/span>/', $replacement['preg_current'], $pageStr);
-    $pageStr = preg_replace('/<span class\=\"rows.+>([^<]+)<\/span>/', $replacement['preg_rows'], $pageStr);
-
-    return $pageStr;
-}
 
 //扫描模板
 function mScanTemplate($name, $controller)

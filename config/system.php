@@ -37,7 +37,6 @@ return [
     'wechat_id'                => 'asdf',
     'wechat_secret'            => 'asdf',
     'wechat_token'             => 'asdf',
-    'wechat_record_log'        => '1',
     'wechat_aeskey'            => 'asdf',
     'wechat_template_id'       => 'asdf',
     'sys_default_image'        => 'css/fimages/default.png',

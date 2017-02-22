@@ -116,7 +116,7 @@ Route::group([
         //'middleware'=>'auth',
         'prefix' => 'Wechat',
     ], function () {
-        Route::get('index', ['as' => 'index', 'uses' => 'Wechat@index']);
+        Route::match(['get', 'post'], 'index', ['as' => 'index', 'uses' => 'Wechat@index']);
         Route::match(['get', 'post'], 'member_bind', ['as' => 'member_bind', 'uses' => 'Wechat@member_bind']);
     });
 

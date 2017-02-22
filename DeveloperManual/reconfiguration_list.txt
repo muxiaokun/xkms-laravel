@@ -1,5 +1,6 @@
 1.多主题模板的前端实现
 2.权限检测需要重构不可以用die
+3.登陆时密码错误 出现系统错误
 
 61/119
 
@@ -124,5 +125,5 @@ Home::Itlink
 扩展管理考核考核评分Home::Assess::add
 扩展管理问卷问卷管理Home::Quests::index
 扩展管理问卷填写问卷Home::Quests::add
-Home::Wechat::index
+ok Home::Wechat::index
 Home::Wechat::member_bind

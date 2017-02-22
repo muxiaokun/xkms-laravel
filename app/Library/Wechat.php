@@ -327,9 +327,9 @@ class Wechat
      * 微信 XML to Array
      * @param $code string 获取的code后。
      */
-    public function msg_decode($xmltext, $node_cfg)
+    public function msg_decode($xmltext = '', $node_cfg)
     {
-        if (empty($xmltext) || !is_array($node_cfg)) {
+        if (!$xmltext || !is_array($node_cfg)) {
             return false;
         }
 

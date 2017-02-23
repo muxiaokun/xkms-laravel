@@ -31,7 +31,7 @@
                     </div>
                     <div class="form-group">
                         @asyncImg(<img class="col-sm-4 col-sm-offset-2"
-                             src="{{ route('VerificationCode') }}"
+                             src="{{ route('VerificationCode',['name'=>'login']) }}"
                              onClick="M_change_verify(this,$('input[name=verify]'))"/>)
                     </div>
                     {{--验证码 结束--}}

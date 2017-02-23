@@ -5,24 +5,23 @@ namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\FrontendMember;
 use App\Model;
+use Illuminate\Support\Facades\Validator;
 
 class Member extends FrontendMember
 {
     public function index()
     {
         if (!$this->isLogin()) {
+            $assign['title'] = trans('common.login');
             return view('home.Member_login', $assign);
         }
+        $assign['title'] = trans('common.member') . trans('common.homepage');
         return view('home.Member_index', $assign);
     }
 
     //登录
     public function login()
     {
-        if (!request()->isMethod('POST') && !request()->ajax()) {
-            return;
-        }
-
         $memberName = request('user');
         $memberPwd  = request('pwd');
         switch ($this->doLogin($memberName, $memberPwd)) {
@@ -45,7 +44,6 @@ class Member extends FrontendMember
     //注册
     public function register()
     {
-        if (request()->isMethod('POST')) {
             if (!$this->verifyCheck(request('verify'), 'register') && config('system.sys_frontend_verify')) {
                 return $this->error(trans('common.verify_code') . trans('common.error'),
                     route('Home::Member::index', ['t' => 'register']));
@@ -87,7 +85,6 @@ class Member extends FrontendMember
                 return $this->error(trans('common.member') . trans('common.register') . trans('common.error'),
                     route('Home::Member::index', ['t' => 'register']));
             }
-        }
     }
 
     //登出
@@ -104,66 +101,29 @@ class Member extends FrontendMember
         $result = ['status' => true, 'info' => ''];
         switch ($field) {
             case 'user':
-                //不能为空
-                if ('' == $data['user']) {
-                    $result['info'] = trans('common.member') . trans('common.name') . trans('common.not') . trans('common.empty');
-                    break;
-                }
-                //检查用户名是否存在
-                $memberInfo = Model\Member::where(['member_name' => $data['user']])->first()->toArray();
-                if (!$memberInfo) {
-                    $result['info'] = trans('common.member') . trans('common.name') . trans('common.dont') . trans('common.exists');
-                    break;
-                }
+                $validator = Validator::make($data, [
+                    'member_name' => 'user_name',
+                ]);
                 break;
             case 'password':
-                //不能为空
-                if ('' == $data['password']) {
-                    $result['info'] = trans('common.pass') . trans('common.not') . trans('common.empty');
-                    break;
-                }
-                //密码长度不能小于6
-                if (6 > strlen($data['password'])) {
-                    $result['info'] = trans('common.pass_len_error');
-                    break;
-                }
+                $validator = Validator::make($data, [
+                    'password' => 'password:' . true,
+                ]);
                 break;
-            case 'password_again':
-                //检测再一次输入的密码是否一致
-                if ($data['password'] != $data['password_again']) {
-                    $result['info'] = trans('common.password_again_error');
-                    break;
-                }
-                //不能为空
-                if ('' == $data['password_again']) {
-                    $result['info'] = trans('common.pass') . trans('common.not') . trans('common.empty');
-                    break;
-                }
+            case 'password_confirmation':
+                $validator = Validator::make($data, [
+                    'password' => 'confirmed',
+                ]);
                 break;
             case 're_member_name':
-                //不能为空
-                if ('' == $data['re_member_name']) {
-                    $result['info'] = trans('common.member') . trans('common.name') . trans('common.not') . trans('common.empty');
-                    break;
-                }
-                //检查用户名规则
-                if ('utf-8' != config('DEFAULT_CHARSET')) {
-                    $data['re_member_name'] = iconv(config('DEFAULT_CHARSET'), 'utf-8', $data['re_member_name']);
-                }
-
-                preg_match('/^[\x80-\xff|a-z|A-Z|0-9]+([^\x80-\xff|^a-z|^A-Z|^0-9]).*$/', $data['re_member_name'],
-                    $matches);
-                if ('' != $matches[1]) {
-                    $result['info'] = trans('common.name_format_error') . $matches[1];
-                    break;
-                }
-                //检查用户名是否存在
-                $memberInfo = Model\Member::where(['member_name' => $data['re_member_name']])->first()->toArray();
-                if ($memberInfo) {
-                    $result['info'] = trans('common.member') . trans('common.name') . trans('common.exists');
-                    break;
-                }
+                $validator = Validator::make($data, [
+                    're_member_name' => 'user_name|member_exist',
+                ]);
                 break;
+        }
+
+        if (isset($validator) && $validator->fails()) {
+            $result['info'] = implode('', $validator->errors()->all());
         }
 
         if ($result['info']) {

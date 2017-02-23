@@ -28,8 +28,8 @@ class CreateMembersTable extends Migration
             $table->tinyInteger('login_num')->nullable()->comment('尝试登录数');
             $table->timestamp('lock_time')->nullable()->comment('登录锁定时间');
             $table->tinyInteger('is_enable')->comment('是否启用');
-            $table->string('email', 64)->comment('电邮');
-            $table->string('phone', 64)->comment('手机');
+            $table->string('email', 64)->nullable()->comment('电邮');
+            $table->string('phone', 64)->nullable()->comment('手机');
         });
     }
 

@@ -13,8 +13,8 @@ class MessageBoardLog extends Backend
     {
         //建立where
         $where      = [];
-        $whereValue = request('msg_id');
-        $whereValue && $where['msg_id'] = $whereValue;
+        $whereValue = request('mb_id');
+        $whereValue && $where['mb_id'] = $whereValue;
         $whereValue = request('audit_id');
         $whereValue && $where[] = [
             'audit_id',

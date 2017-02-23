@@ -39,6 +39,7 @@ Route::group([
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Assess@index']);
         Route::get('add', ['as' => 'add', 'uses' => 'Assess@add']);
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Assess@ajax_api']);
     });
     Route::group([
         'as'     => 'Comment::',
@@ -67,9 +68,10 @@ Route::group([
         'prefix' => 'Member',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Member@index']);
-        Route::get('login', ['as' => 'login', 'uses' => 'Member@login']);
-        Route::get('register', ['as' => 'register', 'uses' => 'Member@register']);
+        Route::post('login', ['as' => 'login', 'uses' => 'Member@login']);
+        Route::post('register', ['as' => 'register', 'uses' => 'Member@register']);
         Route::get('logout', ['as' => 'logout', 'uses' => 'Member@logout']);
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Member@ajax_api']);
     });
     Route::group([
         'as'     => 'Message::',
@@ -79,6 +81,7 @@ Route::group([
         Route::get('index', ['as' => 'index', 'uses' => 'Message@index']);
         Route::get('add', ['as' => 'add', 'uses' => 'Message@add']);
         Route::get('del', ['as' => 'del', 'uses' => 'Message@del']);
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Message@ajax_api']);
     });
     Route::group([
         'as'     => 'MessageBoard::',

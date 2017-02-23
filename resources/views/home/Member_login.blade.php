@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="form-group">
                                     @asyncImg(<img class="col-sm-5 col-sm-offset-3"
-                                         src="{{ route('VerificationCode') }}"
+                                         src="{{ route('VerificationCode',['name'=>'login']) }}"
                                          onClick="M_change_verify(this,$('input[name=verify]'))"/>)
                                 </div>
                                 {{--验证码 结束--}}
@@ -93,6 +93,7 @@
                         </script>
                         <form id="form_valid_register" class="form-horizontal" role="form" method="post"
                               action="{{ route('Home::Member::register') }}">
+                            {{ csrf_field() }}
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">@lang('common.account')</label>
                                 <div class="col-sm-5"><input type="text" class="form-control" placeholder=
@@ -122,7 +123,7 @@
                                 </div>
                                 <div class="form-group">
                                     @asyncImg(<img class="col-sm-5 col-sm-offset-3"
-                                         src="{{ route('VerificationCode') }}"
+                                         src="{{ route('VerificationCode',['name'=>'register']) }}"
                                          onClick="M_change_verify(this,$('input[name=verify]'))"/>)
                                 </div>
                                 {{--验证码 结束--}}

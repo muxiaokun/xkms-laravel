@@ -119,6 +119,19 @@ class Backend extends Common
             ];
             Model\Admin::colWhere($adminInfo['id'])->update($data);
             $adminInfo = Model\Admin::colWhere($adminInfo['id'])->first();
+
+            //管理员有组的 加载分组权限
+            if (0 < count($adminInfo->group_id->toArray())) {
+                $adminInfo['group_privilege'] = Model\AdminGroup::mFindPrivilege($adminInfo['group_id']);
+            }
+            //重置登录次数
+            if (0 != $adminInfo['login_num']) {
+                $loginData = ['login_num' => 0, 'lock_time' => 0];
+                Model\Admin::colWhere($loginInfo->id)->first()->update($loginData);
+            }
+            $adminInfo['login_time'] = Carbon::now();
+            session(['backend_info' => $adminInfo->toArray()]);
+            return 'login_success';
         } else {
             //检测后台尝试登陆次数
             if ($loginNum) {
@@ -129,21 +142,6 @@ class Backend extends Common
             }
             return 'user_pwd_error';
         }
-
-        //管理员有组的 加载分组权限
-        if (0 < count($adminInfo->group_id->toArray())) {
-            $adminInfo['group_privilege'] = Model\AdminGroup::mFindPrivilege($adminInfo['group_id']);
-        }
-        //重置登录次数
-        if (0 != $adminInfo['login_num']) {
-            $loginData              = [];
-            $loginData['login_num'] = 0;
-            $loginData['lock_time'] = null;
-            Model\Admin::colWhere($loginInfo->id)->first()->update($loginData);
-        }
-        $adminInfo['login_time'] = Carbon::now();
-        session(['backend_info' => $adminInfo->toArray()]);
-        return 'login_success';
     }
 
     //登出功能

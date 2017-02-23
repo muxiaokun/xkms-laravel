@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 use App\Model;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
@@ -16,28 +17,6 @@ class Frontend extends Common
         if (request()->isMethod('GET')) {
             $this->_get_position();
         }
-    }
-
-    //生成验证码
-    public function verifyImg()
-    {
-        //查看配置是否需要验证码
-        if (!config('system.sys_frontend_verify')) {
-            return;
-        }
-
-        return parent::verifyImg();
-    }
-
-    //检查验证码是否正确
-    protected function verifyCheck($code, $t = '')
-    {
-        //查看配置是否需要验证码
-        if (!config('system.sys_frontend_verify')) {
-            return true;
-        }
-
-        return parent::verifyCheck($code, $t);
     }
 
     //获取当前位置(也就是当前操作方法)
@@ -74,49 +53,58 @@ class Frontend extends Common
     }
 
     //登录功能
-    /* $ifVc 是在快捷方式登陆时 不检测验证码
-     * $memberInfo 是在快捷方式登陆时 提供用户信息（必须是mFind用户）
-     *
+    /**
+     * @param null $userName
+     * @param null $password
+     * @param bool $ifVc 强制不使用验证码
+     * @return string
      */
-    protected function doLogin($userName = null, $password = null, $ifVc = true, $memberId = false)
+    protected function doLogin($userName = null, $password = null, $ifVc = true)
     {
         if ($ifVc && !$this->verifyCheck(request('verify'), 'login')) {
             return 'verify_error';
         }
 
         //检测前台尝试登陆次数
-        $loginNum = config('system.sys_frontend_login_num');
-        $lockTime = config('system.sys_frontend_lock_time');
-        if (0 != $loginNum) {
-            $memberId  = Model\Member::where('member_name', $userName)->first()['id'];
-            $loginInfo = Model\Member::colWhere($memberId)->first()->toArray();
-            if (0 != $loginInfo['lock_time'] && $loginInfo['lock_time'] > (Carbon::now() - $lockTime)) {
-                Model\Member::data(['lock_time' => Carbon::now()])->where(['id' => $loginInfo['id']])->save();
-                return 'lock_user_error';
-            }
+        $loginNum   = config('system.sys_frontend_login_num');
+        $lockTime   = config('system.sys_frontend_lock_time');
+        $where      = [
+            ['member_name', $userName],
+            ['is_enable', '1'],
+        ];
+        $memberInfo = Model\Member::where($where)->first();
+        if (null === $memberInfo) {
+            return 'user_pwd_error';
+        }
+        if ($loginNum && strtotime($memberInfo->lock_time) > Carbon::now()->getTimestamp() - $lockTime) {
+            $memberInfo->update(['lock_time' => Carbon::now()]);
+            return 'lock_user_error';
         }
         //验证用户名密码
-        $memberInfo = Model\Member::authorized($userName, $password, $memberId);
-        if ($memberInfo) {
-            //会员有组的 验证组是否启用
-            if (0 < count($memberInfo['group_id'])) {
-                $memberInfo['group_privilege'] = Model\MemberGroup::mFindPrivilege($memberInfo['group_id']);
-            }
+        if ($memberInfo['member_pwd'] == md5($password . $memberInfo['member_rand'])) {
+            $loginData = [
+                'last_time' => Carbon::now(),
+                'login_ip'  => request()->ip(),
+            ];
             //重置登录次数
             if (0 != $memberInfo['login_num']) {
-                $loginData = ['login_num' => 0, 'lock_time' => 0];
-                Model\Member::data($loginData)->where(['id' => $loginInfo['id']])->save();
+                $loginData['login_num'] = 0;
+                $loginData['lock_time'] = '1970-01-02 00:00:00';
             }
-            $memberInfo['login_time'] = Carbon::now();
-            session('frontend_info', $memberInfo);
+            $memberInfo->update($loginData);
+
+            //会员有组的 验证组是否启用
+            $memberInfo['group_privilege'] = Model\MemberGroup::mFindPrivilege($memberInfo['group_id'])->toArray();
+            session(['frontend_info' => $memberInfo->toArray()]);
             return 'login_success';
         } else {
             //检测前台尝试登陆次数
             if (0 != $loginNum) {
-                $loginData              = [];
-                $loginData['login_num'] = $loginInfo['login_num'] + 1;
-                $loginData['lock_time'] = ($loginNum <= $loginData['login_num']) ? Carbon::now() : 0;
-                Model\Member::data($loginData)->where(['id' => $loginInfo['id']])->save();
+                $loginData = [
+                    'login_num' => $memberInfo['login_num'] + 1,
+                    'lock_time' => ($loginNum <= $memberInfo['login_num']) ? Carbon::now() : '1970-01-02 00:00:00',
+                ];
+                $memberInfo->update($loginData);
             }
             return 'user_pwd_error';
         }
@@ -125,7 +113,7 @@ class Frontend extends Common
     //登出功能
     protected function doLogout()
     {
-        session('frontend_info', null);
+        session(['frontend_info' => null]);
     }
 
     //子类调用的是否登录的接口

@@ -24,20 +24,14 @@ class AdminGroup extends Common
     //查找出组权限
     public function scopeMFindPrivilege($query, $id)
     {
-        if (!$id) {
-            return false;
-        }
-
-        is_array($id) && $id = ['in', $id];
-        $data = $query->where(['id' => $id, 'is_enable' => 1])->select(['privilege']);
-        foreach ($data as &$dataRow) {
-            $query->mDecodeData($dataRow);
-        }
         $privilege = [];
-        foreach ($data as $group) {
-            $privilege = array_merge($privilege, $group['privilege']);
-        }
-        return new Collection($privilege);
+        $query->whereIn('id', $id)
+            ->where('is_enable', 1)
+            ->select(['privilege'])
+            ->get()->each(function ($item, $key) use (&$privilege) {
+                $privilege = array_merge($privilege, $item['privilege']);
+            });
+        return collect($privilege);
     }
 
     //返回有权管理的组

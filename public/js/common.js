@@ -56,9 +56,8 @@ function M_img_sync_load()
             obj.fadeOut(500,'',function(){
                 sync_obj.hide();
                 obj.before(sync_obj);
+                sync_obj.attr('src', sync_src).fadeIn(500);
                 obj.remove();
-                sync_obj.attr('src',sync_src).fadeIn(500);
-                obj.data('is_sync',false);
             });
         };
         sync_img.src = sync_src;

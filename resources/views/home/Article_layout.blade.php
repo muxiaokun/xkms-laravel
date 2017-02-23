@@ -1,4 +1,4 @@
-@include('home.public_header')
+@include('home.Public_header')
 <section class="container">
     <div class="row">
         <div class="col-sm-8">
@@ -9,4 +9,4 @@
         </div>
     </div>
 </section>
-@include('home.public_footer')
+@include('home.Public_footer')

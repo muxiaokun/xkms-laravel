@@ -48,7 +48,7 @@
                                             'message': "{{ $message['content'] }}"
                                             @if (0 == $message['receive_id'] AND 0 == $message['receive_time'])
                                             ,
-                                            'cb_fn': M_alert_log_Message($('#M_alert_log_{{ $message['id'] }}'),{{ $message['id'] }}, '{:M_U("ajax_api")}')
+                                            'cb_fn': M_alert_log_Message($('#M_alert_log_{{ $message['id'] }}'),{{ $message['id'] }}, '{{ route('Home::Message::ajax_api') }}')
                                             @endif
                                         }
                                         new M_alert_log(config);

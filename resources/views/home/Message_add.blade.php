@@ -21,7 +21,7 @@
                                         @if (request('receive_id'))'def_data': request('receive_id'), @endif
                                         'edit_obj': $('#receive_member_list'),
                                         'post_name': 'receive_id',
-                                        'ajax_url': '{:M_U('ajax_api')}',
+                                        'ajax_url': '{{ route('Home::Message::ajax_api') }}',
                                         'field': 'receive_id'
                                     };
                                     new M_select_add(config);
@@ -43,7 +43,7 @@
                 <button type="submit" class="btn btn-info">
                     @lang('common.send')
                 </button>
-                <a href="{:M_U('index')}" class="btn btn-default">
+                <a href="{{ route('Home::Message::index') }}" class="btn btn-default">
                     @lang('common.goback')
                 </a>
             </div>

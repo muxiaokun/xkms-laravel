@@ -1,16 +1,19 @@
-@include('home.public_header')
+@include('home.Public_header')
 <section class="container">
     <div class="row">
         <div class="col-sm-2 text-center">
             <ul class="nav nav-pills nav-stacked" role="tablist">
-                @foreach ($left_nav as $data)
-                    <li role="presentation"><a href="{{ $data['link'] }}">{{ $data['name'] }}</a></li>
-                @endforeach
+                @if(isset($left_nav))
+                    @foreach ($left_nav as $data)
+                        <li role="presentation"><a href="{{ $data['link'] }}">{{ $data['name'] }}</a></li>
+                    @endforeach
+                @endif
             </ul>
         </div>
         <div class="col-sm-10">
             <div class="col-sm-12">
                 <ol class="breadcrumb">
+                    @if(isset($position))
                     @foreach ($position as $data)
                         @if ($data['link'])
                             <li><a href="{{ $data['link'] }}">{{ $data['name'] }}</a></li>
@@ -18,12 +21,14 @@
                             <li class="active">{{ $data['name'] }}</li>
                         @endif
                     @endforeach
+                    @endif
                 </ol>
             </div>
             <div class="col-sm-12">
-                @section('content')@endsection
+                @section('content')
+                @show
             </div>
         </div>
     </div>
 </section>
-@include('home.public_footer')
+@include('home.Public_footer')

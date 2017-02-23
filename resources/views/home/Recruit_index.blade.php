@@ -35,7 +35,8 @@
                         {{ mSubstr($recruit['explains']|strip_tags,30)}}
                     </td>
                     <td>
-                        <a class="btn btn-primary btn-xs" href="{:M_U('Recruit/edit',array('id'=>$recruit['id']))}">
+                        <a class="btn btn-primary btn-xs"
+                           href="{{ route('Home::Recruit::edit',['id'=>$recruit['id']]) }}">
                             @lang('common.look')@lang('common.recruit')@lang('common.info')
                         </a>
                     </td>

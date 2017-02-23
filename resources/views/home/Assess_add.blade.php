@@ -8,7 +8,7 @@
                 'check_list': {
                     're_grade_id': Array('re_grade_id')
                 },
-                'ajax_url': "{:M_U('ajax_api')}",
+                'ajax_url': "{{ route('Home::Assess::ajax_api') }}",
             };
             new M_valid(config);
         });
@@ -37,7 +37,7 @@
                             var config = {
                                 'edit_obj': $('#re_grade_id'),
                                 'post_name': 're_grade_id',
-                                'ajax_url': '{:M_U('ajax_api')}',
+                                'ajax_url': '{{ route('Home::Assess::ajax_api') }}',
                                 'field': @if ('member' == $assess_info['target'])
                                         'member'
                                 @elseif ('member_group' == $assess_info['target'])
@@ -69,7 +69,7 @@
             <button type="submit" class="btn btn-info">
                 @lang('common.submit')
             </button>
-            <a href="{:M_U('index')}" class="btn btn-default">
+            <a href="{{ route('Home::Assess::index') }}" class="btn btn-default">
                 @lang('common.goback')
             </a>
         </div>

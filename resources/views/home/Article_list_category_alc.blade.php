@@ -20,11 +20,12 @@
                                 @foreach ($article_list as $index => $data)
                                 <div class=" col-sm-12 pb10">
                         <div class="col-sm-2 pt10">
-                            <a id="prettyPhoto{{ $index }}" href="{:M_U('article',$data['id'])}">
+                            <a id="prettyPhoto{{ $index }}"
+                               href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
                                 @asyncImg(<img class="img-thumbnail" src="{{ mExists($data['thumb']) }}"/>)
                             </a>
                         </div>
-                        <a href="{:M_U('article',$data['id'])}">
+                                    <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
                             <h3>{{ mSubstr($data['title'],15)}}</h3>
                         </a>
                                     <span>{{ mSubstr($data['description'],100)}}</span>

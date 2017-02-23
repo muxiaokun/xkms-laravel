@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta name="keywords" content="{{ config('website.site_keywords') }}"/>
     <meta name="description" content="{{ config('website.site_description') }}"/>
-    <meta name="author" content="{:L('pfcopyright',array('app_name'=>APP_NAME))}"/>
+    <meta name="author" content="{{ trans('common.pfcopyright',['app_name'=>trans('common.app_name')]) }}"/>
     <link rel="stylesheet" href="{{ asset('css/jquery-ui#min.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap#min.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/bootstrap-theme#min.css') }}"/>
@@ -47,10 +47,10 @@
         </p>
     </div>
     <ul class="list-group">
-        <li class="list-group-item"><a href="{:M_U('Member/index')}">@lang('common.member')</a></li>
-        <li class="list-group-item"><a href="{:M_U('Quests/index')}">问卷</a></li>
-        <li class="list-group-item"><a href="{:M_U('Assess/index')}">考核</a></li>
-        <li class="list-group-item"><a href="{:M_U('MessageBoard/index')}">留言板</a></li>
+        <li class="list-group-item"><a href="{{ route('Home::Member::index') }}">@lang('common.member')</a></li>
+        <li class="list-group-item"><a href="{{ route('Home::Quests::index') }}">问卷</a></li>
+        <li class="list-group-item"><a href="{{ route('Home::Assess::index') }}">考核</a></li>
+        <li class="list-group-item"><a href="{{ route('Home::MessageBoard::index') }}">留言板</a></li>
     </ul>
 </section>
 </body>

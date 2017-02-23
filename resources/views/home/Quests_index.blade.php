@@ -24,12 +24,12 @@
                 </td>
                 <td>
                     @if ($quests['access_info'])
-                        <form action="{:M_U('Quests/add',array('id'=>$quests['id']))}" method="get">
+                        <form action="{{ route('Home::Quests::add',['id'=>$quests['id']]) }}" method="get">
                             <input type="text" name="access_info"/>
                             <button class="btn btn-default btn-sm">@lang('common.confirm')@lang('common.pass')</button>
                         </form>
                     @else
-                        <a href="{:M_U('Quests/add',array('id'=>$quests['id']))}">@lang('common.public')@lang('common.access')</a>
+                        <a href="{{ route('Home::Quests::add',['id'=>$quests['id']]) }}">@lang('common.public')@lang('common.access')</a>
                     @endif
                 </td>
             </tr>

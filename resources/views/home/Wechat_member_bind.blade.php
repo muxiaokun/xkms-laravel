@@ -30,8 +30,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <img class="col-sm-5 col-sm-offset-3" src="{:M_U('verify_img',array('t'=>'login'))}"
-                             onClick="M_change_verify(this,$('input[name=verify]'))"/>
+                        @asyncImg(<img class="col-sm-4 col-sm-offset-2"
+                             src="{{ route('VerificationCode') }}"
+                             onClick="M_change_verify(this,$('input[name=verify]'))"/>)
                     </div>
                     {{--验证码 结束--}}
                 @endif

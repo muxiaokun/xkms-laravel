@@ -24,7 +24,7 @@
         {{ $recruit_info['explains'] }}
     </div>
     <div class="col-sm-12 text-center mtb10">
-        <a class="btn btn-default" href="{:M_U('Recruit/add',array('id'=>$recruit_info['id']))}">
+        <a class="btn btn-default" href="{{ route('Home::Recruit::add',['id'=>$recruit_info['id']]) }}">
             @lang('common.submit')@lang('common.recruit')@lang('common.info')
         </a>
     </div>

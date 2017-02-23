@@ -44,9 +44,9 @@
                         </div>
                     </div>
                     <div class="cb"></div>
-                    {/* 投票给分组 */}
+                    {{--  投票给分组  --}}
                     <table class="table table-hover text-center">
-                        {/* 评分给分组 */}
+                        {{--  评分给分组  --}}
                         @if ($assess_info.result_info)
                             <tr>
                                 <th>@lang('common.project')</th>

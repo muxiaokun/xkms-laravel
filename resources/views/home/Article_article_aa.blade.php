@@ -41,7 +41,7 @@
             @if ($article_pn['p'])
                 @lang('common.before'){{ $article_pn['limit'] }}@lang('common.piece')@lang('common.article')
                 @foreach ($article_pn['p'] as $data)
-                    <a href="{:M_U('article',$data['id'])}">{{ $data['title'] }}</a>
+                    <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">{{ $data['title'] }}</a>
                 @endforeach
             @endif
         </div>
@@ -49,7 +49,7 @@
             @if ($article_pn['n'])
                 @lang('common.later'){{ $article_pn['limit'] }}@lang('common.piece')@lang('common.article')
                 @foreach ($article_pn['n'] as $data)
-                    <a href="{:M_U('article',$data['id'])}">{{ $data['title'] }}</a>
+                    <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">{{ $data['title'] }}</a>
                 @endforeach
             @endif
         </div>

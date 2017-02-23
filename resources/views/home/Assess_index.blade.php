@@ -27,7 +27,7 @@
                     {{ mDate($assess['end_time']) }}
                 </td>
                 <td>
-                    <a href="{:M_U('Assess/add',array('id'=>$assess[id]))}">
+                    <a href="{{ route('Home::Assess::add',['id'=>$assess['id']]) }}">
                         @lang('common.grade')
                     </a>
                 </td>

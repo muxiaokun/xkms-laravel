@@ -70,7 +70,7 @@
                 <button type="submit" class="btn btn-info">
                     @lang('common.submit')
                 </button>
-                <a href="{:M_U('index')}" class="btn btn-default">
+                <a href="{{ route('Home::Recruit::index') }}" class="btn btn-default">
                     @lang('common.goback')
                 </a>
             </div>

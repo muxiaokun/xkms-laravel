@@ -26,17 +26,9 @@
             var M_comment_editor;
             $(function () {
                 var config = {
-                            'main_obj': $('#comment_index'),
-                            'ajax_url': '{:M_U('Comment / ajax_api
-                ')}',
-                        'controller'
-                :
-                '[controller]',
-                        'item'
-                :
-                '[item]'
-            }
-                ;
+                    'main_obj': $('#comment_index'),
+                    'ajax_url': '{{ route('Home::Comment::ajax_api') }}', 'controller': '[controller]', 'item': '[item]'
+                };
                 M_comment_editor = new M_comment_editor(config);
             });
         </script>

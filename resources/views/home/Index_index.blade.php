@@ -11,14 +11,14 @@
                     @foreach ($function_article as $data)
                         <div class="col-sm-3">
                             <div class="thumbnail">
-                                <a href="{:M_U('article',$data['id'])}">
+                                <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
                                     @asyncImg(<img src="{{ mExists($data['thumb']) }}"/>)
                                 </a>
                                 <div class="caption">
-                                    <a href="{:M_U('article',$data['id'])}">
+                                    <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
                                         <h4>{{ mSubstr($data['title'],6)}}</h4>
                                     </a>
-                                    <a href="{:M_U('article',$data['id'])}">
+                                    <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
                                         <p>{{ mSubstr($data['description'],20)}}</p>
                                     </a>
                                 </div>
@@ -37,14 +37,14 @@
                     @foreach ($case_article as $data)
                         <div class="col-sm-3">
                             <div class="thumbnail">
-                                <a href="{:M_U('article',$data['id'])}">
+                                <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
                                     @asyncImg(<img src="{{ mExists($data['thumb']) }}"/>)
                                 </a>
                                 <div class="caption">
-                                    <a href="{:M_U('article',$data['id'])}">
+                                    <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
                                         <h4>{{ mSubstr($data['title'],6)}}</h4>
                                     </a>
-                                    <a href="{:M_U('article',$data['id'])}">
+                                    <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
                                         <p>{{ mSubstr($data['description'],20)}}</p>
                                     </a>
                                 </div>

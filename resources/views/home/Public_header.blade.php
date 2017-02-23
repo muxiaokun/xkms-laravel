@@ -10,11 +10,10 @@
         <meta name="keywords" content="{{ config('website.site_keywords') }}"/>@endif
     @if (config('system.site_keywords'))
         <meta name="description" content="{{ config('website.site_description') }}"/>@endif
-    @if (L('pfcopyright'))
-        <meta name="author" content="{:L('pfcopyright',array('app_name'=>APP_NAME))}"/>@endif
-    <link rel="stylesheet" href="{{ asset('css/jquery-ui#min.css') }}"/>
-    <link rel="stylesheet" href="{{ asset('css/bootstrap#min.css') }}"/>
-    <link rel="stylesheet" href="{{ asset('css/bootstrap-theme#min.css') }}"/>
+    <meta name="author" content="{{ trans('common.pfcopyright',['app_name'=>trans('common.app_name')]) }}"/>
+    <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/bootstrap-theme.min.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/common.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/home.css') }}"/>
     <script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
@@ -34,14 +33,14 @@
         </ol>
         <div role="listbox" class="carousel-inner">
             <div class="item active">
-                <img alt="" src="{:M_exists('Uploads/attached/image/index/banner1.png')}"/>
+                <img alt="" src="{{ mExists('Uploads/attached/image/index/banner1.png') }}"/>
                 <div class="carousel-caption">
                     <h3></h3>
                     <p></p>
                 </div>
             </div>
             <div class="item">
-                <img alt="" src="{:M_exists('Uploads/attached/image/index/banner2.png')}"/>
+                <img alt="" src="{{ mExists('Uploads/attached/image/index/banner2.png') }}"/>
                 <div class="carousel-caption">
                     <h3></h3>
                     <p></p>
@@ -57,7 +56,7 @@
             <span class="sr-only">Next</span>
         </a>
     </div>
-    {/*导航示例 开始*/}
+    {{-- 导航示例 开始 --}}
     <M:D item="nav_menu" name="Navigation" fn="m_find_data" fn_arg="nav_menu"/>
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
@@ -69,31 +68,38 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{ $nav_menu[0]['nav_url'] }}"><b>{{ $nav_menu[0]['nav_text'] }}</b></a>
+                @if(isset($nav_menu))
+                    <a class="navbar-brand"
+                       href="{{ $nav_menu[0]['nav_url'] }}"><b>{{ $nav_menu[0]['nav_text'] }}</b></a>
+                @endif
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    @foreach ($nav_menu as $data)
-                        @if (0 < $key)
-                            <li class="@if ($data['nav_active']">active@endif)
-                            @if ($data['nav_child'])
-                                    <a  data-toggle=" dropdown" href="#"><b>{{ $data['nav_text'] }}</b><span
-                                    class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                @foreach ($data['nav_child'] as $child_data)
-                                    <li><a href="{{ $child_data['nav_url'] }}" target="{{ $child_data['nav_target'] }}"><b>{{ $child_data['nav_text'] }}</b></a>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @else
-                            <a href="{{ $data['nav_url'] }}"
-                               target="{{ $data['nav_target'] }}"><b>{{ $data['nav_text'] }}</b></a>
+                    @if(isset($nav_menu))
+                        @foreach ($nav_menu as $data)
+                            @if (0 < $key)
+                                <li class="@if ($data['nav_active'])active @endif">
+                                    @if ($data['nav_child'])
+                                        <a data-toggle=" dropdown" href="#"><b>{{ $data['nav_text'] }}</b><span
+                                                    class="caret"></span></a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            @foreach ($data['nav_child'] as $child_data)
+                                                <li><a href="{{ $child_data['nav_url'] }}"
+                                                       target="{{ $child_data['nav_target'] }}"><b>{{ $child_data['nav_text'] }}</b></a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <a href="{{ $data['nav_url'] }}"
+                                           target="{{ $data['nav_target'] }}"><b>{{ $data['nav_text'] }}</b></a>
+                                    @endif
+                                </li>
                             @endif
-                            </li>
-                        @endif
-                    @endforeach
+                        @endforeach
+                    @endif
                 </ul>
-                <form class="navbar-form navbar-right" role="search" action="{:M_U('Article/search')}" method="post">
+                <form class="navbar-form navbar-right" role="search" action="{{ route('Home::Article::search') }}"
+                      method="post">
                     {{ csrf_field() }}
                     @if (isset($category_position['id']))
                         <input type="hidden" name="cate_id" value="{{ $category_position['id'] }}">
@@ -101,15 +107,15 @@
                     <div class="form-group">
                         <select name="type" class="form-control">
                             <option value="title"
-                                    @if ($request['type'] == 'type')selected="selected"@endif >@lang('common.search')@lang('common.type')</option>
+                                    @if (isset($request['type']) && $request['type'] == 'type')selected="selected"@endif >@lang('common.search')@lang('common.type')</option>
                             <option value="description"
-                                    @if ($request['type'] == 'description')selected="selected"@endif>@lang('common.description')</option>
+                                    @if (isset($request['type']) && $request['type'] == 'description')selected="selected"@endif>@lang('common.description')</option>
                             <option value="content"
-                                    @if ($request['type'] == 'content')selected="selected"@endif>@lang('common.content')</option>
+                                    @if (isset($request['type']) && $request['type'] == 'content')selected="selected"@endif>@lang('common.content')</option>
                             @if (isset($category_position['extend']))
                                 @foreach ($category_position['extend'] as $extend)
                                     <option value="extend[{{ $extend }}]"
-                                            @if ($request['type'] == 'extend['.$extend.']')selected="selected"@endif>
+                                            @if (isset($request['type']) && $request['type'] == 'extend['.$extend.']')selected="selected"@endif>
                                         L({{ $extend }})
                                     </option>
                                 @endforeach
@@ -118,7 +124,8 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <input name="keyword" value="{{ $request['keyword'] }}" type="text" class="form-control"
+                        <input name="keyword" value="@if (isset($request['type'])){{ $request['keyword'] }}@endif"
+                               type="text" class="form-control"
                                placeholder="@lang('common.keywords')">
                     </div>
                     <button type="submit" class="btn btn-default"><b>@lang('common.search')</b></button>
@@ -126,5 +133,5 @@
             </div>
         </div>
     </nav>
-    {/*导航示例 结束*/}
+    {{-- 导航示例 结束 --}}
 </header>

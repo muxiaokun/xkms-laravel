@@ -30,10 +30,10 @@
                         <div class="col-sm-12">
                             @foreach ($quest['answer'] as $answer)
                                 <div class="col-sm-2">
-                                    {:L('sf_answer_conut',array('name'=>$answer['name'],'count'=>$answer['count']))}
+                                    {{ trans('questsanswer.sf_answer_conut',['name'=>$answer['name'],'count'=>$answer['count']]) }}
                                 </div>
                             @endforeach
-                            <div class="cb">{:L('sf_answer_all_conut',array('count'=>$quest['max_count']))}</div>
+                            <div class="cb">{{ trans('questsanswer.sf_answer_all_conut',['count'=>$quest['max_count']]) }}</div>
                         </div>
                     </div>
                     <div class="cb h20"></div>

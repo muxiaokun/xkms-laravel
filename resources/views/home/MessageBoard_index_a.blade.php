@@ -1,6 +1,6 @@
 <section class="container">
     <div class="row">
-        <form class="form-horizontal" action="{:M_U('add')}" method="post">
+        <form class="form-horizontal" action="{{ route('Home::MessageBoard::add') }}" method="post">
             {{ csrf_field() }}
             <input type="hidden" name="id" value="{{ $message_board_info['id'] }}"/>
             <div class="col-sm-12">
@@ -45,8 +45,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <img class="col-sm-offset-4 col-sm-2" src="{:M_U('Home/MessageBoard/verify_img')}"
-                             onClick="M_change_verify(this,$('input[name=verify]'))"/>
+                        @asyncImg(<img class="col-sm-4 col-sm-offset-2"
+                             src="{{ route('VerificationCode') }}"
+                             onClick="M_change_verify(this,$('input[name=verify]'))"/>)
                     </div>
                 @endif
             </div>

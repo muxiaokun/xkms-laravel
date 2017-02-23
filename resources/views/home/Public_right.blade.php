@@ -6,7 +6,7 @@
         <M:D name="Article" fn="m_select" fn_arg="cate_id == 2|is_audit > 0" limit="10" item="news_article"/>
         @foreach ($news_article as $data)
             <li class="title">
-                <a href="{:M_U('article',$data['id'])}">
+                <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
                     {{ mSubstr(mDate($data['created_at'],"m-d") }}&nbsp;&nbsp;{{ $data['title'],15)}}
                 </a>
             </li>
@@ -21,7 +21,7 @@
         <M:D name="Article" fn="m_select" fn_arg="cate_id == 4|is_audit > 0" limit="10" item="manual_article"/>
         @foreach ($manual_article as $data)
             <li class="title">
-                <a href="{:M_U('article',$data['id'])}">
+                <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
                     {{ mSubstr(mDate($data['created_at'],"m-d") }}&nbsp;&nbsp;{{ $data['title'],15)}}
                 </a>
             </li>

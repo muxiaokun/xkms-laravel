@@ -6,7 +6,8 @@
             <th>@lang('common.id')</th>
             <th>@lang('common.send')@lang('common.info')</th>
             <th>@lang('common.receive')@lang('common.info')</th>
-            <th><a class="btn btn-xs btn-success" href="{:M_U('add')}">@lang('common.send')@lang('common.message')</a>
+            <th><a class="btn btn-xs btn-success"
+                   href="{{ route('Home::Message::add') }}">@lang('common.send')@lang('common.message')</a>
             </th>
         </tr>
         @foreach ($message_list as $message)
@@ -38,7 +39,7 @@
                                 'message': "{{ $message['content'] }}"
                                 @if (session('frontend_info.id') == $message['receive_id'] AND 0 == $message['receive_time'])
                                 ,
-                                'cb_fn': M_alert_log_Message($('#M_alert_log_{{ $message['id'] }}'),{{ $message['id'] }}, '{:M_U("ajax_api")}')
+                                'cb_fn': M_alert_log_Message($('#M_alert_log_{{ $message['id'] }}'),{{ $message['id'] }}, '{{ route('Home::Message::ajax_api') }}')
                                 @endif
                             }
                             new M_alert_log(config);
@@ -46,13 +47,14 @@
                     </script>
                     &nbsp;|&nbsp;
                     @if (0 < $message['send_id'])
-                        <a class="btn btn-xs btn-primary" href="{:M_U('add',array('receive_id'=>$message['send_id']))}">
+                        <a class="btn btn-xs btn-primary"
+                           href="{{ route('Home::Message::add',['receive_id'=>$message['send_id']]) }}">
                             @lang('common.reply')@lang('common.message')
                         </a>
                         &nbsp;|&nbsp;
                     @endif
                     <a class="btn btn-xs btn-danger" href="javascript:void(0);"
-                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del')?','{:M_U('del',array('id'=>$message['id']))}')">
+                       onClick="return M_confirm('@lang('common.confirm')@lang('common.del')?','{{ route('Home::Message::del',['id'=>$message['id']]) }}')">
                         @lang('common.del')
                     </a>
                 </td>
@@ -70,18 +72,21 @@
                         'type_data': []
                     };
                     @if ($batch_handle['del'])
-                        config.type_data.push({'name': lang.common.del, 'post_link': '{:M_U('del')}'});
+                        config.type_data.push({
+                        'name': lang.common.del,
+                        'post_link': '{{ route('Home::Message::del') }}'
+                    });
                     @endif
-                            new M_batch_handle(config);
+                        new M_batch_handle(config);
                 });
             </script>
         @endif
     </div>
-        <table class="table">
-            <tr>
-                <td class="text-right">
-                    {{ $message_list->links('home.pagination') }}
-                </td>
-            </tr>
-        </table>
+    <table class="table">
+        <tr>
+            <td class="text-right">
+                {{ $message_list->links('home.pagination') }}
+            </td>
+        </tr>
+    </table>
 @endsection

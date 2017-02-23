@@ -200,17 +200,17 @@ Route::group([
         'prefix' => 'Assess',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Assess@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Assess@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'Assess@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'Assess@del']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Assess@add']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'Assess@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'Assess@del']);
     });
     Route::group([
         'as'     => 'AssessLog::',
         //'middleware'=>'auth',
         'prefix' => 'AssessLog',
     ], function () {
-        Route::get('edit', ['as' => 'edit', 'uses' => 'AssessLog@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'AssessLog@del']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'AssessLog@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'AssessLog@del']);
     });
     Route::group([
         'as'     => 'Comment::',
@@ -218,9 +218,9 @@ Route::group([
         'prefix' => 'Comment',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Comment@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Comment@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'Comment@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'Comment@del']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Comment@add']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'Comment@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'Comment@del']);
     });
     Route::group([
         'as'     => 'Index::',
@@ -258,7 +258,7 @@ Route::group([
         'prefix' => 'ManageUpload',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'ManageUpload@index']);
-        Route::get('del', ['as' => 'del', 'uses' => 'ManageUpload@del']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'ManageUpload@del']);
         Route::get('edit', ['as' => 'edit', 'uses' => 'ManageUpload@edit']);
     });
     Route::group([
@@ -290,8 +290,8 @@ Route::group([
         'prefix' => 'Message',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Message@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Message@add']);
-        Route::get('del', ['as' => 'del', 'uses' => 'Message@del']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Message@add']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'Message@del']);
     });
     Route::group([
         'as'     => 'MessageBoard::',
@@ -299,9 +299,9 @@ Route::group([
         'prefix' => 'MessageBoard',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'MessageBoard@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'MessageBoard@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'MessageBoard@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'MessageBoard@del']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'MessageBoard@add']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'MessageBoard@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'MessageBoard@del']);
     });
     Route::group([
         'as'     => 'MessageBoardLog::',
@@ -309,8 +309,8 @@ Route::group([
         'prefix' => 'MessageBoardLog',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'MessageBoardLog@index']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'MessageBoardLog@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'MessageBoardLog@del']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'MessageBoardLog@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'MessageBoardLog@del']);
     });
     Route::group([
         'as'     => 'Navigation::',
@@ -329,9 +329,9 @@ Route::group([
         'prefix' => 'Quests',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Quests@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Quests@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'Quests@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'Quests@del']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Quests@add']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'Quests@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'Quests@del']);
     });
     Route::group([
         'as'     => 'QuestsAnswer::',
@@ -339,9 +339,9 @@ Route::group([
         'prefix' => 'QuestsAnswer',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'QuestsAnswer@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'QuestsAnswer@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'QuestsAnswer@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'QuestsAnswer@del']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'QuestsAnswer@add']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'QuestsAnswer@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'QuestsAnswer@del']);
     });
     Route::group([
         'as'     => 'Recruit::',
@@ -349,9 +349,9 @@ Route::group([
         'prefix' => 'Recruit',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Recruit@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Recruit@add']);
-        Route::get('edit', ['as' => 'edit', 'uses' => 'Recruit@edit']);
-        Route::get('del', ['as' => 'del', 'uses' => 'Recruit@del']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Recruit@add']);
+        Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'Recruit@edit']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'Recruit@del']);
     });
     Route::group([
         'as'     => 'RecruitLog::',
@@ -359,7 +359,7 @@ Route::group([
         'prefix' => 'RecruitLog',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'RecruitLog@index']);
-        Route::get('del', ['as' => 'del', 'uses' => 'RecruitLog@del']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'RecruitLog@del']);
     });
     Route::group([
         'as'     => 'Region::',

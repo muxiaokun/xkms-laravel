@@ -11,12 +11,13 @@ class MessageBoard extends Backend
     //列表
     public function index()
     {
-        //建立where
-        $where      = [];
-        $whereValue                   = request('name');
-        $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
+        $messageBoardList  = Model\MessageBoard::where(function ($query) {
+            $name = request('name');
+            if ($name) {
+                $query->where('name', 'like', '%' . $name . '%');
+            }
 
-        $messageBoardList = Model\MessageBoard::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
+        })->paginate(config('system.sys_max_row'))->appends(request()->all());
         foreach ($messageBoardList as &$messageBoard) {
             $option = [];
             foreach ($messageBoard['config'] as $name => $value) {
@@ -28,7 +29,9 @@ class MessageBoard extends Backend
 
         //初始化where_info
         $whereInfo            = [];
+        $whereInfo['name'] = ['type' => 'input', 'name' => trans('common.messageboard') . trans('common.name')];
         $assign['where_info'] = $whereInfo;
+
 
         //初始化batch_handle
         $batchHandle              = [];
@@ -46,7 +49,7 @@ class MessageBoard extends Backend
     public function add()
     {
         if (request()->isMethod('POST')) {
-            $data      = $this->makeData('add');
+            $data = $this->makeData('add');
             if (!is_array($data)) {
                 return $data;
             }
@@ -54,10 +57,9 @@ class MessageBoard extends Backend
             $resultAdd = Model\MessageBoard::create($data);
             if ($resultAdd) {
                 return $this->success(trans('common.messageboard') . trans('common.add') . trans('common.success'),
-                    $rebackLink);
+                    route('Admin::MessageBoard::index'));
             } else {
-                return $this->error(trans('common.messageboard') . trans('common.add') . trans('common.error'),
-                    route('Admin::MessageBoard::add', ['cate_id' => request('cate_id')]));
+                return $this->error(trans('common.messageboard') . trans('common.add') . trans('common.error'));
             }
         }
 
@@ -76,7 +78,7 @@ class MessageBoard extends Backend
         }
 
         if (request()->isMethod('POST')) {
-            $data       = $this->makeData('edit');
+            $data = $this->makeData('edit');
             if (!is_array($data)) {
                 return $data;
             }
@@ -113,10 +115,12 @@ class MessageBoard extends Backend
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::MessageBoard::index'));
         }
 
-        $resultDel = false;
-        if (1 != $id || (is_array($id) && !in_array(1, $id))) {
-            $resultDel = Model\MessageBoard::destroy($id);
+        if (1 == $id || (is_array($id) && in_array(1, $id))) {
+            return $this->error(trans('common.default') . trans('common.messageboard') . trans('common.not') . trans('common.del'),
+                route('Admin::MessageBoard::index'));
         }
+
+        $resultDel = Model\MessageBoard::destroy($id);
         if ($resultDel) {
             return $this->success(trans('common.messageboard') . trans('common.del') . trans('common.success'),
                 route('Admin::MessageBoard::index'));

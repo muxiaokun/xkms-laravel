@@ -63,10 +63,10 @@ OK 扩展管理微信微信管理Admin::Wechat::index
 OK 扩展管理微信配置微信Admin::Wechat::add
 OK 扩展管理微信删除微信绑定Admin::Wechat::del
 扩展管理微信推送消息Admin::Wechat::edit
-扩展管理留言板留言板管理Admin::MessageBoard::index
-扩展管理留言板添加留言板Admin::MessageBoard::add
-扩展管理留言板删除留言板Admin::MessageBoard::del
-扩展管理留言板编辑留言板Admin::MessageBoard::edit
+OK 扩展管理留言板留言板管理Admin::MessageBoard::index
+OK 扩展管理留言板添加留言板Admin::MessageBoard::add
+OK 扩展管理留言板删除留言板Admin::MessageBoard::del
+OK 扩展管理留言板编辑留言板Admin::MessageBoard::edit
 扩展管理留言板留言管理Admin::MessageBoardLog::index
 扩展管理留言板删除留言Admin::MessageBoardLog::del
 扩展管理留言板审核回复Admin::MessageBoardLog::edit

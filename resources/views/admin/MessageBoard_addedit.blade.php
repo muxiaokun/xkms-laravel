@@ -76,7 +76,8 @@
                         <script>
                             $(function () {
                                 new M_messageboard_editor({
-                                    @if ($edit_info['config'])'def_data':{{ $edit_info['config'] }}, @endif
+                                    @if ($edit_info['config'])'def_data':{!! json_encode($edit_info['config']) !!},
+                                    @endif
                                     'out_obj': $('#out_obj'),
                                     'edit_obj': $('#edit_obj'),
                                     'btn_obj': $('#btn_obj'),

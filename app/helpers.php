@@ -631,7 +631,7 @@ function mScanTemplate($name, $controller)
     foreach ($dirs as $file) {
         if (preg_match($preg, $file, $match)) {
             $template = ['value' => $match[1]];
-            if ($themeInfo[md5($file)]) {
+            if (isset($themeInfo[md5($file)])) {
                 $template['name'] = $themeInfo[md5($file)]['name'];
             } else {
                 $template['name'] = $match[1];

@@ -116,7 +116,7 @@ class MessageBoard extends Frontend
         $memberId = session('frontend_info.id');
         $memberId = ($memberId) ? $memberId : 0;
         $data     = [];
-        (null !== $memberId) && $data['msg_id'] = $id;
+        (null !== $memberId) && $data['mb_id'] = $id;
         (null !== $memberId) && $data['send_id'] = $memberId;
         (null !== $sendInfo) && $data['send_info'] = $sendInfo;
 

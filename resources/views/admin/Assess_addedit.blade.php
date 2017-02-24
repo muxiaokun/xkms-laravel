@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.assess')@lang('common.title')</label>
+                                <label class="col-sm-4 control-label">@lang('assess.assess')@lang('common.title')</label>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control" placeholder="@lang('common.title')"
                                            name="title"
@@ -20,7 +20,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.assess')@lang('common.group')</label>
+                                <label class="col-sm-4 control-label">@lang('assess.assess')@lang('common.group')</label>
                                 <div class="col-sm-8" id="group_level">
                                     <input type="hidden" name="group_level"/>
                                     <script type="text/javascript" src="{{ asset('js/M_select_add.js') }}"></script>
@@ -46,7 +46,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.assess')@lang('common.start')@lang('common.time')</label>
+                                <label class="col-sm-4 control-label">@lang('assess.assess')@lang('common.start')@lang('common.time')</label>
                                 <div class="col-sm-6 ">
                                     <input type="text" class="form-control"
                                            placeholder="@lang('common.start')@lang('common.time')" name="start_time"
@@ -56,7 +56,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.assess')@lang('common.end')@lang('common.time')</label>
+                                <label class="col-sm-4 control-label">@lang('assess.assess')@lang('common.end')@lang('common.time')</label>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control"
                                            placeholder="@lang('common.end')@lang('common.time')" name="end_time"
@@ -69,7 +69,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.assess')@lang('common.yes')@lang('common.no')@lang('common.enable')</label>
+                                <label class="col-sm-4 control-label">@lang('assess.assess')@lang('common.yes')@lang('common.no')@lang('common.enable')</label>
                                 <div class="col-sm-6">
                                     <label class="radio-inline">
                                         <input type="radio" name="is_enable" value="1"
@@ -84,7 +84,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.assess')@lang('common.target')</label>
+                                <label class="col-sm-4 control-label">@lang('assess.assess')@lang('common.target')</label>
                                 <div class="col-sm-6">
                                     <select class="form-control input-sm w260" name="target">
                                         <option value="member"
@@ -99,7 +99,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">@lang('common.assess')@lang('common.explains')</label>
+                                <label class="col-sm-2 control-label">@lang('assess.assess')@lang('common.explains')</label>
                                 <div class="col-sm-9">
                                 <textarea class="form-control" rows="3" style="width:100%;resize:none;"
                                           name="explains">{{ $edit_info['explains'] }}</textarea>
@@ -174,7 +174,7 @@
                     <script type="text/javascript" src="{{ asset('js/M_assess_editor.js') }}"></script>
                     <script type="text/javascript">
                         var config = {
-                            @if ($edit_info['ext_info'])'def_data':{{ $edit_info['ext_info'] }}, @endif
+                            @if ($edit_info['ext_info'])'def_data':{!! json_encode($edit_info['ext_info']) !!}, @endif
                             'out_obj': $('#assess_area'),
                             'edit_obj': $('#quests_edit'),
                             'post_name': 'ext_info'

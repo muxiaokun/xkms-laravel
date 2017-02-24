@@ -206,6 +206,7 @@ Route::group([
         Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Assess@add']);
         Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'Assess@edit']);
         Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'Assess@del']);
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Assess@ajax_api']);
     });
     Route::group([
         'as'     => 'AssessLog::',

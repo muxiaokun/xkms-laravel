@@ -227,7 +227,7 @@ class Member extends Backend
                     }
 
                     if (isset($data['keyword'])) {
-                        $query->where('member_name', 'like', '%' . $data['keyword'] . '%');
+                        $query->where('name', 'like', '%' . $data['keyword'] . '%');
                     }
 
                 })->get()->each(function ($item, $key) use (&$result) {

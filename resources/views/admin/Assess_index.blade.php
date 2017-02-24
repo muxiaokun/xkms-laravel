@@ -34,10 +34,10 @@
                                 {{ $assess['group_name'] }}
                             </td>
                             <td>
-                                {{ mDate($assess['start_time']) }}
+                                {{ $assess['start_time'] }}
                             </td>
                             <td>
-                                {{ mDate($assess['end_time']) }}
+                                {{ $assess['end_time'] }}
                             </td>
                             <td>
                                 @if ($assess['is_enable'])@lang('common.enable')@else @lang('common.disable')@endif

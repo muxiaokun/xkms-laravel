@@ -31,7 +31,6 @@ class Message extends Backend
             }
 
         })->paginate(config('system.sys_max_row'))->appends(request()->all());
-
         foreach ($messageList as &$message) {
             if ($message['send_id']) {
                 $memberInfo           = Model\Member::colWhere($message['send_id'])->first();

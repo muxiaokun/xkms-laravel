@@ -5,22 +5,30 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
 use App\Model;
+use Carbon\Carbon;
 
 class Quests extends Backend
 {
     //列表
     public function index()
     {
-        //建立where
-        $where      = [];
-        $whereValue = request('title');
-        $whereValue && $where['title'] = ['like', '%' . $whereValue . '%'];
-        $whereValue = mMktimeRange('start_time');
-        $whereValue && $where[] = ['start_time', $whereValue];
-        $whereValue = mMktimeRange('end_time');
-        $whereValue && $where[] = ['end_time', $whereValue];
+        $questsList            = Model\Quests::where(function ($query) {
+            $name = request('title');
+            if ($name) {
+                $query->where('title', 'like', '%' . $name . '%');
+            }
 
-        $questsList = Model\Quests::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
+            $start_time = mMktimeRange('start_time');
+            if ($start_time) {
+                $query->timeWhere('start_time', $start_time);
+            }
+
+            $end_time = mMktimeRange('end_time');
+            if ($end_time) {
+                $query->timeWhere('end_time', $end_time);
+            }
+
+        })->paginate(config('system.sys_max_row'))->appends(request()->all());
         $assign['quests_list'] = $questsList;
 
         //初始化where_info
@@ -54,15 +62,15 @@ class Quests extends Backend
 
             $resultAdd = Model\Quests::create($data);
             if ($resultAdd) {
-                return $this->success(trans('common.quests') . trans('common.add') . trans('common.success'),
+                return $this->success(trans('quests.quests') . trans('common.add') . trans('common.success'),
                     route('Admin::Quests::index'));
             } else {
-                return $this->error(trans('common.quests') . trans('common.add') . trans('common.error'),
+                return $this->error(trans('quests.quests') . trans('common.add') . trans('common.error'),
                     route('Admin::Quests::add'));
             }
         }
         $assign['edit_info'] = Model\Quests::columnEmptyData();
-        $assign['title']     = trans('common.add') . trans('common.quests');
+        $assign['title'] = trans('common.add') . trans('quests.quests');
         return view('admin.Quests_addedit', $assign);
     }
 
@@ -86,19 +94,19 @@ class Quests extends Backend
                 return $resultEdit;
             });
             if ($resultEdit) {
-                return $this->success(trans('common.quests') . trans('common.edit') . trans('common.success'),
+                return $this->success(trans('quests.quests') . trans('common.edit') . trans('common.success'),
                     route('Admin::Quests::index'));
             } else {
                 $errorGoLink = (is_array($id)) ? route('Admin::Quests::index') : route('Admin::Quests::edit',
                     ['id' => $id]);
-                return $this->error(trans('common.quests') . trans('common.edit') . trans('common.error'),
+                return $this->error(trans('quests.quests') . trans('common.edit') . trans('common.error'),
                     $errorGoLink);
             }
         }
         $editInfo            = Model\Quests::colWhere($id)->first()->toArray();
         $assign['edit_info'] = $editInfo;
 
-        $assign['title'] = trans('common.edit') . trans('common.quests');
+        $assign['title'] = trans('common.edit') . trans('quests.quests');
         return view('admin.Quests_addedit', $assign);
     }
 
@@ -111,6 +119,7 @@ class Quests extends Backend
         }
 
         $clear = request('clear');
+        $resultDel = false;
         if (!$clear) {
             $resultDel = Model\Quests::destroy($id);
         }
@@ -121,18 +130,18 @@ class Quests extends Backend
             if ($clear) {
                 if ($resultClear) {
                     Model\Quests::where(['id' => $id])->data(['current_portion' => 0])->save();
-                    return $this->success(trans('common.quests') . trans('common.clear') . trans('common.success'),
+                    return $this->success(trans('quests.quests') . trans('common.clear') . trans('common.success'),
                         route('Admin::Quests::index'));
                 } else {
-                    return $this->error(trans('common.quests') . trans('common.clear') . trans('common.error'),
+                    return $this->error(trans('quests.quests') . trans('common.clear') . trans('common.error'),
                         route('Admin::Quests::index'));
 
                 }
             }
-            return $this->success(trans('common.quests') . trans('common.del') . trans('common.success'),
+            return $this->success(trans('quests.quests') . trans('common.del') . trans('common.success'),
                 route('Admin::Quests::index'));
         } else {
-            return $this->error(trans('common.quests') . trans('common.del') . trans('common.error'),
+            return $this->error(trans('quests.quests') . trans('common.del') . trans('common.error'),
                 route('Admin::Quests::edit', ['id' => $id]));
         }
     }
@@ -144,15 +153,14 @@ class Quests extends Backend
         $maxPortion   = request('max_portion');
         $startTime    = request('start_time');
         $endTime      = request('end_time');
-        $startTime    = mMktime($startTime, true);
-        $endTime      = mMktime($endTime, true);
         $startContent = request('start_content');
         $endContent   = request('end_content');
         $accessInfo   = request('access_info');
         $extInfo      = request('ext_info');
-        foreach ($extInfo as &$info) {
-            $info = htmlspecialchars_decode($info);
-            $info = json_decode($info, true);
+        if (is_array($extInfo)) {
+            foreach ($extInfo as &$info) {
+                $info = json_decode(htmlspecialchars_decode($info), true);
+            }
         }
 
         $data = [];
@@ -160,13 +168,13 @@ class Quests extends Backend
             $data['title'] = $title;
         }
         if ('add' == $type || null !== $maxPortion) {
-            $data['max_portion'] = $maxPortion;
+            $data['max_portion'] = $maxPortion ? $maxPortion : 0;
         }
         if ('add' == $type || null !== $startTime) {
-            $data['start_time'] = $startTime;
+            $data['start_time'] = $startTime ? $startTime : Carbon::now();
         }
         if ('add' == $type || null !== $endTime) {
-            $data['end_time'] = $endTime;
+            $data['end_time'] = $endTime ? $endTime : Carbon::now();
         }
         if ('add' == $type || null !== $startContent) {
             $data['start_content'] = $startContent;

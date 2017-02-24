@@ -53,7 +53,7 @@
                                 @if ($batch_handle['answer_edit'])
                                     <a class="btn btn-xs btn-primary"
                                        href="{{ route('Admin::QuestsAnswer::edit',array('quests_id'=>$quests['id'])) }}">
-                                        @lang('common.statistics')@lang('common.quests')
+                                        @lang('common.statistics')@lang('quests.quests')
                                     </a>
                                 @endif
                                 @if ($batch_handle['answer_edit'] AND $batch_handle['edit'])&nbsp;|&nbsp;@endif

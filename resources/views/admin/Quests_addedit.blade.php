@@ -57,7 +57,7 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">@lang('common.access')@lang('common.pass')</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" placeholder="@lang('common.quests_note1')"
+                                    <input type="text" class="form-control" placeholder="@lang('quests.quests_note1')"
                                            name="access_info" value="{{ $edit_info['access_info'] }}"/>
                                 </div>
                             </div>
@@ -114,7 +114,7 @@
                                 <label class="col-sm-2 control-label">@lang('common.answer')</label>
                                 <div class="col-sm-9">
                                     <input class="form-control" type="text"
-                                           placeholder="@lang('common.quests_quest_note1')"
+                                           placeholder="@lang('quests.quests_quest_note1')"
                                            disabled="disabled" mtype="answer"/>
                                 </div>
                             </div>
@@ -159,7 +159,8 @@
                     <script type="text/javascript">
                         $(function () {
                             var config = {
-                                @if ($edit_info['ext_info'])'def_data':{{ $edit_info['ext_info'] }}, @endif
+                                @if ($edit_info['ext_info'])'def_data':{!! json_encode($edit_info['ext_info']) !!},
+                                @endif
                                 'out_obj': $('#quests_area'),
                                 'edit_obj': $('#quests_edit'),
                                 'post_name': 'ext_info'

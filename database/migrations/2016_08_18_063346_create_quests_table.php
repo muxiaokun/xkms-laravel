@@ -20,7 +20,7 @@ class CreateQuestsTable extends Migration
             $table->timestamps();
 
             $table->string('title', 64)->comment('标题');
-            $table->integer('current_portion')->unsigned()->comment('当前份数');
+            $table->integer('current_portion')->default(0)->unsigned()->comment('当前份数');
             $table->integer('max_portion')->unsigned()->comment('最大份数');
             $table->mediumText('start_content')->nullable()->comment('欢迎词');
             $table->mediumText('end_content')->nullable()->comment('结束词');

@@ -37,7 +37,7 @@
                         <div class="col-sm-12 text-center">@lang('common.send')@lang('common.content')</div>
                         <div class="col-sm-12">
                             <textarea rows="5" class="col-sm-12"
-                                      name="content">{{ $edit_info['reply_info'] }}</textarea>
+                                      name="content">{{ $edit_info['content'] }}</textarea>
                         </div>
                     </div>
                     <div class="row mt10">

@@ -3,7 +3,7 @@
 3.登陆时密码错误 出现系统错误
 4.验证码不可以同时调用两个以上
 
-41/77/118
+81/119
 
 Backend
 OK 系统管理系统配置网站配置Admin::Index::websiteSet
@@ -81,9 +81,9 @@ OK 扩展管理招聘删除招聘Admin::Recruit::del
 OK 扩展管理招聘编辑招聘Admin::Recruit::edit
 UNSTART 扩展管理招聘应聘记录Admin::RecruitLog::index
 UNSTART 扩展管理招聘删除招聘Admin::RecruitLog::del
-UNSTART 扩展管理站内信站内信管理Admin::Message::index
-UNSTART 扩展管理站内信发送站内信Admin::Message::add
-UNSTART 扩展管理站内信删除站内信Admin::Message::del
+OK 扩展管理站内信站内信管理Admin::Message::index
+OK 扩展管理站内信发送站内信Admin::Message::add
+OK 扩展管理站内信删除站内信Admin::Message::del
 UNSTART 扩展管理考核考核管理Admin::Assess::index
 UNSTART 扩展管理考核新增考核Admin::Assess::add
 UNSTART 扩展管理考核删除考核Admin::Assess::del
@@ -126,5 +126,5 @@ UNSTART 扩展管理考核考核管理Home::Assess::index
 UNSTART 扩展管理考核考核评分Home::Assess::add
 UNSTART 扩展管理问卷问卷管理Home::Quests::index
 UNSTART 扩展管理问卷填写问卷Home::Quests::add
-ok Home::Wechat::index
+OK Home::Wechat::index
 UNSTART Home::Wechat::member_bind

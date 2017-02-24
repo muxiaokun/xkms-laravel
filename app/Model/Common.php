@@ -57,10 +57,10 @@ class Common extends Model
         $startInputName = $column . '_start';
         $endInputName   = $column . '_end';
         if (isset($timeRange[$startInputName])) {
-            $query->where($column, '>', $timeRange[$startInputName]);
+            $query->where($column, '>=', $timeRange[$startInputName]);
         }
         if (isset($timeRange[$endInputName])) {
-            $query->where($column, '<', $timeRange[$endInputName]);
+            $query->where($column, '<=', $timeRange[$endInputName]);
         }
     }
 

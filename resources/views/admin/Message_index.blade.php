@@ -27,12 +27,12 @@
                             </td>
                             <td>
                                 {{ $message['send_name'] }}
-                                &nbsp;&nbsp;[{{ mDate($message['send_time']) }}]
+                                &nbsp;&nbsp;[{{ $message['created_at'] }}]
                             </td>
                             <td>
                                 {{ $message['receive_name'] }}&nbsp;&nbsp;[
-                                @if (0 < $message['receive_time'])
-                                    {{ mDate($message['receive_time']) }}
+                                @if ($message['updated_at'])
+                                    {{ $message['updated_at'] }}
                                 @else
                                     @lang('common.none')@lang('common.receive')
                                 @endif]
@@ -44,22 +44,22 @@
                                     $(function () {
                                         var config = {
                                             'bind_obj': $('#M_alert_log_{{ $message['id'] }}'),
-                                            'title': '@lang('common.message')@lang('common.content')',
+                                            'title': '@lang('message.message')@lang('common.content')',
                                             'message': "{{ $message['content'] }}"
-                                            @if (0 == $message['receive_id'] AND 0 == $message['receive_time'])
+                                            @if (0 == $message['receive_id'] AND !$message['updated_at'])
                                             ,
-                                            'cb_fn': M_alert_log_Message($('#M_alert_log_{{ $message['id'] }}'),{{ $message['id'] }}, '{{ route('Home::Message::ajax_api') }}')
+                                            'cb_fn': M_alert_log_Message($('#M_alert_log_{{ $message['id'] }}'),{{ $message['id'] }}, '{{ route('Admin::Message::ajax_api') }}')
                                             @endif
                                         }
                                         new M_alert_log(config);
                                     });
                                 </script>
                                 @if ($batch_handle['add'])
-                                    &nbsp;|&nbsp;
-                                    @if (0 < $message['send_id'])
+                                    @if (0 == $message['receive_id'])
+                                        &nbsp;|&nbsp;
                                         <a class="btn btn-xs btn-primary"
                                            href="{{ route('Admin::Message::add',array('receive_id'=>$message['send_id'])) }}">
-                                            @lang('common.reply')@lang('common.message')
+                                            @lang('common.reply')@lang('message.message')
                                         </a>
                                     @endif
                                 @endif
@@ -91,7 +91,7 @@
                                         'post_link': '{{ route('Admin::Message::del') }}'
                                     });
                                     @endif
-                                            new M_batch_handle(config);
+                                        new M_batch_handle(config);
                                 });
                             </script>
                         @endif

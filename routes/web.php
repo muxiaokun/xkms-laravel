@@ -295,6 +295,7 @@ Route::group([
         Route::get('index', ['as' => 'index', 'uses' => 'Message@index']);
         Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Message@add']);
         Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'Message@del']);
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Message@ajax_api']);
     });
     Route::group([
         'as'     => 'MessageBoard::',

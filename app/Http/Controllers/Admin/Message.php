@@ -5,36 +5,54 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
 use App\Model;
+use Carbon\Carbon;
 
 class Message extends Backend
 {
     //列表
     public function index()
     {
-        $where = [];
-        //0为系统发送/接收
-        //$where['_complex']['_logic']     = 'OR';
-        //$where['_complex']['receive_id'] = $where['_complex']['send_id'] = 0;
-        //建立where
-        $whereValue = '';
-        $whereValue = request('receive_id');
-        $whereValue && $where[] = [
-            'receive_id',
-            'in',
-            Model\Member::where(['member_name' => ['like', '%' . $whereValue . '%']])->select(['id'])->pluck('id'),
-        ];
-        $whereValue = mMktimeRange('send_time');
-        $whereValue && $where[] = ['send_time', $whereValue];
+        $messageList = Model\Message::where(function ($query) {
+            $query->where(function ($query) {
+                $query->orWhere('send_id', '=', 0);
+                $query->orWhere('receive_id', '=', 0);
+            });
 
-        $messageList            = Model\Message::orderBy('receive_time', 'asc')->orderBy('send_time',
-            'desc')->where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
+            $member_name = request('member_name');
+            if ($member_name) {
+                $memberIds = Model\Member::where('member_name', 'like',
+                    '%' . $member_name . '%')->select(['id'])->pluck('id');
+                $query->whereIn('receive_id', $memberIds);
+            }
+
+            $created_at = mMktimeRange('created_at');
+            if ($created_at) {
+                $query->timeWhere('created_at', $created_at);
+            }
+
+        })->paginate(config('system.sys_max_row'))->appends(request()->all());
+
+        foreach ($messageList as &$message) {
+            if ($message['send_id']) {
+                $memberInfo           = Model\Member::colWhere($message['send_id'])->first();
+                $message['send_name'] = (null === $memberInfo) ? $message['send_id'] : $memberInfo['member_name'];
+            } else {
+                $message['send_name'] = trans('common.system') . trans('common.send');
+            }
+            if ($message['receive_id']) {
+                $memberInfo              = Model\Member::colWhere($message['receive_id'])->first();
+                $message['receive_name'] = (null === $memberInfo) ? $message['receive_id'] : $memberInfo['member_name'];
+            } else {
+                $message['receive_name'] = trans('common.system') . trans('common.receive');
+            }
+        }
         $assign['message_list'] = $messageList;
 
         //初始化where_info
-        $whereInfo               = [];
-        $whereInfo['receive_id'] = ['type' => 'input', 'name' => trans('common.receive') . trans('common.member')];
-        $whereInfo['send_time']  = ['type' => 'time', 'name' => trans('common.send') . trans('common.time')];
-        $assign['where_info']    = $whereInfo;
+        $whereInfo                = [];
+        $whereInfo['member_name'] = ['type' => 'input', 'name' => trans('common.receive') . trans('common.member')];
+        $whereInfo['created_at']  = ['type' => 'time', 'name' => trans('common.send') . trans('common.time')];
+        $assign['where_info']     = $whereInfo;
 
         //初始化batch_handle
         $batchHandle            = [];
@@ -63,7 +81,7 @@ class Message extends Backend
             }
 
             $data      = [
-                'send_id'    => session('frontend_info.id'),
+                'send_id'    => 0,//0为系统发送
                 'receive_id' => $receiveId,
                 'content'    => $content,
             ];
@@ -80,7 +98,7 @@ class Message extends Backend
         }
 
         $assign['edit_info'] = Model\Message::columnEmptyData();
-        $assign['title']     = trans('common.send') . trans('common.message');
+        $assign['title'] = trans('common.send') . trans('message.message');
         return view('admin.Message_add', $assign);
     }
 
@@ -94,10 +112,10 @@ class Message extends Backend
 
         $resultDel = Model\Message::destroy($id);
         if ($resultDel) {
-            return $this->success(trans('common.message') . trans('common.del') . trans('common.success'),
+            return $this->success(trans('message.message') . trans('common.del') . trans('common.success'),
                 route('Admin::Message::index'));
         } else {
-            return $this->error(trans('common.message') . trans('common.del') . trans('common.error'),
+            return $this->error(trans('message.message') . trans('common.del') . trans('common.error'),
                 route('Admin::Message::index'));
         }
     }
@@ -109,18 +127,26 @@ class Message extends Backend
         $result = ['status' => true, 'info' => []];
         switch ($field) {
             case 'receive_id':
-                isset($data['inserted']) && $where['id'] = ['not in', $data['inserted']];
-                isset($data['keyword']) && $where['member_name'] = ['like', '%' . $data['keyword'] . '%'];
-                $memberUserList = Model\Member::where($where)->get();
-                foreach ($memberUserList as $memberUser) {
-                    $result['info'][] = ['value' => $memberUser['id'], 'html' => $memberUser['member_name']];
-                }
+                Model\Member::where(function ($query) use ($data) {
+                    if (isset($data['inserted'])) {
+                        $query->whereNotIn('id', $data['inserted']);
+                    }
+
+                    if (isset($data['keyword'])) {
+                        $query->where('member_name', 'like', '%' . $data['keyword'] . '%');
+                    }
+
+                })->get()->each(function ($item, $key) use (&$result) {
+                    $result['info'][] = ['value' => $item['id'], 'html' => $item['member_name']];
+                });
                 break;
             case 'read_message':
-                $currentTime = Carbon::now();
-                $resultEdit = Model\Message::colWhere(0, 'receive_id')->colWhere($data['id'])->first()->update($data);
+                $currentTime = Carbon::now()->toDateTimeString();
+                $resultEdit  = Model\Message::where([['id', $data['id']], ['receive_id', 0]])->first()->update([
+                    'updated_at' => $currentTime,
+                ]);
                 if ($resultEdit) {
-                    $result['info'] = date(config('system.sys_date_detail'), $currentTime);
+                    $result['info'] = $currentTime;
                 } else {
                     $result['status'] = false;
                 }

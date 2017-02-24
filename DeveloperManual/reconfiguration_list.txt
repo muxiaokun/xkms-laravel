@@ -2,7 +2,7 @@
 2.权限检测需要重构不可以用die
 3.登陆时密码错误 出现系统错误
 
-61/119
+69/119
 
 Backend
 OK 系统管理系统配置网站配置Admin::Index::websiteSet
@@ -70,10 +70,10 @@ OK 扩展管理留言板编辑留言板Admin::MessageBoard::edit
 扩展管理留言板留言管理Admin::MessageBoardLog::index
 扩展管理留言板删除留言Admin::MessageBoardLog::del
 扩展管理留言板审核回复Admin::MessageBoardLog::edit
-扩展管理评论评论管理Admin::Comment::index
-扩展管理评论审核评论Admin::Comment::add
-扩展管理评论删除评论Admin::Comment::del
-扩展管理评论回复评论Admin::Comment::edit
+OK 扩展管理评论评论管理Admin::Comment::index
+OK 扩展管理评论审核评论Admin::Comment::add
+OK 扩展管理评论删除评论Admin::Comment::del
+OK 扩展管理评论回复评论Admin::Comment::edit
 扩展管理招聘招聘管理Admin::Recruit::index
 扩展管理招聘新增招聘Admin::Recruit::add
 扩展管理招聘删除招聘Admin::Recruit::del

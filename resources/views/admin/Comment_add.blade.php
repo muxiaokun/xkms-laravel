@@ -12,11 +12,11 @@
                                 <label class="col-sm-4 control-label">@lang('common.yes')@lang('common.no')@lang('common.enable')</label>
                                 <div class="col-sm-7">
                                     <label class="radio-inline">
-                                        <input type="radio" name="COMMENT_SWITCH" value="1"
+                                        <input type="radio" name="comment_switch" value="1"
                                                @if ('1' === config('system.comment_switch'))checked="checked"@endif >@lang('common.enable')
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="COMMENT_SWITCH" value="0"
+                                        <input type="radio" name="comment_switch" value="0"
                                                @if ('0' === config('system.comment_switch'))checked="checked"@endif >@lang('common.disable')
                                     </label>
                                 </div>
@@ -27,7 +27,7 @@
                                 <label class="col-sm-4 control-label">@lang('common.permit')@lang('common.privilege')
                                     A,B</label>
                                 <div class="col-sm-7">
-                                    <input type="text" name="COMMENT_ALLOW" value="{{ config('system.comment_allow') }}"
+                                    <input type="text" name="comment_allow" value="{{ config('system.comment_allow') }}"
                                            class="form-control">
                                 </div>
                             </div>
@@ -39,11 +39,11 @@
                                 <label class="col-sm-4 control-label">@lang('common.enable')@lang('common.anonymous')@lang('common.comment')</label>
                                 <div class="col-sm-7">
                                     <label class="radio-inline">
-                                        <input type="radio" name="COMMENT_ANONY" value="1"
+                                        <input type="radio" name="comment_anony" value="1"
                                                @if ('1' === config('system.comment_anony'))checked="checked"@endif >@lang('common.enable')
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio" name="COMMENT_ANONY" value="0"
+                                        <input type="radio" name="comment_anony" value="0"
                                                @if ('0' === config('system.comment_anony'))checked="checked"@endif >@lang('common.disable')
                                     </label>
                                 </div>
@@ -54,7 +54,7 @@
                                 <label class="col-sm-4 control-label">@lang('common.comment')@lang('common.time')@lang('common.interval')
                                     (@lang('common.second'))</label>
                                 <div class="col-sm-7">
-                                    <input type="text" name="COMMENT_INTERVAL"
+                                    <input type="text" name="comment_interval"
                                            value="{{ config('system.comment_interval') }}"
                                            class="form-control" onKeyup="M_in_int(this);">
                                 </div>

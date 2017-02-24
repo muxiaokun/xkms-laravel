@@ -33,19 +33,19 @@
                                 {{ $comment['member_name'] }}
                             </td>
                             <td>
-                                {{ mDate($comment['created_at']) }}
+                                {{ $comment['created_at'] }}
                             </td>
                             <td>
-                                {{ $comment['audit_name'] }}
+                                {{ $comment['admin_name'] }}
                             </td>
                             <td>
-                                {{ $comment['controller'] }}
+                                {{ $comment['route'] }}
                             </td>
                             <td>
                                 {{ $comment['item'] }}
                             </td>
                             <td>
-                                {{ $comment['aip'] }}
+                                {{ $comment['add_ip'] }}
                             </td>
                             <td class="nowrap">
                                 <a id="M_alert_log_{{ $comment['id'] }}" class="btn btn-xs btn-primary"
@@ -55,10 +55,15 @@
                                         var config = {
                                             'bind_obj': $('#M_alert_log_{{ $comment['id'] }}'),
                                             'title': '@lang('common.comment')@lang('common.content')',
-                                            'message': "{{ $comment['content'] }}"
+                                            'message': {
+                                                '@lang('common.comment')@lang('common.level')': "{{ $comment['level'] }}"
+                                                ,
+                                                '@lang('common.comment')@lang('common.content')': "{{ $comment['content'] }}"
+                                            }
                                         }
                                         new M_alert_log(config);
-                                    });
+                                    })
+                                    ;
                                 </script>
                                 @if ($batch_handle['edit'])
                                     &nbsp;|&nbsp;
@@ -101,7 +106,7 @@
                                         'post_link': '{{ route('Admin::Comment::del') }}'
                                     });
                                     @endif
-                                            new M_batch_handle(config);
+                                        new M_batch_handle(config);
                                 });
                             </script>
                         @endif

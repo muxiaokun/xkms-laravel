@@ -19,13 +19,13 @@ class CreateCommentsTable extends Migration
             $table->increments('id');
             $table->timestamps();
 
-            $table->integer('audit_id')->unsigned()->comment('考核表编号');
-            $table->integer('send_id')->unsigned()->comment('评分人');
+            $table->integer('audit_id')->default(0)->unsigned()->comment('审核人');
+            $table->integer('send_id')->unsigned()->comment('评论人');
             $table->ipAddress('add_ip')->comment('活跃IP');
-            $table->string('controller', 64)->comment('上传控制器');
+            $table->string('route', 64)->comment('上传路由');
             $table->integer('item')->unsigned()->comment('属于分组0属于游离');
-            $table->tinyInteger('level')->comment('评论级别');
-            $table->string('content', 256)->comment('评论内容');
+            $table->tinyInteger('level')->default(0)->comment('评论级别');
+            $table->string('content', 256)->nullable()->comment('评论内容');
         });
     }
 

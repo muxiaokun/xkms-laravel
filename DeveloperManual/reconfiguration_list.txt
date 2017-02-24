@@ -1,8 +1,9 @@
 1.多主题模板的前端实现
 2.权限检测需要重构不可以用die
 3.登陆时密码错误 出现系统错误
+4.验证码不可以同时调用两个以上
 
-69/119
+41/77/118
 
 Backend
 OK 系统管理系统配置网站配置Admin::Index::websiteSet
@@ -62,40 +63,40 @@ OK 内容管理导航编辑导航Admin::Navigation::edit
 OK 扩展管理微信微信管理Admin::Wechat::index
 OK 扩展管理微信配置微信Admin::Wechat::add
 OK 扩展管理微信删除微信绑定Admin::Wechat::del
-扩展管理微信推送消息Admin::Wechat::edit
+UNSTART 扩展管理微信推送消息Admin::Wechat::edit
 OK 扩展管理留言板留言板管理Admin::MessageBoard::index
 OK 扩展管理留言板添加留言板Admin::MessageBoard::add
 OK 扩展管理留言板删除留言板Admin::MessageBoard::del
 OK 扩展管理留言板编辑留言板Admin::MessageBoard::edit
-扩展管理留言板留言管理Admin::MessageBoardLog::index
-扩展管理留言板删除留言Admin::MessageBoardLog::del
-扩展管理留言板审核回复Admin::MessageBoardLog::edit
+UNSTART 扩展管理留言板留言管理Admin::MessageBoardLog::index
+UNSTART 扩展管理留言板删除留言Admin::MessageBoardLog::del
+UNSTART 扩展管理留言板审核回复Admin::MessageBoardLog::edit
 OK 扩展管理评论评论管理Admin::Comment::index
 OK 扩展管理评论审核评论Admin::Comment::add
 OK 扩展管理评论删除评论Admin::Comment::del
 OK 扩展管理评论回复评论Admin::Comment::edit
-扩展管理招聘招聘管理Admin::Recruit::index
-扩展管理招聘新增招聘Admin::Recruit::add
-扩展管理招聘删除招聘Admin::Recruit::del
-扩展管理招聘编辑招聘Admin::Recruit::edit
-扩展管理招聘应聘记录Admin::RecruitLog::index
-扩展管理招聘删除招聘Admin::RecruitLog::del
-扩展管理站内信站内信管理Admin::Message::index
-扩展管理站内信发送站内信Admin::Message::add
-扩展管理站内信删除站内信Admin::Message::del
-扩展管理考核考核管理Admin::Assess::index
-扩展管理考核新增考核Admin::Assess::add
-扩展管理考核删除考核Admin::Assess::del
-扩展管理考核编辑考核Admin::Assess::edit
-扩展管理考核统计记录Admin::AssessLog::edit
-扩展管理考核删除记录Admin::AssessLog::del
-扩展管理问卷问卷管理Admin::Quests::index
-扩展管理问卷新增问卷Admin::Quests::add
-扩展管理问卷删除问卷Admin::Quests::del
-扩展管理问卷编辑问卷Admin::Quests::edit
-扩展管理问卷答案管理Admin::QuestsAnswer::index
-扩展管理问卷清空答案Admin::QuestsAnswer::del
-扩展管理问卷统计问卷Admin::QuestsAnswer::edit
+OK 扩展管理招聘招聘管理Admin::Recruit::index
+OK 扩展管理招聘新增招聘Admin::Recruit::add
+OK 扩展管理招聘删除招聘Admin::Recruit::del
+OK 扩展管理招聘编辑招聘Admin::Recruit::edit
+UNSTART 扩展管理招聘应聘记录Admin::RecruitLog::index
+UNSTART 扩展管理招聘删除招聘Admin::RecruitLog::del
+UNSTART 扩展管理站内信站内信管理Admin::Message::index
+UNSTART 扩展管理站内信发送站内信Admin::Message::add
+UNSTART 扩展管理站内信删除站内信Admin::Message::del
+UNSTART 扩展管理考核考核管理Admin::Assess::index
+UNSTART 扩展管理考核新增考核Admin::Assess::add
+UNSTART 扩展管理考核删除考核Admin::Assess::del
+UNSTART 扩展管理考核编辑考核Admin::Assess::edit
+UNSTART 扩展管理考核统计记录Admin::AssessLog::edit
+UNSTART 扩展管理考核删除记录Admin::AssessLog::del
+UNSTART 扩展管理问卷问卷管理Admin::Quests::index
+UNSTART 扩展管理问卷新增问卷Admin::Quests::add
+UNSTART 扩展管理问卷删除问卷Admin::Quests::del
+UNSTART 扩展管理问卷编辑问卷Admin::Quests::edit
+UNSTART 扩展管理问卷答案管理Admin::QuestsAnswer::index
+UNSTART 扩展管理问卷清空答案Admin::QuestsAnswer::del
+UNSTART 扩展管理问卷统计问卷Admin::QuestsAnswer::edit
 OK 扩展管理地域地域管理Admin::Region::index
 OK 扩展管理地域新增地域Admin::Region::add
 OK 扩展管理地域删除地域Admin::Region::del
@@ -103,27 +104,27 @@ OK 扩展管理地域编辑地域Admin::Region::edit
 
 
 Frontend
-Home::Article::article
-Home::Article::category
-Home::Article::channel
-Home::Article::search
-Home::Comment
-Home::Itlink
-成员管理会员管理会员中心Home::Member::index
-成员管理会员管理会员登录Home::Member::login
-成员管理会员管理会员注册Home::Member::register
-成员管理会员管理会员登出Home::Member::logout
-扩展管理留言板留言板列表Home::MessageBoard::index
-扩展管理留言板留言板添加Home::MessageBoard::add
-扩展管理招聘招聘列表Home::Recruit::index
-扩展管理招聘应聘职位Home::Recruit::add
-扩展管理招聘查看招聘Home::Recruit::edit
-扩展管理站内信站内信管理Home::Message::index
-扩展管理站内信发送站内信Home::Message::add
-扩展管理站内信删除站内信Home::Message::del
-扩展管理考核考核管理Home::Assess::index
-扩展管理考核考核评分Home::Assess::add
-扩展管理问卷问卷管理Home::Quests::index
-扩展管理问卷填写问卷Home::Quests::add
+UNSTART Home::Article::article
+UNSTART Home::Article::category
+UNSTART Home::Article::channel
+UNSTART Home::Article::search
+UNSTART Home::Comment
+UNSTART Home::Itlink
+OK 成员管理会员管理会员中心Home::Member::index
+OK 成员管理会员管理会员登录Home::Member::login
+OK 成员管理会员管理会员注册Home::Member::register
+OK 成员管理会员管理会员登出Home::Member::logout
+UNSTART 扩展管理留言板留言板列表Home::MessageBoard::index
+UNSTART 扩展管理留言板留言板添加Home::MessageBoard::add
+UNSTART 扩展管理招聘招聘列表Home::Recruit::index
+UNSTART 扩展管理招聘应聘职位Home::Recruit::add
+UNSTART 扩展管理招聘查看招聘Home::Recruit::edit
+UNSTART 扩展管理站内信站内信管理Home::Message::index
+UNSTART 扩展管理站内信发送站内信Home::Message::add
+UNSTART 扩展管理站内信删除站内信Home::Message::del
+UNSTART 扩展管理考核考核管理Home::Assess::index
+UNSTART 扩展管理考核考核评分Home::Assess::add
+UNSTART 扩展管理问卷问卷管理Home::Quests::index
+UNSTART 扩展管理问卷填写问卷Home::Quests::add
 ok Home::Wechat::index
-Home::Wechat::member_bind
+UNSTART Home::Wechat::member_bind

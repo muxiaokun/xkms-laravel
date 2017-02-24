@@ -9,7 +9,7 @@
                     <tr>
                         <th><input type="checkbox" onClick="M_allselect_par(this,'table')"/>&nbsp;@lang('common.id')
                         </th>
-                        <th>@lang('recruit.recruit')@lang('common.name')</th>
+                        <th>@lang('recruit.recruit')@lang('common.title')</th>
                         <th>@lang('common.yes')@lang('common.no')@lang('common.enable')</th>
                         <th>@lang('recruit.re_recruit')@lang('common.number')</th>
                         <th>@lang('common.start')@lang('common.time')</th>
@@ -46,7 +46,7 @@
                                 @if ($batch_handle['log_index'])
                                     <a class="btn btn-xs btn-primary"
                                        href="{{ route('Admin::RecruitLog::index',array('r_id'=>$recruit['id'])) }}">
-                                        @lang('common.look')@lang('common.re_recruit')
+                                        @lang('common.look')@lang('recruit.re_recruit')
                                     </a>
                                 @endif
                                 @if ($batch_handle['log_index'] AND $batch_handle['edit'])&nbsp;|&nbsp;@endif

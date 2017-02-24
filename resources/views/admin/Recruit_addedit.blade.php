@@ -10,28 +10,17 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.recruit')@lang('common.name')</label>
+                                <label class="col-sm-4 control-label">@lang('recruit.recruit')@lang('common.title')</label>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control"
-                                           placeholder="@lang('common.recruit')@lang('common.name')" name="title"
+                                           placeholder="@lang('recruit.recruit')@lang('common.title')" name="title"
                                            value="{{ $edit_info['title'] }}"/>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.current')@lang('common.recruit')@lang('common.number')</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" name="current_portion"
-                                           value="{{ $edit_info['current_portion'] }}" onKeyup="M_in_int(this);"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.max')@lang('common.recruit')@lang('common.number')</label>
+                                <label class="col-sm-4 control-label">@lang('common.max')@lang('recruit.recruit')@lang('common.number')</label>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control" name="max_portion"
                                            value="{{ $edit_info['max_portion'] }}" onKeyup="M_in_int(this);"/>
@@ -95,7 +84,7 @@
                         <script type="text/javascript">
                             $(function () {
                                 var config = {
-                                    @if ($edit_info['ext_info'])'def_data':{{ $edit_info['ext_info']|json_encode }},
+                                    @if ($edit_info['ext_info'])'def_data':{!! json_encode($edit_info['ext_info']) !!},
                                     @endif
                                     'run_type': 'add_edit',
                                     'out_obj': $('#ext_info_list'),
@@ -107,7 +96,7 @@
                         </script>
                     </div>
                     <div class="col-sm-12">
-                        <label class="col-sm-12">@lang('common.recruit')@lang('common.content')</label>
+                        <label class="col-sm-12">@lang('recruit.recruit')@lang('common.content')</label>
                         <textarea rows="15" class="col-sm-12" name="explains">{{ $edit_info['explains'] }}</textarea>
                     </div>
                     <div class="cb"></div>

@@ -22,7 +22,7 @@ class CreateRecruitsTable extends Migration
             $table->string('title', 64)->comment('招聘名称');
             $table->mediumText('explains')->nullable()->comment('招聘说明');
             $table->tinyInteger('is_enable')->comment('是否启用');
-            $table->integer('current_portion')->unsigned()->comment('当前简历数');
+            $table->integer('current_portion')->default(0)->unsigned()->comment('当前简历数');
             $table->integer('max_portion')->unsigned()->comment('最大简历数');
             $table->timestamp('start_time')->nullable()->comment('开始时间');
             $table->timestamp('end_time')->nullable()->comment('结束时间');

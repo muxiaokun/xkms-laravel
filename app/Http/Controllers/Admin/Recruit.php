@@ -5,27 +5,36 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Backend;
 use App\Model;
+use Carbon\Carbon;
 
 class Recruit extends Backend
 {
     //列表
     public function index()
     {
-        //建立where
-        $where      = [];
-        $whereValue = request('name');
-        $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
-        $whereValue = mMktimeRange('start_time');
-        $whereValue && $where[] = ['start_time', $whereValue];
-        $whereValue = mMktimeRange('end_time');
-        $whereValue && $where[] = ['end_time', $whereValue];
         //初始化翻页 和 列表数据
-        $recruitList = Model\Recruit::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
+        $recruitList            = Model\Recruit::where(function ($query) {
+            $name = request('title');
+            if ($name) {
+                $query->where('title', 'like', '%' . $name . '%');
+            }
+
+            $start_time = mMktimeRange('start_time');
+            if ($start_time) {
+                $query->timeWhere('start_time', $start_time);
+            }
+
+            $end_time = mMktimeRange('end_time');
+            if ($end_time) {
+                $query->timeWhere('end_time', $end_time);
+            }
+
+        })->paginate(config('system.sys_max_row'))->appends(request()->all());
         $assign['recruit_list'] = $recruitList;
 
         //初始化where_info
         $whereInfo               = [];
-        $whereInfo['name'] = ['type' => 'input', 'name' => trans('recruit.recruit') . trans('common.name')];
+        $whereInfo['title']     = ['type' => 'input', 'name' => trans('recruit.recruit') . trans('common.title')];
         $whereInfo['start_time'] = ['type' => 'time', 'name' => trans('common.start') . trans('common.time')];
         $whereInfo['end_time']   = ['type' => 'time', 'name' => trans('common.end') . trans('common.time')];
         $assign['where_info']    = $whereInfo;
@@ -53,15 +62,15 @@ class Recruit extends Backend
 
             $resultAdd = Model\Recruit::create($data);
             if ($resultAdd) {
-                return $this->success(trans('common.recruit') . trans('common.add') . trans('common.success'),
+                return $this->success(trans('recruit.recruit') . trans('common.add') . trans('common.success'),
                     route('Admin::Recruit::index'));
             } else {
-                return $this->error(trans('common.recruit') . trans('common.add') . trans('common.error'),
+                return $this->error(trans('recruit.recruit') . trans('common.add') . trans('common.error'),
                     route('Admin::Recruit::add'));
             }
         }
         $assign['edit_info'] = Model\Recruit::columnEmptyData();
-        $assign['title']     = trans('common.add') . trans('common.recruit');
+        $assign['title'] = trans('common.add') . trans('recruit.recruit');
         return view('admin.Recruit_addedit', $assign);
     }
 
@@ -85,12 +94,12 @@ class Recruit extends Backend
                 return $resultEdit;
             });
             if ($resultEdit) {
-                return $this->success(trans('common.recruit') . trans('common.edit') . trans('common.success'),
+                return $this->success(trans('recruit.recruit') . trans('common.edit') . trans('common.success'),
                     route('Admin::Recruit::index'));
             } else {
                 $errorGoLink = (is_array($id)) ? route('Admin::Recruit::index') : route('Admin::Recruit::edit',
                     ['id' => $id]);
-                return $this->error(trans('common.recruit') . trans('common.edit') . trans('common.error'),
+                return $this->error(trans('recruit.recruit') . trans('common.edit') . trans('common.error'),
                     $errorGoLink);
             }
         }
@@ -98,7 +107,7 @@ class Recruit extends Backend
         $editInfo            = Model\Recruit::colWhere($id)->first()->toArray();
         $assign['edit_info'] = $editInfo;
 
-        $assign['title'] = trans('common.edit') . trans('common.recruit');
+        $assign['title'] = trans('common.edit') . trans('recruit.recruit');
         return view('admin.Recruit_addedit', $assign);
     }
 
@@ -113,10 +122,10 @@ class Recruit extends Backend
         $resultDel = Model\Recruit::destroy($id);
         if ($resultDel) {
             Model\RecruitLog::colWhere($id, 'r_id')->delete();
-            return $this->success(trans('common.recruit') . trans('common.del') . trans('common.success'),
+            return $this->success(trans('recruit.recruit') . trans('common.del') . trans('common.success'),
                 route('Admin::Recruit::index'));
         } else {
-            return $this->error(trans('common.recruit') . trans('common.del') . trans('common.error'),
+            return $this->error(trans('recruit.recruit') . trans('common.del') . trans('common.error'),
                 route('Admin::Recruit::index'));
         }
     }
@@ -130,8 +139,8 @@ class Recruit extends Backend
         $isEnable       = request('is_enable');
         $currentPortion = request('current_portion');
         $maxPortion     = request('max_portion');
-        $startTime      = mMktime(request('start_time'), true);
-        $endTime        = mMktime(request('end_time'), true);
+        $startTime = request('start_time');
+        $endTime = request('end_time');
         $extInfo        = request('ext_info');
 
         $data = [];
@@ -139,25 +148,25 @@ class Recruit extends Backend
             $data['title'] = $title;
         }
         if ('add' == $type || null !== $explains) {
-            $data['explains'] = mParseContent($explains);
+            $data['explains'] = $explains;
         }
         if ('add' == $type || null !== $isEnable) {
             $data['is_enable'] = $isEnable;
         }
         if ('add' == $type || null !== $currentPortion) {
-            $data['current_portion'] = $currentPortion;
+            $data['current_portion'] = $currentPortion ? $currentPortion : 0;
         }
         if ('add' == $type || null !== $maxPortion) {
-            $data['max_portion'] = $maxPortion;
+            $data['max_portion'] = $maxPortion ? $maxPortion : 0;
         }
         if ('add' == $type || null !== $startTime) {
-            $data['start_time'] = $startTime;
+            $data['start_time'] = $startTime ? $startTime : Carbon::now();
         }
         if ('add' == $type || null !== $endTime) {
-            $data['end_time'] = $endTime;
+            $data['end_time'] = $endTime ? $endTime : Carbon::now();
         }
         if ('add' == $type || null !== $extInfo) {
-            $data['ext_info'] = $extInfo;
+            $data['ext_info'] = $extInfo ? $extInfo : [];
         }
 
         return $data;

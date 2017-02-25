@@ -57,7 +57,9 @@
         </a>
     </div>
     {{-- 导航示例 开始 --}}
-    <M:D item="nav_menu" name="Navigation" fn="m_find_data" fn_arg="nav_menu"/>
+    @php
+        $nav_menu = App\Model\Navigation::findData('test');
+    @endphp
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -68,23 +70,23 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @if(isset($nav_menu))
+                @if(isset($nav_menu[0]))
                     <a class="navbar-brand"
-                       href="{{ $nav_menu[0]['nav_url'] }}"><b>{{ $nav_menu[0]['nav_text'] }}</b></a>
+                       href="{{ $nav_menu[0]['nav_link'] }}"><b>{{ $nav_menu[0]['nav_text'] }}</b></a>
                 @endif
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     @if(isset($nav_menu))
-                        @foreach ($nav_menu as $data)
+                        @foreach ($nav_menu as $key => $data)
                             @if (0 < $key)
                                 <li class="@if ($data['nav_active'])active @endif">
                                     @if ($data['nav_child'])
-                                        <a data-toggle=" dropdown" href="#"><b>{{ $data['nav_text'] }}</b><span
+                                        <a data-toggle="dropdown" href="#"><b>{{ $data['nav_text'] }}</b><span
                                                     class="caret"></span></a>
                                         <ul class="dropdown-menu" role="menu">
                                             @foreach ($data['nav_child'] as $child_data)
-                                                <li><a href="{{ $child_data['nav_url'] }}"
+                                                <li><a href="{{ $child_data['nav_link'] }}"
                                                        target="{{ $child_data['nav_target'] }}"><b>{{ $child_data['nav_text'] }}</b></a>
                                                 </li>
                                             @endforeach

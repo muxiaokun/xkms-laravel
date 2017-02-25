@@ -67,7 +67,7 @@
                                 <th class="col-sm-1">@lang('common.target')@lang('common.type')</th>
                                 <th class="col-sm-1">URL</th>
                                 <th class="col-sm-7">
-                                    @lang('common.insite')@lang('common.colon')M/C/A?arg1=argv1,arg2=argv2<br/>
+                                    @lang('common.insite')@lang('common.colon')RouteName?arg1=argv1,arg2=argv2<br/>
                                     @lang('common.outsite')@lang('common.colon')http:// | https:// | ftp://
                                 </th>
                             </tr>

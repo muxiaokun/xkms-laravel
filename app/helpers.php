@@ -329,23 +329,26 @@ function mContent2ckplayer($content, $image, $customId = false, $jop = false)
 }
 
 // 自定义将字符串转换成系统连接
-// 1 M/C/A?ars1=val1&ars2=val2
+// 1 RouteName?ars1=val1&ars2=val2
 // 2 \w*://
 function mStr2url($url)
 {
     if ($url && preg_match('/^(\w*?:\/\/|javascript|#).*/', $url)) {
         return $url;
-    } elseif ($url && preg_match('/^[\w\/]*?\??[\w=,]*?$/', $url)) {
-        $varUrl         = explode('?', $url);
-        $varUrlArray    = [];
-        $varUrlArrayStr = explode(',', $varUrl[1]);
-        foreach ($varUrlArrayStr as $varUrlValue) {
-            list($key, $value) = explode('=', trim($varUrlValue));
-            $varUrlArray[$key] = $value;
+    } elseif ($url && preg_match('/^[\w:]*?\??[\w=,]*?$/', $url)) {
+        $varUrl      = explode('?', $url);
+        $varUrlArray = [];
+        if (isset($varUrl[1])) {
+            $varUrlArrayStr = explode(',', $varUrl[1]);
+            foreach ($varUrlArrayStr as $varUrlValue) {
+                list($key, $value) = explode('=', trim($varUrlValue));
+                $varUrlArray[$key] = $value;
+            }
         }
-        return mU(trim($varUrl[0]), $varUrlArray);
+        return route(trim($varUrl[0]), $varUrlArray);
     } else {
-        return ($url) ? '#' . $url : mU();
+        $baseUrl = request()->getBaseUrl() . '/';
+        return ($url) ? '#' . $url : $baseUrl;
     }
 }
 
@@ -604,9 +607,9 @@ function mQrcode($data, $level = 'L', $size = 10, $margin = 0)
     if (!$data) {
         return mExists();
     }
-    $dataMd5 = 'QRcode_' . md5($data . $level . $size . $margin);
+    $dataMd5    = 'QRcode_' . md5($data . $level . $size . $margin);
     $filesystem = new \Illuminate\Filesystem\Filesystem();
-    $qrFileDir = storage_path('app/public/qrcode/');
+    $qrFileDir  = storage_path('app/public/qrcode/');
     $qrFilePath = $qrFileDir . $dataMd5;
     if (!$filesystem->isDirectory($qrFileDir)) {
         $filesystem->makeDirectory($qrFileDir);

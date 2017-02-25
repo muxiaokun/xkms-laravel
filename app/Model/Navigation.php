@@ -9,29 +9,31 @@ class Navigation extends Common
         'ext_info' => 'array',
     ];
 
-    public function scopeMFind_data($query, $shortName)
+    public function scopeFindData($query, $shortName)
     {
         if (!$shortName) {
             return [];
         }
 
         $navigation = $query->where(['is_enable' => 1, 'short_name' => $shortName])->first();
-        $query->mDecodeData($navigation);
-        $navigationData = $query->_decode_navigation_data($navigation['ext_info']);
-        return ($navigationData) ? $navigationData : [];
+        $currentFullUrl = request()->fullUrl();
+        $navigationData = [];
+        if (is_array($navigation['ext_info'])) {
+            $navigationData = (new static)->_make_navigation($navigation['ext_info'], $currentFullUrl);
+        }
+        return collect($navigationData);
     }
 
-    private function _decode_navigation_data($query, $navigationData)
+    private function _make_navigation($navigationData, $currentFullUrl)
     {
-        $navigationData = json_decode($navigationData, true);
         foreach ($navigationData as &$nav) {
             $nav['nav_active'] = false;
-            $nav['nav_link']   = M_str2url($nav['nav_link']);
-            if (false !== stripos($nav['nav_link'], __SELF__)) {
+            $nav['nav_link'] = mStr2url($nav['nav_link']);
+            if (false !== stripos($nav['nav_link'], $currentFullUrl)) {
                 $nav['nav_active'] = true;
             }
             if ($nav && $nav['nav_child']) {
-                $nav['nav_child'] = $query->_decode_navigation_data($nav['nav_child']);
+                $nav['nav_child'] = $this->_make_navigation($nav['nav_child'], $currentFullUrl);
                 foreach ($nav['nav_child'] as $navChild) {
                     if ($navChild['nav_active']) {
                         $nav['nav_active'] = true;

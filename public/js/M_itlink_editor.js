@@ -101,7 +101,7 @@ M_itlink_editor.prototype =
                         '</div>',
                     '</div>',
                     '<p class="help-block col-sm-offset-2">',
-        lang.common.insite + lang.common.colon + 'M/C/A?arg1=argv1,arg2=argv2',
+        lang.common.insite + lang.common.colon + 'RouteName?arg1=argv1,arg2=argv2',
         lang.common.outsite + lang.common.colon + 'http:// | https:// | ftp://',
                      '</p>',
                 '</td>',

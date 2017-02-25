@@ -33,7 +33,7 @@ class Article extends Backend
 
             $cate_id = request('cate_id');
             if ($cate_id) {
-                $query->whereIn('cate_id', $this->findCateChildIds($cate_id));
+                $query->whereIn('cate_id', Model\ArticleCategory::mFindCateChildIds($cate_id)->toArray());
             }
 
             $channel_id = request('channel_id');
@@ -191,7 +191,7 @@ class Article extends Backend
             $accessGroupId  = ['value' => $accessGroupId, 'html' => $adminGroupName];
         }
 
-        $extendTpl                 = $this->findTopCategory($editInfo['cate_id'], 'extend');
+        $extendTpl = $this->findTopCategory($editInfo['cate_id'], 'extend');
         $valExtend = [];
         foreach ($extendTpl as $template) {
             $valExtend[$template] = (isset($editInfo['extend'][$template])) ? $editInfo['extend'][$template] : '';
@@ -308,8 +308,8 @@ class Article extends Backend
         $cateId        = request('cate_id');
         $channelId     = request('channel_id');
         $thumb         = request('thumb');
-        $createdAt = mMktime(request('created_at'), true);
-        $updatedAt = mMktime(request('updated_at'), true);
+        $createdAt = request('created_at');
+        $updatedAt = request('updated_at');
         $sort          = request('sort');
         $isStick       = request('is_stick');
         $isAudit       = request('is_audit');
@@ -442,14 +442,4 @@ class Article extends Backend
         return $categoryInfo[$column] ? $categoryInfo[$column] : [];
     }
 
-    private function findCateChildIds($id)
-    {
-        $childIds = collect();
-        Model\ArticleCategory::colWhere($id, 'parent_id')->get()->each(function ($item, $key) use ($childIds) {
-            $childIds->merge($this->findCateChildIds($item->id));
-            $childIds->push($item->id);
-        });
-        $childIds->push($id);
-        return $childIds->toArray();
-    }
 }

@@ -78,4 +78,15 @@ class ArticleCategory extends Common
         $mFindAllow->push(0);
         return $mFindAllow;
     }
+
+    public function scopeMFindCateChildIds($query, $id)
+    {
+        $childIds = collect();
+        $query->colWhere($id, 'parent_id')->get()->each(function ($item, $key) use ($query, $childIds) {
+            $childIds->merge(ArticleCategory::scopeMFindCateChildIds($query, $item->id));
+            $childIds->push($item->id);
+        });
+        $childIds->push($id);
+        return $childIds;
+    }
 }

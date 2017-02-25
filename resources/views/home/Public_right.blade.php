@@ -3,12 +3,18 @@
 </div>
 <div class="col-sm-12 m_select">
     <ul class="list-unstyled lh30">
-        <M:D name="Article" fn="m_select" fn_arg="cate_id == 2|is_audit > 0" limit="10" item="news_article"/>
+        @php
+            $ids = App\Model\ArticleCategory::mFindCateChildIds(2)->toArray();
+            $news_article = App\Model\Article::colWhere($ids,'cate_id')
+            ->take(10)
+            ->where('is_audit','>',0)
+            ->get();
+        @endphp
         @if (isset($news_article))
             @foreach ($news_article as $data)
             <li class="title">
                 <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
-                    {{ mSubstr(mDate($data['created_at'],"m-d")) }}&nbsp;&nbsp;{{ mSubstr($data['title'],15) }}
+                    {{ $data['created_at'] }}&nbsp;&nbsp;{{ mSubstr($data['title'],15) }}
                 </a>
             </li>
         @endforeach
@@ -20,12 +26,18 @@
 </div>
 <div class="col-sm-12 m_select">
     <ul class="list-unstyled lh30">
-        <M:D name="Article" fn="m_select" fn_arg="cate_id == 4|is_audit > 0" limit="10" item="manual_article"/>
+        @php
+            $ids = App\Model\ArticleCategory::mFindCateChildIds(4,'cate_id')->toArray();
+            $manual_article = App\Model\Article::colWhere($ids)
+            ->take(10)
+            ->where('is_audit','>',0)
+            ->get();
+        @endphp
         @if (isset($manual_article))
         @foreach ($manual_article as $data)
             <li class="title">
                 <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
-                    {{ mSubstr(mDate($data['created_at'],"m-d")) }}&nbsp;&nbsp;{{ mSubstr($data['title'],15) }}
+                    {{ mDate($data['created_at'],"m-d") }}&nbsp;&nbsp;{{ mSubstr($data['title'],15) }}
                 </a>
             </li>
         @endforeach

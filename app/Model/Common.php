@@ -19,6 +19,7 @@ class Common extends Model
             $query->orderBy($orderBy, $orderDirection);
         }
 
+        return $query;
     }
 
     /**
@@ -33,6 +34,7 @@ class Common extends Model
         foreach ($columns as $column) {
             $empty_columns[$column] = '';
         }
+
         return $empty_columns;
     }
 
@@ -50,6 +52,7 @@ class Common extends Model
             $query->where($column, $id);
         }
 
+        return $query;
     }
 
     public function scopeTimeWhere($query, $column, $timeRange)
@@ -62,6 +65,8 @@ class Common extends Model
         if (isset($timeRange[$endInputName])) {
             $query->where($column, '<=', $timeRange[$endInputName]);
         }
+
+        return $query;
     }
 
     /**
@@ -77,6 +82,8 @@ class Common extends Model
                 $query->orWhere($column, 'like', '%|' . $id . '|%');
             }
         });
+
+        return $query;
     }
 
     /**
@@ -94,8 +101,10 @@ class Common extends Model
         if ($useKey) {
             $useKeyCollect = collect();
             $collect->each(function ($item, $key) use ($useKeyCollect) {
-                list($trueKey, $trueItem) = explode(':', $item);
-                $useKeyCollect->put($trueKey, $trueItem);
+                if ($item) {
+                    list($trueKey, $trueItem) = explode(':', $item);
+                    $useKeyCollect->put($trueKey, $trueItem);
+                }
             });
             return $useKeyCollect;
         }

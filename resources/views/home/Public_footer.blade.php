@@ -1,7 +1,9 @@
 <section class="container">
     <div class="row">
         {{-- 友情链接示例 开始 --}}
-        <M:D item="flinks" name="Itlink" fn="m_find_data" fn_arg="flinks"/>
+        @php
+            $flinks = App\Model\Itlink::mFindData('test');
+        @endphp
         <div class="col-sm-12 mb20">
             <div class="list_title">
                 友情链接<span>Link</span>
@@ -9,9 +11,9 @@
             <div class="list_link">
                 @if(isset($flinks))
                 @foreach ($flinks as $data)
-                    <a class="label label-default list_link" href="{{ $data['link'] }}"
-                       target="{{ $data['link_type'] }}">
-                        {{ $data['link_name'] }}
+                        <a class="label label-default list_link" href="{{ $data['itl_link'] }}"
+                           target="{{ $data['itl_target'] }}">
+                            {{ $data['itl_text'] }}
                     </a>
                 @endforeach
                 @endif

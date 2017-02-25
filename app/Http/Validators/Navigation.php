@@ -17,7 +17,11 @@ class Navigation
     {
         $where   = [];
         $where[] = ['short_name', $value];
-        $exist   = Model\Itlink::where($where)->first();
+        $data = $validator->getData();
+        if (isset($data['id'])) {
+            $where[] = ['id', '!=', $data['id']];
+        }
+        $exist = Model\Navigation::where($where)->first();
         return $exist ? false : true;
     }
 }

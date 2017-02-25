@@ -2,6 +2,8 @@
 
 namespace App\Model;
 
+use Carbon\Carbon;
+
 
 class Itlink extends Common
 {
@@ -49,37 +51,49 @@ class Itlink extends Common
     }
 
 
-    public function scopeMFind_data($query, $shortName)
+    public function scopeMFindData($query, $shortName)
     {
         if (!$shortName) {
             return [];
         }
 
-        //显示限制 最大显示次数
-        $whereString = '(max_show_num = 0 OR show_num < max_show_num)';
-        //显示限制 最大点击次数
-        $whereString .= ' AND (max_hit_num = 0 OR hit_num < max_hit_num)';
-        //显示限制 时间范围
-        $currentTime = Carbon::now();
-        $whereString .= ' AND ((start_time = 0 AND end_time = 0) OR (start_time < ' . $currentTime . ' AND ' . $currentTime . ' < end_time))';
-        $where      = [
-            'short_name' => $shortName,
-            'is_enable'  => 1,
-            '_string'    => $whereString,
-        ];
-        $itlinkInfo = $query->where($where)->first();
-        $query->mDecodeData($itlinkInfo);
-        $links = $itlinkInfo['ext_info'];
-        foreach ($links as &$link) {
-            if (0 < $itlinkInfo['max_hit_num']) {
-                $link['itl_link'] = M_U('itlink',
-                    ['id' => $itlinkInfo['id'], 'link' => base64_encode($link['itl_link'])]);
-            } else {
-                $link['itl_link'] = M_str2url($link['itl_link']);
+        $query->where(function ($query) {
+            $query->orWhere('max_show_num', '=', 0);
+            $query->orWhereColumn('show_num', '<', 'max_show_num');
+        });
+
+        $query->where(function ($query) {
+            $query->orWhere('max_hit_num', '=', 0);
+            $query->orWhereColumn('hit_num', '<', 'max_hit_num');
+        });
+
+        $query->where(function ($query) {
+            $query->orWhere(function ($query) {
+                $query->whereNull('start_time');
+                $query->whereNull('end_time');
+            });
+            $query->orWhere(function ($query) {
+                $currentTime = Carbon::now();
+                $query->where('start_time', '<', $currentTime);
+                $query->where('end_time', '>', $currentTime);
+            });
+        });
+
+        $itlinkInfo = $query->where(['is_enable' => 1, 'short_name' => $shortName])->first();
+        $links      = [];
+        if (null !== $itlinkInfo && isset($itlinkInfo['ext_info'])) {
+            $links = $itlinkInfo['ext_info'];
+            foreach ($links as &$link) {
+                $link['itl_link'] = mStr2url($link['itl_link']);
+                if (0 < $itlinkInfo['max_hit_num']) {
+                    $link['itl_link'] = route('Home::Itlink::index',
+                        ['id' => $itlinkInfo['id'], 'link' => base64_encode($link['itl_link'])]);
+                }
             }
+            //只有限制了显示次数才进行计数
+            $itlinkInfo['max_show_num'] > 0 && Itlink::colWhere($itlinkInfo['id'])->increment('show_num');
+
         }
-        //只有限制了显示次数才进行计数
-        $itlinkInfo['max_show_num'] > 0 && $query->where(['id' => $itlinkInfo['id']])->setInc('show_num');
-        return is_array($links) ? $links : [];
+        return collect($links);
     }
 }

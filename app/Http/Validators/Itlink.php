@@ -17,6 +17,10 @@ class Itlink
     {
         $where   = [];
         $where[] = ['short_name', $value];
+        $data = $validator->getData();
+        if (isset($data['id'])) {
+            $where[] = ['id', '!=', $data['id']];
+        }
         $exist = Model\Itlink::where($where)->first();
         return $exist ? false : true;
     }

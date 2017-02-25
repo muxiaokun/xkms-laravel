@@ -98,33 +98,11 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.show')@lang('common.number')</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control"
-                                           placeholder="@lang('common.show')@lang('common.number')" name="show_num"
-                                           value="{{ $edit_info['show_num'] }}"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
                                 <label class="col-sm-4 control-label">@lang('common.max')@lang('common.click')@lang('common.number')</label>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control"
                                            placeholder="@lang('common.max')@lang('common.click')@lang('common.number')"
                                            name="max_hit_num" value="{{ $edit_info['max_hit_num'] }}"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.click')@lang('common.number')</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control"
-                                           placeholder="@lang('common.click')@lang('common.number')" name="hit_num"
-                                           value="{{ $edit_info['hit_num'] }}"/>
                                 </div>
                             </div>
                         </div>

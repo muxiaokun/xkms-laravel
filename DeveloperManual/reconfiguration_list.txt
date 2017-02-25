@@ -2,8 +2,9 @@
 2.权限检测需要重构不可以用die
 3.登陆时密码错误 出现系统错误
 4.验证码不可以同时调用两个以上
+5.分类树
 
-89/119
+90/119
 
 Backend
 OK 系统管理系统配置网站配置Admin::Index::websiteSet
@@ -109,7 +110,7 @@ UNSTART Home::Article::category
 UNSTART Home::Article::channel
 UNSTART Home::Article::search
 UNSTART Home::Comment
-UNSTART Home::Itlink
+OK Home::Itlink
 OK 成员管理会员管理会员中心Home::Member::index
 OK 成员管理会员管理会员登录Home::Member::login
 OK 成员管理会员管理会员注册Home::Member::register

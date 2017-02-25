@@ -14,6 +14,8 @@ namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Frontend;
 use App\Model;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class Article extends Frontend
 {
@@ -27,13 +29,13 @@ class Article extends Frontend
                 route('Home::Index::index'));
         }
 
-        $articleInfo = Model\Article::where($this->_get_article_where())->colWhere($id)->first()->toArray();
-        if (!$articleInfo) {
+        $articleInfo = Model\Article::where($this->_get_article_where())->colWhere($id)->first();
+        if (null === $articleInfo) {
             return $this->error(trans('common.article') . trans('common.by') . trans('common.hidden'),
                 route('Home::Index::index'));
         }
 
-        Model\Article::where(['id' => $id])->setInc('hits');
+        Model\Article::where(['id' => $id])->increment('hits');
 
         $categoryInfo = Model\ArticleCategory::colWhere($articleInfo['cate_id'])->first()->toArray();
 
@@ -54,15 +56,16 @@ class Article extends Frontend
         }
 
         //缓存数据
-        $cacheName  = MODULE_NAME . CONTROLLER_NAME . 'article' . $id;
-        $cacheValue = S($cacheName);
+        $cacheName     = 'Home::Article::article' . $id;
+        $cacheValue    = Cache::get($cacheName);
         if ($cacheValue && true !== config('app.debug')) {
             $articleInfo['content'] = $cacheValue;
         } else {
             $articleInfo['content'] = mContent2ckplayer($articleInfo['content'], $articleInfo['thumb']);
-            config('system.sys_article_sync_image') && $articleInfo['content'] = mSyncImg($articleInfo['content']);
+            config('system.sys_article_sync_image') && $articleInfo['content'] = mAsyncImg($articleInfo['content']);
             $cacheValue = $articleInfo['content'];
-            S($cacheName, $cacheValue, config('system.sys_td_cache'));
+            $expiresAt = Carbon::now()->addSecond(config('system.sys_td_cache'));
+            Cache::put($cacheName, $cacheValue, $expiresAt);
         }
 
         $assign['article_info']      = $articleInfo;
@@ -71,13 +74,13 @@ class Article extends Frontend
         $assign['title']             = $articleInfo['title'];
         $assign['category_position'] = $this->_get_category_position($articleInfo['cate_id']);
         $assign['article_position']  = $this->_get_article_position($articleInfo['cate_id']);
-        $pnWhere = [
+        $pnWhere       = [
             'cate_id'    => $articleInfo['cate_id'],
             'channel_id' => $articleInfo['channel_id'],
         ];
         $assign['article_pn']        = $this->_get_article_pn($articleInfo['id'], $pnWhere);
         $template                    = $this->_get_template($articleInfo['cate_id'], $channelId);
-        $this->display($template['article_template']);
+        return view($template['article_template'], $assign);
     }
 
     // 显示分类的 独立页面内容、文章列表、子级分类列表
@@ -115,21 +118,22 @@ class Article extends Frontend
             $template = $template['template'];
             //如果分类是单页面
             //缓存数据
-            $cacheName  = MODULE_NAME . CONTROLLER_NAME . 'category' . $cateId;
-            $cacheValue = S($cacheName);
+            $cacheName     = 'Home::Article::category' . $cateId;
+            $cacheValue    = Cache::get($cacheName);
             if ($cacheValue && true !== config('app.debug')) {
                 $categoryInfo['content'] = $cacheValue;
             } else {
                 $categoryInfo['content'] = mContent2ckplayer($categoryInfo['content'], $categoryInfo['thumb']);
                 config('system.sys_article_sync_image') && $categoryInfo['content'] = mSyncImg($categoryInfo['content']);
                 $cacheValue = $categoryInfo['content'];
-                S($cacheName, $cacheValue, config('system.sys_td_cache'));
+                $expiresAt = Carbon::now()->addSecond(config('system.sys_td_cache'));
+                Cache::put($cacheName, $cacheValue, $expiresAt);
             }
         } else {
             //如果分类是列表页
             $template = $template['list_template'];
-            $childArr = Model\ArticleCategory::mFind_child_id($cateId);
-            $where                  = array_merge($this->_get_article_where(), [
+            $childArr = Model\ArticleCategory::mFindCateChildIds($cateId);
+            $where = array_merge($this->_get_article_where(), [
                 'channel_id' => 0,
                 'cate_id'    => ['in', $childArr],
             ]);
@@ -179,7 +183,7 @@ class Article extends Frontend
         $assign['channel_info'] = $channelInfo;
         $assign['title']        = $channelInfo['name'];
         $template               = $this->_get_template(0, $channelId);
-        $this->display($template['channel_template']);
+        return view($template['channel_template'], $assign);
     }
 
     // 搜索文章
@@ -195,7 +199,7 @@ class Article extends Frontend
         $where  = $this->_get_article_where();
         $cateId = request('cate_id');
         if ($cateId) {
-            $where['cate_id'] = ['in', Model\ArticleCategory::mFind_child_id($cateId)];
+            $where['cate_id'] = ['in', Model\ArticleCategory::mFindCateChildIds($cateId)];
             $categoryPosition = $this->_get_category_position($cateId);
             $attributeWhere   = mAttributeWhere($categoryPosition['attribute']);
             $attributeWhere && $where['attribute'] = Model\ArticleCategory::likeWhere('attribute', $attributeWhere);
@@ -239,15 +243,15 @@ class Article extends Frontend
         $assign['request'] = $request;
         $assign['title']   = trans('common.search') . trans('common.article');
         $template          = $this->_get_template(0);
-        $this->display($template['list_template']);
+        return view($template['list_template'], $assign);
     }
 
     // 获得当前文章 分类 频道模板
     private function _get_template($cateId, $channelId = 0)
     {
         //缓存流程 调取模板信息 过多回调
-        $cacheName  = MODULE_NAME . CONTROLLER_NAME . '_get_template' . $channelId . '_' . $cateId;
-        $cacheValue = S($cacheName);
+        $cacheName              = 'Home::Article::_get_template' . $channelId . '_' . $cateId;
+        $cacheValue             = Cache::get($cacheName);
         if ($cacheValue && true !== config('app.debug')) {
             return $cacheValue;
         }
@@ -256,7 +260,7 @@ class Article extends Frontend
         // 如果频道编号存在 则查询频道是否有模板的配置 覆盖一般分类配置
         if ($channelId) {
             $channelInfo        = Model\ArticleChannel::colWhere($channelId)->first()->toArray();
-            $defChannelTemplate = CONTROLLER_NAME . config('TMPL_FILE_DEPR') . 'channel';
+            $defChannelTemplate = 'home.Article_channel';
             $data               = $channelInfo['ext_info'];
             $template           = [
                 's_limit'          => $this->_get_channel_template($cateId, 's_limit', $data),
@@ -277,15 +281,16 @@ class Article extends Frontend
             'article_template'); //文章模板
 
         //返回最终模板文件名 加模板前缀
-        $defTemplate                  = CONTROLLER_NAME . config('TMPL_FILE_DEPR') . 'category';
-        $defListTemplate              = CONTROLLER_NAME . config('TMPL_FILE_DEPR') . 'list_category';
-        $defArticleTemplate           = CONTROLLER_NAME . config('TMPL_FILE_DEPR') . 'article';
+        $defTemplate        = 'home.Article_category';
+        $defListTemplate    = 'home.Article_list_category';
+        $defArticleTemplate = 'home.Article_article';
         $template['template']         = ($template['template']) ? $defTemplate . '_' . $template['template'] : $defTemplate;
         $template['list_template']    = ($template['list_template']) ? $defListTemplate . '_' . $template['list_template'] : $defListTemplate;
         $template['article_template'] = ($template['article_template']) ? $defArticleTemplate . '_' . $template['article_template'] : $defArticleTemplate;
 
         $cacheValue = $template;
-        S($cacheName, $cacheValue, config('system.sys_td_cache'));
+        $expiresAt          = Carbon::now()->addSecond(config('system.sys_td_cache'));
+        Cache::put($cacheName, $cacheValue, $expiresAt);
         return $cacheValue;
     }
 
@@ -320,42 +325,43 @@ class Article extends Frontend
     //获取当前文章分类子类位置
     private function _get_category_position($cateId)
     {
-        $cacheName  = MODULE_NAME . CONTROLLER_NAME . '_get_category_position' . $cateId;
-        $cacheValue = S($cacheName);
+        $cacheName  = 'Home::Article::_get_category_position' . $cateId;
+        $cacheValue = Cache::get($cacheName);
         if ($cacheValue && true !== config('app.debug')) {
             return $cacheValue;
         }
 
-        $topCateId       = Model\ArticleCategory::mFind_top_id($cateId);
+        $topCateId       = Model\ArticleCategory::mFindTopId($cateId);
         $categoryTopInfo = Model\ArticleCategory::colWhere($topCateId)->first()->toArray();
 
         $where        = [
             'parent_id' => $topCateId,
             'if_show'   => 1,
         ];
-        $categoryList = Model\ArticleCategory::where($where)->all();
+        $categoryList    = Model\ArticleCategory::where($where)->get();
 
         $categoryPosition                  = $categoryTopInfo;
         $categoryPosition['category_list'] = $categoryList;
 
         $cacheValue = $categoryPosition;
-        S($cacheName, $cacheValue, config('system.sys_td_cache'));
+        $expiresAt       = Carbon::now()->addSecond(config('system.sys_td_cache'));
+        Cache::put($cacheName, $cacheValue, $expiresAt);
         return $cacheValue;
     }
 
     //获取当前文章分类位置
     private function _get_article_position($cateId, $cacheName = false, $path = [])
     {
-        !$cacheName && $cacheName = MODULE_NAME . CONTROLLER_NAME . '_get_article_position' . $cateId;
-        $cacheValue = S($cacheName);
+        !$cacheName && $cacheName = 'Home::Article::_get_article_position' . $cateId;
+        $cacheValue    = Cache::get($cacheName);
         if ($cacheValue && true !== config('app.debug')) {
             return $cacheValue;
         }
 
         $articleCategoryInfo = Model\ArticleCategory::colWhere($cateId)->first()->toArray();
-        $path[]              = [
+        $path[]        = [
             'name' => $articleCategoryInfo['name'],
-            'link' => mroute('Home::Article::category', ['cate_id' => $articleCategoryInfo['id']]),
+            'link' => route('Home::Article::category', ['cate_id' => $articleCategoryInfo['id']]),
         ];
         if (0 == $articleCategoryInfo['parent_id']) {
             $path[] = [
@@ -365,7 +371,8 @@ class Article extends Frontend
             $path   = array_reverse($path);
 
             $cacheValue = $path;
-            S($cacheName, $cacheValue, config('system.sys_td_cache'));
+            $expiresAt = Carbon::now()->addSecond(config('system.sys_td_cache'));
+            Cache::put($cacheName, $cacheValue, $expiresAt);
             return $cacheValue;
         } else {
             return $this->_get_article_position($articleCategoryInfo['parent_id'], $cacheName, $path);
@@ -378,7 +385,7 @@ class Article extends Frontend
      * @param array  $where 查询列表条件
      * @param string $sort  最后一个排序条件
      */
-    private function _get_article_pn($id, $where = [], $sort = 'sort asc,update_time desc')
+    private function _get_article_pn($id, $where = [], $sort = ['sort' => 'asc', 'updated_at' => 'desc'])
     {
         $limit = config('system.sys_article_pn_limit');
         if (1 > $limit) {
@@ -389,28 +396,30 @@ class Article extends Frontend
             'limit' => $limit,
         ];
         $where     = array_merge($this->_get_article_where(), $where);
-        preg_match('/,?(\w*)\s*(\w*)$/', $sort, $matchs);
-        $mianSort   = $matchs[1];
-        $mianOrder  = $matchs[2];
-        $originSort = str_replace($matchs[0], '', $sort);
-        $originSort .= $originSort ? ',' . $mianSort : $mianSort;
+        $pOrder = $nOrder = $sort;
+        end($sort);
+        $mianSort  = key($sort);
+        $mianOrder = current($sort);
+
         //p = gt asc
         //n = lt desc
-        $pCondition  = ('desc' == $mianOrder) ? 'gt' : 'lt';
-        $nCondition  = ('desc' == $mianOrder) ? 'lt' : 'gt';
+        dump($mianSort);
+        dump($mianOrder);
+        $pCondition = ('desc' == $mianOrder) ? '>' : '<';
+        $nCondition = ('desc' == $mianOrder) ? '<' : '>';
         $pOrder      = ('desc' == $mianOrder) ? $originSort . ' asc' : $originSort . ' desc';
         $nOrder      = ('desc' == $mianOrder) ? $originSort . ' desc' : $originSort . ' asc';
         $articleInfo = Model\Article::colWhere($id)->first()->toArray();
         //上一篇
-        $where[$mianSort] = [$pCondition, $articleInfo[$mianSort]];
-        $articlePn['p']   = Model\Article::where($where)->order($pOrder)->limit($limit)->select();
+        $where          = [[$mianSort, $pCondition, $articleInfo[$mianSort]]];
+        $articlePn['p'] = Model\Article::where($where)->orderBy($pOrder)->limit($limit)->first();
         //下一篇
-        $where[$mianSort] = [$nCondition, $articleInfo[$mianSort]];
-        $articlePn['n']   = Model\Article::where($where)->order($nOrder)->limit($limit)->select();
+        $where          = [[$mianSort, $nCondition, $articleInfo[$mianSort]]];
+        $articlePn['n'] = Model\Article::where($where)->orderBy($nOrder)->limit($limit)->first();
         return $articlePn;
     }
 
-    private function _get_article_where($attribute)
+    private function _get_article_where()
     {
         //默认文章查询条件
         //1.文章是否被隐藏
@@ -418,9 +427,9 @@ class Article extends Frontend
         //3.文章是否被审核
         $currentTime = Carbon::now();
         return [
-            'add_time' => ['lt', $currentTime],
-            'if_show'  => 1,
-            'is_audit' => ['gt', 0],
+            ['created_at', '<', $currentTime],
+            ['if_show', '=', 1],
+            ['is_audit', '>', 0],
         ];
     }
 }

@@ -72,7 +72,7 @@ class Quests extends FrontendMember
             }
             $resultAdd = Model\QuestsAnswer::create($data);
             if ($resultAdd) {
-                Model\Quests::where(['id' => $questsInfo['id']])->setInc('current_portion');
+                Model\Quests::where(['id' => $questsInfo['id']])->increment('current_portion');
                 return $this->success(trans('common.answer') . trans('common.add') . trans('common.success'),
                     route('Home::Quests::index'));
             } else {

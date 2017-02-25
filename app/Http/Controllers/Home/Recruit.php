@@ -66,7 +66,7 @@ class Recruit extends Frontend
             $data['file_path']   = request('file_path');
             $resultAdd           = Model\RecruitLog::create($data);
             if ($resultAdd) {
-                Model\Recruit::where(['id' => $recruitInfo['id']])->setInc('current_portion');
+                Model\Recruit::where(['id' => $recruitInfo['id']])->increment('current_portion');
                 return $this->success(trans('common.resume') . trans('common.submit') . trans('common.success'),
                     route('Home::Recruit::index'));
             } else {

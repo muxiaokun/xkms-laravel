@@ -2,7 +2,8 @@
 <section class="container">
     <div class="row">
         <div class="col-sm-8">
-            @section('content')@endsection
+            @section('content')
+            @show
         </div>
         <div class="col-sm-4">
             @include('home.Public_right')

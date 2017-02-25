@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@if ($title){{ $title }} @lang('common.dash')@endif {{ config('website.site_title') }}</title>
+    <title>@if (isset($title)){{ $title }} @lang('common.dash')@endif {{ config('website.site_title') }}</title>
     <link href="{{ asset('css/bimages/favicon.ico') }}" type="image/ico" rel="shortcut icon"/>
     <meta http-equiv="Content-Type" Content="text/html; charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -33,14 +33,14 @@
         </ol>
         <div role="listbox" class="carousel-inner">
             <div class="item active">
-                <img alt="" src="{{ mExists('Uploads/attached/image/index/banner1.png') }}"/>
+                <img alt="" src="{{ mExists('css/fimages/banner1.png') }}"/>
                 <div class="carousel-caption">
                     <h3></h3>
                     <p></p>
                 </div>
             </div>
             <div class="item">
-                <img alt="" src="{{ mExists('Uploads/attached/image/index/banner2.png') }}"/>
+                <img alt="" src="{{ mExists('css/fimages/banner2.png') }}"/>
                 <div class="carousel-caption">
                     <h3></h3>
                     <p></p>

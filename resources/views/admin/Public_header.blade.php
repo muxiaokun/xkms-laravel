@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@if ($title){{ $title }} @lang('common.dash')@endif @lang('common.app_name')@lang('common.management')@lang('common.backend')</title>
+    <title>@if (isset($title)){{ $title }} @lang('common.dash')@endif @lang('common.app_name')@lang('common.management')@lang('common.backend')</title>
     <link href="{{ asset('css/bimages/favicon.ico') }}" type="image/ico" rel="shortcut icon"/>
     <meta http-equiv="Content-Type" Content="text/html; charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

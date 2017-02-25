@@ -22,7 +22,7 @@
 </section>
 <footer class="container">
     <div class="col-sm-2 lh150 hidden-xs">
-        <img class="w150" src="{{ mExists('Uploads/attached/image/index/sitelogo.png') }}"/>
+        <img class="w150" src="{{ mExists('css/fimages/sitelogo.png') }}"/>
     </div>
     <div class="col-sm-7 pt30 h150 lh30" style="color:#FFF;">
         @if (config('system.site_company')){{ config('website.site_company') }}&nbsp;@endif
@@ -35,7 +35,7 @@
         @lang('common.version')@lang('common.colon') Home Module 1.0.0
     </div>
     <div class="col-sm-3 lh150 hidden-xs">
-        <img class="w120" src="{{ mExists('Uploads/attached/image/index/siteqrcode.png') }}"/>
+        <img class="w120" src="{{ mExists('css/fimages/siteqrcode.png') }}"/>
     </div>
 </footer>
 </body>

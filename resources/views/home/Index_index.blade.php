@@ -1,3 +1,5 @@
+@extends('home.layout')
+@section('body')
 <section class="container">
     <div class="row">
         <div class="col-sm-8">
@@ -8,23 +10,25 @@
                 <div class="list_images">
                     <M:D name="Article" fn="m_select" fn_arg="cate_id between 1|is_audit > 0" limit="8"
                          item="function_article"/>
-                    @foreach ($function_article as $data)
-                        <div class="col-sm-3">
-                            <div class="thumbnail">
-                                <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
-                                    @asyncImg(<img src="{{ mExists($data['thumb']) }}"/>)
-                                </a>
-                                <div class="caption">
+                    @if (isset($function_article))
+                        @foreach ($function_article as $data)
+                            <div class="col-sm-3">
+                                <div class="thumbnail">
                                     <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
-                                        <h4>{{ mSubstr($data['title'],6)}}</h4>
+                                        @asyncImg(<img src="{{ mExists($data['thumb']) }}"/>)
                                     </a>
-                                    <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
-                                        <p>{{ mSubstr($data['description'],20)}}</p>
-                                    </a>
+                                    <div class="caption">
+                                        <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
+                                            <h4>{{ mSubstr($data['title'],6) }}</h4>
+                                        </a>
+                                        <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
+                                            <p>{{ mSubstr($data['description'],20) }}</p>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    @endif
                 </div>
             </div>
             <div class="clearfix">
@@ -34,23 +38,25 @@
                 <div class="list_images">
                     <M:D name="Article" fn="m_select" fn_arg="cate_id == 3|is_audit > 0" limit="8"
                          item="case_article"/>
-                    @foreach ($case_article as $data)
-                        <div class="col-sm-3">
-                            <div class="thumbnail">
-                                <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
-                                    @asyncImg(<img src="{{ mExists($data['thumb']) }}"/>)
-                                </a>
-                                <div class="caption">
+                    @if (isset($case_article))
+                        @foreach ($case_article as $data)
+                            <div class="col-sm-3">
+                                <div class="thumbnail">
                                     <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
-                                        <h4>{{ mSubstr($data['title'],6)}}</h4>
+                                        @asyncImg(<img src="{{ mExists($data['thumb']) }}"/>)
                                     </a>
-                                    <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
-                                        <p>{{ mSubstr($data['description'],20)}}</p>
-                                    </a>
+                                    <div class="caption">
+                                        <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
+                                            <h4>{{ mSubstr($data['title'],6)}}</h4>
+                                        </a>
+                                        <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
+                                            <p>{{ mSubstr($data['description'],20)}}</p>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    @endif
                 </div>
             </div>
         </div>
@@ -59,3 +65,4 @@
         </div>
     </div>
 </section>
+@endsection

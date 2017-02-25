@@ -1,4 +1,4 @@
-@include('admin.Public_header')
+@include('home.Public_header')
 @section('body')
 @show
-@include('admin.Public_footer')
+@include('home.Public_footer')

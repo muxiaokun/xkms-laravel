@@ -13,8 +13,11 @@ class Common extends Model
         'id' => 'desc',
     ];
 
-    public function scopeMOrdered($query)
+    public function scopeMOrdered($query, $ordered = [])
     {
+        if ($ordered && is_array($ordered)) {
+            $this->orders = $ordered;
+        }
         foreach ($this->orders as $orderBy => $orderDirection) {
             $query->orderBy($orderBy, $orderDirection);
         }
@@ -77,6 +80,9 @@ class Common extends Model
      */
     public function scopeTransfixionWhere($query, $column, $ids)
     {
+        if (!is_array($ids)) {
+            $ids = [$ids];
+        }
         $query->where(function ($query) use ($column, $ids) {
             foreach ($ids as $id) {
                 $query->orWhere($column, 'like', '%|' . $id . '|%');

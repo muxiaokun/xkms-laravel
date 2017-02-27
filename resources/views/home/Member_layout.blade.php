@@ -11,19 +11,19 @@
             </ul>
         </div>
         <div class="col-sm-10">
-            <div class="col-sm-12">
-                <ol class="breadcrumb">
-                    @if(isset($position))
-                    @foreach ($position as $data)
-                        @if ($data['link'])
-                            <li><a href="{{ $data['link'] }}">{{ $data['name'] }}</a></li>
-                        @else
-                            <li class="active">{{ $data['name'] }}</li>
-                        @endif
-                    @endforeach
-                    @endif
-                </ol>
-            </div>
+            @if(isset($position))
+                <div class="col-sm-12">
+                    <ol class="breadcrumb">
+                        @foreach ($position as $data)
+                            @if ($data['link'])
+                                <li><a href="{{ $data['link'] }}">{{ $data['name'] }}</a></li>
+                            @else
+                                <li class="active">{{ $data['name'] }}</li>
+                            @endif
+                        @endforeach
+                    </ol>
+                </div>
+            @endif
             <div class="col-sm-12">
                 @section('content')
                 @show

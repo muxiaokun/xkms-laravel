@@ -1,5 +1,5 @@
-@extends('home.Member_layout')
-@section('content')
+@extends('home.layout')
+@section('body')
     <script type="text/javascript" charset="utf-8">
         if (window.top !== window.self) {
             window.top.location = window.location;
@@ -30,7 +30,7 @@
                         <script>
                             $(function () {
                                 var config = {
-                                    'form_obj': $('#form_valid'),
+                                    'form_obj': $('#form_valid_login'),
                                     'check_list': {
                                         'user': Array('user'),
                                     },
@@ -80,7 +80,7 @@
                         <script>
                             $(function () {
                                 var config = {
-                                    'form_obj': $('#form_valid'),
+                                    'form_obj': $('#form_valid_register'),
                                     'check_list': {
                                         're_member_name': Array('re_member_name'),
                                         'password': Array('password'),

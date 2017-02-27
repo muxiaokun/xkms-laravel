@@ -77,6 +77,7 @@ class Member extends FrontendMember
         $data      = [
             'member_name' => $memberName,
             'member_pwd'  => $memberPwd,
+            'group_id'    => [1],
             'is_enable'   => $isEnable,
         ];
         $addResult = Model\Member::create($data);

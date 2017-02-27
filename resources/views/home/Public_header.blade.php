@@ -6,6 +6,7 @@
     <meta http-equiv="Content-Type" Content="text/html; charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     @if (config('system.site_keywords'))
         <meta name="keywords" content="{{ config('website.site_keywords') }}"/>@endif
     @if (config('system.site_keywords'))

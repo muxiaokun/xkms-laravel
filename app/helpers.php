@@ -367,6 +367,12 @@ function mInArray($target, $source)
     }
 }
 
+/**
+ * @param     $attribute
+ * @param int $cateId
+ * @return array
+ * 构造属性url 默认使用request attr
+ */
 function mAttributeArr($attribute, $cateId = 0)
 {
     $attrStrs = request('attr');
@@ -374,15 +380,12 @@ function mAttributeArr($attribute, $cateId = 0)
     if ($attrStrs && !preg_match('/^((\d+)(_(\d+))+-?)+$/', $attrStrs)) {
         $attrStrs = '';
     }
-    $request = request();
+    $request = request()->all();
     $cateId && $request['cate_id'] = $cateId;
-    if (config('system.token_on')) {
-        unset($request[config('system.token_name', null, '__hash__')]);
-    }
 
-    $cacheName  = 'M_attribute_arr' . serialize($attribute) . $attrStrs . serialize($request);
-    $cacheValue = S($cacheName);
-    if ($cacheValue && true !== APP_DEBUG) {
+    $cacheName  = 'M_attribute_arr_' . md5(serialize($attribute) . $attrStrs . serialize($request));
+    $cacheValue = Illuminate\Support\Facades\Cache::get($cacheName);
+    if ($cacheValue && true !== config('app.debug')) {
         return $cacheValue;
     }
 
@@ -398,19 +401,22 @@ function mAttributeArr($attribute, $cateId = 0)
     foreach (explode('-', $attrStrs) as $attrStr) {
         $attrArr = explode('_', $attrStr);
         $k       = array_shift($attrArr);
+        sort($attrArr);
         if ('' == $k) {
             continue;
         }
-
-        foreach ($attrArr as $v) {
-            if (!preg_match('/_' . $valueKey . '(?!\d)/', $data[$key]) && $v < $validateData[$k]) {
+        $attrValue[$k] = '';
+        foreach ($attrArr as $valueKey => $v) {
+            if (preg_match('/_' . $v . '(?!\d)/', $attrStr) && $v < $validateData[$k]) {
                 $attrValue[$k] .= '_' . $v;
             }
         }
-        isset($attrValue[$k]) && $attrValue[$k] = $k . $attrValue[$k];
+        $attrValue[$k] && $attrValue[$k] = $k . $attrValue[$k];
     }
+    ksort($attrValue);
     //解析attr字符串 结束
 
+    //构造连接 开始
     $attributeList = [];
     $key           = 0;
     foreach ($attribute as $name => $values) {
@@ -426,94 +432,106 @@ function mAttributeArr($attribute, $cateId = 0)
         $attributeList[$key][] = [
             'name'    => $name,
             'checked' => $checked,
-            'link'    => $checked ? 'javascript:void(0);' : mU('article_category', $request),
+            'link'    => $checked ? 'javascript:void(0);' : route('Home::Article::category', $request),
         ];
         foreach ($values as $valueKey => $value) {
             unset($request['attr']);
             $data    = $attrValue;
-            $checked = false;
-            if (!preg_match('/_' . $valueKey . '(?!\d)/', $data[$key])) {
-                //添加参数
-                if (!isset($data[$key])) {
-                    $data[$key] = $key;
-                }
+            $oldData           = [];
+            if (isset($data[$key])) {
+                $oldData = explode('_', preg_replace('/^' . $key . '_/', '', $data[$key]));
+            }
 
-                $data[$key] .= '_' . $valueKey;
-            } else {
+            if (isset($data[$key]) && preg_match('/_' . $valueKey . '(?!\d)/', $data[$key])) {
                 //削减参数
                 $checked = true;
-                $oldData = explode('_', preg_replace('/^' . $key . '_/', '', $data[$key]));
                 $newData = [];
                 //BUG创建新数据时错误
                 array_walk($oldData, function ($v, $k) use ($valueKey, &$newData) {
                     ($v != $valueKey) && $newData[] = $v;
                 });
                 if (0 < count($newData)) {
+                    sort($newData);
                     $data[$key] = $key . '_' . implode('_', $newData);
                 } else {
                     unset($data[$key]);
                 }
+            } else {
+                //添加参数
+                $checked = false;
+                if (!isset($data[$key])) {
+                    $data[$key] = $key;
+                }
+                $newData   = $oldData;
+                $newData[] = $valueKey;
+                sort($newData);
+                $data[$key] = $key . '_' . implode('_', $newData);
             }
             $dataStr = implode('-', $data);
             $dataStr && $request['attr'] = $dataStr;
             $attributeList[$key][] = [
                 'name'    => $value,
                 'checked' => $checked,
-                'link'    => mU('article_category', $request),
+                'link'    => route('Home::Article::category', $request),
             ];
         }
         ++$key;
     }
+    //构造连接 结束
 
     $cacheValue = $attributeList;
-    S($cacheName, $cacheValue, config('system.sys_td_cache'));
-
+    $expiresAt  = \Carbon\Carbon::now()->addSecond(config('system.sys_td_cache'));
+    \Illuminate\Support\Facades\Cache::put($cacheName, $cacheValue, $expiresAt);
     return $attributeList;
 }
 
-function mAttributeWhere($attribute, $attr)
+/**
+ * @param        $attribute
+ * @param string $attr
+ * @return array
+ * 构造查询属性条件
+ */
+function mAttributeWhere($attribute, $attr = '')
 {
     $attrStrs = request('attr', $attr);
     //清空非合法属性格式
     if ($attrStrs && !preg_match('/^((\d+)(_(\d+))+-?)+$/', $attrStrs)) {
         $attrStrs = '';
     }
-
-    $cacheName  = 'M_attribute_arr' . serialize($attribute) . $attrStrs;
-    $cacheValue = S($cacheName);
-    if ($cacheValue && true !== APP_DEBUG) {
+    $cacheName  = 'M_attribute_arr_' . md5(serialize($attribute)) . $attrStrs;
+    $cacheValue = Illuminate\Support\Facades\Cache::get($cacheName);
+    if ($cacheValue && true !== config('app.debug')) {
         return $cacheValue;
     }
 
     $where     = [];
     $attrValue = [];
+
     foreach (explode('-', $attrStrs) as $attrStr) {
         $attrArr = explode('_', $attrStr);
         $k       = array_shift($attrArr);
+        sort($attrArr);
         if ('' == $k) {
             continue;
         }
-
-        $attrValue[$k];
+        $attrValue[$k] = [];
         foreach ($attrArr as $v) {
             $attrValue[$k][$v] = $v;
         }
     }
     $key = 0;
     foreach ($attribute as $name => $values) {
-        $twhere = [];
         foreach ($values as $valueKey => $value) {
             if (isset($attrValue[$key][$valueKey])) {
-                $twhere[] = $name . ":" . $value;
+                $where[] = $name . ":" . $value;
             }
         }
-        $where[] = $twhere;
         ++$key;
     }
 
     $cacheValue = $where;
-    S($cacheName, $cacheValue, config('system.sys_td_cache'));
-
+    $expiresAt  = \Carbon\Carbon::now()->addSecond(config('system.sys_td_cache'));
+    \Illuminate\Support\Facades\Cache::put($cacheName, $cacheValue, $expiresAt);
     return $where;
 }
 

@@ -78,14 +78,19 @@ class Common extends Model
      * @param $ids
      * 建立like %||% 查询
      */
-    public function scopeTransfixionWhere($query, $column, $ids)
+    public function scopeTransfixionWhere($query, $column, $ids, $or = true)
     {
         if (!is_array($ids)) {
             $ids = [$ids];
         }
-        $query->where(function ($query) use ($column, $ids) {
+        $query->where(function ($query) use ($column, $ids, $or) {
             foreach ($ids as $id) {
-                $query->orWhere($column, 'like', '%|' . $id . '|%');
+                if ($or) {
+                    $query->orWhere($column, 'like', '%|' . $id . '|%');
+                } else {
+                    $query->where($column, 'like', '%|' . $id . '|%');
+                }
+
             }
         });
 

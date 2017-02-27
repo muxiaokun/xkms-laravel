@@ -1,5 +1,5 @@
 @extends('home.layout')
-@section('content')
+@section('body')
     <section class="container">
         <div class="row">
             <div class="col-sm-8">

@@ -37,9 +37,9 @@ class Article extends Frontend
 
         Model\Article::where(['id' => $id])->increment('hits');
 
-        $categoryInfo = Model\ArticleCategory::colWhere($articleInfo['cate_id'])->first()->toArray();
+        $categoryInfo = Model\ArticleCategory::colWhere($articleInfo['cate_id'])->first();
 
-        $channelInfo = Model\ArticleChannel::colWhere($articleInfo['channel_id'])->first()->toArray();
+        $channelInfo = Model\ArticleChannel::colWhere($articleInfo['channel_id'])->first();
 
         //检测权限
         $memberGroupId = session('frontend_info.group_id');
@@ -56,15 +56,15 @@ class Article extends Frontend
         }
 
         //缓存数据
-        $cacheName     = 'Home::Article::article' . $id;
-        $cacheValue    = Cache::get($cacheName);
+        $cacheName            = 'Home::Article::article' . $id;
+        $cacheValue           = Cache::get($cacheName);
         if ($cacheValue && true !== config('app.debug')) {
             $articleInfo['content'] = $cacheValue;
         } else {
             $articleInfo['content'] = mContent2ckplayer($articleInfo['content'], $articleInfo['thumb']);
             config('system.sys_article_sync_image') && $articleInfo['content'] = mAsyncImg($articleInfo['content']);
             $cacheValue = $articleInfo['content'];
-            $expiresAt = Carbon::now()->addSecond(config('system.sys_td_cache'));
+            $expiresAt        = Carbon::now()->addSecond(config('system.sys_td_cache'));
             Cache::put($cacheName, $cacheValue, $expiresAt);
         }
 
@@ -74,11 +74,7 @@ class Article extends Frontend
         $assign['title']             = $articleInfo['title'];
         $assign['category_position'] = $this->_get_category_position($articleInfo['cate_id']);
         $assign['article_position']  = $this->_get_article_position($articleInfo['cate_id']);
-        $pnWhere       = [
-            'cate_id'    => $articleInfo['cate_id'],
-            'channel_id' => $articleInfo['channel_id'],
-        ];
-        $assign['article_pn']        = $this->_get_article_pn($articleInfo['id'], $pnWhere);
+        $assign['article_pn'] = $this->_get_article_pn($articleInfo['id']);
         $template                    = $this->_get_template($articleInfo['cate_id'], $channelId);
         return view($template['article_template'], $assign);
     }
@@ -93,13 +89,13 @@ class Article extends Frontend
                 route('Home::Index::index'));
         }
 
-        $categoryInfo = Model\ArticleCategory::colWhere($cateId)->first()->toArray();
-        if (!$categoryInfo) {
+        $categoryInfo = Model\ArticleCategory::colWhere($cateId)->first();
+        if (null === $categoryInfo) {
             return $this->error(trans('common.category') . trans('common.id') . trans('common.error'),
                 route('Home::Index::index'));
         }
 
-        $channelInfo = Model\ArticleChannel::colWhere($articleInfo['channel_id'])->first()->toArray();
+        $channelInfo = Model\ArticleChannel::colWhere($channelId)->first();
 
         //检测权限
         $memberGroupId = session('frontend_info.group_id');
@@ -124,31 +120,29 @@ class Article extends Frontend
                 $categoryInfo['content'] = $cacheValue;
             } else {
                 $categoryInfo['content'] = mContent2ckplayer($categoryInfo['content'], $categoryInfo['thumb']);
-                config('system.sys_article_sync_image') && $categoryInfo['content'] = mSyncImg($categoryInfo['content']);
+                config('system.sys_article_sync_image') && $categoryInfo['content'] = mAsyncImg($categoryInfo['content']);
                 $cacheValue = $categoryInfo['content'];
                 $expiresAt = Carbon::now()->addSecond(config('system.sys_td_cache'));
                 Cache::put($cacheName, $cacheValue, $expiresAt);
             }
         } else {
-            //如果分类是列表页
-            $template = $template['list_template'];
-            $childArr = Model\ArticleCategory::mFindCateChildIds($cateId);
-            $where = array_merge($this->_get_article_where(), [
-                'channel_id' => 0,
-                'cate_id'    => ['in', $childArr],
-            ]);
-            $channelId && $where['channel_id'] = ['in', [0, $channelId]];
-            $categoryTopInfo = Model\ArticleCategory::mFind_top($categoryInfo['id']);
-            $attributeWhere  = mAttributeWhere($categoryTopInfo['attribute']);
-            $attributeWhere && $where['attribute'] = Model\ArticleCategory::likeWhere('attribute', $attributeWhere);
+            $page                   = ($categoryInfo['s_limit']) ? $categoryInfo['s_limit'] : config('system.sys_max_page');
+            $template               = $template['list_template'];
+            $articleLsit            = Model\Article::where(function ($query) use ($categoryInfo, $cateId, $channelId) {
+                //如果分类是列表页
+                if ($cateId) {
+                    $childArr = Model\ArticleCategory::mFindCateChildIds($cateId);
+                    $query->whereIn('cate_id', $childArr);
+                }
+                $query->whereIn('channel_id', [0, $channelId]);
+                $query->where($this->_get_article_where());
+                $categoryTopId             = Model\ArticleCategory::mFindTopId($categoryInfo['id']);
+                $categoryTopInfo           = Model\ArticleCategory::colWhere($categoryTopId)->first();
+                $categoryInfo['attribute'] = $categoryTopInfo['attribute'];
+                $attributeWhere            = mAttributeWhere($categoryTopInfo['attribute']);
+                $attributeWhere && $query->transfixionWhere('attribute', $attributeWhere, false);
 
-            $page = true;
-            if ($categoryInfo['s_limit']) {
-                $page                       = $categoryInfo['s_limit'];
-                $assign['article_list_max'] = $page;
-            }
-            $articleLsit = Model\Article::where($where)->paginate($page)->appends(request()->all());
-
+            })->paginate($page)->appends(request()->all());
             $assign['article_list'] = $articleLsit;
         }
 
@@ -189,60 +183,67 @@ class Article extends Frontend
     // 搜索文章
     public function search()
     {
-        $keyword = request('keyword');
+        $keyword   = request('keyword');
+        $cateId    = request('cate_id');
+        $channelId = request('cahnnel_id');
+        $type      = request('type');
         if ('' == $keyword) {
             return $this->error(trans('common.please') . trans('common.input') . trans('common.keywords'),
                 route('Home::Index::index'));
         }
         $keyword = '%' . $keyword . '%';
 
-        $where  = $this->_get_article_where();
-        $cateId = request('cate_id');
         if ($cateId) {
-            $where['cate_id'] = ['in', Model\ArticleCategory::mFindCateChildIds($cateId)];
-            $categoryPosition = $this->_get_category_position($cateId);
-            $attributeWhere   = mAttributeWhere($categoryPosition['attribute']);
-            $attributeWhere && $where['attribute'] = Model\ArticleCategory::likeWhere('attribute', $attributeWhere);
             $assign['category_position'] = $this->_get_category_position($cateId);
         }
-        $channelId = request('cahnnel_id');
-        $channelId && $where['channel_id'] = $channelId;
 
-        $type = request('type');
-        if (preg_match('/extend\[(.*?)\]/', $type, $matches)) {
-            $type   = 'extend';
-            $extend = $matches[1];
-        }
+        $articleLsit            = Model\Article::where(function ($query) use ($keyword, $cateId, $channelId, $type) {
+            if ($cateId) {
+                $childArr = Model\ArticleCategory::mFindCateChildIds($cateId);
+                $query->whereIn('cate_id', $childArr);
+                $categoryTopId   = Model\ArticleCategory::mFindTopId($cateId);
+                $categoryTopInfo = Model\ArticleCategory::colWhere($categoryTopId)->first();
+                $attributeWhere  = mAttributeWhere($categoryTopInfo['attribute']);
+                $attributeWhere && $query->transfixionWhere('attribute', $attributeWhere, false);
+            }
+            if ($channelId) {
+                $query->where('channel_id', '=', $channelId);
+            }
 
-        $complex = ['_logic' => 'or'];
-        switch ($type) {
-            case 'description':
-                $complex['description'] = ['like', $keyword];
-                break;
-            case 'content':
-                $complex['content'] = ['like', $keyword];
-                break;
-            case 'extend':
-                $complex['extend'] = ['like', '%|' . $extend . ':' . $keyword . '|%'];
-                break;
-            case 'all':
-                $complex['description'] = ['like', $keyword];
-                $complex['content']     = ['like', $keyword];
-                $complex['title']       = ['like', $keyword];
-                $complex['extend']      = ['like', '|' . $extend . ':' . $keyword . '|'];
-                break;
-            default:
-                $complex['title'] = ['like', $keyword];
-        }
-        $where['_complex'] = $complex;
+            $query->where($this->_get_article_where());
 
-        $articleLsit = Model\Article::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
+            $extend = '';
+            if (preg_match('/extend\[(.*?)\]/', $type, $matches)) {
+                $type   = 'extend';
+                $extend = $matches[1];
+            }
+            switch ($type) {
+                case 'description':
+                    $query->where('description', 'like', $keyword);
+                    break;
+                case 'content':
+                    $query->where('content', 'like', $keyword);
+                    break;
+                case 'extend':
+                    $query->where('extend', 'like', '%|' . $extend . ':' . $keyword . '|%');
+                    break;
+                case 'all':
+                    $query->where(function ($query) use ($keyword, $extend) {
+                        $query->orWhere('title', 'like', $keyword);
+                        $query->orWhere('description', 'like', $keyword);
+                        $query->orWhere('content', 'like', $keyword);
+                        $extend && $query->orWhere('extend', 'like', '%|' . $extend . ':' . $keyword . '|%');
+                    });
+                    break;
+                default:
+                    $query->where('title', 'like', $keyword);
+            }
+        })->
+        paginate(config('system.sys_max_row'))->appends(request()->all());
         $assign['article_list'] = $articleLsit;
 
-        $request           = request();
-        $assign['request'] = $request;
-        $assign['title']   = trans('common.search') . trans('common.article');
-        $template          = $this->_get_template(0);
+        $assign['title'] = trans('common.search') . trans('common.article');
+        $template        = $this->_get_template(0);
         return view($template['list_template'], $assign);
     }
 
@@ -250,18 +251,24 @@ class Article extends Frontend
     private function _get_template($cateId, $channelId = 0)
     {
         //缓存流程 调取模板信息 过多回调
-        $cacheName              = 'Home::Article::_get_template' . $channelId . '_' . $cateId;
-        $cacheValue             = Cache::get($cacheName);
+        $cacheName  = 'Home::Article::_get_template' . $channelId . '_' . $cateId;
+        $cacheValue = Cache::get($cacheName);
         if ($cacheValue && true !== config('app.debug')) {
             return $cacheValue;
         }
 
-        $template = [];
+        $template = [
+            's_limit'          => '',
+            'template'         => '',
+            'list_template'    => '',
+            'article_template' => '',
+            'channel_template' => '',
+        ];
         // 如果频道编号存在 则查询频道是否有模板的配置 覆盖一般分类配置
         if ($channelId) {
             $channelInfo        = Model\ArticleChannel::colWhere($channelId)->first()->toArray();
             $defChannelTemplate = 'home.Article_channel';
-            $data               = $channelInfo['ext_info'];
+            $data = $channelInfo['extend'];
             $template           = [
                 's_limit'          => $this->_get_channel_template($cateId, 's_limit', $data),
                 'template'         => $this->_get_channel_template($cateId, 'template', $data),
@@ -271,25 +278,25 @@ class Article extends Frontend
             ];
         }
 
-        empty($template['s_limit']) && $template['s_limit'] = $this->_get_category_template($cateId,
+        !$template['s_limit'] && $template['s_limit'] = $this->_get_category_template($cateId,
             's_limit'); //分类调用条数
-        empty($template['template']) && $template['template'] = $this->_get_category_template($cateId,
+        !$template['template'] && $template['template'] = $this->_get_category_template($cateId,
             'template'); //分类模板
-        empty($template['list_template']) && $template['list_template'] = $this->_get_category_template($cateId,
+        !$template['list_template'] && $template['list_template'] = $this->_get_category_template($cateId,
             'list_template'); //文章列表
-        empty($template['article_template']) && $template['article_template'] = $this->_get_category_template($cateId,
+        !$template['article_template'] && $template['article_template'] = $this->_get_category_template($cateId,
             'article_template'); //文章模板
 
         //返回最终模板文件名 加模板前缀
-        $defTemplate        = 'home.Article_category';
-        $defListTemplate    = 'home.Article_list_category';
-        $defArticleTemplate = 'home.Article_article';
+        $defTemplate                  = 'home.Article_category';
+        $defListTemplate              = 'home.Article_list_category';
+        $defArticleTemplate           = 'home.Article_article';
         $template['template']         = ($template['template']) ? $defTemplate . '_' . $template['template'] : $defTemplate;
         $template['list_template']    = ($template['list_template']) ? $defListTemplate . '_' . $template['list_template'] : $defListTemplate;
         $template['article_template'] = ($template['article_template']) ? $defArticleTemplate . '_' . $template['article_template'] : $defArticleTemplate;
 
         $cacheValue = $template;
-        $expiresAt          = Carbon::now()->addSecond(config('system.sys_td_cache'));
+        $expiresAt                    = Carbon::now()->addSecond(config('system.sys_td_cache'));
         Cache::put($cacheName, $cacheValue, $expiresAt);
         return $cacheValue;
     }
@@ -332,19 +339,19 @@ class Article extends Frontend
         }
 
         $topCateId       = Model\ArticleCategory::mFindTopId($cateId);
-        $categoryTopInfo = Model\ArticleCategory::colWhere($topCateId)->first()->toArray();
+        $categoryTopInfo = Model\ArticleCategory::colWhere($topCateId)->first();
 
         $where        = [
             'parent_id' => $topCateId,
             'if_show'   => 1,
         ];
-        $categoryList    = Model\ArticleCategory::where($where)->get();
+        $categoryList = Model\ArticleCategory::where($where)->get();
 
         $categoryPosition                  = $categoryTopInfo;
         $categoryPosition['category_list'] = $categoryList;
 
         $cacheValue = $categoryPosition;
-        $expiresAt       = Carbon::now()->addSecond(config('system.sys_td_cache'));
+        $expiresAt = Carbon::now()->addSecond(config('system.sys_td_cache'));
         Cache::put($cacheName, $cacheValue, $expiresAt);
         return $cacheValue;
     }
@@ -392,30 +399,32 @@ class Article extends Frontend
             return;
         }
 
-        $articlePn = [
+        $articlePn   = [
             'limit' => $limit,
         ];
-        $where     = array_merge($this->_get_article_where(), $where);
-        $pOrder = $nOrder = $sort;
+        $articleInfo = Model\Article::colWhere($id)->first()->toArray();
+        $pnWhere     = [
+            ['cate_id', '=', $articleInfo['cate_id']],
+            ['channel_id', '=', $articleInfo['channel_id']],
+        ];
+        $where       = array_merge($this->_get_article_where(), $where, $pnWhere);
+        $pOrder      = $nOrder = $sort;
         end($sort);
         $mianSort  = key($sort);
         $mianOrder = current($sort);
 
         //p = gt asc
         //n = lt desc
-        dump($mianSort);
-        dump($mianOrder);
-        $pCondition = ('desc' == $mianOrder) ? '>' : '<';
-        $nCondition = ('desc' == $mianOrder) ? '<' : '>';
-        $pOrder      = ('desc' == $mianOrder) ? $originSort . ' asc' : $originSort . ' desc';
-        $nOrder      = ('desc' == $mianOrder) ? $originSort . ' desc' : $originSort . ' asc';
-        $articleInfo = Model\Article::colWhere($id)->first()->toArray();
+        $pCondition        = ('desc' == $mianOrder) ? '>' : '<';
+        $nCondition        = ('desc' == $mianOrder) ? '<' : '>';
+        $pOrder[$mianSort] = ('desc' == $mianOrder) ? ' asc' : ' desc';
+        $nOrder[$mianSort] = ('desc' == $mianOrder) ? ' desc' : ' asc';
         //上一篇
-        $where          = [[$mianSort, $pCondition, $articleInfo[$mianSort]]];
-        $articlePn['p'] = Model\Article::where($where)->orderBy($pOrder)->limit($limit)->first();
+        $pWhere = array_merge($where, [[$mianSort, $pCondition, $articleInfo[$mianSort]]]);;
+        $articlePn['p'] = Model\Article::where($pWhere)->mOrdered($pOrder)->take($limit)->get();
         //下一篇
-        $where          = [[$mianSort, $nCondition, $articleInfo[$mianSort]]];
-        $articlePn['n'] = Model\Article::where($where)->orderBy($nOrder)->limit($limit)->first();
+        $nWhere = array_merge($where, [[$mianSort, $nCondition, $articleInfo[$mianSort]]]);;
+        $articlePn['n'] = Model\Article::where($nWhere)->mOrdered($nOrder)->take($limit)->get();
         return $articlePn;
     }
 

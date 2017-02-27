@@ -14,7 +14,7 @@
             @foreach ($news_article as $data)
             <li class="title">
                 <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
-                    {{ $data['created_at'] }}&nbsp;&nbsp;{{ mSubstr($data['title'],15) }}
+                    {{ $data['created_at']->format('m-d') }}&nbsp;&nbsp;{{ mSubstr($data['title'],15) }}
                 </a>
             </li>
         @endforeach
@@ -37,7 +37,7 @@
         @foreach ($manual_article as $data)
             <li class="title">
                 <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">
-                    {{ mDate($data['created_at'],"m-d") }}&nbsp;&nbsp;{{ mSubstr($data['title'],15) }}
+                    {{ $data['created_at']->format('m-d') }}&nbsp;&nbsp;{{ mSubstr($data['title'],15) }}
                 </a>
             </li>
         @endforeach

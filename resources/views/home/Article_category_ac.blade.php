@@ -8,7 +8,7 @@
         <button id="small_obj" class="btn btn-sm btn-default">@lang('common.tosmall')@lang('common.font')</button>
     </div>
     <div id="content" class="col-sm-12 mt20">
-        {{ $category_info['content'] }}
+        {!! htmlspecialchars_decode($category_info['content']) !!}
     </div>
     <script type="text/javascript" src="{{ asset('js/M_fontsize.js') }}"></script>
     <script type="text/javascript">

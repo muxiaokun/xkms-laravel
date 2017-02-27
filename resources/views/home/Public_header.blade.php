@@ -118,7 +118,7 @@
                                 @foreach ($category_position['extend'] as $extend)
                                     <option value="extend[{{ $extend }}]"
                                             @if (isset($request['type']) && $request['type'] == 'extend['.$extend.']')selected="selected"@endif>
-                                        L({{ $extend }})
+                                        {{ str_replace('common.','',trans('common.'.$extend)) }}
                                     </option>
                                 @endforeach
                             @endif

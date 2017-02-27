@@ -39,7 +39,7 @@
     @if ($article_pn)
         <div class="col-sm-12 mt20">
             <div class="col-sm-6 ">
-                @if ($article_pn['p'])
+                @if (!$article_pn['p']->isEmpty())
                     @lang('common.before'){{ $article_pn['limit'] }}@lang('common.piece')@lang('common.article')
                     @foreach ($article_pn['p'] as $data)
                         <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">{{ $data['title'] }}</a>
@@ -47,7 +47,7 @@
                 @endif
             </div>
             <div class="col-sm-6 ">
-                @if ($article_pn['n'])
+                @if (!$article_pn['n']->isEmpty())
                     @lang('common.later'){{ $article_pn['limit'] }}@lang('common.piece')@lang('common.article')
                     @foreach ($article_pn['n'] as $data)
                         <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">{{ $data['title'] }}</a>

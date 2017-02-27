@@ -30,7 +30,7 @@ Route::group([
         Route::get('article', ['as' => 'article', 'uses' => 'Article@article']);
         Route::get('category', ['as' => 'category', 'uses' => 'Article@category']);
         Route::get('channel', ['as' => 'channel', 'uses' => 'Article@channel']);
-        Route::get('search', ['as' => 'search', 'uses' => 'Article@search']);
+        Route::post('search', ['as' => 'search', 'uses' => 'Article@search']);
     });
     Route::group([
         'as'     => 'Assess::',

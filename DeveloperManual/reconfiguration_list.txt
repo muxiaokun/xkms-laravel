@@ -4,7 +4,7 @@
 4.验证码不可以同时调用两个以上
 5.分类树
 
-90/119
+94/119
 
 Backend
 OK 系统管理系统配置网站配置Admin::Index::websiteSet
@@ -105,10 +105,10 @@ OK 扩展管理地域编辑地域Admin::Region::edit
 
 
 Frontend
-UNSTART Home::Article::article
-UNSTART Home::Article::category
-UNSTART Home::Article::channel
-UNSTART Home::Article::search
+OK Home::Article::article
+OK Home::Article::category
+OK Home::Article::channel
+OK Home::Article::search
 UNSTART Home::Comment
 OK Home::Itlink
 OK 成员管理会员管理会员中心Home::Member::index

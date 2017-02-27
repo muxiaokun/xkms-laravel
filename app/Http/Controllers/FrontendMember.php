@@ -60,7 +60,7 @@ class FrontendMember extends Frontend
         }
     }
 
-    private function _get_left_nav()
+    protected function _get_left_nav()
     {
         //if(没有在权限中找到列表 就显示默认的列表)
         $memberGroupPriv = session('frontend_info.group_privilege');

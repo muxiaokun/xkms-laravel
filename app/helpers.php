@@ -232,11 +232,12 @@ function mExists($url = '', $isThumb = false)
 function mAsyncImg($content)
 {
     $pattern = '/(<img.*?)\ssrc=([\'|\"])(.*?)\2(.*?\/?>)/is';
-    $content = preg_replace_callback($pattern, function ($match) {
-        $newElement  = base64_encode($match[1] . $match[4]);
-        $replacement = '<img src="' . mExists(config('system.sys_sync_image')) . '" ';
+    $content = preg_replace_callback($pattern, function ($matches) {
+        $newElement  = base64_encode($matches[1] . $matches[4]);
+        $replacement = $matches[1] . ' src="' . mExists(config('system.sys_sync_image')) . '" ';
         $replacement .= 'M_Img="' . $newElement . '" ';
-        $replacement .= 'M_img_src=' . $match[2] . $match[3] . $match[2] . ' />';
+        $replacement .= 'M_img_src=' . $matches[2] . $matches[3] . $matches[2];
+        $replacement .= ' style="width:85px;height:85px;padding:0px;"' . $matches[4];
         return $replacement;
     }, $content);
     return $content;

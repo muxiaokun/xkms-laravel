@@ -81,9 +81,9 @@ class ArticleCategory extends Common
 
     public function scopeMFindTopId($query, $id)
     {
-        $categoryInfo = $query->colWhere($id, 'parent_id')->select(['parent_id'])->first();
+        $categoryInfo = $query->colWhere($id)->select(['parent_id'])->first();
         if (null !== $categoryInfo && $categoryInfo['parent_id']) {
-            return ArticleCategory::scopeMFindTopId($categoryInfo['parent_id']);
+            return ArticleCategory::scopeMFindTopId($query, $categoryInfo['parent_id']);
         }
         return $id;
     }

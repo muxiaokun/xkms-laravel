@@ -4,7 +4,7 @@
 4.验证码不可以同时调用两个以上
 5.分类树
 
-94/119
+99/119
 
 Backend
 OK 系统管理系统配置网站配置Admin::Index::websiteSet
@@ -69,9 +69,9 @@ OK 扩展管理留言板留言板管理Admin::MessageBoard::index
 OK 扩展管理留言板添加留言板Admin::MessageBoard::add
 OK 扩展管理留言板删除留言板Admin::MessageBoard::del
 OK 扩展管理留言板编辑留言板Admin::MessageBoard::edit
-UNSTART 扩展管理留言板留言管理Admin::MessageBoardLog::index
-UNSTART 扩展管理留言板删除留言Admin::MessageBoardLog::del
-UNSTART 扩展管理留言板审核回复Admin::MessageBoardLog::edit
+OK 扩展管理留言板留言管理Admin::MessageBoardLog::index
+OK 扩展管理留言板删除留言Admin::MessageBoardLog::del
+OK 扩展管理留言板审核回复Admin::MessageBoardLog::edit
 OK 扩展管理评论评论管理Admin::Comment::index
 OK 扩展管理评论审核评论Admin::Comment::add
 OK 扩展管理评论删除评论Admin::Comment::del
@@ -115,8 +115,8 @@ OK 成员管理会员管理会员中心Home::Member::index
 OK 成员管理会员管理会员登录Home::Member::login
 OK 成员管理会员管理会员注册Home::Member::register
 OK 成员管理会员管理会员登出Home::Member::logout
-UNSTART 扩展管理留言板留言板列表Home::MessageBoard::index
-UNSTART 扩展管理留言板留言板添加Home::MessageBoard::add
+OK 扩展管理留言板留言板列表Home::MessageBoard::index
+OK 扩展管理留言板留言板添加Home::MessageBoard::add
 UNSTART 扩展管理招聘招聘列表Home::Recruit::index
 UNSTART 扩展管理招聘应聘职位Home::Recruit::add
 UNSTART 扩展管理招聘查看招聘Home::Recruit::edit

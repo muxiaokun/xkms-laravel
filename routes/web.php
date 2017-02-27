@@ -89,7 +89,7 @@ Route::group([
         'prefix' => 'MessageBoard',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'MessageBoard@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'MessageBoard@add']);
+        Route::post('add', ['as' => 'add', 'uses' => 'MessageBoard@add']);
     });
     Route::group([
         'as'     => 'Quests::',

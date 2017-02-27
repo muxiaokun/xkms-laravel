@@ -5,76 +5,77 @@ namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\Frontend;
 use App\Model;
+use Carbon\Carbon;
 
 class MessageBoard extends Frontend
 {
     public function index()
     {
-        $id = request('id');
-        if (!$id) {
-            return $this->error(trans('common.id') . trans('common.error'));
-        }
+        $id = request('id', 1);
 
-        $messageBoardInfo = Model\MessageBoard::colWhere($id)->first()->toArray();
-        if (!$messageBoardInfo) {
-            return $this->error(trans('common.messageboard') . trans('common.dont') . trans('common.exists'));
+        $messageBoardInfo = Model\MessageBoard::colWhere($id)->first();
+        if (null === $messageBoardInfo) {
+            return $this->error(trans('common.messageboard') . trans('common.dont') . trans('common.exists'),
+                route('Home::Member::index'));
         }
 
         $assign['message_board_info'] = $messageBoardInfo;
 
-        $where               = [];
-        $where['audit_id']   = ['gt', 0];
-        $messageBoardLogList              = Model\MessageBoardLog::orderBy('add_time',
-            'desc')->where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
-        foreach ($messageBoardLogList as &$messageBoardLog) {
-            $messageBoardLog['reply_info'] = ($messageBoardLog['reply_info']) ? $messageBoardLog['reply_info'] : trans('common.admin') . trans('common.reply') . trans('common.empty');
-            $messageBoardLog['send_info']  = json_decode($messageBoardLog['send_info'], true);
-        }
+        $messageBoardLogList = Model\MessageBoardLog::where(function ($query) {
+            $query->where('audit_id', '>', 0);
+
+        })->paginate(config('system.sys_max_row'))->appends(request()->all());
         $assign['message_board_log_list'] = $messageBoardLogList;
 
-        $defTemplate = CONTROLLER_NAME . config('TMPL_FILE_DEPR') . ACTION_NAME;
+        $defTemplate = 'home.MessageBoard_index';
         $template    = ($messageBoardInfo['template']) ? $defTemplate . '_' . $messageBoardInfo['template'] : $defTemplate;
 
         $assign['title'] = trans('common.messageboard');
+
         return view($template, $assign);
     }
 
     //添加
     public function add()
     {
-        if (request()->isMethod('POST')) {
-            $id = request('id');
-            if (!$id) {
-                return $this->error(trans('common.id') . trans('common.error'));
-            }
+        $id = request('id');
+        if (!$id) {
+            return $this->error(trans('common.id') . trans('common.error'));
+        }
 
-            $messageBoardInfo = Model\MessageBoard::colWhere($id)->first()->toArray();
-            if (!$messageBoardInfo) {
-                return $this->error(trans('common.id') . trans('common.error'));
-            }
+        $messageBoardInfo = Model\MessageBoard::colWhere($id)->first();
+        if (null === $messageBoardInfo) {
+            return $this->error(trans('common.messageboard') . trans('common.dont') . trans('common.exists'),
+                route('Home::Member::index'));
+        }
 
-            if (!$this->verifyCheck(request('verify')) && config('system.sys_frontend_verify')) {
-                return $this->error(trans('common.verify_code') . trans('common.error'),
-                    route('Home::MessageBoard::index', ['id' => $id]));
-            }
-            $submitTime = 300;
-            if (Model\MessageBoard::check_dont_submit($submitTime)) {
-                return $this->error($submitTime . trans('common.second') . trans('common.later') . trans('common.again') . trans('common.send'),
-                    route('Home::MessageBoard::index', ['id' => $id]));
-            }
-            $data = $this->makeData('add');
-            if (!is_array($data)) {
-                return $data;
-            }
+        if (!$this->verifyCheck(request('verify')) && config('system.sys_frontend_verify')) {
+            return $this->error(trans('common.verify_code') . trans('common.error'),
+                route('Home::MessageBoard::index', ['id' => $id]));
+        }
 
-            $resultAdd = Model\MessageBoard::create($data);
-            if ($resultAdd) {
-                return $this->success(trans('common.send') . trans('common.success'),
-                    route('Home::MessageBoard::index', ['id' => $id]));
-            } else {
-                return $this->error(trans('common.send') . trans('common.error'),
-                    route('Home::MessageBoard::index', ['id' => $id]));
-            }
+        $submitTime          = 300;
+        $messageBoardLogInfo = Model\MessageBoardLog::where(function ($query) use ($submitTime) {
+            $query->where('add_ip', '=', request()->ip());
+            $query->where('created_at', '>', Carbon::now()->subSecond($submitTime));
+        })->first();
+        if (null !== $messageBoardLogInfo) {
+            return $this->error($submitTime . trans('common.second') . trans('common.later') . trans('common.again') . trans('common.send'),
+                route('Home::MessageBoard::index', ['id' => $id]));
+        }
+
+        $data = $this->makeData();
+        if (!is_array($data)) {
+            return $data;
+        }
+
+        $resultAdd = Model\MessageBoardLog::create($data);
+        if ($resultAdd) {
+            return $this->success(trans('common.send') . trans('common.success'),
+                route('Home::MessageBoard::index', ['id' => $id]));
+        } else {
+            return $this->error(trans('common.send') . trans('common.error'),
+                route('Home::MessageBoard::index', ['id' => $id]));
         }
     }
 
@@ -113,12 +114,13 @@ class MessageBoard extends Frontend
             }
         }
 
-        $memberId = session('frontend_info.id');
-        $memberId = ($memberId) ? $memberId : 0;
+        $memberId          = session('frontend_info.id', 0);
         $data     = [];
-        (null !== $memberId) && $data['mb_id'] = $id;
-        (null !== $memberId) && $data['send_id'] = $memberId;
-        (null !== $sendInfo) && $data['send_info'] = $sendInfo;
+        $data['mb_id']     = $id;
+        $data['send_id']   = $memberId;
+        $data['send_info'] = $sendInfo;
+        $data['audit_id']  = 0;
+        $data['add_ip']    = request()->ip();
 
         return $data;
     }

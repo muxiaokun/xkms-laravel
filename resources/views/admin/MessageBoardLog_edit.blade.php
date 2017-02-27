@@ -7,6 +7,7 @@
                 <form method="post">
                     {{ csrf_field() }}
                     <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
+                    <input type="hidden" name="audit_id" value="1"/>
                     <div class="col-sm-12 text-center"><h3>@lang('common.system')@lang('common.info')</h3></div>
                     <table class="table table-condensed table-hover col-sm-12">
                         <tr>
@@ -19,7 +20,7 @@
                             <td>@lang('common.send')@lang('common.time')</td>
                             <td>{{ mDate($edit_info['created_at']) }}</td>
                             <td>@lang('common.send') IP</td>
-                            <td>{{ $edit_info['aip'] }}</td>
+                            <td>{{ $edit_info['add_ip'] }}</td>
                         </tr>
                     </table>
                     <div class="col-sm-12 text-center"><h3>@lang('common.extend')@lang('common.info')</h3></div>

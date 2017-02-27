@@ -31,7 +31,7 @@
                                 {{ mDate($message_board_log['created_at']) }}
                             </td>
                             <td>
-                                {{ $message_board_log['aip'] }}
+                                {{ $message_board_log['add_ip'] }}
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])
@@ -66,12 +66,12 @@
                                         config.type_data.push({
                                         'name': lang.common.audit,
                                         'post_link': '{{ route('Admin::MessageBoardLog::edit') }}',
-                                        'post_data': {'is_audit': '1'}
+                                        'post_data': {'audit_id': '1'}
                                     });
                                     config.type_data.push({
                                         'name': lang.common.cancel + lang.common.audit,
                                         'post_link': '{{ route('Admin::MessageBoardLog::edit') }}',
-                                        'post_data': {'is_audit': '0'}
+                                        'post_data': {'audit_id': '0'}
                                     });
                                     @endif
                                     @if ($batch_handle['del'])

@@ -19,7 +19,7 @@ class CreateMessageBoardLogsTable extends Migration
             $table->increments('id');
             $table->timestamps();
 
-            $table->integer('msg_id')->unsigned()->comment('留言板id');
+            $table->integer('mb_id')->unsigned()->comment('留言板id');
             $table->integer('audit_id')->unsigned()->comment('审核id 0未审核');
             $table->integer('send_id')->unsigned()->comment('留言用户');
             $table->ipAddress('add_ip')->comment('发送的IP');

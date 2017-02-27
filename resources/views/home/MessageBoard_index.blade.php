@@ -48,7 +48,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            @asyncImg(<img class="col-sm-4 col-sm-offset-2"
+                            @asyncImg(<img class="col-sm-2 col-sm-offset-4"
                                  src="{{ route('VerificationCode') }}"
                                  onClick="M_change_verify(this,$('input[name=verify]'))"/>)
                         </div>

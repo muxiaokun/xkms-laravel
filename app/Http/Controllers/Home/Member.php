@@ -25,8 +25,8 @@ class Member extends FrontendMember
     //登录
     public function login()
     {
-        $memberName = request('user');
-        $memberPwd  = request('pwd');
+        $memberName = request('member_name');
+        $memberPwd  = request('password');
         switch ($this->doLogin($memberName, $memberPwd)) {
             case 'user_pwd_error':
                 return $this->error(trans('common.account') . trans('common.or') . trans('common.pass') . trans('common.error'),

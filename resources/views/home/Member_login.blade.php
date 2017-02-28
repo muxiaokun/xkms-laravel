@@ -32,7 +32,7 @@
                                 var config = {
                                     'form_obj': $('#form_valid_login'),
                                     'check_list': {
-                                        'user': Array('user'),
+                                        'member_name': Array('member_name'),
                                     },
                                     'ajax_url': "{{ route('Home::Member::ajax_api') }}",
                                 };
@@ -46,14 +46,14 @@
                                 <label class="col-sm-3 control-label">@lang('common.account')</label>
                                 <div class="col-sm-5">
                                     <input type="text" class="form-control" placeholder="@lang('common.account')"
-                                           name="user"/>
+                                           name="member_name"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">@lang('common.pwd')</label>
                                 <div class="col-sm-5">
                                     <input type="password" class="form-control" placeholder="@lang('common.pwd')"
-                                           name="pwd"/>
+                                           name="password"/>
                                 </div>
                             </div>
                             @if (config('system.sys_frontend_verify'))

@@ -31,7 +31,7 @@
                             </td>
                             <td>
                                 {{ $message['receive_name'] }}&nbsp;&nbsp;[
-                                @if ($message['updated_at'])
+                                @if ($message['updated_at'] != $message['created_at'])
                                     {{ $message['updated_at'] }}
                                 @else
                                     @lang('common.none')@lang('common.receive')
@@ -46,7 +46,7 @@
                                             'bind_obj': $('#M_alert_log_{{ $message['id'] }}'),
                                             'title': '@lang('message.message')@lang('common.content')',
                                             'message': "{{ $message['content'] }}"
-                                            @if (0 == $message['receive_id'] AND !$message['updated_at'])
+                                            @if (0 == $message['receive_id'] AND $message['updated_at'] == $message['created_at'])
                                             ,
                                             'cb_fn': M_alert_log_Message($('#M_alert_log_{{ $message['id'] }}'),{{ $message['id'] }}, '{{ route('Admin::Message::ajax_api') }}')
                                             @endif

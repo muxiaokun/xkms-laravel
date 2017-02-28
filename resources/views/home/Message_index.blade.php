@@ -7,7 +7,7 @@
             <th>@lang('common.send')@lang('common.info')</th>
             <th>@lang('common.receive')@lang('common.info')</th>
             <th><a class="btn btn-xs btn-success"
-                   href="{{ route('Home::Message::add') }}">@lang('common.send')@lang('common.message')</a>
+                   href="{{ route('Home::Message::add') }}">@lang('common.send')@lang('message.message')</a>
             </th>
         </tr>
         @foreach ($message_list as $message)
@@ -18,12 +18,12 @@
                 </td>
                 <td>
                     {{ $message['send_name'] }}
-                    &nbsp;&nbsp;[{{ mDate($message['send_time']) }}]
+                    &nbsp;&nbsp;[{{ $message['created_at'] }}]
                 </td>
                 <td>
                     {{ $message['receive_name'] }}&nbsp;&nbsp;[
-                    @if (0 < $message['receive_time'])
-                        {{ mDate($message['receive_time']) }}
+                    @if ($message['updated_at'] != $message['created_at'])
+                        {{ $message['updated_at'] }}
                     @else
                         @lang('common.none')@lang('common.receive')
                     @endif]
@@ -35,7 +35,7 @@
                         $(function () {
                             var config = {
                                 'bind_obj': $('#M_alert_log_{{ $message['id'] }}'),
-                                'title': '@lang('common.message')@lang('common.content')',
+                                'title': '@lang('message.message')@lang('common.content')',
                                 'message': "{{ $message['content'] }}"
                                 @if (session('frontend_info.id') == $message['receive_id'] AND 0 == $message['receive_time'])
                                 ,
@@ -46,10 +46,10 @@
                         });
                     </script>
                     &nbsp;|&nbsp;
-                    @if (0 < $message['send_id'])
+                    @if (session('frontend_info.id') !== $message['send_id'])
                         <a class="btn btn-xs btn-primary"
                            href="{{ route('Home::Message::add',['receive_id'=>$message['send_id']]) }}">
-                            @lang('common.reply')@lang('common.message')
+                            @lang('common.reply')@lang('message.message')
                         </a>
                         &nbsp;|&nbsp;
                     @endif
@@ -62,7 +62,7 @@
         @endforeach
     </table>
     <div id="batch_handle" class="col-sm-4 pagination">
-        @if ($batch_handle['edit'] OR $batch_handle['del'])
+        @if ($batch_handle['del'])
             <script type="text/javascript" src="{{ asset('js/M_batch_handle.js') }}"></script>
             <script type="text/javascript">
                 $(function () {

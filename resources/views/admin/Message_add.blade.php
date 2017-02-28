@@ -17,7 +17,7 @@
                                     <script type="text/javascript">
                                         $(function () {
                                             var config = {
-                                                @if ($receive_info['id'])'def_data': {
+                                                @if (isset($receive_info))'def_data': {
                                                     'value': '{{ $receive_info['id'] }}',
                                                     'html': '{{ $receive_info['member_name'] }}'
                                                 }, @endif

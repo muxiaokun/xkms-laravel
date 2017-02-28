@@ -2,13 +2,12 @@
 @section('content')
     <form class="form-horizontal" role="form" action="" method="post">
         {{ csrf_field() }}
-        <input type="hidden" name="id" value="{{ $edit_info['id'] }}"/>
         <div class="row">
             <div class="col-sm-12">
                 <div class="form-group">
                     <label class="col-sm-2 control-label">@lang('common.receive')@lang('common.member')</label>
                     <div class="col-sm-10" id="receive_member_list">
-                        @if ($receive_info)
+                        @if (isset($receive_info))
                             <input type="hidden" name="receive_id" value="{{ $receive_info['id'] }}"/>
                             <input class="form-control" type="text" disabled
                                    value="{{ $receive_info['member_name'] }}"/>
@@ -35,7 +34,7 @@
         <div class="row">
             <div class="col-sm-12 text-center">@lang('common.send')@lang('common.content')</div>
             <div class="col-sm-12">
-                <textarea rows="5" class="col-sm-12" name="content">{{ $edit_info['reply_info'] }}</textarea>
+                <textarea rows="5" class="col-sm-12" name="content"></textarea>
             </div>
         </div>
         <div class="row mt10">

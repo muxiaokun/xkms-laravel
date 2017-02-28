@@ -79,8 +79,8 @@ Route::group([
         'prefix' => 'Message',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Message@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Message@add']);
-        Route::get('del', ['as' => 'del', 'uses' => 'Message@del']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Message@add']);
+        Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'Message@del']);
         Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Message@ajax_api']);
     });
     Route::group([

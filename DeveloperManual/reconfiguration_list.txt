@@ -4,7 +4,7 @@
 4.验证码不可以同时调用两个以上
 5.分类树
 
-104/119
+107/119
 
 Backend
 OK 系统管理系统配置网站配置Admin::Index::websiteSet
@@ -120,9 +120,9 @@ OK 扩展管理留言板留言板添加Home::MessageBoard::add
 OK 扩展管理招聘招聘列表Home::Recruit::index
 OK 扩展管理招聘应聘职位Home::Recruit::add
 OK 扩展管理招聘查看招聘Home::Recruit::edit
-UNSTART 扩展管理站内信站内信管理Home::Message::index
-UNSTART 扩展管理站内信发送站内信Home::Message::add
-UNSTART 扩展管理站内信删除站内信Home::Message::del
+OK 扩展管理站内信站内信管理Home::Message::index
+OK 扩展管理站内信发送站内信Home::Message::add
+OK 扩展管理站内信删除站内信Home::Message::del
 UNSTART 扩展管理考核考核管理Home::Assess::index
 UNSTART 扩展管理考核考核评分Home::Assess::add
 UNSTART 扩展管理问卷问卷管理Home::Quests::index

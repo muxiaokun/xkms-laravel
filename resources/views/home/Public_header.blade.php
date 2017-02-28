@@ -12,18 +12,15 @@
     @if (config('system.site_keywords'))
         <meta name="description" content="{{ config('website.site_description') }}"/>@endif
     <meta name="author" content="{{ trans('common.pfcopyright',['app_name'=>trans('common.app_name')]) }}"/>
-    <link rel="stylesheet" href="{{ asset('css/jquery-ui.min.css') }}"/>
-    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}"/>
-    <link rel="stylesheet" href="{{ asset('css/bootstrap-theme.min.css') }}"/>
-    <link rel="stylesheet" href="{{ asset('css/common.css') }}"/>
-    <link rel="stylesheet" href="{{ asset('css/home.css') }}"/>
-    <script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/jquery-ui.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('js/common.js') }}"></script>
+
+    <link rel="stylesheet"
+          href="{{ route('Minify',['type'=>'css','files'=>'jquery-ui.min,bootstrap.min,bootstrap-theme.min,common,home']) }}">
+    <script type="text/javascript"
+            src="{{ route('Minify',['type'=>'js','files'=>'jquery.min,bootstrap.min,jquery-ui.min,common','lang'=>'common,frontend']) }}"></script>
     <!--[if lt IE 10]>
-    <script type="text/javascript" src="{{ asset('js/supporthtml5.js') }}"></script>
+    <script type="text/javascript" src="{{ route('Minify',['type'=>'js','files'=>'supporthtml5']) }}"></script>
     <![endif]-->
+    @stack('csses')
 </head>
 <body>
 <header class="container">

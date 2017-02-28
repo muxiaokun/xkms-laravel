@@ -38,7 +38,7 @@ Route::group([
         'prefix' => 'Assess',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Assess@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Assess@add']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Assess@add']);
         Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Assess@ajax_api']);
     });
     Route::group([
@@ -215,6 +215,7 @@ Route::group([
     ], function () {
         Route::match(['get', 'post'], 'edit', ['as' => 'edit', 'uses' => 'AssessLog@edit']);
         Route::match(['get', 'post'], 'del', ['as' => 'del', 'uses' => 'AssessLog@del']);
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'AssessLog@ajax_api']);
     });
     Route::group([
         'as'     => 'Comment::',

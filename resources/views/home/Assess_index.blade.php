@@ -21,24 +21,24 @@
                     {{ $assess['target_name'] }}
                 </td>
                 <td>
-                    {{ mDate($assess['start_time']) }}
+                    {{ $assess['start_time'] }}
                 </td>
                 <td>
-                    {{ mDate($assess['end_time']) }}
+                    {{ $assess['end_time'] }}
                 </td>
                 <td>
-                    <a href="{{ route('Home::Assess::add',['id'=>$assess['id']]) }}">
+                    <a class="btn btn-xs btn-primary" href="{{ route('Home::Assess::add',['id'=>$assess['id']]) }}">
                         @lang('common.grade')
                     </a>
                 </td>
             </tr>
         @endforeach
     </table>
-        <table class="table">
-            <tr>
-                <td class="text-right">
-                    {{ $assess_list->links('home.pagination') }}
-                </td>
-            </tr>
-        </table>
+    <table class="table">
+        <tr>
+            <td class="text-right">
+                {{ $assess_list->links('home.pagination') }}
+            </td>
+        </tr>
+    </table>
 @endsection

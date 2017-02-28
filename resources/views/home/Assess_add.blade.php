@@ -16,6 +16,10 @@
     <form id="form_valid" onSubmit="return false;" method="post" class="form-horizontal" role="form">
         {{ csrf_field() }}
         <div class="col-sm-12 mb20">
+            {{ trans('common.start') }}{{ trans('common.time') }}{{ trans('common.colon') }}{{ $assess_info['start_time'] }}
+            {{ trans('common.end') }}{{ trans('common.time') }}{{ trans('common.colon') }}{{ $assess_info['end_time'] }}
+        </div>
+        <div class="col-sm-12 mb20">
             <small>{{ $assess_info['explains'] }}</small>
         </div>
         <div class="col-sm-12">
@@ -26,8 +30,6 @@
                     @elseif ('member_group' == $assess_info['target'])
                         @lang('common.by')@lang('common.grade')@lang('common.member')@lang('common.group')
                     @endif
-                    {{ mDate($assess_info['start_time']) }}
-                    {{ mDate($assess_info['end_time']) }}
                 </label>
                 <div class="col-sm-6" id="re_grade_id">
                     <input type="hidden" name="re_grade_id"/>
@@ -39,7 +41,7 @@
                                 'post_name': 're_grade_id',
                                 'ajax_url': '{{ route('Home::Assess::ajax_api') }}',
                                 'field': @if ('member' == $assess_info['target'])
-                                        'member'
+                                    'member'
                                 @elseif ('member_group' == $assess_info['target'])
                                 'member_group'
                                 @endif
@@ -60,7 +62,7 @@
                         <th>{{ $row['p'] }}</th>
                         <th>{{ $row['f'] }}</th>
                         <th><input class="w50" type="text" onKeyup="M_in_int_range(this,1,{{ $row['mg'] }});"
-                                   name="score[]"/></th>
+                                   name="score[]"/>/{{ $row['mg'] }}</th>
                     </tr>
                 @endforeach
             </table>

@@ -13,34 +13,27 @@ class AssessLog extends Backend
     {
         $id = request('id');
         if (!$id) {
-            return $this->error(trans('common.assess') . trans('common.id') . trans('common.error'),
+            return $this->error(trans('assess.assess') . trans('common.id') . trans('common.error'),
                 route('Admin::AssessLog::index'));
         }
 
-        $assessInfo = Model\Assess::colWhere($id)->first()->toArray();
+        $assessInfo = Model\Assess::colWhere($id)->first();
         $assessInfo['all_grade']     = 0;
         $assessInfo['re_grade_name'] = '';
         $reGradeId                   = request('re_grade_id');
 
-        switch ($assessInfo['target']) {
-            case 'member':
-                $reGradeName = Model\Member::colWhere($reGradeId)->first()['member_name'];
-                break;
-            case 'member_group':
-                $reGradeName = Model\MemberGroup::colWhere($reGradeId)->first()['name'];
-                break;
-        }
-        if ($reGradeName) {
-            $where                = ['assess_id' => $id];
-            $where['re_grade_id'] = $reGradeId;
-            $assessLogInfos       = Model\AssessLog::limit($countRow)->where($where)->get();
+        $where[]  = ['assess_id', '=', $id];
+        $where[]  = ['re_grade_id', '=', $reGradeId];
+        $countRow = Model\AssessLog::where($where)->count();
+        if (0 < $countRow) {
+            $assessLogInfos = Model\AssessLog::where($where)->get();
             //算出各项评分
             $resultInfo             = [];
-            $assessInfo['ext_info'] = json_decode($assessInfo['ext_info'], true);
             foreach ($assessInfo['ext_info'] as $key => $value) {
                 $resultInfo[$key]['p'] = $value['p'];
                 $resultInfo[$key]['f'] = $value['f'];
                 //处理合计分数
+                $resultInfo[$key]['g'] = 0;
                 foreach ($assessLogInfos as $assessLogInfo) {
                     $resultInfo[$key]['g'] += $assessLogInfo['score'][$key];
                 }
@@ -49,7 +42,13 @@ class AssessLog extends Backend
                 //总分
                 $assessInfo['all_grade'] += $resultInfo[$key]['g'];
             }
-            $assessInfo['re_grade_name'] = $memberInfo['member_name'];
+            $memberInfo = Model\Member::colWhere($assessInfo['grade_id'])->first();
+            if (null !== $memberInfo) {
+                $assessInfo['re_grade_name'] = $memberInfo['member_name'];
+            } else {
+                $assessInfo['re_grade_name'] = $memberInfo['member_name'];
+            }
+
             $assessInfo['result_info']   = $resultInfo;
         }
         $assign['assess_info'] = $assessInfo;
@@ -59,7 +58,7 @@ class AssessLog extends Backend
         $batchHandle['del']     = $this->_check_privilege('del');
         $assign['batch_handle'] = $batchHandle;
 
-        $assign['title'] = trans('common.assess') . trans('common.statistics');
+        $assign['title'] = trans('assess.assess') . trans('common.statistics');
         return view('admin.AssessLog_edit', $assign);
     }
 
@@ -72,12 +71,12 @@ class AssessLog extends Backend
                 route('Admin::AssessLog::edit', ['id' => $id]));
         }
 
-        $resultDel = Model\AssessLog::destroy($id);
+        $resultDel = Model\AssessLog::where('assess_id', '=', $id)->delete();
         if ($resultDel) {
-            return $this->success(trans('common.assess') . trans('common.del') . trans('common.success'),
-                route('Admin::AssessLog::index'));
+            return $this->success(trans('assess.assess') . trans('common.record') . trans('common.del') . trans('common.success'),
+                route('Admin::Assess::index'));
         } else {
-            return $this->error(trans('common.assess') . trans('common.del') . trans('common.error'),
+            return $this->error(trans('assess.assess') . trans('common.record') . trans('common.del') . trans('common.error'),
                 route('Admin::AssessLog::edit', ['id' => $id]));
         }
     }
@@ -89,22 +88,32 @@ class AssessLog extends Backend
         $result = ['status' => true, 'info' => []];
         switch ($field) {
             case 'member':
-                isset($data['keyword']) && $data['keyword'] = $where['member_name'] = [
-                    'like',
-                    '%' . $data['keyword'] . '%',
-                ];
-                $memberUserList = Model\Member::where($where)->get();
-                //取出已经评价的
-                foreach ($memberUserList as $memberUser) {
-                    $result['info'][] = ['value' => $memberUser['id'], 'html' => $memberUser['member_name']];
-                }
+                Model\Member::where(function ($query) use ($data) {
+                    if (isset($data['inserted'])) {
+                        $query->whereNotIn('id', $data['inserted']);
+                    }
+
+                    if (isset($data['keyword'])) {
+                        $query->where('member_name', 'like', '%' . $data['keyword'] . '%');
+                    }
+
+                })->get()->each(function ($item, $key) use (&$result) {
+                    $result['info'][] = ['value' => $item['id'], 'html' => $item['member_name']];
+                });
                 break;
             case 'member_group':
-                isset($data['keyword']) && $data['keyword'] = $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $memberGroupList = Model\MemberGroup::where($where)->get();
-                foreach ($memberGroupList as $memberGroup) {
-                    $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
-                }
+                Model\MemberGroup::where(function ($query) use ($data) {
+                    if (isset($data['inserted'])) {
+                        $query->whereNotIn('id', $data['inserted']);
+                    }
+
+                    if (isset($data['keyword'])) {
+                        $query->where('name', 'like', '%' . $data['keyword'] . '%');
+                    }
+
+                })->get()->each(function ($item, $key) use (&$result) {
+                    $result['info'][] = ['value' => $item['id'], 'html' => $item['name']];
+                });
                 break;
         }
         return $result;

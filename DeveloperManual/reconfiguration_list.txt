@@ -3,8 +3,9 @@
 3.登陆时密码错误 出现系统错误
 4.验证码不可以同时调用两个以上
 5.分类树
+6.View::share() FrontendMember
 
-107/119
+111/119
 
 Backend
 OK 系统管理系统配置网站配置Admin::Index::websiteSet
@@ -89,8 +90,8 @@ OK 扩展管理考核考核管理Admin::Assess::index
 OK 扩展管理考核新增考核Admin::Assess::add
 OK 扩展管理考核删除考核Admin::Assess::del
 OK 扩展管理考核编辑考核Admin::Assess::edit
-UNSTART 扩展管理考核统计记录Admin::AssessLog::edit
-UNSTART 扩展管理考核删除记录Admin::AssessLog::del
+OK 扩展管理考核统计记录Admin::AssessLog::edit
+OK 扩展管理考核删除记录Admin::AssessLog::del
 OK 扩展管理问卷问卷管理Admin::Quests::index
 OK 扩展管理问卷新增问卷Admin::Quests::add
 OK 扩展管理问卷删除问卷Admin::Quests::del
@@ -123,8 +124,8 @@ OK 扩展管理招聘查看招聘Home::Recruit::edit
 OK 扩展管理站内信站内信管理Home::Message::index
 OK 扩展管理站内信发送站内信Home::Message::add
 OK 扩展管理站内信删除站内信Home::Message::del
-UNSTART 扩展管理考核考核管理Home::Assess::index
-UNSTART 扩展管理考核考核评分Home::Assess::add
+OK 扩展管理考核考核管理Home::Assess::index
+OK 扩展管理考核考核评分Home::Assess::add
 UNSTART 扩展管理问卷问卷管理Home::Quests::index
 UNSTART 扩展管理问卷填写问卷Home::Quests::add
 OK Home::Wechat::index

@@ -5,23 +5,22 @@ namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\FrontendMember;
 use App\Model;
+use Carbon\Carbon;
 
 class Assess extends FrontendMember
 {
     //列表
     public function index()
     {
-
-        $currentTime = Carbon::now();
-        $where       = [
-            'group_level' => ['in', session('frontend_info.group_id')],
-            'is_enable'   => 1,
-            'start_time'  => ['lt', $currentTime],
-            'end_time'    => ['gt', $currentTime],
-        ];
-
         //初始化翻页 和 列表数据
-        $assessList = Model\Assess::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
+        $assessList = Model\Assess::where(function ($query) {
+            $currentTime = Carbon::now();
+            $query->where('is_enable', '=', 1);
+            $query->where('start_time', '<', $currentTime);
+            $query->where('end_time', '>', $currentTime);
+            $query->whereIn('group_level', [session('frontend_info.group_id')]);
+
+        })->paginate(config('system.sys_max_row'))->appends(request()->all());
         foreach ($assessList as &$assess) {
             switch ($assess['target']) {
                 case 'member':
@@ -34,7 +33,7 @@ class Assess extends FrontendMember
         }
         $assign['assess_list'] = $assessList;
 
-        $assign['title'] = trans('common.assess');
+        $assign['title'] = trans('assess.assess');
         return view('home.Assess_index', $assign);
     }
 
@@ -55,7 +54,7 @@ class Assess extends FrontendMember
             $currentTime < $assessInfo['start_time'] &&
             $currentTime > $assessInfo['end_time']
         ) {
-            return $this->error(trans('common.you') . trans('common.none') . trans('common.privilege') . trans('common.assess'),
+            return $this->error(trans('common.you') . trans('common.none') . trans('common.privilege') . trans('assess.assess'),
                 route('Home::Assess::index'));
         }
 
@@ -82,17 +81,6 @@ class Assess extends FrontendMember
             }
         }
 
-        //初始化考核需要的数据
-        switch ($assessInfo['target']) {
-            case 'member':
-                $assign['member_list'] = true;
-                break;
-            case 'member_group':
-                $assign['member_group_list'] = true;
-                break;
-        }
-
-        $assessInfo['ext_info'] = json_decode($assessInfo['ext_info'], true);
         $assign['assess_info']  = $assessInfo;
         return view('home.Assess_add', $assign);
     }
@@ -105,7 +93,7 @@ class Assess extends FrontendMember
             case 're_grade_id':
                 //不能为空
                 if ('' == $data['re_grade_id']) {
-                    $result['info'] = trans('common.quest_error1');
+                    $result['info'] = trans('assess.quest_error1');
                 }
                 break;
         }
@@ -120,25 +108,35 @@ class Assess extends FrontendMember
     //异步获取数据接口
     protected function getData($field, $data)
     {
-        $where  = [];
         $result = ['status' => true, 'info' => []];
         switch ($field) {
             case 'member':
-                isset($data['keyword']) && $data['keyword'] = $where['member_name'] = [
-                    'like',
-                    '%' . $data['keyword'] . '%',
-                ];
-                $memberUserList = Model\Member::where($where)->get();
-                foreach ($memberUserList as $memberUser) {
-                    $result['info'][] = ['value' => $memberUser['id'], 'html' => $memberUser['member_name']];
-                }
+                Model\Member::where(function ($query) use ($data) {
+                    if (isset($data['inserted'])) {
+                        $query->whereNotIn('id', $data['inserted']);
+                    }
+
+                    if (isset($data['keyword'])) {
+                        $query->where('member_name', 'like', '%' . $data['keyword'] . '%');
+                    }
+
+                })->get()->each(function ($item, $key) use (&$result) {
+                    $result['info'][] = ['value' => $item['id'], 'html' => $item['member_name']];
+                });
                 break;
             case 'member_group':
-                isset($data['keyword']) && $data['keyword'] = $where['name'] = ['like', '%' . $data['keyword'] . '%'];
-                $memberGroupList = Model\MemberGroup::where($where)->get();
-                foreach ($memberGroupList as $memberGroup) {
-                    $result['info'][] = ['value' => $memberGroup['id'], 'html' => $memberGroup['name']];
-                }
+                Model\MemberGroup::where(function ($query) use ($data) {
+                    if (isset($data['inserted'])) {
+                        $query->whereNotIn('id', $data['inserted']);
+                    }
+
+                    if (isset($data['keyword'])) {
+                        $query->where('name', 'like', '%' . $data['keyword'] . '%');
+                    }
+
+                })->get()->each(function ($item, $key) use (&$result) {
+                    $result['info'][] = ['value' => $item['id'], 'html' => $item['name']];
+                });
                 break;
         }
         return $result;

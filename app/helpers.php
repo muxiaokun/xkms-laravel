@@ -272,7 +272,7 @@ EOF;
 //将内容中的视频替换成CKplayer
 //custom_id 自定义输出div id
 //jop=>just one player 只返回一个视频
-function mContent2ckplayer($content, $image, $customId = false, $jop = false)
+function mContent2ckplayer($content, $image = '', $customId = false, $jop = false)
 {
     if (!preg_match_all('/<embed.*?\/>/i', $content, $elements)) {
         return $content;

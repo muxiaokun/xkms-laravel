@@ -37,10 +37,10 @@
                                 {{ $recruit['current_portion'] }}/{{ $recruit['max_portion'] }}
                             </td>
                             <td>
-                                {{ mDate($recruit['start_time']) }}
+                                {{ $recruit['start_time'] }}
                             </td>
                             <td>
-                                {{ mDate($recruit['end_time']) }}
+                                {{ $recruit['end_time'] }}
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['log_index'])

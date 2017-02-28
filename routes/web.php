@@ -105,7 +105,7 @@ Route::group([
         'prefix' => 'Recruit',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Recruit@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Recruit@add']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Recruit@add']);
         Route::get('edit', ['as' => 'edit', 'uses' => 'Recruit@edit']);
     });
     Route::group([

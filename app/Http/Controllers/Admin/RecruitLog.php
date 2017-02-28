@@ -15,14 +15,26 @@ class RecruitLog extends Backend
         $where      = [];
         $whereValue = request('r_id');
         $whereValue && $where[] = ['r_id', $whereValue];
-        $whereValue = request('name');
-        $whereValue && $where['name'] = ['like', '%' . $whereValue . '%'];
-        $whereValue = mMktimeRange('birthday');
-        $whereValue && $where[] = ['birthday', $whereValue];
         //初始化翻页 和 列表数据
-        $recruitLogList = Model\RecruitLog::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
-        $recruitSexData         = trans('common.recruit_sex_data');
-        $recruitCertificateData = trans('common.recruit_certificate_data');
+        $recruitLogList         = Model\RecruitLog::where(function ($query) {
+            $r_id = request('r_id');
+            if ($r_id) {
+                $query->where('r_id', 'like', '%' . $r_id . '%');
+            }
+
+            $name = request('name');
+            if ($name) {
+                $query->where('name', 'like', '%' . $name . '%');
+            }
+
+            $birthday = mMktimeRange('birthday');
+            if ($birthday) {
+                $query->timeWhere('birthday', $birthday);
+            }
+
+        })->paginate(config('system.sys_max_row'))->appends(request()->all());
+        $recruitSexData         = trans('recruit.recruit_sex_data');
+        $recruitCertificateData = trans('recruit.recruit_certificate_data');
         foreach ($recruitLogList as &$recruitLog) {
             $recruitLog['recruit_title'] = Model\Recruit::colWhere($recruitLog['r_id'])->first()['title'];
             $recruitLog['sex']           = $recruitSexData[$recruitLog['sex']];
@@ -55,10 +67,10 @@ class RecruitLog extends Backend
 
         $resultDel = Model\RecruitLog::destroy($id);
         if ($resultDel) {
-            return $this->success(trans('common.recruit_log') . trans('common.del') . trans('common.success'),
+            return $this->success(trans('recruit.re_recruit') . trans('common.del') . trans('common.success'),
                 route('Admin::RecruitLog::index'));
         } else {
-            return $this->error(trans('common.recruit_log') . trans('common.del') . trans('common.error'),
+            return $this->error(trans('recruit.re_recruit') . trans('common.del') . trans('common.error'),
                 route('Admin::RecruitLog::index'));
         }
     }

@@ -12,7 +12,7 @@
                         </th>
                         <th>@lang('recruit.re_recruit')</th>
                         <th>@lang('recruit.recruit_name')</th>
-                        <th>@lang('recruit.recruit')@lang('common.time')</th>
+                        <th>@lang('recruit.re_recruit')@lang('common.time')</th>
                         <th>@lang('recruit.recruit_birthday')</th>
                         <th>@lang('recruit.recruit_sex')</th>
                         <th>@lang('recruit.recruit_certificate')</th>
@@ -31,10 +31,10 @@
                                 {{ $recruit_log['name'] }}
                             </td>
                             <td>
-                                {{ mDate($recruit_log['created_at']) }}
+                                {{ $recruit_log['created_at'] }}
                             </td>
                             <td>
-                                {{ mDate($recruit_log['birthday']) }}
+                                {{ $recruit_log['birthday'] }}
                             </td>
                             <td>
                                 {{ $recruit_log['sex'] }}
@@ -49,8 +49,8 @@
                                     $(function () {
                                         var config = {
                                             'bind_obj': $('#M_alert_log_{{ $recruit_log['id'] }}'),
-                                            'title': '@lang('common.recruit_log')',
-                                            'message':{{ $recruit_log['ext_info']|json_encode }}
+                                            'title': '@lang('recruit.recruit_log')',
+                                            'message':{!! json_encode($recruit_log['ext_info']) !!}
                                         }
                                         new M_alert_log(config);
                                     });

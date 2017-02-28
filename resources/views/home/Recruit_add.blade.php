@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">@lang('common.recruit_name')</label>
+                        <label class="col-sm-4 control-label">@lang('recruit.recruit_name')</label>
                         <div class="col-sm-7">
                             <input type="text" name="name" class="form-control">
                         </div>
@@ -15,7 +15,7 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">@lang('common.recruit_birthday')</label>
+                        <label class="col-sm-4 control-label">@lang('recruit.recruit_birthday')</label>
                         @datepicker(birthday)
                         <div class="col-sm-7">
                             <input type="text" name="birthday" value="{{ $start_year }}" class="form-control">
@@ -26,10 +26,10 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">@lang('common.recruit_sex')</label>
+                        <label class="col-sm-4 control-label">@lang('recruit.recruit_sex')</label>
                         <div class="col-sm-7">
                             <select name="sex" class="form-control">
-                                @foreach ($Think['lang']['recruit_sex_data'] as $data)
+                                @foreach (trans('recruit.recruit_sex_data') as $key => $data)
                                     <option value="{{ $key }}">{{ $data }}</option>
                                 @endforeach
                             </select>
@@ -38,10 +38,10 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">@lang('common.recruit_certificate')</label>
+                        <label class="col-sm-4 control-label">@lang('recruit.recruit_certificate')</label>
                         <div class="col-sm-7">
                             <select name="certificate" class="form-control">
-                                @foreach ($Think['lang']['recruit_certificate_data'] as $data)
+                                @foreach (trans('recruit.recruit_certificate_data') as $key => $data)
                                     <option value="{{ $key }}">{{ $data }}</option>
                                 @endforeach
                             </select>

@@ -13,7 +13,8 @@
                     <tr>
                         <th><input type="checkbox" onClick="M_allselect_par(this,'table')"/>&nbsp;@lang('common.id')
                         </th>
-                        <th>@lang('common.title')</th>
+                        <th>@lang('quests.quests')@lang('common.title')</th>
+                        <th>@lang('common.member')@lang('common.name')</th>
                         <th>@lang('common.add')@lang('common.time')</th>
                         <th>@lang('common.handle')</th>
                     </tr>
@@ -22,6 +23,9 @@
                             <td>
                                 <input name="id[]" type="checkbox" value="{{ $quests_answer['id'] }}"/>
                                 &nbsp;{{ $quests_answer['id'] }}
+                            </td>
+                            <td>
+                                {{ $quests_answer['quests_title'] }}
                             </td>
                             <td>
                                 {{ $quests_answer['member_name'] }}

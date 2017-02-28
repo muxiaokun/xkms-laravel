@@ -12,20 +12,15 @@
                     <div class="form-group">
                         <label class="col-sm-12">
                             {{ $quest['question'] }}
-                            <switch name="quest['answer_type']">
-                                <case value="radio">
-                                    @lang('common.radio')
-                                </case>
-                                <case value="checkbox">
-                                    @lang('common.checkbox')
-                                </case>
-                                <case value="text">
-                                    @lang('common.textarea')
-                                </case>
-                                <case value="textarea">
-                                    @lang('common.textarea')
-                                </case>
-                            </switch>
+                            @if ('radio' == $quest['answer_type'])
+                                @lang('common.radio')
+                            @elseif ('checkbox' == $quest['answer_type'])
+                                @lang('common.checkbox')
+                            @elseif ('text' == $quest['answer_type'])
+                                @lang('common.textarea')
+                            @elseif ('textarea' == $quest['answer_type'])
+                                @lang('common.textarea')
+                            @endif
                         </label>
                         <div class="col-sm-12">
                             @foreach ($quest['answer'] as $answer)

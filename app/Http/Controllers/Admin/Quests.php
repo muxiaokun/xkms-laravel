@@ -128,8 +128,8 @@ class Quests extends Backend
             //删除问卷会删除该问卷下的所有答案
             $resultClear = Model\QuestsAnswer::colWhere($id, 'quests_id')->delete();
             if ($clear) {
-                if ($resultClear) {
-                    Model\Quests::where(['id' => $id])->data(['current_portion' => 0])->save();
+                if (false !== $resultClear) {
+                    Model\Quests::colWhere($id)->update(['current_portion' => 0]);
                     return $this->success(trans('quests.quests') . trans('common.clear') . trans('common.success'),
                         route('Admin::Quests::index'));
                 } else {

@@ -5,7 +5,7 @@
 5.分类树
 6.View::share() FrontendMember
 
-111/119
+116/119
 
 Backend
 OK 系统管理系统配置网站配置Admin::Index::websiteSet
@@ -96,9 +96,9 @@ OK 扩展管理问卷问卷管理Admin::Quests::index
 OK 扩展管理问卷新增问卷Admin::Quests::add
 OK 扩展管理问卷删除问卷Admin::Quests::del
 OK 扩展管理问卷编辑问卷Admin::Quests::edit
-UNSTART 扩展管理问卷答案管理Admin::QuestsAnswer::index
-UNSTART 扩展管理问卷清空答案Admin::QuestsAnswer::del
-UNSTART 扩展管理问卷统计问卷Admin::QuestsAnswer::edit
+OK 扩展管理问卷答案管理Admin::QuestsAnswer::index
+OK 扩展管理问卷清空答案Admin::QuestsAnswer::del
+OK 扩展管理问卷统计问卷Admin::QuestsAnswer::edit
 OK 扩展管理地域地域管理Admin::Region::index
 OK 扩展管理地域新增地域Admin::Region::add
 OK 扩展管理地域删除地域Admin::Region::del
@@ -126,7 +126,7 @@ OK 扩展管理站内信发送站内信Home::Message::add
 OK 扩展管理站内信删除站内信Home::Message::del
 OK 扩展管理考核考核管理Home::Assess::index
 OK 扩展管理考核考核评分Home::Assess::add
-UNSTART 扩展管理问卷问卷管理Home::Quests::index
-UNSTART 扩展管理问卷填写问卷Home::Quests::add
+OK 扩展管理问卷问卷管理Home::Quests::index
+OK 扩展管理问卷填写问卷Home::Quests::add
 OK Home::Wechat::index
 UNSTART Home::Wechat::member_bind

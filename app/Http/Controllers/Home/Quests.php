@@ -5,22 +5,26 @@ namespace App\Http\Controllers\Home;
 
 use App\Http\Controllers\FrontendMember;
 use App\Model;
+use Carbon\Carbon;
 
 class Quests extends FrontendMember
 {
     //列表
     public function index()
     {
-        $currentTime           = Carbon::now();
-        $where                 = [
-            'start_time' => ['lt', $currentTime],
-            'end_time'   => ['gt', $currentTime],
-            '(current_portion < max_portion OR max_portion = 0)',
-        ];
-        $questsList = Model\Quests::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
+        $questsList = Model\Quests::where(function ($query) {
+            $currentTime = Carbon::now();
+            $query->where('start_time', '<', $currentTime);
+            $query->where('end_time', '>', $currentTime);
+            $query->where(function ($query) {
+                $query->whereColumn('current_portion', '<', 'max_portion');
+                $query->orWhere('max_portion', '=', 0);
+            });
+
+        })->paginate(config('system.sys_max_row'))->appends(request()->all());
         $assign['quests_list'] = $questsList;
 
-        $assign['title'] = trans('common.quests');
+        $assign['title']       = trans('quests.quests');
         return view('home.Quests_index', $assign);
     }
 
@@ -33,10 +37,14 @@ class Quests extends FrontendMember
             return $this->error(trans('common.id') . trans('common.error'), route('Home::Quests::index'));
         }
 
-        $questsInfo = Model\Quests::colWhere($id)->first()->toArray();
+        $questsInfo = Model\Quests::colWhere($id)->first();
         //检测是否能够提交
+        if (null === $questsInfo) {
+            return $this->error(trans('quests.quests') . trans('common.dont') . trans('common.exists'),
+                route('Home::Quests::index'));
+        }
         $currentTime = Carbon::now();
-        if ($questsInfo['start_time'] < $currentTime && $questsInfo['end_time'] < $currentTime) {
+        if ($questsInfo['start_time'] > $currentTime && $questsInfo['end_time'] < $currentTime) {
             return $this->error(trans('common.start') . trans('common.end') . trans('common.time') . trans('common.error'),
                 route('Home::Quests::index'));
         }
@@ -46,28 +54,30 @@ class Quests extends FrontendMember
         }
         $accessInfo = request('access_info');
         if (isset($questsInfo['access_info']) && $questsInfo['access_info'] != $accessInfo) {
-            return $this->error(trans('common.access') . trans('common.pass') . trans('common.error'),
+            return $this->error(trans('common.access') . trans('common.info') . trans('common.error'),
                 route('Home::Quests::index'));
         }
         //初始化问题
-        $questsQuestList = json_decode($questsInfo['ext_info'], true);
+        $questsQuestList = is_array($questsInfo['ext_info']) ? $questsInfo['ext_info'] : [];
         foreach ($questsQuestList as $questId => $quest) {
             $questsQuestList[$questId]['answer'] = explode('|', $questsQuestList[$questId]['answer']);
         }
         //存入数据
         if (request()->isMethod('POST')) {
             $data = [];
-            session('frontend.id') && $data['member_id'] = session('frontend.id');
+            session('frontend_info.id') && $data['member_id'] = session('frontend_info.id');
             $data['quests_id'] = $id;
             $data['answer']    = '|';
             $questsAnswer      = request('quests');
             foreach ($questsQuestList as $questId => $quest) {
-                if ($quest['answer_type'] == 'checkbox') {
-                    foreach ($questsAnswer[$questId] as $value) {
-                        $data['answer'] .= $questId . ':' . $value . '|';
+                if (isset($questsAnswer[$questId]) && $questsAnswer[$questId]) {
+                    if ($quest['answer_type'] == 'checkbox') {
+                        foreach ($questsAnswer[$questId] as $value) {
+                            $data['answer'] .= $questId . ':' . $value . '|';
+                        }
+                    } else {
+                        $data['answer'] .= $questId . ':' . $questsAnswer[$questId] . '|';
                     }
-                } else {
-                    $data['answer'] .= $questId . ':' . $questsAnswer[$questId] . '|';
                 }
             }
             $resultAdd = Model\QuestsAnswer::create($data);
@@ -84,7 +94,7 @@ class Quests extends FrontendMember
 
         $assign['quests_quest_list'] = $questsQuestList;
         $assign['quests_info']       = $questsInfo;
-        $assign['title']             = trans('common.write') . trans('common.quests');
+        $assign['title'] = trans('common.write') . trans('quests.quests');
         return view('home.Quests_add', $assign);
     }
 }

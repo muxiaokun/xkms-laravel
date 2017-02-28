@@ -21,35 +21,30 @@
                             </label>
                             <span class="mt10 help-block">{{ $quest['explains'] }}</span>
                             <div>
-                                <switch name="quest['answer_type']">
-                                    <case value="radio">
-                                        @foreach ($quest['answer'] as $info)
-                                            <div class="col-sm-2">
-                                                <input type="radio" name="quests[{{ $quest_id }}]" value="{{ $key }}"
-                                                       @if (in_array($key,$quests_answer_list[$quest_id]))checked="checked"
-                                                       @endif disabled="disabled"/>
-                                                {{ $info }}
-                                            </div>
-                                        @endforeach
-                                    </case>
-                                    <case value="checkbox">
-                                        @foreach ($quest['answer'] as $info)
-                                            <div class="col-sm-2">
-                                                <input type="checkbox" name="quests[{{ $quest_id }}][]"
-                                                       value="{{ $key }}"
-                                                       @if (in_array($key,$quests_answer_list[$quest_id]))checked="checked"
-                                                       @endif disabled="disabled"/>
-                                                {{ $info }}
-                                            </div>
-                                        @endforeach
-                                    </case>
-                                    <case value="text">
-                                        {{ $quests_answer_list[$quest_id][0] }}
-                                    </case>
-                                    <case value="textarea">
-                                        {{ $quests_answer_list[$quest_id][0] }}
-                                    </case>
-                                </switch>
+                                @if ('radio' == $quest['answer_type'])
+                                    @foreach ($quest['answer'] as $key=> $info)
+                                        <div class="col-sm-2">
+                                            <input type="radio" name="quests[{{ $quest_id }}]" value="{{ $key }}"
+                                                   @if (in_array($key,$quests_answer_list[$quest_id]))checked="checked"
+                                                   @endif disabled="disabled"/>
+                                            {{ $info }}
+                                        </div>
+                                    @endforeach
+                                @elseif ('checkbox' == $quest['answer_type'])
+                                    @foreach ($quest['answer'] as $key=> $info)
+                                        <div class="col-sm-2">
+                                            <input type="checkbox" name="quests[{{ $quest_id }}][]"
+                                                   value="{{ $key }}"
+                                                   @if (in_array($key,$quests_answer_list[$quest_id]))checked="checked"
+                                                   @endif disabled="disabled"/>
+                                            {{ $info }}
+                                        </div>
+                                    @endforeach
+                                @elseif ('text' == $quest['answer_type'])
+                                    {{ $quests_answer_list[$quest_id][0] }}
+                                @elseif ('textarea' == $quest['answer_type'])
+                                    {{ $quests_answer_list[$quest_id][0] }}
+                                @endif
                             </div>
                         </div>
                     </div>

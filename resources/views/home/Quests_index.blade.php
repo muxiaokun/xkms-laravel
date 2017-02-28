@@ -25,6 +25,7 @@
                 <td>
                     @if ($quests['access_info'])
                         <form action="{{ route('Home::Quests::add',['id'=>$quests['id']]) }}" method="get">
+                            <input type="hidden" name="id" value="{{ $quests['id'] }}"/>
                             <input type="text" name="access_info"/>
                             <button class="btn btn-default btn-sm">@lang('common.confirm')@lang('common.pass')</button>
                         </form>

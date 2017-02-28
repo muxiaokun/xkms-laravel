@@ -97,7 +97,7 @@ Route::group([
         'prefix' => 'Quests',
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Quests@index']);
-        Route::get('add', ['as' => 'add', 'uses' => 'Quests@add']);
+        Route::match(['get', 'post'], 'add', ['as' => 'add', 'uses' => 'Quests@add']);
     });
     Route::group([
         'as'     => 'Recruit::',

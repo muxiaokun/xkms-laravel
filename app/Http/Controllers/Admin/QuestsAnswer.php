@@ -11,16 +11,6 @@ class QuestsAnswer extends Backend
     //列表
     public function index()
     {
-        //建立where
-        $where      = [];
-        $whereValue = request('quests_id');
-        $whereValue && $where[] = ['quests_id', $whereValue];
-        $whereValue = request('quests_title');
-        $whereValue && $where[] = [
-            'quests_id',
-            'in',
-            Model\Quests::where(['title' => ['like', '%' . $whereValue . '%']])->select(['id'])->pluck('id'),
-        ];
         $whereValue = request('member_id');
         $whereValue && $where[] = [
             'member_id',
@@ -28,16 +18,53 @@ class QuestsAnswer extends Backend
             Model\Member::where(['member_name' => ['like', '%' . $whereValue . '%']])->select(['id'])->pluck('id'),
         ];
 
-        $questsAnswerList = Model\QuestsAnswer::where($where)->paginate(config('system.sys_max_row'))->appends(request()->all());
+        $questsAnswerList          = Model\QuestsAnswer::where(function ($query) {
+            $quests_id = request('quests_id');
+            if ($quests_id) {
+                $query->where('quests_id', '=', $quests_id);
+            }
+
+            $quests_title = request('quests_title');
+            if ($quests_title) {
+                $ids = Model\Quests::where([
+                    [
+                        'title',
+                        'like',
+                        '%' . $quests_title . '%',
+                    ],
+                ])->select(['id'])->pluck('id');
+                $query->whereIn('quests_id', $ids);
+            }
+
+            $member_name = request('member_name');
+            if ($member_name) {
+                $ids = Model\Member::where([
+                    [
+                        'member_name',
+                        'like',
+                        '%' . $member_name . '%',
+                    ],
+                ])->select(['id'])->pluck('id');
+                $query->whereIn('member_id', $ids);
+            }
+
+
+        })->paginate(config('system.sys_max_row'))->appends(request()->all());
         foreach ($questsAnswerList as &$questsAnswer) {
-            $memberName                  = Model\Member::colWhere($groupId)->first()['name'];
-            $questsAnswer['member_name'] = ($memberName) ? $memberName : trans('common.anonymous');
+            $questsAnswer['quests_title'] = Model\Quests::colWhere($questsAnswer['quests_id'])->first()['title'];
+            $memberInfo                   = Model\Member::colWhere($questsAnswer['member_id'])->first();
+            if (null === $memberInfo) {
+                $questsAnswer['member_name'] = trans('common.member') . trans('common.not') . trans('common.exists');
+            } else {
+                $questsAnswer['member_name'] = $memberInfo['member_name'];
+            }
+
         }
         $assign['quests_answer_list'] = $questsAnswerList;
         //初始化where_info
         $whereInfo                 = [];
-        $whereInfo['quests_title'] = ['type' => 'input', 'name' => trans('quests.quests') . trans('common.name')];
-        $whereInfo['member_id']    = ['type' => 'input', 'name' => trans('common.member') . trans('common.name')];
+        $whereInfo['quests_title'] = ['type' => 'input', 'name' => trans('quests.quests') . trans('common.title')];
+        $whereInfo['member_name']  = ['type' => 'input', 'name' => trans('common.member') . trans('common.name')];
         $assign['where_info']      = $whereInfo;
 
         //初始化batch_handle
@@ -62,14 +89,16 @@ class QuestsAnswer extends Backend
         $questsInfo       = Model\Quests::colWhere($questsAnswerInfo['quests_id'])->first()->toArray();
 
         //初始化问题
-        $questsQuestList = json_decode($questsInfo['ext_info'], true);
+        $questsQuestList = $questsInfo['ext_info'];
         foreach ($questsQuestList as $questId => $quest) {
             $questsQuestList[$questId]['answer'] = explode('|', $questsQuestList[$questId]['answer']);
         }
         $questsAnswerList = [];
         foreach (explode('|', $questsAnswerInfo['answer']) as $questAnswer) {
-            list($key, $value) = explode(':', $questAnswer);
-            '' != $key && $questsAnswerList[$key][] = $value;
+            if ($questAnswer) {
+                list($key, $value) = explode(':', $questAnswer);
+                '' != $key && $questsAnswerList[$key][] = $value;
+            }
         }
 
         $assign['quests_quest_list']  = $questsQuestList;
@@ -77,7 +106,7 @@ class QuestsAnswer extends Backend
         $assign['quests_info']        = $questsInfo;
         $assign['quests_answer_info'] = $questsAnswerInfo;
         $assign['edit_info'] = Model\QuestsAnswer::columnEmptyData();
-        $assign['title']              = trans('common.quests') . trans('common.answer');
+        $assign['title'] = trans('quests.quests') . trans('common.answer');
         return view('admin.QuestsAnswer_add', $assign);
     }
 
@@ -92,38 +121,44 @@ class QuestsAnswer extends Backend
         //读取问题
         $questsInfo = Model\Quests::colWhere($questsId)->first()->toArray();
         //初始化问题
-        $questsQuestList = json_decode($questsInfo['ext_info'], true);
+        $questsQuestList                            = is_array($questsInfo['ext_info']) ? $questsInfo['ext_info'] : [];
         foreach ($questsQuestList as $questId => $quest) {
-            $answerName = explode('|', $questsQuestList[$questId]['answer']);
             $answer     = [];
             switch ($quest['answer_type']) {
                 case 'radio':
+                    $answerName              = explode('|', $quest['answer']);
                     foreach ($answerName as $k => $name) {
-                        $answer[$k]['name']  = $name;
-                        $answer[$k]['count'] = Model\QuestsAnswer::count_quests_answer($questsId,
-                            '%|' . $questId . ':' . $k . "|%");
+                        $answer[$k]['name'] = $name;
+                        $answer[$k]['count'] = Model\QuestsAnswer::whereQuestsAnswer($questsId,
+                            '%|' . $questId . ':' . $k . "|%")->count();
                     }
                     break;
                 case 'checkbox':
+                    $answerName              = explode('|', $quest['answer']);
                     foreach ($answerName as $k => $name) {
-                        $answer[$k]['name']  = $name;
-                        $answer[$k]['count'] = Model\QuestsAnswer::count_quests_answer($questsId,
-                            '%|' . $questId . ':' . $k . "|%");
+                        $answer[$k]['name'] = $name;
+                        $answer[$k]['count'] = Model\QuestsAnswer::whereQuestsAnswer($questsId,
+                            '%|' . $questId . ':' . $k . "|%")->count();
                     }
                     break;
                 case 'text':
-                    $answer[$k]['count'] = Model\QuestsAnswer::count_quests_answer($questsId, "%|" . $questId . ":%");
+                    $answer[0]['name']  = '';
+                    $answer[0]['count'] = Model\QuestsAnswer::whereQuestsAnswer($questsId,
+                        "%|" . $questId . ":%")->count();
                     break;
                 case 'textarea':
-                    $answer[$k]['count'] = Model\QuestsAnswer::count_quests_answer($questsId, "%|" . $questId . ":%");
+                    $answer[0]['name']  = '';
+                    $answer[0]['count'] = Model\QuestsAnswer::whereQuestsAnswer($questsId,
+                        "%|" . $questId . ":%")->count();
                     break;
             }
             $questsQuestList[$questId]['answer']    = $answer;
-            $questsQuestList[$questId]['max_count'] = Model\QuestsAnswer::count_quests_answer($questsId);
+            $questsQuestList[$questId]['max_count'] = Model\QuestsAnswer::whereQuestsAnswer($questsId,
+                "%|" . $questId . ":%")->count();
         }
         $assign['quests_quest_list'] = $questsQuestList;
 
-        $assign['title'] = trans('common.quests') . trans('common.answer') . trans('common.statistics');
+        $assign['title'] = trans('quests.quests') . trans('common.answer') . trans('common.statistics');
         return view('admin.QuestsAnswer_edit', $assign);
     }
 
@@ -138,7 +173,7 @@ class QuestsAnswer extends Backend
         $questsAnswerInfo = Model\QuestsAnswer::colWhere($id)->first()->toArray();
         $resultDel        = Model\QuestsAnswer::destroy($questsAnswerInfo['id']);
         if ($resultDel) {
-            Model\Quests::where(['id' => $questsAnswerInfo['quests_id']])->setDec('current_portion');
+            Model\Quests::where(['id' => $questsAnswerInfo['quests_id']])->decrement('current_portion');
             return $this->success(trans('common.del') . trans('common.answer') . trans('common.success'),
                 route('Admin::QuestsAnswer::index'));
         } else {

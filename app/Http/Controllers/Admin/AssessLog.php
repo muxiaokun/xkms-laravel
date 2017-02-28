@@ -43,8 +43,8 @@ class AssessLog extends Backend
                 $assessInfo['all_grade'] += $resultInfo[$key]['g'];
             }
             $memberInfo = Model\Member::colWhere($assessInfo['grade_id'])->first();
-            if (null !== $memberInfo) {
-                $assessInfo['re_grade_name'] = $memberInfo['member_name'];
+            if (null === $memberInfo) {
+                $assessInfo['re_grade_name'] = trans('common.member') . trans('common.not') . trans('common.exists');
             } else {
                 $assessInfo['re_grade_name'] = $memberInfo['member_name'];
             }

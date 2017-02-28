@@ -10,14 +10,14 @@ class QuestsAnswer extends Common
     ];
 
     //统计答案
-    public function count_quests_answer($query, $questsId, $answer = false)
+    public function scopeWhereQuestsAnswer($query, $questsId, $answer = false)
     {
-        if (!$questsId) {
-            return false;
+        $query->where('quests_id', '=', $questsId);
+
+        if ($answer) {
+            $query->where('answer', 'like', $answer);
         }
 
-        $answer   = ($answer) ? 'answer like "' . $answer . '"' : '1 = 1';
-        $countNum = $query->where(['quests_id' => $questsId, $answer])->count();
-        return $countNum;
+        return $query;
     }
 }

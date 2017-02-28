@@ -5,7 +5,7 @@
 5.分类树
 6.View::share() FrontendMember
 
-116/119
+118/119
 
 Backend
 OK 系统管理系统配置网站配置Admin::Index::websiteSet
@@ -65,7 +65,7 @@ OK 内容管理导航编辑导航Admin::Navigation::edit
 OK 扩展管理微信微信管理Admin::Wechat::index
 OK 扩展管理微信配置微信Admin::Wechat::add
 OK 扩展管理微信删除微信绑定Admin::Wechat::del
-UNSTART 扩展管理微信推送消息Admin::Wechat::edit
+OK 扩展管理微信推送消息Admin::Wechat::edit
 OK 扩展管理留言板留言板管理Admin::MessageBoard::index
 OK 扩展管理留言板添加留言板Admin::MessageBoard::add
 OK 扩展管理留言板删除留言板Admin::MessageBoard::del
@@ -129,4 +129,4 @@ OK 扩展管理考核考核评分Home::Assess::add
 OK 扩展管理问卷问卷管理Home::Quests::index
 OK 扩展管理问卷填写问卷Home::Quests::add
 OK Home::Wechat::index
-UNSTART Home::Wechat::member_bind
+OK Home::Wechat::member_bind

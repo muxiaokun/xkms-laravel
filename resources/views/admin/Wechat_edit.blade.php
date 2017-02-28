@@ -66,7 +66,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">@lang('common.content')
-                                    1@lang('common.color')</label>
+                                    1 @lang('common.color')</label>
                                 <div class="col-sm-7">
                                     <input type="text" name="content1_color" value="#000000" class="form-control">
                                 </div>
@@ -85,7 +85,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">@lang('common.content')
-                                    2@lang('common.color')</label>
+                                    2 @lang('common.color')</label>
                                 <div class="col-sm-7">
                                     <input type="text" name="content2_color" value="#000000" class="form-control">
                                 </div>

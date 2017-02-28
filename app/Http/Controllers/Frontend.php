@@ -59,7 +59,7 @@ class Frontend extends Common
      * @param bool $ifVc 强制不使用验证码
      * @return string
      */
-    protected function doLogin($userName = null, $password = null, $ifVc = true)
+    protected function doLogin($userName = null, $password = null, $ifVc = true, $memberId = 0)
     {
         if ($ifVc && !$this->verifyCheck(request('verify'), 'login')) {
             return 'verify_error';
@@ -68,11 +68,15 @@ class Frontend extends Common
         //检测前台尝试登陆次数
         $loginNum   = config('system.sys_frontend_login_num');
         $lockTime   = config('system.sys_frontend_lock_time');
-        $where      = [
-            ['member_name', $userName],
-            ['is_enable', '1'],
-        ];
-        $memberInfo = Model\Member::where($where)->first();
+        if ($memberId) {
+            $memberInfo = Model\Member::colWhere($memberId)->first();
+        } else {
+            $where      = [
+                ['member_name', $userName],
+                ['is_enable', '1'],
+            ];
+            $memberInfo = Model\Member::where($where)->first();
+        }
         if (null === $memberInfo) {
             return 'user_pwd_error';
         }
@@ -81,7 +85,7 @@ class Frontend extends Common
             return 'lock_user_error';
         }
         //验证用户名密码
-        if ($memberInfo['member_pwd'] == md5($password . $memberInfo['member_rand'])) {
+        if ($memberInfo['member_pwd'] == md5($password . $memberInfo['member_rand']) || $memberId) {
             $loginData = [
                 'last_time' => Carbon::now(),
                 'login_ip'  => request()->ip(),

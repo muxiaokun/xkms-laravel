@@ -6,11 +6,10 @@ namespace App\Http\Controllers\Home;
 use App\Http\Controllers\Frontend;
 use App\Model;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class Wechat extends Frontend
 {
-    private $Wechat;
-
     public function index()
     {
         $wechat = new \App\Library\Wechat();
@@ -52,28 +51,28 @@ class Wechat extends Frontend
     //主接口 自动回复文本消息
     private function _index_text($msgInfo)
     {
-        $wechat = new \App\Library\Wechat();
         if (!$msgInfo) {
             return;
         }
 
-        $data    = [
+        $wechat             = new \App\Library\Wechat();
+        $data               = [
             'ToUserName'   => $msgInfo['FromUserName'],
             'FromUserName' => $msgInfo['ToUserName'],
             'CreateTime'   => Carbon::now(),
             'MsgType'      => 'text',
         ];
         switch ($msgInfo['Content']) {
-            case '登录':
+            case trans('common.login'):
                 $ApiLink    = route('Home::Wechat::member_bind');
-                $Oauth2Link = $wechat->Oauth2_enlink($ApiLink);
+                $Oauth2Link = $wechat->Oauth2_enlink($ApiLink, 'snsapi_userinfo');
                 $content    = $Oauth2Link;
                 break;
-            case '时间':
-                $content = trans('common.server') . trans('common.time') . ':' . date(config('system.sys_date_detail'));
+            case trans('common.time'):
+                $content = trans('common.server') . trans('common.time') . ':' . Carbon::now();
                 break;
             default:
-                $content = '您发送的内容是：' . $msgInfo['Content'];
+                $content = trans('common.welcome') . trans('common.use') . trans('common.app_name');
         }
         $data['Content'] = $content;
         return $wechat->msg_encode($data);
@@ -88,39 +87,49 @@ class Wechat extends Frontend
             $memberPwd  = request('pwd');
             $msg        = $this->doLogin($memberName, $memberPwd);
             if ($this->isLogin()) {
-                $wechatInfo              = session('wechat_info');
-                $wechatInfo['member_id'] = session('frontend_info.id');
+                $code        = request($wechat->Oauth2_code);
+                $cacheName   = $code;
+                $cacheValue  = Cache::get($cacheName);
+                $accessToken = $cacheValue;
+                $userInfo    = $wechat->Oauth2_user($accessToken['access_token'], $accessToken['openid']);
+                $wechatInfo  = [
+                    'openid'     => $userInfo['openid'],
+                    'unionid'    => isset($userInfo['unionid']) ? $userInfo['unionid'] : '',
+                    'nickname'   => $userInfo['nickname'],
+                    'sex'        => $userInfo['sex'],
+                    'language'   => $userInfo['language'],
+                    'country'    => $userInfo['country'],
+                    'province'   => $userInfo['province'],
+                    'city'       => $userInfo['city'],
+                    'headimgurl' => $userInfo['headimgurl'],
+                    'bind_time'  => Carbon::now(),
+                    'member_id'  => session('frontend_info.id'),
+                ];
                 Model\Wechat::updateOrCreate(['openid' => $wechatInfo['openid']], $wechatInfo);
-                session('wechat_info', null);
             }
-            $this->_member_bind_msg($msg);
+            return $this->_member_bind_msg($msg);
         } else {
-            $code        = request($wechat->Oauth2_code);
-            $accessToken = $wechat->Oauth2_access_token($code);
-            //TODO access_token 复用
-            $userInfo    = $wechat->Oauth2_user($accessToken['access_token'], $accessToken['openid']);
-            $data        = [
-                'openid'     => $userInfo['openid'],
-                'nickname'   => $userInfo['nickname'],
-                'sex'        => $userInfo['sex'],
-                'language'   => $userInfo['language'],
-                'country'    => $userInfo['country'],
-                'province'   => $userInfo['province'],
-                'city'       => $userInfo['city'],
-                'headimgurl' => $userInfo['headimgurl'],
-                'bind_time'  => Carbon::now(),
-            ];
+            $code       = request($wechat->Oauth2_code);
+            $cacheName  = $code;
+            $cacheValue = Cache::get($cacheName);
+            if (!$cacheValue) {
+                $accessToken = $wechat->Oauth2_access_token($code);
+                $cacheValue  = $accessToken;
+                $expiresAt   = Carbon::now()->addSecond($accessToken['expires_in']);
+                Cache::put($cacheName, $cacheValue, $expiresAt);
+            }
+            $accessToken = $cacheValue;
             //绑定模式逻辑节点
             //已经绑定 直接登陆
             //未绑定 登录绑定
-            $wechatId = Model\Wechat::where('openid', $userInfo['openid'])->first()['id'];
-            if ($wechatId) {
-                $memberId = Model\Wechat::colWhere($wechatId)->first()['member_id'];
-                $msg      = $this->doLogin(null, null, false, $memberId);
-                $this->_member_bind_msg($msg);
-            } else {
-                session('wechat_info', $data);
+            $userInfo   = $wechat->Oauth2_user($accessToken['access_token'], $accessToken['openid']);
+            $wechatInfo = Model\Wechat::where('openid', $userInfo['openid'])->first();
+            if (null === $wechatInfo) {
                 return view('home.Wechat_member_bind');
+            } else {
+                $memberId = $wechatInfo['member_id'];
+                $msg      = $this->doLogin(null, null, false, $memberId);
+                return $this->_member_bind_msg($msg);
             }
         }
     }
@@ -141,24 +150,5 @@ class Wechat extends Frontend
                 return $this->success(trans('common.login') . trans('common.success'), route('Home::Member::index'));
         }
     }
-
-// switch($_GET['a'])
-    // {
-    // case 'access_token':
-    // $accessToken = $wechat->access_token();
-    // break;
-    // case 'msg_send':
-    // $accessToken = $wechat->access_token();
-    // $accessToken['access_token'] = 'b3yJwu5WrI26w7jF8-GYyJrwacZ17hNjgjlIpMdH71HUJToyXX_S58toIfGEbWqQy133YPo27SToCPLWmw5FuWMz3Hu8jylYOuXCuW_w2CE';
-    // $data = array(
-    // "touser"=>"oIckguFz2cIEQK6jU7LIPQwdxT7o",
-    // "msgtype"=>"text",
-    // "text"=>array(
-    // "content"=>"Hello World",
-    // ),
-    // );
-    // $wechat->msg_send($accessToken['access_token'],$data);
-    // break;
-    // }
 
 }

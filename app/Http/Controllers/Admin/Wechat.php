@@ -15,7 +15,9 @@ class Wechat extends Backend
         $wechatList = Model\Wechat::where(function ($query) {
             $member_name = request('member_name');
             if ($member_name) {
-                $query->where('member_name', 'like', '%' . $member_name . '%');
+                $memberIds = Model\Member::where('member_name', 'like',
+                    '%' . $member_name . '%')->select(['id'])->pluck('id');
+                $query->whereIn('member_id', $memberIds);
             }
 
             $bind_time = mMktimeRange('bind_time');
@@ -94,23 +96,23 @@ class Wechat extends Backend
         if (request()->isMethod('POST')) {
             $errorGoLink = route('Admin::Wechat::edit', ['id' => $id]);
             $Wechat = new \App\Library\Wechat();
-            if (!config('app.debug')) {
+            if (config('app.debug')) {
+                $templateId = 'LDB2O9YxLivGqFr-ihZt8EcXf7QlRIH4yRA7kIHlPq4';
+            } else {
                 $templateId = $Wechat->get_template($templateIdShort);
                 if (0 != $templateId['errcode']) {
                     return $this->error('template_id' . trans('common.error'), $errorGoLink);
                 }
 
                 $templateId = $templateId['template_id'];
-            } else {
-                $templateId = 'LDB2O9YxLivGqFr-ihZt8EcXf7QlRIH4yRA7kIHlPq4';
             }
             $data         = [
                 "touser"      => $editInfo['openid'],
                 "template_id" => $templateId,
-                "url"         => "http://ms.xjhywh.cn",
+                "url"         => "https://wwww.baidu.com",
                 "topcolor"    => "#000000",
             ];
-            $data['data'] = $this->makeData('add');
+            $data['data'] = $this->makeData();
             $putTemplate  = $Wechat->put_template($data);
             if (0 === $putTemplate['errcode']) {
                 return $this->success(trans('wechat.wechat') . trans('common.send') . trans('common.success'),
@@ -144,7 +146,7 @@ class Wechat extends Backend
     }
 
     //构造数据
-    private function makeData($type)
+    private function makeData()
     {
         $startContent      = request('start_content');
         $startContentColor = request('start_content_color');

@@ -2,6 +2,9 @@
 // Wechat Class
 namespace App\Library;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
+
 class Wechat
 {
     public $Oauth2_code;
@@ -67,10 +70,14 @@ class Wechat
 
     public function get_access_token()
     {
-        $access_token = S('wechat_access_token');
-        if (!$access_token) {
+        $cacheName      = 'access_token';
+        $cacheValue     = Cache::get($cacheName);
+        $access_token   = $cacheValue['access_token'];
+        if (!$cacheValue) {
             $access_token = $this->access_token();
-            S('wechat_access_token', $access_token['access_token'], $access_token['expires_in'] - 60);
+            $cacheValue = $access_token;
+            $expiresAt  = Carbon::now()->addSecond($access_token['expires_in']);
+            Cache::put($cacheName, $cacheValue, $expiresAt);
             $access_token = $access_token['access_token'];
         }
         return $access_token;
@@ -87,9 +94,9 @@ class Wechat
             . 'grant_type=client_credential'
             . '&appid=%s'
             . '&secret=%s';
-        $enlink       = sprintf($enlink_fonmot, $appId, $appSecret);
-        $json_str     = file_get_contents($enlink);
-        $access_token = json_decode($json_str, true);
+        $enlink        = sprintf($enlink_fonmot, $appId, $appSecret);
+        $json_str      = file_get_contents($enlink);
+        $access_token  = json_decode($json_str, true);
         return $access_token;
     }
 
@@ -119,10 +126,10 @@ class Wechat
      */
     public function Oauth2_enlink($url, $scope = '', $state = '')
     {
-        $appId      = $this->appId;
-        $code       = $this->Oauth2_code;
-        $url        = urlencode($url);
-        $scope_type = array(
+        $appId         = $this->appId;
+        $code          = $this->Oauth2_code;
+        $url           = urlencode($url);
+        $scope_type    = array(
             'snsapi_base',
             'snsapi_userinfo',
         );
@@ -134,7 +141,7 @@ class Wechat
             . '&scope=%s'
             . '&state=%s'
             . '#wechat_redirect';
-        $enlink = sprintf($enlink_fonmot, $appId, $url, $code, $scope, $state);
+        $enlink        = sprintf($enlink_fonmot, $appId, $url, $code, $scope, $state);
         return $enlink;
         //返回的数据案例 在这个位置获取code
         //redirect_uri/?code=CODE&state=STATE。
@@ -154,9 +161,9 @@ class Wechat
             . '&secret=%s'
             . '&code=%s'
             . '&grant_type=authorization_code';
-        $enlink       = sprintf($enlink_fonmot, $appId, $appSecret, $code);
-        $json_str     = file_get_contents($enlink);
-        $access_token = json_decode($json_str, true);
+        $enlink        = sprintf($enlink_fonmot, $appId, $appSecret, $code);
+        $json_str      = file_get_contents($enlink);
+        $access_token  = json_decode($json_str, true);
         return $access_token;
     }
 
@@ -173,9 +180,9 @@ class Wechat
             . 'appid=%s'
             . '&grant_type=refresh_token'
             . '&refresh_token=%s';
-        $enlink       = sprintf($enlink_fonmot, $appId, $refresh_code);
-        $json_str     = file_get_contents($enlink);
-        $access_token = json_decode($json_str, true);
+        $enlink        = sprintf($enlink_fonmot, $appId, $refresh_code);
+        $json_str      = file_get_contents($enlink);
+        $access_token  = json_decode($json_str, true);
         return $access_token;
     }
     /*
@@ -198,9 +205,9 @@ class Wechat
             . 'access_token=%s'
             . '&openid=%s'
             . '&lang=zh_CN';
-        $enlink   = sprintf($enlink_fonmot, $access_token, $openid);
-        $json_str = file_get_contents($enlink);
-        $user     = json_decode($json_str, true);
+        $enlink        = sprintf($enlink_fonmot, $access_token, $openid);
+        $json_str      = file_get_contents($enlink);
+        $user          = json_decode($json_str, true);
         return $user;
     }
     /*
@@ -241,7 +248,7 @@ class Wechat
         $enlink        = sprintf($enlink_fonmot, $access_token);
         $data          = json_encode(array('template_id_short' => $template_id_short));
         $get_template  = $this->post($enlink, $data);
-        $template_id = json_decode($get_template, true);
+        $template_id   = json_decode($get_template, true);
         return $template_id;
     }
 
@@ -257,7 +264,7 @@ class Wechat
         $enlink        = sprintf($enlink_fonmot, $access_token);
         $data          = json_encode($data);
         $put_template  = $this->post($enlink, $data);
-        $put_template = json_decode($put_template, true);
+        $put_template  = json_decode($put_template, true);
         return $put_template;
     }
 

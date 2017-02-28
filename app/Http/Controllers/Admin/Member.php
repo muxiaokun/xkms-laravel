@@ -270,7 +270,7 @@ class Member extends Backend
             }
             $data['member_name'] = $memberName;
         }
-        if ('add' == $type || null !== $password) {
+        if (('add' == $type || null !== $password) && '' === $password) {
             $isPwd  = ('add' == $type) ? true : false;
             $result = $this->doValidateForm('password', ['password' => $password, 'is_pwd' => $isPwd]);
             if (!$result['status']) {

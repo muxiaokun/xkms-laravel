@@ -15,10 +15,9 @@ class Region extends Frontend
         $result = ['status' => true, 'info' => []];
         switch ($field) {
             case 'parent_id':
-                $where['parent_id'] = ($data['id']) ? $data['id'] : 0;
-                $count              = Model\Region::where($where)->count();
-                $regionUserList     = Model\Region::field('id,region_name')->limit($count)->where($where)->get();
-                $result['info']     = $regionUserList;
+                $where[]        = ['parent_id', '=', ($data['id']) ? $data['id'] : 0];
+                $regionUserList = Model\Region::select(['id', 'region_name as name'])->where($where)->get();
+                $result['info'] = $regionUserList;
                 break;
         }
         return $result;

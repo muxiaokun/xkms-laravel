@@ -11,10 +11,16 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', ['as' => 'root', 'uses' => 'Home\Index@index']);
+//test error
+Route::get('t', function () {
 });
+Route::get('/test', ['as' => 'rootTest', 'uses' => 'Home\Index@test']);
 
+Route::get('Minify/{type}', 'Minify@run')->name('Minify');
+Route::get('VerificationCode/{name?}', 'VerificationCode@run')->name('VerificationCode');
+Route::get('Upload/ManageFile', 'Upload@ManageFile')->name('ManageFile');
+Route::post('Upload/UploadFile', 'Upload@UploadFile')->name('UploadFile');
 
 Route::group([
     'as'        => 'Home::',
@@ -114,6 +120,7 @@ Route::group([
         //'middleware'=>'auth',
         'prefix' => 'Region',
     ], function () {
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Region@ajax_api']);
     });
     Route::group([
         'as'     => 'Wechat::',
@@ -415,13 +422,3 @@ Route::group([
     Route::get('setp4', ['as' => 'setp4', 'uses' => 'Index@setp4']);
     Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Index@ajax_api']);
 });
-
-Route::get('Minify/{type}', 'Minify@run')->name('Minify');
-Route::get('VerificationCode/{name?}', 'VerificationCode@run')->name('VerificationCode');
-Route::get('Upload/ManageFile', 'Upload@ManageFile')->name('ManageFile');
-Route::post('Upload/UploadFile', 'Upload@UploadFile')->name('UploadFile');
-
-//test error
-Route::get('t', function () {
-});
-Route::get('tc', ['as' => 'index', 'uses' => 'Index@getInstallInfo']);

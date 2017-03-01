@@ -4,7 +4,7 @@
 4.验证码不可以同时调用两个以上
 5.分类树
 
-119/119
+120/120
 
 Backend
 OK 系统管理系统配置网站配置Admin::Index::websiteSet
@@ -129,3 +129,4 @@ OK 扩展管理问卷问卷管理Home::Quests::index
 OK 扩展管理问卷填写问卷Home::Quests::add
 OK Home::Wechat::index
 OK Home::Wechat::member_bind
+OK Home::Region::ajax_api

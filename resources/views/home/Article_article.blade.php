@@ -5,11 +5,11 @@
     </div>
     <div class="col-sm-12 text-center">
         @if ($article_info['created_at'])
-            @lang('common.add')@lang('common.time')@lang('common.colon'){{ mDate($article_info['created_at'],"Y-m-d") }}
+            @lang('common.add')@lang('common.time')@lang('common.colon'){{ $article_info['created_at']->format('Y-m-d') }}
             &nbsp;&nbsp;
         @endif
         @if ($article_info['updated_at'])
-            @lang('common.edit')@lang('common.time')@lang('common.colon'){{ mDate($article_info['updated_at'],"Y-m-d") }}
+            @lang('common.edit')@lang('common.time')@lang('common.colon'){{ $article_info['updated_at']->format('Y-m-d') }}
             &nbsp;&nbsp;
         @endif
         @if ($article_info['hits'])
@@ -23,7 +23,7 @@
         <button id="small_obj" class="btn btn-sm btn-default">@lang('common.tosmall')@lang('common.font')</button>
     </div>
     <div id="content" class="col-sm-12 mt20">
-        {{ $article_info['content'] }}
+        {!! htmlspecialchars_decode($article_info['content']) !!}
     </div>
     <script type="text/javascript" src="{{ asset('js/M_fontsize.js') }}"></script>
     <script type="text/javascript">
@@ -36,23 +36,25 @@
             new M_fontsize(config);
         });
     </script>
-    <div class="col-sm-12 mt20">
-        <div class="col-sm-6 ">
-            @if ($article_pn['p'])
-                @lang('common.before'){{ $article_pn['limit'] }}@lang('common.piece')@lang('common.article')
-                @foreach ($article_pn['p'] as $data)
-                    <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">{{ $data['title'] }}</a>
-                @endforeach
-            @endif
+    @if ($article_pn)
+        <div class="col-sm-12 mt20">
+            <div class="col-sm-6 ">
+                @if (!$article_pn['p']->isEmpty())
+                    @lang('common.before'){{ $article_pn['limit'] }}@lang('common.piece')@lang('common.article')
+                    @foreach ($article_pn['p'] as $data)
+                        <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">{{ $data['title'] }}</a>
+                    @endforeach
+                @endif
+            </div>
+            <div class="col-sm-6 ">
+                @if (!$article_pn['n']->isEmpty())
+                    @lang('common.later'){{ $article_pn['limit'] }}@lang('common.piece')@lang('common.article')
+                    @foreach ($article_pn['n'] as $data)
+                        <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">{{ $data['title'] }}</a>
+                    @endforeach
+                @endif
+            </div>
         </div>
-        <div class="col-sm-6 ">
-            @if ($article_pn['n'])
-                @lang('common.later'){{ $article_pn['limit'] }}@lang('common.piece')@lang('common.article')
-                @foreach ($article_pn['n'] as $data)
-                    <a href="{{ route('Home::Article::article',['id'=>$data['id']]) }}">{{ $data['title'] }}</a>
-                @endforeach
-            @endif
-        </div>
-    </div>
-    @include('Comment/index" controller="{{ $Think['const']['CONTROLLER_NAME'] }}" item="{{ $article_info['id'] }}')
+    @endif
+    @include('home.Comment_index',['route'=>'Home::Article::article','item'=>$article_info['id'],])
 @endsection

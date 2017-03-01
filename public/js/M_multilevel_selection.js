@@ -7,14 +7,14 @@
    +----------------------------------------------------------------------
    | Author: merry M  <test20121212@qq.com>
    +----------------------------------------------------------------------
-    M_region Class Javascript
+ M_multilevel_selection Class Javascript
     Include : jQuery
     Included List(Module Controller Action)
 */
 'use strict';
 
 //从select元素中增加数据
-function M_region(config)
+function M_multilevel_selection(config)
 {
     if('object' != typeof(config))
     {
@@ -34,7 +34,7 @@ function M_region(config)
     _self.initialize();
 }
 
-M_region.prototype = {
+M_multilevel_selection.prototype = {
     'out_obj':'',
     'edit_obj':'',
     'post_name':'',
@@ -42,7 +42,7 @@ M_region.prototype = {
 }
 
 //初始化
-M_region.prototype.initialize = function()
+M_multilevel_selection.prototype.initialize = function ()
 {
     var _self = this;
     
@@ -61,7 +61,7 @@ M_region.prototype.initialize = function()
 }
 
 //初始化 选择框
-M_region.prototype.initialize_select = function()
+M_multilevel_selection.prototype.initialize_select = function ()
 {
     var _self = this;
     var cb_fn = function(data)
@@ -73,8 +73,8 @@ M_region.prototype.initialize_select = function()
         $.each(data,function(k,v){
             var option_obj = $('<option></option>');
             option_obj.attr('select_id',v.id);
-            option_obj.attr('value',v.region_name);
-            option_obj.html(v.region_name);
+            option_obj.attr('value', v.name);
+            option_obj.html(v.name);
             select_obj.append(option_obj);
         });
         select_obj.on('change',function(){
@@ -90,7 +90,7 @@ M_region.prototype.initialize_select = function()
     _self.get_data(0,cb_fn);
 }
 
-M_region.prototype.get_data = function(id,cb_fn)
+M_multilevel_selection.prototype.get_data = function (id, cb_fn)
 {
     var _self = this;
     var post_data = {
@@ -113,7 +113,7 @@ M_region.prototype.get_data = function(id,cb_fn)
         },
         'error':function()
         {
-            console.log('M_region ajax error' + _self.ajax_url);
+            console.log('M_multilevel_selection ajax error' + _self.ajax_url);
         }
     });
 }

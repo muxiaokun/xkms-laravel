@@ -33,6 +33,7 @@ class Assess extends FrontendMember
         }
         $assign['assess_list'] = $assessList;
 
+        $this->commonAssgin();
         $assign['title'] = trans('assess.assess');
         return view('home.Assess_index', $assign);
     }
@@ -82,6 +83,8 @@ class Assess extends FrontendMember
         }
 
         $assign['assess_info']  = $assessInfo;
+
+        $this->commonAssgin();
         return view('home.Assess_add', $assign);
     }
 

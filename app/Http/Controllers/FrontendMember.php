@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Model;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 
 class FrontendMember extends Frontend
 {
@@ -42,8 +43,6 @@ class FrontendMember extends Frontend
                 die($this->error(trans('common.you') . trans('common.none') . trans('common.privilege')));
             }
 
-            //建立会员中心左侧菜单
-            //$assign['left_nav'] = $this->_get_left_nav();
         } else {
             //检测不登陆就可以访问的
             $allowRoute = [
@@ -58,6 +57,12 @@ class FrontendMember extends Frontend
 
             }
         }
+    }
+
+    protected function commonAssgin()
+    {
+        parent::commonAssgin();
+        $this->_get_left_nav();
     }
 
     protected function _get_left_nav()
@@ -93,7 +98,8 @@ class FrontendMember extends Frontend
             'link' => route('Home::Member::logout'),
             'name' => trans('common.logout') . trans('common.member'),
         ];
-        return $leftNav;
+        $assign['left_nav'] = $leftNav;
+        View::share($assign);
     }
 
     public function _check_privilege($routeName)

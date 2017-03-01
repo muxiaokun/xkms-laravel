@@ -10,13 +10,9 @@ use Illuminate\Support\Facades\View;
 
 class Frontend extends Common
 {
-    public function _initialize()
+    protected function commonAssgin()
     {
-        parent::_initialize();
-        //当前位置
-        if (request()->isMethod('GET')) {
-            $this->_get_position();
-        }
+        $this->_get_position();
     }
 
     //获取当前位置(也就是当前操作方法)
@@ -27,8 +23,10 @@ class Frontend extends Common
         $allController = [
             'Home::Index::index' => trans('common.homepage'),
         ];
-        foreach ($privilege as $controllerGroup) {
-            $controllerGroup && $allController = array_merge($allController, $controllerGroup);
+        foreach ($privilege as $routeGroup) {
+            foreach ($routeGroup as $routes) {
+                $routes && $allController = array_merge($allController, $routes);
+            }
         }
         $rePosition = [
             [
@@ -36,7 +34,6 @@ class Frontend extends Common
                 'link' => route('Home::Index::index'),
             ],
         ];
-        $assign     = [];
         if (!Route::is('Home::Index::index') && isset($allController[Route::currentRouteName()])) {
             //给title赋默认值
             $positionName    = $allController[Route::currentRouteName()];

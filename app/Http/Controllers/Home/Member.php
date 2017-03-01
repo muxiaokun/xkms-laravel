@@ -12,8 +12,7 @@ class Member extends FrontendMember
     public function index()
     {
         if ($this->isLogin()) {
-            //建立会员中心左侧菜单
-            $assign['left_nav'] = $this->_get_left_nav();
+            $this->commonAssgin();
             $assign['title'] = trans('common.member') . trans('common.homepage');
             return view('home.Member_index', $assign);
         } else {

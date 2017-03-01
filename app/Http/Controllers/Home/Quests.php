@@ -24,6 +24,7 @@ class Quests extends FrontendMember
         })->paginate(config('system.sys_max_row'))->appends(request()->all());
         $assign['quests_list'] = $questsList;
 
+        $this->commonAssgin();
         $assign['title']       = trans('quests.quests');
         return view('home.Quests_index', $assign);
     }
@@ -94,6 +95,8 @@ class Quests extends FrontendMember
 
         $assign['quests_quest_list'] = $questsQuestList;
         $assign['quests_info']       = $questsInfo;
+
+        $this->commonAssgin();
         $assign['title'] = trans('common.write') . trans('quests.quests');
         return view('home.Quests_add', $assign);
     }

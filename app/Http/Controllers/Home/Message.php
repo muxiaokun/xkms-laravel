@@ -57,6 +57,8 @@ class Message extends FrontendMember
         $batchHandle            = [];
         $batchHandle['del']     = $this->_check_privilege('del');
         $assign['batch_handle'] = $batchHandle;
+
+        $this->commonAssgin();
         $assign['title'] = trans('message.message');
         return view('home.Message_index', $assign);
     }
@@ -95,6 +97,7 @@ class Message extends FrontendMember
             $assign['receive_info'] = Model\Member::colWhere($receiveId)->first()->toArray();
         }
 
+        $this->commonAssgin();
         $assign['title'] = trans('common.send') . trans('message.message');
         return view('home.Message_add', $assign);
     }

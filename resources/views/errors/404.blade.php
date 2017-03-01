@@ -1,7 +1,7 @@
 <!DOCTYPE>
 <html>
 <head>
-    <title> 系统发生错误 503 —— @lang('common.app_name')</title>
+    <title> 网页没有找到 404 —— @lang('common.app_name')</title>
     <meta http-equiv="Content-Type" Content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}"/>

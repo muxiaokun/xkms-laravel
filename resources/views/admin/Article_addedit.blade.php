@@ -31,10 +31,15 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.description')</label>
+                                <label class="col-sm-4 control-label">@lang('common.channel')</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" placeholder="@lang('common.description')"
-                                           name="description" value="{{ $edit_info['description'] }}"/>
+                                    <select name="channel_id" class="form-control input-sm">
+                                        <option value="">@lang('common.default')@lang('common.dont')@lang('common.pertain')@lang('common.channel')</option>
+                                        @foreach ($channel_list as $channel)
+                                            <option value="{{ $channel['id'] }}"
+                                                    @if ($channel['id'] == $edit_info['channel_id'])selected="selected"@endif >{{ $channel['name'] }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -51,24 +56,21 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.channel')</label>
-                                <div class="col-sm-6">
-                                    <select name="channel_id" class="form-control input-sm">
-                                        <option value="">@lang('common.default')@lang('common.dont')@lang('common.pertain')@lang('common.channel')</option>
-                                        @foreach ($channel_list as $channel)
-                                            <option value="{{ $channel['id'] }}"
-                                                    @if ($channel['id'] == $edit_info['channel_id'])selected="selected"@endif >{{ $channel['name'] }}</option>
-                                        @endforeach
-                                    </select>
+                                <label class="col-sm-2 control-label">@lang('common.description')</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" placeholder="@lang('common.description')"
+                                           name="description" value="{{ $edit_info['description'] }}"/>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.category')</label>
-                                <div class="col-sm-6">
+                                <label class="col-sm-2 control-label">@lang('common.category')</label>
+                                <div class="col-sm-9">
                                     <select class="form-control input-sm" name="cate_id">
                                         <option value="">@lang('common.default')@lang('common.dont')@lang('common.pertain')@lang('common.category')</option>
                                         @foreach ($category_list as $category)

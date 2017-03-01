@@ -34,35 +34,12 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.parent_level')</label>
+                                <label class="col-sm-4 control-label">@lang('common.list')@lang('common.number')</label>
                                 <div class="col-sm-6">
-                                    <select name="parent_id" class="form-control input-sm">
-                                        <option value="0">@lang('common.top_level')@lang('common.enable')@lang('common.attribute')
-                                            /@lang('common.extend')</option>
-                                        @foreach ($category_list as $category)
-                                            <option value="{{ $category['id'] }}"
-                                                    @if ($category['id'] == $edit_info['parent_id'])selected="selected"@endif >{{ $category['name'] }}</option>
-                                        @endforeach
-                                    </select>
-                                    <script type="text/javascript">
-                                        $(function () {
-                                            function check_cate_id(obj) {
-                                                var top_cate_col = $('#extend,#attribute').parents('.row');
-                                                if (0 == obj.val()) {
-                                                    top_cate_col.show();
-                                                }
-                                                else {
-                                                    top_cate_col.hide();
-                                                }
-                                            }
-
-                                            var select_parent_id = $('select[name=parent_id]');
-                                            $('select[name=parent_id]').on('change', function () {
-                                                check_cate_id(select_parent_id);
-                                            });
-                                            check_cate_id(select_parent_id);
-                                        });
-                                    </script>
+                                    <input type="text" class="form-control"
+                                           placeholder="@lang('common.list')@lang('common.number')" name="s_limit"
+                                           onKeyup="M_in_int(this);"
+                                           value="@if ($edit_info['s_limit']){{ $edit_info['s_limit'] }}@else 0 @endif"/>
                                 </div>
                             </div>
                         </div>
@@ -118,15 +95,6 @@
                                                     @if ($template['value'] == $edit_info['list_template'])selected="selected"@endif >{{ $template['name'] }}</option>
                                         @endforeach
                                     </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">@lang('common.list')@lang('common.number')</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control"
-                                           placeholder="@lang('common.list')@lang('common.number')" name="s_limit"
-                                           onKeyup="M_in_int(this);"
-                                           value="@if ($edit_info['s_limit']){{ $edit_info['s_limit'] }}@else 0 @endif"/>
                                 </div>
                             </div>
                         </div>
@@ -230,6 +198,42 @@
                             </div>
                         </div>
                     @endif
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">@lang('common.parent_level')</label>
+                                <div class="col-sm-9">
+                                    <select name="parent_id" class="form-control input-sm">
+                                        <option value="0">@lang('common.top_level')@lang('common.enable')@lang('common.attribute')
+                                            /@lang('common.extend')</option>
+                                        @foreach ($category_list as $category)
+                                            <option value="{{ $category['id'] }}"
+                                                    @if ($category['id'] == $edit_info['parent_id'])selected="selected"@endif >{{ $category['name'] }}</option>
+                                        @endforeach
+                                    </select>
+                                    <script type="text/javascript">
+                                        $(function () {
+                                            function check_cate_id(obj) {
+                                                var top_cate_col = $('#extend,#attribute').parents('.row');
+                                                if (0 == obj.val()) {
+                                                    top_cate_col.show();
+                                                }
+                                                else {
+                                                    top_cate_col.hide();
+                                                }
+                                            }
+
+                                            var select_parent_id = $('select[name=parent_id]');
+                                            $('select[name=parent_id]').on('change', function () {
+                                                check_cate_id(select_parent_id);
+                                            });
+                                            check_cate_id(select_parent_id);
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">

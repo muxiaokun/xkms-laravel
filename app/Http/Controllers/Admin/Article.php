@@ -62,11 +62,6 @@ class Article extends Backend
         $assign['article_list'] = $articleList;
 
         //初始化where_info
-        $categoryList       = Model\ArticleCategory::colWhere($allowCategory)->get();
-        $searchCategoryList = [];
-        foreach ($categoryList as $category) {
-            $searchCategoryList[$category['id']] = $category['name'];
-        }
         $channelList           = Model\ArticleChannel::colWhere($allowChannel)->get();
         $searchChannelList     = [];
         foreach ($channelList as $channel) {
@@ -78,9 +73,9 @@ class Article extends Backend
         $whereInfo               = [];
         $whereInfo['title']      = ['type' => 'input', 'name' => trans('common.title')];
         $whereInfo['cate_id']    = [
-            'type'  => 'select',
-            'name'  => trans('common.category'),
-            'value' => $searchCategoryList,
+            'type'     => 'multilevel_selection',
+            'name'     => trans('common.category'),
+            'ajax_url' => route('Admin::Article::ajax_api'),
         ];
         $whereInfo['channel_id'] = [
             'type'  => 'select',
@@ -290,6 +285,11 @@ class Article extends Backend
                 } else {
                     $result = ['status' => false, 'info' => 'id error'];
                 }
+                break;
+            case 'parent_id':
+                $where[]        = ['parent_id', '=', ($data['id']) ? $data['id'] : 0];
+                $categoryList   = Model\ArticleCategory::select(['id', 'name'])->where($where)->get();
+                $result['info'] = $categoryList;
                 break;
         }
         return $result;

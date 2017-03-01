@@ -26,11 +26,11 @@ function M_comment_editor(config)
     //检查初始化元素
     if(0 == _self.main_obj.length)console.log('main_obj no exists');
     if(0 == _self.ajax_url.length)console.log('ajax_url no exists');
-    if(0 == _self.controller.length)console.log('controller no exists');
+    if (0 == _self.route.length) console.log('route no exists');
     if(0 == _self.item.length)console.log('item no exists');
     if(0 == _self.main_obj.length
     || 0 == _self.ajax_url.length
-    || 0 == _self.controller.length
+        || 0 == _self.route.length
     || 0 == _self.item)return;
     _self.initialize();
 }
@@ -39,7 +39,7 @@ M_comment_editor.prototype =
 {
     'main_obj':'',
     'ajax_url':'',
-    'controller':'',
+    'route': '',
     'put_lock':false,
     'get_lock':false,
     'item':''
@@ -72,7 +72,7 @@ M_comment_editor.prototype.put_data = function(form_obj)
         'type':'get_data',
         'field':'put_data',
         'data':{
-            'controller':_self.controller,
+            'route': _self.route,
             'item':_self.item,
             'level':level,
             'content':content
@@ -121,14 +121,14 @@ M_comment_editor.prototype.get_data = function(p)
     var data = {
         'type':'get_data',
         'field':'get_data',
-        'data':{'controller':_self.controller,'item':_self.item},
+        'data': {'route': _self.route, 'item': _self.item},
         'p':p
     }
     
     $.ajax({
         'url':_self.ajax_url,
         'data':data,
-        'type':'GET',
+        'type': 'POST',
         'dataType':'HTML',
         'cache':false,
         'success':function(data)

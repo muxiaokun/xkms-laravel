@@ -56,4 +56,5 @@
             </div>
         </div>
     @endif
+    @include('home.Comment_index',['route'=>'Home::Article::article','item'=>$article_info['id'],])
 @endsection

@@ -178,10 +178,14 @@ class Common extends Controller
                 $result['info'] = $this->_zh2py(request('field'), request('data'));
                 break;
         }
-        if ($result['status']) {
-            return $this->success($result['info']);
+        if (is_array($result)) {
+            if ($result['status']) {
+                return $this->success($result['info']);
+            } else {
+                return $this->error($result['info']);
+            }
         } else {
-            return $this->error($result['info']);
+            return $result;
         }
     }
 

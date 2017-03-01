@@ -46,6 +46,7 @@ Route::group([
         //'middleware'=>'auth',
         'prefix' => 'Comment',
     ], function () {
+        Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Comment@ajax_api']);
     });
     Route::group([
         'as'     => 'Index::',

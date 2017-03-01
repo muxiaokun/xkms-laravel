@@ -5,7 +5,7 @@
 5.分类树
 6.View::share() FrontendMember
 
-118/119
+119/119
 
 Backend
 OK 系统管理系统配置网站配置Admin::Index::websiteSet
@@ -110,7 +110,7 @@ OK Home::Article::article
 OK Home::Article::category
 OK Home::Article::channel
 OK Home::Article::search
-UNSTART Home::Comment
+OK Home::Comment
 OK Home::Itlink
 OK 成员管理会员管理会员中心Home::Member::index
 OK 成员管理会员管理会员登录Home::Member::login

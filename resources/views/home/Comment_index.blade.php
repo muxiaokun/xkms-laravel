@@ -1,4 +1,4 @@
-@if (IS_AJAX AND config('system.comment_switch')){{-- 下一行的div只是ajax获取元素时的外壳 --}}
+@if (request()->ajax() AND config('system.comment_switch')){{-- 下一行的div只是ajax获取元素时的外壳 --}}
 <div>
     <div class="col-sm-12">
         {{ $comment_list->links('home.pagination') }}
@@ -18,7 +18,7 @@
         </table>
     </div>
 </div>
-@elseif ( config('system.comment_switch'))
+@elseif ( config('system.comment_switch') && session('frontend_info.id'))
     <div class="col-sm-12">
         <hr/>
         <script type="text/javascript" src="{{ asset('js/M_comment_editor.js') }}"></script>
@@ -27,7 +27,7 @@
             $(function () {
                 var config = {
                     'main_obj': $('#comment_index'),
-                    'ajax_url': '{{ route('Home::Comment::ajax_api') }}', 'controller': '[controller]', 'item': '[item]'
+                    'ajax_url': '{{ route('Home::Comment::ajax_api') }}', 'route': '{{ $route }}', 'item': '{{ $item }}'
                 };
                 M_comment_editor = new M_comment_editor(config);
             });
@@ -36,12 +36,12 @@
             <div class="form-group">
                 <label for="exampleInputEmail1">@lang('common.grade')</label>
                 <div class="radio">
-                    <for start="1" end="6">
+                    @for($i = 0;$i < 6 ;$i++)
                         <label class="mr100">
                             <input type="radio" name="comment_level" value="{{ $i }}"
                                    @if ($i == 5)checked="checked"@endif />{{ $i }}
                         </label>
-                    </for>
+                    @endfor
                 </div>
             </div>
             <div class="form-group">

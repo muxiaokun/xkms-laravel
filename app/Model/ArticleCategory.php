@@ -98,4 +98,27 @@ class ArticleCategory extends Common
         $childIds->push($id);
         return $childIds;
     }
+
+    public function scopeMCategoryTree($query, $id)
+    {
+        $categoryTree = collect();
+        $categoryInfo = ArticleCategory::colWhere($id)->select(['parent_id'])->first();
+        if (null !== $categoryInfo) {
+            $categoryList = ArticleCategory::where('parent_id', $categoryInfo['parent_id'])->select([
+                'id',
+                'name',
+            ])->get();
+            if (0 < $categoryInfo['parent_id']) {
+                $newCategoryTree = ArticleCategory::scopeMCategoryTree($query, $categoryInfo['parent_id']);
+                $newCategoryTree->each(function ($item, $key) use ($categoryTree) {
+                    $categoryTree->push($item);
+                });
+            }
+            $categoryTree->push([
+                'id' => $id,
+                'category_list' => $categoryList,
+            ]);
+        }
+        return $categoryTree;
+    }
 }

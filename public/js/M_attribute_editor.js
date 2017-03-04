@@ -226,7 +226,7 @@ M_attribute_editor.prototype.init_select = function () {
         var post_data = {};
         post_data['type'] = 'get_data';
         post_data['field'] = 'attribute';
-        post_data['data'] = {'id': _self.select_obj.find('option:selected').val()};
+        post_data['data'] = {'id': _self.select_obj.val()};
         if (!post_data.data.id)return;
         //绑定ajax
         $.ajax({

@@ -91,11 +91,12 @@ class ArticleCategory extends Common
     public function scopeMFindCateChildIds($query, $id)
     {
         $childIds = collect();
-        $query->colWhere($id, 'parent_id')->get()->each(function ($item, $key) use ($query, $childIds) {
-            $childIds->merge(ArticleCategory::scopeMFindCateChildIds($query, $item->id));
-            $childIds->push($item->id);
+        ArticleCategory::colWhere($id, 'parent_id')->get()->each(function ($item, $key) use ($query, &$childIds) {
+            ArticleCategory::scopeMFindCateChildIds($query, $item->id)->each(function ($item, $key) use ($childIds) {
+                $childIds->push($item);
+            });
         });
-        $childIds->push($id);
+        $childIds->push((int)$id);
         return $childIds;
     }
 

@@ -36,7 +36,7 @@ M_multilevel_selection.prototype = {
     'out_obj': '',
     'edit_obj': '',
     'submit_type': '',//id or empyt(name)
-    'submit_obj': $('<input type="hidden" />'),
+    'submit_obj': $('<input type="hidden" value="0" />'),
     'post_name': '',
     'ajax_url': ''
 }
@@ -44,61 +44,91 @@ M_multilevel_selection.prototype = {
 //初始化
 M_multilevel_selection.prototype.initialize = function () {
     var _self = this;
-    _self.submit_obj.attr('name', _self.post_name);
-    _self.out_obj.append(_self.submit_obj);
-    _self.initialize_select();
+
+    var def_select_objs = _self.out_obj.find('select');
+    if (0 < def_select_objs.length) {
+        _self.submit_obj = _self.out_obj.find('input[name=' + _self.post_name + ']');
+        def_select_objs.each(function (k, v) {
+            $(v).on('change', function () {
+                _self.select_obj_change($(this));
+            });
+        });
+        _self.get_data(_self.out_obj.find('select:last').val(), function (data) {
+            _self.initialize_select(data);
+        });
+    } else {
+        _self.submit_obj.attr('name', _self.post_name);
+        _self.out_obj.append(_self.submit_obj);
+        _self.get_data(0, function (data) {
+            _self.initialize_select(data);
+        });
+    }
+
+
 }
 
 //初始化 选择框
-M_multilevel_selection.prototype.initialize_select = function () {
+M_multilevel_selection.prototype.initialize_select = function (data) {
     var _self = this;
-    var cb_fn = function (data) {
-        //新建地址回调函数
-        if (!data || 1 > data.length)return;
-        var select_obj = '';
-        if (_self.edit_obj) {
-            select_obj = _self.edit_obj.clone();
-        } else {
-            select_obj = $('<select></select>');
-        }
-        select_obj.append('<option value="">' + lang.common.please + lang.common.selection + '</option>');
-        $.each(data, function (k, v) {
-            var option_obj = $('<option></option>');
-            option_obj.attr('select_id', v.id);
-            if ('id' == _self.submit_type) {
-                option_obj.attr('value', v.id);
-            } else {
-                option_obj.attr('value', v.name);
-            }
-            option_obj.html(v.name);
-            select_obj.append(option_obj);
-        });
-        select_obj.on('change', function () {
-            //删除下级地址
-            var current_obj = $(this);
-            current_obj.nextAll().remove();
-            //新建地址
-            var id = current_obj.find(':selected').attr('select_id');
-            var submit_val = '';
-            if ('id' == _self.submit_type) {
-                submit_val = _self.out_obj.find('select:last>option:selected').val()
-            } else {
-                _self.out_obj.find('select').each(function (k, v) {
-                    var option_val = $(v).find('option:selected').val();
-                    if (option_val) {
-                        if (submit_val) submit_val += ' ';
-                        submit_val += option_val;
-                    }
-                });
-
-            }
-            _self.submit_obj.val(submit_val);
-
-            _self.get_data(id, cb_fn);
-        });
-        _self.out_obj.append(select_obj);
+    //新建地址回调函数
+    if (!data || 1 > data.length)return;
+    var select_obj = '';
+    if (_self.edit_obj) {
+        select_obj = _self.edit_obj.clone();
+    } else {
+        select_obj = $('<select></select>');
     }
-    _self.get_data(0, cb_fn);
+    select_obj.append('<option value="">' + lang.common.please + lang.common.selection + '</option>');
+    $.each(data, function (k, v) {
+        var option_obj = $('<option></option>');
+        option_obj.attr('value', v.id);
+        option_obj.html(v.name);
+        select_obj.append(option_obj);
+    });
+    select_obj.on('change', function () {
+        _self.select_obj_change($(this));
+    });
+    _self.out_obj.append(select_obj);
+}
+
+M_multilevel_selection.prototype.select_obj_change = function (current_obj) {
+    var _self = this;
+    //删除下级地址
+    current_obj.nextAll().remove();
+    //新建地址
+    var id = current_obj.find(':selected').val();
+    var submit_val = '';
+
+    _self.out_obj.find('select').each(function (k, v) {
+        var option_val = '';
+        if ('id' == _self.submit_type) {
+            option_val = $(v).find('option:selected').val();
+        } else {
+            option_val = $(v).find('option:selected').html();
+        }
+        if (0 < option_val.length) {
+            if ('id' == _self.submit_type) {
+                submit_val = option_val;
+            } else {
+                if (submit_val) submit_val += ' ';
+                submit_val += option_val;
+            }
+        }
+    });
+    if (submit_val) {
+        _self.submit_obj.val(submit_val);
+    } else {
+        if ('id' == _self.submit_type) {
+            _self.submit_obj.val(0);
+        }
+    }
+    if (_self.submit_obj.change) {
+        _self.submit_obj.change();
+    }
+
+    _self.get_data(id, function (data) {
+        _self.initialize_select(data);
+    });
 }
 
 M_multilevel_selection.prototype.get_data = function (id, cb_fn) {

@@ -72,9 +72,10 @@ class Article extends Backend
         //初始化where_info
         $whereInfo               = [];
         $whereInfo['title']      = ['type' => 'input', 'name' => trans('common.title')];
-        $whereInfo['cate_id']    = [
+        $whereInfo['cate_id']  = [
             'type'     => 'multilevel_selection',
             'name'     => trans('common.category'),
+            'value'    => Model\ArticleCategory::mCategoryTree(request('cate_id', 0)),
             'ajax_url' => route('Admin::Article::ajax_api'),
         ];
         $whereInfo['channel_id'] = [
@@ -137,6 +138,7 @@ class Article extends Backend
         $this->addEditCommon();
         $assign['edit_info']                  = Model\Article::columnEmptyData();
         $assign['edit_info']['attribute_tpl'] = [];
+        $assign['edit_info']['category_tree'] = Model\ArticleCategory::mCategoryTree(request('cate_id', 0));
         $assign['title']                      = trans('common.article') . trans('common.add');
         return view('admin.Article_addedit', $assign);
     }
@@ -176,10 +178,7 @@ class Article extends Backend
                     $errorGoLink);
             }
         }
-        $currentConfig = config('system.sys_article_sync_image');
-        config('SYS_ARTICLE_SYNC_IMAGE', false);
         $editInfo = Model\Article::colWhere($id)->first()->toArray();
-        config('SYS_ARTICLE_SYNC_IMAGE', $currentConfig);
 
         foreach ($editInfo['access_group_id'] as &$accessGroupId) {
             $adminGroupName = Model\MemberGroup::colWhere($accessGroupId)->first()['name'];
@@ -193,7 +192,7 @@ class Article extends Backend
         }
         $editInfo['extend']        = $valExtend;
         $editInfo['attribute_tpl'] = $this->findTopCategory($editInfo['cate_id'], 'attribute');
-
+        $editInfo['category_tree'] = Model\ArticleCategory::mCategoryTree($editInfo['cate_id']);
         $assign['edit_info'] = $editInfo;
 
         $this->addEditCommon();
@@ -401,15 +400,12 @@ class Article extends Backend
     //添加 编辑 公共方法
     private function addEditCommon()
     {
-        $channelWhere = $categoryWhere = [];
-        if (1 != session('backend_info.id')) {
-            $channelWhere['id']  = ['in', Model\ArticleChannel::mFindAllow()];
-            $categoryWhere['id'] = ['in', Model\ArticleCategory::mFindAllow()];
-        }
-        $channelList  = Model\ArticleChannel::where($channelWhere)->get();
-        $categoryList = Model\ArticleCategory::where($categoryWhere)->get();
-        $assign['channel_list']  = $channelList;
-        $assign['category_list'] = $categoryList;
+        $channelList            = Model\ArticleChannel::where(function ($query) {
+            if (1 != session('backend_info.id')) {
+                $query->whereIn('id', Model\ArticleChannel::mFindAllow());
+            }
+        })->get();
+        $assign['channel_list'] = $channelList;
         View::share($assign);
     }
 

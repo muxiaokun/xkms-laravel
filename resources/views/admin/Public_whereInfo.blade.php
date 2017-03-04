@@ -39,6 +39,18 @@
                 <div class="col-sm-12 mb10 text-right">
                     <div id="multilevel_selection_{{ $input_name }}" class="form-group mr10">
                         <label>{{ $data['name'] }}</label>
+                        @if (isset($data['value']) && !$data['value']->isEmpty())
+                            <input type="hidden" name="cate_id" value="{{ request('cate_id') }}"/>
+                            @foreach($data['value'] as $categorys)
+                                <select class="form-control w100">
+                                    <option value="">@lang('common.please')@lang('common.selection')</option>
+                                    @foreach($categorys['category_list'] as $category)
+                                        <option @if ($categorys['id'] == $category['id'])selected="selected" @endif
+                                        value="{{ $category['id'] }}">{{ $category['name'] }}</option>
+                                    @endforeach
+                                </select>
+                            @endforeach
+                        @endif
                     </div>
                     <script type="text/javascript" src="{{ asset('js/M_multilevel_selection.js') }}"></script>
                     <script type="text/javascript">

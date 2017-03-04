@@ -104,13 +104,14 @@ class ArticleCategory extends Common
     {
         $categoryTree = collect();
         $categoryInfo = ArticleCategory::colWhere($id)->select(['parent_id'])->first();
-        if (null !== $categoryInfo) {
-            $categoryList = ArticleCategory::where('parent_id', $categoryInfo['parent_id'])->select([
+        if (null !== $categoryInfo || 0 === $id) {
+            $parentId     = 0 === $id ? $id : $categoryInfo['parent_id'];
+            $categoryList = ArticleCategory::where('parent_id', $parentId)->select([
                 'id',
                 'name',
             ])->get();
-            if (0 < $categoryInfo['parent_id']) {
-                $newCategoryTree = ArticleCategory::scopeMCategoryTree($query, $categoryInfo['parent_id']);
+            if (0 < $parentId) {
+                $newCategoryTree = ArticleCategory::scopeMCategoryTree($query, $parentId);
                 $newCategoryTree->each(function ($item, $key) use ($categoryTree) {
                     $categoryTree->push($item);
                 });

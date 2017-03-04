@@ -70,16 +70,35 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">@lang('common.category')</label>
-                                <div class="col-sm-9">
-                                    <select class="form-control input-sm" name="cate_id">
-                                        <option value="">@lang('common.default')@lang('common.dont')@lang('common.pertain')@lang('common.category')</option>
-                                        @foreach ($category_list as $category)
-                                            <option value="{{ $category['id'] }}"
-                                                    @if ($category['id'] == $edit_info['cate_id'] or $category['id'] == request('cate_id'))selected="selected"
-                                                    mtype="def_data"@endif >{{ $category['name'] }}</option>
+                                <div id="cate_id" class="col-sm-9">
+                                    @if (isset($edit_info['category_tree']) && !$edit_info['category_tree']->isEmpty())
+                                        <input type="hidden" name="cate_id" value="{{ $edit_info['cate_id'] }}"/>
+                                        @foreach($edit_info['category_tree'] as $key => $categorys)
+                                            <select class="form-control w150 fl">
+                                                <option value="">@lang('common.please')@lang('common.selection')</option>
+                                                @foreach($categorys['category_list'] as $category)
+                                                    <option @if ($categorys['id'] == $category['id'])selected="selected"
+                                                            @endif
+                                                            value="{{ $category['id'] }}">{{ $category['name'] }}</option>
+                                                @endforeach
+                                            </select>
                                         @endforeach
-                                    </select>
+                                    @endif
                                 </div>
+                                <script type="text/javascript"
+                                        src="{{ asset('js/M_multilevel_selection.js') }}"></script>
+                                <script type="text/javascript">
+                                    $(function () {
+                                        var config = {
+                                            'out_obj': $('#cate_id'),
+                                            'submit_type': 'id',
+                                            'edit_obj': $('<select class="form-control w100 fl"></select>'),
+                                            'post_name': 'cate_id',
+                                            'ajax_url': '{{ route('Admin::Article::ajax_api') }}'
+                                        };
+                                        new M_multilevel_selection(config);
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>
@@ -93,7 +112,7 @@
                                             @if ($edit_info['attribute'])'def_selected':{!! json_encode($edit_info['attribute']) !!},
                                     @endif
                                     'run_type': 'select',
-                                    'select_obj': $('select[name=cate_id]'),
+                                    'select_obj': $('#cate_id>select:first'),
                                     'out_obj': $('#attribute'),
                                     'ajax_url': '{{ route('Admin::Article::ajax_api') }}',
                                     'post_name': 'attribute'
@@ -111,7 +130,7 @@
                                     @endif
                                     'run_type': 'edit',
                                     'out_obj': $('#extend_list'),
-                                    'edit_obj': $('select[name=cate_id]'),
+                                    'edit_obj': $('#cate_id>select:first'),
                                     'post_name': 'extend',
                                     'ajax_url': '{{ route('Admin::Article::ajax_api') }}'
                                 };
@@ -279,48 +298,48 @@
                                                 '<div class="fr glyphicon glyphicon-remove" style="top:-115px;right:5px;cursor:pointer;" ></div>',
                                                 '</div>'
                                             ).join(''));
-                                                if ('object' == typeof(url)) {
-                                                    title = url.title;
-                                                    description = url.description;
-                                                    url = url.src;
-                                                }
-                                                var img_data = {
-                                                    'src': url,
-                                                    'title': title,
-                                                    'description': description
-                                                }
-                                                image_box.find('input').val(JSON.stringify(img_data));
+                                            if ('object' == typeof(url)) {
+                                                title = url.title;
+                                                description = url.description;
+                                                url = url.src;
+                                            }
+                                            var img_data = {
+                                                'src': url,
+                                                'title': title,
+                                                'description': description
+                                            }
+                                            image_box.find('input').val(JSON.stringify(img_data));
                                             image_box.find('img').attr('src', url);
 
-                                                var image_title = $('#image_title');
-                                                var image_description = $('#image_description');
-                                                var iamge_editor = $('#image_title,#image_description');
-                                                image_box.on('click', function () {
-                                                    var old_data = JSON.parse(image_box.find('input').val());
-                                                    image_title.val(old_data.title);
-                                                    image_description.val(old_data.description);
-                                                    iamge_editor.prop('disabled', false).off('change keyup');
-                                                    iamge_editor.on('change keyup', function () {
-                                                        old_data.title = image_title.val();
-                                                        old_data.description = image_description.val();
-                                                        image_box.find('input').val(JSON.stringify(old_data));
-                                                    });
+                                            var image_title = $('#image_title');
+                                            var image_description = $('#image_description');
+                                            var iamge_editor = $('#image_title,#image_description');
+                                            image_box.on('click', function () {
+                                                var old_data = JSON.parse(image_box.find('input').val());
+                                                image_title.val(old_data.title);
+                                                image_description.val(old_data.description);
+                                                iamge_editor.prop('disabled', false).off('change keyup');
+                                                iamge_editor.on('change keyup', function () {
+                                                    old_data.title = image_title.val();
+                                                    old_data.description = image_description.val();
+                                                    image_box.find('input').val(JSON.stringify(old_data));
                                                 });
-                                                image_box.find('.glyphicon-remove').on('click', function () {
-                                                    $(this).parent().remove();
-                                                    image_title.val('');
-                                                    image_description.val('');
-                                                    iamge_editor.prop('disabled', true);
-                                                });
-                                                var div = $('#image_box');
-                                                div.append(image_box).sortable();
-                                            }
-                                            @if ($edit_info['album'])
-                                            $(function () {
-                                                @foreach ($edit_info['album'] as $data)
-                                                     @if ('null' != $data)M_article_uploadsbutton({!! json_encode($data) !!});@endif
-                                                @endforeach
                                             });
+                                            image_box.find('.glyphicon-remove').on('click', function () {
+                                                $(this).parent().remove();
+                                                image_title.val('');
+                                                image_description.val('');
+                                                iamge_editor.prop('disabled', true);
+                                            });
+                                            var div = $('#image_box');
+                                            div.append(image_box).sortable();
+                                        }
+                                        @if ($edit_info['album'])
+                                        $(function () {
+                                            @foreach ($edit_info['album'] as $data)
+                                                 @if ('null' != $data)M_article_uploadsbutton({!! json_encode($data) !!});@endif
+                                            @endforeach
+                                        });
                                         @endif
                                     </script>
                                     @uploadfile(uploadsbutton,multiimage,kindeditor,M_article_uploadsbutton)

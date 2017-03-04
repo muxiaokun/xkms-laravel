@@ -110,7 +110,7 @@
                                     <input id="thumb_val" type="hidden" name="thumb" value="{{ $edit_info['thumb'] }}"/>
                                     <script>
                                         function M_article_uploadbutton(url, title) {
-                                                $('#thumb_val').val(url);
+                                            $('#thumb_val').val(url);
                                             $('#thumb_src').attr('src', url);
                                         }
                                         M_jqueryui_tooltip('#uploadbutton');
@@ -202,35 +202,56 @@
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">@lang('common.parent_level')</label>
-                                <div class="col-sm-9">
-                                    <select name="parent_id" class="form-control input-sm">
-                                        <option value="0">@lang('common.top_level')@lang('common.enable')@lang('common.attribute')
-                                            /@lang('common.extend')</option>
-                                        @foreach ($category_list as $category)
-                                            <option value="{{ $category['id'] }}"
-                                                    @if ($category['id'] == $edit_info['parent_id'])selected="selected"@endif >{{ $category['name'] }}</option>
+                                <div id="parent_id" class="col-sm-9">
+                                    @if (isset($edit_info['category_tree']) && !$edit_info['category_tree']->isEmpty())
+                                        <input type="hidden" name="parent_id" value="{{ $edit_info['parent_id'] }}"/>
+                                        @foreach($edit_info['category_tree'] as $key => $categorys)
+                                            <select class="form-control w180 fl">
+                                                @if (0 === $key)
+                                                    <option value="">@lang('common.top_level')@lang('common.enable')@lang('common.attribute')
+                                                        /@lang('common.extend')</option>
+                                                @else
+                                                    <option value="">@lang('common.please')@lang('common.selection')</option>
+                                                @endif
+                                                @foreach($categorys['category_list'] as $category)
+                                                    <option @if ($categorys['id'] == $category['id'])selected="selected"
+                                                            @endif
+                                                            value="{{ $category['id'] }}">{{ $category['name'] }}</option>
+                                                @endforeach
+                                            </select>
                                         @endforeach
-                                    </select>
-                                    <script type="text/javascript">
-                                        $(function () {
-                                            function check_cate_id(obj) {
-                                                var top_cate_col = $('#extend,#attribute').parents('.row');
-                                                if (0 == obj.val()) {
-                                                    top_cate_col.show();
-                                                }
-                                                else {
-                                                    top_cate_col.hide();
-                                                }
-                                            }
+                                    @endif
+                                </div>
+                                <script type="text/javascript"
+                                        src="{{ asset('js/M_multilevel_selection.js') }}"></script>
+                                <script type="text/javascript">
+                                    $(function () {
+                                        var config = {
+                                            'out_obj': $('#parent_id'),
+                                            'submit_type': 'id',
+                                            'edit_obj': $('<select class="form-control w100 fl"></select>'),
+                                            'post_name': 'parent_id',
+                                            'ajax_url': '{{ route('Admin::ArticleCategory::ajax_api',['inserted'=>$edit_info['parent_id']]) }}'
+                                        };
+                                        new M_multilevel_selection(config);
 
-                                            var select_parent_id = $('select[name=parent_id]');
-                                            $('select[name=parent_id]').on('change', function () {
-                                                check_cate_id(select_parent_id);
-                                            });
+                                        function check_cate_id(obj) {
+                                            var top_cate_col = $('#extend,#attribute').parents('.row');
+                                            if (0 == obj.val()) {
+                                                top_cate_col.show();
+                                            }
+                                            else {
+                                                top_cate_col.hide();
+                                            }
+                                        }
+
+                                        var select_parent_id = $('[name=parent_id]');
+                                        select_parent_id.on('change', function () {
                                             check_cate_id(select_parent_id);
                                         });
-                                    </script>
-                                </div>
+                                        check_cate_id(select_parent_id);
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>

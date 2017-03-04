@@ -103,8 +103,9 @@ class ArticleCategory extends Backend
         }
 
         $this->addEditCommon();
-        $assign['edit_info'] = Model\ArticleCategory::columnEmptyData();
-        $assign['title']     = trans('common.add') . trans('common.article') . trans('common.category');
+        $assign['edit_info']                  = Model\ArticleCategory::columnEmptyData();
+        $assign['edit_info']['category_tree'] = Model\ArticleCategory::mCategoryTree(0);
+        $assign['title']                      = trans('common.add') . trans('common.article') . trans('common.category');
         return view('admin.ArticleCategory_addedit', $assign);
     }
 
@@ -155,10 +156,7 @@ class ArticleCategory extends Backend
             }
         }
 
-        $currentConfig = config('system.sys_article_sync_image');
-        config('SYS_ARTICLE_SYNC_IMAGE', false);
         $editInfo = Model\ArticleCategory::colWhere($id)->first()->toArray();
-        config('SYS_ARTICLE_SYNC_IMAGE', $currentConfig);
         //如果有管理权限进行进一步数据处理
         if (mInArray($id, $maAllowArr)) {
             foreach ($editInfo['manage_id'] as &$manageId) {
@@ -175,7 +173,8 @@ class ArticleCategory extends Backend
             }
         }
 
-        $assign['edit_info'] = $editInfo;
+        $editInfo['category_tree'] = Model\ArticleCategory::mCategoryTree($editInfo['parent_id']);
+        $assign['edit_info']       = $editInfo;
 
         $this->addEditCommon();
         $assign['title'] = trans('common.edit') . trans('common.article') . trans('common.category');
@@ -292,6 +291,12 @@ class ArticleCategory extends Backend
                     $result['info'][] = ['value' => $item['id'], 'html' => $item['name']];
                 });
                 break;
+            case 'parent_id':
+                $where[]        = ['parent_id', '=', ($data['id']) ? $data['id'] : 0];
+                $where[]        = ['parent_id', '!=', request('inserted')];
+                $categoryList   = Model\ArticleCategory::select(['id', 'name'])->where($where)->get();
+                $result['info'] = $categoryList;
+                break;
         }
 
         return $result;
@@ -405,7 +410,6 @@ class ArticleCategory extends Backend
     private function addEditCommon()
     {
         $id                              = request('id');
-        $assign['category_list']         = Model\ArticleCategory::where('id', '!=', $id)->get();
         $assign['manage_privilege']      = Model\ArticleCategory::mFindAllow('ma')->search($id) || 1 == session('backend_info.id');
         $assign['template_list']         = mScanTemplate('category', 'Article');
         $assign['list_template_list']    = mScanTemplate('list_category', 'Article');

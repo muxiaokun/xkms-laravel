@@ -136,7 +136,7 @@ class Article extends Frontend
                 }
                 $query->whereIn('channel_id', [0, $channelId]);
                 $query->where($this->_get_article_where());
-                $categoryTopId             = Model\ArticleCategory::mFindTopId($categoryInfo['id']);
+                $categoryTopId             = Model\ArticleCategory::mFindTopId($categoryInfo['id'])->first();
                 $categoryTopInfo           = Model\ArticleCategory::colWhere($categoryTopId)->first();
                 $categoryInfo['attribute'] = $categoryTopInfo['attribute'];
                 $attributeWhere            = mAttributeWhere($categoryTopInfo['attribute']);
@@ -201,7 +201,7 @@ class Article extends Frontend
             if ($cateId) {
                 $childArr = Model\ArticleCategory::mFindCateChildIds($cateId);
                 $query->whereIn('cate_id', $childArr);
-                $categoryTopId   = Model\ArticleCategory::mFindTopId($cateId);
+                $categoryTopId = Model\ArticleCategory::mFindTopId($cateId)->first();
                 $categoryTopInfo = Model\ArticleCategory::colWhere($categoryTopId)->first();
                 $attributeWhere  = mAttributeWhere($categoryTopInfo['attribute']);
                 $attributeWhere && $query->transfixionWhere('attribute', $attributeWhere, false);
@@ -338,7 +338,7 @@ class Article extends Frontend
             return $cacheValue;
         }
 
-        $topCateId       = Model\ArticleCategory::mFindTopId($cateId);
+        $topCateId = Model\ArticleCategory::mFindTopId($cateId)->first();
         $categoryTopInfo = Model\ArticleCategory::colWhere($topCateId)->first();
 
         $where        = [
@@ -365,7 +365,7 @@ class Article extends Frontend
             return $cacheValue;
         }
 
-        $articleCategoryInfo = Model\ArticleCategory::colWhere($cateId)->first()->toArray();
+        $articleCategoryInfo = Model\ArticleCategory::colWhere($cateId)->first();
         $path[]        = [
             'name' => $articleCategoryInfo['name'],
             'link' => route('Home::Article::category', ['cate_id' => $articleCategoryInfo['id']]),

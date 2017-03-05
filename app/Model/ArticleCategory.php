@@ -85,7 +85,7 @@ class ArticleCategory extends Common
         if (null !== $categoryInfo && $categoryInfo['parent_id']) {
             return ArticleCategory::scopeMFindTopId($query, $categoryInfo['parent_id']);
         }
-        return $id;
+        return collect($id);
     }
 
     public function scopeMFindCateChildIds($query, $id)

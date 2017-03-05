@@ -764,11 +764,18 @@ function mGetUrlpreg($useBaseUrl = false)
     return $urlPreg;
 }
 
-//使用PHPMailer发送邮件
+/**
+ * @param $to
+ * @param string $title
+ * @param string $content
+ * @param string $chart
+ * @param string $attachment
+ * 使用PHPMailer发送邮件
+ */
 function mSendmail($to, $title = '', $content = '', $chart = 'utf-8', $attachment = '')
 {
     $from               = 'test20121212@qq.com';
-    $PHPMailer          = new \Common\Lib\PHPMailer();
+    $PHPMailer = new App\Library\PHPMailer();
     $PHPMailer->CharSet = $chart; //设置采用gb2312中文编码
     $PHPMailer->IsSMTP(); //设置采用SMTP方式发送邮件
     $PHPMailer->Host = "smtp.qq.com"; //设置邮件服务器的地址

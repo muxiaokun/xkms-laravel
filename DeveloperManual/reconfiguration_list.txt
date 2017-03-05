@@ -1,5 +1,4 @@
-1.验证码不可以同时调用两个以上
-2.Common imageThumb
+1.Common imageThumb
 
 120/120
 

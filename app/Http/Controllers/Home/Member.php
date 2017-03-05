@@ -46,48 +46,52 @@ class Member extends FrontendMember
     //注册
     public function register()
     {
-        if (!$this->verifyCheck(request('verify'), 'register') && config('system.sys_frontend_verify')) {
-            return $this->error(trans('common.verify_code') . trans('common.error'),
-                route('Home::Member::index', ['t' => 'register']));
-        }
-        $memberName     = request('re_member_name');
-        $memberPwd      = request('password');
-        $memberPwdAgain = request('password_again');
+        if (request()->isMethod('POST')) {
+            if (!$this->verifyCheck(request('verify'), 'register') && config('system.sys_frontend_verify')) {
+                return $this->error(trans('common.verify_code') . trans('common.error'),
+                    route('Home::Member::index', ['t' => 'register']));
+            }
+            $memberName     = request('re_member_name');
+            $memberPwd      = request('password');
+            $memberPwdAgain = request('password_again');
 
-        //检测初始化参数是否合法
-        $result = $this->doValidateForm('re_member_name', ['re_member_name' => $memberName]);
-        if (!$result['status']) {
-            return $this->error($result['info'], route('Home::Member::index', ['t' => 'register']));
-        }
+            //检测初始化参数是否合法
+            $result = $this->doValidateForm('re_member_name', ['re_member_name' => $memberName]);
+            if (!$result['status']) {
+                return $this->error($result['info'], route('Home::Member::index', ['t' => 'register']));
+            }
 
-        $result = $this->doValidateForm('password', ['password' => $memberPwd]);
-        if (!$result['status']) {
-            return $this->error($result['info'], route('Home::Member::index', ['t' => 'register']));
-        }
+            $result = $this->doValidateForm('password', ['password' => $memberPwd]);
+            if (!$result['status']) {
+                return $this->error($result['info'], route('Home::Member::index', ['t' => 'register']));
+            }
 
-        $result = $this->doValidateForm('password_again',
-            ['password' => $memberPwd, 'password_again' => $memberPwdAgain]);
-        if (!$result['status']) {
-            return $this->error($result['info'], route('Home::Member::index', ['t' => 'register']));
-        }
+            $result = $this->doValidateForm('password_again',
+                ['password' => $memberPwd, 'password_again' => $memberPwdAgain]);
+            if (!$result['status']) {
+                return $this->error($result['info'], route('Home::Member::index', ['t' => 'register']));
+            }
 
-        //是否自动启用
-        $isEnable  = config('system.sys_member_auto_enable') ? 1 : 0;
-        $data      = [
-            'member_name' => $memberName,
-            'member_pwd'  => $memberPwd,
-            'group_id'    => [1],
-            'is_enable'   => $isEnable,
-        ];
-        $addResult = Model\Member::create($data);
-        if ($addResult) {
-            $this->doLogin($memberName, $memberPwd, false);
-            return $this->success(trans('common.member') . trans('common.register') . trans('common.success'),
-                route('Home::Member::index'));
-        } else {
-            return $this->error(trans('common.member') . trans('common.register') . trans('common.error'),
-                route('Home::Member::index', ['t' => 'register']));
+            //是否自动启用
+            $isEnable  = config('system.sys_member_auto_enable') ? 1 : 0;
+            $data      = [
+                'member_name' => $memberName,
+                'member_pwd'  => $memberPwd,
+                'group_id'    => [1],
+                'is_enable'   => $isEnable,
+            ];
+            $addResult = Model\Member::create($data);
+            if ($addResult) {
+                $this->doLogin($memberName, $memberPwd, false);
+                return $this->success(trans('common.member') . trans('common.register') . trans('common.success'),
+                    route('Home::Member::index'));
+            } else {
+                return $this->error(trans('common.member') . trans('common.register') . trans('common.error'),
+                    route('Home::Member::index', ['t' => 'register']));
+            }
         }
+        $assign['title'] = trans('common.register');
+        return view('home.Member_register', $assign);
     }
 
     //登出
@@ -95,7 +99,7 @@ class Member extends FrontendMember
     {
         $this->doLogout();
         return $this->success(trans('common.logout') . trans('common.account') . trans('common.success'),
-            route('Home::Index::index'));
+            route('Home::Member::index'));
     }
 
     //表单数据验证

@@ -14,6 +14,7 @@
 Route::get('/', ['as' => 'root', 'uses' => 'Home\Index@index']);
 //test error
 Route::get('t', function () {
+    dump(session()->all());
 });
 Route::get('/test', ['as' => 'rootTest', 'uses' => 'Home\Index@test']);
 
@@ -79,7 +80,7 @@ Route::group([
     ], function () {
         Route::get('index', ['as' => 'index', 'uses' => 'Member@index']);
         Route::post('login', ['as' => 'login', 'uses' => 'Member@login']);
-        Route::post('register', ['as' => 'register', 'uses' => 'Member@register']);
+        Route::match(['get', 'post'], 'register', ['as' => 'register', 'uses' => 'Member@register']);
         Route::get('logout', ['as' => 'logout', 'uses' => 'Member@logout']);
         Route::post('ajax_api', ['as' => 'ajax_api', 'uses' => 'Member@ajax_api']);
     });

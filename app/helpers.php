@@ -28,7 +28,7 @@ function mPutenv($key, $item = '')
 /**
  * @param       $path
  * @param array $arr
- * @param bool  $useOld
+ * @param bool $useOld
  * @return bool|int
  * 数组写入到文件
  */
@@ -67,7 +67,7 @@ function mGetArr($path)
 
 /**
  * @param string $type
- * @param int    $length
+ * @param int $length
  * @return string
  * 随即字符串
  */
@@ -137,8 +137,14 @@ function mGetContentUpload($content)
     return $uploadLinks[2];
 }
 
-//切割字符串
-//提取 Org\Util\String::msubstr
+/**
+ * @param $str
+ * @param $len
+ * @param bool $suffix
+ * @param int $start
+ * @return string
+ * 切割字符串
+ */
 function mSubstr($str, $len, $suffix = true, $start = 0)
 {
     $charset      = 'utf-8';
@@ -156,8 +162,13 @@ function mSubstr($str, $len, $suffix = true, $start = 0)
     return $suffix ? $slice . '...' : $slice;
 }
 
-//转换本系统的格式时间到时间戳
-//暂时只支持基本的格式YmdHis
+/**
+ * @param $date
+ * @param bool $isDetail
+ * @return false|int|null
+ * 转换本系统的格式时间到时间戳
+ * 暂时只支持基本的格式YmdHis
+ */
 function mMktime($date, $isDetail = false)
 {
     if ('' === $date) {
@@ -194,7 +205,11 @@ function mMktime($date, $isDetail = false)
     return $time;
 }
 
-//创建where_info中时间范围的数组
+/**
+ * @param $inputName
+ * @return array
+ * 创建where_info中时间范围的数组
+ */
 function mMktimeRange($inputName)
 {
     $timeRange      = [];
@@ -213,6 +228,12 @@ function mMktimeRange($inputName)
     return $timeRange;
 }
 
+/**
+ * @param string $url
+ * @param bool $isThumb
+ * @return string
+ * 从三个位置查找资源文件
+ */
 function mExists($url = '', $isThumb = false)
 {
     if (!$url) {
@@ -236,7 +257,11 @@ function mExists($url = '', $isThumb = false)
     return asset(config('system.sys_default_image'));
 }
 
-//将内容中的IMG标签替换成异步IMG标签
+/**
+ * @param $content
+ * @return mixed
+ * 将内容中的IMG标签替换成异步IMG标签
+ */
 function mAsyncImg($content)
 {
     $pattern = '/(<img.*?)\ssrc=([\'|\"])(.*?)\2(.*?\/?>)/is';
@@ -337,9 +362,13 @@ function mContent2ckplayer($content, $image = '', $customId = false, $jop = fals
     return $content;
 }
 
-// 自定义将字符串转换成系统连接
-// 1 RouteName?ars1=val1&ars2=val2
-// 2 \w*://
+/**
+ * @param $url
+ * @return string
+ * 自定义将字符串转换成系统连接
+ * 1 RouteName?ars1=val1&ars2=val2
+ * 2 \w*://
+ */
 function mStr2url($url)
 {
     if ($url && preg_match('/^(\w*?:\/\/|javascript|#).*/', $url)) {
@@ -361,6 +390,12 @@ function mStr2url($url)
     }
 }
 
+/**
+ * @param $target
+ * @param $source
+ * @return bool
+ * 查找数组中的值是否在数组中
+ */
 function mInArray($target, $source)
 {
     if (is_array($target)) {
@@ -446,7 +481,7 @@ function mAttributeArr($attribute, $cateId = 0)
         foreach ($values as $valueKey => $value) {
             unset($request['attr']);
             $data    = $attrValue;
-            $oldData           = [];
+            $oldData = [];
             if (isset($data[$key])) {
                 $oldData = explode('_', preg_replace('/^' . $key . '_/', '', $data[$key]));
             }
@@ -544,6 +579,13 @@ function mAttributeWhere($attribute, $attr = '')
     return $where;
 }
 
+/**
+ * @param $date
+ * @param string $format
+ * @param bool $toZh
+ * @return mixed|string
+ * 将时间字符串中的单词替换成中文
+ */
 function mDate($date, $format = '', $toZh = false)
 {
     if (!$date) {
@@ -599,6 +641,12 @@ function mDate($date, $format = '', $toZh = false)
     return $date_str;
 }
 
+/**
+ * @param $ip
+ * @param int $type
+ * @return mixed|string
+ * 获取ip地理位置
+ */
 function mIptoadd($ip, $type = 0)
 {
     if ('' == $ip) {
@@ -622,13 +670,14 @@ function mIptoadd($ip, $type = 0)
     return $reStr;
 }
 
-/*
- * 生成二维码方法
- * $level smallest -> L M Q H ->best
- * $size 1 - 10
- * $margin 0 - N
- * 并生成缓存 无失效期
- */
+/**
+ * @param $data
+ * @param string $level smallest -> L M Q H ->best
+ * @param int $size 1 - 10
+ * @param int $margin 0 - N
+ * @return string
+ * 生成Qrcode静态文件
+ * */
 function mQrcode($data, $level = 'L', $size = 10, $margin = 0)
 {
     if (!$data) {
@@ -648,8 +697,12 @@ function mQrcode($data, $level = 'L', $size = 10, $margin = 0)
     return asset('storage/qrcode/' . $dataMd5);
 }
 
-
-//扫描模板
+/**
+ * @param $name
+ * @param $controller
+ * @return array
+ * 扫描模板
+ */
 function mScanTemplate($name, $controller)
 {
     $dir = resource_path('views/home/');
@@ -672,7 +725,11 @@ function mScanTemplate($name, $controller)
     return $templateList;
 }
 
-//生成处理url的preg
+/**
+ * @param bool $useBaseUrl
+ * @return mixed
+ * 生成处理url的preg
+ */
 function mGetUrlpreg($useBaseUrl = false)
 {
     $baseUrl  = request()->getBaseUrl() . '/';
@@ -727,7 +784,7 @@ function mSendmail($to, $title = '', $content = '', $chart = 'utf-8', $attachmen
 /**
  * @param int $size Byte
  * @return string
- *                  格式化文件大小
+ * 格式化文件大小
  */
 function mFormatSize($size = 0)
 {

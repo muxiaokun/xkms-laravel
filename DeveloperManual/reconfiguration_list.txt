@@ -1,4 +1,4 @@
-1.Common imageThumb
+1.helpers
 
 120/120
 

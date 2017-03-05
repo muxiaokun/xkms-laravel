@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Model;
+use Intervention\Image\Facades\Image;
 
 class Common extends Controller
 {
@@ -72,10 +73,9 @@ class Common extends Controller
     }
 
     //生成缩略图 是源文件名后加 thumb
-    protected function imageThumb($file, $width = 195, $height = 120)
+    protected function imageThumb($oldFile, $width = 195, $height = 120)
     {
-        //TODO 暂时不实现
-        return '';
+        $file    = storage_path('app/public/' . $oldFile);
         if (!is_file($file) || !$width || !$height) {
             return '';
         }
@@ -83,36 +83,33 @@ class Common extends Controller
         $pathinfo = pathinfo($file);
         $newName  = $pathinfo['filename'] . '_thumb.' . $pathinfo['extension'];
         $newFile  = $pathinfo['dirname'] . '/' . $newName;
+        $newPath = str_replace(storage_path('app/public/'), '', $newFile);
         //保证只生成一个缩略图
-        if (false !== strpos($file, $newName)) {
-            $newFile = $file;
+        if (is_file($newFile)) {
+            return $newPath;
         }
 
         //如果文件不存在就生成
-        if (!is_file($newFile)) {
-            $Image = new \Think\Image();
-            $Image->open($file);
-            $Image->thumb($width, $height)->save($newFile);
-        }
+        $img = Image::make($file);
+        $img->resize($width, $height);
+        $img->save($newFile);
 
         //如果记录不存在 追加新生成文件的记录
-        $userId   = ('Admin' == MODULE_NAME) ? session('backend_info.id') : session('frontend_info.id');
-        $userType = ('Admin' == MODULE_NAME) ? 1 : 2;
-        $fileInfo = Model\ManageUpload::where('path', $newFile)->first()->toArray();
-        if (!$fileInfo) {
-            $data = [
-                'name'      => $newName,
-                'user_id'   => $userId,
-                'user_type' => $userType,
-                'path'      => $newFile,
-                'size'      => filesize($newFile),
-                'mime'      => '',
-                'suffix'    => $pathinfo['extension'],
-            ];
-            Model\ManageUpload::create($data);
-        }
+        $manageUploadInfo = Model\ManageUpload::where(['path' => $oldFile])->first();
+        $userType         = session('backend_info.id') ? session('backend_info.id') : 0;
+        $userId           = $userType ? session('backend_info.id') : session('frontend_info.id');
+        $data             = [
+            'name'      => $manageUploadInfo['name'],
+            'user_id'   => $manageUploadInfo['user_id'],
+            'user_type' => $manageUploadInfo['user_type'],
+            'path'      => $newPath,
+            'size'      => filesize($newFile),
+            'mime'      => $manageUploadInfo['mime'],
+            'suffix'    => $manageUploadInfo['suffix'],
+        ];
+        Model\ManageUpload::updateOrCreate(['path' => $newPath], $data);
 
-        return $newFile;
+        return $newPath;
     }
 
     // 加强ajax_api接口安全性

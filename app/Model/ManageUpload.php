@@ -39,7 +39,11 @@ class ManageUpload extends Common
             return true;
         }
 
-        $routeName = str_replace('::', '_', Route::currentRouteName());
+        $currentRouteName = Route::currentRouteName();
+        preg_match_all('/(.*?)::/', $currentRouteName, $matchs);
+        $routeName = implode('_', $matchs[1]);
+        $routeName = $routeName ? $routeName : $currentRouteName;
+
         //文件解除属主
         $ownerStr = '|' . $routeName . ':' . $id . '|';
         ManageUpload::select(['id', 'bind_info'])

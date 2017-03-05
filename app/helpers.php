@@ -94,7 +94,7 @@ function mRandStr($type = 'vc', $length = 4)
  */
 function mParseUploadUrl($fileUrl)
 {
-    $baseUrl = request()->getBaseUrl() . '/';
+    $baseUrl = request()->getBaseUrl() . '/storage/';
     $urlPreg = '/' . str_replace('/', '\/', $baseUrl) . '/';
     return preg_replace($urlPreg, '', $fileUrl, 1);
 }
@@ -106,7 +106,7 @@ function mParseUploadUrl($fileUrl)
  */
 function mMakeUploadUrl($fileUrl)
 {
-    $baseUrl = request()->getBaseUrl() . '/';
+    $baseUrl = request()->getBaseUrl() . '/storage/';
     return $baseUrl . $fileUrl;
 }
 
@@ -215,17 +215,25 @@ function mMktimeRange($inputName)
 
 function mExists($url = '', $isThumb = false)
 {
-    if (!$url || !is_file(public_path($url))) {
-        $url = config('system.sys_default_image');
-    } elseif ($isThumb) {
-        $pathinfo = pathinfo(public_path($url));
+    if (!$url) {
+        //return sys_default_image
+        return asset(config('system.sys_default_image'));
+    } elseif (is_file(public_path($url))) {
+        //return public file
+        return asset($url);
+    } elseif ($isThumb && is_file(storage_path('app/public/' . $url))) {
+        //return thumb file
+        $pathinfo = pathinfo(mMakeUploadUrl($url));
         $newName  = $pathinfo['filename'] . '_thumb.' . $pathinfo['extension'];
         $newFile  = $pathinfo['dirname'] . '/' . $newName;
-        if (is_file($newFile)) {
-            return $newFile;
-        }
+        return $newFile;
+    } elseif (is_file(storage_path('app/public/' . $url))) {
+        //return storage file
+        return mMakeUploadUrl($url);
     }
-    return mMakeUploadUrl($url);
+
+    //return sys_default_image
+    return asset(config('system.sys_default_image'));
 }
 
 //将内容中的IMG标签替换成异步IMG标签

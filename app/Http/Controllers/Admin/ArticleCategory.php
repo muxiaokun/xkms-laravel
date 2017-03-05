@@ -409,7 +409,14 @@ class ArticleCategory extends Backend
     private function addEditAfterCommon(&$data, $id)
     {
         $bindFile   = mGetContentUpload($data['content']);
-        $bindFile[] = $data['thumb'];
+
+        if (isset($data['thumb']) && $data['thumb']) {
+            $bindFile[] = $data['thumb'];
+            $bindFile[] = $this->imageThumb($data['thumb'],
+                config('system.sys_article_thumb_width'),
+                config('system.sys_article_thumb_height'));
+        }
+
         Model\ManageUpload::bindFile($id, $bindFile);
     }
 

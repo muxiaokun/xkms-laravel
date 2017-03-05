@@ -115,14 +115,10 @@ class Article extends Backend
                 return $data;
             }
 
-            isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'],
-                config('system.sys_article_thumb_width'),
-                config('system.sys_article_thumb_height'));
             $resultAdd = Model\Article::create($data);
             //增加了一个分类快捷添加文章的回跳链接
             $rebackLink = request('cate_id') ? route('Admin::ArticleCategory::index') : route('Admin::Article::index');
             if ($resultAdd) {
-                $data['new_thumb'] = $thumbFile;
                 $this->addEditAfterCommon($data, $resultAdd->id);
                 return $this->success(trans('common.article') . trans('common.add') . trans('common.success'),
                     $rebackLink);
@@ -154,17 +150,12 @@ class Article extends Backend
                 return $data;
             }
 
-            isset($data['thumb']) && $thumbFile = $this->imageThumb($data['thumb'],
-                config('system.sys_article_thumb_width'),
-                config('system.sys_article_thumb_height'));
-
             $resultEdit = false;
             Model\Article::colWhere($id)->get()->each(function ($item, $key) use ($data, &$resultEdit) {
                 $resultEdit = $item->update($data);
                 return $resultEdit;
             });
             if ($resultEdit) {
-                $data['new_thumb'] = $thumbFile;
                 $this->addEditAfterCommon($data, $id);
                 return $this->success(trans('common.article') . trans('common.edit') . trans('common.success'),
                     route('Admin::Article::index'));
@@ -405,8 +396,14 @@ class Article extends Backend
                 isset($info['src']) && $bindFile[] = $info['src'];
             }
         }
-        $bindFile[]    = $data['new_thumb'];
-        $bindFile[]    = $data['thumb'];
+
+        if (isset($data['thumb']) && $data['thumb']) {
+            $bindFile[] = $data['thumb'];
+            $bindFile[] = $this->imageThumb($data['thumb'],
+                config('system.sys_article_thumb_width'),
+                config('system.sys_article_thumb_height'));
+        }
+
         $contentUpload = mGetContentUpload($data['content']);
         $bindFile      = array_merge($bindFile, $contentUpload);
         Model\ManageUpload::bindFile($id, $bindFile);

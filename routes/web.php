@@ -14,7 +14,6 @@
 Route::get('/', ['as' => 'root', 'uses' => 'Home\Index@index']);
 //test error
 Route::get('t', function () {
-    dump(session()->all());
 });
 Route::get('/test', ['as' => 'rootTest', 'uses' => 'Home\Index@test']);
 

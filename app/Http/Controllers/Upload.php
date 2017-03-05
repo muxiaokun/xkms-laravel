@@ -39,7 +39,7 @@ class Upload extends Controller
             'name'      => $request->file('imgFile')->getClientOriginalName(),
             'user_id'   => $userId,
             'user_type' => $userType,
-            'path'      => 'storage/' . $path,
+            'path'      => $path,
             'mime'      => $request->file('imgFile')->getMimeType(),
             'size'      => $request->file('imgFile')->getSize(),
             'suffix'    => $request->file('imgFile')->getClientOriginalExtension(),

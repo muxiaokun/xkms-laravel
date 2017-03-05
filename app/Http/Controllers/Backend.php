@@ -134,6 +134,7 @@ class Backend extends Common
             'Admin::Index::topNav',
             'Admin::Index::leftNav',
             'Admin::Index::main',
+            'Admin::Index::login',
             'Admin::Index::logout',
             'Admin::ManageUpload::UploadFile',
             'Admin::ManageUpload::ManageFile',

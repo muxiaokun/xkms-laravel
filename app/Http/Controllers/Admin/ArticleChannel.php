@@ -13,7 +13,7 @@ class ArticleChannel extends Backend
     public function index()
     {
 
-        $allowChannel = Model\ArticleChannel::mFindAllow();
+        $allowChannel = Model\ArticleChannel::mFindAllow()->toArray();
         //初始化翻页 和 列表数据
         $articleChannelList             = Model\ArticleChannel::where(function ($query) use ($allowChannel) {
             $name = request('name');

@@ -12,8 +12,8 @@ class Article extends Backend
     //列表
     public function index()
     {
-        $allowCategory = Model\ArticleCategory::mFindAllow();
-        $allowChannel  = Model\ArticleChannel::mFindAllow();
+        $allowCategory = Model\ArticleCategory::mFindAllow()->toArray();
+        $allowChannel  = Model\ArticleChannel::mFindAllow()->toArray();
         //初始化翻页 和 列表数据
         $articleList = Model\Article::where(function ($query) use ($allowCategory, $allowChannel) {
             $title = request('title');
@@ -204,11 +204,22 @@ class Article extends Backend
     //删除
     public function del()
     {
-        $this->_check_aed();
         $id = request('id');
         if (!$id) {
             return $this->error(trans('common.id') . trans('common.error'), route('Admin::Article::index'));
         }
+
+        $checkAed = true;
+        Model\Article::colWhere($id)->get()->each(function ($item, $key) use (&$checkAed) {
+            $checkAed = $this->_check_aed($item);
+            if (true !== $checkAed) {
+                return false;
+            }
+        });
+        if (true !== $checkAed) {
+            return $checkAed;
+        }
+
         $resultDel = Model\Article::destroy($id);
         if ($resultDel) {
             Model\ManageUpload::bindFile($id);
@@ -374,7 +385,10 @@ class Article extends Backend
         if ('add' == $type || null !== $album) {
             $data['album'] = is_array($album) ? $album : [];
         }
-        $this->_check_aed($data);
+        $checkAed = $this->_check_aed($data);
+        if (true !== $checkAed) {
+            return $checkAed;
+        }
         return $data;
     }
 
@@ -403,7 +417,7 @@ class Article extends Backend
     {
         $channelList            = Model\ArticleChannel::where(function ($query) {
             if (1 != session('backend_info.id')) {
-                $query->whereIn('id', Model\ArticleChannel::mFindAllow());
+                $query->whereIn('id', Model\ArticleChannel::mFindAllow()->toArray());
             }
         })->get();
         $assign['channel_list'] = $channelList;
@@ -411,23 +425,20 @@ class Article extends Backend
     }
 
     //检查是否有 add edit del privilege
-    private function _check_aed($data = false)
+    private function _check_aed($data)
     {
         if (1 == session('backend_info.id')) {
             return true;
         }
 
-        if (!$data) {
-            $id   = request('id');
-            $data = Model\Article::colWhere($id)->first()->toArray();
-        }
-        if (!in_array($data['channel_id'], Model\ArticleChannel::mFindAllow())
-            || !in_array($data['cate_id'], Model\ArticleCategory::mFindAllow())
+        if (!in_array($data['channel_id'], Model\ArticleChannel::mFindAllow()->toArray())
+            || !in_array($data['cate_id'], Model\ArticleCategory::mFindAllow()->toArray())
         ) {
             return $this->error(trans('common.none') . trans('common.privilege') . trans('common.handle') . trans('common.article'),
                 route('Admin::Article::index'));
         }
 
+        return true;
     }
 
     private function findTopCategory($id, $column)

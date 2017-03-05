@@ -339,7 +339,7 @@ class Admin extends Backend
 
         //最高级管理不检查该项 管理员可否被当前管理员添加编辑
         if (1 != session('backend_info.id')) {
-            $mFindAllow = Model\AdminGroup::mFindAllow();
+            $mFindAllow = Model\AdminGroup::mFindAllow()->toArray();
             if (!mInArray($groupId, $mFindAllow)) {
                 return $this->error(trans('common.you') . trans('common.none') . trans('common.privilege'));
             }

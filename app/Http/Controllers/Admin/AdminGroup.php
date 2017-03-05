@@ -18,7 +18,7 @@ class AdminGroup extends Backend
             $login_id = session('backend_info.id');
             if (1 != $login_id) {
                 //非root需要权限
-                $ids = Model\AdminGroup::where('manage_id', 'like', '%|' . $login_id . '|%')->pluck('id');
+                $ids = Model\AdminGroup::where('manage_id', 'like', '%|' . $login_id . '|%')->pluck('id')->toArray();
                 $query->transfixionWhere('group_id', $ids);
             }
 
@@ -36,13 +36,13 @@ class AdminGroup extends Backend
 
         //初始化where_info
         $whereInfo              = [];
-        $whereInfo['name']      = ['type' => 'input', 'name' => trans('common.group') . trans('common.name')];
-        $whereInfo['is_enable'] = [
+        $whereInfo['name']          = ['type' => 'input', 'name' => trans('common.group') . trans('common.name')];
+        $whereInfo['is_enable']     = [
             'type'  => 'select',
             'name'  => trans('common.yes') . trans('common.no') . trans('common.enable'),
             'value' => [1 => trans('common.enable'), 2 => trans('common.disable')],
         ];
-        $assign['where_info']   = $whereInfo;
+        $assign['where_info']       = $whereInfo;
 
         //初始化batch_handle
         $batchHandle            = [];
@@ -122,8 +122,8 @@ class AdminGroup extends Backend
             }
         }
         //获取分组默认信息
-        $editInfo = Model\AdminGroup::colWhere($id)->first()->toArray();
-        $manageIds = [];
+        $editInfo            = Model\AdminGroup::colWhere($id)->first()->toArray();
+        $manageIds           = [];
         Model\Admin::colWhere($editInfo['manage_id'])->each(function ($item, $key) use (&$manageIds) {
             $manageIds[] = ['value' => $item['id'], 'html' => $item['admin_name']];
         });
@@ -149,7 +149,7 @@ class AdminGroup extends Backend
 
         if (1 == session('backend_info.id')) {
             //非root需要权限
-            $mFindAllow = Model\AdminGroup::mFindAllow();
+            $mFindAllow = Model\AdminGroup::mFindAllow()->toArray();
             if (!mInArray($id, $mFindAllow) && 0 < count($mFindAllow)) {
                 return $this->error(trans('common.id') . trans('common.not') . trans('common.del'),
                     route('Admin::AdminGroup::index'));

@@ -12,7 +12,7 @@ class ArticleCategory extends Backend
     //列表
     public function index()
     {
-        $allowCategory = Model\ArticleChannel::mFindAllow();
+        $allowCategory = Model\ArticleChannel::mFindAllow()->toArray();
         //初始化翻页 和 列表数据
         $articleCategoryList = Model\ArticleCategory::where(function ($query) use ($allowCategory) {
             $parent_id = request('parent_id');

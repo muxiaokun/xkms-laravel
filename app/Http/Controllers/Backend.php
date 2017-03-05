@@ -118,13 +118,6 @@ class Backend extends Common
         }
     }
 
-    //调用 404 的默认控制器和默认方法
-    public function _empty()
-    {
-        $EmptyController = A('Common/CommonEmpty');
-        $EmptyController->_empty();
-    }
-
     //检测权限
     public function _check_privilege($routeName)
     {

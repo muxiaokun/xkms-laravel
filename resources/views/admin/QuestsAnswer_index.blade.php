@@ -31,7 +31,7 @@
                                 {{ $quests_answer['member_name'] }}
                             </td>
                             <td>
-                                {{ mDate($quests_answer['created_at']) }}
+                                {{ $quests_answer['created_at'] }}
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['add'])

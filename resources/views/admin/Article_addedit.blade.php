@@ -209,7 +209,7 @@
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control" disabled="disabled"
                                            placeholder="@lang('common.add')@lang('common.time')" name="created_at"
-                                           value="{{ mDate($edit_info['created_at']) }}"/>
+                                           value="{{ $edit_info['created_at'] }}"/>
                                 </div>
                             </div>
                         </div>
@@ -219,7 +219,7 @@
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control" disabled="disabled"
                                            placeholder="@lang('common.update')@lang('common.time')" name="updated_at"
-                                           value="{{ mDate($edit_info['updated_at']) }}"/>
+                                           value="{{ $edit_info['updated_at'] }}"/>
                                 </div>
                             </div>
                         </div>

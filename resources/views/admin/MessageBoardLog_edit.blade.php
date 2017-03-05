@@ -18,7 +18,7 @@
                         </tr>
                         <tr>
                             <td>@lang('common.send')@lang('common.time')</td>
-                            <td>{{ mDate($edit_info['created_at']) }}</td>
+                            <td>{{ $edit_info['created_at'] }}</td>
                             <td>@lang('common.send') IP</td>
                             <td>{{ $edit_info['add_ip'] }}</td>
                         </tr>

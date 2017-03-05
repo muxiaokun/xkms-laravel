@@ -33,7 +33,7 @@
                                 {{ $admin_log['admin_name'] }}
                             </td>
                             <td>
-                                {{ mDate($admin_log['created_at']) }}
+                                {{ $admin_log['created_at'] }}
                             </td>
                             <td>
                                 {{ $admin_log['route_name'] }}

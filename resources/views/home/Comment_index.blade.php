@@ -8,7 +8,7 @@
             @foreach ($comment_list as $data)
                 <tr>
                     <td>{{ $data['member_name'] }}@lang('common.grade')@lang('common.colon'){{ $data['level'] }}
-                        [{{ mDate($data['created_at']) }}]
+                        [{{ $data['created_at'] }}]
                     </td>
                 </tr>
                 <tr>

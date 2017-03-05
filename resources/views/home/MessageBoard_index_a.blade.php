@@ -69,7 +69,7 @@
                             <table class="table table-hover">
                                 <tr>
                                     <td width="10%">@lang('common.send')@lang('common.time')@lang('common.colon')</td>
-                                    <td width="90%">{{ mDate($message_board_log['created_at']) }}</td>
+                                    <td width="90%">{{ $message_board_log['created_at'] }}</td>
                                 </tr>
                                 @foreach ($message_board_log['send_info'] as $name => $value)
                                     <tr>

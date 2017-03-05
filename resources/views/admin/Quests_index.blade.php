@@ -34,10 +34,10 @@
                                 {{ $quests['current_portion'] }}/{{ $quests['max_portion'] }}
                             </td>
                             <td>
-                                {{ mDate($quests['start_time']) }}
+                                {{ $quests['start_time'] }}
                             </td>
                             <td>
-                                {{ mDate($quests['end_time']) }}
+                                {{ $quests['end_time'] }}
                             </td>
                             <td>
                                 {{ $quests['access_info'] }}

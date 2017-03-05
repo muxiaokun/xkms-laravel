@@ -17,10 +17,10 @@
                     {{ $quests['title'] }}
                 </td>
                 <td>
-                    {{ mDate($quests['start_time']) }}
+                    {{ $quests['start_time'] }}
                 </td>
                 <td>
-                    {{ mDate($quests['end_time']) }}
+                    {{ $quests['end_time'] }}
                 </td>
                 <td>
                     @if ($quests['access_info'])

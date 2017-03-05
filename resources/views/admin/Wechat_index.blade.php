@@ -45,7 +45,7 @@
                                 [{{ $wechat['language'] }}]
                             </td>
                             <td>
-                                {{ mDate($wechat['bind_time']) }}
+                                {{ $wechat['bind_time'] }}
                             </td>
                             <td class="nowrap">
                                 @if ($batch_handle['edit'])

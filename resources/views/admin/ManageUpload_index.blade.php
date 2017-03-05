@@ -41,7 +41,7 @@
                                 {{ $manage_upload['name'] }}
                             </td>
                             <td>
-                                {{ mDate($manage_upload['created_at']) }}
+                                {{ $manage_upload['created_at'] }}
                             </td>
                             <td>
                                 {{ $manage_upload['size'] }}

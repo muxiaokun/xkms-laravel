@@ -28,7 +28,7 @@
                                 {{ $message_board_log['member_name'] }}
                             </td>
                             <td>
-                                {{ mDate($message_board_log['created_at']) }}
+                                {{ $message_board_log['created_at'] }}
                             </td>
                             <td>
                                 {{ $message_board_log['add_ip'] }}

@@ -1,6 +1,5 @@
 1.验证码不可以同时调用两个以上
-2.Article addEditCommon
-3.Common imageThumb
+2.Common imageThumb
 
 120/120
 

@@ -51,15 +51,6 @@ class ManageUpload extends Backend
                         ' | ');
                     break;
             }
-            $bindInfo    = [trans('common.route') => trans('common.relevance') . trans('common.id')];
-            $bindInfoArr = explode('|', $manageUpload['bind_info']);
-            foreach ($bindInfoArr as $info) {
-                $bindInfoTmp = explode(':', $info);
-                if (2 == count($bindInfoTmp)) {
-                    $bindInfo[$bindInfoTmp[0]] = $bindInfoTmp[1];
-                }
-            }
-            $manageUpload['bind_info'] = json_encode($bindInfo);
         }
         $assign['manage_upload_list'] = $manageUploadList;
 

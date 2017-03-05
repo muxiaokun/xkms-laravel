@@ -50,7 +50,7 @@
                                 {{ $manage_upload['suffix'] }}
                             </td>
                             <td class="nowrap">
-                                @if ($manage_upload['bind_info'])
+                                @if (!$manage_upload['bind_info']->isEmpty())
                                     <a id="M_alert_log_{{ $manage_upload['id'] }}" class="btn btn-xs btn-primary"
                                        href="javascript:void(0);">@lang('common.look')</a>
                                     <script>
@@ -58,7 +58,7 @@
                                             var config = {
                                                 'bind_obj': $('#M_alert_log_{{ $manage_upload['id'] }}'),
                                                 'title': '@lang('common.file')@lang('common.bind')@lang('common.info')',
-                                                'message':{!! $manage_upload['bind_info'][0] !!}
+                                                'message': {!! json_encode($manage_upload['bind_info']) !!}
                                             }
                                             new M_alert_log(config);
                                         });
@@ -102,7 +102,7 @@
                                         'post_link': '{{ route('Admin::ManageUpload::del') }}'
                                     });
                                     @endif
-                                            new M_batch_handle(config);
+                                        new M_batch_handle(config);
                                 });
                             </script>
                         @endif

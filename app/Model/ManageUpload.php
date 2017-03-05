@@ -19,21 +19,19 @@ class ManageUpload extends Common
 
     public function setBindInfoAttribute($value)
     {
-        //['id'=>?,'paths'=>?]
-        $old_info                      = $this->getAttribute('bind_info');
-        $this->attributes['bind_info'] = $this->transfixionEncode($value);
+        $this->attributes['bind_info'] = $this->transfixionEncode($value, true);
     }
 
     //修改文件属主关系 $paths 不进行传参 就只进行 属主文件归零
-    public static function bindFile($item, $paths = false)
+    public static function bindFile($id, $paths = false)
     {
-        if (!$item) {
+        if (!$id) {
             return false;
         }
 
-        if (is_array($item)) {
-            foreach ($item as $i) {
-                $editResult = static::bindFile($i);
+        if (is_array($id)) {
+            foreach ($id as $i) {
+                $editResult = ManageUpload::bindFile($i);
                 if (!$editResult) {
                     return false;
                 }
@@ -41,33 +39,38 @@ class ManageUpload extends Common
             return true;
         }
 
-        $routeName = Route::currentRouteName();
+        $routeName = str_replace('::', '_', Route::currentRouteName());
         //文件解除属主
-        $ownerStr  = '|' . $routeName . ':' . $item . '|';
-        $ownerList = (new static)->select(['id', 'bind_info'])
-            ->where('bind_info', 'like', '%' . $ownerStr . '%')->get();
-        foreach ($ownerList as $file) {
-            $bindInfo = str_replace($ownerStr, '', $file['bind_info']);
-            //此处的更新有可能没有影响任何数据返回0
-            (new static)->where('id', $file['id'])->update(['bind_info' => $bindInfo]);
-        }
+        $ownerStr = '|' . $routeName . ':' . $id . '|';
+        ManageUpload::select(['id', 'bind_info'])
+            ->where('bind_info', 'like', '%' . $ownerStr . '%')->get()
+            ->each(function ($item, $key) use ($routeName, $id) {
+                $item['bind_info'] = $item['bind_info']->reject(function ($item, $key) use ($routeName, $id) {
+                    return ($item == $id && $key == $routeName);
+                });
+                $item->save();
+            });
+
         //判断是否有文件需要绑定
         if (!$paths) {
             return true;
         }
+        $paths = collect($paths)->map(function ($item, $key) {
+            return mParseUploadUrl($item);
+        });
 
         //文件绑定属主
-        $fileWhere = [
-            'path' => ['in', $paths],
-        ];
-        $fileList  = (new static)->select(['id', 'bind_info'])->where($fileWhere)->get();
-        foreach ($fileList as $file) {
-            $editResult = (new static)->colWhere($file['id'])->update(['bind_info' => $file['bind_info'] . $ownerStr]);
-            if (!$editResult) {
-                return false;
-            }
+        $resultEdit = false;
+        ManageUpload::select(['id', 'bind_info'])
+            ->whereIn('path', $paths)->get()
+            ->each(function ($item, $key) use ($routeName, $id, &$resultEdit) {
+                $item['bind_info'] = $item['bind_info']->put($routeName, $id);
+                $resultEdit        = $item->save();
+                return $resultEdit;
+            });
+        if (!$resultEdit) {
+            return false;
         }
-
         return true;
     }
 }

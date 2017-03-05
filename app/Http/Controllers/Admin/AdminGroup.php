@@ -123,10 +123,11 @@ class AdminGroup extends Backend
         }
         //获取分组默认信息
         $editInfo = Model\AdminGroup::colWhere($id)->first()->toArray();
-        foreach ($editInfo['manage_id'] as $manageKey => $manageId) {
-            $adminName                         = Model\Admin::colWhere($manageId)->first()['admin_name'];
-            $editInfo['manage_id'][$manageKey] = ['value' => $manageId, 'html' => $adminName];
-        }
+        $manageIds = [];
+        Model\Admin::colWhere($editInfo['manage_id'])->each(function ($item, $key) use (&$manageIds) {
+            $manageIds[] = ['value' => $item['id'], 'html' => $item['admin_name']];
+        });
+        $editInfo['manage_id'] = $manageIds;
         $assign['edit_info'] = $editInfo;
 
         $this->addEditCommon();

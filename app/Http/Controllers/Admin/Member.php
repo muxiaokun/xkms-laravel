@@ -123,10 +123,11 @@ class Member extends Backend
         }
 
         $editInfo = Model\Member::colWhere($id)->first()->toArray();
-        foreach ($editInfo['group_id'] as &$groupId) {
-            $memberGroupName = Model\MemberGroup::colWhere($groupId)->first()['name'];
-            $groupId         = ['value' => $groupId, 'html' => $memberGroupName];
-        }
+        $groupIds = [];
+        Model\MemberGroup::colWhere($editInfo['group_id'])->each(function ($item, $key) use (&$groupIds) {
+            $groupIds[] = ['value' => $item['id'], 'html' => $item['name']];
+        });
+        $editInfo['group_id'] = $groupIds;
         $assign['edit_info'] = $editInfo;
 
         $this->addEditCommon();

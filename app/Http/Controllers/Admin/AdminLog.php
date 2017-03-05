@@ -38,7 +38,7 @@ class AdminLog extends Backend
 
         })->paginate(config('system.sys_max_row'))->appends(request()->all());
         foreach ($adminLogList as &$adminLog) {
-            $adminLog['admin_name'] = Model\Admin::colWhere($adminLog['admin_id'])->first()['admin_name'];
+            $adminLog['admin_name'] = Model\Admin::colWhere($adminLog['admin_id'])->get()->implode('admin_name', ' | ');
         }
         $assign['admin_log_list'] = $adminLogList;
 

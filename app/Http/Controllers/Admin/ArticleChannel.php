@@ -139,18 +139,25 @@ class ArticleChannel extends Backend
         $editInfo = Model\ArticleChannel::colWhere($id)->first()->toArray();
         //如果有管理权限进行进一步数据处理
         if (mInArray($id, $maAllowArr)) {
-            foreach ($editInfo['manage_id'] as &$manageId) {
-                $adminName = Model\Admin::colWhere($manageId)->first()['admin_name'];
-                $manageId  = ['value' => $manageId, 'html' => $adminName];
-            }
-            foreach ($editInfo['manage_group_id'] as &$manageGroupId) {
-                $adminGroupName = Model\AdminGroup::colWhere($manageGroupId)->first()['name'];
-                $manageGroupId  = ['value' => $manageGroupId, 'html' => $adminGroupName];
-            }
-            foreach ($editInfo['access_group_id'] as &$accessGroupId) {
-                $adminGroupName = Model\MemberGroup::colWhere($accessGroupId)->first()['name'];
-                $accessGroupId  = ['value' => $accessGroupId, 'html' => $adminGroupName];
-            }
+            $manageIds = [];
+            Model\Admin::colWhere($editInfo['manage_id'])->each(function ($item, $key) use (&$manageIds) {
+                $manageIds[] = ['value' => $item['id'], 'html' => $item['admin_name']];
+            });
+            $editInfo['manage_id'] = $manageIds;
+
+            $manageGroupIds = [];
+            Model\AdminGroup::colWhere($editInfo['manage_group_id'])->each(function ($item, $key) use (&$manageGroupIds
+            ) {
+                $manageGroupIds[] = ['value' => $item['id'], 'html' => $item['name']];
+            });
+            $editInfo['manage_group_id'] = $manageGroupIds;
+
+            $accessGroupIds = [];
+            Model\MemberGroup::colWhere($editInfo['access_group_id'])->each(function ($item, $key) use (&$accessGroupIds
+            ) {
+                $accessGroupIds[] = ['value' => $item['id'], 'html' => $item['name']];
+            });
+            $editInfo['access_group_id'] = $accessGroupIds;
         }
         $assign['edit_info'] = $editInfo;
         $this->addEditCommon($editInfo);

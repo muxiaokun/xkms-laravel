@@ -127,7 +127,7 @@ class Assess extends Backend
         }
 
         $editInfo               = Model\Assess::colWhere($id)->first()->toArray();
-        $editInfo['group_name'] = Model\MemberGroup::colWhere($editInfo['group_level'])->first()['name'];
+        $editInfo['group_name'] = Model\MemberGroup::colWhere($editInfo['group_level'])->get()->implode('name', ' | ');;
         $assign['edit_info']    = $editInfo;
 
         $assign['title'] = trans('assess.assess') . trans('common.edit');

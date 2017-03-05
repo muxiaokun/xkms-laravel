@@ -36,17 +36,21 @@
                                 {{ $admin['admin_name'] }}
                             </td>
                             <td>
-                                {{ $admin['group_name'] }}
+                                @if ($admin['group_name'])
+                                    {{ $admin['group_name'] }}
+                                @else
+                                    @lang('common.empty')
+                                @endif
                             </td>
                             <td>
                                 @if ($admin['created_at'])
-                                    {{ mDate($admin['created_at']) }}
+                                    {{ $admin['created_at'] }}
                                 @else
                                     @lang('common.system')@lang('common.add')
                                 @endif
                             </td>
                             <td>
-                                {{ mDate($admin['last_time']) }}
+                                {{ $admin['last_time'] }}
                             </td>
                             <td>
                                 {{ $admin['aip'] }}

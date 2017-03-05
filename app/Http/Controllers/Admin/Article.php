@@ -50,14 +50,11 @@ class Article extends Backend
 
         })->paginate(config('system.sys_max_row'))->appends(request()->all());
         foreach ($articleList as &$article) {
-            $article['channel_name'] = trans('common.empty');
-            $article['cate_name']    = trans('common.empty');
-            if ($article['channel_id']) {
-                $article['channel_name'] = Model\ArticleChannel::colWhere($article['channel_id'])->first()['name'];
-            }
-            if ($article['cate_id']) {
-                $article['cate_name'] = Model\ArticleCategory::colWhere($article['cate_id'])->first()['name'];
-            }
+            $article['channel_name'] = Model\ArticleChannel::colWhere($article['channel_id'])->get()->implode('name',
+                ' | ');
+            !$article['channel_name'] = trans('common.empty');
+            $article['cate_name'] = Model\ArticleCategory::colWhere($article['cate_id'])->get()->implode('name', ' | ');
+            !$article['cate_name'] = trans('common.empty');
         }
         $assign['article_list'] = $articleList;
 
@@ -180,10 +177,11 @@ class Article extends Backend
         }
         $editInfo = Model\Article::colWhere($id)->first()->toArray();
 
-        foreach ($editInfo['access_group_id'] as &$accessGroupId) {
-            $adminGroupName = Model\MemberGroup::colWhere($accessGroupId)->first()['name'];
-            $accessGroupId  = ['value' => $accessGroupId, 'html' => $adminGroupName];
-        }
+        $accessGroupIds = [];
+        Model\MemberGroup::colWhere($editInfo['access_group_id'])->each(function ($item, $key) use (&$accessGroupIds) {
+            $accessGroupIds[] = ['value' => $item['id'], 'html' => $item['name']];
+        });
+        $editInfo['access_group_id'] = $accessGroupIds;
 
         $extendTpl = $this->findTopCategory($editInfo['cate_id'], 'extend');
         $valExtend = [];
@@ -191,8 +189,11 @@ class Article extends Backend
             $valExtend[$template] = (isset($editInfo['extend'][$template])) ? $editInfo['extend'][$template] : '';
         }
         $editInfo['extend']        = $valExtend;
+
         $editInfo['attribute_tpl'] = $this->findTopCategory($editInfo['cate_id'], 'attribute');
+
         $editInfo['category_tree'] = Model\ArticleCategory::mCategoryTree($editInfo['cate_id']);
+
         $assign['edit_info'] = $editInfo;
 
         $this->addEditCommon();

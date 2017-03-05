@@ -27,7 +27,9 @@ class Wechat extends Backend
 
         })->paginate(config('system.sys_max_row'))->appends(request()->all());
         foreach ($wechatList as &$wechat) {
-            $wechat['member_name'] = Model\Member::colWhere($wechat['member_id'])->first()['member_name'];
+            $wechat['member_name'] = Model\Member::colWhere($wechat['member_id'])->get()->implode('member_name',
+                ' | ');;
+            !$wechat['member_name'] = trans('common.empty');
         }
         $assign['wechat_list'] = $wechatList;
 
@@ -91,7 +93,9 @@ class Wechat extends Backend
 
         }
         $editInfo = Model\Wechat::colWhere($id)->first()->toArray();
-        $editInfo['member_name'] = Model\Member::colWhere($editInfo['member_id'])->first()['member_name'];
+        $editInfo['member_name'] = Model\Member::colWhere($editInfo['member_id'])->get()->implode('member_name',
+            ' | ');;
+        !$editInfo['member_name'] = trans('common.empty');
         $assign['edit_info']     = $editInfo;
         if (request()->isMethod('POST')) {
             $errorGoLink = route('Admin::Wechat::edit', ['id' => $id]);

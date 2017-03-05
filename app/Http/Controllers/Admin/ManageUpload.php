@@ -43,10 +43,12 @@ class ManageUpload extends Backend
         foreach ($manageUploadList as &$manageUpload) {
             switch ($manageUpload['user_type']) {
                 case 1:
-                    $manageUpload['user_name'] = Model\Admin::colWhere($manageUpload['user_id'])->first()['admin_name'];
+                    $manageUpload['user_name'] = Model\Admin::colWhere($manageUpload['user_id'])->get()->implode('admin_name',
+                        ' | ');
                     break;
                 case 2:
-                    $manageUpload['user_name'] = Model\Member::colWhere($manageUpload['user_id'])->first()['member_name'];
+                    $manageUpload['user_name'] = Model\Member::colWhere($manageUpload['user_id'])->get()->implode('member_name',
+                        ' | ');
                     break;
             }
             $bindInfo    = [trans('common.route') => trans('common.relevance') . trans('common.id')];

@@ -325,7 +325,7 @@ class Article extends Frontend
             return $data[$cateId][$col];
         }
 
-        $parentId = Model\ArticleCategory::colWhere($cateId)->first()['parent_id'];
+        $parentId = Model\ArticleCategory::colWhere($cateId)->get()->implode('parent_id', ' | ');
         return ($cateId == $parentId) ? '' : $this->_get_channel_template($parentId, $col, $data);
     }
 

@@ -35,7 +35,7 @@ class Region extends Backend
 
         })->paginate(config('system.sys_max_row'))->appends(request()->all());
         foreach ($regionList as &$region) {
-            $region['parent_name'] = Model\Region::colWhere($region['parent_id'])->first()['region_name'];
+            $region['parent_name'] = Model\Region::colWhere($region['parent_id'])->get()->implode('region_name', ' | ');
         }
 
         $assign['region_list'] = $regionList;
@@ -113,7 +113,7 @@ class Region extends Backend
         }
 
         $editInfo                = Model\Region::colWhere($id)->first()->toArray();
-        $editInfo['parent_name'] = Model\Region::colWhere($editInfo['parent_id'])->first()['region_name'];
+        $editInfo['parent_name'] = Model\Region::colWhere($editInfo['parent_id'])->get()->implode('region_name', ' | ');
         $assign['edit_info']     = $editInfo;
         $assign['title'] = trans('region.region') . trans('common.edit');
         return view('admin.Region_addedit', $assign);

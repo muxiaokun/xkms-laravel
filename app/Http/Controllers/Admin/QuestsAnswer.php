@@ -51,7 +51,8 @@ class QuestsAnswer extends Backend
 
         })->paginate(config('system.sys_max_row'))->appends(request()->all());
         foreach ($questsAnswerList as &$questsAnswer) {
-            $questsAnswer['quests_title'] = Model\Quests::colWhere($questsAnswer['quests_id'])->first()['title'];
+            $questsAnswer['quests_title'] = Model\Quests::colWhere($questsAnswer['quests_id'])->get()->implode('title',
+                ' | ');
             $memberInfo                   = Model\Member::colWhere($questsAnswer['member_id'])->first();
             if (null === $memberInfo) {
                 $questsAnswer['member_name'] = trans('common.member') . trans('common.not') . trans('common.exists');

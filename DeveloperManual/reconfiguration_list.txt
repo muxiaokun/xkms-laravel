@@ -1,7 +1,7 @@
 1.验证码不可以同时调用两个以上
-2.first()['name']
-3.Article addEditCommon
-4.Common imageThumb
+2.Article addEditCommon
+3.Common imageThumb
+4.remove mDate
 
 120/120
 

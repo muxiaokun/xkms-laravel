@@ -56,13 +56,8 @@ class Admin extends Backend
         })->paginate(config('system.sys_max_row'))->appends(request()->all());
 
         foreach ($adminList as &$admin) {
-            foreach ($admin['group_id'] as $groupId) {
-                $groupName = Model\AdminGroup::colWhere($groupId)->first()['name'];
-                isset($admin['group_name']) && $admin['group_name'] .= " | ";
-                $admin['group_name'] .= $groupName;
-            }
-            !isset($admin['group_name']) && $admin['group_name'] = trans('common.empty');
-            !isset($admin['add_time']) && $admin['add_time'] = trans('common.system') . trans('common.add');
+            $admin['group_name'] = Model\AdminGroup::colWhere($admin['group_id']->toArray())->get()->implode('name',
+                ' | ');
         }
         $assign['admin_list'] = $adminList;
 
@@ -153,10 +148,11 @@ class Admin extends Backend
         }
 
         $editInfo = Model\Admin::colWhere($id)->first()->toArray();
-        foreach ($editInfo['group_id'] as &$groupId) {
-            $adminGroupName = Model\AdminGroup::colWhere($groupId)->first()['name'];
-            $groupId        = ['value' => $groupId, 'html' => $adminGroupName];
-        }
+        $groupIds = [];
+        Model\AdminGroup::colWhere($editInfo['group_id'])->each(function ($item, $key) use (&$groupIds) {
+            $groupIds[] = ['value' => $item['id'], 'html' => $item['name']];
+        });
+        $editInfo['group_id'] = $groupIds;
         $assign['edit_info'] = $editInfo;
 
         $this->addEditCommon();

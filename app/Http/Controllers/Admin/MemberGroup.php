@@ -113,10 +113,11 @@ class MemberGroup extends Backend
         }
         //获取分组默认信息
         $editInfo = Model\MemberGroup::colWhere($id)->first()->toArray();
-        foreach ($editInfo['manage_id'] as $manageKey => $manageId) {
-            $memberName                        = Model\Member::colWhere($manageId)->first()['member_name'];
-            $editInfo['manage_id'][$manageKey] = ['value' => $manageId, 'html' => $memberName];
-        }
+        $manageIds = [];
+        Model\Member::colWhere($editInfo['manage_id'])->each(function ($item, $key) use (&$manageIds) {
+            $manageIds[] = ['value' => $item['id'], 'html' => $item['member_name']];
+        });
+        $editInfo['manage_id'] = $manageIds;
         $assign['edit_info'] = $editInfo;
 
         $this->addEditCommon();

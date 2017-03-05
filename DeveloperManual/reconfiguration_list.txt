@@ -1,8 +1,7 @@
-1.权限检测需要重构不可以用die
-2.登陆时密码错误 出现系统错误
-3.验证码不可以同时调用两个以上
-4.first()['name']
-5.Article addEditCommon
+1.验证码不可以同时调用两个以上
+2.first()['name']
+3.Article addEditCommon
+4.Common imageThumb
 
 120/120
 

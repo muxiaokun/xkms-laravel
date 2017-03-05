@@ -100,7 +100,7 @@ class Frontend extends Common
             return 'login_success';
         } else {
             //检测前台尝试登陆次数
-            if (0 != $loginNum) {
+            if ($loginNum) {
                 $loginData = [
                     'login_num' => $memberInfo['login_num'] + 1,
                     'lock_time' => ($loginNum <= $memberInfo['login_num']) ? Carbon::now() : '1970-01-02 00:00:00',

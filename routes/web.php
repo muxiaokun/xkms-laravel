@@ -24,7 +24,10 @@ Route::post('Upload/UploadFile', 'Upload@UploadFile')->name('UploadFile');
 
 Route::group([
     'as'        => 'Home::',
-    //'middleware'=>'auth',
+    [
+        App\Http\Middleware\CheckInstall::class,
+        App\Http\Middleware\VerifyBackend::class,
+    ],
     'namespace' => 'Home',
     'prefix'    => 'Home',
 ], function () {
@@ -134,10 +137,14 @@ Route::group([
 });
 
 Route::group([
-    'as'        => 'Admin::',
-    //'middleware'=>'auth',
-    'namespace' => 'Admin',
-    'prefix'    => 'Admin',
+    'as'         => 'Admin::',
+    'middleware' =>
+        [
+            App\Http\Middleware\CheckInstall::class,
+            App\Http\Middleware\VerifyBackend::class,
+        ],
+    'namespace'  => 'Admin',
+    'prefix'     => 'Admin',
 ], function () {
     Route::group([
         'as'     => 'Admin::',
@@ -408,10 +415,12 @@ Route::group([
     });
 });
 Route::group([
-    'as'        => 'Install::',
-    //'middleware'=>'auth',
-    'namespace' => 'Install',
-    'prefix'    => 'Install',
+    'as'         => 'Install::',
+    'middleware' => [
+        App\Http\Middleware\CheckInstalled::class,
+    ],
+    'namespace'  => 'Install',
+    'prefix'     => 'Install',
 ], function () {
     Route::get('index', ['as' => 'index', 'uses' => 'Index@index']);
     Route::get('scan/{name?}', ['as' => 'scan', 'uses' => 'Index@scan']);

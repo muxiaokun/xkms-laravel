@@ -5,55 +5,12 @@ namespace App\Http\Controllers;
 
 use App\Model;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Route;
 
 class Backend extends Common
 {
     public function _initialize()
     {
         parent::_initialize();
-        if ($this->isLogin()) {
-            $backendInfo = session('backend_info');
-            //自动登出时间
-            if (Carbon::now()->getTimestamp() - config('system.sys_backend_timeout') < $backendInfo['login_time']->getTimestamp()) {
-                session('backend_info.login_time', Carbon::now()->getTimestamp());
-            } else {
-                $this->doLogout();
-                die($this->error(trans('common.login') . trans('common.timeout'), route('Admin::Index::index')));
-            }
-            //检查管理员或者管理员组权限变动 先检查数量 提高效率
-            $adminInfo           = Model\Admin::colWhere($backendInfo['id'])->first()->toArray();
-            $adminGroupPrivilege = Model\AdminGroup::mFindPrivilege($adminInfo['group_id']);
-            if (
-                $backendInfo['privilege'] !== $adminInfo['privilege'] ||
-                $backendInfo['group_privilege']->toArray() !== $adminGroupPrivilege->toArray()
-            ) {
-                $this->doLogout();
-                die($this->error(trans('common.privilege') . trans('common.change') . trans('common.please') . trans('common.login'),
-                    route('Admin::Index::index')));
-            }
-
-            //登录后 检查权限
-            if (!$this->_check_privilege(Route::currentRouteName())) {
-                die($this->error(trans('common.you') . trans('common.none') . trans('common.privilege')));
-            }
-
-            //是否开启管理员日志 记录POST提交数据除了root用户
-            if (config('system.sys_admin_auto_log') && 1 != session('backend_info.id') && request()->isMethod('POST')) {
-                Model\AdminLog::record($backendInfo['id']);
-            }
-        } else {
-            //检测不登陆就可以访问的
-            $allowRoute = [
-                'Admin::Index::index',
-                'Admin::Index::login',
-                'Admin::Index::logout',
-            ];
-            if (!call_user_func_array('Route::is', $allowRoute)) {
-                die($this->error(trans('common.not_login') . trans('common.backend'), route('Admin::Index::index')));
-
-            }
-        }
     }
 
     //生成验证码
@@ -90,68 +47,69 @@ class Backend extends Common
     }
 
     //登录功能
-    protected function doLogin($userName, $password)
+    public function doLogin($userName, $password)
     {
         if (!$this->verifyCheck(request('verify'))) {
             return 'verify_error';
         }
 
-        //检测后台尝试登陆次数
-        $loginNum  = config('system.sys_backend_login_num');
-        $lockTime  = config('system.sys_backend_lock_time');
-        $loginInfo = Model\Admin::where('admin_name', $userName)->first();
-        if ($loginNum && null !== $loginInfo && strtotime($loginInfo->lock_time) > Carbon::now()->getTimestamp() - $lockTime) {
-            $loginInfo->lock_time = Carbon::now();
-            $loginInfo->save();
-            return 'lock_user_error';
-        }
-
-        //验证用户名密码
+        //验证用户名
         $where     = [
             ['admin_name', $userName],
             ['is_enable', '1'],
         ];
         $adminInfo = Model\Admin::where($where)->first();
+        if (null === $adminInfo) {
+            return 'user_pwd_error';
+        }
+        //检测后台尝试登陆次数
+        $loginNum = config('system.sys_backend_login_num');
+        $lockTime = config('system.sys_backend_lock_time');
+        if ($loginNum && strtotime($adminInfo->lock_time) > Carbon::now()->getTimestamp() - $lockTime) {
+            $adminInfo->update(['lock_time' => Carbon::now()]);
+            return 'lock_user_error';
+        }
+        //验证密码
         if ($adminInfo['admin_pwd'] == md5($password . $adminInfo['admin_rand'])) {
-            $data = [
+            $loginData = [
                 'last_time' => Carbon::now(),
                 'login_ip'  => request()->ip(),
             ];
-            Model\Admin::colWhere($adminInfo['id'])->update($data);
-            $adminInfo = Model\Admin::colWhere($adminInfo['id'])->first();
 
-            //管理员有组的 加载分组权限
-            if (0 < count($adminInfo->group_id->toArray())) {
-                $adminInfo['group_privilege'] = Model\AdminGroup::mFindPrivilege($adminInfo['group_id']);
-            }
             //重置登录次数
             if (0 != $adminInfo['login_num']) {
-                $loginData = ['login_num' => 0, 'lock_time' => 0];
-                Model\Admin::colWhere($loginInfo->id)->first()->update($loginData);
+                $loginData['login_num'] = 0;
+                $loginData['lock_time'] = '1970-01-02 00:00:00';
             }
-            $adminInfo['login_time'] = Carbon::now();
+
+            $adminInfo->update($loginData);
+
+            //管理员有组的 加载分组权限
+            $adminInfo['group_privilege'] = Model\AdminGroup::mFindPrivilege($adminInfo['group_id'])->toArray();
+
             session(['backend_info' => $adminInfo->toArray()]);
             return 'login_success';
         } else {
             //检测后台尝试登陆次数
             if ($loginNum) {
-                $loginData              = [];
-                $loginData['login_num'] = $loginInfo->login_num + 1;
-                $loginData['lock_time'] = ($loginNum <= $loginData['login_num']) ? Carbon::now() : null;
-                Model\Admin::colWhere($loginInfo->id)->first()->update($loginData);
+                $loginData = [
+                    'login_num' => $adminInfo['login_num'] + 1,
+                    'lock_time' => ($loginNum <= $adminInfo['login_num']) ? Carbon::now() : '1970-01-02 00:00:00',
+                ];
+                $adminInfo->update($loginData);
             }
             return 'user_pwd_error';
         }
     }
 
     //登出功能
-    protected function doLogout()
+    public function doLogout()
     {
         session(['backend_info' => null]);
     }
 
     //子类调用的是否登录的接口
-    protected function isLogin()
+    public function isLogin()
     {
         if (session('backend_info')) {
             return true;

@@ -3,30 +3,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Route;
 use Carbon\Carbon;
 use App\Model;
 
 class Common extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(function ($request, \Closure $next) {
-            $response = $next($request);
-            $this->_initialize();
-            return $response;
-        });
-    }
-
-    public function _initialize()
-    {
-        //没有安装，跳转到安装页
-        if (0 == env('INSTALL_STATUS') && !Route::is("Install::*")) {
-            $message = trans('common.please') . trans('common.install') . trans('common.app_name');
-            die($this->error($message, route('Install::index')));
-        }
-    }
-
     protected function success($msg = '', $backUrl = '', $timeout = 3)
     {
         return $this->dispatch_jump($msg, $backUrl, $timeout, true);

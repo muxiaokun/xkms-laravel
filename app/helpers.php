@@ -276,7 +276,11 @@ function mAsyncImg($content)
     return $content;
 }
 
-//创建CKplayer
+/**
+ * @param $config
+ * @return string
+ * 创建CKplayer
+ */
 function mCkplayer($config)
 {
     $id          = $config['id'];
@@ -288,25 +292,32 @@ function mCkplayer($config)
         return '';
     }
 
-    $img       = ($config['img']) ? $config['img'] : ''; //default image
-    $loop      = ($config['loop']) ? $config['loop'] : 2; //1repeat 2stop 2
-    $volume    = ($config['volume']) ? $config['volume'] : 100; //0-100 100
-    $autostart = ($config['autostart']) ? $config['autostart'] : 2; //0stop 1play 2notload 2
-    $configXml = ($config['right_close']) ? 'ckplayer_min.xml' : 'ckplayer.xml';
+    $img       = (isset($config['img'])) ? $config['img'] : ''; //default image
+    $loop      = (isset($config['loop'])) ? $config['loop'] : 2; //1repeat 2stop 2
+    $volume    = (isset($config['volume'])) ? $config['volume'] : 100; //0-100 100
+    $autostart = (isset($config['autostart'])) ? $config['autostart'] : 2; //0stop 1play 2notload 2
+    $configXml = (isset($config['right_close'])) ? 'ckplayer_min.xml' : 'ckplayer.xml';
+    $swfPath   = asset('ckplayer/ckplayer.swf');
     return <<<EOF
-<script type="text/javascript" src="Public/ckplayer/ckplayer.js"></script>
+<script type="text/javascript" src="ckplayer/ckplayer.js"></script>
 <script type="text/javascript">
-    var flashvars={f:<ntag url='{$src}' />,e:'{$loop}',v:'{$volume}',p:'{$autostart}',i:<ntag url='{$img}' />,c:1,x:'{$configXml}'};
-    CKobject.embed(<ntag url='Public/ckplayer/ckplayer.swf' />,'{$id}','','100%','100%',false,flashvars);
+    var flashvars={f:'{$src}',e:'{$loop}',v:'{$volume}',p:'{$autostart}',i:'{$img}',c:1,x:'{$configXml}'};
+    CKobject.embed('{$swfPath}','{$id}','','100%','100%',false,flashvars);
 </script>
 EOF;
 }
 
-//将内容中的视频替换成CKplayer
-//custom_id 自定义输出div id
-//jop=>just one player 只返回一个视频
+/**
+ * @param $content
+ * @param string $image
+ * @param bool $customId 自定义输出div id
+ * @param bool $jop 只返回一个视频 just one player
+ * @return mixed|string
+ * 将内容中的视频替换成CKplayer
+ */
 function mContent2ckplayer($content, $image = '', $customId = false, $jop = false)
 {
+    $content = htmlspecialchars_decode($content);
     if (!preg_match_all('/<embed.*?\/>/i', $content, $elements)) {
         return $content;
     }

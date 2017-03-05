@@ -133,7 +133,7 @@ function mGetContentUpload($content)
 {
     $baseUrl = request()->getBaseUrl() . '/';
     $baseUrl = str_replace('/', '\/', $baseUrl);
-    preg_match_all('/(\'|\")' . $baseUrl . '(storage\/.*?)\1/i', $content, $uploadLinks);
+    preg_match_all('/(\'|\")' . $baseUrl . 'storage\/(.*?)\1/i', $content, $uploadLinks);
     return $uploadLinks[2];
 }
 

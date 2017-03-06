@@ -8,11 +8,6 @@ use Carbon\Carbon;
 
 class Backend extends Common
 {
-    public function _initialize()
-    {
-        parent::_initialize();
-    }
-
     //生成验证码
     public function verifyImg()
     {

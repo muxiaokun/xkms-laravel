@@ -9,15 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class Index extends Common
 {
-    public function _initialize()
-    {
-        parent::_initialize();
-        if (1 == env('INSTALL_STATUS') && !env('APP_DEBUG')) {
-            $message = trans('common.app_name') . trans('common.install') . trans('common.success');
-            die($this->success($message, route('Home::Index::index')));
-        }
-    }
-
     //第一页 欢迎页
     public function index()
     {

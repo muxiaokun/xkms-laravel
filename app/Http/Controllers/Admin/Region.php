@@ -176,7 +176,7 @@ class Region extends Backend
 
         $data = [];
         if ('add' == $type || null !== $parentId) {
-            $data['parent_id'] = $parentId;
+            $data['parent_id'] = $parentId ? $parentId : 0;
         }
         if ('add' == $type || null !== $regionName) {
             $data['region_name'] = $regionName;

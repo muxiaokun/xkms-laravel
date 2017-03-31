@@ -341,10 +341,10 @@ class Article extends Backend
             $data['content'] = $content;
         }
         if ('add' == $type || null !== $cateId) {
-            $data['cate_id'] = $cateId;
+            $data['cate_id'] = $cateId ? $cateId : 0;
         }
         if ('add' == $type || null !== $channelId) {
-            $data['channel_id'] = $channelId;
+            $data['channel_id'] = $channelId ? $channelId : 0;
         }
         if ('add' == $type || null !== $thumb) {
             $data['thumb'] = $thumb;
@@ -362,7 +362,7 @@ class Article extends Backend
             $data['is_stick'] = $isStick;
         }
         if ('add' == $type || null !== $isAudit) {
-            $data['is_audit'] = $isAudit;
+            $data['is_audit'] = $isAudit ? session('backend_info.id') : 0;
         }
         if ('add' == $type || null !== $ifShow) {
             $data['if_show'] = $ifShow;

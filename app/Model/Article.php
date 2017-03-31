@@ -40,21 +40,6 @@ class Article extends Common
         $this->attributes['content'] = mParseContent($value);
     }
 
-    public function setCateIdAttribute($value)
-    {
-        $this->attributes['cate_id'] = $value ? $value : 0;
-    }
-
-    public function setChannelIdAttribute($value)
-    {
-        $this->attributes['channel_id'] = $value ? $value : 0;
-    }
-
-    public function setIsAuditAttribute($value)
-    {
-        $this->attributes['is_audit'] = $value ? session('backend_info.id') : 0;
-    }
-
     public function setThumbAttribute($value)
     {
         $this->attributes['thumb'] = mParseUploadUrl($value);

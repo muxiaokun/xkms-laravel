@@ -13,7 +13,7 @@ class Itlink extends Backend
     public function index()
     {
         //初始化翻页 和 列表数据
-        $itlinkList = Model\Itlink::where(function ($query) {
+        $itlinkList            = Model\Itlink::where(function ($query) {
             $name = request('name');
             if ($name) {
                 $query->where('name', 'like', '%' . $name . '%');
@@ -30,7 +30,7 @@ class Itlink extends Backend
             }
 
         })->paginate(config('system.sys_max_row'))->appends(request()->all());
-        $assign['itlink_list']   = $itlinkList;
+        $assign['itlink_list'] = $itlinkList;
 
         //初始化where_info
         $whereInfo['name']       = ['type' => 'input', 'name' => trans('itlink.itlink') . trans('common.name')];
@@ -74,7 +74,7 @@ class Itlink extends Backend
         }
 
         $assign['edit_info'] = Model\Itlink::columnEmptyData();
-        $assign['title'] = trans('itlink.itlink') . trans('common.add');
+        $assign['title']     = trans('itlink.itlink') . trans('common.add');
         return view('admin.Itlink_addedit', $assign);
     }
 
@@ -111,7 +111,7 @@ class Itlink extends Backend
 
         $editInfo            = Model\Itlink::colWhere($id)->first()->toArray();
         $assign['edit_info'] = $editInfo;
-        $assign['title'] = trans('itlink.itlink') . trans('common.edit');
+        $assign['title']     = trans('itlink.itlink') . trans('common.edit');
         return view('admin.Itlink_addedit', $assign);
     }
 
@@ -215,16 +215,16 @@ class Itlink extends Backend
             $data['is_enable'] = $isEnable;
         }
         if ('add' == $type || null !== $maxShowNum) {
-            $data['max_show_num'] = $maxShowNum;
+            $data['max_show_num'] = $maxShowNum ? $maxShowNum : 0;
         }
         if ('add' == $type || null !== $maxHitNum) {
-            $data['max_hit_num'] = $maxHitNum;
+            $data['max_hit_num'] = $maxHitNum ? $maxHitNum : 0;
         }
         if ('add' == $type || null !== $showNum) {
-            $data['show_num'] = $showNum;
+            $data['show_num'] = $showNum ? $showNum : 0;
         }
         if ('add' == $type || null !== $hitNum) {
-            $data['hit_num'] = $hitNum;
+            $data['hit_num'] = $hitNum ? $hitNum : 0;
         }
         if ('add' == $type || 0 < count($extInfo)) {
             $data['ext_info'] = $extInfo;

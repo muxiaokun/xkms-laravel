@@ -7,26 +7,6 @@ use Carbon\Carbon;
 
 class Itlink extends Common
 {
-    public function setMaxShowNumAttribute($value)
-    {
-        $this->attributes['max_show_num'] = $value ? $value : 0;
-    }
-
-    public function setMaxHitNumAttribute($value)
-    {
-        $this->attributes['max_hit_num'] = $value ? $value : 0;
-    }
-
-    public function setShowNumAttribute($value)
-    {
-        $this->attributes['show_num'] = $value ? $value : 0;
-    }
-
-    public function setHitNumAttribute($value)
-    {
-        $this->attributes['hit_num'] = $value ? $value : 0;
-    }
-
     public function getExtInfoAttribute($value)
     {
         $value = json_decode($value, true);

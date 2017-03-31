@@ -12,7 +12,7 @@ class ArticleCategory extends Backend
     //列表
     public function index()
     {
-        $allowCategory = Model\ArticleChannel::mFindAllow()->toArray();
+        $allowCategory = Model\ArticleCategory::mFindAllow()->toArray();
         //初始化翻页 和 列表数据
         $articleCategoryList = Model\ArticleCategory::where(function ($query) use ($allowCategory) {
             $parent_id = request('parent_id');
@@ -45,9 +45,13 @@ class ArticleCategory extends Backend
             $articleCategory['show']          = ($articleCategory['if_show']) ? trans('common.show') : trans('common.hidden');
             $articleCategory['ajax_api_link'] = route('Admin::ArticleCategory::ajax_api');
             $articleCategory['look_link']     = route('Home::Article::category', ['cate_id' => $articleCategory['id']]);
-            $articleCategory['edit_link']     = route('Admin::ArticleCategory::edit', ['id' => $articleCategory['id']]);
-            $articleCategory['del_link']      = route('Admin::ArticleCategory::del', ['id' => $articleCategory['id']]);
-            $articleCategory['add_link']      = route('Admin::ArticleCategory::add',
+            if ($this->_check_privilege('Admin::ArticleCategory::edit')) {
+                $articleCategory['edit_link'] = route('Admin::ArticleCategory::edit', ['id' => $articleCategory['id']]);
+            }
+            if ($this->_check_privilege('Admin::ArticleCategory::del')) {
+                $articleCategory['del_link'] = route('Admin::ArticleCategory::del', ['id' => $articleCategory['id']]);
+            }
+            $articleCategory['add_link'] = route('Admin::Article::add',
                 ['cate_id' => $articleCategory['id']]);
         }
 
@@ -69,6 +73,13 @@ class ArticleCategory extends Backend
             'value' => [1 => trans('common.show'), 2 => trans('common.hidden')],
         ];
         $assign['where_info'] = $whereInfo;
+
+        //初始化batch_handle
+        $batchHandle            = [];
+        $batchHandle['add']     = $this->_check_privilege('Admin::ArticleCategory::add');
+        $batchHandle['edit']    = $this->_check_privilege('Admin::ArticleCategory::edit');
+        $batchHandle['del']     = $this->_check_privilege('Admin::ArticleCategory::del');
+        $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.article') . trans('common.category') . trans('common.management');
         return view('admin.ArticleCategory_index', $assign);
@@ -341,7 +352,7 @@ class ArticleCategory extends Backend
 
         $data = [];
         if ('add' == $type || null !== $parentId) {
-            $data['parent_id'] = $parentId;
+            $data['parent_id'] = $parentId ? $parentId : 0;
         }
         if ('add' == $type || null !== $name) {
             $data['name'] = $name;

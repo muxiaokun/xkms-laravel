@@ -71,8 +71,12 @@ class ArticleCategory extends Common
                 $query->transfixionWhere('manage_group_id', session('backend_info.group_id'));
                 break;
             default:
-                $query->transfixionWhere('manage_id', [session('backend_info.id')]);
-                $query->transfixionWhere('manage_group_id', session('backend_info.group_id'));
+                $query->orWhere(function ($query) {
+                    $query->transfixionWhere('manage_id', [session('backend_info.id')]);
+                });
+                $query->orWhere(function ($query) {
+                    $query->transfixionWhere('manage_group_id', session('backend_info.group_id'));
+                });
         }
         $mFindAllow = $query->select('id')->get()->pluck('id');
         $mFindAllow->push(0);

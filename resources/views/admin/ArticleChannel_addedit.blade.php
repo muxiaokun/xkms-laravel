@@ -210,7 +210,7 @@
                                         </td>
                                         <td @if (0 == $cate_key)id="s_limit"@endif >
                                             <input type="text" name="s_limit[{{ $article_category['id'] }}]"
-                                                   style="width:100%;" onKeyup="M_in_int(this);"/>
+                                                   style="width:100%;" onKeyup="M_in_int(this);" value="0"/>
                                         </td>
                                         <td @if (0 == $cate_key)id="template_list"@endif >
                                             <select name="template_list[{{ $article_category['id'] }}]">

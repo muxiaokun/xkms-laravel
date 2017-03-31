@@ -41,9 +41,9 @@ class Wechat extends Backend
 
         //初始化batch_handle
         $batchHandle            = [];
-        $batchHandle['add']     = $this->_check_privilege('add');
-        $batchHandle['edit']    = $this->_check_privilege('edit');
-        $batchHandle['del']     = $this->_check_privilege('del');
+        $batchHandle['add']     = $this->_check_privilege('Admin::Wechat::add');
+        $batchHandle['edit']    = $this->_check_privilege('Admin::Wechat::edit');
+        $batchHandle['del']     = $this->_check_privilege('Admin::Wechat::del');
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('wechat.wechat') . trans('common.management');

@@ -55,8 +55,8 @@ class Message extends Backend
 
         //初始化batch_handle
         $batchHandle            = [];
-        $batchHandle['add']     = $this->_check_privilege('add');
-        $batchHandle['del']     = $this->_check_privilege('del');
+        $batchHandle['add']     = $this->_check_privilege('Admin::Message::add');
+        $batchHandle['del']     = $this->_check_privilege('Admin::Message::del');
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('message.message') . trans('common.management');

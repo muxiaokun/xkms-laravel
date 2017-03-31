@@ -65,9 +65,9 @@ class Template extends Backend
 
         //初始化batch_handle
         $batchHandle            = [];
-        $batchHandle['add']     = $this->_check_privilege('add');
-        $batchHandle['edit']    = $this->_check_privilege('edit');
-        $batchHandle['del']     = $this->_check_privilege('del');
+        $batchHandle['add']     = $this->_check_privilege('Admin::Template::add');
+        $batchHandle['edit']    = $this->_check_privilege('Admin::Template::edit');
+        $batchHandle['del']     = $this->_check_privilege('Admin::Template::del');
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.theme') . trans('common.template') . trans('common.management');

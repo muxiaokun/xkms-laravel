@@ -55,7 +55,7 @@ class AssessLog extends Backend
 
         //初始化batch_handle
         $batchHandle            = [];
-        $batchHandle['del']     = $this->_check_privilege('del');
+        $batchHandle['del']     = $this->_check_privilege('Admin::AssessLog::del');
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('assess.assess') . trans('common.statistics');

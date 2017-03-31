@@ -61,10 +61,10 @@ class Assess extends Backend
 
         //初始化batch_handle
         $batchHandle             = [];
-        $batchHandle['add']      = $this->_check_privilege('add');
-        $batchHandle['edit']     = $this->_check_privilege('edit');
-        $batchHandle['log_edit'] = $this->_check_privilege('edit', 'AssessLog');
-        $batchHandle['del']      = $this->_check_privilege('del');
+        $batchHandle['add']      = $this->_check_privilege('Admin::Assess::add');
+        $batchHandle['edit']     = $this->_check_privilege('Admin::Assess::edit');
+        $batchHandle['log_edit'] = $this->_check_privilege('Admin::AssessLog::edit');
+        $batchHandle['del']      = $this->_check_privilege('Admin::Assess::del');
         $assign['batch_handle']  = $batchHandle;
 
         $assign['title'] = trans('assess.assess') . trans('common.management');

@@ -71,8 +71,8 @@ class MessageBoardLog extends Backend
 
         //初始化batch_handle
         $batchHandle            = [];
-        $batchHandle['edit']    = $this->_check_privilege('edit');
-        $batchHandle['del']     = $this->_check_privilege('del');
+        $batchHandle['edit']    = $this->_check_privilege('Admin::MessageBoardLog::edit');
+        $batchHandle['del']     = $this->_check_privilege('Admin::MessageBoardLog::del');
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.messageboard') . trans('common.management');

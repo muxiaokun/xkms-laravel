@@ -55,7 +55,7 @@ class Message extends FrontendMember
 
         //初始化batch_handle
         $batchHandle            = [];
-        $batchHandle['del']     = $this->_check_privilege('del');
+        $batchHandle['del']     = $this->_check_privilege('Home::Message::del');
         $assign['batch_handle'] = $batchHandle;
 
         $this->commonAssgin();

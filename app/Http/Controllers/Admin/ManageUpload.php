@@ -63,8 +63,8 @@ class ManageUpload extends Backend
 
         //初始化batch_handle
         $batchHandle            = [];
-        $batchHandle['edit']    = $this->_check_privilege('edit');
-        $batchHandle['del']     = $this->_check_privilege('del');
+        $batchHandle['edit']    = $this->_check_privilege('Admin::ManageUpload::edit');
+        $batchHandle['del']     = $this->_check_privilege('Admin::ManageUpload::del');
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.file') . trans('common.management');

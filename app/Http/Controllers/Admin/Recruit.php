@@ -41,10 +41,10 @@ class Recruit extends Backend
 
         //初始化batch_handle
         $batchHandle              = [];
-        $batchHandle['log_index'] = $this->_check_privilege('add', 'RecruitLog');
-        $batchHandle['add']       = $this->_check_privilege('add');
-        $batchHandle['edit']      = $this->_check_privilege('edit');
-        $batchHandle['del']       = $this->_check_privilege('del');
+        $batchHandle['log_index'] = $this->_check_privilege('Admin::RecruitLog::add');
+        $batchHandle['add']       = $this->_check_privilege('Admin::Recruit::add');
+        $batchHandle['edit']      = $this->_check_privilege('Admin::Recruit::edit');
+        $batchHandle['del']       = $this->_check_privilege('Admin::Recruit::del');
         $assign['batch_handle']   = $batchHandle;
 
         $assign['title'] = trans('recruit.recruit') . trans('common.management');

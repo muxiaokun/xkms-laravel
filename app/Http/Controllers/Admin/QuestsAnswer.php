@@ -70,8 +70,8 @@ class QuestsAnswer extends Backend
 
         //初始化batch_handle
         $batchHandle            = [];
-        $batchHandle['add']     = $this->_check_privilege('add');
-        $batchHandle['del']     = $this->_check_privilege('del');
+        $batchHandle['add']     = $this->_check_privilege('Admin::QuestsAnswer::add');
+        $batchHandle['del']     = $this->_check_privilege('Admin::QuestsAnswer::del');
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('quests.quests') . trans('common.answer') . trans('common.management');

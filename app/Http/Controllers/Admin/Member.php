@@ -59,9 +59,9 @@ class Member extends Backend
 
         //初始化batch_handle
         $batchHandle            = [];
-        $batchHandle['add']     = $this->_check_privilege('add');
-        $batchHandle['edit']    = $this->_check_privilege('edit');
-        $batchHandle['del']     = $this->_check_privilege('del');
+        $batchHandle['add']     = $this->_check_privilege('Admin::Member::add');
+        $batchHandle['edit']    = $this->_check_privilege('Admin::Member::edit');
+        $batchHandle['del']     = $this->_check_privilege('Admin::Member::del');
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.member') . trans('common.management');

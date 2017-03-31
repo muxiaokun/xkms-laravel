@@ -49,9 +49,9 @@ class Region extends Backend
 
         //初始化batch_handle
         $batchHandle            = [];
-        $batchHandle['add']     = $this->_check_privilege('add');
-        $batchHandle['edit']    = $this->_check_privilege('edit');
-        $batchHandle['del']     = $this->_check_privilege('del');
+        $batchHandle['add']     = $this->_check_privilege('Admin::Region::add');
+        $batchHandle['edit']    = $this->_check_privilege('Admin::Region::edit');
+        $batchHandle['del']     = $this->_check_privilege('Admin::Region::del');
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('region.region') . trans('common.management');

@@ -40,11 +40,11 @@ class Quests extends Backend
 
         //初始化batch_handle
         $batchHandle                 = [];
-        $batchHandle['add']          = $this->_check_privilege('add');
-        $batchHandle['answer_index'] = $this->_check_privilege('index', 'QuestsAnswer');
-        $batchHandle['answer_edit']  = $this->_check_privilege('edit', 'QuestsAnswer');
-        $batchHandle['edit']         = $this->_check_privilege('edit');
-        $batchHandle['del']          = $this->_check_privilege('del');
+        $batchHandle['add']          = $this->_check_privilege('Admin::Quests::add');
+        $batchHandle['answer_index'] = $this->_check_privilege('Admin::QuestsAnswer::index');
+        $batchHandle['answer_edit']  = $this->_check_privilege('Admin::QuestsAnswer::edit');
+        $batchHandle['edit']         = $this->_check_privilege('Admin::Quests::edit');
+        $batchHandle['del']          = $this->_check_privilege('Admin::Quests::del');
         $assign['batch_handle']      = $batchHandle;
 
         $assign['title'] = trans('quests.quests') . trans('common.management');

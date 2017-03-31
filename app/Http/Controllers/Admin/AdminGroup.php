@@ -46,10 +46,10 @@ class AdminGroup extends Backend
 
         //初始化batch_handle
         $batchHandle            = [];
-        $batchHandle['add']     = $this->_check_privilege('add');
-        $batchHandle['edit']        = $this->_check_privilege('edit');
-        $batchHandle['del']         = $this->_check_privilege('del');
-        $assign['batch_handle']     = $batchHandle;
+        $batchHandle['add']     = $this->_check_privilege('Admin::AdminGroup::add');
+        $batchHandle['edit']    = $this->_check_privilege('Admin::AdminGroup::edit');
+        $batchHandle['del']     = $this->_check_privilege('Admin::AdminGroup::del');
+        $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.admin') . trans('common.group') . trans('common.management');
         return view('admin.AdminGroup_index', $assign);

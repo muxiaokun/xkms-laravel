@@ -65,9 +65,9 @@ class Comment extends Backend
 
         //初始化batch_handle
         $batchHandle            = [];
-        $batchHandle['add']     = $this->_check_privilege('add');
-        $batchHandle['edit']    = $this->_check_privilege('edit');
-        $batchHandle['del']     = $this->_check_privilege('del');
+        $batchHandle['add']     = $this->_check_privilege('Admin::Comment::add');
+        $batchHandle['edit']    = $this->_check_privilege('Admin::Comment::edit');
+        $batchHandle['del']     = $this->_check_privilege('Admin::Comment::del');
         $assign['batch_handle'] = $batchHandle;
 
         $assign['title'] = trans('common.comment') . trans('common.management');

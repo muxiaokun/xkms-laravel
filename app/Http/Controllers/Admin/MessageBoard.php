@@ -35,10 +35,10 @@ class MessageBoard extends Backend
 
         //初始化batch_handle
         $batchHandle              = [];
-        $batchHandle['log_index'] = $this->_check_privilege('index', 'MessageBoardLog');
-        $batchHandle['add']       = $this->_check_privilege('add');
-        $batchHandle['edit']      = $this->_check_privilege('edit');
-        $batchHandle['del']       = $this->_check_privilege('del');
+        $batchHandle['log_index'] = $this->_check_privilege('Admin::MessageBoardLog::index');
+        $batchHandle['add']       = $this->_check_privilege('Admin::MessageBoard::add');
+        $batchHandle['edit']      = $this->_check_privilege('Admin::MessageBoard::edit');
+        $batchHandle['del']       = $this->_check_privilege('Admin::MessageBoard::del');
         $assign['batch_handle']   = $batchHandle;
 
         $assign['title'] = trans('common.messageboard') . trans('common.management');

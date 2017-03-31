@@ -70,13 +70,6 @@ class ArticleCategory extends Backend
         ];
         $assign['where_info'] = $whereInfo;
 
-        //初始化batch_handle
-        $batchHandle            = [];
-        $batchHandle['add']     = $this->_check_privilege('add');
-        $batchHandle['edit']    = $this->_check_privilege('edit');
-        $batchHandle['del']     = $this->_check_privilege('del');
-        $assign['batch_handle'] = $batchHandle;
-
         $assign['title'] = trans('common.article') . trans('common.category') . trans('common.management');
         return view('admin.ArticleCategory_index', $assign);
     }

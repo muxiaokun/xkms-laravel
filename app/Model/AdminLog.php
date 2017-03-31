@@ -26,6 +26,9 @@ class AdminLog extends Common
                 if (in_array($key, $denyLogRequest)) {
                     unset($request[$key]);
                 } else {
+                    if (is_array($request[$key])) {
+                        $request[$key] = json_encode($request[$key]);
+                    }
                     $request[$key] = mSubstr($request[$key], 30);
                 }
 
